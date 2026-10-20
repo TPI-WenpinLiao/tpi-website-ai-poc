@@ -111,7 +111,7 @@ function normalize(href, base) {
   u.protocol = 'https:';
   u.hash = '';
   u.search = '';
-  u.pathname = u.pathname.replace(/\/{2,}/g, '/');
+  u.pathname = u.pathname.replace(/\/{2,}/g, '/').replace(/(%20)+$/, '');
   // www.tpisoftware.vn serves /vn/* as a duplicate of /* (200, no redirect); keep the unprefixed form.
   if (u.hostname === 'www.tpisoftware.vn') u.pathname = u.pathname.replace(/^\/vn(?=\/|$)/, '') || '/';
   if (u.pathname.length > 1) u.pathname = u.pathname.replace(/\/+$/, '');
@@ -439,6 +439,7 @@ function pageTypeOf(url, hint) {
     [/^\/(about-us|partners)$/, 'about'],
     [/^\/contact-us$/, 'contact'],
     [/^\/resource$/, 'resource'],
+    [/^\/(epaper|edm)\//, 'newsletter'],
     [/^\/search$/, 'search'],
     [/^\/(subscribe|subscribe\/result|unsubscribe|cancelrecord|thanks)$/, 'utility'],
   ];
@@ -555,6 +556,7 @@ async function main() {
   const results = new Map(); // final url -> row
   const visited = new Set();
   const failures = [];
+  const referrers = new Map(); // url -> Set of pages linking to it
   const queue = [...candidates.keys()];
   let processed = 0;
 
@@ -577,6 +579,8 @@ async function main() {
       // Follow in-page links, but never into subsites or across to other hosts.
       if (!subsiteOf(url)) {
         for (const link of r.links) {
+          if (!referrers.has(link)) referrers.set(link, new Set());
+          referrers.get(link).add(r.finalUrl ?? url);
           const added = addCandidate(link, 'link');
           if (added) queue.push(added);
         }
@@ -604,7 +608,7 @@ async function main() {
   };
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
-  const rows = [...results.values()].map((r) => {
+  const allRows = [...results.values()].map((r) => {
     const locale = localeOf(r.htmlLang, r.url);
     const trails = new Set([...(navMap.get(r.url) ?? []), ...[...r.aliases].flatMap((a) => [...(navMap.get(a) ?? [])])]);
     const pageType = pageTypeOf(r.url, r.pageTypeHint);
@@ -634,8 +638,17 @@ async function main() {
       nav_location: navLocation,
       discovered_via: [...r.via].sort().join(';'),
       notes: rowNotes.join('; '),
+      found_on: [r.requested, ...r.aliases].flatMap((u) => [...(referrers.get(u) ?? [])]),
     };
   });
+
+  // URLs reached only through in-page links that do not resolve are broken links, not pages.
+  const isBroken = (r) => r.status !== 200 && r.discovered_via === 'link';
+  const rows = allRows.filter((r) => !isBroken(r));
+  const broken = allRows
+    .filter(isBroken)
+    .map((r) => ({ ...r, found_on: [...new Set(r.found_on)].sort().join(' ') }))
+    .sort((a, b) => a.url.localeCompare(b.url));
 
   const localeOrder = ['zh-TW', 'en', 'vi', 'ja'];
   rows.sort(
@@ -645,7 +658,10 @@ async function main() {
 
   const csv = [COLUMNS.join(','), ...rows.map((r) => COLUMNS.map((c) => csvCell(r[c])).join(','))].join('\n');
   await mkdir('docs/research', { recursive: true });
-  await writeFile('docs/research/inventory.csv', `﻿${csv}\n`);
+  await writeFile('docs/research/inventory.csv', `\uFEFF${csv}\n`);
+  const brokenColumns = ['url', 'status', 'found_on'];
+  const brokenCsv = [brokenColumns.join(','), ...broken.map((r) => brokenColumns.map((c) => csvCell(r[c])).join(','))];
+  await writeFile('docs/research/broken-links.csv', `\uFEFF${brokenCsv.join('\n')}\n`);
 
   const tally = (key, filter = () => true) =>
     rows.filter(filter).reduce((acc, r) => ((acc[r[key]] = (acc[r[key]] ?? 0) + 1), acc), {});
@@ -653,6 +669,7 @@ async function main() {
     crawledAt: started.toISOString().slice(0, 10),
     node: process.version,
     rows: rows.length,
+    brokenLinks: broken.length,
     byLocale: tally('locale'),
     byPageType: tally('page_type'),
     byStatus: tally('status'),
@@ -664,7 +681,7 @@ async function main() {
     notes,
   };
   await writeFile('docs/research/inventory-summary.json', `${JSON.stringify(summary, null, 2)}\n`);
-  console.log(`Done: ${rows.length} rows, ${failures.length} fetch failures.`);
+  console.log(`Done: ${rows.length} rows, ${broken.length} broken links, ${failures.length} fetch failures.`);
 }
 
 await main();
