@@ -12,7 +12,7 @@
 |---|---|
 | M0 基礎建設 | 完成：PR #1 已合併；bootstrap 已執行（10 labels、8 milestones、44 issues） |
 | M1 盤點與研究 | 進行中（剩 M1-06 收尾）：M1-01 現站內容盤點完成（#2，PR #46）；雲端 session 品質關卡修正（#47，PR #48，已驗證新 session 不需手動設定即可通過 `npm run check`）；M1-02 內容稽核完成（#3）；M1-03 SEO 基線完成（#4）；M1-04 功能盤點完成（#5）；M1-05 受眾與轉換目標完成（#6） |
-| M2 資訊架構 | 進行中：M2-01 sitemap 與模板對應完成（#8，`ia-approved`）；M2-02 導覽定案完成（#9，`ia-approved`，PR #60）；PR 審查 skill `/pr-review`（#62）；M2-03 URL 規則與語系策略（#10，ADR 0002，PR #59），待合併 |
+| M2 資訊架構 | 進行中：M2-01 sitemap 與模板對應完成（#8，`ia-approved`）；M2-02 導覽定案完成（#9，`ia-approved`，PR #60）；PR 審查 skill `/pr-review`（#62）；M2-03 URL 規則與語系策略完成（#10，ADR 0002，PR #59） |
 | M3 設計系統 | 未開始 |
 | M4 開發骨架 | 未開始 |
 | M5 內容遷移 | 未開始 |
@@ -22,7 +22,7 @@
 
 ## 下一步
 
-1. Review M2-03 的 URL 規則（`docs/decisions/0002-url-and-locale.md`，PR #59），特別是 vi 改用 `/vi`、blog 文章改 `/blog/{slug}`；M2-05 redirect map 依此產生
+1. M2-05 redirect map（#12）的依賴（#8、#10）都已完成，可以開始；轉址規則依 ADR 0002，blog 文章的新 slug 用 `docs/ia/page-map.csv` 的 `blog_slug` 欄
 2. M2-02 導覽已定案（`docs/ia/navigation.md`）。M3-01 wireframe 另需 M2-04 內容模型（#11）完成；M3 實測 en、vi 選單在 1280px 能否放進一列
 3. M3-01 前先處理 #64：導覽文件與 `navigation.csv` 的第四層節點、footer 法務位置對齊（`/pr-review` 驗收時找到），需決定法務放 footer 第 6 欄或最底列
 4. Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
