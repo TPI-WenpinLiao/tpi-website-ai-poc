@@ -6,7 +6,7 @@
 flowchart LR
   A["/next-issue<br>挑 issue"] --> B["/issue-start N<br>檢查與計畫"]
   B -->|你確認計畫| C[實作]
-  C --> D["/issue-ship<br>check、commit、PR"]
+  C --> D["/issue-ship<br>check、review、PR"]
   D --> E[你 review 並合併]
   E --> A
 ```
@@ -69,14 +69,29 @@ Claude 會依序：
 輸入 `/issue-ship` 就等於同意這次的 commit、push 與開 PR。Claude 會：
 
 1. 確認變更範圍，排除暫存檔與 secrets
-2. 對照相關 skill 檢查，並執行 `npm run check`。失敗就停下，不會 push
-3. 出貨前自我 review：程式碼跑 `/code-review`（必要時加 `/security-review`）；文件逐條對驗收條件找反例；每次都檢查 `_headers`、`robots.txt`、`noindex`、design tokens、捏造內容
+2. 執行 `npm run check`。失敗就停下，不會 push
+3. 出貨前自我 review：執行 `/pr-review`（見第 5 節），Act on 的發現修正後重跑檢查，Consider 寫進 PR 的「待確認」
 4. 更新 `docs/status.md`
 5. commit、push 到 session branch
 6. 開 PR：`needs-design` 階段一開 draft，其他開 ready for review。PR body 含 `Closes #N`、變更摘要、驗收方式、preview 檢查重點、待確認
 7. 問你要不要監看 PR
 
 ## 5. Review 與合併
+
+審查 PR 時，在任一 session 輸入：
+
+```
+/pr-review 60
+```
+
+也可以直接說「review PR #60」。Claude 會讀 PR 的 diff、body 與 `Closes #N` 的 issue，然後：
+
+1. 逐條對照 issue 的驗收條件找反例
+2. 執行專案固定檢查，清單見 [`pr-review/SKILL.md`](../.claude/skills/pr-review/SKILL.md) 第 4 步
+3. 程式碼變更交給 `/code-review`，必要時加 `/security-review`
+4. 把發現分成 Act on／Consider，輸出一段可以直接貼到 PR 的審查意見
+
+`/pr-review` 預設只輸出到對話，不會在 PR 上留言。要發成留言時明確說「發到 PR」。`/issue-ship` 第 3 步用的是同一套檢查；不帶參數時審查目前 branch，帶 `<base>..<head>` 時審查指定的 commit 範圍。
 
 - 回覆「監看 PR」後，CI 失敗、review 留言都會自動喚醒 session 處理
 - 在 GitHub 上 review 並合併。合併後 issue 會由 `Closes #N` 自動關閉
@@ -108,4 +123,4 @@ Claude 會依序：
 
 ## 修改流程
 
-流程定義在 `.claude/skills/issue-start/`、`issue-ship/`、`next-issue/` 的 `SKILL.md`。修改 skill 時同步更新本文件與 `CLAUDE.md` 的「雲端 session 工作規則」。
+流程定義在 `.claude/skills/issue-start/`、`issue-ship/`、`pr-review/`、`next-issue/` 的 `SKILL.md`。專案固定檢查只寫在 `pr-review/SKILL.md`。修改 skill 時同步更新本文件、`CLAUDE.md` 的「雲端 session 工作規則」；新增或移除 skill 時，另外更新 `README.md` 的流程圖與「如何開需求」、`CLAUDE.md` 的目錄結構。

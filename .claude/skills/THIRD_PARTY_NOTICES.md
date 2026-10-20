@@ -6,7 +6,7 @@
 |---|---|---|---|
 | `typescript-best-practices/SKILL.md` | `typescript-best-practices`、`principle-type-system-discipline`、`principle-boundary-discipline` | [michael-denyer/pstack-claude @ 49b6850](https://github.com/michael-denyer/pstack-claude/tree/49b6850)（移植自 [cursor/plugins/pstack @ e46364b](https://github.com/cursor/plugins/tree/e46364b8be46000b7df0f260550cd712afbb8d36/pstack)） | (c) 2026 Lauren Tan；(c) 2026 Michael Denyer |
 | `writing-style/SKILL.md` | `unslop`、`technical-writing` | pstack-claude @ 49b6850（移植自 cursor/plugins/pstack @ e46364b、@ 4612556） | (c) 2026 Lauren Tan；(c) 2026 Michael Denyer |
-| `issue-ship/SKILL.md` 的「出貨前自我 review」 | `interrogate` 的 `references/lead-judgment.md`；`thermo-nuclear-review` | pstack-claude @ 49b6850（移植自 cursor/plugins/pstack @ e46364b；[cursor/plugins/thermos @ 118e73b](https://github.com/cursor/plugins/tree/118e73b0e196e4d49d5aade7ce6dd8985a621f68/thermos)） | (c) 2026 Lauren Tan；(c) 2026 Michael Denyer；(c) 2026 Cursor |
+| `pr-review/SKILL.md` 的分類與判斷原則 | `interrogate` 的 `references/lead-judgment.md`；`thermo-nuclear-review` | pstack-claude @ 49b6850（移植自 cursor/plugins/pstack @ e46364b；[cursor/plugins/thermos @ 118e73b](https://github.com/cursor/plugins/tree/118e73b0e196e4d49d5aade7ce6dd8985a621f68/thermos)） | (c) 2026 Lauren Tan；(c) 2026 Michael Denyer；(c) 2026 Cursor |
 | `CLAUDE.md` 的「工作原則」 | `principle-prove-it-works`、`principle-build-the-lever`、`principle-make-operations-idempotent`、`principle-encode-lessons-in-structure`、`principle-fix-root-causes`、`principle-sequence-verifiable-units`、`principle-laziness-protocol` | pstack-claude @ 49b6850（移植自 cursor/plugins/pstack @ e46364b） | (c) 2026 Lauren Tan；(c) 2026 Michael Denyer |
 
 ## MIT License（pstack、pstack-claude）

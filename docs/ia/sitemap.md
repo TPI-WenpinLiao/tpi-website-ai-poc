@@ -23,7 +23,7 @@ node scripts/ia/sitemap.mjs           # 產生 page-map.csv、sitemap-summary.js
 | [`templates.csv`](./templates.csv) | 模板 id 與用途 | 手寫 |
 | [`route-map.csv`](./route-map.csv) | 現站路由 → 節點。路由取 `final_url`、去掉 `/en`、`/vn` 前綴、轉小寫；`/prefix/*` 表示整個路徑底下 | 手寫 |
 | [`blog-categories.csv`](./blog-categories.csv) | 每篇 blog 文章在現站 blog API 的主分類與子分類 | `blog-categories.mjs` 產生 |
-| [`page-map.csv`](./page-map.csv) | inventory 每個 keep／rewrite／merge 列的節點、模板、新 blog 分類 | `sitemap.mjs` 產生 |
+| [`page-map.csv`](./page-map.csv) | inventory 每個 keep／rewrite／merge 列的節點、模板、新 blog 分類與 slug（`blog_slug`，規則見 ADR 0002） | `sitemap.mjs` 產生 |
 | [`sitemap-summary.json`](./sitemap-summary.json) | 各節點、各模板的列數 | `sitemap.mjs` 產生 |
 
 `kind` 的值：`page`（一頁）、`collection`（一個模板產生多頁，如文章、新聞、顧問）、`external`（外部連結，不建頁）、`asset`（下載檔案）、`group`（只用來分組，沒有頁面）。
@@ -97,14 +97,14 @@ zh-TW 的 `/blog/en` 分類頁沒有文章，併入 blog 首頁。
 | 上方決策紀錄（產業順序、landing page、日文版、重疊頁面、舊路由、blog 分類） | 專案負責人，`ia-approved` 審核時 | M2 其餘 issue |
 | `note` 標「待確認」的 6 個產品／方案是否仍在銷售 | 內容負責人 | M5 前未確認則改 merge |
 | 新頁的介紹文字：資安家族、產業方案總覽、金融、政府、製造業、服務總覽 | 內容負責人（不由 Claude 撰寫） | M5 |
-| OrientAI 放在 AI 家族（zh-TW 導覽是獨立的「Agentic AI」群組，vi 導覽放在 DigiLism 下） | 專案負責人 | M2-02 導覽 |
+| OrientAI 放在 AI 家族（zh-TW 導覽是獨立的「Agentic AI」群組，vi 導覽放在 DigiLism 下） | 專案負責人 | M2-02 已決定：維持在 AI 家族，導覽放第一項並加「Agentic AI」標記（`navigation.md`） |
 | `Featured/Neo4j` 3 篇（以 Neo4j 偵測金融詐欺）歸到數位轉型 | 專案負責人 | M5 |
 | 成功案例內頁：現站沒有內頁，案例清單與客戶名稱授權未確認（`content-audit.md`「內容負責人要確認」第 4 項） | 內容負責人 | 確認後才建 `case-study` |
 
 ## 給 M2 其他 issue 的輸入
 
-- M2-02 導覽：頂層與產品家族見上方階層；`group` 節點（法務與政策、功能頁）只在 footer 或不出現
-- M2-03 URL 規則：已完成，見 [ADR 0002](../decisions/0002-url-and-locale.md)。`nodes.csv` 的 `path` 已依規則調整（`/whitepaper/digilogs` 轉小寫、blog 文章改 `/blog/{slug}`）
+- M2-02 導覽：頂層與產品家族見上方階層；`group` 節點（法務與政策、功能頁）只在 footer 或不出現。定案的導覽見 [`navigation.md`](./navigation.md)
+- M2-03 URL 規則：見 [ADR 0002](../decisions/0002-url-and-locale.md)。`nodes.csv` 的 `path` 已依規則調整（`/whitepaper/digilogs` 轉小寫、blog 文章改 `/blog/{slug}`）
 - M2-04 內容模型：每個模板的欄位；`offering` 要能區分產品、解決方案、服務；blog 分類與 tag
 - M2-05 redirect map：`page-map.csv` 的每一列（現站 URL → 節點）是 301 的來源；merge 列已指到合併後的節點。drop 列不在 `page-map.csv`，轉址策略由 M2-05 決定
 
