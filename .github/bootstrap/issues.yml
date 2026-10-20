@@ -1,0 +1,551 @@
+# Issue title is rendered as "[<id>] <title>" and used for idempotent matching.
+# `gate`: the label a human adds after review; the issue is not done until it is present.
+# `dependsOn`: ids resolved to issue numbers at bootstrap time (must appear earlier in this file).
+
+# ---------------------------------------------------------------- M1
+- id: M1-01
+  title: 現站內容盤點（inventory.csv）
+  milestone: M1
+  labels: [type:content]
+  goal: 完整列出 https://www.tpisoftware.com 的所有頁面與內容資產，作為後續稽核、IA 與遷移的唯一清單。
+  deliverables:
+    - "`docs/research/inventory.csv`：欄位至少包含 url、語系、頁面類型、title、h1、最後更新日、字數、圖片數、內嵌媒體、表單、對應的現站導覽位置"
+    - "`docs/research/inventory.md`：擷取方式、涵蓋範圍、無法擷取的頁面與原因"
+  acceptance:
+    - 涵蓋現站 sitemap 與導覽可達的所有頁面（含 en 或其他語系版本）
+    - 每列都有可開啟的 url
+    - 擷取方式可重現（script 或步驟記錄於 inventory.md）
+  dependsOn: []
+
+- id: M1-02
+  title: 內容稽核（正確性、重複、過時）
+  milestone: M1
+  labels: [type:content]
+  goal: 依盤點結果判斷每頁內容的處置方式（保留、改寫、合併、刪除）。
+  deliverables:
+    - "`inventory.csv` 新增欄位：處置（keep / rewrite / merge / drop）、理由、待確認事項"
+    - "`docs/research/content-audit.md`：統計摘要與需人工決定的項目"
+  acceptance:
+    - 每頁都有處置與理由
+    - 疑似過時或矛盾的事實列為待確認，不自行判定真偽
+  dependsOn: [M1-01]
+
+- id: M1-03
+  title: SEO 基線（meta、結構化資料、索引頁、Core Web Vitals）
+  milestone: M1
+  labels: [type:docs]
+  goal: 記錄現站 SEO 現況，作為新站的比較基準與 redirect 優先順序依據。
+  deliverables:
+    - "`docs/research/seo-baseline.md`：title / description / canonical / hreflang / JSON-LD 使用狀況、重複與缺漏統計"
+    - 代表性頁面的 Lighthouse 分數與 Core Web Vitals（標註量測日期與工具）
+    - 重要頁面清單（流量或外部連結資料若無法取得，列為 needs-input）
+  acceptance:
+    - 所有數據註明來源與量測時間
+    - 列出新站必須保留或改善的項目
+  dependsOn: [M1-01]
+
+- id: M1-04
+  title: 功能盤點（表單、搜尋、影片、追蹤碼、第三方嵌入）
+  milestone: M1
+  labels: [type:docs]
+  goal: 列出現站所有互動功能與第三方服務，決定新站的對應做法。
+  deliverables:
+    - "`docs/research/features.md`：每項功能的頁面位置、用途、技術、資料去向、新站建議做法"
+  acceptance:
+    - 涵蓋所有表單、搜尋、影片、追蹤碼（GA / GTM 等）、聊天或其他嵌入
+    - 資料去向不明者列為待確認
+  dependsOn: [M1-01]
+
+- id: M1-05
+  title: 受眾與轉換目標定義
+  milestone: M1
+  labels: [type:docs, needs-input]
+  goal: 由業務與行銷提供目標受眾、主要轉換行為與成功指標，作為 IA 與設計決策依據。
+  deliverables:
+    - "`docs/research/audience-and-goals.md`：受眾分群、各分群的主要任務、轉換目標與量測方式"
+  acceptance:
+    - 內容由人工提供或確認，Claude 只負責整理與提問
+    - 列出尚未回答的問題
+  dependsOn: []
+
+- id: M1-06
+  title: M1 收尾：更新 CLAUDE.md 與 skills
+  milestone: M1
+  labels: [type:docs]
+  goal: 將 M1 的發現沉澱到專案規則與 skills。
+  deliverables:
+    - 更新 `CLAUDE.md`、`.claude/skills/content-migration/SKILL.md`、`docs/status.md`
+  acceptance:
+    - 規則變更有對應的理由（ADR 或 PR 說明）
+    - "`docs/status.md` 指向 M2"
+  dependsOn: [M1-01, M1-02, M1-03, M1-04, M1-05]
+
+# ---------------------------------------------------------------- M2
+- id: M2-01
+  title: 新 sitemap 與模板對應
+  milestone: M2
+  labels: [type:docs]
+  gate: ia-approved
+  goal: 依受眾與內容稽核結果設計新站頁面階層，並對應到有限數量的模板。
+  deliverables:
+    - "`docs/ia/sitemap.md`：頁面階層（Mermaid）與每頁對應模板"
+    - 模板清單與各模板用途
+  acceptance:
+    - inventory 中 keep / rewrite / merge 的頁面都有新位置
+    - 人工審核後加上 `ia-approved`
+  dependsOn: [M1-02, M1-05]
+
+- id: M2-02
+  title: 導覽設計（至少兩方案）
+  milestone: M2
+  labels: [type:feature, needs-design]
+  gate: ia-approved
+  goal: 提出至少兩種主導覽與頁尾結構方案，比較取捨。
+  deliverables:
+    - "`docs/ia/navigation.md`：各方案的結構圖、優缺點、行動版行為"
+  acceptance:
+    - 至少兩個方案並附推薦
+    - 依兩階段設計確認流程，人工選定後加上 `ia-approved`
+  dependsOn: [M2-01]
+
+- id: M2-03
+  title: URL 規則與語系策略
+  milestone: M2
+  labels: [type:docs]
+  goal: 定義 URL 命名、尾斜線、語系路徑與 x-default 規則。
+  deliverables:
+    - "`docs/decisions/` 新增 ADR：URL 與語系策略"
+  acceptance:
+    - 涵蓋 zh-TW（預設、無前綴與否）、en、vi 的路徑規則
+    - 與 Astro i18n 設定可對應
+  dependsOn: [M2-01]
+
+- id: M2-04
+  title: 內容模型（content types 與欄位定義）
+  milestone: M2
+  labels: [type:docs]
+  goal: 為每種內容類型定義欄位，作為 M4 Zod schema 的規格。
+  deliverables:
+    - "`docs/ia/content-model.md`：每種類型的欄位、型別、必填、範例、對應 JSON-LD"
+  acceptance:
+    - 涵蓋產品、解決方案、案例、部落格、新聞、公司頁
+    - 包含 `sourceUrl` 等遷移追蹤欄位
+  dependsOn: [M2-01]
+
+- id: M2-05
+  title: 舊站 redirect map
+  milestone: M2
+  labels: [type:docs]
+  goal: 將所有舊網址對應到新網址，避免上線後失去既有收錄與連結。
+  deliverables:
+    - "`docs/ia/redirects.csv`：from、to、狀態碼、備註"
+  acceptance:
+    - inventory 中每個 url 都有對應（drop 的頁面導到最接近的上層頁）
+    - 可轉換為 Cloudflare Pages `_redirects` 格式
+  dependsOn: [M2-01, M2-03]
+
+- id: M2-06
+  title: M2 收尾：更新 CLAUDE.md 與 skills
+  milestone: M2
+  labels: [type:docs]
+  goal: 將 IA 決策沉澱到專案規則與 skills。
+  deliverables:
+    - 更新 `CLAUDE.md`（目錄與 URL 規則）、`seo-checklist`、`content-migration`、`docs/status.md`
+  acceptance:
+    - "`docs/status.md` 指向 M3"
+  dependsOn: [M2-01, M2-02, M2-03, M2-04, M2-05]
+
+# ---------------------------------------------------------------- M3
+- id: M3-01
+  title: 各模板低保真 wireframe
+  milestone: M3
+  labels: [type:feature, needs-design]
+  gate: wireframe-approved
+  goal: 為每個模板產出低保真 wireframe，確認資訊層級與區塊組成。
+  deliverables:
+    - 每個模板的 wireframe（桌機與行動版），可為 HTML 原型或設計稿連結
+  acceptance:
+    - 涵蓋 M2-01 的所有模板
+    - 人工審核後加上 `wireframe-approved`
+  dependsOn: [M2-01, M2-02, M2-04]
+
+- id: M3-02
+  title: Design tokens 與元件庫
+  milestone: M3
+  labels: [type:feature, needs-design]
+  gate: design-approved
+  goal: 定案色彩、字體、間距、圓角、陰影、斷點等 tokens，並實作基礎元件。
+  deliverables:
+    - "`src/styles/tokens.css` 定案"
+    - 基礎元件（按鈕、連結、卡片、標題區、表單欄位等）
+  acceptance:
+    - 文字對比符合 WCAG 2.2 AA
+    - 元件只引用 tokens
+    - 人工審核後加上 `design-approved`
+  dependsOn: [M3-01]
+
+- id: M3-03
+  title: design-system 展示頁
+  milestone: M3
+  labels: [type:feature, needs-design]
+  goal: 建立展示所有 tokens 與元件的頁面，作為設計與開發的共同參考。
+  deliverables:
+    - design-system 展示頁（路徑於 PR 中提出）
+  acceptance:
+    - 列出所有 tokens 與元件的各種狀態
+    - 不出現在正式導覽與 sitemap 中
+  dependsOn: [M3-02]
+
+- id: M3-04
+  title: 首頁高保真（兩種視覺方向）
+  milestone: M3
+  labels: [type:feature, needs-design]
+  gate: design-approved
+  goal: 以兩種視覺方向製作首頁高保真，由人工選定方向。
+  deliverables:
+    - 兩個視覺方向的首頁（桌機與行動版）
+  acceptance:
+    - 兩方向都只用 tokens 與元件庫
+    - 內容使用現站事實，不捏造數據或客戶
+    - 人工選定後加上 `design-approved`
+  dependsOn: [M3-02]
+
+- id: M3-05
+  title: 產品頁高保真（兩種視覺方向）
+  milestone: M3
+  labels: [type:feature, needs-design]
+  gate: design-approved
+  goal: 以與首頁一致的兩種視覺方向製作產品頁高保真。
+  deliverables:
+    - 兩個視覺方向的產品頁（桌機與行動版）
+  acceptance:
+    - 與 M3-04 的方向一一對應
+    - 人工選定後加上 `design-approved`
+  dependsOn: [M3-02]
+
+- id: M3-06
+  title: M3 收尾：更新 CLAUDE.md 與 skills
+  milestone: M3
+  labels: [type:docs]
+  goal: 補齊 design-system skill，並更新設計相關規則。
+  deliverables:
+    - 補齊 `.claude/skills/design-system/SKILL.md`
+    - 更新 `CLAUDE.md`、`docs/status.md`
+  acceptance:
+    - skill 涵蓋 token 命名、元件清單與新增元件流程
+    - "`docs/status.md` 指向 M4"
+  dependsOn: [M3-01, M3-02, M3-03, M3-04, M3-05]
+
+# ---------------------------------------------------------------- M4
+- id: M4-01
+  title: Content collections 與 Zod schema
+  milestone: M4
+  labels: [type:feature]
+  goal: 依內容模型建立 Astro content collections 與 Zod schema。
+  deliverables:
+    - "`src/content.config.ts` 與各 collection 的 schema"
+    - 每個 collection 一筆範例內容
+  acceptance:
+    - 欄位與 `docs/ia/content-model.md` 一致
+    - 不合法的 frontmatter 會讓 `astro check` 或 build 失敗
+  dependsOn: [M2-04]
+
+- id: M4-02
+  title: i18n 路由（zh-TW / en / vi）
+  milestone: M4
+  labels: [type:feature]
+  goal: 依 URL 與語系策略實作多語系路由與語系切換。
+  deliverables:
+    - i18n 路由設定、語系工具函式、語系切換元件
+  acceptance:
+    - 與 M2-03 ADR 一致
+    - 未翻譯頁面的行為有明確規則（不產生空頁）
+  dependsOn: [M2-03]
+
+- id: M4-03
+  title: 共用 SEO 層（Seo 元件、JSON-LD、sitemap、hreflang）
+  milestone: M4
+  labels: [type:feature]
+  goal: 將 seo-checklist 的必備項目集中為共用元件，頁面只需提供資料。
+  deliverables:
+    - Seo 元件、JSON-LD 產生函式、sitemap 整合、hreflang 輸出
+  acceptance:
+    - 符合 `.claude/skills/seo-checklist/SKILL.md` 全部項目
+    - 不輸出 noindex meta
+    - Lighthouse SEO = 1
+  dependsOn: [M4-01, M4-02]
+
+- id: M4-04
+  title: 各模板 layout
+  milestone: M4
+  labels: [type:feature, needs-design]
+  goal: 依核准的 wireframe 與高保真實作所有模板 layout。
+  deliverables:
+    - 每個模板的 layout 與共用區塊（header、footer、breadcrumb）
+  acceptance:
+    - 與 M3 核准的設計一致
+    - 只使用 tokens 與元件庫，新元件同步加到展示頁
+  dependsOn: [M3-04, M3-05, M4-03]
+
+- id: M4-05
+  title: 品質關卡擴充（axe、連結檢查、Playwright 視覺回歸）
+  milestone: M4
+  labels: [type:chore]
+  goal: 擴充 `npm run check`，涵蓋無障礙、斷連與視覺回歸。
+  deliverables:
+    - axe 檢查、內部連結檢查、Playwright 視覺回歸（含 baseline 更新流程）
+  acceptance:
+    - 整合進 `npm run check` 與 quality-gate workflow
+    - 失敗時輸出可讀的報告
+  dependsOn: [M4-04]
+
+- id: M4-06
+  title: M4 收尾：更新 CLAUDE.md 與 skills
+  milestone: M4
+  labels: [type:docs]
+  goal: 將開發骨架的慣例沉澱到專案規則與 skills。
+  deliverables:
+    - 更新 `CLAUDE.md`（目錄、指令、元件慣例）、`seo-checklist`、`docs/status.md`
+  acceptance:
+    - "`docs/status.md` 指向 M5"
+  dependsOn: [M4-01, M4-02, M4-03, M4-04, M4-05]
+
+# ---------------------------------------------------------------- M5
+- id: M5-01
+  title: 產品內容遷移
+  milestone: M5
+  labels: [type:content]
+  goal: 將現站產品內容遷移到 products collection。
+  deliverables:
+    - 所有產品頁內容檔與圖片
+  acceptance:
+    - 依 content-migration skill，事實與 `sourceUrl` 對照一致
+    - PR 列出待確認事項
+  dependsOn: [M4-04]
+
+- id: M5-02
+  title: 解決方案內容遷移
+  milestone: M5
+  labels: [type:content]
+  goal: 將現站解決方案內容遷移到對應 collection。
+  deliverables:
+    - 所有解決方案頁內容檔與圖片
+  acceptance:
+    - 依 content-migration skill，事實與 `sourceUrl` 對照一致
+  dependsOn: [M4-04]
+
+- id: M5-03
+  title: 客戶案例遷移
+  milestone: M5
+  labels: [type:content]
+  goal: 將現站客戶案例遷移到對應 collection。
+  deliverables:
+    - 所有案例內容檔與圖片
+  acceptance:
+    - 客戶名稱、logo 使用授權不明者列為待確認
+  dependsOn: [M4-04]
+
+- id: M5-04
+  title: 部落格與新聞批次轉換 script
+  milestone: M5
+  labels: [type:chore]
+  goal: 撰寫可重複執行的 script，將現站部落格與新聞批次轉為 Markdown 內容檔。
+  deliverables:
+    - "`scripts/` 下的轉換 script 與使用說明"
+  acceptance:
+    - 產出的 frontmatter 通過 Zod schema
+    - 圖片下載並改寫路徑
+    - 可冪等重跑
+  dependsOn: [M4-01]
+
+- id: M5-05
+  title: 部落格與新聞遷移
+  milestone: M5
+  labels: [type:content]
+  goal: 以轉換 script 遷移所有部落格與新聞，並人工抽查。
+  deliverables:
+    - 所有部落格與新聞內容檔
+  acceptance:
+    - 抽查報告列於 PR
+    - 轉換失敗的文章列出原因
+  dependsOn: [M5-04, M4-04]
+
+- id: M5-06
+  title: 公司頁內容遷移
+  milestone: M5
+  labels: [type:content]
+  goal: 遷移關於我們、聯絡、徵才等公司頁內容。
+  deliverables:
+    - 所有公司頁內容檔
+  acceptance:
+    - 依 content-migration skill，事實與 `sourceUrl` 對照一致
+  dependsOn: [M4-04]
+
+- id: M5-07
+  title: M5 收尾：更新 CLAUDE.md 與 skills
+  milestone: M5
+  labels: [type:docs]
+  goal: 將遷移經驗沉澱到 content-migration skill。
+  deliverables:
+    - 更新 `content-migration`、`CLAUDE.md`、`docs/status.md`
+  acceptance:
+    - "`docs/status.md` 指向 M6"
+  dependsOn: [M5-01, M5-02, M5-03, M5-05, M5-06]
+
+# ---------------------------------------------------------------- M6
+- id: M6-01
+  title: 表單（Pages Functions、伺服器端驗證、Turnstile、可替換送出 adapter）
+  milestone: M6
+  labels: [type:feature, needs-design]
+  goal: 實作聯絡表單，送出邏輯以 adapter 抽象，預設寫入 log。
+  deliverables:
+    - 表單元件、Pages Function、伺服器端驗證、Turnstile 驗證
+    - 送出 adapter 介面與預設 log adapter
+  acceptance:
+    - 驗證規則前後端一致，伺服器端為準
+    - Turnstile 未通過時拒絕送出
+    - 不在 repo 中寫入任何 secret（以 Cloudflare 環境變數設定）
+  dependsOn: [M1-04, M4-04]
+
+- id: M6-02
+  title: Pagefind 站內搜尋
+  milestone: M6
+  labels: [type:feature, needs-design]
+  goal: 以 Pagefind 建立靜態站內搜尋。
+  deliverables:
+    - build 後產生索引、搜尋 UI（island）
+  acceptance:
+    - 支援 zh-TW 斷詞，各語系分開索引
+    - 不影響未使用搜尋頁面的效能分數
+  dependsOn: [M4-04]
+
+- id: M6-03
+  title: 影片延遲載入（facade）
+  milestone: M6
+  labels: [type:feature]
+  goal: 影片以 facade 呈現，使用者互動後才載入播放器。
+  deliverables:
+    - 影片 facade 元件
+  acceptance:
+    - 首次載入不請求第三方播放器資源
+    - 可鍵盤操作，有可讀的標題
+  dependsOn: [M4-04]
+
+- id: M6-04
+  title: GTM 與 consent 管理
+  milestone: M6
+  labels: [type:feature, needs-design]
+  goal: 導入 GTM 與 consent 機制，未同意前不載入追蹤。
+  deliverables:
+    - consent banner、偏好設定、GTM 載入邏輯
+  acceptance:
+    - 未同意前不送出追蹤請求
+    - GTM container ID 以環境變數設定
+    - consent 規範需求來源列為 needs-input（若未提供）
+  dependsOn: [M1-04, M4-04]
+
+- id: M6-05
+  title: M6 收尾：更新 CLAUDE.md 與 skills
+  milestone: M6
+  labels: [type:docs]
+  goal: 記錄功能模組的使用方式與規則。
+  deliverables:
+    - 更新 `CLAUDE.md`、相關 ADR、`docs/status.md`
+  acceptance:
+    - "`docs/status.md` 指向 M7"
+  dependsOn: [M6-01, M6-02, M6-03, M6-04]
+
+# ---------------------------------------------------------------- M7
+- id: M7-01
+  title: 翻譯詞彙表
+  milestone: M7
+  labels: [type:content]
+  goal: 建立產品名、專有名詞與常用 UI 字串的 zh-TW / en / vi 對照。
+  deliverables:
+    - "`docs/i18n/glossary.csv`"
+  acceptance:
+    - 產品名稱等專有名詞由人工確認
+  dependsOn: [M5-07]
+
+- id: M7-02
+  title: en 翻譯
+  milestone: M7
+  labels: [type:content]
+  goal: 依詞彙表完成英文版內容與 UI 字串。
+  deliverables:
+    - en 內容檔與 UI 字串
+  acceptance:
+    - 用語符合詞彙表
+    - 每頁 SEO 項目齊全
+  dependsOn: [M7-01]
+
+- id: M7-03
+  title: vi 翻譯
+  milestone: M7
+  labels: [type:content]
+  goal: 依詞彙表完成越南文版內容與 UI 字串。
+  deliverables:
+    - vi 內容檔與 UI 字串
+  acceptance:
+    - 用語符合詞彙表
+    - 每頁 SEO 項目齊全
+  dependsOn: [M7-01]
+
+- id: M7-04
+  title: hreflang 驗證
+  milestone: M7
+  labels: [type:chore]
+  goal: 驗證所有語系版本的 hreflang 雙向對應正確。
+  deliverables:
+    - hreflang 自動檢查（整合進 `npm run check`）
+  acceptance:
+    - 每頁列出所有存在的語系版本與 x-default
+    - 無單向或指向 404 的 hreflang
+  dependsOn: [M7-02, M7-03]
+
+- id: M7-05
+  title: M7 收尾：更新 CLAUDE.md 與 skills
+  milestone: M7
+  labels: [type:docs]
+  goal: 記錄多語系內容的維護規則。
+  deliverables:
+    - 更新 `CLAUDE.md`、`seo-checklist`、`content-migration`、`docs/status.md`
+  acceptance:
+    - "`docs/status.md` 指向 M8"
+  dependsOn: [M7-01, M7-02, M7-03, M7-04]
+
+# ---------------------------------------------------------------- M8
+- id: M8-01
+  title: 全站驗收（SEO、無障礙、效能、連結、內容）
+  milestone: M8
+  labels: [type:chore]
+  goal: 對全站逐項驗收，修正或記錄所有問題。
+  deliverables:
+    - "`docs/launch/audit.md`：各項檢查結果與問題清單"
+  acceptance:
+    - 全站 `npm run check` 通過
+    - redirect map 全數驗證
+    - 問題皆已修正或開 issue 追蹤
+  dependsOn: [M7-05]
+
+- id: M8-02
+  title: launch-readiness 報告
+  milestone: M8
+  labels: [type:docs]
+  goal: 彙整上線前必須處理的事項，供決策者判斷是否上線。
+  deliverables:
+    - "`docs/launch/launch-readiness.md`：上線步驟（含移除 noindex 設定、網域、redirect、追蹤碼）、風險、待決事項"
+  acceptance:
+    - 每個待決事項有負責人欄位
+  dependsOn: [M8-01]
+
+- id: M8-03
+  title: M8 收尾：更新 CLAUDE.md 與 skills
+  milestone: M8
+  labels: [type:docs]
+  goal: 整理專案最終規則，作為後續維運基準。
+  deliverables:
+    - 更新 `CLAUDE.md`、所有 skills、`docs/status.md`
+  acceptance:
+    - 文件反映最終架構與流程
+  dependsOn: [M8-01, M8-02]

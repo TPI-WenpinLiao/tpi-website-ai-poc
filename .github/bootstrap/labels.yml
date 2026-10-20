@@ -1,0 +1,35 @@
+# Flow
+- name: needs-design
+  color: "d93f0b"
+  description: 需要設計確認，走兩階段流程（階段一完成後等待 design-approved）
+- name: design-approved
+  color: "0e8a16"
+  description: 設計已確認，可進入階段二
+- name: ia-approved
+  color: "0e8a16"
+  description: 資訊架構（sitemap / 導覽）已確認
+- name: wireframe-approved
+  color: "0e8a16"
+  description: 低保真 wireframe 已確認
+
+# Type
+- name: type:feature
+  color: "1d76db"
+  description: 新功能或頁面
+- name: type:bug
+  color: "b60205"
+  description: 錯誤修正
+- name: type:content
+  color: "5319e7"
+  description: 內容盤點、撰寫或遷移
+- name: type:docs
+  color: "0075ca"
+  description: 文件、規格、研究報告
+- name: type:chore
+  color: "cfd3d7"
+  description: 工具、設定、維護
+
+# Input
+- name: needs-input
+  color: "fbca04"
+  description: 需要人工提供資訊才能進行

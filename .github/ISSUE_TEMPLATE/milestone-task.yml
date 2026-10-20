@@ -1,0 +1,52 @@
+name: Milestone 任務
+description: 規劃中的 milestone 工作項目
+title: "[Mx-xx] "
+body:
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: 所屬 milestone
+      options:
+        - M1 盤點與研究
+        - M2 資訊架構
+        - M3 設計系統
+        - M4 開發骨架
+        - M5 內容遷移
+        - M6 功能
+        - M7 多語系
+        - M8 驗收
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: 目標
+    validations:
+      required: true
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: 交付物
+      placeholder: "- docs/xxx.md"
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 驗收條件
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 依賴
+      description: 需要先完成的 issue
+      placeholder: "#12"
+  - type: checkboxes
+    id: design
+    attributes:
+      label: 設計確認
+      description: 勾選後會自動加上 `needs-design`
+      options:
+        - label: 需要設計確認

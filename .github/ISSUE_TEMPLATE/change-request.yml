@@ -1,0 +1,51 @@
+name: 變更需求
+description: 新功能、內容或樣式的變更需求
+title: "[需求] "
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: 類型
+      options:
+        - 新功能
+        - 內容
+        - 樣式 / 版面
+        - SEO
+        - 文件
+        - 其他
+    validations:
+      required: true
+  - type: input
+    id: pages
+    attributes:
+      label: 影響頁面
+      description: 頁面路徑或名稱，多個以逗號分隔
+      placeholder: "/、/products/xxx"
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: 現況
+      description: 目前的狀態或問題
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望
+      description: 希望變成什麼樣子
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: 參考資料
+      description: 連結、截圖、設計稿、現站對應頁面
+  - type: checkboxes
+    id: design
+    attributes:
+      label: 設計確認
+      description: 勾選後會自動加上 `needs-design`，實作會走兩階段設計確認流程
+      options:
+        - label: 需要設計確認

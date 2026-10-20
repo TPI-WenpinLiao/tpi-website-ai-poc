@@ -1,0 +1,51 @@
+name: issue-launcher
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions: {}
+
+concurrency:
+  group: issue-launcher-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  launcher:
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/scripts
+      - name: Comment Claude Code link
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { postLauncherComment } = require('./.github/scripts/launcher.cjs');
+            // Read the title from the payload, never via expression interpolation.
+            const { number, title } = context.payload.issue;
+            await postLauncherComment({ github, ...context.repo, number, title });
+
+  design-label:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add needs-design when the form checkbox is ticked
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { number, body, labels } = context.payload.issue;
+            const checked = /^\s*-\s*\[x\]\s*需要設計確認\s*$/im.test(body ?? '');
+            const hasLabel = labels.some((l) => l.name === 'needs-design');
+            if (checked && !hasLabel) {
+              await github.rest.issues.addLabels({
+                ...context.repo,
+                issue_number: number,
+                labels: ['needs-design'],
+              });
+            }
