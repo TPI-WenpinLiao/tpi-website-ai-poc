@@ -24,6 +24,8 @@ const LOCALES = ['zh-TW', 'en', 'vi'];
 // Kinds without a template of their own: external links, downloadable files, and nav-only groupings
 const UNTEMPLATED = new Set(['external', 'asset', 'group']);
 const KINDS = new Set(['page', 'collection', ...UNTEMPLATED]);
+// URL rule from docs/decisions/0002-url-and-locale.md: lowercase kebab-case segments or {placeholder}, no trailing slash
+const PATH_PATTERN = /^\/$|^(\/([a-z0-9]+(-[a-z0-9]+)*|\{[a-z]+\}))+$/;
 
 const errors = [];
 
@@ -43,6 +45,7 @@ function validateNodes(nodes, templates) {
     if (n.parent && !byId.has(n.parent)) errors.push(`node ${n.id}: parent "${n.parent}" not found`);
     if (!n.parent && n.id !== 'home') errors.push(`node ${n.id}: only home may have no parent`);
     if (!KINDS.has(n.kind)) errors.push(`node ${n.id}: invalid kind "${n.kind}"`);
+    if (n.path && !PATH_PATTERN.test(n.path)) errors.push(`node ${n.id}: path "${n.path}" breaks the URL rule (ADR 0002)`);
     if (UNTEMPLATED.has(n.kind) ? n.template : !templates.has(n.template)) {
       errors.push(`node ${n.id}: template "${n.template}" not allowed for kind ${n.kind}`);
     }
@@ -131,8 +134,8 @@ function generatedSection(nodes, templates, byId, counts) {
     out.push(`| \`${tid}\` | ${t.purpose} | ${ids.length} | ${ids.reduce((s, id) => s + total(id), 0)} |`);
   }
 
-  out.push('', '### 節點與模板對應', '', '路徑為暫定：有現站頁面的沿用現站路徑（去掉語系前綴），新頁為新路徑；正式 URL 由 M2-03 決定。列數為對應到該節點的 inventory 列數（keep／rewrite／merge）。', '');
-  out.push('| 節點 | 模板 | 暫定路徑 | zh-TW | en | vi | 備註 |', '|---|---|---|--:|--:|--:|---|');
+  out.push('', '### 節點與模板對應', '', '路徑依 [ADR 0002](../decisions/0002-url-and-locale.md)：有現站頁面的沿用現站路徑（去掉語系前綴、轉小寫），新頁依階層命名；en、vi 加 `/en`、`/vi` 前綴。列數為對應到該節點的 inventory 列數（keep／rewrite／merge）。', '');
+  out.push('| 節點 | 模板 | 路徑 | zh-TW | en | vi | 備註 |', '|---|---|---|--:|--:|--:|---|');
   for (const n of nodes) {
     const indent = '　'.repeat(depth(n, byId));
     const path = n.path ? `\`${n.path}\`` : '';
