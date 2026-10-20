@@ -391,11 +391,11 @@ JSON-LD：`ProfilePage`，`mainEntity` 為 `Person`：`name` ← `title`、`jobT
 | 欄位 | 型別 | 必填 | 說明 | 現站來源 |
 |---|---|---|---|---|
 | `node` | `string` | 是 | `whitepaper-*` 節點 id | `page-map.csv` |
-| `offering` | `ref(offering)` | 是 | 對應產品，產品頁 `downloads` 反查用 | 現站頁面 |
+| `offering` | `ref(offering) \| ref(hub)` | 是 | 對應的產品，產品頁 `downloads` 反查用。AI Playbook 涵蓋整個 SysTalk.ai 家族，指向 hub `family-ai` | 現站頁面 |
 | `coverImage` | `image` | 是 | 白皮書封面 | 現站頁面 |
 | `summary` | `string[]` | 否 | 內容重點 | 現站頁面 |
 | `file` | `string` | 是 | 送出表單後提供的檔案 | 現站下載流程，待確認 |
-| `form` | `'whitepaper'` | 是 | 表單種類。4 種白皮書表單欄位相同（`features.md`），端點由 M6 決定 | `features.md`「表單」 |
+| `form` | `'whitepaper' \| 'ai-playbook'` | 是 | 表單種類。digiRunner、digiLogs、GreenSwift 用 `whitepaper`；AI Playbook 多一個「導入 AI 遇到的問題」複選欄位，用 `ai-playbook`（`features.md`）。端點由 M6 決定 | `features.md`「表單」 |
 
 範例（取自 <https://www.tpisoftware.com/whitepaper/api-strategies>）：
 
@@ -469,4 +469,4 @@ JSON-LD：
 | 白皮書檔案的實際位置（現站在表單送出後提供） | 後端負責人 | `whitepaper.file` |
 | tag 清單（上表）的合併方式與顯示名稱 | 專案負責人 | M4-01 tag 資料檔 |
 | 現站案例分類對應到 `case-study.industry` 的方式 | 內容負責人 | 建 `case-study` 時 |
-| `offering.kind` 的歸類：`inventory.csv` 的 `page_type` 是依 URL 推定，例如 `/solutions/smartclaim` 與 `/solutions/insurering` 實際是否為產品 | 內容負責人 | M5 |
+| `offering.kind` 的歸類：`inventory.csv` 的 `page_type` 是依 URL 推定，例如 `/solutions/smartclaim` 與 `/solutions/insurering` 實際是否為產品；`systalk-chat` 的現站頁面同時判為 product 與 service（各 3 列）、`greenswift` 有 1 列 campaign、`orient-ai` 與 `aiso` 判為 service 但新聞稱「自研 OrientAI 系列軟體」、`uiux` 判為 solution 但內容是設計服務 | 內容負責人 | M5 |

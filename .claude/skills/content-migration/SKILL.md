@@ -21,7 +21,7 @@ sourceUrl: https://www.tpisoftware.com/...   # 現站原始頁面
 migratedAt: 2026-10-20                       # 擷取日期
 ```
 
-多個來源頁合併時，`sourceUrl` 改為陣列，第一個是主要來源。新頁（現站沒有對應頁）寫 `sourceUrl: []`，不要省略。
+多頁合併、新頁等 `sourceUrl` 的寫法見 [`content-model.md`「遷移追蹤欄位」](../../../docs/ia/content-model.md#遷移追蹤欄位)。
 
 ## 圖片
 
