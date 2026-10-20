@@ -1,0 +1,209 @@
+{
+  "rows": 1306,
+  "newsCutoff": "2024-01-01",
+  "blogStaleBefore": "2022-01-01",
+  "byDisposition": {
+    "rewrite": 183,
+    "drop": 414,
+    "merge": 60,
+    "keep": 649
+  },
+  "byDispositionLocale": {
+    "rewrite": {
+      "zh-TW": 73,
+      "en": 56,
+      "vi": 54
+    },
+    "drop": {
+      "zh-TW": 258,
+      "en": 126,
+      "vi": 28,
+      "ja": 2
+    },
+    "merge": {
+      "zh-TW": 26,
+      "en": 19,
+      "vi": 15
+    },
+    "keep": {
+      "zh-TW": 178,
+      "en": 123,
+      "vi": 348
+    }
+  },
+  "byPageTypeDisposition": {
+    "home": {
+      "rewrite": 3,
+      "drop": 1
+    },
+    "campaign": {
+      "drop": 3
+    },
+    "about": {
+      "rewrite": 6,
+      "drop": 1
+    },
+    "service": {
+      "rewrite": 19,
+      "keep": 25,
+      "merge": 2,
+      "drop": 3
+    },
+    "blog-index": {
+      "rewrite": 3
+    },
+    "blog-category": {
+      "merge": 52,
+      "keep": 3
+    },
+    "blog-post": {
+      "keep": 467,
+      "merge": 2
+    },
+    "utility": {
+      "rewrite": 15
+    },
+    "contact": {
+      "rewrite": 3
+    },
+    "download": {
+      "rewrite": 15
+    },
+    "newsletter": {
+      "drop": 25
+    },
+    "events": {
+      "rewrite": 3
+    },
+    "subsite": {
+      "keep": 2
+    },
+    "news-index": {
+      "rewrite": 3
+    },
+    "news": {
+      "drop": 381,
+      "keep": 150
+    },
+    "pdf": {
+      "rewrite": 8,
+      "keep": 2,
+      "merge": 1
+    },
+    "product-index": {
+      "rewrite": 3
+    },
+    "product": {
+      "rewrite": 72,
+      "merge": 3
+    },
+    "resource": {
+      "rewrite": 3
+    },
+    "search": {
+      "rewrite": 3
+    },
+    "solution": {
+      "rewrite": 21
+    },
+    "case-study": {
+      "rewrite": 3
+    }
+  },
+  "toConfirm": 215,
+  "overrides": 17,
+  "localeGaps": [
+    {
+      "route": "/chatgpt-enterprise",
+      "missing": [
+        "en",
+        "vi"
+      ]
+    },
+    {
+      "route": "/esg-advisory/huang-zhijun",
+      "missing": [
+        "zh-TW"
+      ]
+    },
+    {
+      "route": "/esg-advisory/li-shuhui",
+      "missing": [
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/digicare",
+      "missing": [
+        "en",
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/digilogs/log-detection",
+      "missing": [
+        "en"
+      ]
+    },
+    {
+      "route": "/products/esgswift",
+      "missing": [
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/systalk-ai",
+      "missing": [
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/systalk-audit",
+      "missing": [
+        "en",
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/systalk-audit/quality-analysis",
+      "missing": [
+        "en",
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/systalk-audit/quality-analysis/quiz",
+      "missing": [
+        "en",
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/systalk-coach",
+      "missing": [
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/systalk-icr",
+      "missing": [
+        "en",
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/systalk-rpa/enterp-diagnosis",
+      "missing": [
+        "en",
+        "vi"
+      ]
+    },
+    {
+      "route": "/products/systalk-viki/vikibundle",
+      "missing": [
+        "en",
+        "vi"
+      ]
+    }
+  ]
+}

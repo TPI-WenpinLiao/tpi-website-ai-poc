@@ -15,6 +15,8 @@ node scripts/inventory/crawl.mjs            # 完整擷取，約 20–30 分鐘
 node scripts/inventory/crawl.mjs --limit 30 # 試跑：只抓前 30 頁
 ```
 
+- crawl 會覆寫 `inventory.csv`，重爬後執行 `node scripts/inventory/audit.mjs` 補回 M1-02 稽核欄位
+
 - 輸出覆寫 `docs/research/` 下的三個檔案，以 url 排序，diff 可直接比較
 - 有設定 `HTTPS_PROXY` 時（例如雲端 session），script 會自動以 `NODE_USE_ENV_PROXY=1` 重新啟動，讓 fetch 走 proxy
 - 雲端環境需要 Allowed domains：`www.tpisoftware.com`、`tpisoftware.com`、`www.tpisoftware.vn`、`tpisoftware.vn`（見 `docs/onboarding.md`）
@@ -56,6 +58,9 @@ URL 正規化：去除 query 與 hash、去除結尾斜線。`www.tpisoftware.co
 | `nav_location` | 出現在導覽的位置，如 `header: 公司 > 媒體中心`、`footer: 關於我們`，多處以 ` \| ` 串接。不在導覽時：blog 文章為 `blog listing`、新聞為 `media-center listing`，其餘為 `not in nav` |
 | `discovered_via` | 見上表，多個來源以 `;` 串接 |
 | `notes` | `no h1`、`h1 xN`、`error page`、PDF 大小、轉址來源等 |
+| `disposition` | M1-02 稽核處置：`keep`／`rewrite`／`merge`／`drop`（由 `scripts/inventory/audit.mjs` 寫入，見 [`content-audit.md`](./content-audit.md)） |
+| `disposition_reason` | 處置理由；merge 時註明合併目標 |
+| `to_confirm` | 需人工確認的事項，多項以 `; ` 串接 |
 
 ## 涵蓋範圍
 

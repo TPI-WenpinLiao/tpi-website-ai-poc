@@ -1,0 +1,18 @@
+url,disposition,disposition_reason,to_confirm
+https://www.tpisoftware.com/products/open-banking,,,title 拼字為「Open Bankning」；開放銀行內容與 digiRunner 產品頁重疊，確認是否獨立成頁
+https://www.tpisoftware.com/products/open-government,,,title 寫「開放銀行 Open Government」，與頁面主題（開放政府）不符；內容與 digiRunner 產品頁重疊，確認是否獨立成頁
+https://www.tpisoftware.com/en/products/open-banking,,,title 為通用的「TPIsoftware | API Management Platform」，與 open-government 頁相同
+https://www.tpisoftware.com/en/products/open-government,,,title 為通用的「TPIsoftware | API Management Platform」，與 open-banking 頁相同
+https://www.tpisoftware.com/vn/products/open-banking,,,title 為通用的「TPIsoftware | API Management Platform」，與 open-government 頁相同
+https://www.tpisoftware.com/vn/products/open-government,,,title 為通用的「TPIsoftware | API Management Platform」，與 open-banking 頁相同
+https://www.tpisoftware.com/genai-solution,,,SysTalk.Chat 導入服務頁，與 /products/systalk-chat 主題重疊，確認新 IA 是否合併
+https://www.tpisoftware.com/en/genai-solution,,,SysTalk.Chat 導入服務頁，與 /products/systalk-chat 主題重疊，確認新 IA 是否合併
+https://www.tpisoftware.com/vn/genai-solution,,,SysTalk.Chat 導入服務頁，與 /products/systalk-chat 主題重疊，確認新 IA 是否合併
+https://www.tpisoftware.com/partners,,,zh-TW 版內容區幾乎為空（字數 1、無 h1），en／vi 版有內容；確認是 client 端渲染或頁面損壞
+https://www.tpisoftware.com/success-story,,,內容區字數極少，案例可能為 client 端渲染；遷移前需開頁確認案例清單與客戶名稱授權
+https://www.tpisoftware.com/en/success-story,,,內容區字數極少，案例可能為 client 端渲染；遷移前需開頁確認案例清單與客戶名稱授權
+https://www.tpisoftware.com/vn/success-story,,,內容區字數極少，案例可能為 client 端渲染；遷移前需開頁確認案例清單與客戶名稱授權
+https://www.tpisoftware.com/esg-advisory,,,zh-TW 顧問清單沒有 huang-zhijun（en／vi 有）；三語顧問名單不一致
+https://www.tpisoftware.com/vn/esg-advisory,,,vi 顧問清單連到拼錯的 /esg-advisory/li-shuhi（500），因此缺少 li-shuhui 頁
+https://www.tpisoftware.com/products/esgswift,,,h1 x6，頁面結構需重整；與 GreenSwift／ElectriSwift 的產品關係需在 M2 釐清
+https://www.tpisoftware.com/en/products/esgswift,,,h1 x6，頁面結構需重整；與 GreenSwift／ElectriSwift 的產品關係需在 M2 釐清
