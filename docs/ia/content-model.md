@@ -44,11 +44,11 @@
 | `title` | `string` | 是 | 頁面主題，也是 h1。`<title>` 由版型組成 `{title}｜TPIsoftware 昕力資訊` |
 | `seoTitle` | `string` | 否 | `<title>` 要和 h1 不同時才填 |
 | `description` | `string` | 是 | meta description，也用於 `og:description` 與卡片摘要 |
-| `translationKey` | `string` | 是 | 同一份內容的各語系版本填相同值，M7 用來輸出 hreflang。慣例：zh-TW 版的 slug；新聞用 zh-TW 版的新聞 id，沒有 zh-TW 版時用該語系自己的 id |
+| `translationKey` | `string` | 是 | 同一份內容的各語系版本填相同值，M7 用來輸出 hreflang。慣例：有 `node` 欄位的類型（offering、hub、page、whitepaper）填節點 id；case-study、blog、person 填 zh-TW 版的 slug；新聞用 zh-TW 版的新聞 id，沒有 zh-TW 版時用該語系自己的 id |
 | `ogImage` | `image` | 否 | 沒填時依序用類型自己的主圖（`coverImage` 等），再用全站預設圖 |
 | `draft` | `boolean` | 否，預設 `false` | `true` 時不輸出頁面 |
 | 語系 | — | 推出 | 由檔案路徑推出（`zh-TW`、`en`、`vi`），不寫在 frontmatter |
-| slug | — | 推出 | 由檔名推出，不寫在 frontmatter。URL 組法見 ADR 0002；blog 文章的 slug 取 `page-map.csv` 的 `blog_slug` |
+| slug | — | 推出 | 不寫在 frontmatter。有 `node` 欄位的類型，URL 取 `nodes.csv` 的 `path`，檔名不影響 URL；case-study、blog、news、person 由檔名推出。URL 組法見 ADR 0002；blog 文章的 slug 取 `page-map.csv` 的 `blog_slug` |
 
 ## 遷移追蹤欄位
 
@@ -194,7 +194,7 @@ zh-TW 106 列、en 67 列、vi 299 列（`page-map.csv` 的 `blog-post` 節點�
 
 | 欄位 | 型別 | 必填 | 說明 | 現站來源（blog API） |
 |---|---|---|---|---|
-| `category` | `'ai' \| 'digital-transformation' \| 'enterprise-management' \| 'esg' \| 'use-cases'` | 是 | 新分類，對應 `nodes.csv` 的 `blog-*` 節點。每篇只有一個 | `page-map.csv` 的 `blog_category` |
+| `category` | `'ai' \| 'digital-transformation' \| 'enterprise-management' \| 'esg' \| 'use-cases'` | 是 | 新分類，對應 `nodes.csv` 的 `blog-*` 節點。每篇只有一個 | `page-map.csv` 的 `blog_category` 去掉 `blog-` 前綴 |
 | `tags` | `string[]` | 否 | 值必須在 tag 清單內（見下表） | `blog-categories.csv` 的 `sub_category` |
 | `featured` | `boolean` | 否，預設 `false` | 列表頁置頂 | 現站 `Featured` 分類 |
 | `publishedAt` | `date` | 是 | 發布日 | `atcDate` |
