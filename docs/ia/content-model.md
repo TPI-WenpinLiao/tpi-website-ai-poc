@@ -3,7 +3,7 @@
 新站每種內容類型的欄位、型別、必填與對應的 JSON-LD。M4-01 依本檔寫 Astro content collections 的 Zod schema，M5 依本檔寫遷移 script。
 
 - 輸入：[`sitemap.md`](./sitemap.md) 的節點與模板（[`nodes.csv`](./nodes.csv)、[`templates.csv`](./templates.csv)）、[`blog-categories.csv`](./blog-categories.csv)、[`seo-checklist`](../../.claude/skills/seo-checklist/SKILL.md) 的 JSON-LD 對照、[`content-migration`](../../.claude/skills/content-migration/SKILL.md) 的 frontmatter 規則
-- 範圍：本檔只定欄位。URL 形式與語系前綴由 M2-03 決定，目錄結構與 Zod 寫法由 M4-01 決定，選單由 M2-02 決定
+- 範圍：本檔只定欄位。URL 形式與語系前綴見 [ADR 0002](../decisions/0002-url-and-locale.md)（M2-03），目錄結構與 Zod 寫法由 M4-01 決定，選單由 M2-02 決定
 - 範例值都取自現站 2026-10-20 的實際資料，每個範例附來源。現站沒有內容的類型，範例只列欄位，值寫「待人工提供」
 
 ## 原則
@@ -48,7 +48,7 @@
 | `ogImage` | `image` | 否 | 沒填時依序用類型自己的主圖（`coverImage` 等），再用全站預設圖 |
 | `draft` | `boolean` | 否，預設 `false` | `true` 時不輸出頁面 |
 | 語系 | — | 推出 | 由檔案路徑推出（`zh-TW`、`en`、`vi`），不寫在 frontmatter |
-| slug | — | 推出 | 由檔名推出，不寫在 frontmatter。URL 怎麼組由 M2-03 決定 |
+| slug | — | 推出 | 由檔名推出，不寫在 frontmatter。URL 組法見 ADR 0002；blog 文章的 slug 取 `page-map.csv` 的 `blog_slug` |
 
 ## 遷移追蹤欄位
 

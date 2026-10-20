@@ -1,7 +1,7 @@
 // New sitemap and template mapping for M2-01 (#8).
 // Reads docs/research/inventory.csv, docs/ia/blog-categories.csv (scripts/ia/blog-categories.mjs)
 // and the hand-written docs/ia/{nodes,templates,route-map}.csv,
-// maps every keep / rewrite / merge row to a sitemap node, writes docs/ia/page-map.csv and
+// maps every keep / rewrite / merge row to a sitemap node (and blog articles to their new slug), writes docs/ia/page-map.csv and
 // docs/ia/sitemap-summary.json, and regenerates the marked section of docs/ia/sitemap.md.
 // Re-run after editing any input or re-running scripts/inventory/audit.mjs: node scripts/ia/sitemap.mjs
 
@@ -24,6 +24,8 @@ const LOCALES = ['zh-TW', 'en', 'vi'];
 // Kinds without a template of their own: external links, downloadable files, and nav-only groupings
 const UNTEMPLATED = new Set(['external', 'asset', 'group']);
 const KINDS = new Set(['page', 'collection', ...UNTEMPLATED]);
+// URL rule from docs/decisions/0002-url-and-locale.md: lowercase kebab-case segments or {placeholder}, no trailing slash
+const PATH_PATTERN = /^\/$|^(\/([a-z0-9]+(-[a-z0-9]+)*|\{[a-z]+\}))+$/;
 
 const errors = [];
 
@@ -43,6 +45,7 @@ function validateNodes(nodes, templates) {
     if (n.parent && !byId.has(n.parent)) errors.push(`node ${n.id}: parent "${n.parent}" not found`);
     if (!n.parent && n.id !== 'home') errors.push(`node ${n.id}: only home may have no parent`);
     if (!KINDS.has(n.kind)) errors.push(`node ${n.id}: invalid kind "${n.kind}"`);
+    if (n.path && !PATH_PATTERN.test(n.path)) errors.push(`node ${n.id}: path "${n.path}" breaks the URL rule (ADR 0002)`);
     if (UNTEMPLATED.has(n.kind) ? n.template : !templates.has(n.template)) {
       errors.push(`node ${n.id}: template "${n.template}" not allowed for kind ${n.kind}`);
     }
@@ -94,6 +97,33 @@ function mapRow(row, ctx) {
   return { node: routes.get(route) };
 }
 
+// Blog article slug under /blog (ADR 0002): the old slug lowercased, runs of "-" collapsed, edge "-" trimmed.
+// A slug equal to a category slug or "page" takes the old category segment as prefix.
+// Merge rows take the slug of their target, the first URL in disposition_reason (scripts/inventory/audit.mjs).
+function assignBlogSlugs(mapped, nodes) {
+  const clean = (s) => s.toLowerCase().replace(/-+/g, '-').replace(/^-|-$/g, '');
+  const reserved = new Set(['page', ...nodes.filter((n) => n.parent === 'blog' && n.kind === 'page').map((n) => n.path.split('/').pop())]);
+  const articles = mapped.filter((r) => r.node === 'blog-post');
+  const kept = new Map();
+  const seen = new Map();
+  for (const r of articles.filter((a) => a.disposition !== 'merge')) {
+    const segments = new URL(r.url).pathname.split('/').filter(Boolean);
+    let slug = clean(segments.at(-1));
+    if (reserved.has(slug)) slug = clean(`${segments.at(-2)}-${slug}`);
+    if (reserved.has(slug) || !PATH_PATTERN.test(`/${slug}`)) errors.push(`blog slug "${slug}" breaks the URL rule (ADR 0002): ${r.url}`);
+    const key = `${r.locale} ${slug}`;
+    if (seen.has(key)) errors.push(`duplicate blog slug ${key}: ${seen.get(key)} and ${r.url}`);
+    seen.set(key, r.url);
+    kept.set(r.url, r);
+    r.blog_slug = slug;
+  }
+  for (const r of articles.filter((a) => a.disposition === 'merge')) {
+    const target = kept.get(r.disposition_reason.match(/https:\/\/\S+?(?=[\s，。]|$)/)?.[0]);
+    if (!target || target.locale !== r.locale) errors.push(`blog merge row without a kept target in the same locale: ${r.url}`);
+    else r.blog_slug = target.blog_slug;
+  }
+}
+
 function mermaid(nodes) {
   const label = (n) => {
     const tag = n.template || n.kind;
@@ -131,8 +161,8 @@ function generatedSection(nodes, templates, byId, counts) {
     out.push(`| \`${tid}\` | ${t.purpose} | ${ids.length} | ${ids.reduce((s, id) => s + total(id), 0)} |`);
   }
 
-  out.push('', '### 節點與模板對應', '', '路徑為暫定：有現站頁面的沿用現站路徑（去掉語系前綴），新頁為新路徑；正式 URL 由 M2-03 決定。列數為對應到該節點的 inventory 列數（keep／rewrite／merge）。', '');
-  out.push('| 節點 | 模板 | 暫定路徑 | zh-TW | en | vi | 備註 |', '|---|---|---|--:|--:|--:|---|');
+  out.push('', '### 節點與模板對應', '', '路徑依 [ADR 0002](../decisions/0002-url-and-locale.md)：有現站頁面的沿用現站路徑（去掉語系前綴、轉小寫），新頁依階層命名；en、vi 加 `/en`、`/vi` 前綴。列數為對應到該節點的 inventory 列數（keep／rewrite／merge）。', '');
+  out.push('| 節點 | 模板 | 路徑 | zh-TW | en | vi | 備註 |', '|---|---|---|--:|--:|--:|---|');
   for (const n of nodes) {
     const indent = '　'.repeat(depth(n, byId));
     const path = n.path ? `\`${n.path}\`` : '';
@@ -165,8 +195,9 @@ async function main() {
     .filter((r) => r.disposition !== 'drop')
     .map((r) => {
       const { node, blog_category = '' } = mapRow(r, { routes, byId, used, subCategory });
-      return { url: r.url, locale: r.locale, page_type: r.page_type, disposition: r.disposition, node, template: byId.get(node)?.template ?? '', blog_category };
+      return { url: r.url, locale: r.locale, page_type: r.page_type, disposition: r.disposition, disposition_reason: r.disposition_reason, node, template: byId.get(node)?.template ?? '', blog_category };
     });
+  assignBlogSlugs(mapped, nodes);
   for (const route of routes.keys()) if (!used.has(route)) errors.push(`route-map entry not used by any inventory row: ${route}`);
 
   // Every node needs inventory rows or a note saying why it has none (new page, no detail pages yet)
@@ -186,7 +217,7 @@ async function main() {
     process.exit(1);
   }
 
-  const columns = ['url', 'locale', 'page_type', 'disposition', 'node', 'template', 'blog_category'];
+  const columns = ['url', 'locale', 'page_type', 'disposition', 'node', 'template', 'blog_category', 'blog_slug'];
   const csv = [columns.join(','), ...mapped.map((r) => columns.map((c) => csvCell(r[c])).join(','))].join('\n');
   await writeFile(PAGE_MAP, `﻿${csv}\n`);
 

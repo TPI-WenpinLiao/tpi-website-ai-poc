@@ -6,7 +6,7 @@
 
 - 可上線品質的真實開發，但目前只部署到 Cloudflare Pages（`*.pages.dev`），不上正式網域
 - 本站是現站的改版複製品，**不可被搜尋引擎收錄**：`public/_headers` 與 `public/robots.txt` 不得移除或放寬
-- 語系：zh-TW 優先；架構需支援 en、vi（M7 才翻譯）
+- 語系：zh-TW 優先；架構需支援 en、vi（M7 才翻譯）。URL 與語系路徑規則見 `docs/decisions/0002-url-and-locale.md`
 - 目前 milestone、進度與下一步以 `docs/status.md` 為準
 
 ## 技術棧
@@ -22,7 +22,7 @@ src/styles/       tokens.css（design tokens）
 public/           靜態檔（_headers、robots.txt）
 scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、inventory/（現站盤點與稽核）、ia/（sitemap 對應）
 docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構）
-.claude/skills/   issue-start、issue-ship、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
+.claude/skills/   issue-start、issue-ship、pr-review、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
 .github/          ISSUE_TEMPLATE、workflows、bootstrap（labels / milestones / issues）
 ```
 
@@ -38,7 +38,7 @@ Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）
 
 ## 雲端 session 工作規則
 
-1. 每個 session 對應一張 issue。以 `/issue-start <N>` 開始：讀 issue、本檔、`docs/status.md`，檢查依賴與環境，以 Plan 模式提出計畫，等使用者確認後再實作。
+1. 每個 session 對應一張 issue。以 `/issue-start <N>` 開始：讀 issue、本檔、`docs/status.md`，對照 `status.md` 與 GitHub 實際狀態，檢查依賴與環境，以 Plan 模式提出計畫，等使用者確認後再實作。
 2. 若 `node_modules` 不存在或 SessionStart hook 回報安裝失敗，先執行 `npm ci` 並回報結果，不要直接開始實作。
 3. Branch：雲端 session 使用 session 指定的 branch；本機開發用 `<type>/<issue-number>-<slug>`，type 取 `feat` / `fix` / `content` / `docs` / `chore`。PR 標題以 issue 的 `[Mx-xx]` 或 `[chore]` 前綴開頭。
 4. 以 `/issue-ship` 收尾。PR body 必含：`Closes #N`、變更摘要、驗收方式、preview 檢查重點（要看哪些頁面、哪些斷點）。

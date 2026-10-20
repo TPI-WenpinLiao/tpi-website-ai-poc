@@ -7,7 +7,10 @@ const SITE = process.env.SITE_URL ?? 'https://tpi-website-ai-poc.pages.dev';
 export default defineConfig({
   site: SITE,
   output: 'static',
-  trailingSlash: 'ignore',
+  trailingSlash: 'never',
+  build: {
+    format: 'file',
+  },
   i18n: {
     locales: ['zh-TW', 'en', 'vi'],
     defaultLocale: 'zh-TW',

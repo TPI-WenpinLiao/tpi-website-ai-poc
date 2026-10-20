@@ -8,7 +8,9 @@ interface Props {
 }
 
 const { title, description, lang = 'zh-TW' } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// build.format 'file' makes pathname end in .html; canonical URLs have no extension or trailing slash (ADR 0002)
+const pathname = Astro.url.pathname.replace(/\.html$/, '').replace(/(^|\/)index$/, '') || '/';
+const canonical = new URL(pathname, Astro.site).href;
 const ogLocale = lang.replace('-', '_');
 ---
 

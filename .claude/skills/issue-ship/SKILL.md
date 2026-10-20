@@ -22,46 +22,32 @@ git diff --stat
 
 ## 2. 品質檢查
 
-1. 依變更類型對照 skill：頁面 → `seo-checklist`；樣式 → `design-system`（只用 tokens，不得寫死色碼、字級、間距）；遷移內容 → `content-migration`（不得捏造事實）；`.ts`／`.astro`／`.mjs` → `typescript-best-practices`；文件、PR 描述 → `writing-style`
-2. 有可重跑的 script 時，重跑一次確認輸出與 commit 內容一致；驗證要看實際輸出與 exit code，不以「應該會過」代替
-3. 執行 `npm run check`（Bash timeout 600000 ms，輸出導到 scratchpad）。**失敗就停下回報，不得 commit 或 push**
+執行 `npm run check`（Bash timeout 600000 ms，輸出導到 scratchpad）。**失敗就停下回報，不得 commit 或 push**
 
-## 3. 出貨前自我 review
+## 3. 更新 `docs/status.md`
 
-> 判斷框架改寫自 pstack 的 `interrogate`（lead-judgment）與 `thermo-nuclear-review`，見 [`../THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md)
+`status.md` 描述 main 的狀態。PR 的內容在合併那一刻才進 main，所以 PR 裡寫的是**這個 PR 合併後**的狀態。本節是 `status.md` 寫法的唯一規則；`/issue-start` 的對照與 `/pr-review` 的固定檢查都依本節判斷。
 
-先用一段話寫出本次變更的意圖（來自 issue、計畫與 commit），再 review：
-
-- **程式碼變更**（`src/`、`scripts/`、`.github/`、設定檔）：執行內建的 `/code-review`；動到表單、Pages Functions、`_headers`、secrets 讀取時，另外執行 `/security-review`
-- **文件與資料**：逐條對 issue 的驗收條件找反例，例如有沒有漏列的列、統計數字跟產出檔案對不上、這次產出的東西反過來證明規則錯了
-- **本專案的「功能外洩」檢查**（每次都做）：
-  - `public/_headers`、`public/robots.txt` 沒有被移除或放寬
-  - HTML 沒有 `noindex` meta
-  - 沒有寫死色碼、字級、間距（`design-system`）
-  - 沒有捏造的產品功能、數據、客戶名稱（`content-migration`）
-- **devex 破壞**：環境變數名稱、npm scripts、`.nvmrc`、SessionStart hook 的改變，有沒有同步更新 `docs/onboarding.md` 或 `docs/workflow.md`
-
-每個發現歸入一類，附一行理由：
-
-| 類別 | 意義 | 處理 |
-|---|---|---|
-| Act on | 影響正確性、安全或可維護性，真的會擋下 PR | 修正後重跑第 2 步 |
-| Consider | 合理，但不確定值得現在處理 | 寫進 PR 的「待確認」 |
-| Noted | 正確但現階段不需處理 | 不列出 |
-| Dismissed | 錯誤、吹毛求疵或缺乏脈絡 | 不列出 |
-
-判斷時：
-- 假設情境要追到真實的呼叫端或輸入才算數；型別或上游驗證已擋住的就 dismiss
-- 「我會換個寫法」不是問題，除非能指出目前寫法的具體缺陷
-- 安全與正確性的發現即使只有一個來源，也要多查一次再決定
-- 沒有實質發現就直說沒有，不要湊數
-
-## 4. 更新 `docs/status.md`
-
-- 「最後更新」改為今天
-- 「進度」表加上本 issue（`M1-02 內容稽核完成（#3）` 的格式）
-- 「下一步」移除已完成的項目；新增本 issue 產生的待決事項
+- 「最後更新」改為今天。與其他 PR 衝突時取較新的日期
+- 「進度」表只寫 milestone 層級的狀態：未開始／進行中／完成
+- 「Issue」段落一個 issue 一行，已關閉的 issue 與有 open PR 的 issue 都要列。放在所屬 milestone 的小標下，依 bootstrap-id（`M2-03`）排序；沒有 bootstrap-id 的排在該小標最後。沒有 milestone 的 issue（例如 `[chore]`）放在 issue 關閉當時「進度」表中編號最大的「進行中」milestone；還沒關閉的（包括本 issue）以寫入當下為準
+- 本 issue 寫成合併後的狀態：`M2-03 URL 規則與語系策略完成（#10）`
+  - 不寫 PR 編號：開 PR 前還不知道編號，PR 可從 issue 的 `closed_by_pull_requests` 查到。既有條目的 PR 編號保留
+  - `needs-design` 階段一的 draft PR 合併前要先拿到 approved label，這時還不算完成，寫成 `M3-01 wireframe（#13），階段一，等待 wireframe-approved`；階段二的 PR 再改成完成
+- 其他 issue 依 GitHub 實際狀態寫：issue 已關閉的寫完成；有 open PR 的寫 `M2-04 內容模型（#11，PR #61），待合併`，不得寫完成
+- 「下一步」用無編號清單
+  - 移除本 issue 的項目
+  - 加上合併後才成立的項目，例如「M2-06 可以開始」。寫之前用 `mcp__github__issue_read` 確認該 issue「## 依賴」的其他 issue 都已關閉，只差本 issue
+  - 加上本 issue 產生的待決事項
 - 「待辦備忘」只放跨 issue、需要記住的事
+
+## 4. 出貨前自我 review
+
+執行 `/pr-review`（不帶參數，審查目前 branch）。依該 skill 的規定交給子代理執行。固定檢查與分類規則只寫在 [`../pr-review/SKILL.md`](../pr-review/SKILL.md)，本步驟不另列。
+
+- Act on：修正後重跑第 2 步，再跑一次 `/pr-review`
+- Consider：寫進 PR 的「待確認」
+- 本步驟不在 PR 上留言（此時還沒有 PR）
 
 ## 5. Commit
 
