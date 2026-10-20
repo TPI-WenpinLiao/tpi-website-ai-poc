@@ -9,6 +9,15 @@ description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編�
 
 本 skill 預設唯讀：只把審查意見輸出到對話，不修改 repo，也不在 PR 上留言。使用者明確要求時才發留言（第 7 步）。
 
+## 在改動的 session 審查時交給子代理
+
+審查對象是本 session 寫的變更時（`/issue-ship` 的自我 review、審查本 session 開的 PR 或推過的 commit），不要自己審，改用 Agent tool 開一個子代理執行本 skill。作者的脈絡會讓人看不出自己的盲點，子代理從零開始讀 diff 與 issue，比較容易找到反例。
+
+- 子代理的 prompt 只給：審查對象（PR 編號、git range，或 repo 路徑加 branch）、issue 編號、本檔路徑，以及「依本檔第 1–7 步執行、唯讀、不留言，依第 7 步格式輸出」
+- 不要把實作時的推論、計畫內容或「哪裡應該沒問題」寫進 prompt；PR body 與 commit message 讓子代理自己讀
+- 子代理回報後，由本 session 判斷每個發現是否成立（第 6 步的原則同樣適用），再轉述給使用者或依 `/issue-ship` 處理
+- 審查別人的 PR、或本 session 沒有改動過的變更時，直接在本 session 執行
+
 ## 1. 決定審查對象
 
 | 參數 | 對象 | diff 來源 | issue 來源 |
@@ -47,7 +56,7 @@ description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編�
 | 依變更類型套用 skill | 頁面 → `seo-checklist`；搬移內容 → `content-migration`；`.ts`／`.astro`／`.mjs` → `typescript-best-practices`；文件、PR 描述、commit message → `writing-style` |
 | 產生檔與 script 一致 | diff 有 script 或它的產出檔時，重跑 script，`git diff --exit-code` 必須沒有差異；再跑一次結果相同 |
 | 文件與資料來源一致 | 手寫的表格或清單在描述某個資料檔的某一類列時（例如「不進導覽的節點」對應 `navigation.csv` 的 `none` 列），把兩邊的 ID 各列成一份清單再比對：文件有、資料檔那一類沒有的，以及反過來的，都是發現。ID 只在別的資料檔（例如 `nodes.csv`）存在不算對上。手寫數字要從資料檔重新算一次。script 重跑沒有差異不代表手寫段落正確 |
-| `docs/status.md` 與 PR 實際狀態一致 | 未合併的 PR 不得寫成「完成」，要寫「待合併」；寫了「待合併」但 PR 已合併的也要標出 |
+| `docs/status.md` 寫的是合併後的狀態 | 依 [`issue-ship` 第 3 步](../issue-ship/SKILL.md#3-更新-docsstatusmd)，假設這個 diff 已合併，逐項查：(1) 本 issue 寫成完成（`needs-design` 階段一寫中間狀態），寫「待合併」也是發現 (2) 其他還沒合併的 PR 沒有寫成完成 (3) 列出的 issue 已關閉、PR 已合併的寫成完成；已關閉的 issue 與有 open PR 的 issue 都有自己一行（查法同 `issue-start` 第 4 步的 3、4） (4)「下一步」沒有留著本 issue 的項目；寫「可以開始」的 issue，依賴在合併後確實都已關閉。(2)–(4) 用 `mcp__github__issue_read`／`pull_request_read` 查 |
 | 同一個決定只放在一個地方 | 同一份清單、數字、規則不得在兩個檔案各寫一份；第二份改為連結 |
 | devex 沒有被破壞 | 環境變數名稱、npm scripts、`.nvmrc`、SessionStart hook 有變動時，`docs/onboarding.md` 或 `docs/workflow.md` 有同步更新 |
 
