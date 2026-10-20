@@ -9,6 +9,15 @@ description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編�
 
 本 skill 預設唯讀：只把審查意見輸出到對話，不修改 repo，也不在 PR 上留言。使用者明確要求時才發留言（第 7 步）。
 
+## 在改動的 session 審查時交給子代理
+
+審查對象是本 session 寫的變更時（`/issue-ship` 的自我 review、審查本 session 開的 PR 或推過的 commit），不要自己審，改用 Agent tool 開一個子代理執行本 skill。作者的脈絡會讓人看不出自己的盲點，子代理從零開始讀 diff 與 issue，比較容易找到反例。
+
+- 子代理的 prompt 只給：審查對象（PR 編號、git range，或 repo 路徑加 branch）、issue 編號、本檔路徑，以及「依本檔第 1–7 步執行、唯讀、不留言，依第 7 步格式輸出」
+- 不要把實作時的推論、計畫內容或「哪裡應該沒問題」寫進 prompt；PR body 與 commit message 讓子代理自己讀
+- 子代理回報後，由本 session 判斷每個發現是否成立（第 6 步的原則同樣適用），再轉述給使用者或依 `/issue-ship` 處理
+- 審查別人的 PR、或本 session 沒有改動過的變更時，直接在本 session 執行
+
 ## 1. 決定審查對象
 
 | 參數 | 對象 | diff 來源 | issue 來源 |

@@ -43,7 +43,7 @@ git diff --stat
 
 ## 4. 出貨前自我 review
 
-執行 `/pr-review`（不帶參數，審查目前 branch）。固定檢查與分類規則只寫在 [`../pr-review/SKILL.md`](../pr-review/SKILL.md)，本步驟不另列。
+執行 `/pr-review`（不帶參數，審查目前 branch）。依該 skill 的規定交給子代理執行。固定檢查與分類規則只寫在 [`../pr-review/SKILL.md`](../pr-review/SKILL.md)，本步驟不另列。
 
 - Act on：修正後重跑第 2 步，再跑一次 `/pr-review`
 - Consider：寫進 PR 的「待確認」
