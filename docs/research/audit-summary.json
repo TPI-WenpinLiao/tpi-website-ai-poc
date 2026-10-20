@@ -3,27 +3,27 @@
   "newsCutoff": "2024-01-01",
   "blogStaleBefore": "2022-01-01",
   "byDisposition": {
-    "rewrite": 183,
-    "drop": 414,
-    "merge": 60,
+    "rewrite": 164,
+    "drop": 413,
+    "merge": 80,
     "keep": 649
   },
   "byDispositionLocale": {
     "rewrite": {
-      "zh-TW": 73,
-      "en": 56,
-      "vi": 54
+      "zh-TW": 64,
+      "en": 51,
+      "vi": 49
     },
     "drop": {
-      "zh-TW": 258,
+      "zh-TW": 257,
       "en": 126,
       "vi": 28,
       "ja": 2
     },
     "merge": {
-      "zh-TW": 26,
-      "en": 19,
-      "vi": 15
+      "zh-TW": 36,
+      "en": 24,
+      "vi": 20
     },
     "keep": {
       "zh-TW": 178,
@@ -37,16 +37,17 @@
       "drop": 1
     },
     "campaign": {
-      "drop": 3
+      "drop": 2,
+      "merge": 1
     },
     "about": {
       "rewrite": 6,
       "drop": 1
     },
     "service": {
-      "rewrite": 19,
+      "rewrite": 16,
       "keep": 25,
-      "merge": 2,
+      "merge": 5,
       "drop": 3
     },
     "blog-index": {
@@ -94,8 +95,8 @@
       "rewrite": 3
     },
     "product": {
-      "rewrite": 72,
-      "merge": 3
+      "rewrite": 56,
+      "merge": 19
     },
     "resource": {
       "rewrite": 3
@@ -110,7 +111,7 @@
       "rewrite": 3
     }
   },
-  "toConfirm": 215,
+  "toConfirm": 204,
   "overrides": 17,
   "localeGaps": [
     {
@@ -165,20 +166,6 @@
       ]
     },
     {
-      "route": "/products/systalk-audit/quality-analysis",
-      "missing": [
-        "en",
-        "vi"
-      ]
-    },
-    {
-      "route": "/products/systalk-audit/quality-analysis/quiz",
-      "missing": [
-        "en",
-        "vi"
-      ]
-    },
-    {
       "route": "/products/systalk-coach",
       "missing": [
         "vi"
@@ -186,20 +173,6 @@
     },
     {
       "route": "/products/systalk-icr",
-      "missing": [
-        "en",
-        "vi"
-      ]
-    },
-    {
-      "route": "/products/systalk-rpa/enterp-diagnosis",
-      "missing": [
-        "en",
-        "vi"
-      ]
-    },
-    {
-      "route": "/products/systalk-viki/vikibundle",
       "missing": [
         "en",
         "vi"

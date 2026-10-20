@@ -1,0 +1,82 @@
+id,parent,title,template,kind,path,note
+home,,首頁,home,page,/,
+products,home,產品總覽,hub,page,/products,
+family-ai,products,AI（SysTalk.ai）,hub,page,/products/systalk-ai,
+systalk-chat,family-ai,SysTalk.Chat AI 智能客服,offering,page,/products/systalk-chat,併入 /genai-solution 導入服務
+systalk-viki,family-ai,SysTalk.VIKI 企業生成式 AI 應用平台,offering,page,/products/systalk-viki,
+systalk-coach,family-ai,SysTalk.Coach AI 業務培訓,offering,page,/products/systalk-coach,
+systalk-audit,family-ai,SysTalk.Audit AI 語音質檢,offering,page,/products/systalk-audit,
+systalk-icr,family-ai,SysTalk.ICR AI 智慧光學字元辨識,offering,page,/products/systalk-icr,
+systalk-rpa,family-ai,SysTalk.RPA 流程自動化,offering,page,/products/systalk-rpa,
+smartclaim,family-ai,AI 智能理賠解決方案,offering,page,/solutions/smartclaim,
+smartfilling,family-ai,AI 智慧建檔解決方案,offering,page,/solutions/smartfilling,
+textualanalysis,family-ai,SysTalk.Detect AI 文本分析,offering,page,/solutions/textualanalysis,待確認：不在導覽，是否仍銷售
+orient-ai,family-ai,OrientAI 企業級 Agentic AI 平台,offering,page,/orient-ai,zh-TW 導覽為獨立的 Agentic AI 群組，vi 導覽放在 DigiLism 下
+family-dx,products,數位轉型（DigiLism）,hub,page,/products/digilism,
+digirunner,family-dx,digiRunner API 管理平台,offering,page,/products/digirunner,
+digirunner-cloud,digirunner,digiRunner on Cloud,offering,page,/products/digirunner-cloud,併入 AWS Marketplace landing page
+digirunner-aws-guide,digirunner-cloud,digiRunner on AWS Marketplace 買家指南（PDF）,,asset,,原檔保留，zh-TW 與 en 各一份
+digilogs,family-dx,digiLogs 集中化日誌管理平台,offering,page,/products/digilogs,
+digilogs-iso27001,digilogs,ISO27001 日誌存錄,offering,page,/products/digilogs/iso27001logging,
+digilogs-detection,digilogs,digiLogs 日誌分析,offering,page,/products/digilogs/log-detection,待確認：不在導覽，是否仍銷售
+digimars,family-dx,digiMars 大數據管理平台,offering,page,/products/digimars,
+digiflexis,family-dx,digiFlexis 企業流程管理平台,offering,page,/products/digiflexis,
+digicare,family-dx,digiCare 智慧醫療服務,offering,page,/products/digicare,
+interactivehealth,family-dx,互動式健康管理服務平台,offering,page,/solutions/interactivehealth,待確認：不在導覽，是否仍銷售
+family-security,products,資安（GadoSecurity）,hub,page,/products/gadosecurity,新頁：現站沒有對應頁，介紹文字需人工提供
+gadodido,family-security,gadoDIDO 無密碼身分驗證,offering,page,/products/gadodido,
+gadoscout,family-security,gadoScout AI 異常偵測系統,offering,page,/products/gadoscout,
+family-esg,products,ESG 與能源（ESGswift）,hub,page,/products/esgswift,
+greenswift,family-esg,GreenSwift 智慧碳管理平台,offering,page,/products/greenswift,併入 /carbon 推廣頁
+electriswift,family-esg,ElectriSwift 智慧能源管理系統,offering,page,/products/electriswift,
+industries,home,產業方案,hub,page,/industries,新頁：介紹文字需人工提供；子頁順序待確認（audience-and-goals.md 問題 2）
+industry-finance,industries,金融,hub,page,/industries/finance,新頁：承接 /products/open-banking 內容，其餘介紹需人工提供
+insurebrick,industry-finance,InsureBrick 保險科技模組化平台,offering,page,/products/insurebrick,待確認：不在導覽，是否仍銷售
+insurering,industry-finance,InsureRing 保險自動化規則檢核,offering,page,/solutions/insurering,待確認：不在導覽，是否仍銷售
+industry-government,industries,政府與公部門,hub,page,/industries/government,新頁：承接 /products/open-government 內容，其餘介紹需人工提供
+gis,industry-government,GIS 空間數據解決方案,offering,page,/solutions/gis,待確認：不在導覽，是否仍銷售
+industry-manufacturing,industries,製造業,hub,page,/industries/manufacturing,新頁：現站沒有製造業內容，需人工提供
+services,home,服務總覽,hub,page,/services,新頁：現站沒有服務總覽頁，介紹文字需人工提供
+aiso,services,AISO 主權 AI,offering,page,/aiso,
+outsourcing,services,委外服務,offering,page,/outsourcing,
+cloudservice,services,雲端整合服務,offering,page,/cloudservice,
+chatgpt-enterprise,services,ChatGPT 企業服務,offering,page,/chatgpt-enterprise,
+uiux,services,UI/UX 數位產品設計,offering,page,/solutions/uiux,
+esg-advisory,services,ESG 永續發展與顧問服務,offering,page,/esg-advisory,
+esg-advisor,esg-advisory,ESG 顧問個人頁,person,collection,/esg-advisory/{slug},
+success-stories,home,成功案例,listing,page,/success-story,
+case-study,success-stories,成功案例內頁,case-study,collection,/success-story/{slug},現站沒有內頁，案例清單與客戶授權確認後才建
+resources,home,資源,hub,page,/resource,
+blog,resources,部落格,listing,page,/blog,
+blog-ai,blog,AI,listing,page,/blog/ai,
+blog-digital-transformation,blog,數位轉型,listing,page,/blog/digital-transformation,
+blog-enterprise-management,blog,企業管理,listing,page,/blog/enterprise-management,
+blog-esg,blog,ESG 與綠色轉型,listing,page,/blog/esg,
+blog-use-cases,blog,應用情境,listing,page,/blog/use-cases,
+blog-post,blog,blog 文章,article,collection,/blog/{category}/{slug},
+whitepaper-digirunner,resources,digiRunner 白皮書,gated-download,page,/whitepaper/api-strategies,
+whitepaper-digilogs,resources,digiLogs 白皮書,gated-download,page,/whitepaper/digiLogs,
+whitepaper-greenswift,resources,GreenSwift 碳盤指南,gated-download,page,/whitepaper/greenswift,
+whitepaper-systalk-ai,resources,SysTalk.ai AI Playbook,gated-download,page,/whitepaper/systalk-ai,
+events,resources,活動,listing,page,/events,
+tpu,resources,昕力大學,,external,/tpu,獨立子站，只放入口連結
+about,home,關於我們,content,page,/about-us,
+partners,about,合作夥伴,content,page,/partners,zh-TW 現站內容幾乎為空，zh-TW 版需人工提供內容
+media-center,about,媒體中心,listing,page,/media-center,
+news-article,media-center,新聞,article,collection,/media-center/{id},
+hr,about,人才招募,,external,/hr,獨立應用，只放入口連結
+contact,home,聯絡我們,contact,page,/contact-us,
+legal,home,法務與政策,,group,,只在 footer 出現
+privacy,legal,隱私權政策,content,page,/privacy,PDF 轉 HTML
+terms,legal,使用條款,content,page,/terms,PDF 轉 HTML
+disclaimer,legal,免責聲明,content,page,/disclaimer,PDF 轉 HTML
+security-policy,legal,資訊安全政策,content,page,/security-policy,PDF 轉 HTML
+utilities,home,功能頁,,group,,不進導覽
+search,utilities,站內搜尋,utility,page,/search,
+subscribe,utilities,電子報訂閱,utility,page,/subscribe,
+subscribe-result,subscribe,訂閱結果,utility,page,/subscribe/result,
+unsubscribe,utilities,取消訂閱,utility,page,/unsubscribe,
+cancelrecord,utilities,取消訂閱紀錄,utility,page,/cancelrecord,
+thanks,utilities,感謝頁,utility,page,/thanks,
+download,utilities,檔案下載中繼頁,utility,collection,/download/{product},
+not-found,utilities,404,utility,page,/404,新頁
