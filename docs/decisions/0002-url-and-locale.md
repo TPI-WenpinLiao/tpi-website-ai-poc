@@ -42,11 +42,12 @@
 - 有現站頁面的沿用現站路徑，只做上述正規化（例如 `/whitepaper/digiLogs` → `/whitepaper/digilogs`）。新頁依 IA 階層命名（`/industries/finance`、`/services`、`/products/gadosecurity`）
 - 頁面路徑的 slug 三語共用，不翻譯
 - blog 文章：`/blog/{slug}`，不含分類，slug 沿用現站並正規化。分類頁為 `/blog/{category}`
-- `/blog/` 底下的保留字：各分類的 slug（`ai`、`digital-transformation`、`enterprise-management`、`esg`、`use-cases`）與 `page`。文章 slug 與保留字相同時，前面加上現站分類路徑段（vi 的 `/blog/digital-transformation/AI` → `/vi/blog/digital-transformation-ai`）；新文章不用保留字
+- 合併掉的重複文章（inventory 的 merge 列）用合併目標的 slug，301 到目標文章
+- `/blog/` 底下的保留字：各分類頁的 slug（`nodes.csv` 中 parent 為 `blog` 的節點）與 `page`。文章 slug 與保留字相同時，前面加上現站分類路徑段（vi 的 `/blog/digital-transformation/AI` → `/vi/blog/digital-transformation-ai`）；新文章不用保留字
 - 新聞：`/media-center/{id}`，沿用現站的數字 id
 - 列表分頁：第一頁不帶頁碼；第 2 頁起為 `/{列表路徑}/page/{n}`，例如 `/blog/page/2`、`/blog/ai/page/2`
 - 篩選以分類頁的路徑呈現，不用 query string 產生要被收錄的頁面
-- `node scripts/ia/sitemap.mjs` 檢查 `nodes.csv` 的 `path` 欄，並依上述規則算出每篇 blog 文章的新 slug，寫到 `docs/ia/page-map.csv` 的 `blog_slug` 欄。格式不符、撞到保留字或同語系重複時 exit 1
+- `node scripts/ia/sitemap.mjs` 檢查 `nodes.csv` 的 `path` 欄，並依上述規則算出每篇 blog 文章的新 slug，寫到 `docs/ia/page-map.csv` 的 `blog_slug` 欄。格式不符、撞到保留字、同語系重複，或 merge 列在同語系找不到合併目標時 exit 1
 
 ### 尾斜線
 

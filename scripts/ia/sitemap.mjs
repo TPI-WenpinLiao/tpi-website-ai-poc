@@ -99,23 +99,28 @@ function mapRow(row, ctx) {
 
 // Blog article slug under /blog (ADR 0002): the old slug lowercased, runs of "-" collapsed, edge "-" trimmed.
 // A slug equal to a category slug or "page" takes the old category segment as prefix.
+// Merge rows take the slug of their target, the first URL in disposition_reason (scripts/inventory/audit.mjs).
 function assignBlogSlugs(mapped, nodes) {
   const clean = (s) => s.toLowerCase().replace(/-+/g, '-').replace(/^-|-$/g, '');
   const reserved = new Set(['page', ...nodes.filter((n) => n.parent === 'blog' && n.kind === 'page').map((n) => n.path.split('/').pop())]);
+  const articles = mapped.filter((r) => r.node === 'blog-post');
+  const kept = new Map();
   const seen = new Map();
-  for (const r of mapped) {
-    if (r.node !== 'blog-post') continue;
+  for (const r of articles.filter((a) => a.disposition !== 'merge')) {
     const segments = new URL(r.url).pathname.split('/').filter(Boolean);
     let slug = clean(segments.at(-1));
     if (reserved.has(slug)) slug = clean(`${segments.at(-2)}-${slug}`);
     if (reserved.has(slug) || !PATH_PATTERN.test(`/${slug}`)) errors.push(`blog slug "${slug}" breaks the URL rule (ADR 0002): ${r.url}`);
-    // merge rows redirect to the kept article with the same slug
     const key = `${r.locale} ${slug}`;
-    if (r.disposition !== 'merge') {
-      if (seen.has(key)) errors.push(`duplicate blog slug ${key}: ${seen.get(key)} and ${r.url}`);
-      seen.set(key, r.url);
-    }
+    if (seen.has(key)) errors.push(`duplicate blog slug ${key}: ${seen.get(key)} and ${r.url}`);
+    seen.set(key, r.url);
+    kept.set(r.url, r);
     r.blog_slug = slug;
+  }
+  for (const r of articles.filter((a) => a.disposition === 'merge')) {
+    const target = kept.get(r.disposition_reason.match(/https:\/\/\S+?(?=[\s，。]|$)/)?.[0]);
+    if (!target || target.locale !== r.locale) errors.push(`blog merge row without a kept target in the same locale: ${r.url}`);
+    else r.blog_slug = target.blog_slug;
   }
 }
 
@@ -190,7 +195,7 @@ async function main() {
     .filter((r) => r.disposition !== 'drop')
     .map((r) => {
       const { node, blog_category = '' } = mapRow(r, { routes, byId, used, subCategory });
-      return { url: r.url, locale: r.locale, page_type: r.page_type, disposition: r.disposition, node, template: byId.get(node)?.template ?? '', blog_category };
+      return { url: r.url, locale: r.locale, page_type: r.page_type, disposition: r.disposition, disposition_reason: r.disposition_reason, node, template: byId.get(node)?.template ?? '', blog_category };
     });
   assignBlogSlugs(mapped, nodes);
   for (const route of routes.keys()) if (!used.has(route)) errors.push(`route-map entry not used by any inventory row: ${route}`);
