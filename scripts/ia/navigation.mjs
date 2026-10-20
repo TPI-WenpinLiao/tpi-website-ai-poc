@@ -20,6 +20,8 @@ const MAX_DEPTH = 3;
 const OPTIONAL_ROOTS = new Set(['utilities']);
 // Groups whose pages never appear in the header menus (search sits in the utility bar instead)
 const NOT_IN_HEADER = new Set(['legal', 'utilities']);
+// Only these kinds have a single URL to link to
+const LINKABLE = new Set(['page', 'external']);
 
 const errors = [];
 
@@ -44,6 +46,9 @@ function buildTree(rows, byId, area) {
     const node = r.node ? byId.get(r.node) : null;
     if (r.node && !node) { errors.push(`${area}: node "${r.node}" not found`); continue; }
     if (!r.node && !r.label) { errors.push(`${area}: row needs a node or a label`); continue; }
+    if (area !== 'none' && node && !LINKABLE.has(node.kind)) errors.push(`${area}: ${r.node} is a ${node.kind} node with no single page to link to`);
+    // Labels go into Mermaid strings and Markdown table cells unescaped
+    if (/["|]/.test(r.label)) errors.push(`${area}: label "${r.label}" must not contain " or |`);
     const key = r.node || r.label;
     if (items.has(key)) errors.push(`${area}: duplicate item "${key}"`);
     const item = { key, node, label: r.label || node.title, note: r.note, children: [] };
@@ -83,14 +88,14 @@ function pathOf(item, tree) {
   return labels.join(' > ');
 }
 
-function generatedSection(trees, required, byId) {
+function generatedSection(trees, listed, byId) {
   const out = [MARK_START, ''];
   out.push('### header', '', '方框為連到頁面的項目，六角形為只用來展開選單、沒有連結的項目。', '', mermaid(trees.header.roots), '');
   out.push('### footer', '', footerTable(trees.footer.roots), '');
 
-  out.push('### 節點在導覽中的位置', '', `sitemap 中深度 ${MAX_DEPTH} 以內的頁面與外部連結（不含功能頁群組）都要出現在 header、footer 或工具列，或列為「不進導覽」並寫理由。script 依此檢查。`, '');
+  out.push('### 節點在導覽中的位置', '', `sitemap 中深度 ${MAX_DEPTH} 以內的頁面與外部連結（不含功能頁群組）都要出現在 header、footer 或工具列，或列為「不進導覽」並寫理由。script 依此檢查。更深的節點有出現在 navigation.csv 時也列出。`, '');
   out.push('| 節點 | 位置 |', '|---|---|');
-  for (const n of required) {
+  for (const n of listed) {
     const indent = '　'.repeat(depth(n, byId));
     const cell = AREAS
       .flatMap((a) => (trees[a].items.has(n.id) ? [a === 'none' ? `不進導覽：${trees[a].items.get(n.id).note}` : `${AREA_LABEL[a]}：${pathOf(trees[a].items.get(n.id), trees[a])}`] : []))
@@ -122,7 +127,13 @@ async function main() {
     for (const a of ['utility', 'header', 'footer']) if (trees[a].items.has(item.key)) errors.push(`${item.key} is in both none and ${a}`);
   }
   for (const item of trees.header.items.values()) {
-    if (item.node && ancestors(item.node, byId).some((x) => NOT_IN_HEADER.has(x))) errors.push(`header: ${item.key} may not be in the header`);
+    if (item.node && [item.key, ...ancestors(item.node, byId)].some((x) => NOT_IN_HEADER.has(x))) errors.push(`header: ${item.key} may not be in the header`);
+  }
+  // The footer is one level of unlinked column headings with links under them; footerTable renders only that
+  if (!trees.footer.roots.length) errors.push('footer: no columns');
+  for (const col of trees.footer.roots) {
+    if (col.node) errors.push(`footer: column heading "${col.key}" must be a label, not a node`);
+    for (const c of col.children) if (c.children.length) errors.push(`footer: ${c.key} may not have children`);
   }
   for (const n of required) {
     if (!AREAS.some((a) => trees[a].items.has(n.id))) errors.push(`node ${n.id} is not in any nav area; add it or list it under area none with a note`);
@@ -140,7 +151,7 @@ async function main() {
     console.error(`${DOC}: generated section markers not found`);
     process.exit(1);
   }
-  await writeFile(DOC, doc.slice(0, start) + generatedSection(trees, required, byId) + doc.slice(end + MARK_END.length));
+  await writeFile(DOC, doc.slice(0, start) + generatedSection(trees, nodes.filter((n) => required.includes(n) || AREAS.some((a) => trees[a].items.has(n.id))), byId) + doc.slice(end + MARK_END.length));
 
   console.log(`header ${trees.header.items.size} items, footer ${trees.footer.items.size}, none ${trees.none.items.size}`);
 }
