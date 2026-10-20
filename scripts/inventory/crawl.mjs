@@ -405,7 +405,7 @@ function forms(node) {
   return `form:${formCount};fields:${fields}`;
 }
 
-function localeOf(htmlLang, url) {
+function localeOf(htmlLang = '', url) {
   const { hostname, pathname } = new URL(url);
   if (hostname.endsWith('.vn')) return 'vi';
   if (/^\/en(\/|$)/.test(pathname)) return 'en';
