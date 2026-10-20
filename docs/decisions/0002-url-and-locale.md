@@ -37,14 +37,16 @@
 
 ### 路徑命名
 
-- 只用小寫英文字母、數字與 `-`，每段至少一個字元；不用底線、大寫、空白或非 ASCII 字元
-- 有現站頁面的沿用現站路徑，只轉小寫（例如 `/whitepaper/digiLogs` → `/whitepaper/digilogs`）。新頁依 IA 階層命名（`/industries/finance`、`/services`、`/products/gadosecurity`）
+- 只用小寫英文字母、數字與 `-`；`-` 只能出現在兩個字元之間，不能連續、不能在開頭或結尾；不用底線、大寫、空白或非 ASCII 字元
+- 沿用現站 slug 時依序正規化：轉小寫、連續的 `-` 合併為一個、去掉開頭與結尾的 `-`（例如 `logmanagement--insurance` → `logmanagement-insurance`）
+- 有現站頁面的沿用現站路徑，只做上述正規化（例如 `/whitepaper/digiLogs` → `/whitepaper/digilogs`）。新頁依 IA 階層命名（`/industries/finance`、`/services`、`/products/gadosecurity`）
 - 頁面路徑的 slug 三語共用，不翻譯
-- blog 文章：`/blog/{slug}`，不含分類。slug 沿用現站，轉小寫。分類頁為 `/blog/{category}`
+- blog 文章：`/blog/{slug}`，不含分類，slug 沿用現站並正規化。分類頁為 `/blog/{category}`
+- `/blog/` 底下的保留字：各分類的 slug（`ai`、`digital-transformation`、`enterprise-management`、`esg`、`use-cases`）與 `page`。文章 slug 與保留字相同時，前面加上現站分類路徑段（vi 的 `/blog/digital-transformation/AI` → `/vi/blog/digital-transformation-ai`）；新文章不用保留字
 - 新聞：`/media-center/{id}`，沿用現站的數字 id
 - 列表分頁：第一頁不帶頁碼；第 2 頁起為 `/{列表路徑}/page/{n}`，例如 `/blog/page/2`、`/blog/ai/page/2`
 - 篩選以分類頁的路徑呈現，不用 query string 產生要被收錄的頁面
-- `nodes.csv` 的 `path` 欄必須符合以上格式，`node scripts/ia/sitemap.mjs` 會檢查，不符時 exit 1
+- `node scripts/ia/sitemap.mjs` 檢查 `nodes.csv` 的 `path` 欄，並依上述規則算出每篇 blog 文章的新 slug，寫到 `docs/ia/page-map.csv` 的 `blog_slug` 欄。格式不符、撞到保留字或同語系重複時 exit 1
 
 ### 尾斜線
 
@@ -102,7 +104,7 @@ export default defineConfig({
 - **同一網域**：static 輸出不能用 `i18n.domains`；同一網域也只需要一份 `_headers`、`robots.txt` 與部署設定
 - **不加尾斜線**：與現站一致，減少轉址
 - **沿用現站路徑**：保留既有排名與外部連結，301 數量最少。代價是 URL 不完全反映 IA 階層，例如服務頁在根目錄、`/solutions/smartclaim` 屬於 AI 家族。麵包屑與導覽依 IA，不從 URL 推導
-- **blog 文章不含分類**：M2-01 已經改了分類，分類日後還可能調整；不含分類的 URL 不會因此改變。同一語系內去掉分類後沒有重複的 slug（以 `docs/ia/page-map.csv` 檢查，唯一重複的 vi `ai-viet-van-ban` 是大小寫重複、已 merge）。代價是所有 blog 文章都要 301，約 470 筆，在 Cloudflare Pages `_redirects` 的靜態規則上限 2,000 筆以內
+- **blog 文章不含分類**：M2-01 已經改了分類，分類日後還可能調整；不含分類的 URL 不會因此改變。472 篇文章中，2 篇與分類頁撞名、2 篇的 `-` 需要正規化，依上方規則處理後同語系沒有重複（vi 的 `AI-viet-van-ban` 是大小寫重複，已 merge 到 `ai-viet-van-ban`），由 `sitemap.mjs` 檢查。代價是所有 blog 文章都要 301，約 470 筆，在 Cloudflare Pages `_redirects` 的靜態規則上限 2,000 筆以內
 - **x-default 指 zh-TW**：與現站相同；zh-TW 是預設語系，內容最完整
 
 ## 影響

@@ -1,7 +1,7 @@
 // New sitemap and template mapping for M2-01 (#8).
 // Reads docs/research/inventory.csv, docs/ia/blog-categories.csv (scripts/ia/blog-categories.mjs)
 // and the hand-written docs/ia/{nodes,templates,route-map}.csv,
-// maps every keep / rewrite / merge row to a sitemap node, writes docs/ia/page-map.csv and
+// maps every keep / rewrite / merge row to a sitemap node (and blog articles to their new slug), writes docs/ia/page-map.csv and
 // docs/ia/sitemap-summary.json, and regenerates the marked section of docs/ia/sitemap.md.
 // Re-run after editing any input or re-running scripts/inventory/audit.mjs: node scripts/ia/sitemap.mjs
 
@@ -97,6 +97,28 @@ function mapRow(row, ctx) {
   return { node: routes.get(route) };
 }
 
+// Blog article slug under /blog (ADR 0002): the old slug lowercased, runs of "-" collapsed, edge "-" trimmed.
+// A slug equal to a category slug or "page" takes the old category segment as prefix.
+function assignBlogSlugs(mapped, nodes) {
+  const clean = (s) => s.toLowerCase().replace(/-+/g, '-').replace(/^-|-$/g, '');
+  const reserved = new Set(['page', ...nodes.filter((n) => n.parent === 'blog' && n.kind === 'page').map((n) => n.path.split('/').pop())]);
+  const seen = new Map();
+  for (const r of mapped) {
+    if (r.node !== 'blog-post') continue;
+    const segments = new URL(r.url).pathname.split('/').filter(Boolean);
+    let slug = clean(segments.at(-1));
+    if (reserved.has(slug)) slug = clean(`${segments.at(-2)}-${slug}`);
+    if (reserved.has(slug) || !PATH_PATTERN.test(`/${slug}`)) errors.push(`blog slug "${slug}" breaks the URL rule (ADR 0002): ${r.url}`);
+    // merge rows redirect to the kept article with the same slug
+    const key = `${r.locale} ${slug}`;
+    if (r.disposition !== 'merge') {
+      if (seen.has(key)) errors.push(`duplicate blog slug ${key}: ${seen.get(key)} and ${r.url}`);
+      seen.set(key, r.url);
+    }
+    r.blog_slug = slug;
+  }
+}
+
 function mermaid(nodes) {
   const label = (n) => {
     const tag = n.template || n.kind;
@@ -170,6 +192,7 @@ async function main() {
       const { node, blog_category = '' } = mapRow(r, { routes, byId, used, subCategory });
       return { url: r.url, locale: r.locale, page_type: r.page_type, disposition: r.disposition, node, template: byId.get(node)?.template ?? '', blog_category };
     });
+  assignBlogSlugs(mapped, nodes);
   for (const route of routes.keys()) if (!used.has(route)) errors.push(`route-map entry not used by any inventory row: ${route}`);
 
   // Every node needs inventory rows or a note saying why it has none (new page, no detail pages yet)
@@ -189,7 +212,7 @@ async function main() {
     process.exit(1);
   }
 
-  const columns = ['url', 'locale', 'page_type', 'disposition', 'node', 'template', 'blog_category'];
+  const columns = ['url', 'locale', 'page_type', 'disposition', 'node', 'template', 'blog_category', 'blog_slug'];
   const csv = [columns.join(','), ...mapped.map((r) => columns.map((c) => csvCell(r[c])).join(','))].join('\n');
   await writeFile(PAGE_MAP, `﻿${csv}\n`);
 
