@@ -11,7 +11,7 @@
 | Milestone | 狀態 |
 |---|---|
 | M0 基礎建設 | 完成：PR #1 已合併；bootstrap 已執行（10 labels、8 milestones、44 issues） |
-| M1 盤點與研究 | 進行中：M1-01 現站內容盤點完成（#2，PR #46）；雲端 session 品質關卡修正（#47，PR #48，已驗證新 session 不需手動設定即可通過 `npm run check`）；M1-02 內容稽核完成（#3）；M1-03 SEO 基線完成（#4）；M1-04 功能盤點完成（#5） |
+| M1 盤點與研究 | 進行中：M1-01 現站內容盤點完成（#2，PR #46）；雲端 session 品質關卡修正（#47，PR #48，已驗證新 session 不需手動設定即可通過 `npm run check`）；M1-02 內容稽核完成（#3）；M1-03 SEO 基線完成（#4）；M1-04 功能盤點完成（#5）；M1-05 受眾與轉換目標：現況與問題清單已整理，待業務／行銷回覆（#6） |
 | M2 資訊架構 | 未開始 |
 | M3 設計系統 | 未開始 |
 | M4 開發骨架 | 未開始 |
@@ -25,7 +25,8 @@
 1. Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「需人工決定的項目」
 2. Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 3. Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
-4. 依序處理 M1 其餘 issue（以 `/next-issue` 找出可開始的 issue）
+4. 請業務與行銷回答 `docs/research/audience-and-goals.md`「待回答問題」，回覆後補進該檔並完成 #6
+5. 依序處理 M1 其餘 issue（以 `/next-issue` 找出可開始的 issue）
 
 ## 待辦備忘
 
