@@ -31,4 +31,5 @@
 - Node 26 預計 2026-10-28 進入 Active LTS，屆時將 `.nvmrc` 升為 `26`（同步 Cloudflare Pages 的 `NODE_VERSION`）
 - 雲端環境預裝 Node 22，與 `.nvmrc`（24）、`engines`（>=24）不一致；待評估是否以 setup script 安裝指定版本
 - 現站 `/sitemap.xml` 與 `/ja` 回 500，盤點改以導覽與連結爬取為準（見 `docs/research/inventory.md`）
+- 待 M2 決定：新站是否支援日文版。現站 `/ja`、`/ja/partners` 回 500，日文版目前只有這兩個路由（M1-01 盤點，#2）
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
