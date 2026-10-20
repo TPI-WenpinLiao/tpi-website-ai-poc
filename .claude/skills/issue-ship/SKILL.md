@@ -22,44 +22,21 @@ git diff --stat
 
 ## 2. 品質檢查
 
-1. 依變更類型對照 skill：頁面 → `seo-checklist`；樣式 → `design-system`（只用 tokens，不得寫死色碼、字級、間距）；遷移內容 → `content-migration`（不得捏造事實）；`.ts`／`.astro`／`.mjs` → `typescript-best-practices`；文件、PR 描述 → `writing-style`
-2. 有可重跑的 script 時，重跑一次確認輸出與 commit 內容一致；驗證要看實際輸出與 exit code，不以「應該會過」代替
-3. 執行 `npm run check`（Bash timeout 600000 ms，輸出導到 scratchpad）。**失敗就停下回報，不得 commit 或 push**
+執行 `npm run check`（Bash timeout 600000 ms，輸出導到 scratchpad）。**失敗就停下回報，不得 commit 或 push**
 
 ## 3. 出貨前自我 review
 
-> 判斷框架改寫自 pstack 的 `interrogate`（lead-judgment）與 `thermo-nuclear-review`，見 [`../THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md)
+執行 `/pr-review`（不帶參數，審查目前 branch）。固定檢查與分類規則只寫在 [`../pr-review/SKILL.md`](../pr-review/SKILL.md)，本步驟不另列。
 
-先用一段話寫出本次變更的意圖（來自 issue、計畫與 commit），再 review：
-
-- **程式碼變更**（`src/`、`scripts/`、`.github/`、設定檔）：執行內建的 `/code-review`；動到表單、Pages Functions、`_headers`、secrets 讀取時，另外執行 `/security-review`
-- **文件與資料**：逐條對 issue 的驗收條件找反例，例如有沒有漏列的列、統計數字跟產出檔案對不上、這次產出的東西反過來證明規則錯了
-- **本專案的「功能外洩」檢查**（每次都做）：
-  - `public/_headers`、`public/robots.txt` 沒有被移除或放寬
-  - HTML 沒有 `noindex` meta
-  - 沒有寫死色碼、字級、間距（`design-system`）
-  - 沒有捏造的產品功能、數據、客戶名稱（`content-migration`）
-- **devex 破壞**：環境變數名稱、npm scripts、`.nvmrc`、SessionStart hook 的改變，有沒有同步更新 `docs/onboarding.md` 或 `docs/workflow.md`
-
-每個發現歸入一類，附一行理由：
-
-| 類別 | 意義 | 處理 |
-|---|---|---|
-| Act on | 影響正確性、安全或可維護性，真的會擋下 PR | 修正後重跑第 2 步 |
-| Consider | 合理，但不確定值得現在處理 | 寫進 PR 的「待確認」 |
-| Noted | 正確但現階段不需處理 | 不列出 |
-| Dismissed | 錯誤、吹毛求疵或缺乏脈絡 | 不列出 |
-
-判斷時：
-- 假設情境要追到真實的呼叫端或輸入才算數；型別或上游驗證已擋住的就 dismiss
-- 「我會換個寫法」不是問題，除非能指出目前寫法的具體缺陷
-- 安全與正確性的發現即使只有一個來源，也要多查一次再決定
-- 沒有實質發現就直說沒有，不要湊數
+- Act on：修正後重跑第 2 步，再跑一次 `/pr-review`
+- Consider：寫進 PR 的「待確認」
+- 本步驟不在 PR 上留言（此時還沒有 PR）
 
 ## 4. 更新 `docs/status.md`
 
 - 「最後更新」改為今天
-- 「進度」表加上本 issue（`M1-02 內容稽核完成（#3）` 的格式）
+- 「進度」表加上本 issue，寫成 `M2-02 導覽定案（#9），待合併`。此時 PR 還沒合併，不得寫「完成」
+- 「進度」表中已合併的「待合併」項目改為完成，寫成 `M2-02 導覽定案完成（#9，PR #60）`；用 `mcp__github__issue_read`（`get`）確認 issue 已關閉，PR 編號取自 `closed_by_pull_requests`
 - 「下一步」移除已完成的項目；新增本 issue 產生的待決事項
 - 「待辦備忘」只放跨 issue、需要記住的事
 
