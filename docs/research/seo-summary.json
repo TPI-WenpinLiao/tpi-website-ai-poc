@@ -1,0 +1,1545 @@
+{
+  "measuredAt": "2026-10-20T07:12:01.093Z",
+  "node": "v24.22.0",
+  "source": "SSR HTML fetched with Node fetch (no JavaScript executed); input = inventory.csv rows with status 200, excluding PDFs",
+  "site": {
+    "https://www.tpisoftware.com": {
+      "robotsTxt": {
+        "status": 200,
+        "body": "User-agent: *\nDisallow:"
+      },
+      "sitemapXml": {
+        "status": 500,
+        "urls": 0
+      }
+    },
+    "https://www.tpisoftware.vn": {
+      "robotsTxt": {
+        "status": 200,
+        "body": "User-agent: *\nDisallow:"
+      },
+      "sitemapXml": {
+        "status": 200,
+        "urls": 299
+      }
+    }
+  },
+  "all": {
+    "pages": 1290,
+    "title": {
+      "missing": 0,
+      "duplicated": 68
+    },
+    "description": {
+      "missing": 89,
+      "duplicated": 87
+    },
+    "canonical": {
+      "missing": 1230,
+      "other": 38,
+      "self": 22
+    },
+    "hreflang": {
+      "present": 730,
+      "ok": 564,
+      "noXDefault": 1,
+      "notReciprocal": 52,
+      "targetNot200": 125
+    },
+    "noindex": 0,
+    "ogComplete": 0,
+    "ogMissingByKey": {
+      "og:type": 30,
+      "og:title": 45,
+      "og:description": 92,
+      "og:url": 564,
+      "og:image": 34,
+      "og:locale": 1289,
+      "og:site_name": 27
+    },
+    "twitterCard": 0,
+    "h1": {
+      "none": 89,
+      "one": 1181,
+      "multiple": 20
+    },
+    "jsonld": {
+      "withAny": 1263,
+      "parseErrors": 0
+    },
+    "images": {
+      "total": 26114,
+      "noAlt": 1439,
+      "noSize": 25660
+    }
+  },
+  "byLocale": {
+    "en": {
+      "pages": 323,
+      "title": {
+        "missing": 0,
+        "duplicated": 26
+      },
+      "description": {
+        "missing": 20,
+        "duplicated": 30
+      },
+      "canonical": {
+        "missing": 304,
+        "other": 14,
+        "self": 5
+      },
+      "hreflang": {
+        "present": 236,
+        "ok": 186,
+        "noXDefault": 0,
+        "notReciprocal": 14,
+        "targetNot200": 38
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 1,
+        "og:title": 6,
+        "og:description": 20,
+        "og:url": 174,
+        "og:image": 1,
+        "og:locale": 323,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 20,
+        "one": 296,
+        "multiple": 7
+      },
+      "jsonld": {
+        "withAny": 323,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 7029,
+        "noAlt": 388,
+        "noSize": 6895
+      }
+    },
+    "vi": {
+      "pages": 442,
+      "title": {
+        "missing": 0,
+        "duplicated": 19
+      },
+      "description": {
+        "missing": 15,
+        "duplicated": 23
+      },
+      "canonical": {
+        "missing": 423,
+        "other": 13,
+        "self": 6
+      },
+      "hreflang": {
+        "present": 129,
+        "ok": 73,
+        "noXDefault": 0,
+        "notReciprocal": 20,
+        "targetNot200": 40
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 1,
+        "og:title": 4,
+        "og:description": 16,
+        "og:url": 70,
+        "og:image": 3,
+        "og:locale": 442,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 18,
+        "one": 418,
+        "multiple": 6
+      },
+      "jsonld": {
+        "withAny": 442,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 8030,
+        "noAlt": 458,
+        "noSize": 7949
+      }
+    },
+    "zh-TW": {
+      "pages": 525,
+      "title": {
+        "missing": 0,
+        "duplicated": 23
+      },
+      "description": {
+        "missing": 54,
+        "duplicated": 34
+      },
+      "canonical": {
+        "missing": 503,
+        "other": 11,
+        "self": 11
+      },
+      "hreflang": {
+        "present": 365,
+        "ok": 305,
+        "noXDefault": 1,
+        "notReciprocal": 18,
+        "targetNot200": 47
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 28,
+        "og:title": 35,
+        "og:description": 56,
+        "og:url": 320,
+        "og:image": 30,
+        "og:locale": 524,
+        "og:site_name": 27
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 51,
+        "one": 467,
+        "multiple": 7
+      },
+      "jsonld": {
+        "withAny": 498,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 11055,
+        "noAlt": 593,
+        "noSize": 10816
+      }
+    }
+  },
+  "byPageType": {
+    "about": {
+      "pages": 6,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 1,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 6
+      },
+      "hreflang": {
+        "present": 6,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 1,
+        "targetNot200": 6
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 1,
+        "og:title": 1,
+        "og:description": 1,
+        "og:url": 1,
+        "og:image": 1,
+        "og:locale": 6,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 1,
+        "one": 3,
+        "multiple": 2
+      },
+      "jsonld": {
+        "withAny": 6,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 194,
+        "noAlt": 6,
+        "noSize": 194
+      }
+    },
+    "blog-category": {
+      "pages": 55,
+      "title": {
+        "missing": 0,
+        "duplicated": 6
+      },
+      "description": {
+        "missing": 52,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 55
+      },
+      "hreflang": {
+        "present": 0,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 0
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 13,
+        "og:description": 52,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 55,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 55,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 55,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 1055,
+        "noAlt": 55,
+        "noSize": 1055
+      }
+    },
+    "blog-index": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 3,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 3
+      },
+      "hreflang": {
+        "present": 0,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 0
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 3,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 3,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 74,
+        "noAlt": 3,
+        "noSize": 74
+      }
+    },
+    "blog-post": {
+      "pages": 469,
+      "title": {
+        "missing": 0,
+        "duplicated": 2
+      },
+      "description": {
+        "missing": 1,
+        "duplicated": 4
+      },
+      "canonical": {
+        "missing": 469
+      },
+      "hreflang": {
+        "present": 0,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 0
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 1,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 469,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 469,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 469,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 6061,
+        "noAlt": 469,
+        "noSize": 6061
+      }
+    },
+    "campaign": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 2,
+        "self": 1
+      },
+      "hreflang": {
+        "present": 3,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 3
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 2,
+        "one": 0,
+        "multiple": 1
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 123,
+        "noAlt": 5,
+        "noSize": 58
+      }
+    },
+    "case-study": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 3
+      },
+      "hreflang": {
+        "present": 3,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 3
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 0,
+        "multiple": 3
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 57,
+        "noAlt": 3,
+        "noSize": 57
+      }
+    },
+    "contact": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 3
+      },
+      "hreflang": {
+        "present": 3,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 3
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 0,
+        "multiple": 3
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 36,
+        "noAlt": 3,
+        "noSize": 36
+      }
+    },
+    "download": {
+      "pages": 15,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 4
+      },
+      "canonical": {
+        "missing": 15
+      },
+      "hreflang": {
+        "present": 13,
+        "ok": 8,
+        "noXDefault": 0,
+        "notReciprocal": 2,
+        "targetNot200": 4
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 15,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 6,
+        "one": 9,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 15,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 304,
+        "noAlt": 18,
+        "noSize": 197
+      }
+    },
+    "events": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 3
+      },
+      "hreflang": {
+        "present": 3,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 1,
+        "targetNot200": 3
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 3,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 57,
+        "noAlt": 3,
+        "noSize": 57
+      }
+    },
+    "home": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "self": 3
+      },
+      "hreflang": {
+        "present": 3,
+        "ok": 1,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 2
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 3,
+        "one": 0,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 360,
+        "noAlt": 3,
+        "noSize": 360
+      }
+    },
+    "news": {
+      "pages": 531,
+      "title": {
+        "missing": 0,
+        "duplicated": 4
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 14
+      },
+      "canonical": {
+        "missing": 531
+      },
+      "hreflang": {
+        "present": 531,
+        "ok": 531,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 0
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 531,
+        "og:image": 0,
+        "og:locale": 531,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 531,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 531,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 11682,
+        "noAlt": 531,
+        "noSize": 11682
+      }
+    },
+    "news-index": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "self": 3
+      },
+      "hreflang": {
+        "present": 3,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 3
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 3,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 73,
+        "noAlt": 3,
+        "noSize": 73
+      }
+    },
+    "newsletter": {
+      "pages": 25,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 25,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 25
+      },
+      "hreflang": {
+        "present": 0,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 0
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 25,
+        "og:title": 25,
+        "og:description": 25,
+        "og:url": 25,
+        "og:image": 25,
+        "og:locale": 25,
+        "og:site_name": 25
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 25,
+        "one": 0,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 0,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 407,
+        "noAlt": 0,
+        "noSize": 407
+      }
+    },
+    "product": {
+      "pages": 75,
+      "title": {
+        "missing": 0,
+        "duplicated": 6
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 18
+      },
+      "canonical": {
+        "missing": 54,
+        "other": 10,
+        "self": 11
+      },
+      "hreflang": {
+        "present": 73,
+        "ok": 14,
+        "noXDefault": 0,
+        "notReciprocal": 12,
+        "targetNot200": 51
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 2,
+        "og:description": 0,
+        "og:url": 2,
+        "og:image": 2,
+        "og:locale": 75,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 6,
+        "one": 64,
+        "multiple": 5
+      },
+      "jsonld": {
+        "withAny": 75,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 3010,
+        "noAlt": 221,
+        "noSize": 2869
+      }
+    },
+    "product-index": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 3
+      },
+      "hreflang": {
+        "present": 3,
+        "ok": 3,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 0
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 0,
+        "multiple": 3
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 72,
+        "noAlt": 3,
+        "noSize": 72
+      }
+    },
+    "resource": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 3,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 3
+      },
+      "hreflang": {
+        "present": 3,
+        "ok": 1,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 2
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 3,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 1,
+        "one": 2,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 39,
+        "noAlt": 3,
+        "noSize": 27
+      }
+    },
+    "search": {
+      "pages": 3,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 3
+      },
+      "hreflang": {
+        "present": 3,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 1,
+        "targetNot200": 3
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 3,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 3,
+        "one": 0,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 3,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 36,
+        "noAlt": 3,
+        "noSize": 36
+      }
+    },
+    "service": {
+      "pages": 46,
+      "title": {
+        "missing": 0,
+        "duplicated": 32
+      },
+      "description": {
+        "missing": 4,
+        "duplicated": 32
+      },
+      "canonical": {
+        "missing": 18,
+        "other": 25,
+        "self": 3
+      },
+      "hreflang": {
+        "present": 43,
+        "ok": 6,
+        "noXDefault": 0,
+        "notReciprocal": 31,
+        "targetNot200": 6
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 3,
+        "og:title": 3,
+        "og:description": 6,
+        "og:url": 3,
+        "og:image": 5,
+        "og:locale": 46,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 25,
+        "one": 18,
+        "multiple": 3
+      },
+      "jsonld": {
+        "withAny": 46,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 992,
+        "noAlt": 46,
+        "noSize": 902
+      }
+    },
+    "solution": {
+      "pages": 21,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 21
+      },
+      "hreflang": {
+        "present": 21,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 0,
+        "targetNot200": 21
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 21,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 0,
+        "one": 21,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 21,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 943,
+        "noAlt": 21,
+        "noSize": 904
+      }
+    },
+    "subsite": {
+      "pages": 2,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 1,
+        "self": 1
+      },
+      "hreflang": {
+        "present": 1,
+        "ok": 0,
+        "noXDefault": 1,
+        "notReciprocal": 1,
+        "targetNot200": 0
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 1,
+        "og:title": 1,
+        "og:description": 1,
+        "og:url": 2,
+        "og:image": 1,
+        "og:locale": 1,
+        "og:site_name": 2
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 2,
+        "one": 0,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 0,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 65,
+        "noAlt": 25,
+        "noSize": 65
+      }
+    },
+    "utility": {
+      "pages": 15,
+      "title": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "description": {
+        "missing": 0,
+        "duplicated": 0
+      },
+      "canonical": {
+        "missing": 12,
+        "other": 3
+      },
+      "hreflang": {
+        "present": 15,
+        "ok": 0,
+        "noXDefault": 0,
+        "notReciprocal": 3,
+        "targetNot200": 15
+      },
+      "noindex": 0,
+      "ogComplete": 0,
+      "ogMissingByKey": {
+        "og:type": 0,
+        "og:title": 0,
+        "og:description": 0,
+        "og:url": 0,
+        "og:image": 0,
+        "og:locale": 15,
+        "og:site_name": 0
+      },
+      "twitterCard": 0,
+      "h1": {
+        "none": 15,
+        "one": 0,
+        "multiple": 0
+      },
+      "jsonld": {
+        "withAny": 15,
+        "parseErrors": 0
+      },
+      "images": {
+        "total": 474,
+        "noAlt": 15,
+        "noSize": 474
+      }
+    }
+  },
+  "byPriority": {
+    "en P1": 31,
+    "en P2": 30,
+    "en P3": 262,
+    "vi P1": 29,
+    "vi P2": 29,
+    "vi P3": 384,
+    "zh-TW P1": 44,
+    "zh-TW P2": 28,
+    "zh-TW P3": 453
+  },
+  "titleLength": {
+    "zh-TW": {
+      "min": 4,
+      "median": 33,
+      "max": 160
+    },
+    "en": {
+      "min": 4,
+      "median": 63,
+      "max": 204
+    },
+    "vi": {
+      "min": 4,
+      "median": 61,
+      "max": 197
+    }
+  },
+  "jsonldTypes": {
+    "WebSite": 1263
+  },
+  "htmlLang": {
+    "en: en": 323,
+    "vi: vi": 442,
+    "zh-TW: (none)": 26,
+    "zh-TW: zh": 1,
+    "zh-TW: zh-TW": 498
+  },
+  "topDuplicateTitles": [
+    {
+      "locale": "en",
+      "value": "ESG Consulting Services | TPIsoftware",
+      "count": 10,
+      "examples": [
+        "https://www.tpisoftware.com/en/esg-advisory",
+        "https://www.tpisoftware.com/en/esg-advisory/chen-zhengrui",
+        "https://www.tpisoftware.com/en/esg-advisory/chuang-binyuan"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "Dịch vụ tư vấn ESG của TPIsoftware",
+      "count": 9,
+      "examples": [
+        "https://www.tpisoftware.vn/esg-advisory",
+        "https://www.tpisoftware.vn/esg-advisory/chen-zhengrui",
+        "https://www.tpisoftware.vn/esg-advisory/chuang-binyuan"
+      ]
+    },
+    {
+      "locale": "zh-TW",
+      "value": "ESG 永續發展與顧問服務 - 昕力資訊 TPIsoftware",
+      "count": 9,
+      "examples": [
+        "https://www.tpisoftware.com/esg-advisory",
+        "https://www.tpisoftware.com/esg-advisory/chen-zhengrui",
+        "https://www.tpisoftware.com/esg-advisory/chuang-binyuan"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "Ace Financial Examination with Comprehensive API Management (APIM)",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/en/blog/smartmgmt/financial-examination",
+        "https://www.tpisoftware.com/en/blog/smartmgmt/financial-examination-en"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "Artificial Intelligence",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/en/blog/artifintell",
+        "https://www.tpisoftware.com/en/blog/businessscenario/aisolutions"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "Enterprise Innovation",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/en/blog/dt/enterprise-innovation",
+        "https://www.tpisoftware.com/en/blog/smartmgmt"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "gadoDIDO - Xác Thực Không Mật Khẩu từ TPIsoftware",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.vn/products/gadoDIDO",
+        "https://www.tpisoftware.vn/products/gadodido"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "gadoDIDO Passwordless Authentication TPIsoftware",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/en/products/gadoDIDO",
+        "https://www.tpisoftware.com/en/products/gadodido"
+      ]
+    },
+    {
+      "locale": "zh-TW",
+      "value": "gadoDIDO 無密碼身分驗證- 昕力資訊TPIsoftware",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/products/gadoDIDO",
+        "https://www.tpisoftware.com/products/gadodido"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "OrientAI Nền tảng AI tự chủ cho doanh nghiệp - TPIsoftware",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.vn/orient-aI",
+        "https://www.tpisoftware.vn/orient-ai"
+      ]
+    },
+    {
+      "locale": "zh-TW",
+      "value": "OrientAI 企業級 Agentic AI 平台 - 昕力資訊TPIsoftware",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/orient-aI",
+        "https://www.tpisoftware.com/orient-ai"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "Quản lý API",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.vn/blog/enterprise-management/api",
+        "https://www.tpisoftware.vn/blog/enterprise-management/api-management"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "TPIsoftware - Dẫn đầu về giải pháp phần mềm cho doanh nghiệp",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.vn/",
+        "https://www.tpisoftware.vn/subscribe"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "TPIsoftware - Leading Enterprise Software Solutions Provider",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/en",
+        "https://www.tpisoftware.com/en/subscribe"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "TPIsoftware | API Management Platform | Open Banking",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/en/download/digirunner",
+        "https://www.tpisoftware.com/en/products/open-banking"
+      ]
+    }
+  ],
+  "topDuplicateDescriptions": [
+    {
+      "locale": "en",
+      "value": "Climate change and its socio-economic impacts are now globally recognized, which has prompted us to move from slogans to real action. Guidelines and metrics were established to govern enterprises’ ESG initiatives, which calls for enterprises’ urgent actions. TPIsoftware offers comprehensive consulting services with a tailored three-phase transformation strategy, developed and delivered by a team of ESG experts, to help enterprises ace carbon inventory in accordance with ISO 14064-1 and enhance enterprises’ commitment to sustainability.",
+      "count": 10,
+      "examples": [
+        "https://www.tpisoftware.com/en/esg-advisory",
+        "https://www.tpisoftware.com/en/esg-advisory/chen-zhengrui",
+        "https://www.tpisoftware.com/en/esg-advisory/chuang-binyuan"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "Thế giới hiện nay đã nhận biết hiện trạng biến đổi khí hậu và tác động của nó đến kinh tế xã hội, điều này đã thúc đẩy chúng ta chuyển từ khẩu hiệu sang hành động thực tế. Các hướng dẫn và thước đo được thiết lập để có nhiều sáng kiến ESG cho doanh nghiệp và kêu gọi doanh nghiệp hành động khẩn cấp. TPIsoftware cung cấp các dịch vụ tư vấn toàn diện với chiến lược chuyển đổi ba giai đoạn phù hợp, được phát triển và cung cấp bởi đội ngũ chuyên gia ESG, nhằm giúp các doanh nghiệp kiểm soát lượng khí thải carbon theo tiêu chuẩn ISO 14064-1 và nâng cao cam kết của doanh nghiệp về tính bền vững.",
+      "count": 9,
+      "examples": [
+        "https://www.tpisoftware.vn/esg-advisory",
+        "https://www.tpisoftware.vn/esg-advisory/chen-zhengrui",
+        "https://www.tpisoftware.vn/esg-advisory/chuang-binyuan"
+      ]
+    },
+    {
+      "locale": "zh-TW",
+      "value": "面對氣候變遷和相關社經議題的關注增加，永續發展從口號走向具體規範，相關法政的訂立明確了企業 ESG 評鑑與數位化指標，企業減碳行動刻不容緩。昕力資訊提供全台最完整的顧問服務，提供轉型策略三階段，且開發團隊全面通過永續人才培訓，輔導您依照 ISO 14064-1 標準進行碳盤查，量身打造可持續的解決方案。",
+      "count": 9,
+      "examples": [
+        "https://www.tpisoftware.com/esg-advisory",
+        "https://www.tpisoftware.com/esg-advisory/chen-zhengrui",
+        "https://www.tpisoftware.com/esg-advisory/chuang-binyuan"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "digiRunner integrates API development design, deployment release, and monitoring management to accelerate innovation and manage quality between ecosystems efficiently.",
+      "count": 3,
+      "examples": [
+        "https://www.tpisoftware.com/en/download/digirunner",
+        "https://www.tpisoftware.com/en/products/open-banking",
+        "https://www.tpisoftware.com/en/products/open-government"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "digiRunner integrates API development design, deployment release, and monitoring management to accelerate innovation and manage quality between ecosystems efficiently.",
+      "count": 3,
+      "examples": [
+        "https://www.tpisoftware.vn/download/digirunner",
+        "https://www.tpisoftware.vn/products/open-banking",
+        "https://www.tpisoftware.vn/products/open-government"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "TPIsoftware is renowned for our formidable software development capabilities, modular design, and AI-driven technologies. We provide proprietary iPaaS middle platform DigiLism, conversational AI series SysTalk.ai, sustainability management platform ESGswift, and enterprise security platform GadoSecurity, along with continuously innovative software solutions to domestic and overseas markets.",
+      "count": 3,
+      "examples": [
+        "https://www.tpisoftware.com/en",
+        "https://www.tpisoftware.com/en/about-us",
+        "https://www.tpisoftware.com/en/subscribe"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "TPIsoftware nổi tiếng với năng lực phát triển phần mềm vượt trội, thiết kế module hóa và công nghệ AI tiên tiến. Chúng tôi cung cấp nền tảng trung gian iPaaS độc quyền DigiLism, dòng AI hội thoại SysTalk.ai, nền tảng quản lý bền vững ESGswift và nền tảng bảo mật doanh nghiệp GadoSecurity, cùng các giải pháp phần mềm không ngừng đổi mới cho thị trường trong nước và quốc tế.",
+      "count": 3,
+      "examples": [
+        "https://www.tpisoftware.vn/",
+        "https://www.tpisoftware.vn/about-us",
+        "https://www.tpisoftware.vn/subscribe"
+      ]
+    },
+    {
+      "locale": "zh-TW",
+      "value": "昕力資訊憑藉軟體研發實力、模組化設計與 AI 核心科技，自主研發 DigiLism 企業服務中台、SysTalk.ai 交談 AI 及、ESGswift 永續及 GadoSecurity 企業安全防護等企業創新軟體產品，銷售通路遍及海內外。同時擁有跨國大型專案建置的經驗，靈活因應市場，為企業實現數位轉型，贏得客戶信賴與多個國際獎項肯定。",
+      "count": 3,
+      "examples": [
+        "https://www.tpisoftware.com/",
+        "https://www.tpisoftware.com/about-us",
+        "https://www.tpisoftware.com/subscribe"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "Bảo mật, kiểm soát và tối ưu hóa API với digiRunner. Nền tảng API management linh hoạt, mở rộng, đáp ứng mọi nhu cầu doanh nghiệp.",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.vn/digirunner-api-management",
+        "https://www.tpisoftware.vn/products/digirunner-cloud"
+      ]
+    },
+    {
+      "locale": "zh-TW",
+      "value": "digiRunner 以一鍵啟動為企業帶來簡潔、高效的雲端 APIM。 擺脫複雜部署方式，享受流暢的 API 管理、分析與部署體驗，全速啟動您的創新引擎。",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/products/digirunner-cloud",
+        "https://www.tpisoftware.com/products/digirunner/awsmarketplace"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "digiRunner, an AWS-certified cloud-native API management platform, transforms enterprise technology with its one-click activation, offering a streamlined, high-performance cloud APIM solution. Eliminate complex deployment hassles and unlock a smooth, comprehensive API management journey, accelerating your path to innovation with ease.",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/en/products/digirunner-cloud",
+        "https://www.tpisoftware.com/en/products/digirunner/awsmarketplace"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "For too long now, the power of data has been monopolized by banks. The right to use and open customer data has not been in the hands of the customer themselves but the bank the data is provided to.",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/en/media-center/179",
+        "https://www.tpisoftware.com/en/media-center/183"
+      ]
+    },
+    {
+      "locale": "en",
+      "value": "Open banking is just the beginning. By connecting banks and third-party providers through APIs, the financial industry is building a seamless open finance ecosystem that brings one-stop convenience to consumers’ daily lives.",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/en/blog/dt/robinhood",
+        "https://www.tpisoftware.com/en/blog/dt/thefinancialecosystem"
+      ]
+    },
+    {
+      "locale": "zh-TW",
+      "value": "Open Banking 的精髓，就是讓銀行客戶可以自由選擇是否開放個人與交易資料給別家業者，也就是所謂的將資料開放權『還歸於民』。",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.com/media-center/174",
+        "https://www.tpisoftware.com/media-center/182"
+      ]
+    },
+    {
+      "locale": "vi",
+      "value": "OrientAI là nền tảng Agentic AI tiêu chuẩn doanh nghiệp dành cho việc quản lý, quản trị và điều phối các tác nhân AI (AI agent). Nền tảng giúp tập trung hóa quyền kiểm soát LLM và agent, giám sát mức sử dụng token, giảm thiểu rủi ro bảo mật và mở rộng quy mô hoạt động AI xuyên suốt các quy trình làm việc của doanh nghiệp",
+      "count": 2,
+      "examples": [
+        "https://www.tpisoftware.vn/orient-aI",
+        "https://www.tpisoftware.vn/orient-ai"
+      ]
+    }
+  ],
+  "failures": []
+}

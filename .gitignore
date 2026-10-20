@@ -3,6 +3,7 @@ dist/
 .astro/
 .lhci-dist/
 .lighthouseci/
+.lighthouse-baseline/
 .env
 .env.*
 !.env.example
