@@ -42,7 +42,8 @@ git status -sb
 
 1. 列出 `status.md`「待辦備忘」以外每個 `#N`、`PR #N`，以及寫的狀態（完成／待合併／階段一／可以開始）
 2. 用 `mcp__github__issue_read`（`get`）與 `mcp__github__pull_request_read`（`get`）查實際狀態；「可以開始」的 issue 另外查它的依賴是否都已關閉
-3. 用 `mcp__github__list_pull_requests`（`state: open`）列出 open PR，body 有 `Closes #N` 但 `status.md` 沒列到的也算對不上
+3. 用 `mcp__github__list_pull_requests`（`state: open`）列出 open PR。body 有 `Closes #N` 時，`status.md` 沒寫 `PR #N`，或 `#N` 沒有自己一行寫出狀態，都算對不上；只在別的句子裡提到 `#N` 不算有列
+4. 用 `mcp__github__list_issues`（`state: CLOSED`）列出已關閉的 issue，「Issue」段落沒有這張 issue 的一行也算對不上
 
 對不上的寫進計畫的「`status.md` 同步」一項。這一步不擋計畫，沒有對不上的就在環境檢查表寫「一致」。
 
