@@ -44,7 +44,7 @@
 | `title` | `string` | 是 | 頁面主題，也是 h1。`<title>` 由版型組成 `{title}｜TPIsoftware 昕力資訊` |
 | `seoTitle` | `string` | 否 | `<title>` 要和 h1 不同時才填 |
 | `description` | `string` | 是 | meta description，也用於 `og:description` 與卡片摘要 |
-| `translationKey` | `string` | 是 | 同一份內容的各語系版本填相同值，M7 用來輸出 hreflang。慣例：zh-TW 版的 slug；新聞用 zh-TW 版的新聞 id |
+| `translationKey` | `string` | 是 | 同一份內容的各語系版本填相同值，M7 用來輸出 hreflang。慣例：zh-TW 版的 slug；新聞用 zh-TW 版的新聞 id，沒有 zh-TW 版時用該語系自己的 id |
 | `ogImage` | `image` | 否 | 沒填時依序用類型自己的主圖（`coverImage` 等），再用全站預設圖 |
 | `draft` | `boolean` | 否，預設 `false` | `true` 時不輸出頁面 |
 | 語系 | — | 推出 | 由檔案路徑推出（`zh-TW`、`en`、`vi`），不寫在 frontmatter |
@@ -98,9 +98,9 @@ sourceUrl: []
 | `useCases` | `{ title: string; body: string; industry?: 'finance' \| 'government' \| 'manufacturing' }[]` | 否 | 應用情境。`industry` 讓產業頁（`hub`）反查相關產品 | 現站情境區 |
 | `faq` | `{ question: string; answer: string }[]` | 否 | 常見問題 | 現站 FAQ 區（少數頁有） |
 | `cta` | `'contact' \| 'demo'` | 是 | 主要 CTA：聯絡業務或預約 demo。表單端點由 M6 依此決定 | `features.md`「表單」 |
-| `relatedCaseStudies` | `ref(case-study)[]` | 否 | 相關成功案例 | — |
-| `relatedPosts` | `ref(blog)[]` | 否 | 相關文章 | — |
-| `downloads` | `{ label: string; whitepaper?: ref(whitepaper); file?: string }[]` | 否 | 白皮書或下載檔（例如 `digirunner-aws-guide` 的 PDF） | 現站下載按鈕 |
+| `relatedCaseStudies` | `ref(case-study)[]` | 否 | 精選案例與排序。留空時由 `case-study.offerings` 反查；關聯以 `case-study.offerings` 為準，這裡只列其中的項目 | — |
+| `relatedPosts` | `ref(blog)[]` | 否 | 精選文章與排序。留空時由 `blog.relatedOfferings` 反查；關聯以 `blog.relatedOfferings` 為準，這裡只列其中的項目 | — |
+| `downloads` | `{ label: string; file: string }[]` | 否 | 下載檔（例如 `digirunner-aws-guide` 的 PDF），也是 `download` 中繼頁的資料來源。白皮書不列在這裡，由 `whitepaper.offeringNode` 反查 | 現站下載按鈕 |
 
 範例（`kind: product`，取自 <https://www.tpisoftware.com/products/digirunner>，`useCases` 只列兩項）：
 
@@ -277,7 +277,7 @@ zh-TW 60 列、en 48 列、vi 42 列（`page-map.csv` 的 `news-article` 節點�
 | `coverImage` | `image` | 是 | 封面 | `imagePath` |
 | `relatedOfferings` | `ref(offering)[]` | 否 | 相關產品 | — |
 
-`description` 取 API 的 `summary`，超過 meta description 長度時 M5 改寫。`translationKey` 用 zh-TW 版的新聞 id：API 的 `langTW`、`langEN`、`langVN` 記錄三語版本的 id，三個版本填相同值。
+`description` 取 API 的 `summary`，超過 meta description 長度時 M5 改寫。`translationKey` 用 zh-TW 版的新聞 id：API 的 `langTW`、`langEN`、`langVN` 記錄三語版本的 id，三個版本填相同值。沒有 zh-TW 版（`langTW` 為空，例如 en 的 455、456、522、542）時用該語系自己的 id。
 
 | `newsType` | 現站 `newsTypeId` | 現站名稱 | 保留的 zh-TW 篇數 |
 |---|---|---|--:|
@@ -391,7 +391,7 @@ JSON-LD：`ProfilePage`，`mainEntity` 為 `Person`：`name` ← `title`、`jobT
 | 欄位 | 型別 | 必填 | 說明 | 現站來源 |
 |---|---|---|---|---|
 | `node` | `string` | 是 | `whitepaper-*` 節點 id | `page-map.csv` |
-| `offering` | `ref(offering) \| ref(hub)` | 是 | 對應的產品，產品頁 `downloads` 反查用。AI Playbook 涵蓋整個 SysTalk.ai 家族，指向 hub `family-ai` | 現站頁面 |
+| `offeringNode` | `string` | 是 | 對應產品的 `nodes.csv` 節點 id（`offering` 或 `hub` 節點），產品頁與家族頁反查白皮書用。AI Playbook 涵蓋整個 SysTalk.ai 家族，填 `family-ai` | 現站頁面 |
 | `coverImage` | `image` | 是 | 白皮書封面 | 現站頁面 |
 | `summary` | `string[]` | 否 | 內容重點 | 現站頁面 |
 | `file` | `string` | 是 | 送出表單後提供的檔案 | 現站下載流程，待確認 |
@@ -404,14 +404,14 @@ title: 佈局 API 策略藍圖 賦能關鍵系統應用
 description: 在快速變化的數位經濟中，API 策略是企業成功轉型的關鍵。我們深入探討如何有效整合 API 管理策略，如何透過 API 賦能企業關鍵系統應用，幫助企業在數位轉型中淬礪企業韌性，開創數位新局！立即下載 API 管理白皮書，我們將分析當前趨勢、面臨的挑戰及最佳實踐，為您的業務提升提供實用的見解。
 translationKey: whitepaper-digirunner
 node: whitepaper-digirunner
-offering: digirunner
+offeringNode: digirunner
 form: whitepaper
 file: 待確認
 sourceUrl: https://www.tpisoftware.com/whitepaper/api-strategies
 migratedAt: 2026-11-03
 ```
 
-JSON-LD：`WebPage`，`mainEntity` 為 `DigitalDocument`：`name` ← `title`、`description`、`image` ← `coverImage`、`publisher` ← `organization`、`about` ← `offering`。檔案在表單後面，不輸出 `url`。
+JSON-LD：`WebPage`，`mainEntity` 為 `DigitalDocument`：`name` ← `title`、`description`、`image` ← `coverImage`、`publisher` ← `organization`、`about` ← `offeringNode` 對應的頁面。檔案在表單後面，不輸出 `url`。
 
 ## organization（公司資料檔）
 
@@ -455,7 +455,7 @@ JSON-LD：
 |---|---|
 | `home` | 首頁由其他 collection 組成（精選產品、案例、文章、新聞）。標題與描述等少量文案放在 i18n 字串檔，由 M4-01 決定位置 |
 | `listing` | 列表頁（blog 首頁與分類、媒體中心、活動、成功案例列表）的內容是其他 collection 的項目。標題與描述依節點寫在 i18n 字串檔；blog 分類頁的標題取 `nodes.csv` 的 `title` |
-| `utility` | 搜尋、訂閱流程、感謝頁、下載中繼頁、404 是功能頁，文案放 i18n 字串檔，行為由 M6 決定 |
+| `utility` | 搜尋、訂閱流程、感謝頁、下載中繼頁、404 是功能頁，文案放 i18n 字串檔，行為由 M6 決定。下載中繼頁（`/download/{product}`）的產品與檔案取自 `offering.downloads[].file` |
 
 活動（`events`）列表的項目來源（現站是否有活動資料、要不要建 `event` collection）在 M6 決定。
 
