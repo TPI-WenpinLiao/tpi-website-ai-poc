@@ -1,6 +1,6 @@
 ---
 name: issue-start
-description: 開始處理一張 GitHub issue 時使用（/issue-start <issue 編號>）。讀取 issue 與專案文件、檢查依賴與 label、執行環境檢查，全部通過後以 Plan 模式提出計畫並等待確認。使用者說「處理 issue #N」時也適用。
+description: 開始處理一張 GitHub issue 時使用（/issue-start <issue 編號>）。讀取 issue 與專案文件、檢查依賴與 label、對照 status.md 與 GitHub 實際狀態、執行環境檢查，全部通過後以 Plan 模式提出計畫並等待確認。使用者說「處理 issue #N」時也適用。
 ---
 
 # Issue start
@@ -36,7 +36,17 @@ git status -sb
 | `needs-input` | 有此 label 時，內容必須由人工提供 | 不停下，但計畫只能整理與提問，不得自行補內容 |
 | `needs-design` | 有此 label 時適用 `CLAUDE.md` 的兩階段流程 | 不停下；計畫只涵蓋階段一，除非已有 `design-approved` |
 
-## 4. 環境檢查
+## 4. 對照 `docs/status.md`
+
+`status.md` 應該描述 main 目前的狀態。對照 GitHub 找出對不上的地方，在本 issue 的 PR 一起修，不另開同步 PR。判斷規則見 [`issue-ship` 第 4 步](../issue-ship/SKILL.md#4-更新-docsstatusmd)。
+
+1. 列出 `status.md`「待辦備忘」以外每個 `#N`、`PR #N`，以及寫的狀態（完成／待合併／階段一／可以開始）
+2. 用 `mcp__github__issue_read`（`get`）與 `mcp__github__pull_request_read`（`get`）查實際狀態；「可以開始」的 issue 另外查它的依賴是否都已關閉
+3. 用 `mcp__github__list_pull_requests`（`state: open`）列出 open PR，body 有 `Closes #N` 但 `status.md` 沒列到的也算對不上
+
+對不上的寫進計畫的「`status.md` 同步」一項。這一步不擋計畫，沒有對不上的就在環境檢查表寫「一致」。
+
+## 5. 環境檢查
 
 依序執行，全部記錄結果：
 
@@ -53,7 +63,7 @@ npm run check                # 記錄 exit code；失敗時保留最後 30 行�
 
 **任何一項失敗就停下回報**，不要進入 Plan 模式。
 
-## 5. 提出計畫
+## 6. 提出計畫
 
 先在對話中輸出環境檢查表：
 
@@ -63,12 +73,14 @@ npm run check                # 記錄 exit code；失敗時保留最後 30 行�
 | `npm run check` | exit 0 ✅／失敗原因 ❌ |
 | 依賴 | #N closed ✅ … |
 | 現站連線（需要時） | 200 ✅／… |
+| `status.md` 對照 | 一致 ✅／列出對不上的項目 |
 
 接著呼叫 `EnterPlanMode`，把計畫寫進 plan 檔，再呼叫 `ExitPlanMode` 請使用者確認。計畫必須包含：
 
 - **Context**：issue 目標、前置產出、為什麼要做
 - **做法**：每個交付物怎麼產出；能重跑的資料處理寫成 script（放 `scripts/`），不要手改產出檔
 - **驗收對照**：issue 的每一條驗收條件分別如何驗證
+- **`status.md` 同步**：第 4 步找到的不一致與修法（沒有就省略）
 - **需使用者決定**：有推薦的選項時寫出推薦與理由，不要只列選項
 - **branch**：使用 session 指定的 branch
 - **收尾**：完成後以 `/issue-ship` 收尾

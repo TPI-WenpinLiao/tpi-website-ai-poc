@@ -47,7 +47,7 @@ description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編�
 | 依變更類型套用 skill | 頁面 → `seo-checklist`；搬移內容 → `content-migration`；`.ts`／`.astro`／`.mjs` → `typescript-best-practices`；文件、PR 描述、commit message → `writing-style` |
 | 產生檔與 script 一致 | diff 有 script 或它的產出檔時，重跑 script，`git diff --exit-code` 必須沒有差異；再跑一次結果相同 |
 | 文件與資料來源一致 | 手寫的表格或清單在描述某個資料檔的某一類列時（例如「不進導覽的節點」對應 `navigation.csv` 的 `none` 列），把兩邊的 ID 各列成一份清單再比對：文件有、資料檔那一類沒有的，以及反過來的，都是發現。ID 只在別的資料檔（例如 `nodes.csv`）存在不算對上。手寫數字要從資料檔重新算一次。script 重跑沒有差異不代表手寫段落正確 |
-| `docs/status.md` 與 PR 實際狀態一致 | 未合併的 PR 不得寫成「完成」，要寫「待合併」；寫了「待合併」但 PR 已合併的也要標出 |
+| `docs/status.md` 寫的是合併後的狀態 | 依 [`issue-ship` 第 4 步](../issue-ship/SKILL.md#4-更新-docsstatusmd)，假設這個 diff 已合併，逐項查：(1) 本 issue 寫成完成（`needs-design` 階段一寫中間狀態），寫「待合併」也是發現 (2) 其他還沒合併的 PR 沒有寫成完成 (3) 列出的 issue 已關閉、PR 已合併的寫成完成 (4)「下一步」沒有留著本 issue 的項目；寫「可以開始」的 issue，依賴在合併後確實都已關閉。(2)–(4) 用 `mcp__github__issue_read`／`pull_request_read` 查 |
 | 同一個決定只放在一個地方 | 同一份清單、數字、規則不得在兩個檔案各寫一份；第二份改為連結 |
 | devex 沒有被破壞 | 環境變數名稱、npm scripts、`.nvmrc`、SessionStart hook 有變動時，`docs/onboarding.md` 或 `docs/workflow.md` 有同步更新 |
 

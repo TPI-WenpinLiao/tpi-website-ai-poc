@@ -43,8 +43,9 @@ Claude 會依序：
 1. 從最新的 `main` 同步 session 指定的 branch
 2. 讀 issue、`CLAUDE.md`、`docs/status.md` 與前置 issue 的產出
 3. 檢查依賴是否關閉、關卡 label 是否齊全
-4. 執行環境檢查：Node 版本與 `.nvmrc` 一致、`node_modules` 存在、`npm run check` 通過；issue 需要時測試現站連線
-5. 回報環境檢查表，然後以 Plan 模式提出計畫
+4. 拿 `docs/status.md` 對照 GitHub 上 issue 與 PR 的實際狀態；對不上的列進計畫，在這張 issue 的 PR 一起修，不另開同步 PR
+5. 執行環境檢查：Node 版本與 `.nvmrc` 一致、`node_modules` 存在、`npm run check` 通過；issue 需要時測試現站連線
+6. 回報環境檢查表，然後以 Plan 模式提出計畫
 
 **你要做的事**：看環境檢查表與計畫，回覆確認或要修改的地方。計畫中的「需使用者決定」要逐項回答。任一項檢查失敗時 Claude 會停下回報，不會開始實作。
 
@@ -71,7 +72,7 @@ Claude 會依序：
 1. 確認變更範圍，排除暫存檔與 secrets
 2. 執行 `npm run check`。失敗就停下，不會 push
 3. 出貨前自我 review：執行 `/pr-review`（見第 5 節），Act on 的發現修正後重跑檢查，Consider 寫進 PR 的「待確認」
-4. 更新 `docs/status.md`
+4. 更新 `docs/status.md`，寫成這個 PR 合併後的狀態，寫法見 [`issue-ship` 第 4 步](../.claude/skills/issue-ship/SKILL.md#4-更新-docsstatusmd)
 5. commit、push 到 session branch
 6. 開 PR：`needs-design` 階段一開 draft，其他開 ready for review。PR body 含 `Closes #N`、變更摘要、驗收方式、preview 檢查重點、待確認
 7. 問你要不要監看 PR
