@@ -3,7 +3,8 @@
 // Stages come from the progress file's table; status comes from commit subjects of the form
 // `<type>: 階段 <k> 完成|進行中：<summary>（#N）`, the latest commit per stage winning.
 // Exits non-zero when a `wip:` commit or any subject mentioning `階段 <k>` doesn't parse, names an
-// unknown stage or another issue, or a stage is done while an earlier one isn't. Rules: .claude/skills/checkpoint/SKILL.md
+// unknown stage or another issue, or the stages aren't in order: done ones first, then at most one
+// in progress, then not started. Rules: .claude/skills/checkpoint/SKILL.md
 // Run: node scripts/checkpoint/status.mjs <N> [ref=HEAD] [base=origin/main]
 
 import { execFileSync } from 'node:child_process';
@@ -43,9 +44,9 @@ export function deriveStatus(issue, stages, commits) {
     status.set(Number(n), { status: st, sha });
   }
   const rows = stages.map((s) => ({ ...s, ...status.get(s.n) }));
-  const lastDone = rows.findLastIndex((r) => r.status === '完成');
-  const gap = lastDone > 0 ? rows.slice(0, lastDone).find((r) => r.status !== '完成') : undefined;
-  if (gap) throw new Error(`stage ${rows[lastDone].n} is 完成 but stage ${gap.n} is ${gap.status}`);
+  const current = rows.findIndex((r) => r.status !== '完成');
+  const ahead = current === -1 ? undefined : rows.slice(current + 1).find((r) => r.status !== '未開始');
+  if (ahead) throw new Error(`stage ${ahead.n} is ${ahead.status} but stage ${rows[current].n} is ${rows[current].status}`);
   return rows;
 }
 

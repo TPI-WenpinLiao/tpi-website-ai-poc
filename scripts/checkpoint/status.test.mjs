@@ -67,6 +67,14 @@ test('rejects malformed wip, unknown stage, other issue, and gaps', () => {
   assert.throws(() => deriveStatus(7, stages, [c('wip: 階段 4 完成：x（#7）')]), /stage 4 isn't/);
   assert.throws(() => deriveStatus(7, stages, [c('wip: 階段 1 完成：x（#8）')]), /expected #7/);
   assert.throws(() => deriveStatus(7, stages, [c('wip: 階段 2 完成：x（#7）')]), /stage 2 is 完成 but stage 1 is 未開始/);
+  assert.throws(
+    () => deriveStatus(7, stages, [c('wip: 階段 1 完成：x（#7）'), c('wip: 階段 3 進行中：x（#7）')]),
+    /stage 3 is 進行中 but stage 2 is 未開始/,
+  );
+  assert.throws(
+    () => deriveStatus(7, stages, [c('wip: 階段 1 進行中：x（#7）'), c('wip: 階段 2 進行中：x（#7）')]),
+    /stage 2 is 進行中 but stage 1 is 進行中/,
+  );
 });
 
 test('CLI reads the progress file and git log of a real repo', (t) => {
