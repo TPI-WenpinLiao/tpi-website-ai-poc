@@ -22,7 +22,7 @@ src/styles/       tokens.css（design tokens）
 public/           靜態檔（_headers、robots.txt）
 scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs
 docs/             status.md、decisions/（ADR）、onboarding.md
-.claude/skills/   seo-checklist、design-system、content-migration
+.claude/skills/   issue-start、issue-ship、next-issue（工作流程）；seo-checklist、design-system、content-migration
 .github/          ISSUE_TEMPLATE、workflows、bootstrap（labels / milestones / issues）
 ```
 
@@ -38,11 +38,12 @@ Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）
 
 ## 雲端 session 工作規則
 
-1. 每個 session 對應一張 issue。開始前先讀 issue 內容、本檔、`docs/status.md`，以 Plan 模式提出計畫，等使用者確認後再實作。
+1. 每個 session 對應一張 issue。以 `/issue-start <N>` 開始：讀 issue、本檔、`docs/status.md`，檢查依賴與環境，以 Plan 模式提出計畫，等使用者確認後再實作。
 2. 若 `node_modules` 不存在或 SessionStart hook 回報安裝失敗，先執行 `npm ci` 並回報結果，不要直接開始實作。
-3. Branch 命名：`<type>/<issue-number>-<slug>`，type 取 `feat` / `fix` / `content` / `docs` / `chore`。例：`feat/12-header-nav`。
-4. PR body 必含：`Closes #N`、變更摘要、驗收方式、preview 檢查重點（要看哪些頁面、哪些斷點）。
+3. Branch：雲端 session 使用 session 指定的 branch；本機開發用 `<type>/<issue-number>-<slug>`，type 取 `feat` / `fix` / `content` / `docs` / `chore`。PR 標題以 issue 的 `[Mx-xx]` 或 `[chore]` 前綴開頭。
+4. 以 `/issue-ship` 收尾。PR body 必含：`Closes #N`、變更摘要、驗收方式、preview 檢查重點（要看哪些頁面、哪些斷點）。
 5. 推送前 `npm run check` 必須通過。不得 push `main`。
+6. 找下一張可開始的 issue 用 `/next-issue`。
 
 ## 設計確認兩階段流程（issue 帶 `needs-design` 時適用）
 
