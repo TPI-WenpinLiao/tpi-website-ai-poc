@@ -1,0 +1,24 @@
+- id: M1
+  title: M1 盤點與研究
+  description: 盤點現站內容、SEO 與功能，定義受眾與轉換目標
+- id: M2
+  title: M2 資訊架構
+  description: 新 sitemap、導覽、URL 與語系策略、內容模型、redirect map
+- id: M3
+  title: M3 設計系統
+  description: Wireframe、design tokens、元件庫、高保真設計
+- id: M4
+  title: M4 開發骨架
+  description: Content collections、i18n 路由、SEO 層、模板 layout、品質關卡擴充
+- id: M5
+  title: M5 內容遷移
+  description: 依內容類型將現站內容遷移到新架構
+- id: M6
+  title: M6 功能
+  description: 表單、站內搜尋、影片延遲載入、GTM 與 consent
+- id: M7
+  title: M7 多語系
+  description: 翻譯詞彙表、en、vi、hreflang 驗證
+- id: M8
+  title: M8 驗收
+  description: 全站驗收與 launch-readiness 報告

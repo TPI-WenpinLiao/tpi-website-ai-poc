@@ -1,0 +1,46 @@
+name: 錯誤回報
+description: 頁面顯示或功能異常
+title: "[Bug] "
+labels: ["type:bug"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: 頁面
+      description: 發生問題的網址
+      placeholder: "https://<preview>.pages.dev/..."
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 裝置 / 瀏覽器
+      placeholder: "iPhone 15 / Safari 18、Windows 11 / Chrome 130"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 重現步驟
+      placeholder: |
+        1. 開啟 ...
+        2. 點擊 ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 預期結果
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 實際結果
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截圖
+      description: 可直接貼上圖片或錄影
