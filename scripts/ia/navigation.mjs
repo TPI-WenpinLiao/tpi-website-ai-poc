@@ -1,5 +1,5 @@
-// Navigation options for M2-02 (#9).
-// Reads the hand-written docs/ia/navigation.csv and docs/ia/nodes.csv, checks every option against
+// Site navigation for M2-02 (#9).
+// Reads the hand-written docs/ia/navigation.csv and docs/ia/nodes.csv, checks the navigation against
 // the sitemap, and regenerates the marked section of docs/ia/navigation.md.
 // Re-run after editing either CSV: node scripts/ia/navigation.mjs
 
@@ -35,35 +35,36 @@ function ancestors(n, byId) {
   return out;
 }
 
-// Rows of one option and area become a forest; a row's key is its node id, or its label when it has no node
-function buildTree(rows, byId, where) {
+// Rows of one area become a forest; a row's key is its node id, or its label when it has no node
+function buildTree(rows, byId, area) {
   const items = new Map();
+  const parentOf = new Map();
   const roots = [];
   for (const r of rows) {
     const node = r.node ? byId.get(r.node) : null;
-    if (r.node && !node) { errors.push(`${where}: node "${r.node}" not found`); continue; }
-    if (!r.node && !r.label) { errors.push(`${where}: row needs a node or a label`); continue; }
+    if (r.node && !node) { errors.push(`${area}: node "${r.node}" not found`); continue; }
+    if (!r.node && !r.label) { errors.push(`${area}: row needs a node or a label`); continue; }
     const key = r.node || r.label;
-    if (items.has(key)) errors.push(`${where}: duplicate item "${key}"`);
+    if (items.has(key)) errors.push(`${area}: duplicate item "${key}"`);
     const item = { key, node, label: r.label || node.title, note: r.note, children: [] };
     items.set(key, item);
     if (!r.parent) roots.push(item);
-    else if (items.has(r.parent)) items.get(r.parent).children.push(item);
-    else errors.push(`${where}: parent "${r.parent}" of "${key}" must appear on an earlier row`);
+    else if (items.has(r.parent)) { items.get(r.parent).children.push(item); parentOf.set(key, items.get(r.parent)); }
+    else errors.push(`${area}: parent "${r.parent}" of "${key}" must appear on an earlier row`);
   }
-  return { items, roots };
+  return { items, parentOf, roots };
 }
 
-function mermaid(option, roots) {
-  const lines = ['```mermaid', 'flowchart LR', `  ${option}_root(("${option}"))`];
+function mermaid(roots) {
+  const lines = ['```mermaid', 'flowchart LR', '  root(("header"))'];
   let i = 0;
   const walk = (item, parentId) => {
-    const id = `${option}_${i++}`;
+    const id = `n${i++}`;
     const shape = item.node ? `["${item.label}"]` : `{{"${item.label}"}}`;
     lines.push(`  ${id}${shape}`, `  ${parentId} --> ${id}`);
     for (const c of item.children) walk(c, id);
   };
-  for (const r of roots) walk(r, `${option}_root`);
+  for (const r of roots) walk(r, 'root');
   lines.push('```');
   return lines.join('\n');
 }
@@ -82,27 +83,24 @@ function pathOf(item, tree) {
   return labels.join(' > ');
 }
 
-function generatedSection(options, required, byId) {
+function generatedSection(trees, required, byId) {
   const out = [MARK_START, ''];
-  for (const [option, trees] of options) {
-    out.push(`### 方案 ${option}`, '', '#### header', '', '方框為連到頁面的項目，六角形為只用來展開選單、沒有連結的項目。', '', mermaid(option, trees.header.roots), '');
-    out.push('#### footer', '', footerTable(trees.footer.roots), '');
-  }
+  out.push('### header', '', '方框為連到頁面的項目，六角形為只用來展開選單、沒有連結的項目。', '', mermaid(trees.header.roots), '');
+  out.push('### footer', '', footerTable(trees.footer.roots), '');
 
-  out.push('### 節點在各方案的位置', '', `sitemap 中深度 ${MAX_DEPTH} 以內的頁面與外部連結（不含功能頁群組）都要出現在 header、footer 或工具列，或列為「不進導覽」並寫理由。script 依此檢查。`, '');
-  out.push(`| 節點 | ${[...options.keys()].map((o) => `方案 ${o}`).join(' | ')} |`,`|---|${[...options.keys()].map(() => '---').join('|')}|`);
+  out.push('### 節點在導覽中的位置', '', `sitemap 中深度 ${MAX_DEPTH} 以內的頁面與外部連結（不含功能頁群組）都要出現在 header、footer 或工具列，或列為「不進導覽」並寫理由。script 依此檢查。`, '');
+  out.push('| 節點 | 位置 |', '|---|---|');
   for (const n of required) {
     const indent = '　'.repeat(depth(n, byId));
-    const cells = [...options.values()].map((trees) => AREAS
+    const cell = AREAS
       .flatMap((a) => (trees[a].items.has(n.id) ? [a === 'none' ? `不進導覽：${trees[a].items.get(n.id).note}` : `${AREA_LABEL[a]}：${pathOf(trees[a].items.get(n.id), trees[a])}`] : []))
-      .join('<br/>'));
-    out.push(`| ${indent}${n.title}（\`${n.id}\`） | ${cells.join(' | ')} |`);
+      .join('<br/>');
+    out.push(`| ${indent}${n.title}（\`${n.id}\`） | ${cell} |`);
   }
 
-  out.push('', '### 統計', '', `| 方案 | header 第一層 | header 項目 | footer 欄 | footer 項目 | 不進導覽 |`, '|---|--:|--:|--:|--:|--:|');
-  for (const [option, t] of options) {
-    out.push(`| ${option} | ${t.header.roots.length} | ${t.header.items.size} | ${t.footer.roots.length} | ${t.footer.items.size - t.footer.roots.length} | ${t.none.items.size} |`);
-  }
+  const t = trees;
+  out.push('', '### 統計', '', '| header 第一層 | header 項目 | footer 欄 | footer 項目 | 不進導覽 |', '|--:|--:|--:|--:|--:|');
+  out.push(`| ${t.header.roots.length} | ${t.header.items.size} | ${t.footer.roots.length} | ${t.footer.items.size - t.footer.roots.length} | ${t.none.items.size} |`);
   out.push('', MARK_END);
   return out.join('\n');
 }
@@ -111,40 +109,23 @@ async function main() {
   const nodes = await readCsv(NODES);
   const byId = new Map(nodes.map((n) => [n.id, n]));
   const rows = await readCsv(NAV);
-
-  const options = new Map();
-  for (const r of rows) {
-    if (!AREAS.includes(r.area)) errors.push(`option ${r.option}: invalid area "${r.area}"`);
-    if (!options.has(r.option)) options.set(r.option, []);
-    options.get(r.option).push(r);
-  }
-  if (options.size < 2) errors.push(`need at least two options, found ${options.size}`);
+  for (const r of rows) if (!AREAS.includes(r.area)) errors.push(`invalid area "${r.area}"`);
 
   const required = nodes.filter((n) => ['page', 'external'].includes(n.kind)
     && depth(n, byId) <= MAX_DEPTH
     && !ancestors(n, byId).some((a) => OPTIONAL_ROOTS.has(a)));
 
-  const built = new Map();
-  for (const [option, optionRows] of options) {
-    const trees = {};
-    for (const area of AREAS) {
-      const tree = buildTree(optionRows.filter((r) => r.area === area), byId, `option ${option} ${area}`);
-      tree.parentOf = new Map();
-      for (const item of tree.items.values()) for (const c of item.children) tree.parentOf.set(c.key, item);
-      trees[area] = tree;
-    }
-    for (const item of trees.none.items.values()) {
-      if (!item.node) errors.push(`option ${option} none: "${item.key}" must be a node`);
-      if (!item.note) errors.push(`option ${option} none: ${item.key} needs a note saying why`);
-      for (const a of ['utility', 'header', 'footer']) if (trees[a].items.has(item.key)) errors.push(`option ${option}: ${item.key} is in both none and ${a}`);
-    }
-    for (const item of trees.header.items.values()) {
-      if (item.node && ancestors(item.node, byId).some((x) => NOT_IN_HEADER.has(x))) errors.push(`option ${option} header: ${item.key} may not be in the header`);
-    }
-    for (const n of required) {
-      if (!AREAS.some((a) => trees[a].items.has(n.id))) errors.push(`option ${option}: node ${n.id} is not in any nav area; add it or list it under area none with a note`);
-    }
-    built.set(option, trees);
+  const trees = Object.fromEntries(AREAS.map((a) => [a, buildTree(rows.filter((r) => r.area === a), byId, a)]));
+  for (const item of trees.none.items.values()) {
+    if (!item.node) errors.push(`none: "${item.key}" must be a node`);
+    if (!item.note) errors.push(`none: ${item.key} needs a note saying why`);
+    for (const a of ['utility', 'header', 'footer']) if (trees[a].items.has(item.key)) errors.push(`${item.key} is in both none and ${a}`);
+  }
+  for (const item of trees.header.items.values()) {
+    if (item.node && ancestors(item.node, byId).some((x) => NOT_IN_HEADER.has(x))) errors.push(`header: ${item.key} may not be in the header`);
+  }
+  for (const n of required) {
+    if (!AREAS.some((a) => trees[a].items.has(n.id))) errors.push(`node ${n.id} is not in any nav area; add it or list it under area none with a note`);
   }
 
   if (errors.length) {
@@ -159,11 +140,9 @@ async function main() {
     console.error(`${DOC}: generated section markers not found`);
     process.exit(1);
   }
-  await writeFile(DOC, doc.slice(0, start) + generatedSection(built, required, byId) + doc.slice(end + MARK_END.length));
+  await writeFile(DOC, doc.slice(0, start) + generatedSection(trees, required, byId) + doc.slice(end + MARK_END.length));
 
-  for (const [option, t] of built) {
-    console.log(`option ${option}: header ${t.header.items.size} items, footer ${t.footer.items.size}, none ${t.none.items.size}`);
-  }
+  console.log(`header ${trees.header.items.size} items, footer ${trees.footer.items.size}, none ${trees.none.items.size}`);
 }
 
 await main();
