@@ -4,7 +4,7 @@
 
 ## 目前 milestone
 
-**M1 盤點與研究**（剩 M1-06 收尾）；M2-01 已先開始
+**M1 盤點與研究**（剩 M1-06 收尾）；M2 進行中
 
 ## 進度
 
@@ -12,7 +12,7 @@
 |---|---|
 | M0 基礎建設 | 完成：PR #1 已合併；bootstrap 已執行（10 labels、8 milestones、44 issues） |
 | M1 盤點與研究 | 進行中（剩 M1-06 收尾）：M1-01 現站內容盤點完成（#2，PR #46）；雲端 session 品質關卡修正（#47，PR #48，已驗證新 session 不需手動設定即可通過 `npm run check`）；M1-02 內容稽核完成（#3）；M1-03 SEO 基線完成（#4）；M1-04 功能盤點完成（#5）；M1-05 受眾與轉換目標完成（#6） |
-| M2 資訊架構 | 進行中：M2-01 sitemap 與模板對應待審核（#8，關卡：`ia-approved`） |
+| M2 資訊架構 | 進行中：M2-01 sitemap 與模板對應完成（#8，已 `ia-approved`）；M2-04 內容模型完成（#11） |
 | M3 設計系統 | 未開始 |
 | M4 開發骨架 | 未開始 |
 | M5 內容遷移 | 未開始 |
@@ -22,7 +22,7 @@
 
 ## 下一步
 
-1. 審核 M2-01（`docs/ia/sitemap.md`），特別是「決策紀錄」與「待確認」；通過後在 #8 加上 `ia-approved`，M2-02～M2-05 才能開始
+1. Review M2-04 內容模型（`docs/ia/content-model.md`），特別是 tag 清單與文末「待確認」
 2. Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 3. Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 4. Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
@@ -40,4 +40,5 @@
 - 日文版：M2-01 決定不支援，M2-05 將 `/ja/*` 301 到 `/en`（現站 `/ja`、`/ja/partners` 回 500）
 - M1-04：表單建議沿用現站 `/tpi/api/*` 後端，需後端開放新站網域的 CORS 並確認 reCAPTCHA 設定；GTM 等追蹤碼由新站重新規劃，不沿用現站 4 個容器；.com 站內搜尋 API 目前回 500（見 `docs/research/features.md`）
 - M1-05：主要轉換為聯絡業務；新站只用 GTM、需要 cookie 同意機制、Facebook Pixel 與 Ahrefs 不沿用；成功指標包含自然搜尋流量，但沒有 GA4／Search Console 權限，量測方式待定（見 `docs/research/audience-and-goals.md`）
+- M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（已同步 `seo-checklist`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
