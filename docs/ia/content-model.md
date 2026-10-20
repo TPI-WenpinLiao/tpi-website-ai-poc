@@ -463,7 +463,7 @@ JSON-LD：
 
 | 項目 | 誰確認 | 影響 |
 |---|---|---|
-| blog `author` 的現站資料品質：zh-TW 有 `TPIsowftware` 拼錯、`商業週刊`／`科技報橘` 等轉載來源；vi 272 篇作者為 `kay`、15 篇為空值，可能是後台帳號而非作者 | 內容負責人 | M5 的 `author` 與 `authorType` 怎麼填 |
+| blog `author` 的現站資料品質：zh-TW 有 `TPIsowftware` 拼錯、`商業週刊`／`科技報橘` 等轉載來源；vi 272 篇作者（API 的 `authorName`）為 `kay`，其中 90 篇的後台帳號（`uidName`）是 `Kay Tăng Tấn Khôi`，`kay` 是否就是此人、要不要顯示全名；另有 15 篇作者為空值 | 內容負責人 | M5 的 `author` 與 `authorType` 怎麼填 |
 | `商業週刊`、`科技報橘` 為作者的 6 篇是否有轉載授權 | 內容負責人 | M5 是否遷移 |
 | blog 三語版本的對應：API 沒有跨語系欄位 | 內容負責人 | M7 的 `translationKey` |
 | 白皮書檔案的實際位置（現站在表單送出後提供） | 後端負責人 | `whitepaper.file` |
