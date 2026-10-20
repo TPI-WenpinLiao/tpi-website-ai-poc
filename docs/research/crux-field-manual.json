@@ -19,7 +19,7 @@
     }
   ],
   "psiLabScores": {
-    "note": "同一份 PageSpeed 報告下半部的 Lighthouse lab 分數（Google 機器量測），由使用者以文字提供。.vn mobile 與 .com mobile 四項完全相同，使用者未再確認，可能誤貼",
+    "note": "同一份 PageSpeed 報告下半部的 Lighthouse lab 分數（Google 機器量測），由使用者以文字提供。.vn mobile 與 .com mobile 四項完全相同，使用者已確認為實際結果",
     "https://www.tpisoftware.com/": {
       "mobile": { "performance": 27, "accessibility": 81, "bestPractices": 69, "seo": 92 },
       "desktop": { "performance": 40, "accessibility": 81, "bestPractices": 73, "seo": 92 }
