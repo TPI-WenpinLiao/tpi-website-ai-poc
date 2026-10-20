@@ -6,7 +6,7 @@
 
 - 可上線品質的真實開發，但目前只部署到 Cloudflare Pages（`*.pages.dev`），不上正式網域
 - 本站是現站的改版複製品，**不可被搜尋引擎收錄**：`public/_headers` 與 `public/robots.txt` 不得移除或放寬
-- 語系：zh-TW 優先；架構需支援 en、vi（M7 才翻譯）
+- 語系：zh-TW 優先；架構需支援 en、vi（M7 才翻譯）。URL 與語系路徑規則見 `docs/decisions/0002-url-and-locale.md`
 - 目前 milestone、進度與下一步以 `docs/status.md` 為準
 
 ## 技術棧

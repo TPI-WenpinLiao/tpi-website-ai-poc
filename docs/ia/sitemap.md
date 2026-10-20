@@ -3,7 +3,7 @@
 新站的頁面階層、每個節點使用的模板，以及現站每個 keep／rewrite／merge 頁面在新站的位置。M2-02 導覽、M2-03 URL 規則、M2-04 內容模型、M2-05 redirect map 以本檔為依據。
 
 - 輸入：[`inventory.csv`](../research/inventory.csv) 的 M1-02 處置（#3）、[`audience-and-goals.md`](../research/audience-and-goals.md)（#6）
-- 範圍：本檔決定頁面放在哪個節點、用哪個模板。正式 URL 與語系前綴（M2-03）、選單呈現（M2-02）、模板欄位（M2-04）、301 對照（M2-05）不在本檔
+- 範圍：本檔決定頁面放在哪個節點、用哪個模板。URL 與語系前綴的規則見 [ADR 0002](../decisions/0002-url-and-locale.md)（M2-03）；選單呈現（M2-02）、模板欄位（M2-04）、301 對照（M2-05）不在本檔
 - 三語系共用同一棵樹。各語系缺頁見 [`audit-summary.json`](../research/audit-summary.json) 的 `localeGaps`，M7 處理
 
 ## 重現方式
@@ -15,15 +15,15 @@ node scripts/ia/sitemap.mjs           # 產生 page-map.csv、sitemap-summary.js
 ```
 
 - `sitemap.mjs` 不連網路，結果固定：同一份輸入重跑，輸出逐位元組相同
-- 下列情況 script 以 exit 1 結束：keep／rewrite／merge 的列找不到節點；route-map 指向不存在的節點，或有沒被任何列用到的路由；節點的 parent、kind、模板不合法；沒有對應列的節點沒寫備註
+- 下列情況 script 以 exit 1 結束：節點的 `path` 不符 ADR 0002 的格式；keep／rewrite／merge 的列找不到節點；route-map 指向不存在的節點，或有沒被任何列用到的路由；節點的 parent、kind、模板不合法；沒有對應列的節點沒寫備註
 
 | 檔案 | 內容 | 維護方式 |
 |---|---|---|
-| [`nodes.csv`](./nodes.csv) | sitemap 節點：`id`、`parent`、`title`、`template`、`kind`、`path`（暫定）、`note`；列的順序就是同層的排序 | 手寫，階層的唯一來源 |
+| [`nodes.csv`](./nodes.csv) | sitemap 節點：`id`、`parent`、`title`、`template`、`kind`、`path`（zh-TW 路徑，格式依 ADR 0002）、`note`；列的順序就是同層的排序 | 手寫，階層的唯一來源 |
 | [`templates.csv`](./templates.csv) | 模板 id 與用途 | 手寫 |
 | [`route-map.csv`](./route-map.csv) | 現站路由 → 節點。路由取 `final_url`、去掉 `/en`、`/vn` 前綴、轉小寫；`/prefix/*` 表示整個路徑底下 | 手寫 |
 | [`blog-categories.csv`](./blog-categories.csv) | 每篇 blog 文章在現站 blog API 的主分類與子分類 | `blog-categories.mjs` 產生 |
-| [`page-map.csv`](./page-map.csv) | inventory 每個 keep／rewrite／merge 列的節點、模板、新 blog 分類 | `sitemap.mjs` 產生 |
+| [`page-map.csv`](./page-map.csv) | inventory 每個 keep／rewrite／merge 列的節點、模板、新 blog 分類與 slug（`blog_slug`，規則見 ADR 0002） | `sitemap.mjs` 產生 |
 | [`sitemap-summary.json`](./sitemap-summary.json) | 各節點、各模板的列數 | `sitemap.mjs` 產生 |
 
 `kind` 的值：`page`（一頁）、`collection`（一個模板產生多頁，如文章、新聞、顧問）、`external`（外部連結，不建頁）、`asset`（下載檔案）、`group`（只用來分組，沒有頁面）。
@@ -104,7 +104,7 @@ zh-TW 的 `/blog/en` 分類頁沒有文章，併入 blog 首頁。
 ## 給 M2 其他 issue 的輸入
 
 - M2-02 導覽：頂層與產品家族見上方階層；`group` 節點（法務與政策、功能頁）只在 footer 或不出現。定案的導覽見 [`navigation.md`](./navigation.md)
-- M2-03 URL 規則：`path` 欄為暫定，有現站頁面的沿用現站路徑。正式規則決定後改 `nodes.csv` 的 `path`
+- M2-03 URL 規則：見 [ADR 0002](../decisions/0002-url-and-locale.md)。`nodes.csv` 的 `path` 已依規則調整（`/whitepaper/digilogs` 轉小寫、blog 文章改 `/blog/{slug}`）
 - M2-04 內容模型：每個模板的欄位；`offering` 要能區分產品、解決方案、服務；blog 分類與 tag
 - M2-05 redirect map：`page-map.csv` 的每一列（現站 URL → 節點）是 301 的來源；merge 列已指到合併後的節點。drop 列不在 `page-map.csv`，轉址策略由 M2-05 決定
 
@@ -301,9 +301,9 @@ flowchart LR
 
 ### 節點與模板對應
 
-路徑為暫定：有現站頁面的沿用現站路徑（去掉語系前綴），新頁為新路徑；正式 URL 由 M2-03 決定。列數為對應到該節點的 inventory 列數（keep／rewrite／merge）。
+路徑依 [ADR 0002](../decisions/0002-url-and-locale.md)：有現站頁面的沿用現站路徑（去掉語系前綴、轉小寫），新頁依階層命名；en、vi 加 `/en`、`/vi` 前綴。列數為對應到該節點的 inventory 列數（keep／rewrite／merge）。
 
-| 節點 | 模板 | 暫定路徑 | zh-TW | en | vi | 備註 |
+| 節點 | 模板 | 路徑 | zh-TW | en | vi | 備註 |
 |---|---|---|--:|--:|--:|---|
 | 首頁（`home`） | `home` | `/` | 1 | 1 | 1 |  |
 | 　產品總覽（`products`） | `hub` | `/products` | 1 | 1 | 1 |  |
@@ -359,9 +359,9 @@ flowchart LR
 | 　　　企業管理（`blog-enterprise-management`） | `listing` | `/blog/enterprise-management` | 6 | 4 | 4 |  |
 | 　　　ESG 與綠色轉型（`blog-esg`） | `listing` | `/blog/esg` | 1 | 1 | 4 |  |
 | 　　　應用情境（`blog-use-cases`） | `listing` | `/blog/use-cases` | 3 | 3 | 0 |  |
-| 　　　blog 文章（`blog-post`） | `article` | `/blog/{category}/{slug}` | 106 | 67 | 299 |  |
+| 　　　blog 文章（`blog-post`） | `article` | `/blog/{slug}` | 106 | 67 | 299 |  |
 | 　　digiRunner 白皮書（`whitepaper-digirunner`） | `gated-download` | `/whitepaper/api-strategies` | 1 | 1 | 1 |  |
-| 　　digiLogs 白皮書（`whitepaper-digilogs`） | `gated-download` | `/whitepaper/digiLogs` | 1 | 1 | 1 |  |
+| 　　digiLogs 白皮書（`whitepaper-digilogs`） | `gated-download` | `/whitepaper/digilogs` | 1 | 1 | 1 |  |
 | 　　GreenSwift 碳盤指南（`whitepaper-greenswift`） | `gated-download` | `/whitepaper/greenswift` | 1 | 0 | 0 |  |
 | 　　SysTalk.ai AI Playbook（`whitepaper-systalk-ai`） | `gated-download` | `/whitepaper/systalk-ai` | 1 | 1 | 0 |  |
 | 　　活動（`events`） | `listing` | `/events` | 1 | 1 | 1 |  |
