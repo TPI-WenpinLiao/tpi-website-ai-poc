@@ -26,18 +26,9 @@ description: 新增或修改任何頁面、版型、內容時使用。列出每�
 
 ## JSON-LD 類型對照
 
-| 頁面類型 | Schema |
-|---|---|
-| 首頁 | `Organization` + `WebSite` |
-| 產品頁 | `SoftwareApplication` |
-| 解決方案、服務 | `Service` |
-| 客戶案例 | `Article`（或 `CreativeWork`） |
-| 部落格 / 新聞 | `BlogPosting` / `NewsArticle` |
-| 公司頁（關於、聯絡） | `AboutPage` / `ContactPage` + `Organization` |
-| 徵才 | `JobPosting`（僅在有真實職缺資料時） |
-| 所有非首頁 | `BreadcrumbList` |
+各頁面類型的 schema（含首頁與 `BreadcrumbList`）與屬性對應只寫在 [`docs/ia/content-model.md`](../../../docs/ia/content-model.md)，見「內容類型總覽」與各類型的 JSON-LD 段落。內容模型沒有涵蓋的：
 
-各類型的 schema 屬性與內容欄位對應見 [`docs/ia/content-model.md`](../../../docs/ia/content-model.md)。
+- 徵才：`JobPosting`，僅在有真實職缺資料時
 
 不得在 JSON-LD 寫入頁面上不存在的資訊（評分、價格、地址等需有真實來源）。
 

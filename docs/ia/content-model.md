@@ -2,7 +2,7 @@
 
 新站每種內容類型的欄位、型別、必填與對應的 JSON-LD。M4-01 依本檔寫 Astro content collections 的 Zod schema，M5 依本檔寫遷移 script。
 
-- 輸入：[`sitemap.md`](./sitemap.md) 的節點與模板（[`nodes.csv`](./nodes.csv)、[`templates.csv`](./templates.csv)）、[`blog-categories.csv`](./blog-categories.csv)、[`seo-checklist`](../../.claude/skills/seo-checklist/SKILL.md) 的 JSON-LD 對照、[`content-migration`](../../.claude/skills/content-migration/SKILL.md) 的 frontmatter 規則
+- 輸入：[`sitemap.md`](./sitemap.md) 的節點與模板（[`nodes.csv`](./nodes.csv)、[`templates.csv`](./templates.csv)）、[`blog-categories.csv`](./blog-categories.csv)、[`content-migration`](../../.claude/skills/content-migration/SKILL.md) 的 frontmatter 規則
 - 範圍：本檔只定欄位。URL 形式與語系前綴見 [ADR 0002](../decisions/0002-url-and-locale.md)（M2-03），目錄結構與 Zod 寫法由 M4-01 決定，選單由 M2-02 決定
 - 範例值都取自現站 2026-10-20 的實際資料，每個範例附來源。現站沒有內容的類型，範例只列欄位，值寫「待人工提供」
 
