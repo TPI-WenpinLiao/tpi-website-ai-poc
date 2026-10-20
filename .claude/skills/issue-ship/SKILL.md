@@ -17,6 +17,8 @@ git diff --stat
 
 - 目前 branch 不得是 `main`
 - 從對話或 branch 上的 commit 找出對應的 issue 編號；找不到就問
+- `origin/main...HEAD` 包含 [`checkpoint`](../checkpoint/SKILL.md) 推過的 `wip:` commit，範圍確認要涵蓋它們
+- 刪除 `.claude/progress/<N>.md`（`git rm`）；進度檔不得進入 `main`
 - 未追蹤或修改的檔案逐一確認是本 issue 的產出；scratchpad、`.lighthouseci/`、`.lhci-dist/` 等暫存不得 commit
 - 掃一次 diff，不得包含 secrets、token、個人資料
 
@@ -65,6 +67,7 @@ git diff --stat
 - `type`：`feat`／`fix`／`content`／`docs`／`chore`，依 issue 的 `type:*` label
 - 摘要用正體中文，不寫模型名稱；依 `writing-style` 去除空話
 - 一張 issue 原則上一個 commit；修正 review 意見時另開 commit，不 amend 已 push 的 commit
+- branch 上有 `wip:` commit 且還沒開 PR 時，先 `git reset --soft "$(git merge-base origin/main HEAD)"`，再用上述格式 commit 成一個。用 merge-base 而不是 `origin/main`：`main` 在這之後有新 commit 時，reset 到 `origin/main` 會把那些變更反向寫進這個 commit。`main` 用 merge commit 合併 PR，不合併的話 `wip:` 會留在 `main` 的歷史
 
 ## 6. Push
 
@@ -73,6 +76,8 @@ git push -u origin <session 指定的 branch>
 ```
 
 只在網路錯誤時重試，最多 4 次（間隔 2s、4s、8s、16s）。不得 push `main`、不得 force push 到他人的 branch。
+
+第 5 步合併過 `wip:` commit 時，改用 `git push --force-with-lease -u origin <branch>`。這時還沒開 PR，branch 只有本 session 在用，改寫歷史不影響別人。PR 開了之後就不再 force push。
 
 ## 7. 開 PR
 
