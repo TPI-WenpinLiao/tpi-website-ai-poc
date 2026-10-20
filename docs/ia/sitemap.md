@@ -103,7 +103,7 @@ zh-TW 的 `/blog/en` 分類頁沒有文章，併入 blog 首頁。
 
 ## 給 M2 其他 issue 的輸入
 
-- M2-02 導覽：頂層與產品家族見上方階層；`group` 節點（法務與政策、功能頁）只在 footer 或不出現
+- M2-02 導覽：頂層與產品家族見上方階層；`group` 節點（法務與政策、功能頁）只在 footer 或不出現。方案與推薦見 [`navigation.md`](./navigation.md)
 - M2-03 URL 規則：`path` 欄為暫定，有現站頁面的沿用現站路徑。正式規則決定後改 `nodes.csv` 的 `path`
 - M2-04 內容模型：每個模板的欄位；`offering` 要能區分產品、解決方案、服務；blog 分類與 tag
 - M2-05 redirect map：`page-map.csv` 的每一列（現站 URL → 節點）是 301 的來源；merge 列已指到合併後的節點。drop 列不在 `page-map.csv`，轉址策略由 M2-05 決定
