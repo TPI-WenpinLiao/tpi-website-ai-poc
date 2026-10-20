@@ -14,14 +14,14 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 
 ## Frontmatter
 
-每個遷移的內容檔都必須包含（實際欄位以 M4-01 的 Zod schema 為準）：
+每個遷移的內容檔都必須包含下列欄位。各內容類型的完整欄位見 [`docs/ia/content-model.md`](../../../docs/ia/content-model.md)，實際寫法以 M4-01 的 Zod schema 為準：
 
 ```yaml
 sourceUrl: https://www.tpisoftware.com/...   # 現站原始頁面
 migratedAt: 2026-10-20                       # 擷取日期
 ```
 
-多個來源頁合併時，`sourceUrl` 改為陣列。
+多頁合併、新頁等 `sourceUrl` 的寫法見 [`content-model.md`「遷移追蹤欄位」](../../../docs/ia/content-model.md#遷移追蹤欄位)。
 
 ## 圖片
 

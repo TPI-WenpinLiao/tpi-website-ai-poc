@@ -105,7 +105,7 @@ zh-TW 的 `/blog/en` 分類頁沒有文章，併入 blog 首頁。
 
 - M2-02 導覽：頂層與產品家族見上方階層；`group` 節點（法務與政策、功能頁）只在 footer 或不出現。定案的導覽見 [`navigation.md`](./navigation.md)
 - M2-03 URL 規則：見 [ADR 0002](../decisions/0002-url-and-locale.md)。`nodes.csv` 的 `path` 已依規則調整（`/whitepaper/digilogs` 轉小寫、blog 文章改 `/blog/{slug}`）
-- M2-04 內容模型：每個模板的欄位；`offering` 要能區分產品、解決方案、服務；blog 分類與 tag
+- M2-04 內容模型：每個模板的欄位；`offering` 要能區分產品、解決方案、服務；blog 分類與 tag。已完成，見 [`content-model.md`](./content-model.md)
 - M2-05 redirect map：`page-map.csv` 的每一列（現站 URL → 節點）是 301 的來源；merge 列已指到合併後的節點。drop 列不在 `page-map.csv`，轉址策略由 M2-05 決定
 
 ## 自動產生的段落

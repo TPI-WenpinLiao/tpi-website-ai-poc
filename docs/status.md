@@ -43,15 +43,15 @@
 - M2-01 sitemap 與模板對應完成（#8，`ia-approved`）
 - M2-02 導覽定案完成（#9，`ia-approved`，PR #60）
 - M2-03 URL 規則與語系策略完成（#10，ADR 0002，PR #59）
-- M2-04 內容模型（#11，PR #61），待合併
+- M2-04 內容模型完成（#11，PR #61）
 - PR 審查 skill `/pr-review` 完成（#62，PR #65）
 - `status.md` 改寫合併後的狀態完成（#67）
 
 ## 下一步
 
-- Review M2-04 內容模型（`docs/ia/content-model.md`，PR #61），特別是文末「待確認」；PR #61 與 main 有衝突，合併前需先解
+- 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
 - M2-05 redirect map（#12）的依賴（#8、#10）都已完成，可以開始；轉址規則依 ADR 0002，blog 文章的新 slug 用 `docs/ia/page-map.csv` 的 `blog_slug` 欄
-- M2-02 導覽已定案（`docs/ia/navigation.md`）。M3-01 wireframe 另需 M2-04 內容模型（#11）完成；M3 實測 en、vi 選單在 1280px 能否放進一列
+- M2-02 導覽已定案（`docs/ia/navigation.md`）。M3-01 wireframe 的另一個依賴 M2-04 內容模型（#11）也已完成；M3 實測 en、vi 選單在 1280px 能否放進一列
 - M3-01 前先處理 #64：導覽文件與 `navigation.csv` 的第四層節點、footer 法務位置對齊（`/pr-review` 驗收時找到），需決定法務放 footer 第 6 欄或最底列
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
@@ -70,5 +70,6 @@
 - 日文版：M2-01 決定不支援，M2-05 將 `/ja/*` 301 到 `/en`（現站 `/ja`、`/ja/partners` 回 500）
 - M1-04：表單建議沿用現站 `/tpi/api/*` 後端，需後端開放新站網域的 CORS 並確認 reCAPTCHA 設定；GTM 等追蹤碼由新站重新規劃，不沿用現站 4 個容器；.com 站內搜尋 API 目前回 500（見 `docs/research/features.md`）
 - M1-05：主要轉換為聯絡業務；新站只用 GTM、需要 cookie 同意機制、Facebook Pixel 與 Ahrefs 不沿用；成功指標包含自然搜尋流量，但沒有 GA4／Search Console 權限，量測方式待定（見 `docs/research/audience-and-goals.md`）
+- M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（`seo-checklist` 的 JSON-LD 對照改為連到 `content-model.md`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）
 - M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定。`og:locale` 的 en、vi 值要改成「語言_地區」格式，M7 處理
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
