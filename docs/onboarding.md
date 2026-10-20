@@ -31,10 +31,19 @@
 
 `.claude/settings.json` 在 `startup` / `resume` 時執行 `scripts/session-start.sh`：
 
-- 只在 `CLAUDE_CODE_REMOTE=true`（雲端）時執行 `npm ci`；本機直接略過
-- `package-lock.json` 未變更時略過重裝
-- 失敗時在 transcript 顯示錯誤，並告知 Claude 先回報、不要開始實作
-- 多 repo 的雲端 session 不會載入 hook，此時需手動執行 `npm ci`
+- 只在 `CLAUDE_CODE_REMOTE=true`（雲端）時執行；本機直接略過
+- Node 主版號與 `.nvmrc` 不符時，以預裝的 nvm（`/opt/nvm`）安裝並切換，切換失敗時顯示警告，仍以原本的 Node 繼續
+- 讓 `npm run check` 的 Lighthouse 可在雲端執行：指定預裝的 Chromium（`CHROME_PATH=/opt/pw-browsers/chromium`），並因以 root 執行而加上 `--no-sandbox`
+- 以上設定寫入 `CLAUDE_ENV_FILE`，套用到 session 之後的每個 Bash 指令
+- 執行 `npm ci`；`package-lock.json` 與 Node 主版號都未變更時略過重裝
+- `npm ci` 失敗時在 transcript 顯示錯誤，並告知 Claude 先回報、不要開始實作
+- 多 repo 的雲端 session 不會載入 hook，此時需手動執行：
+
+  ```bash
+  . /opt/nvm/nvm.sh --no-use && nvm install && npm ci
+  export CHROME_PATH=/opt/pw-browsers/chromium
+  export LHCI_COLLECT__SETTINGS__CHROME_FLAGS="--no-sandbox --headless=new"
+  ```
 
 ## 4. 本機開發（選用）
 
