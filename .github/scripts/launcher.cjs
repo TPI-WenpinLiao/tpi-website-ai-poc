@@ -5,8 +5,9 @@
 const ENVIRONMENT = 'tpi-website-ai-poc';
 const MARKER = '<!-- claude-code-launcher -->';
 
+// The issue-start skill (.claude/skills/issue-start) reads the issue, checks the environment and plans.
 function buildPrompt(number, title) {
-  return `處理 issue #${number}：${title}。先閱讀 issue、CLAUDE.md 與 docs/status.md，以 Plan 模式提出計畫，等我確認後再實作。`;
+  return `/issue-start ${number}\n處理 issue #${number}：${title}。`;
 }
 
 function buildLauncherUrl({ owner, repo, number, title }) {

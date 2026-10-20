@@ -14,21 +14,27 @@ TPIsoftware（昕力資訊）官方網站的完整改版專案，素材來源為
 ```mermaid
 flowchart TD
   A[開 issue<br/>使用 issue form] --> B[issue-launcher 留言<br/>「在 Claude Code 開啟」連結]
-  A -->|勾選需要設計確認| L[自動加上 needs-design]
-  B --> C[開發人員開啟雲端 session]
-  C --> D[Claude 讀 issue / CLAUDE.md / status.md<br/>以 Plan 模式提出計畫]
+  A -->|勾選「需要設計確認」| L[issue-launcher 自動加上<br/>needs-design label]
+  B --> C[開發人員開啟雲端 session<br/>/issue-start N]
+  L -.->|/issue-start 讀取 label| D
+  C --> D[Claude 檢查依賴與環境<br/>以 Plan 模式提出計畫]
   D --> E{開發人員確認計畫}
   E -->|調整| D
-  E -->|確認| F{needs-design?}
-  F -->|否| G[實作 → npm run check → 開 PR]
-  F -->|是| H[階段一：視覺與結構<br/>開 draft PR，列出設計決策]
-  H --> I{人工設計確認<br/>加上 design-approved}
-  I -->|修改| H
-  I -->|通過| J[階段二：SEO / 無障礙 / 內容<br/>npm run check → ready for review]
+  E -->|確認| F{issue 有 needs-design?}
+  F -->|否| G[實作 → /issue-ship<br/>npm run check → 開 ready PR]
+  F -->|是| H[階段一：視覺與結構<br/>/issue-ship 開 draft PR<br/>列出設計決策與待確認問題]
+  H --> P[Claude 停下等待<br/>人工看 Cloudflare preview]
+  P -->|要修改：在 session 告訴 Claude| H
+  P -->|通過| Q[人工在 issue 加上 design-approved<br/>並在 session 告訴 Claude 繼續]
+  Q --> J[階段二：SEO / 無障礙 / 內容<br/>npm run check → 同一個 PR 轉為 ready]
   G --> K[quality-gate + Cloudflare preview]
   J --> K
-  K --> M[人工 review → merge]
+  K --> M[人工 review → merge<br/>PR 的 Closes 自動關閉 issue]
 ```
+
+- 雲端 session 不會監看 issue 的 label。加上 `design-approved` 後，要在 session 中告訴 Claude 才會進入階段二
+- M2、M3 的關卡 issue 流程相同，只是確認用的 label 依階段不同：`ia-approved`（M2）、`wireframe-approved`（M3-01）、`design-approved`（M3-02 起）
+- 每一步的操作與需要人工介入的時機見 [docs/workflow.md](docs/workflow.md)
 
 ## 如何開需求
 
@@ -37,7 +43,7 @@ flowchart TD
    - **錯誤回報**：頁面或功能異常
    - **Milestone 任務**：規劃中的 milestone 工作
 2. issue 建立後會自動出現「在 Claude Code 開啟」連結，點擊即以 `tpi-website-ai-poc` 環境開啟雲端 session
-3. 依 [CLAUDE.md](CLAUDE.md) 的工作規則進行
+3. 之後的流程（`/issue-start`、`/issue-ship`、`/next-issue`）見 [docs/workflow.md](docs/workflow.md)
 
 ## Labels
 
