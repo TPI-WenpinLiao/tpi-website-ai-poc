@@ -170,7 +170,7 @@ CWV 門檻（良好）：LCP ≤ 2.5 秒、INP ≤ 200 ms、CLS ≤ 0.1。
 
 篩選方式：用試算表開 `seo-pages.csv`，依 `locale`、`priority` 篩選。P1 共 104 頁，除了 `/tpu` 子站是 `keep`，其餘 M1-02 處置都是 `rewrite`，網址會改變的機率高，都需要 redirect。
 
-這份分級沒有流量與外部連結資料。blog 文章與新聞全部落在 P3，但其中可能有流量最高的頁面，取得資料後要重新排序（見「待補資料」）。
+這份分級沒有流量與外部連結資料：專案沒有 GA4 與 Search Console 的存取權限，本 issue 略過。blog 文章與新聞全部落在 P3，但其中可能有流量最高的頁面，無法挑出來。因此 M2 的 redirect 對照不能只做 P1／P2，M1-02 處置為 `keep`、`rewrite`、`merge` 的頁面都要有 301。
 
 ## 新站必須保留或改善的項目
 
@@ -203,16 +203,16 @@ CWV 門檻（良好）：LCP ≤ 2.5 秒、INP ≤ 200 ms、CLS ≤ 0.1。
 | 圖片尺寸與 alt | 98% 的 `<img>` 沒有尺寸；1,439 個沒有 `alt` | 全部有 `width`／`height` 與 `alt` |
 | 效能 | 行動版 LCP、INP 未達標；.vn CLS 超標 | 所有 CWV 達「良好」；本專案的 Lighthouse 門檻為 performance ≥ 0.95 |
 
-## 待補資料（needs-input）
+## 待補資料
 
 | 資料 | 用途 | 取得方式 |
 |---|---|---|
-| 頁面流量（GA4 或 Search Console「成效」） | 重新排序重要頁面，找出 P3 中的高流量頁 | 內容負責人匯出近 12 個月、以網頁為維度的 CSV |
-| 外部連結（Search Console「連結」） | 有外部連結的頁面優先 redirect | Search Console 匯出「熱門連結網頁」 |
+| 頁面流量（GA4 或 Search Console「成效」） | 重新排序重要頁面，找出 P3 中的高流量頁 | 無存取權限，略過。日後取得權限時，匯出近 12 個月、以網頁為維度的 CSV |
+| 外部連結（Search Console「連結」） | 有外部連結的頁面優先 redirect | 無存取權限，略過。日後取得權限時，匯出「熱門連結網頁」 |
 | 其他頁面的 field CWV | 目前只有 .com 首頁與 .vn origin | 在 PageSpeed Insights 查 .com 的「來源」分頁；或設定 API key 後由 script 取得 |
 
 ## 已知限制
 
 - Meta 擷取只看 SSR HTML。現站是 Nuxt 2，client 端可能再改寫 head，搜尋引擎渲染後看到的值可能不同
 - Lab 量測在雲端容器經 proxy 執行，網路來回時間比一般使用者長，分數只適合新舊站在同一環境下比較，不代表真實使用者體驗
-- 重要頁面清單只依導覽位置與頁面類型分級，沒有流量資料
+- 重要頁面清單只依導覽位置與頁面類型分級，沒有流量與外部連結資料（無存取權限）

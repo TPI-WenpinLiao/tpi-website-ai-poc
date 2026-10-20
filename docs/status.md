@@ -23,12 +23,12 @@
 ## 下一步
 
 1. Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「需人工決定的項目」
-2. Review M1-03 SEO 基線（`docs/research/seo-baseline.md`），提供「待補資料」的流量與外部連結匯出
+2. Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 3. 依序處理 M1 其餘 issue（以 `/next-issue` 找出可開始的 issue）
 
 ## 待辦備忘
 
-- M1-03 needs-input：頁面流量（GA4／Search Console「成效」）與外部連結（Search Console「連結」）匯出後，重排 `docs/research/seo-baseline.md` 的重要頁面分級；.com origin 層級的 field CWV 尚未取得
+- M1-03 沒有流量與外部連結資料（無 GA4／Search Console 權限），重要頁面無法依流量排序；M2 的 redirect 對照要涵蓋所有 `keep`／`rewrite`／`merge` 頁面，不能只做 P1／P2。.com origin 層級的 field CWV 尚未取得
 - Node 26 預計 2026-10-28 進入 Active LTS，屆時將 `.nvmrc` 升為 `26`（同步 Cloudflare Pages 的 `NODE_VERSION`）；雲端 session 的 SessionStart hook 會自動依 `.nvmrc` 切換
 - 現站 `/sitemap.xml` 與 `/ja` 回 500，盤點改以導覽與連結爬取為準（見 `docs/research/inventory.md`）
 - M1-02 稽核的 M2 待決事項（不在導覽的產品是否仍銷售、主題重疊頁面是否合併、舊 `/solutions/*` 路由、blog 分類）見 `docs/research/content-audit.md`
