@@ -1,0 +1,98 @@
+{
+  "crawledAt": "2026-10-20",
+  "node": "v22.22.0",
+  "rows": 1306,
+  "brokenLinks": 59,
+  "byLocale": {
+    "zh-TW": 535,
+    "en": 324,
+    "vi": 445,
+    "ja": 2
+  },
+  "byPageType": {
+    "home": 4,
+    "campaign": 3,
+    "about": 7,
+    "service": 49,
+    "blog-index": 3,
+    "blog-category": 55,
+    "blog-post": 469,
+    "utility": 15,
+    "contact": 3,
+    "download": 15,
+    "newsletter": 25,
+    "events": 3,
+    "subsite": 2,
+    "news-index": 3,
+    "news": 531,
+    "pdf": 11,
+    "product-index": 3,
+    "product": 75,
+    "resource": 3,
+    "search": 3,
+    "solution": 21,
+    "case-study": 3
+  },
+  "byStatus": {
+    "200": 1301,
+    "500": 5
+  },
+  "byLocaleOk": {
+    "zh-TW": 534,
+    "en": 323,
+    "vi": 444
+  },
+  "nonOk": [
+    {
+      "url": "https://www.tpisoftware.com/outsourcing/dropdown",
+      "status": 500,
+      "notes": "no h1; error page"
+    },
+    {
+      "url": "https://www.tpisoftware.com/en/outsourcing/dropdown",
+      "status": 500,
+      "notes": "no h1; error page"
+    },
+    {
+      "url": "https://www.tpisoftware.com/vn/outsourcing/dropdown",
+      "status": 500,
+      "notes": "no h1; error page; redirected from: https://www.tpisoftware.com/vn/outsourcing/dropdown https://www.tpisoftware.vn/outsourcing/dropdown"
+    },
+    {
+      "url": "https://www.tpisoftware.com/ja",
+      "status": 500,
+      "notes": "no h1"
+    },
+    {
+      "url": "https://www.tpisoftware.com/ja/partners",
+      "status": 500,
+      "notes": "no h1"
+    }
+  ],
+  "navTargetsMissing": [],
+  "outOfScopeHosts": {
+    "blog.tpisoftware.com": 143,
+    "blog.tpisoftware.vn": 1,
+    "docs.tpisoftware.com": 59,
+    "greenswift.tpisoftware.com": 5,
+    "ir.tpisoftware.com": 6,
+    "tpi.dev": 5,
+    "tpisoftware.com": 7,
+    "tpisoftware.piee.pw": 3,
+    "tpisoftware.vn": 23,
+    "tpisoftware07781.pse.is": 4,
+    "tpisoftwaretw.pse.is": 1
+  },
+  "fetchFailures": [],
+  "notes": [
+    "ja home https://www.tpisoftware.com/ja returned 500",
+    "https://www.tpisoftware.com/sitemap.xml returned 500",
+    "https://www.tpisoftware.vn/sitemap.xml: 299 urls",
+    "blog zh-TW: API totalCount=105, listed=105, hidden (future date)=0",
+    "blog en: API totalCount=66, listed=66, hidden (future date)=0",
+    "blog vi: API totalCount=298, listed=298, hidden (future date)=0",
+    "news zh-TW: API total=283, unpublished (status!=1)=2",
+    "news en: API total=173, unpublished (status!=1)=0",
+    "news vi: API total=69, unpublished (status!=1)=0"
+  ]
+}

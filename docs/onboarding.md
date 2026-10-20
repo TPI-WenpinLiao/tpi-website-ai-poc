@@ -23,7 +23,7 @@
 | 欄位 | 值 |
 |---|---|
 | 名稱 | `tpi-website-ai-poc`（issue 留言中的連結以此名稱預選環境，名稱必須一致） |
-| Network access | **Trusted**（預設 allowlist 已含 `registry.npmjs.org`）。M1 需要擷取 `www.tpisoftware.com` 時改為 **Custom**，勾選包含預設清單並加入 `www.tpisoftware.com`、`tpisoftware.com` |
+| Network access | **Limited**，勾選 **Allow package managers**（`npm ci` 需要），Allowed domains 加入 `www.tpisoftware.com`、`tpisoftware.com`、`www.tpisoftware.vn`、`tpisoftware.vn`（現站越南文版 `/vn` 轉址到獨立網域） |
 | 環境變數 | 目前不需要。不要放任何 secret 或 token |
 | Setup script | 目前不需要。依賴安裝由 repo 的 SessionStart hook 處理 |
 
