@@ -38,7 +38,7 @@ git status -sb
 
 ## 4. 對照 `docs/status.md`
 
-`status.md` 應該描述 main 目前的狀態。對照 GitHub 找出對不上的地方，在本 issue 的 PR 一起修，不另開同步 PR。判斷規則見 [`issue-ship` 第 4 步](../issue-ship/SKILL.md#4-更新-docsstatusmd)。
+`status.md` 應該描述 main 目前的狀態。對照 GitHub 找出對不上的地方，在本 issue 的 PR 一起修，不另開同步 PR。判斷規則見 [`issue-ship` 第 3 步](../issue-ship/SKILL.md#3-更新-docsstatusmd)。
 
 1. 列出 `status.md`「待辦備忘」以外每個 `#N`、`PR #N`，以及寫的狀態（完成／待合併／階段一／可以開始）
 2. 用 `mcp__github__issue_read`（`get`）與 `mcp__github__pull_request_read`（`get`）查實際狀態；「可以開始」的 issue 另外查它的依賴是否都已關閉

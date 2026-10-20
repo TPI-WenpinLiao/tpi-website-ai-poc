@@ -24,21 +24,13 @@ git diff --stat
 
 執行 `npm run check`（Bash timeout 600000 ms，輸出導到 scratchpad）。**失敗就停下回報，不得 commit 或 push**
 
-## 3. 出貨前自我 review
-
-執行 `/pr-review`（不帶參數，審查目前 branch）。固定檢查與分類規則只寫在 [`../pr-review/SKILL.md`](../pr-review/SKILL.md)，本步驟不另列。
-
-- Act on：修正後重跑第 2 步，再跑一次 `/pr-review`
-- Consider：寫進 PR 的「待確認」
-- 本步驟不在 PR 上留言（此時還沒有 PR）
-
-## 4. 更新 `docs/status.md`
+## 3. 更新 `docs/status.md`
 
 `status.md` 描述 main 的狀態。PR 的內容在合併那一刻才進 main，所以 PR 裡寫的是**這個 PR 合併後**的狀態。本節是 `status.md` 寫法的唯一規則；`/issue-start` 的對照與 `/pr-review` 的固定檢查都依本節判斷。
 
 - 「最後更新」改為今天。與其他 PR 衝突時取較新的日期
 - 「進度」表只寫 milestone 層級的狀態：未開始／進行中／完成
-- 「Issue」段落一個 issue 一行，已關閉的 issue 與有 open PR 的 issue 都要列。放在所屬 milestone 的小標下，依 bootstrap-id（`M2-03`）排序；沒有 milestone 的 issue（例如 `[chore]`）放在 issue 建立時編號最大的進行中 milestone，排在該小標最後
+- 「Issue」段落一個 issue 一行，已關閉的 issue 與有 open PR 的 issue 都要列。放在所屬 milestone 的小標下，依 bootstrap-id（`M2-03`）排序；沒有 bootstrap-id 的排在該小標最後。沒有 milestone 的 issue（例如 `[chore]`）放在寫入當下「進度」表中編號最大的「進行中」milestone
 - 本 issue 寫成合併後的狀態：`M2-03 URL 規則與語系策略完成（#10）`
   - 不寫 PR 編號：開 PR 前還不知道編號，PR 可從 issue 的 `closed_by_pull_requests` 查到。既有條目的 PR 編號保留
   - `needs-design` 階段一的 draft PR 合併前要先拿到 approved label，這時還不算完成，寫成 `M3-01 wireframe（#13），階段一，等待 wireframe-approved`；階段二的 PR 再改成完成
@@ -48,6 +40,14 @@ git diff --stat
   - 加上合併後才成立的項目，例如「M2-06 可以開始」。寫之前用 `mcp__github__issue_read` 確認該 issue「## 依賴」的其他 issue 都已關閉，只差本 issue
   - 加上本 issue 產生的待決事項
 - 「待辦備忘」只放跨 issue、需要記住的事
+
+## 4. 出貨前自我 review
+
+執行 `/pr-review`（不帶參數，審查目前 branch）。固定檢查與分類規則只寫在 [`../pr-review/SKILL.md`](../pr-review/SKILL.md)，本步驟不另列。
+
+- Act on：修正後重跑第 2 步，再跑一次 `/pr-review`
+- Consider：寫進 PR 的「待確認」
+- 本步驟不在 PR 上留言（此時還沒有 PR）
 
 ## 5. Commit
 

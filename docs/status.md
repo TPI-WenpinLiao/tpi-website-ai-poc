@@ -22,7 +22,7 @@
 
 ## Issue
 
-寫法見 [`issue-ship` 第 4 步](../.claude/skills/issue-ship/SKILL.md#4-更新-docsstatusmd)。
+寫法見 [`issue-ship` 第 3 步](../.claude/skills/issue-ship/SKILL.md#3-更新-docsstatusmd)。
 
 ### M0 基礎建設
 
