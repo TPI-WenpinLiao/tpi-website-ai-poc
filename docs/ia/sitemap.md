@@ -97,7 +97,7 @@ zh-TW 的 `/blog/en` 分類頁沒有文章，併入 blog 首頁。
 | 上方決策紀錄（產業順序、landing page、日文版、重疊頁面、舊路由、blog 分類） | 專案負責人，`ia-approved` 審核時 | M2 其餘 issue |
 | `note` 標「待確認」的 6 個產品／方案是否仍在銷售 | 內容負責人 | M5 前未確認則改 merge |
 | 新頁的介紹文字：資安家族、產業方案總覽、金融、政府、製造業、服務總覽 | 內容負責人（不由 Claude 撰寫） | M5 |
-| OrientAI 放在 AI 家族（zh-TW 導覽是獨立的「Agentic AI」群組，vi 導覽放在 DigiLism 下） | 專案負責人 | M2-02 導覽 |
+| OrientAI 放在 AI 家族（zh-TW 導覽是獨立的「Agentic AI」群組，vi 導覽放在 DigiLism 下） | 專案負責人 | M2-02 已決定：維持在 AI 家族，導覽放第一項並加「Agentic AI」標記（`navigation.md`） |
 | `Featured/Neo4j` 3 篇（以 Neo4j 偵測金融詐欺）歸到數位轉型 | 專案負責人 | M5 |
 | 成功案例內頁：現站沒有內頁，案例清單與客戶名稱授權未確認（`content-audit.md`「內容負責人要確認」第 4 項） | 內容負責人 | 確認後才建 `case-study` |
 
