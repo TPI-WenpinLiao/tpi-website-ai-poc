@@ -7,7 +7,7 @@
 | 資料 | 檔案 | 量測時間 | 工具與方式 |
 |---|---|---|---|
 | 全站 meta | [`seo-pages.csv`](./seo-pages.csv)、[`seo-summary.json`](./seo-summary.json) | 2026-10-20 07:12 UTC 起 | `scripts/inventory/seo.mjs`，Node v24.22.0 抓 SSR HTML（不執行 JavaScript），1,290 頁，0 失敗 |
-| Lab 效能 | [`lighthouse-baseline.json`](./lighthouse-baseline.json) | 見檔內 `measuredAt` | `scripts/inventory/lighthouse.mjs`，Lighthouse 12.6.1、headless Chromium 141，14 頁 × mobile／desktop × 3 次取中位數 |
+| Lab 效能 | [`lighthouse-baseline.json`](./lighthouse-baseline.json) | 2026-10-20 07:22 UTC 起 | `scripts/inventory/lighthouse.mjs`，Lighthouse 12.6.1、headless Chromium 141，14 頁 × mobile／desktop × 3 次取中位數 |
 | Field CWV | [`crux-field-manual.json`](./crux-field-manual.json) | 2026-10-20 15:20（台北時間），涵蓋最近 28 天 | PageSpeed Insights 網頁版，使用者手動查詢後提供截圖 |
 
 輸入範圍：[`inventory.csv`](./inventory.csv)（M1-01）中 `status` = 200 的 HTML 頁，排除 PDF。
@@ -16,8 +16,8 @@
 
 ```bash
 npm ci
-node scripts/inventory/seo.mjs              # 全站 meta，約 25 分鐘；--limit N 試跑
-node scripts/inventory/lighthouse.mjs       # lab 量測，約 50 分鐘；--runs N、--only <網址片段>
+node scripts/inventory/seo.mjs              # 全站 meta，2026-10-20 實測約 10 分鐘；--limit N 試跑
+node scripts/inventory/lighthouse.mjs       # lab 量測，2026-10-20 實測約 30 分鐘；--runs N、--only <網址片段>
 ```
 
 - 兩支 script 都會覆寫產出檔；重跑前先跑 `crawl.mjs` 與 `audit.mjs` 更新 `inventory.csv`，`seo-pages.csv` 的 `disposition` 欄才會是最新的
@@ -91,7 +91,52 @@ node scripts/inventory/lighthouse.mjs       # lab 量測，約 50 分鐘；--run
 
 ## 效能（Core Web Vitals）
 
-<!-- LAB -->
+### Lab 數據（Lighthouse）
+
+來源：[`lighthouse-baseline.json`](./lighthouse-baseline.json)，2026-10-20 07:22 UTC 起量測。每列是 3 次量測的中位數；分數 × 100。mobile 用 Lighthouse 預設的模擬節流（慢速 4G、CPU 4 倍降速），desktop 用 desktop preset。
+
+| 頁面 | 裝置 | 效能 | 無障礙 | 最佳做法 | SEO | LCP | CLS | TBT | FCP |
+|---|---|--:|--:|--:|--:|--:|--:|--:|--:|
+| 首頁 zh-TW `/` | mobile | 46 | 86 | 93 | 92 | 24.6 秒 | 0.005 | 415 ms | 7.9 秒 |
+| | desktop | 63 | 82 | 96 | 85 | 8.8 秒 | 0.002 | 107 ms | 1.2 秒 |
+| 首頁 en `/en` | mobile | 47 | 86 | 93 | 85 | 24.7 秒 | 0 | 366 ms | 7.7 秒 |
+| | desktop | 63 | 82 | 96 | 77 | 8.7 秒 | 0.003 | 98 ms | 1.1 秒 |
+| 首頁 vi（.vn `/`） | mobile | 46 | 86 | 93 | 92 | 25.4 秒 | 0.016 | 464 ms | 6.3 秒 |
+| | desktop | 63 | 82 | 96 | 85 | 9.3 秒 | 0.003 | 131 ms | 1.1 秒 |
+| 產品總覽 `/products` | mobile | 47 | 87 | 93 | 92 | 15.1 秒 | 0 | 383 ms | 7.4 秒 |
+| | desktop | 69 | 84 | 96 | 83 | 3.7 秒 | 0 | 38 ms | 1.3 秒 |
+| 產品頁 `/products/digilism` | mobile | 42 | 77 | 93 | 83 | 31.5 秒 | 0.049 | 693 ms | 3.6 秒 |
+| | desktop | 63 | 84 | 96 | 83 | 9.4 秒 | 0.004 | 108 ms | 1.4 秒 |
+| 解決方案 `/solutions/smartclaim` | mobile | 52 | 83 | 93 | 92 | 16.6 秒 | 0 | 225 ms | 7.2 秒 |
+| | desktop | 63 | 80 | 96 | 83 | 5.7 秒 | 0 | 86 ms | 1.4 秒 |
+| 服務 `/aiso` | mobile | 41 | 87 | 93 | 83 | 16.9 秒 | 0 | 590 ms | 8.0 秒 |
+| | desktop | 63 | 84 | 96 | 75 | 4.4 秒 | 0 | 74 ms | 2.4 秒 |
+| 客戶案例 `/success-story` | mobile | 51 | 87 | 93 | 92 | 15.6 秒 | 0 | 362 ms | 7.8 秒 |
+| | desktop | 68 | 84 | 96 | 83 | 3.9 秒 | 0 | 112 ms | 1.4 秒 |
+| Blog 首頁 `/blog` | mobile | 48 | 85 | 93 | 83 | 44.0 秒 | 0 | 511 ms | 6.1 秒 |
+| | desktop | 62 | 76 | 96 | 75 | 6.5 秒 | 0 | 132 ms | 1.3 秒 |
+| Blog 文章 `/blog/ai/ai-gateway-for-enterprise-ai-security` | mobile | 28 | 88 | 93 | 92 | 13.0 秒 | 0.470 | 355 ms | 7.5 秒 |
+| | desktop | 48 | 76 | 96 | 83 | 4.4 秒 | 0.383 | 102 ms | 1.4 秒 |
+| 媒體中心 `/media-center` | mobile | 50 | 83 | 89 | 92 | 12.4 秒 | 0.049 | 367 ms | 3.6 秒 |
+| | desktop | 59 | 84 | 96 | 85 | 4.4 秒 | 0 | 42 ms | 2.7 秒 |
+| 新聞 `/media-center/585` | mobile | 26 | 90 | 93 | 92 | 13.7 秒 | 0.521 | 510 ms | 3.8 秒 |
+| | desktop | 41 | 86 | 96 | 83 | 4.9 秒 | 0.465 | 69 ms | 2.3 秒 |
+| 關於我們 `/about-us` | mobile | 50 | 82 | 93 | 92 | 17.9 秒 | 0 | 256 ms | 8.0 秒 |
+| | desktop | 70 | 77 | 96 | 83 | 3.6 秒 | 0 | 62 ms | 1.2 秒 |
+| 聯絡我們 `/contact-us` | mobile | 49 | 81 | 89 | 92 | 16.1 秒 | 0 | 356 ms | 7.3 秒 |
+| | desktop | 65 | 81 | 96 | 83 | 4.2 秒 | 0 | 45 ms | 2.1 秒 |
+
+觀察：
+
+- 28 組的效能分數都低於 0.95（本專案新站的 Lighthouse 門檻）；mobile 26–52，desktop 41–70
+- mobile LCP 全部超過 12 秒。首頁 LCP 元素是以 CSS 背景圖呈現的區塊（`.homepage__orient-ai`），首頁傳輸量約 7.4 MB（`total-byte-weight`）
+- Blog 文章與新聞的 CLS 為 0.38–0.52，與 .vn field 數據 CLS 超標的方向一致；內文由 client 端載入後推擠版面是可能原因，未逐一驗證
+- 在 SEO 類別，28 組全部扣分於 `crawlable-anchors`（有無法爬取的連結）；15 組扣 `image-alt`，4 組扣 `meta-description`
+- 無障礙類別最常見的問題：`link-name`（28 組）、`button-name`（20）、`color-contrast`（19）、`heading-order`（16）
+
+Lab 數值與 field 數據差距大（例如 .com 首頁 mobile LCP：lab 24.6 秒、field 4.4 秒）。lab 是模擬慢速網路下的最壞情況，加上量測環境經 proxy；用途是新舊站在同一環境下比較，不要拿來估計真實使用者體驗。
+
+另一份 lab 參考：使用者在 PageSpeed Insights 網頁版（Google 機器）量到的首頁分數，記錄在 `crux-field-manual.json` 的 `psiLabScores`。.com mobile 效能 27、desktop 40；.vn mobile 27、desktop 37。兩者都低於本機量測（46／63），趨勢一致。
 
 ### Field 數據（CrUX）
 

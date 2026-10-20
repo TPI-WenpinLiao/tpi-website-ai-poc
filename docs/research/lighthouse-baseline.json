@@ -1,0 +1,1359 @@
+{
+  "measuredAt": "2026-10-20T07:22:58.246Z",
+  "node": "v24.22.0",
+  "lighthouse": "12.6.1",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.0.0 Safari/537.36",
+  "benchmarkIndex": 1319.5,
+  "throttling": {
+    "mobile": "Lighthouse default (simulated, slow 4G, 4x CPU)",
+    "desktop": "Lighthouse desktop preset (simulated)"
+  },
+  "runsPerPage": 3,
+  "environment": "Claude Code cloud container, headless Chromium via the session HTTPS proxy",
+  "results": [
+    {
+      "label": "首頁 zh-TW",
+      "pageType": "home",
+      "url": "https://www.tpisoftware.com/",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.46,
+          "accessibility": 0.86,
+          "best-practices": 0.93,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 24598,
+          "cls": 0.005,
+          "tbtMs": 415,
+          "fcpMs": 7942,
+          "siMs": 11870
+        },
+        "rttMs": 0
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.46,
+            "accessibility": 0.86,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.47,
+            "accessibility": 0.86,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.44,
+            "accessibility": 0.86,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "首頁 zh-TW",
+      "pageType": "home",
+      "url": "https://www.tpisoftware.com/",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.63,
+          "accessibility": 0.82,
+          "best-practices": 0.96,
+          "seo": 0.85
+        },
+        "metrics": {
+          "lcpMs": 8764,
+          "cls": 0.002,
+          "tbtMs": 107,
+          "fcpMs": 1166,
+          "siMs": 3587
+        },
+        "rttMs": 0
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.82,
+            "best-practices": 0.96,
+            "seo": 0.85
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.62,
+            "accessibility": 0.82,
+            "best-practices": 0.96,
+            "seo": 0.85
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.82,
+            "best-practices": 0.96,
+            "seo": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "label": "首頁 en",
+      "pageType": "home",
+      "url": "https://www.tpisoftware.com/en",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.47,
+          "accessibility": 0.86,
+          "best-practices": 0.93,
+          "seo": 0.85
+        },
+        "metrics": {
+          "lcpMs": 24708,
+          "cls": 0,
+          "tbtMs": 366,
+          "fcpMs": 7745,
+          "siMs": 12095
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.47,
+            "accessibility": 0.86,
+            "best-practices": 0.93,
+            "seo": 0.85
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.46,
+            "accessibility": 0.86,
+            "best-practices": 0.93,
+            "seo": 0.85
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.48,
+            "accessibility": 0.86,
+            "best-practices": 0.93,
+            "seo": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "label": "首頁 en",
+      "pageType": "home",
+      "url": "https://www.tpisoftware.com/en",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.63,
+          "accessibility": 0.82,
+          "best-practices": 0.96,
+          "seo": 0.77
+        },
+        "metrics": {
+          "lcpMs": 8689,
+          "cls": 0.003,
+          "tbtMs": 98,
+          "fcpMs": 1128,
+          "siMs": 3487
+        },
+        "rttMs": 0
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.82,
+            "best-practices": 0.96,
+            "seo": 0.77
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.62,
+            "accessibility": 0.82,
+            "best-practices": 0.96,
+            "seo": 0.77
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.64,
+            "accessibility": 0.82,
+            "best-practices": 0.96,
+            "seo": 0.77
+          }
+        }
+      ]
+    },
+    {
+      "label": "首頁 vi",
+      "pageType": "home",
+      "url": "https://www.tpisoftware.vn/",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.46,
+          "accessibility": 0.86,
+          "best-practices": 0.93,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 25379,
+          "cls": 0.016,
+          "tbtMs": 464,
+          "fcpMs": 6255,
+          "siMs": 12672
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.43,
+            "accessibility": 0.86,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.51,
+            "accessibility": 0.86,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.46,
+            "accessibility": 0.86,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "首頁 vi",
+      "pageType": "home",
+      "url": "https://www.tpisoftware.vn/",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.63,
+          "accessibility": 0.82,
+          "best-practices": 0.96,
+          "seo": 0.85
+        },
+        "metrics": {
+          "lcpMs": 9288,
+          "cls": 0.003,
+          "tbtMs": 131,
+          "fcpMs": 1084,
+          "siMs": 3544
+        },
+        "rttMs": 0
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.82,
+            "best-practices": 0.96,
+            "seo": 0.85
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.82,
+            "best-practices": 0.96,
+            "seo": 0.85
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.48,
+            "accessibility": 0.82,
+            "best-practices": 0.96,
+            "seo": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "label": "產品總覽",
+      "pageType": "product-index",
+      "url": "https://www.tpisoftware.com/products",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.47,
+          "accessibility": 0.87,
+          "best-practices": 0.93,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 15050,
+          "cls": 0,
+          "tbtMs": 383,
+          "fcpMs": 7369,
+          "siMs": 10260
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.52,
+            "accessibility": 0.87,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.47,
+            "accessibility": 0.87,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.47,
+            "accessibility": 0.87,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "產品總覽",
+      "pageType": "product-index",
+      "url": "https://www.tpisoftware.com/products",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.69,
+          "accessibility": 0.84,
+          "best-practices": 0.96,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 3711,
+          "cls": 0,
+          "tbtMs": 38,
+          "fcpMs": 1251,
+          "siMs": 3553
+        },
+        "rttMs": 36
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.72,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.69,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.6,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "產品頁",
+      "pageType": "product",
+      "url": "https://www.tpisoftware.com/products/digilism",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.42,
+          "accessibility": 0.77,
+          "best-practices": 0.93,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 31457,
+          "cls": 0.049,
+          "tbtMs": 693,
+          "fcpMs": 3624,
+          "siMs": 10115
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.28,
+            "accessibility": 0.77,
+            "best-practices": 0.93,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.47,
+            "accessibility": 0.77,
+            "best-practices": 0.93,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.42,
+            "accessibility": 0.77,
+            "best-practices": 0.93,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "產品頁",
+      "pageType": "product",
+      "url": "https://www.tpisoftware.com/products/digilism",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.63,
+          "accessibility": 0.84,
+          "best-practices": 0.96,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 9399,
+          "cls": 0.004,
+          "tbtMs": 108,
+          "fcpMs": 1398,
+          "siMs": 3293
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.6,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "解決方案",
+      "pageType": "solution",
+      "url": "https://www.tpisoftware.com/solutions/smartclaim",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.52,
+          "accessibility": 0.83,
+          "best-practices": 0.93,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 16575,
+          "cls": 0,
+          "tbtMs": 225,
+          "fcpMs": 7228,
+          "siMs": 10201
+        },
+        "rttMs": 0
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.53,
+            "accessibility": 0.83,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.52,
+            "accessibility": 0.83,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.52,
+            "accessibility": 0.83,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "解決方案",
+      "pageType": "solution",
+      "url": "https://www.tpisoftware.com/solutions/smartclaim",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.63,
+          "accessibility": 0.8,
+          "best-practices": 0.96,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 5659,
+          "cls": 0,
+          "tbtMs": 86,
+          "fcpMs": 1375,
+          "siMs": 4231
+        },
+        "rttMs": 37
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.8,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.59,
+            "accessibility": 0.8,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.8,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "服務",
+      "pageType": "service",
+      "url": "https://www.tpisoftware.com/aiso",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.41,
+          "accessibility": 0.87,
+          "best-practices": 0.93,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 16922,
+          "cls": 0,
+          "tbtMs": 590,
+          "fcpMs": 7990,
+          "siMs": 7990
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.4,
+            "accessibility": 0.87,
+            "best-practices": 0.93,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.41,
+            "accessibility": 0.87,
+            "best-practices": 0.93,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.49,
+            "accessibility": 0.87,
+            "best-practices": 0.93,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "服務",
+      "pageType": "service",
+      "url": "https://www.tpisoftware.com/aiso",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.63,
+          "accessibility": 0.84,
+          "best-practices": 0.96,
+          "seo": 0.75
+        },
+        "metrics": {
+          "lcpMs": 4397,
+          "cls": 0,
+          "tbtMs": 74,
+          "fcpMs": 2378,
+          "siMs": 2863
+        },
+        "rttMs": 207
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.72,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.75
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.75
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.61,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.75
+          }
+        }
+      ]
+    },
+    {
+      "label": "客戶案例",
+      "pageType": "case-study",
+      "url": "https://www.tpisoftware.com/success-story",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.51,
+          "accessibility": 0.87,
+          "best-practices": 0.93,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 15593,
+          "cls": 0,
+          "tbtMs": 362,
+          "fcpMs": 7818,
+          "siMs": 9695
+        },
+        "rttMs": 0
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.51,
+            "accessibility": 0.87,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.52,
+            "accessibility": 0.87,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.47,
+            "accessibility": 0.87,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "客戶案例",
+      "pageType": "case-study",
+      "url": "https://www.tpisoftware.com/success-story",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.68,
+          "accessibility": 0.84,
+          "best-practices": 0.96,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 3927,
+          "cls": 0,
+          "tbtMs": 112,
+          "fcpMs": 1380,
+          "siMs": 2814
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.69,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.68,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "Blog 首頁",
+      "pageType": "blog-index",
+      "url": "https://www.tpisoftware.com/blog",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.48,
+          "accessibility": 0.85,
+          "best-practices": 0.93,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 43964,
+          "cls": 0,
+          "tbtMs": 511,
+          "fcpMs": 6098,
+          "siMs": 10930
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.41,
+            "accessibility": 0.85,
+            "best-practices": 0.93,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.49,
+            "accessibility": 0.85,
+            "best-practices": 0.93,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.48,
+            "accessibility": 0.85,
+            "best-practices": 0.93,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "Blog 首頁",
+      "pageType": "blog-index",
+      "url": "https://www.tpisoftware.com/blog",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.62,
+          "accessibility": 0.76,
+          "best-practices": 0.96,
+          "seo": 0.75
+        },
+        "metrics": {
+          "lcpMs": 6539,
+          "cls": 0,
+          "tbtMs": 132,
+          "fcpMs": 1338,
+          "siMs": 2877
+        },
+        "rttMs": 0
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.61,
+            "accessibility": 0.76,
+            "best-practices": 0.96,
+            "seo": 0.75
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.62,
+            "accessibility": 0.76,
+            "best-practices": 0.96,
+            "seo": 0.75
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.64,
+            "accessibility": 0.76,
+            "best-practices": 0.96,
+            "seo": 0.75
+          }
+        }
+      ]
+    },
+    {
+      "label": "Blog 文章",
+      "pageType": "blog-post",
+      "url": "https://www.tpisoftware.com/blog/ai/ai-gateway-for-enterprise-ai-security",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.28,
+          "accessibility": 0.88,
+          "best-practices": 0.93,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 12958,
+          "cls": 0.47,
+          "tbtMs": 355,
+          "fcpMs": 7516,
+          "siMs": 8236
+        },
+        "rttMs": 2
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.27,
+            "accessibility": 0.88,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.28,
+            "accessibility": 0.88,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.29,
+            "accessibility": 0.88,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "Blog 文章",
+      "pageType": "blog-post",
+      "url": "https://www.tpisoftware.com/blog/ai/ai-gateway-for-enterprise-ai-security",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.48,
+          "accessibility": 0.76,
+          "best-practices": 0.96,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 4355,
+          "cls": 0.383,
+          "tbtMs": 102,
+          "fcpMs": 1413,
+          "siMs": 3030
+        },
+        "rttMs": 2
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.51,
+            "accessibility": 0.76,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.48,
+            "accessibility": 0.76,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.43,
+            "accessibility": 0.76,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "媒體中心",
+      "pageType": "news-index",
+      "url": "https://www.tpisoftware.com/media-center",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.5,
+          "accessibility": 0.83,
+          "best-practices": 0.89,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 12395,
+          "cls": 0.049,
+          "tbtMs": 367,
+          "fcpMs": 3627,
+          "siMs": 10908
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.46,
+            "accessibility": 0.83,
+            "best-practices": 0.89,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.5,
+            "accessibility": 0.83,
+            "best-practices": 0.89,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.5,
+            "accessibility": 0.83,
+            "best-practices": 0.89,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "媒體中心",
+      "pageType": "news-index",
+      "url": "https://www.tpisoftware.com/media-center",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.59,
+          "accessibility": 0.84,
+          "best-practices": 0.96,
+          "seo": 0.85
+        },
+        "metrics": {
+          "lcpMs": 4368,
+          "cls": 0,
+          "tbtMs": 42,
+          "fcpMs": 2694,
+          "siMs": 4726
+        },
+        "rttMs": 217
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.67,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.85
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.59,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.85
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.59,
+            "accessibility": 0.84,
+            "best-practices": 0.96,
+            "seo": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "label": "新聞",
+      "pageType": "news",
+      "url": "https://www.tpisoftware.com/media-center/585",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.26,
+          "accessibility": 0.9,
+          "best-practices": 0.93,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 13682,
+          "cls": 0.521,
+          "tbtMs": 510,
+          "fcpMs": 3783,
+          "siMs": 7748
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.27,
+            "accessibility": 0.9,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.21,
+            "accessibility": 0.9,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.26,
+            "accessibility": 0.9,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "新聞",
+      "pageType": "news",
+      "url": "https://www.tpisoftware.com/media-center/585",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.41,
+          "accessibility": 0.86,
+          "best-practices": 0.96,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 4919,
+          "cls": 0.465,
+          "tbtMs": 69,
+          "fcpMs": 2270,
+          "siMs": 2889
+        },
+        "rttMs": 141
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.5,
+            "accessibility": 0.86,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.41,
+            "accessibility": 0.86,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.4,
+            "accessibility": 0.86,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "關於我們",
+      "pageType": "about",
+      "url": "https://www.tpisoftware.com/about-us",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.5,
+          "accessibility": 0.82,
+          "best-practices": 0.93,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 17874,
+          "cls": 0,
+          "tbtMs": 256,
+          "fcpMs": 8045,
+          "siMs": 13956
+        },
+        "rttMs": 1
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.41,
+            "accessibility": 0.82,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.5,
+            "accessibility": 0.82,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.5,
+            "accessibility": 0.82,
+            "best-practices": 0.93,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "關於我們",
+      "pageType": "about",
+      "url": "https://www.tpisoftware.com/about-us",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.7,
+          "accessibility": 0.77,
+          "best-practices": 0.96,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 3630,
+          "cls": 0,
+          "tbtMs": 62,
+          "fcpMs": 1195,
+          "siMs": 3257
+        },
+        "rttMs": 0
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.69,
+            "accessibility": 0.77,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.7,
+            "accessibility": 0.77,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.76,
+            "accessibility": 0.77,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        }
+      ]
+    },
+    {
+      "label": "聯絡我們",
+      "pageType": "contact",
+      "url": "https://www.tpisoftware.com/contact-us",
+      "formFactor": "mobile",
+      "median": {
+        "scores": {
+          "performance": 0.49,
+          "accessibility": 0.81,
+          "best-practices": 0.89,
+          "seo": 0.92
+        },
+        "metrics": {
+          "lcpMs": 16111,
+          "cls": 0,
+          "tbtMs": 356,
+          "fcpMs": 7324,
+          "siMs": 7985
+        },
+        "rttMs": 0
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.5,
+            "accessibility": 0.81,
+            "best-practices": 0.89,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.49,
+            "accessibility": 0.81,
+            "best-practices": 0.89,
+            "seo": 0.92
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.48,
+            "accessibility": 0.81,
+            "best-practices": 0.89,
+            "seo": 0.92
+          }
+        }
+      ]
+    },
+    {
+      "label": "聯絡我們",
+      "pageType": "contact",
+      "url": "https://www.tpisoftware.com/contact-us",
+      "formFactor": "desktop",
+      "median": {
+        "scores": {
+          "performance": 0.65,
+          "accessibility": 0.81,
+          "best-practices": 0.96,
+          "seo": 0.83
+        },
+        "metrics": {
+          "lcpMs": 4154,
+          "cls": 0,
+          "tbtMs": 45,
+          "fcpMs": 2051,
+          "siMs": 3186
+        },
+        "rttMs": 195
+      },
+      "runs": [
+        {
+          "scores": {
+            "performance": 0.7,
+            "accessibility": 0.81,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.63,
+            "accessibility": 0.81,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        },
+        {
+          "scores": {
+            "performance": 0.65,
+            "accessibility": 0.81,
+            "best-practices": 0.96,
+            "seo": 0.83
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -11,7 +11,7 @@
 | Milestone | 狀態 |
 |---|---|
 | M0 基礎建設 | 完成：PR #1 已合併；bootstrap 已執行（10 labels、8 milestones、44 issues） |
-| M1 盤點與研究 | 進行中：M1-01 現站內容盤點完成（#2，PR #46）；雲端 session 品質關卡修正（#47，PR #48，已驗證新 session 不需手動設定即可通過 `npm run check`）；M1-02 內容稽核完成（#3） |
+| M1 盤點與研究 | 進行中：M1-01 現站內容盤點完成（#2，PR #46）；雲端 session 品質關卡修正（#47，PR #48，已驗證新 session 不需手動設定即可通過 `npm run check`）；M1-02 內容稽核完成（#3）；M1-03 SEO 基線完成（#4） |
 | M2 資訊架構 | 未開始 |
 | M3 設計系統 | 未開始 |
 | M4 開發骨架 | 未開始 |
@@ -23,10 +23,12 @@
 ## 下一步
 
 1. Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「需人工決定的項目」
-2. 依序處理 M1 其餘 issue（以 `/next-issue` 找出可開始的 issue）
+2. Review M1-03 SEO 基線（`docs/research/seo-baseline.md`），提供「待補資料」的流量與外部連結匯出
+3. 依序處理 M1 其餘 issue（以 `/next-issue` 找出可開始的 issue）
 
 ## 待辦備忘
 
+- M1-03 needs-input：頁面流量（GA4／Search Console「成效」）與外部連結（Search Console「連結」）匯出後，重排 `docs/research/seo-baseline.md` 的重要頁面分級；.com origin 層級的 field CWV 尚未取得
 - Node 26 預計 2026-10-28 進入 Active LTS，屆時將 `.nvmrc` 升為 `26`（同步 Cloudflare Pages 的 `NODE_VERSION`）；雲端 session 的 SessionStart hook 會自動依 `.nvmrc` 切換
 - 現站 `/sitemap.xml` 與 `/ja` 回 500，盤點改以導覽與連結爬取為準（見 `docs/research/inventory.md`）
 - M1-02 稽核的 M2 待決事項（不在導覽的產品是否仍銷售、主題重疊頁面是否合併、舊 `/solutions/*` 路由、blog 分類）見 `docs/research/content-audit.md`
