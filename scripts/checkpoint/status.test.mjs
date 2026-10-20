@@ -50,6 +50,11 @@ test('status comes from commits, latest per stage wins', () => {
   assert.deepEqual(rows.map((r) => r.status), ['完成', '完成', '未開始']);
 });
 
+test('no stage done yet: first checkpoint mid-stage, or no stage commits', () => {
+  assert.deepEqual(deriveStatus(7, stages, [c('wip: 階段 1 進行中：等回覆（#7）')]).map((r) => r.status), ['進行中', '未開始', '未開始']);
+  assert.deepEqual(deriveStatus(7, stages, []).map((r) => r.status), ['未開始', '未開始', '未開始']);
+});
+
 test('a commit after a PR opens may use its normal type', () => {
   const rows = deriveStatus(7, stages, [c('wip: 階段 1 完成：一（#7）'), c('feat: 階段 2 進行中：二（#7）')]);
   assert.deepEqual(rows.map((r) => r.status), ['完成', '進行中', '未開始']);
@@ -57,6 +62,8 @@ test('a commit after a PR opens may use its normal type', () => {
 
 test('rejects malformed wip, unknown stage, other issue, and gaps', () => {
   assert.throws(() => deriveStatus(7, stages, [c('wip: 新增 skill（#7）')]), /doesn't match/);
+  assert.throws(() => deriveStatus(7, stages, [c('feat(ia): 階段 1 完成：x（#7）')]), /doesn't match/);
+  assert.throws(() => deriveStatus(7, stages, [c('feat: 階段 1 完成: x（#7）')]), /doesn't match/);
   assert.throws(() => deriveStatus(7, stages, [c('wip: 階段 4 完成：x（#7）')]), /stage 4 isn't/);
   assert.throws(() => deriveStatus(7, stages, [c('wip: 階段 1 完成：x（#8）')]), /expected #7/);
   assert.throws(() => deriveStatus(7, stages, [c('wip: 階段 2 完成：x（#7）')]), /stage 2 is 完成 but stage 1 is 未開始/);

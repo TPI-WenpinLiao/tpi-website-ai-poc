@@ -2,14 +2,15 @@
 // (.claude/progress/<N>.md) never carries a hand-edited status that can drift.
 // Stages come from the progress file's table; status comes from commit subjects of the form
 // `<type>: 階段 <k> 完成|進行中：<summary>（#N）`, the latest commit per stage winning.
-// Exits non-zero when a `wip:` commit doesn't parse, names an unknown stage or another issue,
-// or a stage is done while an earlier one isn't. Rules: .claude/skills/checkpoint/SKILL.md
+// Exits non-zero when a `wip:` commit or any subject mentioning `階段 <k>` doesn't parse, names an
+// unknown stage or another issue, or a stage is done while an earlier one isn't. Rules: .claude/skills/checkpoint/SKILL.md
 // Run: node scripts/checkpoint/status.mjs <N> [ref=HEAD] [base=origin/main]
 
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
 const SUBJECT = /^[a-z]+: 階段 (\d+) (完成|進行中)：.+（#(\d+)）$/;
+const MENTIONS_STAGE = /階段 *\d/;
 
 export function parseStages(markdown) {
   const section = markdown.split(/^## /m).find((s) => s.startsWith('階段\n'));
@@ -31,7 +32,9 @@ export function deriveStatus(issue, stages, commits) {
   for (const { sha, subject } of commits) {
     const m = SUBJECT.exec(subject);
     if (!m) {
-      if (subject.startsWith('wip:')) throw new Error(`${sha} "${subject}": wip commit doesn't match "wip: 階段 <k> 完成|進行中：<摘要>（#N）"`);
+      if (subject.startsWith('wip:') || MENTIONS_STAGE.test(subject)) {
+        throw new Error(`${sha} "${subject}": doesn't match "<type>: 階段 <k> 完成|進行中：<摘要>（#N）"`);
+      }
       continue;
     }
     const [, n, st, num] = m;
@@ -41,7 +44,7 @@ export function deriveStatus(issue, stages, commits) {
   }
   const rows = stages.map((s) => ({ ...s, ...status.get(s.n) }));
   const lastDone = rows.findLastIndex((r) => r.status === '完成');
-  const gap = rows.slice(0, lastDone).find((r) => r.status !== '完成');
+  const gap = lastDone > 0 ? rows.slice(0, lastDone).find((r) => r.status !== '完成') : undefined;
   if (gap) throw new Error(`stage ${rows[lastDone].n} is 完成 but stage ${gap.n} is ${gap.status}`);
   return rows;
 }

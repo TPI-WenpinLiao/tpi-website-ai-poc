@@ -56,7 +56,7 @@ Claude 會依序：
 每完成一個階段，以及停下等你回覆之前，Claude 會執行 `/checkpoint`：
 
 - 把工作以 `wip:` commit push 到 session branch。還沒開 PR，所以不會跑 CI，也不會出現 preview
-- 更新 `.claude/progress/<N>.md`，記錄已完成的階段、下一步、待你決定的事項
+- 更新 `.claude/progress/<N>.md`，記錄階段計畫、目前狀態、待你決定的事項。每個階段完成了沒，由 commit message 推算（`node scripts/checkpoint/status.mjs <N>`），進度檔不手動維護
 
 雲端容器閒置太久會被回收，checkpoint 過的工作不會消失。session 中斷後，開新 session 輸入 `/issue-start <N>`，Claude 會在 remote 找到進度檔，回報進度後從下一個階段繼續，不再重新提計畫。你也可以隨時輸入 `/checkpoint` 要求保存。`wip:` commit 與進度檔會在 `/issue-ship` 時整理掉，不會進入 `main`。規則見 [`checkpoint/SKILL.md`](../.claude/skills/checkpoint/SKILL.md)。
 
