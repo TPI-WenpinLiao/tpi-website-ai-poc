@@ -29,7 +29,7 @@ flowchart TD
   Q --> J[階段二：SEO / 無障礙 / 內容<br/>npm run check → 同一個 PR 轉為 ready]
   G --> K[quality-gate + Cloudflare preview]
   J --> K
-  K --> M[人工 review → merge<br/>PR 的 Closes 自動關閉 issue]
+  K --> M[人工 review（可用 /pr-review N）→ merge<br/>PR 的 Closes 自動關閉 issue]
 ```
 
 - 雲端 session 不會監看 issue 的 label。加上 `design-approved` 後，要在 session 中告訴 Claude 才會進入階段二
@@ -43,7 +43,7 @@ flowchart TD
    - **錯誤回報**：頁面或功能異常
    - **Milestone 任務**：規劃中的 milestone 工作
 2. issue 建立後會自動出現「在 Claude Code 開啟」連結，點擊即以 `tpi-website-ai-poc` 環境開啟雲端 session
-3. 之後的流程（`/issue-start`、`/issue-ship`、`/next-issue`）見 [docs/workflow.md](docs/workflow.md)
+3. 之後的流程（`/issue-start`、`/issue-ship`、`/pr-review`、`/next-issue`）見 [docs/workflow.md](docs/workflow.md)
 
 ## Labels
 
