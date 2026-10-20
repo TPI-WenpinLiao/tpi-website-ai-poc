@@ -25,7 +25,7 @@ git status -sb
 1. 用 GitHub MCP 工具（`mcp__github__issue_read`，`method: get` 與 `get_comments`）讀 issue 內文、label、milestone 與留言。雲端 session 沒有 `gh` CLI
 2. 讀 `CLAUDE.md`、`docs/status.md`
 3. 讀 issue「交付物」提到的既有檔案，以及前置 issue 的產出（例如 `docs/research/`）
-4. 依 issue 類型讀對應 skill：頁面或內容 → `seo-checklist`；樣式或元件 → `design-system`；搬移現站內容 → `content-migration`
+4. 依 issue 類型讀對應 skill：頁面或內容 → `seo-checklist`；樣式或元件 → `design-system`；搬移現站內容 → `content-migration`；TypeScript／Astro 程式 → `typescript-best-practices`；文件 → `writing-style`
 
 ## 3. 前置條件檢查
 
