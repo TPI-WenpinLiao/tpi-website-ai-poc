@@ -1,0 +1,372 @@
+{
+  "mappedRows": 893,
+  "byDisposition": {
+    "keep": 649,
+    "rewrite": 164,
+    "merge": 80
+  },
+  "nodes": 81,
+  "templates": 11,
+  "byTemplate": {
+    "": 5,
+    "article": 622,
+    "contact": 3,
+    "content": 14,
+    "gated-download": 9,
+    "home": 3,
+    "hub": 22,
+    "listing": 64,
+    "offering": 102,
+    "person": 25,
+    "utility": 24
+  },
+  "byNode": {
+    "home": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "products": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "family-ai": {
+      "zh-TW": 2,
+      "en": 2,
+      "vi": 1
+    },
+    "systalk-chat": {
+      "zh-TW": 2,
+      "en": 2,
+      "vi": 2
+    },
+    "systalk-viki": {
+      "zh-TW": 2,
+      "en": 1,
+      "vi": 1
+    },
+    "systalk-coach": {
+      "zh-TW": 1,
+      "en": 1
+    },
+    "systalk-audit": {
+      "zh-TW": 3
+    },
+    "systalk-icr": {
+      "zh-TW": 1
+    },
+    "systalk-rpa": {
+      "zh-TW": 2,
+      "en": 1,
+      "vi": 1
+    },
+    "smartclaim": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "smartfilling": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "textualanalysis": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "orient-ai": {
+      "zh-TW": 2,
+      "en": 1,
+      "vi": 2
+    },
+    "family-dx": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "digirunner": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "digirunner-cloud": {
+      "zh-TW": 2,
+      "en": 2,
+      "vi": 2
+    },
+    "digirunner-aws-guide": {
+      "zh-TW": 2,
+      "vi": 1
+    },
+    "digilogs": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "digilogs-iso27001": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "digilogs-detection": {
+      "zh-TW": 1,
+      "vi": 1
+    },
+    "digimars": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "digiflexis": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "digicare": {
+      "zh-TW": 1
+    },
+    "interactivehealth": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "gadodido": {
+      "zh-TW": 2,
+      "en": 2,
+      "vi": 2
+    },
+    "gadoscout": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "family-esg": {
+      "zh-TW": 1,
+      "en": 1
+    },
+    "greenswift": {
+      "zh-TW": 2,
+      "en": 1,
+      "vi": 1
+    },
+    "electriswift": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "industry-finance": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "insurebrick": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "insurering": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "industry-government": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "gis": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "aiso": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "outsourcing": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "cloudservice": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "chatgpt-enterprise": {
+      "zh-TW": 1
+    },
+    "uiux": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "esg-advisory": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "esg-advisor": {
+      "zh-TW": 8,
+      "en": 9,
+      "vi": 8
+    },
+    "success-stories": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "resources": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "blog": {
+      "zh-TW": 2,
+      "en": 1,
+      "vi": 1
+    },
+    "blog-ai": {
+      "zh-TW": 5,
+      "en": 3
+    },
+    "blog-digital-transformation": {
+      "zh-TW": 8,
+      "en": 6,
+      "vi": 3
+    },
+    "blog-enterprise-management": {
+      "zh-TW": 6,
+      "en": 4,
+      "vi": 4
+    },
+    "blog-esg": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 4
+    },
+    "blog-use-cases": {
+      "zh-TW": 3,
+      "en": 3
+    },
+    "blog-post": {
+      "zh-TW": 106,
+      "en": 67,
+      "vi": 299
+    },
+    "whitepaper-digirunner": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "whitepaper-digilogs": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "whitepaper-greenswift": {
+      "zh-TW": 1
+    },
+    "whitepaper-systalk-ai": {
+      "zh-TW": 1,
+      "en": 1
+    },
+    "events": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "tpu": {
+      "zh-TW": 1
+    },
+    "about": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "partners": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "media-center": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "news-article": {
+      "zh-TW": 60,
+      "en": 48,
+      "vi": 42
+    },
+    "hr": {
+      "zh-TW": 1
+    },
+    "contact": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "privacy": {
+      "zh-TW": 2,
+      "vi": 1
+    },
+    "terms": {
+      "zh-TW": 2
+    },
+    "disclaimer": {
+      "zh-TW": 2
+    },
+    "security-policy": {
+      "zh-TW": 1
+    },
+    "search": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "subscribe": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "subscribe-result": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "unsubscribe": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "cancelrecord": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "thanks": {
+      "zh-TW": 1,
+      "en": 1,
+      "vi": 1
+    },
+    "download": {
+      "zh-TW": 2,
+      "en": 2,
+      "vi": 2
+    }
+  },
+  "nodesWithoutRows": [
+    "family-security",
+    "industries",
+    "industry-manufacturing",
+    "services",
+    "case-study",
+    "legal",
+    "utilities",
+    "not-found"
+  ]
+}

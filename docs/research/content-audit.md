@@ -35,12 +35,14 @@ node scripts/inventory/audit.mjs
 | | zh-TW | en | vi | ja | 合計 |
 |---|--:|--:|--:|--:|--:|
 | keep | 178 | 123 | 348 | 0 | 649 |
-| rewrite | 73 | 56 | 54 | 0 | 183 |
-| merge | 26 | 19 | 15 | 0 | 60 |
-| drop | 258 | 126 | 28 | 2 | 414 |
+| rewrite | 64 | 51 | 49 | 0 | 164 |
+| merge | 36 | 24 | 20 | 0 | 80 |
+| drop | 257 | 126 | 28 | 2 | 413 |
 | **合計** | **535** | **324** | **445** | **2** | **1,306** |
 
-遷移量（keep + rewrite）：zh-TW 251、en 179、vi 402。zh-TW 實際需要重寫的是 73 頁；en／vi 的翻譯在 M7。
+遷移量（keep + rewrite）：zh-TW 242、en 174、vi 397。zh-TW 實際需要重寫的是 64 頁；en／vi 的翻譯在 M7。
+
+本節數字已反映 M2-01（#8）的決策：landing page、`/carbon`、開放銀行、開放政府、`/genai-solution` 改為 merge（見 [`docs/ia/sitemap.md`](../ia/sitemap.md)「決策紀錄」）。
 
 ### 處置 × 頁面類型
 
@@ -48,9 +50,9 @@ node scripts/inventory/audit.mjs
 |---|--:|--:|--:|--:|
 | news | 150 | 0 | 0 | 381 |
 | blog-post | 467 | 0 | 2 | 0 |
-| product | 0 | 72 | 3 | 0 |
+| product | 0 | 56 | 19 | 0 |
 | blog-category | 3 | 0 | 52 | 0 |
-| service | 25 | 19 | 2 | 3 |
+| service | 25 | 16 | 5 | 3 |
 | newsletter | 0 | 0 | 0 | 25 |
 | solution | 0 | 21 | 0 | 0 |
 | utility | 0 | 15 | 0 | 0 |
@@ -58,11 +60,11 @@ node scripts/inventory/audit.mjs
 | pdf | 2 | 8 | 1 | 0 |
 | about | 0 | 6 | 0 | 1 |
 | home | 0 | 3 | 0 | 1 |
-| campaign | 0 | 0 | 0 | 3 |
+| campaign | 0 | 0 | 1 | 2 |
 | blog-index、contact、events、news-index、product-index、resource、search、case-study | 0 | 各 3 | 0 | 0 |
 | subsite | 2 | 0 | 0 | 0 |
 
-`to_confirm` 非空：215 列。
+`to_confirm` 非空：204 列。
 
 ## 規則
 
@@ -73,14 +75,14 @@ node scripts/inventory/audit.mjs
 | .vn 上與 .com 同名的 PDF | merge | 同一份 AWS Marketplace 買家指南 |
 | 首頁、產品、服務、解決方案、關於、聯絡、列表頁 | rewrite | 依新 IA 重寫結構 |
 | 不在導覽的產品／方案頁 | rewrite + 待確認 | 可能已停售 |
-| 產品路由下的行銷 landing page（`systalk-ai-phison`、`vikibundle`、`quality-analysis`、`enterp-diagnosis`、`awsmarketplace`） | rewrite + 待確認 | 確認是否仍在投放 |
+| 產品路由下的行銷 landing page（`systalk-ai-phison`、`vikibundle`、`quality-analysis`、`enterp-diagnosis`、`awsmarketplace`） | merge | 沒有投放廣告，併入所屬產品頁（M2-01 決定）；兩個問卷頁的問卷功能待 M6 |
 | `/esg-advisory/<顧問>` | keep + 待確認 | 人物頁，確認合作狀態與照片授權 |
 | 訂閱、退訂、感謝、搜尋、下載中繼頁、白皮書表單 | rewrite | M6 功能重做 |
 | 隱私權、使用條款、免責聲明、資安政策 PDF | rewrite + 待確認 | 轉 HTML 頁，需法務確認版本 |
 | `/tpu`、`/hr` | keep | 獨立應用，只保留入口連結 |
 | `epaper/2018–2020` | drop | 已停刊的歷史電子報 |
 | `2023tpiday`、`2024tpiday` | drop | 已結束活動 |
-| `/carbon` | drop + 待確認 | GreenSwift 推廣頁，與產品頁重疊 |
+| `/carbon` | merge | GreenSwift 推廣頁，併入 GreenSwift 產品頁（M2-01 決定） |
 | blog 分類頁 | merge | 併入 M2 定案的新 blog 分類 |
 | blog 分類路由但 h1 為單篇文章（3 列） | keep + 待確認 | page_type 誤判；不在 blog API 清單 |
 | blog 文章 | keep | 2022 年前發布者（56 篇）待確認內容是否過時；同標題重複的較舊一篇 merge 至較新一篇 |
@@ -99,6 +101,8 @@ node scripts/inventory/audit.mjs
 
 ### M2 資訊架構要決定
 
+以下 5 項已在 M2-01（#8）決定，結果見 [`docs/ia/sitemap.md`](../ia/sitemap.md)「決策紀錄」。
+
 1. **日文版**：現站 `/ja`、`/ja/partners` 回 500，新站是否支援（已列入 `docs/status.md`）
 2. **不在導覽的產品／方案是否仍銷售**（33 列）：zh-TW 的 `/products/insurebrick`、`/products/open-banking`、`/products/open-government`、`/products/digilogs/log-detection`、`/solutions/gis`、`/solutions/insurering`、`/solutions/interactivehealth`、`/solutions/textualanalysis`；en、vi 另有部分 zh-TW 在導覽、但該語系不在導覽的頁面
 3. **主題重疊的頁面是否合併**：
@@ -111,7 +115,7 @@ node scripts/inventory/audit.mjs
 
 ### 內容負責人要確認
 
-1. **行銷 landing page 是否仍在投放**（10 列）：`systalk-ai-phison`、`systalk-viki/vikibundle`、`systalk-audit/quality-analysis`（含 `/quiz`）、`systalk-rpa/enterp-diagnosis`、`digirunner/awsmarketplace`
+1. ~~**行銷 landing page 是否仍在投放**~~（10 列，M2-01 已決定併入產品頁）：`systalk-ai-phison`、`systalk-viki/vikibundle`、`systalk-audit/quality-analysis`（含 `/quiz`）、`systalk-rpa/enterp-diagnosis`、`digirunner/awsmarketplace`
 2. **ESG 顧問**（25 列）：是否仍合作、經歷是否正確、照片授權。三語名單不一致：zh-TW 沒有 `huang-zhijun`；vi 清單連到拼錯的 `/esg-advisory/li-shuhi`（500），所以缺 `li-shuhui`
 3. **法務文件**（8 列）：隱私權、使用條款、免責聲明（zh-TW／en／vi）與資訊安全政策的有效版本；轉為 HTML 是否需法務審閱
 4. **成功案例**：三語 `/success-story` 內容區字數都很少（49–95），案例可能是 client 端渲染；遷移前要開頁確認案例清單與客戶名稱授權
@@ -144,13 +148,13 @@ zh-TW、en、vi 之間缺頁的內容路由（不含 merge 掉的重複路由，
 
 | 缺 en 與 vi | 只缺 vi | 只缺 en | 只缺 zh-TW |
 |---|---|---|---|
-| `/chatgpt-enterprise`、`/products/digicare`、`/products/systalk-audit`（含子頁）、`/products/systalk-icr`、`/products/systalk-rpa/enterp-diagnosis`、`/products/systalk-viki/vikibundle` | `/products/esgswift`、`/products/systalk-ai`、`/products/systalk-coach`、`/esg-advisory/li-shuhui` | `/products/digilogs/log-detection` | `/esg-advisory/huang-zhijun` |
+| `/chatgpt-enterprise`、`/products/digicare`、`/products/systalk-audit`、`/products/systalk-icr` | `/products/esgswift`、`/products/systalk-ai`、`/products/systalk-coach`、`/esg-advisory/li-shuhui` | `/products/digilogs/log-detection` | `/esg-advisory/huang-zhijun` |
 
 新站是否三語對齊由 M2／M7 決定，本次不處理。
 
 ## 給 M2 的輸入
 
-- merge + drop 共 474 列。其中 merge 的 60 列需要 301 到合併目標；drop 的頁面是否 301 到上層列表頁或回 410，由 M2 的轉址策略決定
+- merge + drop 共 493 列（含 M2-01 改為 merge 的頁面）。其中 merge 的 80 列需要 301 到合併目標；drop 的頁面是否 301 到上層列表頁或回 410，由 M2 的轉址策略決定
 - notes 的 `redirected from` 共記錄 98 個轉址來源（含 `www.tpisoftware.com/vn/*` 到 `www.tpisoftware.vn/*` 的鏡像），新站上線時一併納入轉址表
 - `page_type` 修正：3 個分類路由實為單篇文章（見上）；`/carbon` 標為 campaign，實為產品推廣頁
 

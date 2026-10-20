@@ -20,8 +20,8 @@ src/pages/        路由頁面
 src/layouts/      版型
 src/styles/       tokens.css（design tokens）
 public/           靜態檔（_headers、robots.txt）
-scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、inventory/（現站盤點與稽核）
-docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/
+scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、inventory/（現站盤點與稽核）、ia/（sitemap 對應）
+docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構）
 .claude/skills/   issue-start、issue-ship、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
 .github/          ISSUE_TEMPLATE、workflows、bootstrap（labels / milestones / issues）
 ```

@@ -6,6 +6,7 @@
 
 import { writeFile } from 'node:fs/promises';
 import { readCsv, csvCell } from './csv.mjs';
+import { pathOf, routeKey, ROUTE_ALIASES } from './routes.mjs';
 
 const INVENTORY = 'docs/research/inventory.csv';
 const BROKEN = 'docs/research/broken-links.csv';
@@ -26,15 +27,22 @@ const DISPOSITIONS = ['keep', 'rewrite', 'merge', 'drop'];
 
 // ---------- Helpers ----------
 
-const pathOf = (url) => new URL(url).pathname;
-// Locale-independent route key, e.g. /en/products/x and tpisoftware.vn/products/x -> /products/x
-const routeKey = (url) => pathOf(url).replace(/^\/(en|ja|vn)(?=\/|$)/, '') || '/';
 const inNav = (row) => /(^|\| )(header|footer):/.test(row.nav_location);
 const hasCjk = (s) => /[一-鿿]/.test(s);
 const noteHas = (row, s) => row.notes.split('; ').some((n) => n.startsWith(s));
 const LEGAL_PDF = /\/pdf\/(%E8%B3%87%E8%A8%8A%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96|\d-\d(PrivacyPolicy|Use|Disclaimer))/;
-// Subpages that sit under a product route but act as campaign / lead-gen landing pages.
-const LANDING = /^\/products\/(systalk-ai-phison|systalk-viki\/vikibundle|systalk-audit\/quality-analysis(\/quiz)?|systalk-rpa\/enterp-diagnosis|digirunner\/awsmarketplace)$/;
+// Campaign / lead-gen landing pages under product routes. No ads are running (M1-05),
+// so M2-01 merges each into its product page.
+const LANDING = {
+  '/products/systalk-ai-phison': '/products/systalk-ai',
+  '/products/systalk-viki/vikibundle': '/products/systalk-viki',
+  '/products/systalk-audit/quality-analysis': '/products/systalk-audit',
+  '/products/systalk-audit/quality-analysis/quiz': '/products/systalk-audit',
+  '/products/systalk-rpa/enterp-diagnosis': '/products/systalk-rpa',
+  '/products/digirunner/awsmarketplace': '/products/digirunner-cloud',
+};
+// Landing pages whose questionnaire may survive as a tool page (audience-and-goals.md question 4)
+const QUESTIONNAIRE = new Set(['/products/systalk-audit/quality-analysis/quiz', '/products/systalk-rpa/enterp-diagnosis']);
 
 // ---------- Rules ----------
 
@@ -79,9 +87,9 @@ function decide(row, ctx) {
         confirm.push('人物頁：確認顧問仍合作中、經歷內容與照片授權');
         return out('keep', 'ESG 顧問個人介紹，內容為人物經歷，原文保留，版面依新設計調整');
       }
-      if (LANDING.test(key)) {
-        confirm.push('不在導覽的行銷 landing page，確認是否仍在投放或有外部連結');
-        return out('rewrite', '產品行銷／名單收集頁，依新 IA 與 M6 表單元件重做');
+      if (LANDING[key]) {
+        if (QUESTIONNAIRE.has(key)) confirm.push('問卷功能是否保留依 audience-and-goals.md 問題 4 於 M6 決定');
+        return out('merge', `不在導覽的行銷 landing page，目前沒有投放廣告，內容併入 ${LANDING[key]}（M2-01 決定）`);
       }
       if (!inNav(row)) confirm.push('不在導覽，確認此產品／方案是否仍在銷售');
       return out('rewrite', `${{ product: '產品', service: '服務', solution: '解決方案' }[type]}頁，依新 IA 與內容模型重寫結構`);
@@ -119,8 +127,7 @@ function decide(row, ctx) {
       return out('drop', '2018–2020 已停刊的歷史電子報，資訊已過時');
     case 'campaign':
       if (key === '/carbon') {
-        confirm.push('用途不明的 GreenSwift 推廣頁，與 GreenSwift 產品頁（/products/greenswift）內容重疊；確認是否仍在投放');
-        return out('drop', '不在導覽的產品推廣頁，產品內容由 GreenSwift 產品頁承接');
+        return out('merge', '不在導覽的 GreenSwift 推廣頁，內容與產品頁重疊，併入 /products/greenswift（M2-01 決定）');
       }
       return out('drop', '已結束的年度活動頁');
     case 'blog-category': {
@@ -201,12 +208,6 @@ function buildContext(rows, brokenLinks) {
 }
 
 // ---------- Main ----------
-
-// .vn keeps the legacy product routes that .com redirects to /products/*
-const ROUTE_ALIASES = {
-  '/digilogs-logs-management': '/products/digilogs',
-  '/digirunner-api-management': '/products/digirunner',
-};
 
 function countBy(rows, ...keys) {
   const out = {};
