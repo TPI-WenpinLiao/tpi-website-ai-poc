@@ -29,9 +29,9 @@ description: 實作中途保存進度時使用（/checkpoint）。把目前的�
 
 ## 階段
 
-| # | 階段 | 完成條件 | 狀態 |
-|---|---|---|---|
-| 1 | … | … | 完成／進行中／未開始 |
+| # | 階段 | 完成條件 |
+|---|---|---|
+| 1 | … | … |
 
 ## 目前狀態
 
@@ -42,7 +42,8 @@ description: 實作中途保存進度時使用（/checkpoint）。把目前的�
 - <沒有就寫「無」>
 ```
 
-- 「階段」與「完成條件」照抄確認過的計畫，只改狀態欄。計畫有變動時，在「目前狀態」寫出改了什麼、使用者何時同意
+- 「階段」與「完成條件」照抄確認過的計畫，建立後不再修改；編號從 1 連續。計畫有變動時，在「目前狀態」寫出改了什麼、使用者何時同意
+- 表格沒有狀態欄。每個階段的狀態由 commit message 推算（第 3 步），用 `node scripts/checkpoint/status.mjs <N>` 查看
 - 使用者在對話中做的決定寫進「目前狀態」，接續的 session 看不到對話
 
 ## 2. 檢查
@@ -56,14 +57,17 @@ checkpoint 不跑 `npm run check`：還沒開 PR 時 push 不會觸發 CI（`qua
 ## 3. Commit 與 push
 
 ```
-wip: <階段摘要>（#N）
+wip: 階段 <k> 完成：<摘要>（#N）
 
 <系統指示要求的 attribution trailer>
 ```
 
+- 階段完成時寫 `完成`；階段做到一半、停下等回覆時寫 `進行中`
+- commit 後、push 前跑 `node scripts/checkpoint/status.mjs <N>`，確認輸出的狀態符合預期；不符時 `git commit --amend` 修正 message（還沒 push，不影響別人）。`wip:` commit 的 message 不符合這個格式時 script 會失敗，接續的 session 也會停下
+
 push 方式與重試規則同 [`issue-ship` 第 6 步](../issue-ship/SKILL.md#6-push)。`wip:` commit 會在 `/issue-ship` 時合併成一個 commit，不會進入 `main`。
 
-branch 已經有 open PR 時（例如 `needs-design` 階段二），PR 開了就不能再改寫歷史，`wip:` 合併不掉。這時 commit message 改用 [`issue-ship` 第 5 步](../issue-ship/SKILL.md#5-commit)的格式；進度檔照寫，`/issue-ship` 收尾時刪除。
+branch 已經有 open PR 時（例如 `needs-design` 階段二），PR 開了就不能再改寫歷史，`wip:` 合併不掉。這時 commit message 的 `wip` 換成 issue 的 type，例如 `feat: 階段 2 完成：<摘要>（#N）`，script 一樣能推算；進度檔照寫，`/issue-ship` 收尾時刪除。
 
 ## 4. 回報
 

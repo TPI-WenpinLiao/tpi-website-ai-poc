@@ -20,7 +20,7 @@ src/pages/        路由頁面
 src/layouts/      版型
 src/styles/       tokens.css（design tokens）
 public/           靜態檔（_headers、robots.txt）
-scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、inventory/（現站盤點與稽核）、ia/（sitemap 對應）
+scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、inventory/（現站盤點與稽核）、ia/（sitemap 對應）、checkpoint/（進度推算）
 docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構）
 .claude/skills/   issue-start、issue-ship、checkpoint、pr-review、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
 .github/          ISSUE_TEMPLATE、workflows、bootstrap（labels / milestones / issues）
@@ -32,7 +32,7 @@ docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md�
 |---|---|
 | `npm run dev` | 本機開發 |
 | `npm run build` | 產生 `dist/` |
-| `npm run check` | astro check → build → html-validate → Lighthouse CI（推送前必跑） |
+| `npm run check` | scripts 測試 → astro check → build → html-validate → Lighthouse CI（推送前必跑） |
 
 Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）執行；HTML 內不可放 `noindex` meta。
 

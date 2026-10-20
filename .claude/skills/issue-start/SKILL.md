@@ -29,7 +29,7 @@ git status -sb
 2. 用 `mcp__github__list_pull_requests` 查該 ref 有沒有 open PR，`head` 要寫成 `TPI-WenpinLiao:<branch>`（去掉 `origin/`）
    - 有 open PR：`git checkout -B <branch> <該 ref>`，留在這個 branch，之後都 push 到這裡，PR 才會更新
    - 沒有：`git checkout -B <session branch> <該 ref>`。第一次 checkpoint push 成功後，確認舊 branch 已包含在新 branch 裡（`git merge-base --is-ancestor <該 ref> HEAD`），再 `git push origin --delete <舊 branch>`。該 ref 就是 `origin/<session branch>` 時（同一個 session 重啟）不刪除。舊 branch 留著的話，`/issue-ship` 只會刪掉新 branch 上的進度檔，之後的 `/issue-start` 會找到舊 branch 上過時的進度檔。刪除被拒絕時不要重試，在 PR 的「待確認」列出舊 branch 請人工刪除
-3. 讀進度檔，照常執行第 2、3、5 步（第 4 步的 `status.md` 對照已在原計畫做過，略過）
+3. 執行 `node scripts/checkpoint/status.mjs <N>`，取得每個階段的狀態與下一步；script 失敗（exit 非 0）就停下回報錯誤，不要自己從 commit 推測。再讀進度檔的「目前狀態」與「待使用者決定」，照常執行第 2、3、5 步（第 4 步的 `status.md` 對照已在原計畫做過，略過）
 4. 回報環境檢查表、已完成的階段、下一步與「待使用者決定」，**不進 Plan 模式**：計畫已確認過，寫在進度檔裡
 5. 「待使用者決定」不是「無」時停下等回覆；否則從下一個階段繼續實作
 
