@@ -51,6 +51,7 @@
 - IA script 接進 `npm run check` 完成（#63）
 - `issue-ship` 審查迴圈等目前 head 的 CI、PR body 不預寫 CI 結果完成（#74）
 - 導覽第四層節點與 footer 法務位置對齊完成（#64）：法務定為 footer 最底列，`navigation.mjs` 檢查不限深度
+- footer 最底列的法務順序改成現站順序完成（#77）：資訊安全政策、隱私權政策、使用條款、免責聲明
 
 ## 下一步
 
