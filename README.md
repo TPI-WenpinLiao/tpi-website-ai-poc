@@ -17,19 +17,23 @@ flowchart TD
   A -->|勾選「需要設計確認」| L[issue-launcher 自動加上<br/>needs-design label]
   B --> C[開發人員開啟雲端 session<br/>/issue-start N]
   L -.->|/issue-start 讀取 label| D
-  C --> D[Claude 檢查依賴與環境<br/>以 Plan 模式提出計畫]
-  D --> E{開發人員確認計畫}
+  C --> D[Claude 檢查依賴與環境<br/>提出計畫]
+  D --> F{有 needs-design、needs-input<br/>或需使用者決定?}
+  F -->|否：自動模式<br/>計畫貼到 issue| G[實作，每個階段 /checkpoint<br/>→ /issue-ship 開 draft PR<br/>→ 審查迴圈<br/>→ 轉 ready、貼合併判斷摘要]
+  F -->|是| E{開發人員確認計畫}
   E -->|調整| D
-  E -->|確認| F{issue 有 needs-design?}
-  F -->|否| G[實作，每個階段 /checkpoint<br/>→ /issue-ship<br/>npm run check → 開 ready PR]
-  F -->|是| H[階段一：視覺與結構<br/>/issue-ship 開 draft PR<br/>列出設計決策與待確認問題]
+  E -->|確認，非 needs-design| G
+  E -->|確認，needs-design| H
+  H[階段一：視覺與結構<br/>/issue-ship 開 draft PR<br/>列出設計決策與待確認問題]
   H --> P[Claude 停下等待<br/>人工看 Cloudflare preview]
   P -->|要修改：在 session 告訴 Claude| H
   P -->|通過| Q[人工在 issue 加上 design-approved<br/>並在 session 告訴 Claude 繼續]
-  Q --> J[階段二：SEO / 無障礙 / 內容<br/>npm run check → 同一個 PR 轉為 ready]
+  Q --> J[階段二：SEO / 無障礙 / 內容<br/>同一個 PR 跑審查迴圈 → 轉 ready]
   G --> K[quality-gate + Cloudflare preview]
   J --> K
-  K --> M[人工 review（可用 /pr-review N）→ merge<br/>PR 的 Closes 自動關閉 issue]
+  G -.->|停下找人| N[needs-decision label<br/>留言與推播<br/>人在 session 回覆]
+  N -.-> G
+  K --> M[人工看合併判斷摘要 → merge<br/>PR 的 Closes 自動關閉 issue]
 ```
 
 - 雲端 session 不會監看 issue 的 label。加上 `design-approved` 後，要在 session 中告訴 Claude 才會進入階段二
@@ -59,6 +63,7 @@ flowchart TD
 | `type:docs` | 文件、規格、研究報告 |
 | `type:chore` | 工具、設定、維護 |
 | `needs-input` | 需要人工提供資訊才能進行 |
+| `needs-decision` | Claude 停下等人決定，問題在 issue 或 PR 的留言 |
 
 ## 指令
 

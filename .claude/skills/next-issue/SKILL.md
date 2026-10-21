@@ -26,6 +26,7 @@ description: 找出下一張可以開始的 issue 並產生開場提示詞時使
 
 | 類別 | 條件 |
 |---|---|
+| 需人工決定 | 帶 `needs-decision`：Claude 停下等人決定，問題在 issue 或 PR 的最新留言（不論依賴，都列在最前面） |
 | 可開始 | 依賴全部滿足，且沒有 `needs-input` |
 | 需人工提供 | 依賴滿足，但有 `needs-input`（Claude 只能整理與提問） |
 | 等待中 | 有依賴未滿足（列出卡在哪幾張） |
@@ -49,4 +50,4 @@ description: 找出下一張可以開始的 issue 並產生開場提示詞時使
 補充：本 issue 需要連到現站並量測 Lighthouse／CWV；需要 API key 時列為 needs-input，不要要求貼上 credentials。
 ```
 
-4. 「需人工提供」與「等待中」各用一兩行帶過
+4. 「需人工決定」列在結論之前，附 issue 或 PR 留言的連結；「需人工提供」與「等待中」各用一兩行帶過

@@ -33,3 +33,6 @@
 - name: needs-input
   color: "fbca04"
   description: 需要人工提供資訊才能進行
+- name: needs-decision
+  color: "fbca04"
+  description: Claude 停下等人決定，問題在 issue 或 PR 的留言
