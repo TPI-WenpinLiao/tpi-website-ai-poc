@@ -111,14 +111,14 @@ Closes #N
 
 1. 等 CI：目前 head 的 CI 跑完才開始這一輪，第 1 輪也一樣。審查者要看 CI log 才能確認的驗收條件，CI 沒跑完只會被報成缺證據
    - 判斷依據是 `mcp__github__pull_request_read` 的 `get_check_runs`（查的是目前 head），或 `head_sha` 等於目前 head 的 `check_suite.completed` 事件。事件可能晚到：PR #73 先收到舊 head `8442615` 的事件，之後才收到 `31e116c` 的。`head_sha` 不是目前 head 的事件不算，包括被 `cancel-in-progress` 取消的舊 run
-   - 綠燈：用 `mcp__github__update_pull_request` 把 body 的「待 CI」換成 run 連結與 log 摘錄，再往下做
+   - 綠燈：用 `mcp__github__update_pull_request` 把 body 的 CI 證據改成目前 head 的 run 連結與 log 摘錄，再往下做。第 1 輪換掉「待 CI」；之後每輪換掉上一輪的 head 與連結
    - 失敗：先修 CI，push 後回到本項重新等
 2. 用 Agent tool 開一個**新的**子代理執行 `/pr-review <PR 編號>`，依 [`pr-review`](../pr-review/SKILL.md) 的「在改動的 session 審查時交給子代理」給 prompt。第 2 輪起，把上一輪的 Act on 與「未修好」逐條原文附進 prompt
 3. 由本 session 判斷每個發現是否成立（`pr-review` 第 6 步的原則），再用 `mcp__github__add_issue_comment` 把審查意見貼到 PR：第一行寫「AI 審查第 N 輪（head `<短 SHA>`，CI <run 連結>）」，最後是 `pr-review` 第 7 步的結論行，結尾附系統指示要求的 attribution footer
 4. 依結論行決定：
    - 全部是 0：檢查第 8 步的完成條件
    - 不是 0 且已達輪數上限（[`checkpoint` 的「停下找人」](../checkpoint/SKILL.md#停下找人)）：照該節停下找人
-   - 其他：修正。每個修正用一般 commit（`fix: <摘要>（#N）`），跑第 2 步，push（不 force push），進下一輪
+   - 其他：修正。每個修正用一般 commit（`fix: <摘要>（#N）`），跑本檔第 2 步（`npm run check`），push（不 force push），進下一輪
 5. Consider：是本 PR 引入的缺陷就當成 Act on 修；其他的記下來，寫進合併判斷摘要
 
 在審查迴圈停下找人時，checkpoint 的 commit 不寫「階段」（`fix: 審查迴圈第 <N> 輪停下等決定（#N）`）：開 PR 時 `wip:` 已合併，`status.mjs` 推算不到之前的階段。進度檔「目前狀態」第一行寫「審查迴圈第 <N> 輪，等使用者決定」，`/issue-start` 接續時依此回到本步驟。使用者回覆後，不論是繼續修或接受現狀，回覆後的第一個 commit（`fix: 依審查決定繼續（#N）`）就 `git rm` 進度檔，不另做 checkpoint。
