@@ -11,7 +11,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "npm run check:ia && npm run test:scripts && astro check && astro build && npm run validate:html && npm run lighthouse",
-    "check:ia": "node scripts/ia/sitemap.mjs --check && node scripts/ia/navigation.mjs --check",
+    "check:ia": "node scripts/ia/sitemap.mjs --check && node scripts/ia/navigation.mjs --check && node scripts/ia/redirects.mjs --check",
     "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
     "validate:html": "html-validate \"dist/**/*.html\"",
     "lighthouse": "node scripts/lhci-prepare.mjs && lhci autorun"

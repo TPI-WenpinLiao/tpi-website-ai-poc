@@ -1,6 +1,12 @@
-// Helpers shared by scripts/ia/sitemap.mjs and scripts/ia/navigation.mjs.
+// Helpers shared by scripts/ia/sitemap.mjs, scripts/ia/navigation.mjs and scripts/ia/redirects.mjs.
 
 import { readFile, writeFile } from 'node:fs/promises';
+
+// URL rule from docs/decisions/0002-url-and-locale.md: lowercase kebab-case segments or {placeholder}, no trailing slash
+export const PATH_PATTERN = /^\/$|^(\/([a-z0-9]+(-[a-z0-9]+)*|\{[a-z]+\}))+$/;
+
+// Old slug normalized per ADR 0002: lowercased, runs of "-" collapsed, edge "-" trimmed
+export const normalizeSlug = (s) => s.toLowerCase().replace(/-+/g, '-').replace(/^-|-$/g, '');
 
 // Distance from the root of the sitemap (home is 0)
 export function depth(n, byId) {
