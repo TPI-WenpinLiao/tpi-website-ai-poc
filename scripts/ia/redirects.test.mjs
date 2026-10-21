@@ -108,6 +108,11 @@ test('toRedirects rejects rules that match a new page', () => {
     'redirect matches the new page /products/gadodido (loop or shadowed page): /products/gadodido / 301',
     'redirect matches the new page /blog/ai (loop or shadowed page): /blog/* /blog/ai 301',
   ]);
+  // Pages no redirect points to come from nodes.csv, in every locale
+  const unlinked = [{ from: 'https://www.tpisoftware.com/en/subscribe', to: '/en', status: '301' }];
+  assert.deepEqual(toRedirects(unlinked, nodes).errors, [
+    'redirect matches the new page /en/subscribe (loop or shadowed page): /en/subscribe /en 301',
+  ]);
 });
 
 test('toRedirects enforces the Cloudflare Pages limits', () => {

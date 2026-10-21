@@ -116,8 +116,9 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets }) {
   return { rows, errors };
 }
 
-// Cloudflare Pages _redirects: static rules first, then splats; only paths on the main host
-export function toRedirects(rows) {
+// Cloudflare Pages _redirects: static rules first, then splats; only paths on the main host.
+// `nodes` (docs/ia/nodes.csv) adds the new pages no redirect points to, in every locale, to the loop check.
+export function toRedirects(rows, nodes = []) {
   const errors = [];
   const rules = rows
     .filter((r) => r.status !== '200' && new URL(r.from).host === MAIN_HOST)
@@ -128,6 +129,9 @@ export function toRedirects(rows) {
   // A rule must not match a page of the new site: Cloudflare follows redirects even when an asset matches,
   // so it would shadow the page or loop
   const pages = new Set(rows.map((r) => r.to));
+  for (const n of nodes.filter((x) => (x.kind === 'page' || x.kind === 'collection') && x.path)) {
+    for (const locale of Object.keys(PREFIX)) pages.add(withPrefix(locale, n.path));
+  }
   for (const { source, line, dynamic } of rules) {
     const hit = dynamic ? [...pages].find((p) => p.startsWith(source.slice(0, -1))) : pages.has(source) && source;
     if (hit) errors.push(`redirect matches the new page ${hit} (loop or shadowed page): ${line}`);
@@ -143,13 +147,14 @@ export function toRedirects(rows) {
 
 async function main() {
   const inventory = await readCsv(INVENTORY);
+  const nodes = await readCsv(NODES);
   const { rows, errors } = buildRedirects({
     inventory,
     pageMap: await readCsv(PAGE_MAP),
-    nodes: await readCsv(NODES),
+    nodes,
     dropTargets: await readCsv(DROP_TARGETS),
   });
-  const redirects = toRedirects(rows);
+  const redirects = toRedirects(rows, nodes);
   errors.push(...redirects.errors);
   if (errors.length) {
     console.error(errors.join('\n'));
