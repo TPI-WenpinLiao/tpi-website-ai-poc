@@ -131,8 +131,11 @@ B 的代價：第一層 6 項加上工具列，en 標籤較長（例如 Success 
 ## 重現方式
 
 ```bash
-node scripts/ia/navigation.mjs
+node scripts/ia/navigation.mjs           # 產生本檔的自動產生段落
+node scripts/ia/navigation.mjs --check   # 同樣的檢查，不寫檔；本檔過期時 exit 1
 ```
+
+`npm run check` 的第一步 `npm run check:ia` 會執行兩支 IA script 的 `--check`，改了 `navigation.csv` 或 `nodes.csv` 沒重跑就會失敗。
 
 | 檔案 | 內容 | 維護方式 |
 |---|---|---|

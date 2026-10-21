@@ -32,7 +32,8 @@ docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md�
 |---|---|
 | `npm run dev` | 本機開發 |
 | `npm run build` | 產生 `dist/` |
-| `npm run check` | scripts 測試 → astro check → build → html-validate → Lighthouse CI（推送前必跑） |
+| `npm run check` | IA 資料檢查 → scripts 測試 → astro check → build → html-validate → Lighthouse CI（推送前必跑） |
+| `npm run check:ia` | 驗證 `docs/ia/` 的 IA 資料，並確認 `sitemap.mjs`、`navigation.mjs` 的產出是最新的（不寫檔） |
 
 Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）執行；HTML 內不可放 `noindex` meta。
 

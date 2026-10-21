@@ -79,7 +79,7 @@ npm run dev
 npm run check
 ```
 
-`npm run check` 依序執行 `scripts/` 的測試 → `astro check` → build → html-validate → Lighthouse CI（門檻：SEO = 1，其餘 ≥ 0.95；本機需要 Chrome）。
+`npm run check` 執行的步驟見 [`CLAUDE.md` 的指令表](./CLAUDE.md#指令)。Lighthouse CI 門檻：SEO = 1，其餘 ≥ 0.95；本機需要 Chrome。
 
 ## 首次設定
 

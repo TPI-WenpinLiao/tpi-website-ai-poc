@@ -48,10 +48,11 @@
 - `status.md` 改寫合併後的狀態完成（#67）
 - 長時間任務的 checkpoint 機制完成（#69，PR #70）
 - 自動開發到 PR 完成：審查迴圈與合併判斷摘要完成（#71）
+- IA script 接進 `npm run check` 完成（#63）
 
 ## 下一步
 
-- 觸發 `bootstrap` workflow 建立 `needs-decision` label，再用 #63 實跑自動模式，驗收 #71 的「全程不停下」「PR 上有每輪審查留言與摘要」兩項，結果留言在 #71
+- 依 #63 的自動模式實跑（issue 上的計畫留言與 PR 上的審查留言、合併判斷摘要），驗收 #71 的「全程不停下」「PR 上有每輪審查留言與摘要」兩項，結果留言在 #71
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
 - M2-05 redirect map（#12）的依賴（#8、#10）都已完成，可以開始；轉址規則依 ADR 0002，blog 文章的新 slug 用 `docs/ia/page-map.csv` 的 `blog_slug` 欄
 - M2-02 導覽已定案（`docs/ia/navigation.md`）。M3-01 wireframe 的另一個依賴 M2-04 內容模型（#11）也已完成；M3 實測 en、vi 選單在 1280px 能否放進一列
