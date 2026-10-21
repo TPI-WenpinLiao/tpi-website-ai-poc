@@ -9,7 +9,7 @@
 import { readFile } from 'node:fs/promises';
 import { readCsv, csvCell } from '../inventory/csv.mjs';
 import { routeKey, ROUTE_ALIASES } from '../inventory/routes.mjs';
-import { PATH_PATTERN, depth, emit, normalizeSlug, replaceSection } from './generated.mjs';
+import { PATH_PATTERN, depth, emit, matchRoute, normalizeSlug, replaceSection } from './generated.mjs';
 
 const INVENTORY = 'docs/research/inventory.csv';
 const NODES = 'docs/ia/nodes.csv';
@@ -59,16 +59,6 @@ function validateNodes(nodes, templates) {
   return byId;
 }
 
-function lookup(routes, key) {
-  if (routes.has(key)) return key;
-  // Longest matching "/prefix/*" pattern
-  let best;
-  for (const route of routes.keys()) {
-    if (route.endsWith('/*') && key.startsWith(route.slice(0, -1)) && (!best || route.length > best.length)) best = route;
-  }
-  return best;
-}
-
 function mapRow(row, ctx) {
   const { routes, byId, used, subCategory } = ctx;
   // Blog articles (including the three mis-typed as categories) join the article collection.
@@ -88,7 +78,7 @@ function mapRow(row, ctx) {
   }
   if (row.page_type === 'news') return { node: 'news-article' };
 
-  const route = lookup(routes, keyOf(row.final_url));
+  const route = matchRoute(routes, keyOf(row.final_url));
   if (!route) {
     errors.push(`no route-map entry for ${keyOf(row.final_url)}: ${row.url}`);
     return {};

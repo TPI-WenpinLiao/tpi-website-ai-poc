@@ -10,7 +10,7 @@ import { writeFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { readCsv, csvCell } from '../inventory/csv.mjs';
 import { routeKey } from '../inventory/routes.mjs';
-import { PATH_PATTERN, emit, normalizeSlug } from './generated.mjs';
+import { PATH_PATTERN, emit, matchRoute, normalizeSlug } from './generated.mjs';
 
 const INVENTORY = 'docs/research/inventory.csv';
 const PAGE_MAP = 'docs/ia/page-map.csv';
@@ -42,16 +42,6 @@ function newPath(row, node) {
   const last = new URL(row.url).pathname.split('/').filter(Boolean).at(-1);
   const path = node.path.replace(/\{([a-z]+)\}/, (_, name) => (name === 'slug' && row.blog_slug) || normalizeSlug(last));
   return withPrefix(row.locale, path);
-}
-
-// Longest matching route, "/prefix/*" patterns included (same lookup as route-map.csv in scripts/ia/sitemap.mjs)
-function lookup(routes, key) {
-  if (routes.has(key)) return routes.get(key);
-  let best;
-  for (const route of routes.keys()) {
-    if (route.endsWith('/*') && key.startsWith(route.slice(0, -1)) && (!best || route.length > best.length)) best = route;
-  }
-  return best && routes.get(best);
 }
 
 export function buildRedirects({ inventory, pageMap, nodes, dropTargets }) {
@@ -87,9 +77,13 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets }) {
     }
     let to;
     let note;
-    const override = lookup(dropRoutes, key);
+    const override = dropRoutes.get(matchRoute(dropRoutes, key));
     if (override) {
-      to = byId.get(override) && withPrefix(row.locale, byId.get(override).path);
+      if (!byId.has(override)) {
+        errors.push(`${DROP_TARGETS}: node "${override}" not found: ${row.url}`);
+        continue;
+      }
+      to = withPrefix(row.locale, byId.get(override).path);
       note = `drop：${DROP_TARGETS}`;
     } else {
       const segments = key.split('/').filter(Boolean);
@@ -114,16 +108,10 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets }) {
   });
   rows.push(...FALLBACKS.map((f) => ({ ...f, status: '301' })));
 
-  // A redirect source must not be a page of the new site: Cloudflare follows redirects even when an asset matches
-  const pages = new Set(rows.map((r) => r.to));
   const sources = new Set();
   for (const r of rows) {
     if (sources.has(r.from)) errors.push(`duplicate redirect source: ${r.from}`);
     sources.add(r.from);
-  }
-  for (const r of rows.filter((x) => x.status === '301')) {
-    const url = new URL(r.from);
-    if (url.host === MAIN_HOST && pages.has(url.pathname)) errors.push(`redirect source is also a new page (loop or shadowed page): ${r.from}`);
   }
   return { rows, errors };
 }
@@ -132,8 +120,18 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets }) {
 export function toRedirects(rows) {
   const errors = [];
   const rules = rows
-    .filter((r) => r.status !== '200' && new URL(r.from.replace('*', 'x')).host === MAIN_HOST)
-    .map((r) => ({ line: `${new URL(r.from.replace('*', 'x')).pathname.replace(/x$/, '*')} ${r.to} ${r.status}`, dynamic: r.from.includes('*') }));
+    .filter((r) => r.status !== '200' && new URL(r.from).host === MAIN_HOST)
+    .map((r) => {
+      const source = new URL(r.from).pathname;
+      return { source, line: `${source} ${r.to} ${r.status}`, dynamic: source.endsWith('/*') };
+    });
+  // A rule must not match a page of the new site: Cloudflare follows redirects even when an asset matches,
+  // so it would shadow the page or loop
+  const pages = new Set(rows.map((r) => r.to));
+  for (const { source, line, dynamic } of rules) {
+    const hit = dynamic ? [...pages].find((p) => p.startsWith(source.slice(0, -1))) : pages.has(source) && source;
+    if (hit) errors.push(`redirect matches the new page ${hit} (loop or shadowed page): ${line}`);
+  }
   const staticRules = rules.filter((r) => !r.dynamic);
   const dynamicRules = rules.filter((r) => r.dynamic);
   if (staticRules.length > MAX_STATIC) errors.push(`${staticRules.length} static redirects, Cloudflare Pages allows ${MAX_STATIC}`);
