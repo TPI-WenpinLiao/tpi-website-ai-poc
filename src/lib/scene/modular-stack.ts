@@ -59,7 +59,7 @@ const FRAGMENT = /* glsl */ `
   }
 `;
 
-const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, narrow }) => {
+const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, isNarrow }) => {
   const edge = tier.density < 0.5 ? EDGE.reduced : EDGE.full;
   const perModule = edge ** 3;
   const count = perModule * MODULES;
@@ -146,7 +146,7 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
       const swing = tier.path === 'orbit' ? Math.sin(progress * Math.PI * 1.5) * ORBIT_SWING + pointer.x * 0.08 : 0;
       placeCamera(camera, {
         target,
-        distance: CAMERA_DISTANCE + (narrow ? NARROW_HERO_PULLBACK * (1 - split) : 0) - split * (tier.path === 'orbit' ? 8 : 4),
+        distance: CAMERA_DISTANCE + (isNarrow() ? NARROW_HERO_PULLBACK * (1 - split) : 0) - split * (tier.path === 'orbit' ? 8 : 4),
         elevation: view.elevation + (tier.parallax ? pointer.y * 0.05 : 0),
         azimuth: view.azimuth + swing,
       });

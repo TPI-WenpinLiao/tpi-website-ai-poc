@@ -70,6 +70,8 @@ const { direction } = Astro.props;
     if (reduceMotion.matches || !supportsWebGL()) return;
 
     const [{ mount }, { default: factory }] = await Promise.all([import('../../lib/scene/runtime'), load()]);
+    // Reduced motion may have been turned on while the chunk downloaded
+    if (reduceMotion.matches) return;
     host.hidden = false;
     const stop = mount({
       host,

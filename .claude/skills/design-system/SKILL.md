@@ -107,7 +107,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 放在 `PageHero` 的 `backdrop` slot、靜態 `Backdrop`（`priority`）之後；靜態圖是 LCP，也是減少動態、Save-Data、不支援 WebGL 時的完整版本
 - hero 與要讓場景透出的區塊包在同一個 `data-scene-track` 元素裡，捲動進度以它計算。canvas 固定在 viewport，track 裡 hero 之後的區塊要寫 `[data-scene='ready'] .x { background: transparent; }`，並用 `position: relative` 與 `--z-raised` 疊在 hero 之上
 - 場景上的文字放在玻璃面板（`--glass-bg`）或 scrim 那一側，不直接壓在方塊上
-- 新場景寫成 `src/lib/scene/<名稱>.ts`，default export 一個 `SceneFactory`，加進 `Scene3D` 的 `LOADERS`；數量要乘上 `tier.density`，讓行動版降級生效
+- 新場景寫成 `src/lib/scene/<名稱>.ts`，default export 一個 `SceneFactory`，加進 `Scene3D` 的 `LOADERS`；數量依 `tier.density` 減少，讓行動版降級生效（`modular-stack.ts` 在 density < 0.5 時把每個模組從 3×3×3 改成 2×2×2）
 - 改到 `Scene3D`、`src/lib/scene/` 或用到它的頁面後，跑 ADR 0003「量測」的三個 script
 
 ## 展示頁

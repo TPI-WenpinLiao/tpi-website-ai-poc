@@ -25,12 +25,12 @@ three.js 是本站第一個大型 client 依賴。ADR 0001 定了「預設零 cl
 3. **不載入的條件**：`prefers-reduced-motion: reduce`、`navigator.connection.saveData`、瀏覽器不支援 WebGL。執行中切換成減少動態時，停止場景、移除 canvas，回到靜態圖
 4. **第一個 frame 畫完才淡入**：track 加上 `data-scene="ready"` 後 canvas 淡入（`--duration-slow`），靜態圖不做任何動畫
 5. **不在畫面上就不畫**：IntersectionObserver 在 track 離開畫面時停止 `requestAnimationFrame`，分頁隱藏（`visibilitychange`）時也停止
-6. **行動版降級**：`(width < 64rem), (pointer: coarse)` 用 `TIERS.mobile`
+6. **行動版降級**：`(width < 64rem), (pointer: coarse)` 用 `TIERS.mobile`，在場景啟動時決定。構圖（主體偏右或偏上）只看寬度 `(width < 64rem)`，和 CSS 的 `--bp-lg-down` 一致，視窗縮放跨過斷點時跟著改；橫向平板是桌機構圖、行動版預算
 
    | 設定 | 桌機 | 行動版 |
    |---|---|---|
    | `devicePixelRatio` 上限 | 2 | 1.5 |
-   | 方塊數量 | 1（每個模組 3×3×3） | 0.35（每個模組 2×2×2） |
+   | 方塊數量（`density`） | 每個模組 3×3×3，共 108 塊（1） | 每個模組 2×2×2，共 32 塊（0.35，低於 0.5 就改用 2×2×2） |
    | antialias | 開 | 關 |
    | 鏡頭路徑 | 環繞（方位角擺動、推近） | 只沿一個方向移動 |
    | 滑鼠視差 | 開 | 關 |

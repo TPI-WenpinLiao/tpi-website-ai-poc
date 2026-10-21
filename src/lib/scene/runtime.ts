@@ -23,13 +23,17 @@ export const TIERS = {
   mobile: { kind: 'mobile', maxDpr: 1.5, density: 0.35, antialias: false, parallax: false, path: 'dolly' },
 } as const satisfies Record<Tier['kind'], Tier>;
 
-// HTML and scripts can't read @custom-media; this is --bp-lg-down from src/styles/media.css
-const NARROW = '(width < 64rem), (pointer: coarse)';
+// Layout follows the CSS: scripts can't read @custom-media, so this is --bp-lg-down from
+// src/styles/media.css. Read it live, since the viewport can cross it after the scene starts.
+const narrowLayout = () => matchMedia('(width < 64rem)').matches;
+// The rendering budget also drops on touch devices, whatever their layout (a landscape tablet
+// gets the desktop layout but the mobile tier). Picked once, when the scene starts.
+const LOW_POWER = '(width < 64rem), (pointer: coarse)';
 
 // Fraction of the viewport the scene's center moves off the middle
 const FOCUS_SHIFT = { wide: 0.22, narrow: 0.3 };
 
-export const pickTier =(): Tier => (matchMedia(NARROW).matches ? TIERS.mobile : TIERS.desktop);
+export const pickTier = (): Tier => (matchMedia(LOW_POWER).matches ? TIERS.mobile : TIERS.desktop);
 
 export interface Palette {
   bg: Color;
@@ -54,7 +58,8 @@ export interface SceneContext {
   palette: Palette;
   /** Camera elevation and azimuth from --scene-angle-x/-z, radians */
   view: { elevation: number; azimuth: number };
-  narrow: boolean;
+  /** Whether the page uses the narrow layout right now (--bp-lg-down) */
+  isNarrow: () => boolean;
 }
 
 export interface SceneInstance {
@@ -142,8 +147,7 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(50, 1, 0.1, 400);
-  const narrow = matchMedia(NARROW).matches;
-  const instance = factory({ scene, camera, tier, palette, view: readView(host), narrow });
+  const instance = factory({ scene, camera, tier, palette, view: readView(host), isNarrow: narrowLayout });
 
   const resize = () => {
     const { clientWidth: w, clientHeight: h } = host;
@@ -155,7 +159,7 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
     camera.fov = fovFor(h, perspective);
     // Center the scene where the static image's subject is: the end side on wide screens, the
     // upper part on narrow ones (Backdrop fade="hero")
-    const shift = narrow ? { x: 0, y: h * FOCUS_SHIFT.narrow } : { x: -w * FOCUS_SHIFT.wide, y: 0 };
+    const shift = narrowLayout() ? { x: 0, y: h * FOCUS_SHIFT.narrow } : { x: -w * FOCUS_SHIFT.wide, y: 0 };
     camera.setViewOffset(w, h, shift.x, shift.y, w, h);
     camera.updateProjectionMatrix();
   };
