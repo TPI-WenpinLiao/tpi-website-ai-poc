@@ -3,6 +3,7 @@
 // A link can't be disabled, so `disabled` only exists on the button variant.
 // primary: solid action color that lifts and glows on hover. secondary: energy-gradient outline.
 // text: no frame. All variants follow the surrounding data-surface.
+// data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
 import type { HTMLAttributes } from 'astro/types';
 
 type Common = {
@@ -74,7 +75,7 @@ const classes = ['btn', variant, size, className];
     color: var(--color-action-text);
   }
 
-  .primary:hover {
+  .primary:is(:hover, [data-preview-state='hover']) {
     background: var(--color-action-hover);
     box-shadow: var(--glow-brand);
     transform: translateY(var(--lift));
@@ -88,7 +89,7 @@ const classes = ['btn', variant, size, className];
     color: var(--color-text);
   }
 
-  .secondary:hover {
+  .secondary:is(:hover, [data-preview-state='hover']) {
     background:
       linear-gradient(var(--color-action-subtle-hover), var(--color-action-subtle-hover)) padding-box,
       var(--gradient-energy) border-box;
@@ -102,7 +103,7 @@ const classes = ['btn', variant, size, className];
     color: var(--color-link);
   }
 
-  .text:hover {
+  .text:is(:hover, [data-preview-state='hover']) {
     color: var(--color-link-hover);
     text-decoration: underline;
     text-underline-offset: var(--underline-offset);

@@ -3,6 +3,7 @@
 // viewer, lights an energy-gradient rim and glows on hover. The whole card is clickable through the
 // title link's ::after, so there is exactly one link per card and its name is the title.
 // Image alt is required; pass alt="" only when the image is purely decorative.
+// data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -14,13 +15,14 @@ interface Props {
   eyebrow?: string;
   description?: string;
   image?: { src: ImageMetadata; alt: string };
+  'data-preview-state'?: 'hover' | 'focus';
 }
 
-const { title, href, level = 3, index, eyebrow, description, image } = Astro.props;
+const { title, href, level = 3, index, eyebrow, description, image, 'data-preview-state': previewState } = Astro.props;
 const Heading = `h${level}` as const;
 ---
 
-<article class="card">
+<article class="card" data-preview-state={previewState}>
   {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes="(width >= 64rem) 22rem, 100vw" />}
   <div class="body">
     {
@@ -79,18 +81,18 @@ const Heading = `h${level}` as const;
   }
 
   /* :has(:focus-visible), not :focus-within, so a mouse click on the title draws no ring */
-  .card:hover,
-  .card:has(a:focus-visible) {
+  .card:is(:hover, [data-preview-state='hover']),
+  .card:is(:has(a:focus-visible), [data-preview-state='focus']) {
     box-shadow: var(--shadow-md), var(--glow-brand);
     transform: perspective(var(--perspective)) rotateX(var(--tilt)) translateY(var(--lift));
   }
 
-  .card:hover::before,
-  .card:has(a:focus-visible)::before {
+  .card:is(:hover, [data-preview-state='hover'])::before,
+  .card:is(:has(a:focus-visible), [data-preview-state='focus'])::before {
     opacity: 1;
   }
 
-  .card:has(a:focus-visible) {
+  .card:is(:has(a:focus-visible), [data-preview-state='focus']) {
     outline: var(--focus-ring-width) solid var(--color-focus);
     outline-offset: var(--focus-ring-offset);
   }
@@ -151,7 +153,7 @@ const Heading = `h${level}` as const;
     outline: none;
   }
 
-  .card:hover .title a {
+  .card:is(:hover, [data-preview-state='hover']) .title a {
     color: var(--color-link);
   }
 

@@ -65,6 +65,45 @@ const principles = [
   { title: '動態跟著捲動', body: '進場、圖層分離與進度條都由捲動驅動，不需要 client JS；偏好減少動態時全部靜止。' },
 ];
 
+// States drawn statically with data-preview-state; components have no :active style to show
+type PreviewState = 'hover' | 'focus' | undefined;
+const linkStates: { label: string; preview: PreviewState }[] = [
+  { label: '預設', preview: undefined },
+  { label: 'Hover', preview: 'hover' },
+  { label: 'Focus', preview: 'focus' },
+];
+const buttonStates: { label: string; preview: PreviewState; disabled?: boolean }[] = [
+  ...linkStates,
+  { label: 'Disabled', preview: undefined, disabled: true },
+];
+const buttonVariants = [
+  { variant: 'primary', label: '主要按鈕' },
+  { variant: 'secondary', label: '次要按鈕' },
+  { variant: 'text', label: '文字按鈕' },
+] as const;
+const linkVariants = [
+  { name: 'inline', variant: 'inline', label: '內文連結', external: false },
+  { name: 'standalone', variant: 'standalone', label: '獨立連結', external: false },
+  { name: 'inline + external', variant: 'inline', label: '外部連結', external: true },
+] as const;
+const tagTones = [
+  { tone: 'neutral', label: '中性標籤' },
+  { tone: 'brand', label: '品牌標籤' },
+  { tone: 'node', label: 'Node label' },
+] as const;
+
+const toc = [
+  { id: 'principles', label: '原則' },
+  { id: 'tokens', label: '色階' },
+  { id: 'tokens-dark', label: '語意（深）' },
+  { id: 'tokens-light', label: '語意（亮）' },
+  { id: 'tokens-scale', label: '尺度' },
+  { id: 'components-dark', label: '元件（深）' },
+  { id: 'components-light', label: '元件（亮）' },
+  { id: 'imagery', label: '影像' },
+  { id: 'reading', label: '長文' },
+];
+
 const title = 'Design system 審核｜TPIsoftware 昕力資訊';
 const description =
   'M3-02 design tokens 與基礎元件審核頁：亮暗兩種 surface、光與景深、字體與間距，以及按鈕、連結、卡片、表單與捲動動態的各種狀態。';
@@ -84,8 +123,16 @@ const description =
     </Fragment>
   </PageHero>
 
+  <nav class="toc" aria-label="本頁目錄">
+    <ul>
+      {toc.map((t) => (
+        <li><a href={`#${t.id}`}>{t.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+
   <main>
-    <Surface tone="dark">
+    <Surface tone="dark" id="principles">
       <Backdrop slot="backdrop" image={ambientGlow} fade="bottom" strength="soft" />
       <SectionHeading index="01" eyebrow="Principles" title="三個設計原則" />
       <ol class="principles">
@@ -180,9 +227,191 @@ const description =
       {byLayer('scale').map((g) => <TokenGroup title={g.title} note={g.note} rows={rows(g, light)} />)}
     </Surface>
 
+
+    {
+      (['dark', 'light'] as const).map((tone) => (
+        <Surface tone={tone} pattern={tone === 'dark' ? 'grid' : 'none'} id={`components-${tone}`}>
+          <SectionHeading
+            index={tone === 'dark' ? '05' : undefined}
+            eyebrow={`Components · ${tone} surface`}
+            title={tone === 'dark' ? '元件：深色 surface' : '元件：亮色 surface'}
+            description="同一組元件，不需要變體，顏色跟著 surface 切換。hover 與 focus 欄是靜態畫出的狀態（data-preview-state），樣式和實際操作時同一份。範例文字只用來看版面，不是網站內容。"
+          />
+
+          <h3>Button</h3>
+          <div class="table-wrap">
+            <table class="matrix">
+              <thead>
+                <tr>
+                  <th scope="col">Variant</th>
+                  {buttonStates.map((st) => <th scope="col">{st.label}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {buttonVariants.map((v) => (
+                  <tr>
+                    <th scope="row"><code>{v.variant}</code></th>
+                    {buttonStates.map((st) => (
+                      <td>
+                        <Button variant={v.variant} data-preview-state={st.preview} disabled={st.disabled}>
+                          {v.label}
+                        </Button>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="note">尺寸 sm／md／lg，以及有 href 時輸出的連結（連結不能 disabled）：</p>
+          <div class="row">
+            <Button size="sm">小型</Button>
+            <Button>中型</Button>
+            <Button size="lg">大型</Button>
+            <Button href={`#components-${tone}`} variant="secondary">
+              連結樣式的按鈕
+            </Button>
+          </div>
+
+          <h3>Link</h3>
+          <div class="table-wrap">
+            <table class="matrix">
+              <thead>
+                <tr>
+                  <th scope="col">Variant</th>
+                  {linkStates.map((st) => <th scope="col">{st.label}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {linkVariants.map((v) => (
+                  <tr>
+                    <th scope="row"><code>{v.name}</code></th>
+                    {linkStates.map((st) => (
+                      <td>
+                        <Link href={v.external ? 'https://www.tpisoftware.com' : `#components-${tone}`} variant={v.variant} external={v.external} data-preview-state={st.preview}>
+                          {v.label}
+                        </Link>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Tag</h3>
+          <div class="table-wrap">
+            <table class="matrix">
+              <thead>
+                <tr>
+                  <th scope="col">Tone</th>
+                  {linkStates.map((st) => <th scope="col">{st.label}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {tagTones.map((t) => (
+                  <tr>
+                    <th scope="row"><code>{t.tone}</code></th>
+                    <td><Tag tone={t.tone}>{t.label}</Tag></td>
+                    <td colspan="2" class="muted">沒有 href 時不能互動</td>
+                  </tr>
+                ))}
+                {tagTones.map((t) => (
+                  <tr>
+                    <th scope="row"><code>{t.tone}</code> + href</th>
+                    {linkStates.map((st) => (
+                      <td>
+                        <Tag href={`#components-${tone}`} tone={t.tone} data-preview-state={st.preview}>
+                          {t.label}
+                        </Tag>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3>SectionHeading</h3>
+          <div class="demo">
+            <SectionHeading level={3} index="07" eyebrow="Eyebrow" title="編號式區塊標題" description="標題層級由呼叫端指定，避免跳級。" />
+          </div>
+          <div class="demo">
+            <SectionHeading level={3} title="沒有編號與 eyebrow 的區塊標題" />
+          </div>
+
+          <h3>Card</h3>
+          <ul class="cards">
+            {linkStates.map((st, i) => (
+              <li class="state">
+                <span class="state-label">{st.label}</span>
+                <Card
+                  level={4}
+                  href={`#components-${tone}`}
+                  index={`0${i + 1}`}
+                  eyebrow="分類"
+                  title="有圖片的卡片標題"
+                  description="hover 與 focus 時往前傾、亮起漸層外框。整張卡可點，但只有標題一個連結。"
+                  image={{ src: coverIntegration, alt: '' }}
+                  data-preview-state={st.preview}
+                >
+                  <Fragment slot="meta">
+                    <Tag tone="node">Tag one</Tag>
+                    <Tag tone="node">Tag two</Tag>
+                  </Fragment>
+                </Card>
+              </li>
+            ))}
+            <li class="state">
+              <span class="state-label">沒有圖片</span>
+              <Card level={4} href={`#components-${tone}`} index="04" title="沒有圖片的卡片" description="玻璃面板，背景的格線與 3D 場景會透出來。" />
+            </li>
+            <li class="state">
+              <span class="state-label">長標題</span>
+              <Card
+                level={4}
+                href={`#components-${tone}`}
+                index="05"
+                eyebrow="分類"
+                title="標題較長時換行的卡片標題範例，用來確認行高與間距"
+                image={{ src: coverData, alt: '' }}
+              />
+            </li>
+          </ul>
+
+          <h3>FormField</h3>
+          <div class="fields">
+            <FormField id={`${tone}-default`} name={`${tone}-default`} label="預設" kind="text" />
+            <FormField id={`${tone}-hover`} name={`${tone}-hover`} label="Hover" kind="text" data-preview-state="hover" />
+            <FormField id={`${tone}-focus`} name={`${tone}-focus`} label="Focus" kind="text" data-preview-state="focus" />
+            <FormField id={`${tone}-filled`} name={`${tone}-filled`} label="已填寫" kind="email" value="name@example.com" />
+            <FormField id={`${tone}-required`} name={`${tone}-required`} label="必填" kind="text" required />
+            <FormField id={`${tone}-hint`} name={`${tone}-hint`} label="有說明文字" kind="email" hint="我們會寄送確認信到這個信箱。" />
+            <FormField id={`${tone}-error`} name={`${tone}-error`} label="錯誤" kind="tel" value="abc" error="電話格式不正確，請只輸入數字。" />
+            <FormField
+              id={`${tone}-select`}
+              name={`${tone}-select`}
+              label="下拉選單"
+              kind="select"
+              placeholder="請選擇"
+              options={[
+                { value: 'a', label: '選項一' },
+                { value: 'b', label: '選項二' },
+              ]}
+            />
+            <FormField id={`${tone}-textarea`} name={`${tone}-textarea`} label="多行文字" kind="textarea" rows={3} />
+            <FormField id={`${tone}-checkbox`} name={`${tone}-checkbox`} label="核取方塊" kind="checkbox" />
+            <FormField id={`${tone}-checked`} name={`${tone}-checked`} label="已勾選的核取方塊" kind="checkbox" checked />
+            <FormField id={`${tone}-checkbox-error`} name={`${tone}-checkbox-error`} label="核取方塊錯誤" kind="checkbox" required error="請勾選後再送出。" />
+          </div>
+          <p class="note">FormField 沒有 disabled 狀態；送出按鈕的 disabled 見 Button。</p>
+        </Surface>
+      ))
+    }
+
     <Surface tone="dark" pattern="grid" id="imagery">
       <SectionHeading
-        index="05"
+        index="06"
         eyebrow="Imagery"
         title="影像"
         description="抽象 3D 渲染，只用品牌色，不放文字、人物或真實產品。素材與提示詞見 docs/design/image-prompts.md。"
@@ -226,109 +455,7 @@ const description =
       <LayerStack />
     </Surface>
 
-    {
-      (['dark', 'light'] as const).map((tone) => (
-        <Surface tone={tone} pattern={tone === 'dark' ? 'grid' : 'none'} id={`components-${tone}`}>
-          <SectionHeading
-            index={tone === 'dark' ? '06' : undefined}
-            eyebrow={`Components · ${tone} surface`}
-            title={tone === 'dark' ? '元件：深色 surface' : '元件：亮色 surface'}
-            description="同一組元件，不需要變體，顏色跟著 surface 切換。範例文字只用來看版面，不是網站內容。"
-          />
-
-          <h3>Button</h3>
-          <div class="row">
-            <Button>主要按鈕</Button>
-            <Button variant="secondary">次要按鈕</Button>
-            <Button variant="text">文字按鈕</Button>
-            <Button disabled>停用</Button>
-          </div>
-          <div class="row">
-            <Button size="sm">小型主要</Button>
-            <Button size="sm" variant="secondary">小型次要</Button>
-            <Button href={`#components-${tone}`} size="sm" variant="text">
-              連結樣式的按鈕
-            </Button>
-          </div>
-
-          <h3>Link 與 Tag</h3>
-          <div class="row">
-            <Link href={`#components-${tone}`}>內文連結</Link>
-            <Link href={`#components-${tone}`} variant="standalone">獨立連結</Link>
-            <Link href="https://www.tpisoftware.com" external>外部連結</Link>
-          </div>
-          <div class="row">
-            <Tag>中性標籤</Tag>
-            <Tag tone="brand">品牌標籤</Tag>
-            <Tag tone="node">Node label</Tag>
-            <Tag href={`#components-${tone}`} tone="brand">可點的標籤</Tag>
-          </div>
-
-          <h3>SectionHeading</h3>
-          <div class="demo">
-            <SectionHeading level={3} index="07" eyebrow="Eyebrow" title="編號式區塊標題" description="標題層級由呼叫端指定，避免跳級。" />
-          </div>
-
-          <h3>Card</h3>
-          <div class="cards">
-            <Reveal>
-              <Card
-                level={4}
-                href={`#components-${tone}`}
-                index="01"
-                eyebrow="分類"
-                title="有圖片的卡片標題"
-                description="hover 時往前傾、亮起漸層外框。整張卡可點，但只有標題一個連結。"
-                image={{ src: coverIntegration, alt: '' }}
-              >
-                <Fragment slot="meta">
-                  <Tag tone="node">Tag one</Tag>
-                  <Tag tone="node">Tag two</Tag>
-                </Fragment>
-              </Card>
-            </Reveal>
-            <Reveal delay={1}>
-              <Card level={4} href={`#components-${tone}`} index="02" title="沒有圖片的卡片" description="玻璃面板，背景的格線與 3D 場景會透出來。" />
-            </Reveal>
-            <Reveal delay={2}>
-              <Card
-                level={4}
-                href={`#components-${tone}`}
-                index="03"
-                eyebrow="分類"
-                title="標題較長時換行的卡片標題範例，用來確認行高與間距"
-                image={{ src: coverData, alt: '' }}
-              />
-            </Reveal>
-          </div>
-
-          <h3>FormField</h3>
-          <form class="form" action="#" method="post">
-            <FormField id={`${tone}-name`} name="name" label="姓名" kind="text" autocomplete="name" required />
-            <FormField id={`${tone}-email`} name="email" label="Email" kind="email" autocomplete="email" required hint="我們會寄送確認信到這個信箱。" />
-            <FormField
-              id={`${tone}-topic`}
-              name="topic"
-              label="洽詢主題"
-              kind="select"
-              placeholder="請選擇"
-              options={[
-                { value: 'a', label: '選項一' },
-                { value: 'b', label: '選項二' },
-              ]}
-            />
-            <FormField id={`${tone}-phone`} name="phone" label="電話" kind="tel" autocomplete="tel" value="abc" error="電話格式不正確，請只輸入數字。" />
-            <FormField id={`${tone}-message`} name="message" label="需求說明" kind="textarea" rows={4} />
-            <FormField id={`${tone}-agree`} name="agree" label="我同意隱私權政策" kind="checkbox" required />
-            <div class="row">
-              <Button type="submit" disabled>送出（審核頁不送出）</Button>
-            </div>
-          </form>
-        </Surface>
-      ))
-    }
-
-    <Surface tone="light" width="reading">
+    <Surface tone="light" width="reading" id="reading">
       <Backdrop slot="backdrop" image={readingHeader} fade="bottom" focus="top" />
       <SectionHeading eyebrow="Reading" title="長文閱讀" />
       <div class="prose">
@@ -410,7 +537,9 @@ const description =
     margin-block: var(--space-3);
   }
 
+  /* position: relative keeps absolutely positioned content (.sr-only) inside the scroller */
   .table-wrap {
+    position: relative;
     overflow-x: auto;
   }
 
@@ -491,11 +620,85 @@ const description =
     gap: var(--space-2);
   }
 
-  .form {
+
+  .toc {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--z-raised);
+    border-block-end: var(--border-width) solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+  }
+
+  /* Scrolls sideways inside the bar on narrow screens, never the page */
+  .toc ul {
+    display: flex;
+    gap: var(--space-1);
+    max-inline-size: var(--content-max-width);
+    margin-inline: auto;
+    padding: var(--space-1) var(--space-gutter);
+    overflow-x: auto;
+  }
+
+  .toc a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .toc a:hover {
+    background: var(--color-bg-muted);
+    color: var(--color-text);
+  }
+
+  /* Sections land below the sticky bar */
+  main :global([id]) {
+    scroll-margin-block-start: calc(var(--touch-target) + var(--space-2));
+  }
+
+  .matrix td,
+  .matrix th {
+    padding: var(--space-3);
+    vertical-align: middle;
+  }
+
+  .matrix thead th {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: var(--letter-spacing-mono);
+    text-transform: uppercase;
+  }
+
+  .muted {
+    color: var(--color-text-muted);
+  }
+
+  .state {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
-    max-width: var(--reading-max-width);
+    gap: var(--space-2);
+  }
+
+  .state-label {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-mono);
+    text-transform: uppercase;
+  }
+
+  .fields {
+    display: grid;
+    gap: var(--space-5) var(--space-6);
+    align-items: start;
   }
 
   .prose p {
@@ -504,6 +707,7 @@ const description =
   }
 
   @media (--bp-sm-up) {
+    .fields,
     .cards {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }

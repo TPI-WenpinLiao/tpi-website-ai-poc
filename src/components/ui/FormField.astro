@@ -2,6 +2,8 @@
 // Labelled form control with hint and error text. Hint and error are wired to the control with
 // aria-describedby; an error also sets aria-invalid. Validation itself belongs to M6-01.
 // The textarea value sits inline between its tags: any whitespace there becomes the value.
+// data-preview-state="hover" | "focus" goes on the control and draws that state statically, for
+// the /design-system page only.
 import type { HTMLAttributes } from 'astro/types';
 
 type Common = {
@@ -12,6 +14,7 @@ type Common = {
   error?: string;
   required?: boolean;
   requiredLabel?: string;
+  'data-preview-state'?: 'hover' | 'focus';
 };
 
 type Props = Common &
@@ -27,7 +30,11 @@ const { id, name, label, hint, error, required = false, requiredLabel = '必填'
 const hintId = hint ? `${id}-hint` : undefined;
 const errorId = error ? `${id}-error` : undefined;
 const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined;
-const aria = { 'aria-describedby': describedBy, 'aria-invalid': error ? true : undefined };
+const aria = {
+  'aria-describedby': describedBy,
+  'aria-invalid': error ? true : undefined,
+  'data-preview-state': props['data-preview-state'],
+};
 ---
 
 <div class:list={['field', props.kind === 'checkbox' && 'checkbox', error && 'has-error']}>
@@ -113,7 +120,7 @@ const aria = { 'aria-describedby': describedBy, 'aria-invalid': error ? true : u
     resize: vertical;
   }
 
-  .control:hover {
+  .control:is(:hover, [data-preview-state='hover']) {
     border-color: var(--color-text-muted);
   }
 

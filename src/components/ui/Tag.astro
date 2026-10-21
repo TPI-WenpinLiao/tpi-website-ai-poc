@@ -2,16 +2,18 @@
 // Label for a category, topic or data point. `node` is the data-flow label: mono text with a
 // glowing signal dot, for product modules and technical keywords. With href it links to the
 // filtered listing.
+// data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
 interface Props {
   href?: string;
   tone?: 'neutral' | 'brand' | 'node';
+  'data-preview-state'?: 'hover' | 'focus';
 }
 
-const { href, tone = 'neutral' } = Astro.props;
+const { href, tone = 'neutral', 'data-preview-state': previewState } = Astro.props;
 const Element = href ? 'a' : 'span';
 ---
 
-<Element class:list={['tag', tone]} href={href}><slot /></Element>
+<Element class:list={['tag', tone]} href={href} data-preview-state={previewState}><slot /></Element>
 
 <style>
   .tag {
@@ -55,7 +57,7 @@ const Element = href ? 'a' : 'span';
     box-shadow: var(--glow-accent);
   }
 
-  a.tag:hover {
+  a.tag:is(:hover, [data-preview-state='hover']) {
     border-color: var(--color-border-brand);
     text-decoration: underline;
   }
