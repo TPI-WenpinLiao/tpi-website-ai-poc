@@ -13,7 +13,15 @@ description: 開始處理一張 GitHub issue 時使用（/issue-start <issue 編
 
 使用 session 指定的 branch（雲端 session 的系統指示會寫明）；沒有指定時用 `<type>/<N>-<slug>`，type 依 issue 的 `type:*` label。
 
-先找這張 issue 有沒有 checkpoint 過的進度檔（[`checkpoint`](../checkpoint/SKILL.md)）。新的 session 會拿到新的 branch 名稱，所以要找遍 remote：
+先用 `mcp__github__list_pull_requests`（`state: open`）找 body 有 `Closes #<N>` 的 PR。
+
+**有 open PR：以 PR 的 head branch 為準**
+
+`git fetch origin <head> && git checkout -B <head> origin/<head>`，之後都 push 到這裡，PR 才會更新。其他 branch 上的進度檔一律不看：出貨後舊 branch 還留著時，那上面的進度檔已經過時。head 上有進度檔就照下面的「接續」第 3 步起執行；沒有（例如 `needs-design` 階段一已出貨）就停下說明 PR 狀態，問使用者下一步。
+
+**沒有 open PR：找進度檔**
+
+新的 session 會拿到新的 branch 名稱，所以要找遍 remote：
 
 ```bash
 git fetch --prune origin
@@ -23,12 +31,10 @@ done
 git status -sb
 ```
 
-**找到進度檔：接續**
+找到進度檔時接續（[`checkpoint`](../checkpoint/SKILL.md)）：
 
 1. 找到多個 ref 時，取 `git log -1 --format=%ci` 最新的一個；時間相同時優先取 session branch，否則任取，並在回報中列出其他 ref
-2. 用 `mcp__github__list_pull_requests` 查該 ref 有沒有 open PR，`head` 要寫成 `TPI-WenpinLiao:<branch>`（去掉 `origin/`）
-   - 有 open PR：`git checkout -B <branch> <該 ref>`，留在這個 branch，之後都 push 到這裡，PR 才會更新
-   - 沒有：`git checkout -B <session branch> <該 ref>`。第一次 checkpoint push 成功後，確認舊 branch 已包含在新 branch 裡（`git merge-base --is-ancestor <該 ref> HEAD`），再 `git push origin --delete <舊 branch>`。該 ref 就是 `origin/<session branch>` 時（同一個 session 重啟）不刪除。舊 branch 留著的話，`/issue-ship` 只會刪掉新 branch 上的進度檔，之後的 `/issue-start` 會找到舊 branch 上過時的進度檔。刪除被拒絕時不要重試，在 PR 的「待確認」列出舊 branch 請人工刪除
+2. `git checkout -B <session branch> <該 ref>`。舊 branch 不刪除：雲端 session 刪除 remote branch 會被 403 擋下（#70 實測）。舊 branch 列進之後 PR 的「待確認」，請人工刪除
 3. 執行 `node scripts/checkpoint/status.mjs <N>`，取得每個階段的狀態與下一步；script 失敗（exit 非 0）就停下回報錯誤，不要自己從 commit 推測。再讀進度檔的「目前狀態」與「待使用者決定」，照常執行第 2、3、5 步（第 4 步的 `status.md` 對照已在原計畫做過，略過）
 4. 回報環境檢查表、已完成的階段、下一步與「待使用者決定」，**不進 Plan 模式**：計畫已確認過，寫在進度檔裡
 5. 「待使用者決定」不是「無」時停下等回覆；否則從下一個階段繼續實作
