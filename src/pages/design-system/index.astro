@@ -123,7 +123,7 @@ const description =
     </Fragment>
   </PageHero>
 
-  <nav class="toc" aria-label="本頁目錄">
+  <nav class="toc" aria-label="本頁目錄" data-surface="dark">
     <ul>
       {toc.map((t) => (
         <li><a href={`#${t.id}`}>{t.label}</a></li>
@@ -621,6 +621,7 @@ const description =
   }
 
 
+  /* Dark glass on every section: most of the page is the dark scene surface */
   .toc {
     position: sticky;
     inset-block-start: 0;
