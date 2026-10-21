@@ -85,17 +85,18 @@ footer,公司,media-center,,
 footer,公司,hr,,
 footer,公司,contact,,
 footer,公司,subscribe,訂閱電子報,
-footer,,,法務,footer 最底列，與版權聲明同列
-footer,法務,privacy,,
-footer,法務,terms,,
-footer,法務,disclaimer,,
-footer,法務,security-policy,,
+footer-bottom,,privacy,,與版權聲明同列
+footer-bottom,,terms,,
+footer-bottom,,disclaimer,,
+footer-bottom,,security-policy,,
 none,,textualanalysis,,待確認是否仍銷售；從所屬家族頁或產業頁內文連結
 none,,interactivehealth,,待確認是否仍銷售；從所屬家族頁或產業頁內文連結
 none,,insurebrick,,待確認是否仍銷售；從所屬家族頁或產業頁內文連結
 none,,insurering,,待確認是否仍銷售；從所屬家族頁或產業頁內文連結
 none,,gis,,待確認是否仍銷售；從所屬家族頁或產業頁內文連結
 none,,digilogs-detection,,待確認是否仍銷售；第四層，從 digiLogs 產品頁連結
+none,,digirunner-cloud,,第四層，從上一層產品頁連結
+none,,digilogs-iso27001,,第四層，從上一層產品頁連結
 none,,blog-ai,,部落格頁內的分類篩選
 none,,blog-digital-transformation,,部落格頁內的分類篩選
 none,,blog-enterprise-management,,部落格頁內的分類篩選
