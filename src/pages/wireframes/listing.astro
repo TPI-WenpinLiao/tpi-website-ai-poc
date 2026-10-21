@@ -1,0 +1,46 @@
+---
+import WfLayout from '../../layouts/WfLayout.astro';
+import WfSection from '../../components/wireframe/WfSection.astro';
+import WfBlock from '../../components/wireframe/WfBlock.astro';
+import WfGrid from '../../components/wireframe/WfGrid.astro';
+import WfBreadcrumb from '../../components/wireframe/WfBreadcrumb.astro';
+import { children } from '../../lib/wireframe/ia';
+
+const categories = children('blog').filter((n) => n.kind === 'page');
+---
+
+<WfLayout
+  template="listing"
+  title="listing 模板"
+  description="列表頁 wireframe：部落格首頁與分類、媒體中心、活動、成功案例列表共用。標題、篩選、卡片格線與分頁。"
+>
+  <p slot="notes">
+    範例節點：部落格。篩選依列表不同：部落格是分類（{categories.map((n) => n.title).join('、')}）與 tag，成功案例是產業，媒體中心是新聞類型。
+  </p>
+
+  <WfBreadcrumb node="blog" />
+
+  <WfBlock size="sm" label="頁面標題" fields={['nodes.csv title（h1）', 'i18n：說明']} />
+
+  <WfSection title="精選" note="部落格的 featured 文章置頂；其他列表沒有這區">
+    <WfGrid cols={2} mobile={1}>
+      <WfBlock size="lg" label="精選文章圖" fields={['coverImage']} />
+      <WfBlock size="lg" label="精選文章" fields={['category', 'title', 'description', 'publishedAt']} />
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="篩選">
+    <WfBlock
+      size="sm"
+      label="篩選列"
+      note="桌機為一列標籤，行動版改為可橫向捲動的標籤列。分類是連到分類頁的連結（各有 URL），tag 是頁內篩選"
+    />
+  </WfSection>
+
+  <WfSection title="列表">
+    <WfGrid cols={3} mobile={1}>
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => <WfBlock label="卡片" fields={['coverImage', 'category', 'title', 'description', 'publishedAt']} />)}
+    </WfGrid>
+    <WfBlock size="sm" label="分頁" note="上一頁／頁碼／下一頁；每頁筆數在 M4 決定" />
+  </WfSection>
+</WfLayout>

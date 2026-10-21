@@ -4,7 +4,7 @@
 
 ## 目前 milestone
 
-**M1 盤點與研究**（剩 M1-06 收尾）；M2 進行中
+**M1 盤點與研究**（剩 M1-06 收尾）；M2、M3 進行中
 
 ## 進度
 
@@ -13,7 +13,7 @@
 | M0 基礎建設 | 完成 |
 | M1 盤點與研究 | 進行中（剩 M1-06 收尾） |
 | M2 資訊架構 | 進行中 |
-| M3 設計系統 | 未開始 |
+| M3 設計系統 | 進行中 |
 | M4 開發骨架 | 未開始 |
 | M5 內容遷移 | 未開始 |
 | M6 功能 | 未開始 |
@@ -53,11 +53,16 @@
 - 導覽第四層節點與 footer 法務位置對齊完成（#64）：法務定為 footer 最底列，`navigation.mjs` 檢查不限深度
 - footer 最底列的法務順序改成現站順序完成（#77）：資訊安全政策、隱私權政策、使用條款、免責聲明
 
+### M3 設計系統
+
+- M3-01 wireframe（#14），階段一，等待 wireframe-approved：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`
+
 ## 下一步
 
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
 - M2-05 redirect map（#12）的依賴（#8、#10）都已完成，可以開始；轉址規則依 ADR 0002，blog 文章的新 slug 用 `docs/ia/page-map.csv` 的 `blog_slug` 欄
-- M2-02 導覽已定案（`docs/ia/navigation.md`）。M3-01 wireframe 的另一個依賴 M2-04 內容模型（#11）也已完成；M3 實測 en、vi 選單在 1280px 能否放進一列
+- Review M3-01 wireframe（preview 的 `/wireframes`），確認後在 #14 加上 `wireframe-approved`
+- 決定 en、vi header 放不下時的做法：實測 vi 在 1280px 放不下、en 勉強（`docs/design/nav-fit.md`）；「成功案例」移到「資源」後都放得下，是否採用、是否三語統一待決定
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
@@ -78,3 +83,5 @@
 - M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（`seo-checklist` 的 JSON-LD 對照改為連到 `content-model.md`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）
 - M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定。`og:locale` 的 en、vi 值要改成「語言_地區」格式，M7 處理
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
+- M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除；`tokens.css` 的 `--wf-*` 由 M3-02 的正式 token 取代。`@media` 不能用 custom property，斷點 64rem 目前以字面值寫在 media query，機制由 M3-02 決定
+- `docs/design/nav-fit.md` 的量測依賴容器字型與 wireframe 的暫定間距，M3-02 定字型與 token 後重跑 `node scripts/wireframe/nav-fit.mjs`

@@ -1,0 +1,65 @@
+---
+import WfLayout from '../../layouts/WfLayout.astro';
+import WfSection from '../../components/wireframe/WfSection.astro';
+import { templates } from '../../lib/wireframe/ia';
+
+// Every template in templates.csv must have a wireframe page; a missing one fails the build
+const pages = Object.keys(import.meta.glob('./*.astro')).map((p) => p.replace(/^\.\/|\.astro$/g, ''));
+const missing = templates.filter((t) => !pages.includes(t.id)).map((t) => t.id);
+if (missing.length > 0) throw new Error(`wireframe pages missing for templates: ${missing.join(', ')}`);
+---
+
+<WfLayout
+  title="模板 wireframe 索引"
+  description="M3-01 低保真 wireframe 索引：docs/ia/templates.csv 的 11 個模板與導覽，各頁以同一份響應式版面呈現桌機與行動版。"
+>
+  <WfSection title="怎麼看">
+    <ul>
+      <li>每頁上方的黃色區塊是說明，以下才是頁面本身：header、內容區塊、footer</li>
+      <li>灰色虛線框是內容區塊，框內的 <code>欄位</code> 是 <code>docs/ia/content-model.md</code> 的欄位名稱；不放真實文案</li>
+      <li>桌機看 1280px，行動版看 375px；寬度小於 1024px 時切換為行動版版面</li>
+      <li>header、footer 的項目直接讀 <code>docs/ia/navigation.csv</code>；選單展開狀態見導覽頁</li>
+    </ul>
+  </WfSection>
+  <WfSection title="導覽">
+    <p><a href="/wireframes/navigation">header 選單、行動版選單、footer 與 1280px 寬度測試</a></p>
+  </WfSection>
+  <WfSection title="模板">
+    <table>
+      <thead>
+        <tr><th scope="col">模板</th><th scope="col">用途</th><th scope="col">節點數</th></tr>
+      </thead>
+      <tbody>
+        {
+          templates.map((t) => (
+            <tr>
+              <td><a href={`/wireframes/${t.id}`}><code>{t.id}</code></a></td>
+              <td>{t.purpose}</td>
+              <td>{t.nodes.length}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </WfSection>
+</WfLayout>
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--wf-font-size-sm);
+  }
+
+  th,
+  td {
+    padding: var(--space-2);
+    border-block-end: var(--wf-line-width) solid var(--wf-color-fill-strong);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  a {
+    color: var(--color-text);
+  }
+</style>

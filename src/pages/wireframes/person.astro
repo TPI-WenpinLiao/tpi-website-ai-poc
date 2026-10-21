@@ -1,0 +1,58 @@
+---
+import WfLayout from '../../layouts/WfLayout.astro';
+import WfSection from '../../components/wireframe/WfSection.astro';
+import WfBlock from '../../components/wireframe/WfBlock.astro';
+import WfGrid from '../../components/wireframe/WfGrid.astro';
+import WfBreadcrumb from '../../components/wireframe/WfBreadcrumb.astro';
+---
+
+<WfLayout
+  template="person"
+  title="person 模板"
+  description="ESG 顧問個人頁 wireframe：照片、姓名與職稱，接專長、經歷、學歷與證照，最後回到 ESG 顧問服務頁並提供聯絡入口。"
+>
+  <p slot="notes">範例節點：ESG 顧問個人頁（25 位）。照片需確認授權。</p>
+
+  <WfBreadcrumb node="esg-advisor" />
+
+  <WfGrid cols={3} mobile={1}>
+    <WfBlock size="lg" label="照片" fields={['photo']} />
+    <div class="span">
+      <WfBlock size="lg" label="姓名與職稱" fields={['title（h1）', 'jobTitle', 'affiliation']} />
+    </div>
+  </WfGrid>
+
+  <WfSection title="專長">
+    <WfBlock size="sm" label="專長標籤" fields={['expertise']} />
+  </WfSection>
+
+  <WfGrid cols={3} mobile={1}>
+    <WfSection title="經歷">
+      <WfBlock label="清單" fields={['experience']} />
+    </WfSection>
+    <WfSection title="學歷">
+      <WfBlock label="清單" fields={['education']} />
+    </WfSection>
+    <WfSection title="證照">
+      <WfBlock label="清單" fields={['certifications']} />
+    </WfSection>
+  </WfGrid>
+
+  <WfSection title="ESG 顧問團隊">
+    <WfBlock size="sm" label="回到 ESG 永續發展與顧問服務" note="連到上層服務頁的顧問列表；另放「聯絡我們」按鈕" />
+  </WfSection>
+</WfLayout>
+
+<style>
+  .span {
+    display: grid;
+    grid-column: span 2;
+  }
+
+  /* 64rem breakpoint, see tokens.css */
+  @media (max-width: 63.99rem) {
+    .span {
+      grid-column: auto;
+    }
+  }
+</style>

@@ -1,0 +1,42 @@
+---
+// Breadcrumb derived from nodes.csv parents (docs/ia/navigation.md「SEO」)
+import { breadcrumb } from '../../lib/wireframe/ia';
+
+interface Props {
+  node: string;
+}
+
+const trail = breadcrumb(Astro.props.node);
+---
+
+<nav class="wf-breadcrumb" aria-label="麵包屑">
+  <ol>
+    {
+      trail.map((n, i) => (
+        <li>{i < trail.length - 1 ? <a href={n.path}>{n.title}</a> : <span aria-current="page">{n.title}</span>}</li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--wf-space-1) var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--wf-font-size-sm);
+  }
+
+  li + li::before {
+    content: '/';
+    margin-inline-end: var(--space-2);
+    color: var(--wf-color-label);
+  }
+
+  a {
+    color: var(--color-text);
+  }
+</style>

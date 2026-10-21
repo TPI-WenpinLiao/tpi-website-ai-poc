@@ -1,0 +1,114 @@
+---
+// Wireframe footer (docs/ia/navigation.md): 5 columns from navigation.csv, then the bottom row
+// with the copyright notice and the legal pages in the current site's order.
+import { footer, footerBottom } from '../../lib/wireframe/ia';
+---
+
+<footer class="wf-footer">
+  <nav class="columns" aria-label="頁尾選單">
+    {
+      footer.map((col) => (
+        <div class="col">
+          <p class="col-title">{col.label}</p>
+          <ul>
+            {col.children.map((item) => (
+              <li>
+                <a href={item.href}>
+                  {item.label}
+                  {item.external && (<><span aria-hidden="true">↗</span><span class="sr-only">（外部連結）</span></>)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </nav>
+  <div class="bottom">
+    <p class="copyright">© 版權聲明（文字待定）</p>
+    <ul>
+      {
+        footerBottom.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .wf-footer {
+    margin-block-start: var(--wf-space-12);
+    border-block-start: var(--wf-line-width) solid var(--wf-color-line);
+    background: var(--wf-color-fill);
+    font-size: var(--wf-font-size-sm);
+  }
+
+  .columns,
+  .bottom {
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-8);
+  }
+
+  .col-title {
+    margin: 0 0 var(--space-2);
+    font-weight: 700;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .col li a {
+    display: inline-block;
+    padding-block: var(--wf-space-1);
+  }
+
+  a {
+    color: var(--color-text);
+  }
+
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-block-start: var(--wf-line-width) solid var(--wf-color-fill-strong);
+  }
+
+  .bottom p {
+    margin: 0;
+  }
+
+  .bottom ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+  }
+
+  /* 64rem breakpoint, see tokens.css */
+  @media (max-width: 63.99rem) {
+    .columns {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+    }
+
+    .bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

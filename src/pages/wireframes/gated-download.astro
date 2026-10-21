@@ -1,0 +1,43 @@
+---
+import WfLayout from '../../layouts/WfLayout.astro';
+import WfSection from '../../components/wireframe/WfSection.astro';
+import WfBlock from '../../components/wireframe/WfBlock.astro';
+import WfGrid from '../../components/wireframe/WfGrid.astro';
+import WfBreadcrumb from '../../components/wireframe/WfBreadcrumb.astro';
+---
+
+<WfLayout
+  template="gated-download"
+  title="gated-download 模板"
+  description="白皮書與文件索取頁 wireframe：左側封面、摘要與內容重點，右側索取表單；行動版表單排在摘要之後。送出後進入感謝頁取得檔案。"
+>
+  <p slot="notes">範例節點：digiRunner 白皮書。表單欄位取自 <code>docs/research/features.md</code>，端點與檔案位置由 M6 決定。</p>
+
+  <WfBreadcrumb node="whitepaper-digirunner" />
+
+  <WfGrid cols={2} mobile={1}>
+    <div class="stack">
+      <WfBlock size="lg" label="封面" fields={['coverImage']} />
+      <WfBlock size="sm" label="標題與說明" fields={['title（h1）', 'description']} />
+      <WfBlock label="內容重點" fields={['summary']} />
+    </div>
+    <WfBlock
+      size="hero"
+      label="索取表單"
+      fields={['姓名*', '電話*', 'Email*', '公司*', '職稱*', '個資同意']}
+      note="form 為 ai-playbook 時多一個「導入 AI 遇到的問題」複選欄位。送出後到感謝頁取得 file"
+    />
+  </WfGrid>
+
+  <WfSection title="相關產品" note="offeringNode 指向的產品或家族頁">
+    <WfBlock size="sm" label="產品卡片" fields={['offeringNode']} />
+  </WfSection>
+</WfLayout>
+
+<style>
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+import WfLayout from '../../layouts/WfLayout.astro';
+import WfSection from '../../components/wireframe/WfSection.astro';
+import WfBlock from '../../components/wireframe/WfBlock.astro';
+import WfGrid from '../../components/wireframe/WfGrid.astro';
+---
+
+<WfLayout
+  template="utility"
+  title="utility 模板"
+  description="功能頁 wireframe：站內搜尋結果、表單送出後的感謝頁、404 三種狀態。訂閱流程與下載中繼頁沿用同一個單欄版面。"
+>
+  <p slot="notes">功能頁的文案放 i18n 字串檔，行為由 M6 決定（搜尋用 Pagefind）。以下三個狀態在實際網站是三個不同的頁面。</p>
+
+  <WfSection title="狀態一：站內搜尋結果">
+    <WfBlock size="sm" label="搜尋框" fields={['關鍵字']} note="結果頁的 h1 為「搜尋結果」" />
+    <WfBlock size="sm" label="結果數與篩選" note="依內容類型篩選（產品、文章、新聞…），M6 決定" />
+    {[1, 2, 3].map(() => <WfBlock size="sm" label="結果" fields={['title', '摘要', 'URL']} />)}
+  </WfSection>
+
+  <WfSection title="狀態二：感謝頁">
+    <WfBlock label="感謝訊息" fields={['i18n：標題', 'i18n：說明']} note="白皮書索取的感謝頁在這裡提供下載連結" />
+    <WfGrid cols={3} mobile={1}>
+      {[1, 2, 3].map(() => <WfBlock size="sm" label="推薦內容" note="相關文章或產品" />)}
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="狀態三：404">
+    <WfBlock label="找不到頁面" fields={['i18n：標題', 'i18n：說明']} />
+    <WfBlock size="sm" label="搜尋框" />
+    <WfBlock size="sm" label="常用入口" note="產品總覽、產業方案、服務總覽、聯絡我們" />
+  </WfSection>
+</WfLayout>

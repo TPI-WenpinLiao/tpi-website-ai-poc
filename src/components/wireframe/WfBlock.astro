@@ -1,0 +1,81 @@
+---
+// Grey placeholder box: what the block is, which content-model fields feed it, and an optional note
+interface Props {
+  label: string;
+  fields?: string[];
+  note?: string;
+  size?: 'sm' | 'md' | 'lg' | 'hero';
+}
+
+const { label, fields = [], note, size = 'md' } = Astro.props;
+---
+
+<div class:list={['wf-block', size]}>
+  <p class="label">{label}</p>
+  {
+    fields.length > 0 && (
+      <p class="fields">
+        {fields.map((f) => (
+          <code>{f}</code>
+        ))}
+      </p>
+    )
+  }
+  <slot />
+  {note && <p class="note">{note}</p>}
+</div>
+
+<style>
+  .wf-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wf-space-1);
+    min-height: var(--wf-block-min-height);
+    padding: var(--wf-space-3);
+    border: var(--wf-line-width) dashed var(--wf-color-line);
+    border-radius: var(--wf-radius);
+    background: var(--wf-color-fill);
+    color: var(--wf-color-label);
+    font-size: var(--wf-font-size-sm);
+  }
+
+  .sm {
+    min-height: auto;
+  }
+
+  .lg {
+    min-height: calc(var(--wf-block-min-height) * 2);
+  }
+
+  .hero {
+    min-height: var(--wf-hero-min-height);
+    justify-content: center;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .label {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--wf-space-1);
+  }
+
+  code {
+    padding-inline: var(--wf-space-1);
+    border-radius: var(--wf-radius);
+    background: var(--wf-color-fill-strong);
+    color: var(--color-text);
+    font-size: var(--wf-font-size-xs);
+  }
+
+  .note {
+    font-size: var(--wf-font-size-xs);
+  }
+</style>

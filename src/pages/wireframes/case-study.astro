@@ -1,0 +1,54 @@
+---
+import WfLayout from '../../layouts/WfLayout.astro';
+import WfSection from '../../components/wireframe/WfSection.astro';
+import WfBlock from '../../components/wireframe/WfBlock.astro';
+import WfGrid from '../../components/wireframe/WfGrid.astro';
+import WfBreadcrumb from '../../components/wireframe/WfBreadcrumb.astro';
+---
+
+<WfLayout
+  template="case-study"
+  title="case-study 模板"
+  description="成功案例內頁 wireframe：客戶與產業、挑戰、做法與成果，接使用的產品與其他案例。現站沒有內頁，先保留模板位置。"
+>
+  <p slot="notes">
+    範例節點：成功案例內頁。<code>client.disclosed</code> 為 false 時只顯示 <code>industry</code> 與 <code>clientDescription</code>，不顯示客戶名稱與 logo。
+  </p>
+
+  <WfBreadcrumb node="case-study" />
+
+  <WfGrid cols={2} mobile={1}>
+    <WfBlock size="hero" label="標題區" fields={['title（h1）', 'client.name／clientDescription', 'client.logo', 'industry', 'publishedAt']} />
+    <WfBlock size="hero" label="主圖" fields={['coverImage']} />
+  </WfGrid>
+
+  <WfSection title="成果" note="只填客戶授權公開的數字；沒有就不顯示">
+    <WfGrid cols={3} mobile={1}>
+      {[1, 2, 3].map(() => <WfBlock size="sm" label="成果" fields={['results[].value', 'results[].label']} />)}
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="挑戰">
+    <WfBlock label="挑戰" fields={['challenge']} />
+  </WfSection>
+
+  <WfSection title="做法">
+    <WfBlock size="lg" label="做法" fields={['solution', 'Markdown 內文']} />
+  </WfSection>
+
+  <WfSection title="使用的產品與服務" note="offerings">
+    <WfGrid cols={3} mobile={1}>
+      {[1, 2, 3].map(() => <WfBlock size="sm" label="產品卡片" fields={['offering.title', 'offering.description']} />)}
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="其他案例" note="同產業優先">
+    <WfGrid cols={3} mobile={1}>
+      {[1, 2, 3].map(() => <WfBlock label="案例卡片" fields={['client', 'industry', 'title']} />)}
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="CTA">
+    <WfBlock label="聯絡業務" note="連到聯絡我們" />
+  </WfSection>
+</WfLayout>
