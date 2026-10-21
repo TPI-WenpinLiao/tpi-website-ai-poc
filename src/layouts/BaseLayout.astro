@@ -3,17 +3,31 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/tokens.css';
 
+interface OgImage {
+  // Site-relative path or absolute URL
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+}
+
 interface Props {
   title: string;
   description: string;
   lang?: string;
+  // Falls back to the site-wide default (content-model.md `ogImage`), rendered by
+  // scripts/design/og-image.mjs
+  image?: OgImage;
 }
 
-const { title, description, lang = 'zh-TW' } = Astro.props;
+const DEFAULT_IMAGE: OgImage = { src: '/og/default.png', width: 1200, height: 630, alt: 'TPIsoftware 昕力資訊' };
+
+const { title, description, lang = 'zh-TW', image = DEFAULT_IMAGE } = Astro.props;
 // build.format 'file' makes pathname end in .html; canonical URLs have no extension or trailing slash (ADR 0002)
 const pathname = Astro.url.pathname.replace(/\.html$/, '').replace(/(^|\/)index$/, '') || '/';
 const canonical = new URL(pathname, Astro.site).href;
 const ogLocale = lang.replace('-', '_');
+const imageUrl = new URL(image.src, Astro.site).href;
 ---
 
 <!doctype html>
@@ -31,9 +45,15 @@ const ogLocale = lang.replace('-', '_');
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={ogLocale} />
     <meta property="og:site_name" content="TPIsoftware 昕力資訊" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content={String(image.width)} />
+    <meta property="og:image:height" content={String(image.height)} />
+    <meta property="og:image:alt" content={image.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={image.alt} />
   </head>
   <body>
     <slot />
