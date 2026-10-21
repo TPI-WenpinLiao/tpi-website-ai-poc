@@ -13,7 +13,7 @@
 | M0 基礎建設 | 完成 |
 | M1 盤點與研究 | 進行中（剩 M1-06 收尾） |
 | M2 資訊架構 | 進行中 |
-| M3 設計系統 | 未開始 |
+| M3 設計系統 | 進行中 |
 | M4 開發骨架 | 未開始 |
 | M5 內容遷移 | 未開始 |
 | M6 功能 | 未開始 |
@@ -54,12 +54,16 @@
 - 導覽第四層節點與 footer 法務位置對齊完成（#64）：法務定為 footer 最底列，`navigation.mjs` 檢查不限深度
 - footer 最底列的法務順序改成現站順序完成（#77）：資訊安全政策、隱私權政策、使用條款、免責聲明
 
+### M3 設計系統
+
+- M3-01 各模板低保真 wireframe（#14，PR #80），階段一，等待 wireframe-approved
+
 ## 下一步
 
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
 - M2-06 M2 收尾（#13）的依賴都已完成，可以開始
 - M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
-- M2-02 導覽已定案（`docs/ia/navigation.md`）。M3-01 wireframe 的另一個依賴 M2-04 內容模型（#11）也已完成；M3 實測 en、vi 選單在 1280px 能否放進一列
+- Review M3-01 wireframe（PR #80），回覆 PR 的「待確認問題」，特別是 en、vi header 放不下的處理方式
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
