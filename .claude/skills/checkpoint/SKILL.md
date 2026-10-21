@@ -25,7 +25,7 @@ description: 實作中途保存進度時使用（/checkpoint）。把目前的�
 - `needs-input` 的內容要由使用者提供
 - `/issue-ship` 的審查迴圈跑滿 3 輪，最新一輪的結論行仍不是全部 0
 
-`needs-design` 階段一出貨後的停下不走這裡，照 `CLAUDE.md` 的兩階段流程。
+`needs-design` 階段一出貨後的停下不走這裡，照 [`issue-ship` 的「`needs-design` 階段一」](../issue-ship/SKILL.md#needs-design-階段一)。
 
 做法：
 
@@ -89,7 +89,7 @@ wip: 階段 <k> 完成：<摘要>（#N）
 - 階段完成時寫 `完成`；階段做到一半、停下等回覆時寫 `進行中`
 - commit 後、push 前跑 `node scripts/checkpoint/status.mjs <N>`（審查迴圈停下時的 commit 不寫階段，跳過這項檢查，見 [`issue-ship` 第 7 步](../issue-ship/SKILL.md#7-審查迴圈)），確認輸出的狀態符合預期；不符時 `git commit --amend` 修正 message（還沒 push，不影響別人）。`wip:` commit 的 message 不符合這個格式時 script 會失敗，接續的 session 也會停下
 
-push 方式與重試規則同 [`issue-ship` 第 5 步](../issue-ship/SKILL.md#5-push)。`wip:` commit 會在 `/issue-ship` 時合併成一個 commit，不會進入 `main`。
+push 方式與重試規則同 [`issue-ship` 第 5 步](../issue-ship/SKILL.md#5-push)。開 PR 一律經過 `/issue-ship`（`needs-design` 階段一也是），`wip:` commit 由 [`issue-ship` 第 4 步](../issue-ship/SKILL.md#4-commit)在開 PR 前合併成一個 commit，不會進入 `main`。
 
 branch 已經有 open PR 時（例如 `needs-design` 階段二），PR 開了就不能再改寫歷史，`wip:` 合併不掉。這時 commit message 的 `wip` 換成 issue 的 type，例如 `feat: 階段 2 完成：<摘要>（#N）`，script 一樣能推算；進度檔照寫，`/issue-ship` 收尾時刪除。
 

@@ -123,7 +123,7 @@ npm run check                # 記錄 exit code；失敗時保留最後 30 行�
 - **`status.md` 同步**：第 4 步找到的不一致與修法（沒有就省略）
 - **需使用者決定**：有推薦的選項時寫出推薦與理由，不要只列選項
 - **branch**：使用第 1 步決定的 branch
-- **收尾**：最後一個階段完成後執行 `/issue-ship`
+- **收尾**：最後一個階段完成後執行 `/issue-ship`。`needs-design` 階段一也一樣，走到開 draft PR 後停下，見 [`issue-ship` 的「`needs-design` 階段一」](../issue-ship/SKILL.md#needs-design-階段一)。計畫不另列 push、開 PR 的階段：自己開 PR 會跳過 `issue-ship` 第 4 步的 `wip:` 合併
 
 ### 自動模式
 

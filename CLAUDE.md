@@ -54,7 +54,7 @@ Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）
 1. 每個 session 對應一張 issue。以 `/issue-start <N>` 開始：讀 issue、本檔、`docs/status.md`，對照 `status.md` 與 GitHub 實際狀態，檢查依賴與環境，提出計畫。issue 沒有 `needs-design`、`needs-input`，計畫也沒有待使用者決定的事項時，計畫貼到 issue 留言後直接實作（自動模式）；否則以 Plan 模式等使用者確認。計畫拆成階段，每個階段完成時與停下等回覆前執行 `/checkpoint`（WIP commit 加進度檔）；session 中斷後再執行 `/issue-start <N>` 從進度檔接續。
 2. 若 `node_modules` 不存在或 SessionStart hook 回報安裝失敗，先執行 `npm ci` 並回報結果，不要直接開始實作。
 3. Branch：雲端 session 使用 session 指定的 branch，接續既有 PR 時用 PR 的 head branch（見 `issue-start` 第 1 步）；本機開發用 `<type>/<issue-number>-<slug>`，type 取 `feat` / `fix` / `content` / `docs` / `chore`。PR 標題以 issue 的 `[Mx-xx]` 或 `[chore]` 前綴開頭。
-4. 最後一個階段完成後自動執行 `/issue-ship`：開 draft PR，跑審查迴圈直到符合完成條件，再轉 ready 並在 PR 貼合併判斷摘要。合併由使用者決定。PR body 必含：`Closes #N`、變更摘要、驗收方式、preview 檢查重點（要看哪些頁面、哪些斷點）。需要人決定時依 `checkpoint` skill 的「停下找人」處理。
+4. 最後一個階段完成後自動執行 `/issue-ship`（`needs-design` 階段一也是，見下方兩階段流程）：開 draft PR，跑審查迴圈直到符合完成條件，再轉 ready 並在 PR 貼合併判斷摘要。合併由使用者決定。PR body 必含：`Closes #N`、變更摘要、驗收方式、preview 檢查重點（要看哪些頁面、哪些斷點）。需要人決定時依 `checkpoint` skill 的「停下找人」處理。
 5. 開 PR 前 `npm run check` 必須通過；checkpoint 的 push 不跑，規則見 `checkpoint` skill。不得 push `main`。
 6. 找下一張可開始的 issue 用 `/next-issue`。
 
@@ -74,13 +74,13 @@ Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）
 
 **階段一：視覺與結構**
 - 只做版面、視覺與元件結構
-- push 後開 **draft PR**，body 列出設計決策與待確認問題
+- 最後一個階段完成後執行 `/issue-ship`，走到開 **draft PR** 為止，body 列出設計決策與待確認問題。做法見 `.claude/skills/issue-ship/SKILL.md` 的「`needs-design` 階段一」；計畫不另列 push、開 PR 的階段
 - 停下，告知使用者等待設計確認。**不得自行進入階段二**
 
 **階段二：完成度**
 - 使用者告知已加上 `design-approved` 後才繼續
 - 補齊 SEO、無障礙、內容完整度
-- 跑 `/issue-ship` 的審查迴圈，符合完成條件後將 PR 轉為 ready for review
+- 再執行一次 `/issue-ship`（不另開 PR），跑審查迴圈，符合完成條件後將 PR 轉為 ready for review
 
 M2、M3 的關卡 issue 改用對應的 label（`ia-approved`、`wireframe-approved`、`design-approved`），流程相同。
 
