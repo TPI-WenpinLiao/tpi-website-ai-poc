@@ -21,7 +21,7 @@ flowchart TD
   D --> E{開發人員確認計畫}
   E -->|調整| D
   E -->|確認| F{issue 有 needs-design?}
-  F -->|否| G[實作 → /issue-ship<br/>npm run check → 開 ready PR]
+  F -->|否| G[實作，每個階段 /checkpoint<br/>→ /issue-ship<br/>npm run check → 開 ready PR]
   F -->|是| H[階段一：視覺與結構<br/>/issue-ship 開 draft PR<br/>列出設計決策與待確認問題]
   H --> P[Claude 停下等待<br/>人工看 Cloudflare preview]
   P -->|要修改：在 session 告訴 Claude| H
@@ -43,7 +43,7 @@ flowchart TD
    - **錯誤回報**：頁面或功能異常
    - **Milestone 任務**：規劃中的 milestone 工作
 2. issue 建立後會自動出現「在 Claude Code 開啟」連結，點擊即以 `tpi-website-ai-poc` 環境開啟雲端 session
-3. 之後的流程（`/issue-start`、`/issue-ship`、`/pr-review`、`/next-issue`）見 [docs/workflow.md](docs/workflow.md)
+3. 之後的流程（`/issue-start`、`/checkpoint`、`/issue-ship`、`/pr-review`、`/next-issue`）見 [docs/workflow.md](docs/workflow.md)
 
 ## Labels
 
@@ -74,7 +74,7 @@ npm run dev
 npm run check
 ```
 
-`npm run check` 依序執行 `astro check` → build → html-validate → Lighthouse CI（門檻：SEO = 1，其餘 ≥ 0.95；本機需要 Chrome）。
+`npm run check` 依序執行 `scripts/` 的測試 → `astro check` → build → html-validate → Lighthouse CI（門檻：SEO = 1，其餘 ≥ 0.95；本機需要 Chrome）。
 
 ## 首次設定
 

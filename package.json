@@ -10,7 +10,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check && astro build && npm run validate:html && npm run lighthouse",
+    "check": "npm run test:scripts && astro check && astro build && npm run validate:html && npm run lighthouse",
+    "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
     "validate:html": "html-validate \"dist/**/*.html\"",
     "lighthouse": "node scripts/lhci-prepare.mjs && lhci autorun"
   },
