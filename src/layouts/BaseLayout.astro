@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
 import '../styles/tokens.css';
 
 interface Props {
@@ -47,6 +48,12 @@ const ogLocale = lang.replace('-', '_');
     line-height: var(--line-height-base);
     color: var(--color-text);
     background: var(--color-bg);
+  }
+
+  /* Semantic tokens switch on any data-surface="dark" element; give it the matching paint */
+  [data-surface='dark'] {
+    background: var(--color-bg);
+    color: var(--color-text);
   }
 
   /* One focus style for every interactive element; the offset keeps the ring on the surrounding

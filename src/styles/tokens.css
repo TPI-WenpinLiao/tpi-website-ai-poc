@@ -1,84 +1,101 @@
 /*
  * Design tokens (M3-02). Rules: .claude/skills/design-system/SKILL.md
  *
- * Two layers:
- * - Primitives (--purple-*, --orange-*, --neutral-*, --red-*, --green-*): raw color values. Only
- *   referenced inside this file; components never use them.
- * - Semantic tokens (--color-*, --font-*, --space-*, --radius-*, ...): what components use.
+ * The site is a scene with depth: narrative pages (home, products, solutions) sit on the dark
+ * surface over the 3D scroll scene (M3-07); reading pages (blog, legal) use the light surface.
+ * `:root` is the light surface; any element with data-surface="dark" switches every semantic color
+ * token below it, so components work on both without variants.
  *
- * Brand colors come from the current site's CSS (purple #662e8d, orange #ff6329). Text/background
- * pairs are checked against WCAG 2.2 AA by scripts/design/contrast.mjs (npm run check:design).
- * Breakpoints can't be custom properties; they live in src/styles/media.css as @custom-media.
+ * Layers:
+ * - Primitives (--purple-*, --magenta-*, --orange-*, --ink-*, --red-*, --green-*): raw values,
+ *   only referenced inside this file.
+ * - Semantic tokens (--color-*, --glass-*, --glow-*, --gradient-*, --shadow-*): what components use.
+ * - Scales (--font-size-*, --space-*, --radius-*, --duration-*, ...): used directly.
+ *
+ * Brand colors come from the current site's CSS: purple #662e8d, magenta #a61ebc / #b824d1,
+ * orange #ff6329. Contrast for both surfaces is checked by scripts/design/contrast.mjs
+ * (npm run check:design). Breakpoints live in src/styles/media.css as @custom-media.
  */
 :root {
   /* Primitives: brand purple. 700 is the current site's primary color. */
   --purple-50: #f6f1fa;
   --purple-100: #ebdff3;
-  --purple-200: #d6bfe7;
-  --purple-300: #b996d4;
+  --purple-200: #d9c4f2;
+  --purple-300: #bf9de8;
+  --purple-400: #a277d6;
   --purple-500: #7d45a3;
   --purple-700: #662e8d;
   --purple-800: #4f2370;
   --purple-900: #381850;
 
-  /* Primitives: accent orange. 500 is the current site's accent; it fails 4.5:1 on white, so text
-     and filled controls use 700. */
+  /* Primitives: magenta, the middle of the energy gradient */
+  --magenta-400: #d55ae9;
+  --magenta-500: #b824d1;
+
+  /* Primitives: orange, the signal color of data flow. 500 fails 4.5:1 on white, so light-surface
+     text uses 700. */
   --orange-50: #fff4ee;
   --orange-100: #ffe4d6;
   --orange-300: #ff9a6e;
+  --orange-400: #ff7a45;
   --orange-500: #ff6329;
   --orange-700: #b83a0b;
+  --orange-950: #2b140a;
 
-  /* Primitives: neutrals and status */
-  --neutral-0: #ffffff;
-  --neutral-50: #f7f7f8;
-  --neutral-100: #eeeef0;
-  --neutral-200: #dedde2;
-  --neutral-300: #c4c3ca;
-  --neutral-500: #74737d;
-  --neutral-600: #5a5962;
-  --neutral-700: #43424a;
-  --neutral-900: #1b1a1f;
+  /* Primitives: ink, purple-tinted neutrals from paper white to the scene's near black */
+  --ink-0: #ffffff;
+  --ink-50: #f6f5fa;
+  --ink-100: #ecebf3;
+  --ink-200: #dcdae6;
+  --ink-300: #b9b5cc;
+  --ink-400: #8d88a6;
+  --ink-500: #6c6785;
+  --ink-600: #534e69;
+  --ink-700: #3a3550;
+  --ink-800: #221d33;
+  --ink-850: #1a1628;
+  --ink-900: #120f1d;
+  --ink-950: #0a0812;
+
+  /* Primitives: status */
   --red-50: #fdecec;
+  --red-300: #ff8a80;
   --red-700: #b42318;
+  --red-950: #2a1214;
   --green-50: #ecf6ec;
+  --green-300: #7fd88a;
   --green-700: #22672a;
+  --green-950: #0f2414;
 
   /* Color: text */
-  --color-text: var(--neutral-900);
-  --color-text-muted: var(--neutral-600);
-  --color-text-inverse: var(--neutral-0);
-  --color-text-inverse-muted: var(--purple-100);
+  --color-text: var(--ink-900);
+  --color-text-muted: var(--ink-600);
   --color-text-brand: var(--purple-700);
   --color-text-accent: var(--orange-700);
 
   /* Color: surfaces */
-  --color-bg: var(--neutral-0);
-  --color-bg-subtle: var(--neutral-50);
-  --color-bg-muted: var(--neutral-100);
-  --color-bg-brand: var(--purple-700);
-  --color-bg-brand-strong: var(--purple-900);
+  --color-bg: var(--ink-0);
+  --color-bg-subtle: var(--ink-50);
+  --color-bg-muted: var(--ink-100);
   --color-bg-brand-subtle: var(--purple-50);
   --color-bg-accent-subtle: var(--orange-50);
 
-  /* Color: lines. border is decorative (cards, dividers); border-strong marks form controls and
-     must reach 3:1 against the background. */
-  --color-border: var(--neutral-200);
-  --color-border-strong: var(--neutral-500);
+  /* Color: lines. border is decorative; border-strong marks form controls (3:1). */
+  --color-border: var(--ink-200);
+  --color-border-strong: var(--ink-500);
   --color-border-brand: var(--purple-200);
+  --color-grid-line: rgb(18 15 29 / 0.06);
 
   /* Color: interactive */
   --color-action: var(--purple-700);
   --color-action-hover: var(--purple-800);
-  --color-action-text: var(--neutral-0);
+  --color-action-text: var(--ink-0);
   --color-action-subtle-hover: var(--purple-100);
   --color-link: var(--purple-700);
   --color-link-hover: var(--purple-900);
-  --color-link-inverse: var(--neutral-0);
-  --color-disabled-bg: var(--neutral-100);
-  --color-disabled-text: var(--neutral-500);
+  --color-disabled-bg: var(--ink-100);
+  --color-disabled-text: var(--ink-500);
   --color-focus: var(--orange-700);
-  --color-focus-inverse: var(--orange-300);
 
   /* Color: decoration only (never text or the only cue of a control) */
   --color-accent: var(--orange-500);
@@ -91,9 +108,31 @@
   --color-success: var(--green-700);
   --color-success-bg: var(--green-50);
 
-  /* Typography. Latin and Vietnamese use self-hosted Inter (@fontsource-variable/inter, loaded in
-     BaseLayout); Chinese falls back to system fonts, no CJK webfont. */
+  /* Glass: translucent panels floating over the scene. --scene-worst is the backdrop color that
+     gives the lowest contrast on this surface; contrast.mjs composites glass over it. */
+  --glass-bg: rgb(255 255 255 / 0.82);
+  --glass-border: rgb(18 15 29 / 0.08);
+  --glass-blur: 16px;
+  --scene-worst: var(--ink-950);
+
+  /* Light and energy. The gradient is decoration only: lines, borders, the scroll progress bar. */
+  --gradient-energy: linear-gradient(100deg, var(--purple-500), var(--magenta-500) 55%, var(--orange-500));
+  --glow-brand: 0 8px 24px rgb(102 46 141 / 0.22);
+  --glow-accent: 0 8px 24px rgb(255 99 41 / 0.22);
+
+  /* Depth: three elevations above the page. Dark surface swaps shadows for rim light. */
+  --shadow-sm: 0 1px 2px rgb(18 15 29 / 0.08);
+  --shadow-md: 0 6px 16px rgb(18 15 29 / 0.1);
+  --shadow-lg: 0 18px 40px rgb(18 15 29 / 0.14);
+  --perspective: 75rem;
+  --tilt: 3deg;
+  --lift: -0.375rem;
+
+  /* Typography. Latin and Vietnamese use self-hosted Inter; Chinese falls back to system fonts.
+     Mono (JetBrains Mono) is for indices, eyebrows and data labels only. Both are imported in
+     BaseLayout. */
   --font-sans: "Inter Variable", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -106,16 +145,19 @@
   --font-size-xl: 1.25rem;
   --font-size-h4: 1.125rem;
   --font-size-h3: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-  --font-size-h2: clamp(1.5rem, 1.3rem + 1vw, 2rem);
-  --font-size-h1: clamp(1.75rem, 1.4rem + 1.75vw, 2.75rem);
-  --font-size-display: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+  --font-size-h2: clamp(1.75rem, 1.3rem + 2vw, 2.75rem);
+  --font-size-h1: clamp(2.25rem, 1.5rem + 3.5vw, 4rem);
+  --font-size-display: clamp(2.75rem, 1.5rem + 5.5vw, 6rem);
 
-  --line-height-tight: 1.25;
+  --line-height-display: 1.05;
+  --line-height-tight: 1.2;
   --line-height-snug: 1.45;
   --line-height-base: 1.7;
-  --letter-spacing-eyebrow: 0.08em;
+  --letter-spacing-display: -0.035em;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-mono: 0.08em;
 
-  /* Spacing: 4px scale. Components may use the scale directly. */
+  /* Spacing: 4px scale. */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -126,40 +168,43 @@
   --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
-  --space-section: clamp(3rem, 2rem + 4vw, 6rem);
+  --space-24: 6rem;
+  --space-section: clamp(4rem, 2rem + 8vw, 9rem);
   --space-gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
 
-  /* Shape */
+  /* Shape and lines */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
   --radius-pill: 62.5rem;
   --border-width: 1px;
   --border-width-strong: 2px;
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;
   --underline-offset: 0.2em;
+  --grid-size: 4rem;
+  --marker-size: 0.75rem;
 
-  /* Elevation (shadow color is neutral-900 at low alpha) */
-  --shadow-sm: 0 1px 2px rgb(27 26 31 / 0.08);
-  --shadow-md: 0 4px 12px rgb(27 26 31 / 0.1);
-  --shadow-lg: 0 12px 32px rgb(27 26 31 / 0.14);
-
-  /* Motion. Zeroed under prefers-reduced-motion below. */
+  /* Motion. Reveals and parallax use CSS scroll-driven animations (no client JS) and are
+     disabled under prefers-reduced-motion, where durations also drop to zero. */
   --duration-fast: 120ms;
   --duration-base: 200ms;
+  --duration-slow: 480ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --reveal-distance: 2rem;
+  --reveal-range: entry 10% cover 30%;
 
   /* Layout */
   --content-max-width: 72rem;
-  --reading-max-width: 48rem;
+  --reading-max-width: 46rem;
   --touch-target: 2.75rem;
-  --icon-size: 1.25em;
+  --progress-height: 3px;
 
   /*
    * Wireframe-only tokens (M3-01). Used by src/components/wireframe and src/pages/wireframes;
-   * removed with the wireframe pages after M4-04. Values with a real equivalent point to it; the
-   * grey fills and the note color stay wireframe-specific on purpose.
+   * removed with the wireframe pages after M4-04.
    */
   --wf-color-fill: #eef0f2;
   --wf-color-fill-strong: #d5d9de;
@@ -167,7 +212,7 @@
   --wf-color-label: #3d444d;
   --wf-color-note-bg: #fff6d6;
   --wf-color-note-line: #8a6d00;
-  --wf-color-inverse: var(--color-text-inverse);
+  --wf-color-inverse: var(--ink-0);
   --wf-font-size-sm: var(--font-size-sm);
   --wf-font-size-xs: var(--font-size-xs);
   --wf-font-size-h2: 1.375rem;
@@ -181,12 +226,67 @@
   --wf-hero-min-height: 18rem;
   --wf-touch-target: var(--touch-target);
   --wf-mobile-frame: 23.4375rem; /* 375px */
-  --wf-reading-width: var(--reading-max-width);
+  --wf-reading-width: 48rem;
+}
+
+/* Dark surface: the scene the 3D scroll effects play on. Only semantic tokens change. */
+[data-surface="dark"] {
+  --color-text: var(--ink-50);
+  --color-text-muted: var(--ink-300);
+  --color-text-brand: var(--purple-300);
+  --color-text-accent: var(--orange-400);
+
+  --color-bg: var(--ink-950);
+  --color-bg-subtle: var(--ink-900);
+  --color-bg-muted: var(--ink-850);
+  --color-bg-brand-subtle: var(--purple-900);
+  --color-bg-accent-subtle: var(--orange-950);
+
+  --color-border: var(--ink-700);
+  --color-border-strong: var(--ink-400);
+  --color-border-brand: var(--purple-700);
+  --color-grid-line: rgb(255 255 255 / 0.06);
+
+  --color-action: var(--purple-300);
+  --color-action-hover: var(--purple-200);
+  --color-action-text: var(--ink-950);
+  --color-action-subtle-hover: var(--ink-800);
+  --color-link: var(--purple-300);
+  --color-link-hover: var(--purple-200);
+  --color-disabled-bg: var(--ink-800);
+  --color-disabled-text: var(--ink-400);
+  --color-focus: var(--orange-400);
+
+  --color-accent: var(--orange-500);
+  --color-brand: var(--purple-300);
+  --color-brand-soft: var(--purple-700);
+
+  --color-error: var(--red-300);
+  --color-error-bg: var(--red-950);
+  --color-success: var(--green-300);
+  --color-success-bg: var(--green-950);
+
+  --glass-bg: rgb(18 15 29 / 0.85);
+  --glass-border: rgb(255 255 255 / 0.1);
+  --scene-worst: var(--ink-0);
+
+  --gradient-energy: linear-gradient(100deg, var(--purple-400), var(--magenta-400) 55%, var(--orange-400));
+  --glow-brand: 0 0 0 1px rgb(191 157 232 / 0.35), 0 0 32px rgb(184 36 209 / 0.35);
+  --glow-accent: 0 0 0 1px rgb(255 122 69 / 0.4), 0 0 32px rgb(255 99 41 / 0.35);
+
+  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --shadow-md: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 12px 32px rgb(0 0 0 / 0.45);
+  --shadow-lg: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 24px 56px rgb(0 0 0 / 0.55);
+
+  color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
     --duration-fast: 0ms;
     --duration-base: 0ms;
+    --duration-slow: 0ms;
+    --tilt: 0deg;
+    --lift: 0;
   }
 }
