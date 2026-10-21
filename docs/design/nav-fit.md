@@ -1,15 +1,19 @@
 # header 選單寬度實測（M3-01）
 
-確認 header 第一層 6 項加上工具列（搜尋、語系切換、聯絡我們），en、vi 在 1280px 寬度能否放進一列。對應 [`navigation.md`](../ia/navigation.md)「待確認」。
+確認 header 第一層加上工具列（搜尋、語系切換、聯絡我們），en、vi 在 1280px 寬度能否放進一列。結果用來決定 [`navigation.md`](../ia/navigation.md)「個別項目的決定」的「成功案例」位置。
 
 ## 結論
 
-- zh-TW 放得下，餘裕 269px 以上
-- en 只有在 Arial 寬度的字型下放得下（餘裕 15–54px）；「產業方案」用較長的譯名（`en-long`）或較寬的字型就放不下
-- vi 在三種字型都放不下（差 23–148px），主因是「Câu Chuyện Thành Công」
-- 依 `navigation.md` 的備案，把「成功案例」移到「資源」底下（`*-long-fallback`）後，en、vi 最壞情況仍有 65px 以上餘裕
+第一層原本 6 項（產品｜產業方案｜服務｜成功案例｜資源｜公司）時的量測結果（2026-10-21，同樣條件）：
 
-是否採用備案、只用在 en、vi 還是三語統一，列在 M3-01 PR 待使用者決定；決定前不改 `navigation.csv`。
+| 標籤組 | 餘裕（px） | 結果 |
+|---|---|---|
+| zh-TW | 269～287 | 放得下 |
+| en | -22～54 | 只有 Liberation Sans、Inter 放得下 |
+| en-long | -88～-4 | 放不下 |
+| vi | -107～-23 | 放不下，主因是「Câu Chuyện Thành Công」 |
+
+依 `navigation.md` 原本寫好的備案，使用者於 2026-10-21 決定把「成功案例」移到「資源」底下，三語統一。第一層剩 5 項，下方自動產生的段落是改完後的量測：en、vi 最壞情況（`*-long` 搭配偏寬的 DejaVu Sans）仍有 65px 以上餘裕。
 
 ## 量測條件
 
@@ -39,39 +43,31 @@ node scripts/wireframe/nav-fit.mjs --check   # 只比對，不寫檔；過期或
 
 | 標籤組 | 字型 | 需要寬度 | 可用寬度 | 餘裕 | 放得下 |
 |---|---|--:|--:|--:|---|
-| `zh-TW` | Liberation Sans | 833 | 1120 | 287 | ✅ |
-| `en` | Liberation Sans | 1066 | 1120 | 54 | ✅ |
-| `en-long` | Liberation Sans | 1124 | 1120 | -4 | ❌ |
-| `vi` | Liberation Sans | 1143 | 1120 | -23 | ❌ |
-| `vi-long` | Liberation Sans | 1179 | 1120 | -59 | ❌ |
-| `en-long-fallback` | Liberation Sans | 981 | 1120 | 139 | ✅ |
-| `vi-long-fallback` | Liberation Sans | 970 | 1120 | 150 | ✅ |
-| `zh-TW` | Inter | 837 | 1120 | 283 | ✅ |
-| `en` | Inter | 1105 | 1120 | 15 | ✅ |
-| `en-long` | Inter | 1167 | 1120 | -47 | ❌ |
-| `vi` | Inter | 1181 | 1120 | -61 | ❌ |
-| `vi-long` | Inter | 1219 | 1120 | -99 | ❌ |
-| `en-long-fallback` | Inter | 1017 | 1120 | 103 | ✅ |
-| `vi-long-fallback` | Inter | 1001 | 1120 | 119 | ✅ |
-| `zh-TW` | DejaVu Sans | 851 | 1120 | 269 | ✅ |
-| `en` | DejaVu Sans | 1142 | 1120 | -22 | ❌ |
-| `en-long` | DejaVu Sans | 1208 | 1120 | -88 | ❌ |
-| `vi` | DejaVu Sans | 1227 | 1120 | -107 | ❌ |
-| `vi-long` | DejaVu Sans | 1268 | 1120 | -148 | ❌ |
-| `en-long-fallback` | DejaVu Sans | 1055 | 1120 | 65 | ✅ |
-| `vi-long-fallback` | DejaVu Sans | 1042 | 1120 | 78 | ✅ |
+| `zh-TW` | Liberation Sans | 741 | 1120 | 379 | ✅ |
+| `en` | Liberation Sans | 924 | 1120 | 196 | ✅ |
+| `en-long` | Liberation Sans | 981 | 1120 | 139 | ✅ |
+| `vi` | Liberation Sans | 934 | 1120 | 186 | ✅ |
+| `vi-long` | Liberation Sans | 970 | 1120 | 150 | ✅ |
+| `zh-TW` | Inter | 745 | 1120 | 375 | ✅ |
+| `en` | Inter | 956 | 1120 | 164 | ✅ |
+| `en-long` | Inter | 1017 | 1120 | 103 | ✅ |
+| `vi` | Inter | 963 | 1120 | 157 | ✅ |
+| `vi-long` | Inter | 1001 | 1120 | 119 | ✅ |
+| `zh-TW` | DejaVu Sans | 759 | 1120 | 361 | ✅ |
+| `en` | DejaVu Sans | 989 | 1120 | 131 | ✅ |
+| `en-long` | DejaVu Sans | 1055 | 1120 | 65 | ✅ |
+| `vi` | DejaVu Sans | 1001 | 1120 | 119 | ✅ |
+| `vi-long` | DejaVu Sans | 1042 | 1120 | 78 | ✅ |
 
 寬度單位為 CSS px。需要寬度是 logo 左緣到最後一個工具列按鈕右緣的距離。
 
 標籤：
 
-- `zh-TW`：產品｜產業方案｜服務｜成功案例｜資源｜公司｜中文｜聯絡我們
-- `en`：Products｜Industries｜Services｜Success Stories｜Resources｜Company｜English｜Contact Us
-- `en-long`：Products｜Industry Solutions｜Services｜Success Stories｜Resources｜Company｜English｜Contact Us
-- `vi`：Sản Phẩm｜Giải pháp ngành｜Dịch Vụ｜Câu Chuyện Thành Công｜Nguồn｜Công Ty｜Tiếng Việt｜Liên Hệ
-- `vi-long`：Sản Phẩm｜Giải pháp theo ngành｜Dịch Vụ｜Câu Chuyện Thành Công｜Nguồn｜Công Ty｜Tiếng Việt｜Liên Hệ
-- `en-long-fallback`：Products｜Industry Solutions｜Services｜Resources｜Company｜English｜Contact Us
-- `vi-long-fallback`：Sản Phẩm｜Giải pháp theo ngành｜Dịch Vụ｜Nguồn｜Công Ty｜Tiếng Việt｜Liên Hệ
+- `zh-TW`：產品｜產業方案｜服務｜資源｜公司｜中文｜聯絡我們
+- `en`：Products｜Industries｜Services｜Resources｜Company｜English｜Contact Us
+- `en-long`：Products｜Industry Solutions｜Services｜Resources｜Company｜English｜Contact Us
+- `vi`：Sản Phẩm｜Giải pháp ngành｜Dịch Vụ｜Nguồn｜Công Ty｜Tiếng Việt｜Liên Hệ
+- `vi-long`：Sản Phẩm｜Giải pháp theo ngành｜Dịch Vụ｜Nguồn｜Công Ty｜Tiếng Việt｜Liên Hệ
 
 ### 水平捲動
 

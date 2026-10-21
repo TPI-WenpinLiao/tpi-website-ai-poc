@@ -14,7 +14,6 @@ interface Props {
 }
 
 const { labels = zhTW, navLabel = '主選單', fit = false } = Astro.props;
-const items = header.filter((h) => !labels.omit?.includes(h.key));
 const home = utility.find((u) => u.key === 'home');
 const contact = utility.find((u) => u.key === 'contact');
 ---
@@ -25,7 +24,7 @@ const contact = utility.find((u) => u.key === 'contact');
     <nav class="primary" aria-label={navLabel}>
       <ul>
         {
-          items.map((item) => (
+          header.map((item) => (
             <li>
               {item.children.length > 0 ? (
                 <button type="button" aria-expanded="false">

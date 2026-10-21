@@ -13,8 +13,6 @@ export interface HeaderLabels {
   contact: string;
   search: string;
   menu: string;
-  // First-level keys left out, to measure the fallback in navigation.md「待確認」
-  omit?: string[];
 }
 
 const util = (key: string) => {
@@ -40,7 +38,6 @@ const en: HeaderLabels = {
     產品: 'Products',
     產業方案: 'Industries',
     服務: 'Services',
-    'success-stories': 'Success Stories',
     資源: 'Resources',
     公司: 'Company',
   },
@@ -57,7 +54,6 @@ const vi: HeaderLabels = {
     產品: 'Sản Phẩm',
     產業方案: 'Giải pháp ngành',
     服務: 'Dịch Vụ',
-    'success-stories': 'Câu Chuyện Thành Công',
     資源: 'Nguồn',
     公司: 'Công Ty',
   },
@@ -67,18 +63,10 @@ const vi: HeaderLabels = {
   menu: 'Menu',
 };
 
-const sets: HeaderLabels[] = [
+export const navFitSets: HeaderLabels[] = [
   zhTW,
   en,
   { ...en, id: 'en-long', items: { ...en.items, 產業方案: 'Industry Solutions' } },
   vi,
   { ...vi, id: 'vi-long', items: { ...vi.items, 產業方案: 'Giải pháp theo ngành' } },
-];
-
-// Fallback from navigation.md: 成功案例 moves under 資源, measured on the long (worst-case) sets
-export const navFitSets: HeaderLabels[] = [
-  ...sets,
-  ...sets
-    .filter((s) => s.id.endsWith('-long'))
-    .map((s) => ({ ...s, id: s.id.replace('-long', '-long-fallback'), omit: ['success-stories'] })),
 ];

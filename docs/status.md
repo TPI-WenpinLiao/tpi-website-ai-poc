@@ -55,14 +55,13 @@
 
 ### M3 設計系統
 
-- M3-01 wireframe（#14），階段一，等待 wireframe-approved：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`
+- M3-01 wireframe（#14），階段一，等待 wireframe-approved：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 en、vi 放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
 
 ## 下一步
 
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
 - M2-05 redirect map（#12）的依賴（#8、#10）都已完成，可以開始；轉址規則依 ADR 0002，blog 文章的新 slug 用 `docs/ia/page-map.csv` 的 `blog_slug` 欄
 - Review M3-01 wireframe（preview 的 `/wireframes`），確認後在 #14 加上 `wireframe-approved`
-- 決定 en、vi header 放不下時的做法：實測 vi 在 1280px 放不下、en 勉強（`docs/design/nav-fit.md`）；「成功案例」移到「資源」後都放得下，是否採用、是否三語統一待決定
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
