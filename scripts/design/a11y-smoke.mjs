@@ -9,7 +9,7 @@
 // run it after changing hero images, Backdrop, Surface or focus styles.
 // Run after `npm run build`: node scripts/design/a11y-smoke.mjs [path=/design-system]
 
-import { join, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import sharp from 'sharp';
