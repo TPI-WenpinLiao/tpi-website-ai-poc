@@ -4,20 +4,23 @@
 
 ## 結論
 
-第一層原本 6 項（產品｜產業方案｜服務｜成功案例｜資源｜公司）時的量測結果（2026-10-21，同樣條件）：
+第一層原本 6 項（產品｜產業方案｜服務｜成功案例｜資源｜公司）時的餘裕（2026-10-21 量測的需要寬度，對照實際 header 的可用寬度 1152px）：
 
-| 標籤組 | 餘裕（px） | 結果 |
-|---|---|---|
-| zh-TW | 269～287 | 放得下 |
-| en | -22～54 | 只有 Liberation Sans、Inter 放得下 |
-| en-long | -88～-4 | 放不下 |
-| vi | -107～-23 | 放不下，主因是「Câu Chuyện Thành Công」 |
+| 標籤組 | Liberation Sans | Inter | DejaVu Sans | 結果 |
+|---|--:|--:|--:|---|
+| zh-TW | 319 | 315 | 301 | 放得下 |
+| en | 86 | 47 | 10 | 放得下，DejaVu Sans 只剩 10px |
+| en-long | 28 | -15 | -56 | Inter、DejaVu Sans 放不下 |
+| vi | 9 | -29 | -75 | Inter、DejaVu Sans 放不下，主因是「Câu Chuyện Thành Công」 |
+| vi-long | -27 | -67 | -116 | 放不下 |
 
-依 `navigation.md` 原本寫好的備案，使用者於 2026-10-21 決定把「成功案例」移到「資源」底下，三語統一。第一層剩 5 項，下方自動產生的段落是改完後的量測：en、vi 最壞情況（`*-long` 搭配偏寬的 DejaVu Sans）仍有 65px 以上餘裕。
+依 `navigation.md` 原本寫好的備案，使用者於 2026-10-21 決定把「成功案例」移到「資源」底下，三語統一。第一層剩 5 項，下方自動產生的段落是改完後的量測：en、vi 最壞情況（`en-long` 搭配偏寬的 DejaVu Sans）仍有 97px 餘裕。
+
+第一版量測把可用寬度算成 1120px：量測列放在 `<main>` 裡，比頁面 header 窄 32px，所有餘裕都少算 32px（PR #80 審查發現）。修正後可用寬度改讀頁面本身的 header，上表與下方段落都是修正後的數字。修正後 vi 與 en 長譯名在 6 項時仍放不下，決定的依據不變。
 
 ## 量測條件
 
-- 頁面：`/wireframes/navigation` 的「1280px 寬度測試」，viewport 1280px，版面最大寬度 `--content-max-width`（72rem）扣掉左右 padding，可用 1120px
+- 頁面：`/wireframes/navigation`，viewport 1280px。需要寬度取自「1280px 寬度測試」各標籤組的列；可用寬度取自頁面本身的 header（`--content-max-width` 72rem，即 1152px）
 - 標籤：zh-TW 讀自 `navigation.csv`。en、vi 是量測用標籤，不是翻譯（選單文字屬 M7）：有現站對應的沿用現站 header 文字（`inventory.csv` 的 `nav_location`），「產業方案」現站沒有，用暫譯，並以較長的譯名（`*-long`）當最壞情況。定義在 `src/lib/wireframe/header-labels.ts`
 - 間距：第一層項目左右各 `--wf-space-3`（12px）、搜尋按鈕 44px 寬，都是 wireframe 的暫定值；M3-02 定正式 token 與字型後要重跑
 - 字型：容器沒有 Segoe UI、PingFang 等系統字型，改用三種已安裝的字型量測，中文一律 fallback 到 WenQuanYi Zen Hei。Liberation Sans 與 Arial 等寬；Inter 是常見的 UI 字型；DejaVu Sans 偏寬，當最壞情況
@@ -43,21 +46,21 @@ node scripts/wireframe/nav-fit.mjs --check   # 只比對，不寫檔；過期或
 
 | 標籤組 | 字型 | 需要寬度 | 可用寬度 | 餘裕 | 放得下 |
 |---|---|--:|--:|--:|---|
-| `zh-TW` | Liberation Sans | 741 | 1120 | 379 | ✅ |
-| `en` | Liberation Sans | 924 | 1120 | 196 | ✅ |
-| `en-long` | Liberation Sans | 981 | 1120 | 139 | ✅ |
-| `vi` | Liberation Sans | 934 | 1120 | 186 | ✅ |
-| `vi-long` | Liberation Sans | 970 | 1120 | 150 | ✅ |
-| `zh-TW` | Inter | 745 | 1120 | 375 | ✅ |
-| `en` | Inter | 956 | 1120 | 164 | ✅ |
-| `en-long` | Inter | 1017 | 1120 | 103 | ✅ |
-| `vi` | Inter | 963 | 1120 | 157 | ✅ |
-| `vi-long` | Inter | 1001 | 1120 | 119 | ✅ |
-| `zh-TW` | DejaVu Sans | 759 | 1120 | 361 | ✅ |
-| `en` | DejaVu Sans | 989 | 1120 | 131 | ✅ |
-| `en-long` | DejaVu Sans | 1055 | 1120 | 65 | ✅ |
-| `vi` | DejaVu Sans | 1001 | 1120 | 119 | ✅ |
-| `vi-long` | DejaVu Sans | 1042 | 1120 | 78 | ✅ |
+| `zh-TW` | Liberation Sans | 741 | 1152 | 411 | ✅ |
+| `en` | Liberation Sans | 924 | 1152 | 228 | ✅ |
+| `en-long` | Liberation Sans | 981 | 1152 | 171 | ✅ |
+| `vi` | Liberation Sans | 934 | 1152 | 218 | ✅ |
+| `vi-long` | Liberation Sans | 970 | 1152 | 182 | ✅ |
+| `zh-TW` | Inter | 745 | 1152 | 407 | ✅ |
+| `en` | Inter | 956 | 1152 | 196 | ✅ |
+| `en-long` | Inter | 1017 | 1152 | 135 | ✅ |
+| `vi` | Inter | 963 | 1152 | 189 | ✅ |
+| `vi-long` | Inter | 1001 | 1152 | 151 | ✅ |
+| `zh-TW` | DejaVu Sans | 759 | 1152 | 393 | ✅ |
+| `en` | DejaVu Sans | 989 | 1152 | 163 | ✅ |
+| `en-long` | DejaVu Sans | 1055 | 1152 | 97 | ✅ |
+| `vi` | DejaVu Sans | 1001 | 1152 | 151 | ✅ |
+| `vi-long` | DejaVu Sans | 1042 | 1152 | 110 | ✅ |
 
 寬度單位為 CSS px。需要寬度是 logo 左緣到最後一個工具列按鈕右緣的距離。
 

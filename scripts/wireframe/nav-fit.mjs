@@ -70,20 +70,24 @@ function assertFonts() {
 async function measureRows(page, font) {
   await page.addStyleTag({ content: `[data-nav-fit] { font-family: "${font}", "${CJK_FALLBACK}", sans-serif !important; }` });
   await page.evaluate(() => document.fonts.ready);
-  return page.$$eval('[data-nav-fit]', (headers) =>
-    headers.map((h) => {
+  // The measurement rows sit inside <main>, which is narrower than the page header, so the available
+  // width comes from the page's own header row; the rows only provide each label set's content width
+  return page.$$eval('[data-nav-fit]', (headers) => {
+    const real = document.querySelector('header.wf-header:not([data-nav-fit]) [data-fit-row]');
+    const style = getComputedStyle(real);
+    const available = Math.floor(real.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight));
+    return headers.map((h) => {
       const row = h.querySelector('[data-fit-row]');
-      const style = getComputedStyle(row);
       const first = row.firstElementChild.getBoundingClientRect();
       const last = row.lastElementChild.getBoundingClientRect();
       return {
         set: h.dataset.navFit,
         labels: [...row.querySelectorAll('.primary li, .tools .locale, .tools .cta')].map((el) => el.textContent.replace('▾', '').trim()),
         content: Math.ceil(last.right - first.left),
-        available: Math.floor(row.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight)),
+        available,
       };
-    }),
-  );
+    });
+  });
 }
 
 async function main() {
