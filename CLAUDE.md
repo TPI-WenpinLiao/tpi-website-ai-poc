@@ -16,15 +16,26 @@ Astro（`output: 'static'`，預設零 client JS，互動才用 island）、Type
 ## 目錄結構
 
 ```
-src/pages/        路由頁面
+src/pages/        路由頁面；zh-TW 放根目錄，en、vi 放 en/、vi/
 src/layouts/      版型
 src/styles/       tokens.css（design tokens）
 public/           靜態檔（_headers、robots.txt）
 scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應）、checkpoint/（進度推算）
-docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構）
+docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）
 .claude/skills/   issue-start、issue-ship、checkpoint、pr-review、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
 .github/          ISSUE_TEMPLATE、workflows、bootstrap（labels / milestones / issues）
 ```
+
+## IA 與 URL
+
+M2 定案的規則，細節以連結的文件為準：
+
+- 頁面階層只寫在 `docs/ia/nodes.csv`。新增頁面先加節點，路徑取節點的 `path`；麵包屑、子頁卡片由 `parent` 推出，不從 URL 推導
+- 導覽只讀 `docs/ia/navigation.csv`（`docs/ia/navigation.md`），不在元件裡另寫一份選單
+- URL：zh-TW 不加前綴，en、vi 加 `/en`、`/vi`；路徑只用小寫英文、數字與 `-`，不加尾斜線（`/` 除外），slug 三語共用。完整規則見 ADR 0002
+- 現站頁面在新站的位置看 `docs/ia/page-map.csv`，舊網址的轉址看 `docs/ia/redirects.csv`
+- `page-map.csv`、`redirects.csv`、`sitemap-summary.json`、`blog-categories.csv` 與 `sitemap.md`、`navigation.md` 的自動產生段落由 `scripts/ia/` 產生，不手改；改了輸入就重跑對應 script。`npm run check:ia` 會擋下過期的產出，`blog-categories.csv` 要連現站，不在檢查範圍
+- 內容類型的欄位與 JSON-LD 見 `docs/ia/content-model.md`
 
 ## 指令
 

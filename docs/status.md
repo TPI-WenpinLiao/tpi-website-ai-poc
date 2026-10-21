@@ -4,7 +4,7 @@
 
 ## 目前 milestone
 
-**M1 盤點與研究**（剩 M1-06 收尾）；M2、M3 進行中
+**M3 設計系統**；M1 剩 M1-06 收尾（#7）
 
 ## 進度
 
@@ -12,7 +12,7 @@
 |---|---|
 | M0 基礎建設 | 完成 |
 | M1 盤點與研究 | 進行中（剩 M1-06 收尾） |
-| M2 資訊架構 | 進行中 |
+| M2 資訊架構 | 完成 |
 | M3 設計系統 | 進行中 |
 | M4 開發骨架 | 未開始 |
 | M5 內容遷移 | 未開始 |
@@ -45,7 +45,7 @@
 - M2-03 URL 規則與語系策略完成（#10，ADR 0002，PR #59）
 - M2-04 內容模型完成（#11，PR #61）
 - M2-05 舊站 redirect map 完成（#12）：`docs/ia/redirects.csv` 涵蓋 inventory 全部網址，可用 `node scripts/ia/redirects.mjs --redirects <file>` 轉成 `_redirects`
-- M2-06 M2 收尾（#13，PR #81），待合併
+- M2-06 M2 收尾完成（#13）：IA 與 URL 規則寫進 `CLAUDE.md`、`seo-checklist`、`content-migration`
 - PR 審查 skill `/pr-review` 完成（#62，PR #65）
 - `status.md` 改寫合併後的狀態完成（#67）
 - 長時間任務的 checkpoint 機制完成（#69，PR #70）
@@ -62,7 +62,6 @@
 ## 下一步
 
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
-- Review M2-06 M2 收尾（PR #81）後合併；與 PR #80 都改了 `docs/status.md`，後合併的一方要解衝突
 - M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
 - M3-02 design tokens 與元件庫（#15）的依賴 M3-01（#14）已完成，可以開始
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
