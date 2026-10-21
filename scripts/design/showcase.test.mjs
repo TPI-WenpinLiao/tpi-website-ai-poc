@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { missingComponents } from './showcase.mjs';
+import { missingComponents, internalNodes } from './showcase.mjs';
 import { groupTokens } from './token-groups.mjs';
 import { parseTokens } from './contrast.mjs';
 
@@ -65,4 +65,14 @@ test('reports groups that mix value tokens with specimen kinds', () => {
     { id: 'b', title: 'B', layer: 'scale', kind: 'value', patterns: ['--z-'] },
   ];
   assert.deepEqual(groupTokens(['--space-1', '--space-max', '--z-1'], groups).mixed, ['a']);
+});
+
+test('flags IA nodes at or below an internal page, not paths that only share the prefix', () => {
+  const nodes = [
+    { id: 'home', path: '/' },
+    { id: 'ds', path: '/design-system' },
+    { id: 'wf', path: '/wireframes/home' },
+    { id: 'other', path: '/design-systems-guide' },
+  ];
+  assert.deepEqual(internalNodes(nodes).map((n) => n.id), ['ds', 'wf']);
 });

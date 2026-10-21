@@ -5,7 +5,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 # Design system
 
-> 狀態：M3-02（#15）定案 tokens 與基礎元件。展示頁流程由 M3-03 補齊；3D 方向專屬的細節（粒子色、方塊材質）等 M3-07 選定後在 M3-04 補上，M3 收尾 issue 再更新本檔。
+> 狀態：M3-02（#15）定案 tokens 與基礎元件，M3-03（#16）補齊 `/design-system` 展示頁。3D 方向專屬的細節（粒子色、方塊材質）等 M3-07 選定後在 M3-04 補上，M3 收尾 issue 再更新本檔。
 
 ## 設計方向
 
@@ -19,8 +19,16 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 所有樣式值（色彩、字級、行高、間距、圓角、陰影、斷點、角度、動畫時間）只能引用 `src/styles/tokens.css` 的 CSS custom properties
 - 需要新 token 時先加到 `tokens.css` 並在 PR 中說明用途，不得在元件內寫死數值
 - 不使用 UI framework 或 utility CSS framework
-- 元件樣式寫在 `.astro` 的 scoped `<style>`；全域樣式只放在 `BaseLayout`（`body`、`[data-surface='dark']`、`:focus-visible`、`.sr-only`）
-- 頁面元件在 `src/components/ui/`，新元件同步加到 `/design-system`（`src/pages/design-system/index.astro`）
+- 元件樣式寫在 `.astro` 的 scoped `<style>`；全域樣式只放在 `BaseLayout`（`box-sizing`、`body`、`[data-surface='dark']`、`:focus-visible`、`.sr-only`）
+- 頁面元件在 `src/components/ui/`，新元件同步加到 `/design-system`，寫法見「展示頁」
+
+## 尺寸計算
+
+`BaseLayout` 把所有元素設成 `box-sizing: border-box`：`min-height`、`width` 包含 padding 與邊框。
+
+- 元件的 `min-height: var(--touch-target)` 就是實際高度，不必扣 padding
+- `max-width` 代表內容寬度、外面再加左右 padding 的容器（`Surface` 的 `.inner`），寫 `box-sizing: content-box`，讓 `--content-max-width`、`--reading-max-width` 維持內容寬度
+- 沒有這條規則時，`<a>` 按鈕與 `input` 是 content-box，`<button>`、`<select>` 在瀏覽器預設樣式裡是 border-box，同一個元件會因輸出的標籤不同而高度不同（#16 實測：`<a>` 的 lg 按鈕 76px，應為約 48px）
 
 ## 亮暗 surface
 
@@ -90,6 +98,23 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
 
+## 展示頁
+
+`/design-system`（`src/pages/design-system/`）是 tokens 與元件的參考頁，不在導覽與 sitemap 裡。
+
+- Tokens 由 `tokens.css` 在 build 時讀出，依 `scripts/design/token-groups.mjs` 分組渲染（`_TokenGroup.astro`）。新增 token 時，讓它落進某一組；需要新的組時加在 `GROUPS`，並以 `kind` 指定範例的畫法
+- 沒有合適範例的 token（z-index、比例、`clamp()` 高度等）用 `kind: 'value'`，放在整組都是 `value` 的組，渲染成名稱／值表格。同一組混用 `value` 與有範例的 kind 時，範例欄會空著，`showcase.mjs` 會擋
+- 元件區以狀態矩陣呈現：每個元件的 variant × 預設、hover、focus（以及 disabled、error 等該元件有的狀態），深淺兩個 surface 各一份
+- 互動狀態的選擇器同時接受 `data-preview-state`，讓展示頁不用操作就能畫出狀態，樣式只寫一份：
+
+  ```css
+  .primary:is(:hover, [data-preview-state='hover']) { … }
+  ```
+
+  focus 由 `BaseLayout` 的 `:focus-visible, [data-preview-state='focus']` 統一處理；元件自己畫 focus 的（`Card`）也要寫成同樣的形式。`data-preview-state` 只用在展示頁
+- 預覽用的複本加 `inert`：不進 Tab 順序、不被報讀，可操作的是「預設」那一份（#16 實測：Tab 停點 109 → 65）。矩陣表格加 `caption.sr-only` 說明示意欄不能操作
+- `/design-system`、`/wireframes` 不得出現在 `docs/ia/nodes.csv`（導覽只能指向節點，sitemap 也由節點產生），`showcase.mjs` 會擋。M4 加 sitemap 時要排除這兩個路徑，並把檢查接到 sitemap 的輸出
+
 ## 影像
 
 - 抽象 3D 渲染，只用品牌色，不放文字、數字、人物、真實產品。提示詞、規格與素材清單見 `docs/design/image-prompts.md`
@@ -110,7 +135,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - `npm run check:design`
   - `scripts/design/contrast.mjs`：兩個 surface 各自檢查 `PAIRS` 每一組
   - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/pages/design-system/`、`BaseLayout` 的 `<style>` 不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
-  - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import
+  - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import；`tokens.css` 每個 token（`--wf-*` 除外）都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；`/design-system`、`/wireframes` 不得出現在 `docs/ia/nodes.csv`
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
 
