@@ -30,7 +30,7 @@ keep、rewrite、merge 的列導到 `page-map.csv` 對應節點的路徑，en �
 drop 的列導到同語系最接近的上層頁：
 
 1. 從路徑往上一層一層找，第一個在新站同語系存在的頁面就是目標，例如 `/media-center/123` → `/media-center`
-2. 找不到上層頁的，寫在 `drop-targets.csv`（`route` 用去掉語系前綴的小寫路徑，可用 `/prefix/*`）：`/epaper/*` → 電子報訂閱 `/subscribe`，`/2023tpiday`、`/2024tpiday` → 活動 `/events`
+2. 找不到上層頁的，對照寫在 [`drop-targets.csv`](./drop-targets.csv)：`route` 用去掉語系前綴的小寫路徑，可用 `/prefix/*`；`node` 是目標節點 id
 3. 兩者都沒有就 exit 1，不會默默導到首頁
 4. 日文版不支援，`/ja`、`/ja/*` 一律導到 `/en`
 
@@ -57,3 +57,4 @@ node scripts/ia/redirects.mjs --redirects public/_redirects
 
 - Cloudflare Pages `_redirects` 比對來源路徑是否區分大小寫，官方文件沒有寫。不區分的話，`/products/gadoDIDO /products/gadodido 301` 這類規則會變成迴圈。M4 部署 `_redirects` 時在 preview 實測
 - 含 `%` 編碼的來源（例如 `/pdf/%E8%B3%87%E8%A8%8A%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96.pdf`）在 `_redirects` 是用編碼前還是編碼後的路徑比對，同上一起實測
+- `www.tpisoftware.vn` 對 `/vn/*` 也回 200，內容與 `/*` 相同（`scripts/inventory/crawl.mjs`）。萬用規則 `www.tpisoftware.vn/*` → `/vi/:splat` 會把 `/vn/products/gadodido` 導到不存在的 `/vi/vn/products/gadodido`。`.vn` 網域的處理方式決定時，先把 `/vn/*` 去掉前綴再轉
