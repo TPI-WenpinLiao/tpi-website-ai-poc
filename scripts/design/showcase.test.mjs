@@ -4,8 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { missingComponents, internalNodes } from './showcase.mjs';
-import { groupTokens } from './token-groups.mjs';
-import { parseTokens } from './contrast.mjs';
+import { groupTokens, tokenNames } from './token-groups.mjs';
 
 const PAGE = `---
 import Button from '../../components/ui/Button.astro';
@@ -55,7 +54,7 @@ test('reports patterns that match no token, including ones shadowed by an earlie
 
 test('every token in tokens.css is grouped', () => {
   const css = readFileSync(new URL('../../src/styles/tokens.css', import.meta.url), 'utf8');
-  const r = groupTokens([...parseTokens(css).keys()]);
+  const r = groupTokens(tokenNames(css));
   assert.deepEqual([r.ungrouped, r.unused, r.mixed], [[], [], []]);
 });
 
@@ -75,4 +74,9 @@ test('flags IA nodes at or below an internal page, not paths that only share the
     { id: 'other', path: '/design-systems-guide' },
   ];
   assert.deepEqual(internalNodes(nodes).map((n) => n.id), ['ds', 'wf']);
+});
+
+test('token names include ones declared only on the dark surface', () => {
+  const css = ':root { --space-1: 1px; }\n[data-surface="dark"] { --space-1: 2px; --glow-dark: none; }';
+  assert.deepEqual(tokenNames(css), ['--space-1', '--glow-dark']);
 });

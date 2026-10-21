@@ -7,6 +7,8 @@
 // tokens, so a row never shows an empty specimen column; showcase.mjs fails on a mixed group.
 // --wf-* tokens are wireframe-only (M3-01) and not shown.
 
+import { parseSurfaces } from './contrast.mjs';
+
 /**
  * @typedef {'color' | 'gradient' | 'shadow' | 'font-family' | 'font-weight' | 'font-size' | 'line-height'
  *   | 'letter-spacing' | 'length' | 'radius' | 'duration' | 'ease' | 'angle' | 'value'} Kind
@@ -108,6 +110,13 @@ export const GROUPS = [
     patterns: ['--content-max-width', '--reading-max-width', '--hero-', '--backdrop-soft-opacity', '--z-'],
   },
 ];
+
+/**
+ * Every token name in tokens.css, on any surface: a token declared only under
+ * [data-surface="dark"] still has to be grouped and shown.
+ * @param {string} css source of tokens.css
+ */
+export const tokenNames = (css) => [...new Set(parseSurfaces(css).flatMap((s) => [...s.tokens.keys()]))];
 
 /** @param {string} pattern @param {string} name */
 const matches = (pattern, name) => (pattern.endsWith('-') ? name.startsWith(pattern) : name === pattern || name.startsWith(`${pattern}-`));

@@ -88,5 +88,5 @@
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除，`tokens.css` 的 `--wf-*` 也一起刪。M3-02 起斷點寫在 `src/styles/media.css` 的 `@custom-media`，wireframe 的 media query 已改用
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機要對齊這兩個值，方向專屬的細節在 M3-04 補進 tokens
-- M3-03：`/design-system`、`/wireframes` 不得進 IA（`scripts/design/showcase.mjs` 檢查 `docs/ia/nodes.csv`）。M4-03（#22）加 sitemap 時要排除這兩個路徑，並把檢查接到 sitemap 的輸出（見 `design-system` skill「展示頁」）
+- M4-03（#22）加 sitemap 時排除 `/design-system`、`/wireframes`，做法見 `design-system` skill「展示頁」
 - `docs/design/nav-fit.md` 的量測用容器字型與 wireframe 的間距（`--wf-space-3` 仍是 12px），M3-02 後 `node scripts/wireframe/nav-fit.mjs --check` 仍通過；正式 header（M4-04）的選單間距與 Inter 字型要另外實測

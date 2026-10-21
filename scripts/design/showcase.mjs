@@ -10,9 +10,8 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { parseTokens } from './contrast.mjs';
 import { parseCsv } from '../inventory/csv.mjs';
-import { groupTokens } from './token-groups.mjs';
+import { groupTokens, tokenNames } from './token-groups.mjs';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const COMPONENTS = 'src/components/ui';
@@ -46,7 +45,7 @@ function main() {
   for (const m of missing) console.log(`${COMPONENTS}/${m} is not shown on ${PAGE}`);
   console.log(`${components.length - missing.length}/${components.length} components on the showcase page`);
 
-  const names = [...parseTokens(readFileSync(join(ROOT, TOKENS), 'utf8')).keys()];
+  const names = tokenNames(readFileSync(join(ROOT, TOKENS), 'utf8'));
   const { groups, ungrouped, unused, mixed } = groupTokens(names);
   for (const t of ungrouped) console.log(`${t} is in no group of scripts/design/token-groups.mjs`);
   for (const p of unused) console.log(`scripts/design/token-groups.mjs pattern matches no token: ${p}`);

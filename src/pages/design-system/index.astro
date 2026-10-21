@@ -19,7 +19,7 @@ import Backdrop from '../../components/ui/Backdrop.astro';
 import { Image } from 'astro:assets';
 import tokensCss from '../../styles/tokens.css?raw';
 import { parseSurfaces, resolveColor, checkPairs, contrastRatio, PAIRS } from '../../../scripts/design/contrast.mjs';
-import { groupTokens, type Group } from '../../../scripts/design/token-groups.mjs';
+import { groupTokens, tokenNames, type Group } from '../../../scripts/design/token-groups.mjs';
 import TokenGroup, { type Row } from './_TokenGroup.astro';
 import heroDataFlow from '../../assets/design/hero-data-flow.webp';
 import heroDataFlowMobile from '../../assets/design/hero-data-flow-mobile.webp';
@@ -34,7 +34,7 @@ import coverSecurity from '../../assets/design/cover-security.webp';
 
 const surfaces = parseSurfaces(tokensCss);
 const light = surfaces[0].tokens;
-const { groups } = groupTokens([...light.keys()]);
+const { groups } = groupTokens(tokenNames(tokensCss));
 const byLayer = (layer: Group['layer']) => groups.filter((g) => g.layer === layer);
 const white = resolveColor(light, '--ink-0');
 const black = resolveColor(light, '--ink-950');

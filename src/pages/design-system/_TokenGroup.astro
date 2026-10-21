@@ -27,9 +27,10 @@ interface Props {
 const { title, note, rows, layout = 'rows' } = Astro.props;
 const values = rows.every((r) => r.kind === 'value');
 const sample = 'Aa 昕力 0123';
-// rotateX needs the shared perspective to read as depth; the other angles are flat rotations
+// Each angle is drawn with the transform the components use it in: --scene-angle-z turns in the
+// screen plane, the others tilt around the x axis (Card, LayerStack) and need the shared perspective
 const angle = (name: string) =>
-  name === '--scene-angle-x' ? `transform: perspective(var(--perspective)) rotateX(var(${name}))` : `transform: rotate(var(${name}))`;
+  name === '--scene-angle-z' ? `transform: rotate(var(${name}))` : `transform: perspective(var(--perspective)) rotateX(var(${name}))`;
 ---
 
 <div class="group">
@@ -190,7 +191,9 @@ const angle = (name: string) =>
     overflow: hidden;
   }
 
-  .row > .specimen {
+  /* Narrow screens: square specimens sit beside name and value, wide ones span the row. The
+     sm-up block resets both with the same selectors, so equal specificity lets the later rule win. */
+  :is(.kind-color, .kind-shadow, .kind-radius, .kind-angle, .kind-line-height) > .specimen {
     grid-row: span 2;
   }
 
@@ -201,7 +204,6 @@ const angle = (name: string) =>
   }
 
   :is(.kind-gradient, .kind-length, .kind-duration, .kind-ease, .kind-font-family, .kind-font-size, .kind-font-weight, .kind-letter-spacing) > * {
-    grid-row: auto;
     grid-column: 1 / -1;
   }
 
@@ -298,9 +300,11 @@ const angle = (name: string) =>
       grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 2fr);
     }
 
-    .row > *,
-    :is(.kind-gradient, .kind-length, .kind-duration, .kind-ease, .kind-font-family, .kind-font-weight, .kind-letter-spacing) > * {
+    :is(.kind-color, .kind-shadow, .kind-radius, .kind-angle, .kind-line-height) > .specimen {
       grid-row: auto;
+    }
+
+    :is(.kind-gradient, .kind-length, .kind-duration, .kind-ease, .kind-font-family, .kind-font-size, .kind-font-weight, .kind-letter-spacing) > * {
       grid-column: auto;
     }
 
