@@ -14,9 +14,20 @@ import Link from '../../components/ui/Link.astro';
 import Tag from '../../components/ui/Tag.astro';
 import Card from '../../components/ui/Card.astro';
 import FormField from '../../components/ui/FormField.astro';
+import Backdrop from '../../components/ui/Backdrop.astro';
+import { Image } from 'astro:assets';
 import tokensCss from '../../styles/tokens.css?raw';
 import { parseSurfaces, resolveColor, checkPairs, PAIRS } from '../../../scripts/design/contrast.mjs';
-import sample from '../../assets/design-system/sample.svg';
+import heroDataFlow from '../../assets/design/hero-data-flow.webp';
+import heroDataFlowMobile from '../../assets/design/hero-data-flow-mobile.webp';
+import heroModularStack from '../../assets/design/hero-modular-stack.webp';
+import heroModularStackMobile from '../../assets/design/hero-modular-stack-mobile.webp';
+import ambientGlow from '../../assets/design/ambient-glow-1.webp';
+import readingHeader from '../../assets/design/reading-header.webp';
+import coverPlatform from '../../assets/design/cover-platform.webp';
+import coverIntegration from '../../assets/design/cover-integration.webp';
+import coverData from '../../assets/design/cover-data.webp';
+import coverSecurity from '../../assets/design/cover-security.webp';
 
 const surfaces = parseSurfaces(tokensCss);
 const light = surfaces[0].tokens;
@@ -50,17 +61,18 @@ const description =
   <PageHero
     eyebrow="M3-02 · Design system"
     title="有景深的設計系統"
-    description="為 3D 捲動場景設計的 tokens 與元件。本頁的標題區就是 PageHero，旁邊的圖層是 3D 場景載入前的靜態版本，往下捲會分開。"
+    description="為 3D 捲動場景設計的 tokens 與元件。本頁的標題區就是 PageHero，背後是方向 A 的靜態主視覺，3D 場景載入前與減少動態時都顯示這張圖。"
   >
+    <Backdrop slot="backdrop" image={heroDataFlow} mobile={heroDataFlowMobile} fade="hero" focus="end" priority />
     <Fragment slot="actions">
       <Button href="#components-dark" size="lg">看元件</Button>
       <Button href="#color" size="lg" variant="secondary">看色彩</Button>
     </Fragment>
-    <LayerStack slot="visual" />
   </PageHero>
 
   <main>
     <Surface tone="dark">
+      <Backdrop slot="backdrop" image={ambientGlow} fade="bottom" strength="soft" />
       <SectionHeading index="01" eyebrow="Principles" title="三個設計原則" />
       <ol class="principles">
         {
@@ -192,11 +204,57 @@ const description =
       </ul>
     </Surface>
 
+    <Surface tone="dark" pattern="grid" id="imagery">
+      <SectionHeading
+        index="05"
+        eyebrow="Imagery"
+        title="影像"
+        description="抽象 3D 渲染，只用品牌色，不放文字、人物或真實產品。素材與提示詞見 docs/design/image-prompts.md。"
+      />
+      <h3>主視覺：兩個 3D 方向的靜態版本</h3>
+      <div class="directions">
+        {
+          [
+            { title: '方向 A：Data Flow', image: heroDataFlow, mobile: heroDataFlowMobile, alt: '紫色與橘色光束連成的資料網路，光點沿著光束流向幾個發光節點' },
+            { title: '方向 B：Modular Stack', image: heroModularStack, mobile: heroModularStackMobile, alt: '四片帶格線的霧面玻璃板上下堆疊，一道紫到橘的光束垂直穿過中心' },
+          ].map((d) => (
+            <figure class="direction">
+              <Image src={d.image} alt={d.alt} widths={[640, 960, 1280]} sizes="(width >= 64rem) 36rem, 100vw" />
+              <figcaption>
+                <strong>{d.title}</strong>
+                <span>桌機 16:9，手機改用 4:5 構圖（主體在上半部）。M3-07 選定方向後，這張圖是 3D 場景的 LCP 與減少動態時的版本。</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      <h3>卡片封面</h3>
+      <ul class="covers">
+        {
+          [
+            { name: 'cover-platform', image: coverPlatform },
+            { name: 'cover-integration', image: coverIntegration },
+            { name: 'cover-data', image: coverData },
+            { name: 'cover-security', image: coverSecurity },
+          ].map((c) => (
+            <li>
+              <Image src={c.image} alt="" widths={[400, 800]} sizes="(width >= 64rem) 17rem, 50vw" />
+              <code>{c.name}</code>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="note">封面是抽象意象，不代表特定產品功能，當作卡片沒有真實素材時的預設圖；裝飾用，alt 留空。</p>
+      <h3>CSS 3D 圖層（LayerStack）</h3>
+      <p class="note">同一個等角視角的 CSS 版本，不需要圖片，捲出畫面時圖層分開。用在不值得放一張大圖的區塊。</p>
+      <LayerStack />
+    </Surface>
+
     {
       (['dark', 'light'] as const).map((tone) => (
         <Surface tone={tone} pattern={tone === 'dark' ? 'grid' : 'none'} id={`components-${tone}`}>
           <SectionHeading
-            index={tone === 'dark' ? '05' : undefined}
+            index={tone === 'dark' ? '06' : undefined}
             eyebrow={`Components · ${tone} surface`}
             title={tone === 'dark' ? '元件：深色 surface' : '元件：亮色 surface'}
             description="同一組元件，不需要變體，顏色跟著 surface 切換。範例文字只用來看版面，不是網站內容。"
@@ -232,7 +290,7 @@ const description =
 
           <h3>SectionHeading</h3>
           <div class="demo">
-            <SectionHeading level={3} index="06" eyebrow="Eyebrow" title="編號式區塊標題" description="標題層級由呼叫端指定，避免跳級。" />
+            <SectionHeading level={3} index="07" eyebrow="Eyebrow" title="編號式區塊標題" description="標題層級由呼叫端指定，避免跳級。" />
           </div>
 
           <h3>Card</h3>
@@ -245,7 +303,7 @@ const description =
                 eyebrow="分類"
                 title="有圖片的卡片標題"
                 description="hover 時往前傾、亮起漸層外框。整張卡可點，但只有標題一個連結。"
-                image={{ src: sample, alt: '幾何圖形示意圖' }}
+                image={{ src: coverIntegration, alt: '' }}
               >
                 <Fragment slot="meta">
                   <Tag tone="node">Tag one</Tag>
@@ -257,7 +315,14 @@ const description =
               <Card level={4} href={`#components-${tone}`} index="02" title="沒有圖片的卡片" description="玻璃面板，背景的格線與 3D 場景會透出來。" />
             </Reveal>
             <Reveal delay={2}>
-              <Card level={4} href={`#components-${tone}`} index="03" eyebrow="分類" title="標題較長時換行的卡片標題範例，用來確認行高與間距" />
+              <Card
+                level={4}
+                href={`#components-${tone}`}
+                index="03"
+                eyebrow="分類"
+                title="標題較長時換行的卡片標題範例，用來確認行高與間距"
+                image={{ src: coverData, alt: '' }}
+              />
             </Reveal>
           </div>
 
@@ -288,6 +353,7 @@ const description =
     }
 
     <Surface tone="light" width="reading">
+      <Backdrop slot="backdrop" image={readingHeader} fade="bottom" focus="top" />
       <SectionHeading eyebrow="Reading" title="長文閱讀" />
       <div class="prose">
         <p>
@@ -495,6 +561,52 @@ const description =
     gap: var(--space-6);
   }
 
+  .directions {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .direction {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .direction img,
+  .covers img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .direction figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    color: var(--color-text-muted);
+  }
+
+  .direction strong {
+    color: var(--color-text);
+  }
+
+  .covers {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .covers li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
   .form {
     display: flex;
     flex-direction: column;
@@ -515,6 +627,14 @@ const description =
   }
 
   @media (--bp-lg-up) {
+    .directions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .covers {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
     .principles,
     .swatches,
     .cards {

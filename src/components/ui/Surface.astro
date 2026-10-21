@@ -2,7 +2,8 @@
 // Page section that sets the surface its content renders on. tone="dark" is the scene surface for
 // narrative pages (and the 3D scroll scene); "light" is for reading. Every semantic color token
 // switches with data-surface, so components inside need no variants.
-// pattern="grid" draws the coordinate grid that fades out from the top.
+// pattern="grid" draws the coordinate grid that fades out from the top. The `backdrop` slot takes a
+// Backdrop image, drawn under the grid.
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = HTMLAttributes<'section'> & {
@@ -15,6 +16,13 @@ const { tone = 'light', pattern = 'none', width = 'content', class: className, .
 ---
 
 <section class:list={['surface', pattern, className]} data-surface={tone} {...rest}>
+  {
+    Astro.slots.has('backdrop') && (
+      <div class="backdrop-layer">
+        <slot name="backdrop" />
+      </div>
+    )
+  }
   <div class:list={['inner', width]}>
     <slot />
   </div>
@@ -26,6 +34,12 @@ const { tone = 'light', pattern = 'none', width = 'content', class: className, .
     isolation: isolate;
     background: var(--color-bg);
     color: var(--color-text);
+  }
+
+  .backdrop-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
   }
 
   .grid::before {

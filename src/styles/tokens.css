@@ -208,6 +208,14 @@
   --z-raised: 1;
   --z-overlay: 100;
 
+  /* Imagery: backdrops behind sections (src/assets/design, docs/design/image-prompts.md).
+     Text over an image always sits on the side the scrim fades to --color-bg. */
+  --hero-min-height: clamp(34rem, 30rem + 20vh, 48rem);
+  --backdrop-soft-opacity: 0.55;
+  --hero-image-share: 58%;
+  --hero-copy-share: 0.45;
+  --hero-narrow-offset: 62vw;
+
   /* Layout */
   --content-max-width: 72rem;
   --reading-max-width: 46rem;
