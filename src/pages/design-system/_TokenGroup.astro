@@ -1,0 +1,316 @@
+---
+// One group of scripts/design/token-groups.mjs on the showcase page: every token with a specimen
+// for its kind, its declared value and, for colors, the resolved value. Primitive colors render as
+// a swatch grid with their contrast against the two extremes of the ink ramp. A group of `value`
+// tokens (no visual) renders as a name/value table; token-groups.mjs keeps groups from mixing them.
+// Files starting with "_" are not routes.
+import type { Kind } from '../../../scripts/design/token-groups.mjs';
+
+export interface Row {
+  name: string;
+  kind: Kind;
+  /** Value as declared on this surface, e.g. "var(--purple-700)" */
+  value: string;
+  /** Literal color after following var() references, colors only */
+  resolved?: string;
+  /** Contrast against --ink-0 and --ink-950, primitive colors only */
+  ratios?: { light: number; dark: number };
+}
+
+interface Props {
+  title: string;
+  note?: string;
+  rows: Row[];
+  layout?: 'rows' | 'swatches';
+}
+
+const { title, note, rows, layout = 'rows' } = Astro.props;
+const values = rows.every((r) => r.kind === 'value');
+const sample = 'Aa 昕力 0123';
+// Each angle is drawn with the transform the components use it in: --scene-angle-z turns in the
+// screen plane, the others tilt around the x axis (Card, LayerStack) and need the shared perspective
+const angle = (name: string) =>
+  name === '--scene-angle-z' ? `transform: rotate(var(${name}))` : `transform: perspective(var(--perspective)) rotateX(var(${name}))`;
+---
+
+<div class="group">
+  <h3>{title}</h3>
+  {note && <p class="note">{note}</p>}
+  {
+    layout === 'swatches' ? (
+      <ul class="swatches">
+        {rows.map((r) => (
+          <li>
+            <span class="chip" style={`background: var(${r.name})`} />
+            <code>{r.name}</code>
+            <span class="value">{r.value}</span>
+            {r.ratios && (
+              <span class="value">
+                對白 {r.ratios.light.toFixed(2)}
+                <br />
+                對黑 {r.ratios.dark.toFixed(2)}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    ) : values ? (
+      <table class="values">
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <th scope="row">
+                <code>{r.name}</code>
+              </th>
+              <td class="value">{r.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ) : (
+      <ul class="rows">
+        {rows.map((r) => (
+          <li class:list={['row', `kind-${r.kind}`]}>
+            <span class="specimen" aria-hidden="true">
+              {r.kind === 'color' && <span class="chip" style={`background: var(${r.name})`} />}
+              {r.kind === 'gradient' && <span class="bar" style={`background: var(${r.name})`} />}
+              {r.kind === 'shadow' && <span class="box" style={`box-shadow: var(${r.name})`} />}
+              {r.kind === 'radius' && <span class="box" style={`border-radius: var(${r.name})`} />}
+              {r.kind === 'length' && <span class="bar" style={`inline-size: var(${r.name})`} />}
+              {r.kind === 'angle' && <span class="box plane" style={angle(r.name)} />}
+              {r.kind === 'font-family' && <span style={`font-family: var(${r.name})`}>{sample}</span>}
+              {r.kind === 'font-size' && <span class="type" style={`font-size: var(${r.name})`}>{sample}</span>}
+              {r.kind === 'font-weight' && <span style={`font-weight: var(${r.name})`}>{sample}</span>}
+              {r.kind === 'letter-spacing' && <span style={`letter-spacing: var(${r.name})`}>TPISOFTWARE 昕力資訊</span>}
+              {r.kind === 'line-height' && (
+                <span class="leading" style={`line-height: var(${r.name})`}>
+                  兩行以上的文字用來看行高，Latin and 中文 mixed.
+                </span>
+              )}
+              {r.kind === 'duration' && (
+                <span class="track">
+                  <span class="dot" style={`transition-duration: var(${r.name})`} />
+                </span>
+              )}
+              {r.kind === 'ease' && (
+                <span class="track">
+                  <span class="dot" style={`transition-timing-function: var(${r.name})`} />
+                </span>
+              )}
+            </span>
+            <code>{r.name}</code>
+            <span class="value">
+              {r.value}
+              {r.resolved && r.resolved !== r.value && ` → ${r.resolved}`}
+            </span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</div>
+
+<style>
+  @import '../../styles/media.css';
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: var(--font-size-h4);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+  }
+
+  .note,
+  .value {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    overflow-wrap: anywhere;
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--space-24), 1fr));
+    gap: var(--space-4);
+  }
+
+  .swatches li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .swatches .chip {
+    inline-size: 100%;
+    block-size: var(--space-12);
+  }
+
+  .chip {
+    display: block;
+    inline-size: var(--space-12);
+    block-size: var(--space-12);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Narrow screens: square specimens sit beside name and value, wide ones span the row */
+  .row {
+    display: grid;
+    grid-template-columns: var(--space-24) minmax(0, 1fr);
+    gap: var(--space-1) var(--space-4);
+    align-items: center;
+    padding-block: var(--space-3);
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  .specimen {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--space-8);
+    min-inline-size: 0;
+    overflow: hidden;
+  }
+
+  /* Narrow screens: square specimens sit beside name and value, wide ones span the row. The
+     sm-up block resets both with the same selectors, so equal specificity lets the later rule win. */
+  :is(.kind-color, .kind-shadow, .kind-radius, .kind-angle, .kind-line-height) > .specimen {
+    grid-row: span 2;
+  }
+
+  /* Rotated planes reach past their box */
+  .kind-angle > .specimen {
+    overflow: visible;
+    padding-block: var(--space-2);
+  }
+
+  :is(.kind-gradient, .kind-length, .kind-duration, .kind-ease, .kind-font-family, .kind-font-size, .kind-font-weight, .kind-letter-spacing) > * {
+    grid-column: 1 / -1;
+  }
+
+  /* Sized to its content: a flex column would otherwise stretch it and push values far right */
+  .values {
+    align-self: start;
+    border-collapse: collapse;
+  }
+
+  .values th {
+    white-space: nowrap;
+  }
+
+  .values th,
+  .values td {
+    padding: var(--space-3) var(--space-6) var(--space-3) 0;
+    border-block-end: var(--border-width) solid var(--color-border);
+    font-weight: var(--font-weight-regular);
+    text-align: start;
+    vertical-align: baseline;
+  }
+
+  .bar {
+    display: block;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    block-size: var(--space-3);
+    border-radius: var(--radius-pill);
+    background: var(--gradient-energy);
+  }
+
+  .box {
+    display: block;
+    inline-size: var(--space-16);
+    block-size: var(--space-16);
+    margin: var(--space-2);
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-subtle);
+  }
+
+  .kind-radius .box {
+    border-color: var(--color-border-strong);
+  }
+
+  .plane {
+    background: var(--glass-bg);
+    box-shadow: var(--glow-brand);
+  }
+
+  .type {
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-display);
+    white-space: nowrap;
+  }
+
+  .leading {
+    max-inline-size: var(--space-24);
+    padding-inline-start: var(--space-2);
+    border-inline-start: var(--border-width-strong) solid var(--color-border-brand);
+    font-size: var(--font-size-sm);
+  }
+
+  .track {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    block-size: var(--space-3);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg-muted);
+  }
+
+  .dot {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: var(--space-3);
+    block-size: var(--space-3);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    box-shadow: var(--glow-accent);
+    transition-property: inset-inline-start, translate;
+    transition-duration: var(--duration-slow);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  .row:hover .dot {
+    inset-inline-start: 100%;
+    translate: -100%;
+  }
+
+  @media (--bp-sm-up) {
+    .row {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    :is(.kind-color, .kind-shadow, .kind-radius, .kind-angle, .kind-line-height) > .specimen {
+      grid-row: auto;
+    }
+
+    :is(.kind-gradient, .kind-length, .kind-duration, .kind-ease, .kind-font-family, .kind-font-size, .kind-font-weight, .kind-letter-spacing) > * {
+      grid-column: auto;
+    }
+
+    /* Large sizes need the full row; name and value go below the sample */
+    .kind-font-size > .specimen {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

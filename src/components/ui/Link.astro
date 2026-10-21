@@ -2,6 +2,7 @@
 // Text link. `inline` sits in running text (always underlined so it doesn't rely on color alone);
 // `standalone` is a call-to-action line with an arrow that slides on hover. `external` marks links
 // that leave the site. Colors follow the surrounding data-surface.
+// data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = Omit<HTMLAttributes<'a'>, 'href'> & {
@@ -30,7 +31,7 @@ const { variant = 'inline', external = false, class: className, ...rest } = Astr
     text-underline-offset: var(--underline-offset);
   }
 
-  .link:hover {
+  .link:is(:hover, [data-preview-state='hover']) {
     color: var(--color-link-hover);
   }
 
@@ -47,7 +48,7 @@ const { variant = 'inline', external = false, class: className, ...rest } = Astr
     text-decoration: none;
   }
 
-  .standalone:hover {
+  .standalone:is(:hover, [data-preview-state='hover']) {
     text-decoration: underline;
   }
 
@@ -57,7 +58,7 @@ const { variant = 'inline', external = false, class: className, ...rest } = Astr
     transition: transform var(--duration-base) var(--ease-out-expo);
   }
 
-  .standalone:hover .icon {
+  .standalone:is(:hover, [data-preview-state='hover']) .icon {
     transform: translateX(var(--space-1));
   }
 </style>

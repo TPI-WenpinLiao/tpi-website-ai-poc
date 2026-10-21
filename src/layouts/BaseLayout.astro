@@ -61,6 +61,14 @@ const imageUrl = new URL(image.src, Astro.site).href;
 </html>
 
 <style is:global>
+  /* Sizes include padding and border. Without this, <a> buttons and text inputs (content-box)
+     outgrow <button> and <select> (border-box in the UA stylesheet) with the same min-height. */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
     font-family: var(--font-sans);
@@ -77,8 +85,10 @@ const imageUrl = new URL(image.src, Astro.site).href;
   }
 
   /* One focus style for every interactive element; the offset keeps the ring on the surrounding
-     surface, which is what scripts/design/contrast.mjs checks it against. */
-  :focus-visible {
+     surface, which is what scripts/design/contrast.mjs checks it against. data-preview-state="focus"
+     draws it statically on the /design-system page. */
+  :focus-visible,
+  [data-preview-state='focus'] {
     outline: var(--focus-ring-width) solid var(--color-focus);
     outline-offset: var(--focus-ring-offset);
   }

@@ -63,6 +63,11 @@ const { tone = 'light', pattern = 'none', width = 'content', class: className, .
     padding: var(--space-section) var(--space-gutter);
   }
 
+  /* The width tokens are the content width; gutters are added outside them */
+  .inner {
+    box-sizing: content-box;
+  }
+
   .content {
     max-width: var(--content-max-width);
   }
