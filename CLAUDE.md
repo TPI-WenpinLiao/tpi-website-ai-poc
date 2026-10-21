@@ -74,13 +74,13 @@ Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）
 
 **階段一：視覺與結構**
 - 只做版面、視覺與元件結構
-- 最後一個階段完成後執行 `/issue-ship`，走到開 **draft PR** 為止，body 列出設計決策與待確認問題。做法見 `.claude/skills/issue-ship/SKILL.md` 的「`needs-design` 階段一」；計畫不另列 push、開 PR 的階段
-- 停下，告知使用者等待設計確認。**不得自行進入階段二**
+- 最後一個階段完成後執行 `/issue-ship`，開 **draft PR** 後停下。做法見 `.claude/skills/issue-ship/SKILL.md` 的「`needs-design` 的兩個階段」
+- 告知使用者等待設計確認。**不得自行進入階段二**
 
 **階段二：完成度**
 - 使用者告知已加上 `design-approved` 後才繼續
 - 補齊 SEO、無障礙、內容完整度
-- 再執行一次 `/issue-ship`（不另開 PR），跑審查迴圈，符合完成條件後將 PR 轉為 ready for review
+- 再執行一次 `/issue-ship`（不另開 PR，做法見同一節），跑審查迴圈，符合完成條件後將 PR 轉為 ready for review
 
 M2、M3 的關卡 issue 改用對應的 label（`ia-approved`、`wireframe-approved`、`design-approved`），流程相同。
 

@@ -83,7 +83,7 @@ Claude 會依序：
 6. 審查迴圈：每一輪先等目前 head 的 CI 跑完，把 PR body 的 CI 證據換成目前 head 的 run 連結，再開新的子代理跑 `/pr-review`，結論貼到 PR（開頭「AI 審查第 N 輪」）。有 Act on 就修正、push、等 CI、再審一輪；第 2 輪起會逐項確認上一輪的發現修好了沒。CI 判斷方式見 [`issue-ship` 第 7 步](../.claude/skills/issue-ship/SKILL.md#7-審查迴圈)
 7. 審查沒有發現、驗收條件都有證據、CI 是綠的，就把 PR 轉為 ready，貼「合併判斷摘要」，推播通知你
 
-`needs-design` 的 issue 會執行兩次 `/issue-ship`：階段一走到第 5 項開 draft PR 就停下，等你加上 approved label；階段二不另開 PR，從頭再走一次並跑審查迴圈。見 [`issue-ship` 的「`needs-design` 階段一」](../.claude/skills/issue-ship/SKILL.md#needs-design-階段一)。
+`needs-design` 的 issue 會執行兩次 `/issue-ship`：階段一走到第 5 項開 draft PR 就停下，等你加上 approved label；階段二不另開 PR，從頭再走一次並跑審查迴圈。見 [`issue-ship` 的「`needs-design` 的兩個階段」](../.claude/skills/issue-ship/SKILL.md#needs-design-的兩個階段)。
 
 完成條件與摘要格式見 [`issue-ship` 第 8 步](../.claude/skills/issue-ship/SKILL.md#8-完成條件轉-ready)。審查跑滿輪數上限還沒過，Claude 會停下找你（第 3 節）。
 

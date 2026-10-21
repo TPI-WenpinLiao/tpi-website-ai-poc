@@ -101,7 +101,7 @@ Closes #N
 
 最後附上系統指示要求的 PR attribution。開完後用 `subscribe_pr_activity` 監看，CI 結果與留言會喚醒 session。
 
-### `needs-design` 階段一
+### `needs-design` 的兩個階段
 
 `needs-design` 的兩個階段各執行一次本 skill。`CLAUDE.md` 的兩階段流程、`issue-start` 的計畫、`checkpoint` 都連到這裡，做法不另外寫。
 
