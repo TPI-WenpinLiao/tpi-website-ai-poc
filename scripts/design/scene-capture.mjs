@@ -1,5 +1,6 @@
 // Screenshots of the 3D scroll prototype (M3-07, #54) at several scroll positions, on desktop and
-// mobile, plus a reduced-motion run that must show no canvas and request no 3D chunk.
+// mobile, plus a reduced-motion run that must show no canvas and request no 3D chunk, and a switch
+// to reduced motion while the scene plays, which must remove the canvas and leave the static image.
 // Headless Chromium renders WebGL with SwiftShader (software), so frames show the look of the
 // scene, not its real frame rate.
 // With --video it records instead: one WebM per page and viewport, scrolling through the whole
@@ -75,8 +76,20 @@ async function capture(browser, base, path, viewport, outDir, reducedMotion) {
     scrollWidth: document.documentElement.scrollWidth,
     width: innerWidth,
   }));
+  // Turning reduced motion on while the scene plays must drop back to the static image
+  let switchedOff;
+  if (!reducedMotion && ready) {
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await sleep(500);
+    switchedOff = await page.evaluate(
+      () =>
+        document.querySelectorAll('canvas').length === 0 &&
+        !document.querySelector('[data-scene-track]')?.hasAttribute('data-scene') &&
+        Boolean(document.querySelector('.backdrop img')?.checkVisibility()),
+    );
+  }
   await page.close();
-  return { page: path, viewport: viewport.name, reducedMotion, ready, sceneRequests: sceneRequests.length, ...state, errors };
+  return { page: path, viewport: viewport.name, reducedMotion, ready, switchedOff, sceneRequests: sceneRequests.length, ...state, errors };
 }
 
 // Seconds of hold on the hero, then of scrolling through the track
@@ -146,7 +159,7 @@ async function main() {
         for (const reducedMotion of [false, true]) {
           const result = await capture(browser, base, path, viewport, outDir, reducedMotion);
           console.log(JSON.stringify(result));
-          const bad = reducedMotion ? result.canvas > 0 || result.sceneRequests > 0 : !result.ready;
+          const bad = reducedMotion ? result.canvas > 0 || result.sceneRequests > 0 : !result.ready || !result.switchedOff;
           if (bad || result.errors.length || result.scrollWidth > result.width) failed = true;
         }
       }

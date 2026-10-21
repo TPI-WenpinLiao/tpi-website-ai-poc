@@ -2,11 +2,13 @@
 // - text over images: every text line inside a section with a Backdrop must reach WCAG 2.2 AA
 //   (4.5:1, or 3:1 for large text) against the worst pixel behind it. contrast.mjs can only check
 //   token pairs; this measures what the image actually puts behind the text, at several widths.
+// - text over the 3D scene (Scene3D): with motion on, the same measurement over what the running
+//   scene draws, at several positions of the scene track
 // - no horizontal scrolling at any of those widths
 // - keyboard: every focusable element shows a visible focus indicator when reached with Tab
 // - prefers-reduced-motion: no element is still animating and nothing is left transparent
 // Results depend on the installed fonts and on Chromium, so this is not part of `npm run check`;
-// run it after changing hero images, Backdrop, Surface or focus styles.
+// run it after changing hero images, Backdrop, Surface, Scene3D or focus styles.
 // Run after `npm run build`: node scripts/design/a11y-smoke.mjs [path=/design-system]
 
 import { resolve } from 'node:path';
@@ -65,16 +67,15 @@ export function worstContrast(image, rect, text) {
 }
 
 /**
- * Text-over-image problems in one section with a Backdrop, scrolled into view.
- * @param {import('puppeteer-core').Page} page @param {number} index
+ * Text lines inside the elements matching `selector` that are in the viewport, measured against the
+ * worst pixel behind them: the text is made transparent and the page screenshotted.
+ * @param {import('puppeteer-core').Page} page @param {string} selector
  */
-async function textOverImages(page, index) {
-  const lines = await page.evaluate((index) => {
+async function textContrast(page, selector) {
+  const lines = await page.evaluate((selector) => {
     const out = [];
-    const section = document.querySelectorAll('section:has(.backdrop)')[index];
-    section.scrollIntoView({ block: 'start' });
-    {
-      const walker = document.createTreeWalker(section, NodeFilter.SHOW_TEXT);
+    for (const root of document.querySelectorAll(selector)) {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
       for (let node = walker.nextNode(); node; node = walker.nextNode()) {
         const el = node.parentElement;
         if (!el || !node.textContent?.trim() || el.closest('[aria-hidden="true"], .sr-only')) continue;
@@ -94,11 +95,10 @@ async function textOverImages(page, index) {
       }
     }
     return out;
-  }, index);
+  }, selector);
   const hide = await page.addStyleTag({
     // Transitions off: otherwise the screenshot catches text halfway through fading to transparent
-    content:
-      'section:has(.backdrop) * { color: transparent !important; text-shadow: none !important; caret-color: transparent !important; transition: none !important; }',
+    content: `:is(${selector}) * { color: transparent !important; text-shadow: none !important; caret-color: transparent !important; transition: none !important; }`,
   });
   const { data, info } = await sharp(await page.screenshot()).raw().toBuffer({ resolveWithObject: true });
   await hide.evaluate((el) => el.remove());
@@ -109,6 +109,54 @@ async function textOverImages(page, index) {
     if (ratio < min) problems.push(`"${line.text}" ${ratio.toFixed(2)} < ${min}`);
   }
   return { checked: lines.length, problems };
+}
+
+/**
+ * Text-over-image problems in one section with a Backdrop, scrolled into view.
+ * @param {import('puppeteer-core').Page} page @param {number} index
+ */
+async function textOverImages(page, index) {
+  await page.evaluate((index) => {
+    document.querySelector('[data-a11y-measure]')?.removeAttribute('data-a11y-measure');
+    const section = document.querySelectorAll('section:has(.backdrop)')[index];
+    section.setAttribute('data-a11y-measure', '');
+    section.scrollIntoView({ block: 'start' });
+  }, index);
+  return textContrast(page, '[data-a11y-measure]');
+}
+
+// Fractions of the 3D scene track (Scene3D) at which text over the running scene is measured
+const SCENE_STOPS = [0, 0.25, 0.5, 0.75, 1];
+const SCENE_VIEWPORTS = [
+  [375, 800],
+  [1280, 860],
+];
+const SCENE_TIMEOUT = 20_000;
+
+/**
+ * Text over the running 3D scene, at each SCENE_STOPS position of the track. Empty when the page
+ * has no scene track; a problem when the scene never draws.
+ * @param {import('puppeteer-core').Page} page
+ */
+async function textOverScene(page) {
+  if (!(await page.$('[data-scene-track]'))) return [];
+  const ready = await page
+    .waitForSelector('[data-scene="ready"]', { timeout: SCENE_TIMEOUT })
+    .then(() => true)
+    .catch(() => false);
+  if (!ready) return [{ stop: 0, checked: 0, problems: ['3D scene never reached data-scene="ready"'] }];
+  const results = [];
+  for (const stop of SCENE_STOPS) {
+    await page.evaluate((f) => {
+      const track = document.querySelector('[data-scene-track]');
+      const top = track.getBoundingClientRect().top + scrollY;
+      scrollTo(0, top + (track.offsetHeight - innerHeight) * f);
+    }, stop);
+    // Let the canvas fade in and the camera settle on the new position
+    await new Promise((r) => setTimeout(r, 1200));
+    results.push({ stop, ...(await textContrast(page, '[data-scene-track]')) });
+  }
+  return results;
 }
 
 /** Focusable elements without a visible focus indicator. @param {import('puppeteer-core').Page} page */
@@ -174,6 +222,18 @@ async function main([path = '/design-system']) {
         await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => r(null))));
         const text = await textOverImages(page, i);
         report(`${width}×${height} text over image, section ${i + 1}/${sections} (${text.checked} lines in view)`, text.problems);
+      }
+      await page.close();
+    }
+
+    // Motion on: the 3D scene runs, so text is measured over what it actually draws
+    for (const [width, height] of SCENE_VIEWPORTS) {
+      const page = await browser.newPage();
+      await page.setViewport({ width, height });
+      await page.goto(url, { waitUntil: 'load' });
+      await page.evaluate(() => document.fonts.ready);
+      for (const r of await textOverScene(page)) {
+        report(`${width}×${height} text over 3D scene at ${r.stop * 100}% (${r.checked} lines in view)`, r.problems);
       }
       await page.close();
     }
