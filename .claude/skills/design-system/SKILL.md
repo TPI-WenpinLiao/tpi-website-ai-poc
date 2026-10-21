@@ -5,11 +5,11 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 # Design system
 
-> 狀態：M3-02（#15）定案 tokens 與基礎元件，M3-03（#16）補齊 `/design-system` 展示頁。3D 方向專屬的細節（粒子色、方塊材質）等 M3-07 選定後在 M3-04 補上，M3 收尾 issue 再更新本檔。
+> 狀態：M3-02（#15）定案 tokens 與基礎元件，M3-03（#16）補齊 `/design-system` 展示頁，M3-07（#54）選定 3D 方向 B Modular Stack 並加上 `Scene3D`。方塊材質等方向專屬的 tokens 在 M3-04 補上，M3 收尾 issue 再更新本檔。
 
 ## 設計方向
 
-網站是有景深的場景：敘事頁（首頁、產品、方案）放在深色 surface 上，底下是 3D 捲動場景（M3-07），內容是浮在場景上的玻璃圖層；閱讀頁（blog、法務、長文）用亮色 surface。
+網站是有景深的場景：敘事頁（首頁、產品、方案）放在深色 surface 上，底下是 3D 捲動場景（方向 B Modular Stack：等角視角的方塊隨捲動拆解、翻轉，再重組成各產品家族的模組），內容是浮在場景上的玻璃圖層；閱讀頁（blog、法務、長文）用亮色 surface。
 
 - 光標示資料與互動：紫、品紅、橘的能量漸層與光點只用在線條、外框、焦點、hover，不當文字的底色
 - 動態跟著捲動：進場、圖層分離、進度條都用 CSS scroll-driven animation，不加 client JS
@@ -50,7 +50,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 品牌色沿用現站（2026-10-21 審核確認）：紫 `--purple-700`（`#662e8d`）、品紅 `--magenta-500`（`#b824d1`）、橘 `--orange-500`（`#ff6329`）。橘 500 對白只有 2.97:1，只當裝飾（`--color-accent`）
 - glass（`--glass-bg`）是半透明面板，背後可能是 3D 場景最亮的地方。對比以 `--scene-worst`（該 surface 最不利的背景）合成後計算
 - 字型：`--font-sans` 是 Inter＋系統中文字；`--font-mono`（JetBrains Mono）只用在編號、eyebrow、資料標籤。兩者都在 `BaseLayout` import，不載中文 webfont
-- 3D：`--scene-angle-x`、`--scene-angle-z` 是共用的等角視角，`--perspective` 是共用透視距離。M3-07 的 three.js 相機要對齊這兩個值，靜態版與 3D 版才會重疊
+- 3D：`--scene-angle-x`、`--scene-angle-z` 是共用的等角視角，`--perspective` 是共用透視距離。`Scene3D` 的 three.js 相機從這些值換算（`src/lib/scene/runtime.ts`），靜態版與 3D 版才會重疊；顏色從 `--gradient-energy`、`--color-bg`、`--color-border-brand` 讀，TS 不寫色碼
 - `--wf-*` 只給 M3-01 wireframe 用，M4-04 後隨 wireframe 刪除，新元件不得引用
 
 ## 斷點
@@ -98,6 +98,17 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
+| `Scene3D` | three.js 3D 捲動場景 | 見下方「3D 場景」 |
+
+## 3D 場景
+
+`Scene3D` 是 three.js 的 island，載入策略與理由見 [ADR 0003](../../../docs/decisions/0003-3d-island-loading.md)。
+
+- 放在 `PageHero` 的 `backdrop` slot、靜態 `Backdrop`（`priority`）之後；靜態圖是 LCP，也是減少動態、Save-Data、不支援 WebGL 時的完整版本
+- hero 與要讓場景透出的區塊包在同一個 `data-scene-track` 元素裡，捲動進度以它計算。canvas 固定在 viewport，track 裡 hero 之後的區塊要寫 `[data-scene='ready'] .x { background: transparent; }`，並用 `position: relative` 與 `--z-raised` 疊在 hero 之上
+- 場景上的文字放在玻璃面板（`--glass-bg`）或 scrim 那一側，不直接壓在方塊上
+- 新場景寫成 `src/lib/scene/<名稱>.ts`，default export 一個 `SceneFactory`，加進 `Scene3D` 的 `LOADERS`；數量要乘上 `tier.density`，讓行動版降級生效
+- 改到 `Scene3D`、`src/lib/scene/` 或用到它的頁面後，跑 ADR 0003「量測」的三個 script
 
 ## 展示頁
 
@@ -140,4 +151,4 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
 
-不在 `npm run check` 裡、依環境字型與 Chromium 的：`node scripts/design/a11y-smoke.mjs`（圖上文字對比、水平捲動、鍵盤 focus、reduced motion），改到 hero、`Backdrop`、`Surface` 或 focus 樣式後要跑。
+不在 `npm run check` 裡、依環境字型與 Chromium 的：`node scripts/design/a11y-smoke.mjs [path]`（圖上與 3D 場景上的文字對比、水平捲動、鍵盤 focus、reduced motion），改到 hero、`Backdrop`、`Surface`、`Scene3D` 或 focus 樣式後要跑。

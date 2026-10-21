@@ -3,7 +3,7 @@
 // `backdrop` slot after the Backdrop that holds the static image, inside an element marked
 // `data-scene-track` (the hero plus the sections the scene plays behind).
 // The static Backdrop stays the LCP and the complete fallback. three.js loads only after the
-// page's load event and an idle callback, and never with prefers-reduced-motion: reduce, Save-Data
+// page's load event, the hero image's first paint and an idle callback, and never with prefers-reduced-motion: reduce, Save-Data
 // or without WebGL. Once the first frame is drawn the track gets data-scene="ready" and the canvas
 // fades in over the static image; it is fixed to the viewport so it keeps playing while the
 // track's later sections (which must then drop their background) scroll over it.
@@ -44,6 +44,15 @@ const { direction } = Astro.props;
       else addEventListener('load', () => resolve(), { once: true });
     });
 
+  // `load` can fire before the decoded hero image is on screen; the scene must start after it (#54)
+  const heroPainted = async (track: HTMLElement) => {
+    await track
+      .querySelector('img')
+      ?.decode()
+      .catch(() => undefined);
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  };
+
   const idle = () =>
     new Promise<void>((resolve) => {
       if ('requestIdleCallback' in window) requestIdleCallback(() => resolve(), { timeout: IDLE_TIMEOUT });
@@ -56,6 +65,7 @@ const { direction } = Astro.props;
     if (!load || !track || reduceMotion.matches || saveData()) return;
 
     await afterLoad();
+    await heroPainted(track);
     await idle();
     if (reduceMotion.matches || !supportsWebGL()) return;
 
