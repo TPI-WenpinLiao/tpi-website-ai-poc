@@ -104,15 +104,15 @@ const toc = [
   { id: 'reading', label: '長文' },
 ];
 
-const title = 'Design system 審核｜TPIsoftware 昕力資訊';
+const title = 'Design system｜TPIsoftware 昕力資訊';
 const description =
-  'M3-02 design tokens 與基礎元件審核頁：亮暗兩種 surface、光與景深、字體與間距，以及按鈕、連結、卡片、表單與捲動動態的各種狀態。';
+  'TPIsoftware 網站的 design tokens 與元件參考：原始色階、亮暗兩種 surface 的語意色彩、字體與間距等尺度，以及按鈕、連結、標籤、卡片、表單欄位的各種狀態。';
 ---
 
 <BaseLayout title={title} description={description}>
   <ScrollProgress />
   <PageHero
-    eyebrow="M3-02 · Design system"
+    eyebrow="Design system"
     title="有景深的設計系統"
     description="為 3D 捲動場景設計的 tokens 與元件。本頁的標題區就是 PageHero，背後是方向 A 的靜態主視覺，3D 場景載入前與減少動態時都顯示這張圖。"
   >
@@ -235,12 +235,13 @@ const description =
             index={tone === 'dark' ? '05' : undefined}
             eyebrow={`Components · ${tone} surface`}
             title={tone === 'dark' ? '元件：深色 surface' : '元件：亮色 surface'}
-            description="同一組元件，不需要變體，顏色跟著 surface 切換。hover 與 focus 欄是靜態畫出的狀態（data-preview-state），樣式和實際操作時同一份。範例文字只用來看版面，不是網站內容。"
+            description="同一組元件，不需要變體，顏色跟著 surface 切換。hover 與 focus 欄是靜態畫出的狀態（data-preview-state），樣式和實際操作時同一份；示意欄不能操作，請用「預設」欄實際操作。範例文字只用來看版面，不是網站內容。"
           />
 
           <h3>Button</h3>
           <div class="table-wrap">
             <table class="matrix">
+              <caption class="sr-only">Button 各 variant 的狀態。Hover、Focus 欄是靜態示意，不能操作。</caption>
               <thead>
                 <tr>
                   <th scope="col">Variant</th>
@@ -252,7 +253,7 @@ const description =
                   <tr>
                     <th scope="row"><code>{v.variant}</code></th>
                     {buttonStates.map((st) => (
-                      <td>
+                      <td inert={st.preview !== undefined}>
                         <Button variant={v.variant} data-preview-state={st.preview} disabled={st.disabled}>
                           {v.label}
                         </Button>
@@ -276,6 +277,7 @@ const description =
           <h3>Link</h3>
           <div class="table-wrap">
             <table class="matrix">
+              <caption class="sr-only">Link 各 variant 的狀態。Hover、Focus 欄是靜態示意，不能操作。</caption>
               <thead>
                 <tr>
                   <th scope="col">Variant</th>
@@ -287,7 +289,7 @@ const description =
                   <tr>
                     <th scope="row"><code>{v.name}</code></th>
                     {linkStates.map((st) => (
-                      <td>
+                      <td inert={st.preview !== undefined}>
                         <Link href={v.external ? 'https://www.tpisoftware.com' : `#components-${tone}`} variant={v.variant} external={v.external} data-preview-state={st.preview}>
                           {v.label}
                         </Link>
@@ -302,6 +304,7 @@ const description =
           <h3>Tag</h3>
           <div class="table-wrap">
             <table class="matrix">
+              <caption class="sr-only">Tag 各 tone 的狀態。Hover、Focus 欄是靜態示意，不能操作。</caption>
               <thead>
                 <tr>
                   <th scope="col">Tone</th>
@@ -320,7 +323,7 @@ const description =
                   <tr>
                     <th scope="row"><code>{t.tone}</code> + href</th>
                     {linkStates.map((st) => (
-                      <td>
+                      <td inert={st.preview !== undefined}>
                         <Tag href={`#components-${tone}`} tone={t.tone} data-preview-state={st.preview}>
                           {t.label}
                         </Tag>
@@ -343,7 +346,7 @@ const description =
           <h3>Card</h3>
           <ul class="cards">
             {linkStates.map((st, i) => (
-              <li class="state">
+              <li class="state" inert={st.preview !== undefined}>
                 <span class="state-label">{st.label}</span>
                 <Card
                   level={4}
@@ -382,8 +385,12 @@ const description =
           <h3>FormField</h3>
           <div class="fields">
             <FormField id={`${tone}-default`} name={`${tone}-default`} label="預設" kind="text" />
-            <FormField id={`${tone}-hover`} name={`${tone}-hover`} label="Hover" kind="text" data-preview-state="hover" />
-            <FormField id={`${tone}-focus`} name={`${tone}-focus`} label="Focus" kind="text" data-preview-state="focus" />
+            <div inert>
+              <FormField id={`${tone}-hover`} name={`${tone}-hover`} label="Hover（示意）" kind="text" data-preview-state="hover" />
+            </div>
+            <div inert>
+              <FormField id={`${tone}-focus`} name={`${tone}-focus`} label="Focus（示意）" kind="text" data-preview-state="focus" />
+            </div>
             <FormField id={`${tone}-filled`} name={`${tone}-filled`} label="已填寫" kind="email" value="name@example.com" />
             <FormField id={`${tone}-required`} name={`${tone}-required`} label="必填" kind="text" required />
             <FormField id={`${tone}-hint`} name={`${tone}-hint`} label="有說明文字" kind="email" hint="我們會寄送確認信到這個信箱。" />
