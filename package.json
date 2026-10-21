@@ -12,7 +12,7 @@
     "preview": "astro preview",
     "check": "npm run check:ia && npm run check:design && npm run test:scripts && astro check && astro build && node scripts/design/dist-css.mjs && node scripts/seo/headings.mjs && npm run validate:html && npm run lighthouse",
     "check:ia": "node scripts/ia/sitemap.mjs --check && node scripts/ia/navigation.mjs --check && node scripts/ia/redirects.mjs --check",
-    "check:design": "node scripts/design/contrast.mjs && node scripts/design/token-usage.mjs",
+    "check:design": "node scripts/design/contrast.mjs && node scripts/design/token-usage.mjs && node scripts/design/showcase.mjs",
     "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
     "validate:html": "html-validate \"dist/**/*.html\"",
     "lighthouse": "node scripts/lhci-prepare.mjs && lhci autorun"
