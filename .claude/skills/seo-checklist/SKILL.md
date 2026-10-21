@@ -20,7 +20,7 @@ description: 新增或修改任何頁面、版型、內容時使用。列出每�
 | h1 | 每頁恰好一個，描述頁面主題 |
 | heading 層級 | 依序不跳級（h2 → h3，不可 h2 → h4）；不用 heading 做視覺樣式 |
 | 圖片 | 有意義的圖必有描述性 `alt`；裝飾圖 `alt=""`；必有 `width`/`height`；用 `astro:assets` 輸出 AVIF/WebP；首屏以下 `loading="lazy"` |
-| 連結 | 內部連結用站內絕對路徑，取 `nodes.csv` 的 `path`（加語系前綴），不寫現站路徑、尾斜線或 `.html`；錨點文字有意義（不用「點此」）；不得有斷連 |
+| 連結 | 內部連結用站內絕對路徑，取 `nodes.csv` 的 `path`，blog 文章取 `page-map.csv` 的 `blog_slug` 組成 `/blog/{blog_slug}`（都加語系前綴），不寫現站路徑、尾斜線或 `.html`；錨點文字有意義（不用「點此」）；不得有斷連 |
 | 導覽與麵包屑 | 選單連結以 `<a href>` 輸出在靜態 HTML，不在 client 端產生；麵包屑沿 `nodes.csv` 的 `parent` 產生（`navigation.md`「SEO」） |
 | 列表分頁 | 第一頁不帶頁碼，第 2 頁起 `/{列表路徑}/page/{n}`，canonical 指向自己；篩選用分類頁路徑，不用 query string 產生要被收錄的頁面（ADR 0002） |
 | 結構化資料 | 依下表輸出 JSON-LD |
