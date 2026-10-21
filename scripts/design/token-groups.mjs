@@ -3,6 +3,8 @@
 // no group (so "every token is shown" stays true) or a pattern matches nothing (so this list can't
 // rot). A pattern ending in "-" is a prefix; any other pattern matches that name and names that
 // extend it with "-" (--color-text matches --color-text-muted). The first matching group wins.
+// A group is either all `value` (no visual, rendered as a name/value table) or has no `value`
+// tokens, so a row never shows an empty specimen column; showcase.mjs fails on a mixed group.
 // --wf-* tokens are wireframe-only (M3-01) and not shown.
 
 /**
@@ -79,35 +81,31 @@ export const GROUPS = [
     title: '3D 場景',
     layer: 'scale',
     kind: 'angle',
-    patterns: ['--scene-angle-', '--tilt', '--quarter-turn', '--perspective', '--lift', '--scene-size', '--layer-gap', '--node-size', '--grid-size', '--marker-size'],
+    patterns: ['--scene-angle-', '--tilt', '--quarter-turn', '--scene-size', '--layer-gap', '--node-size', '--grid-size', '--marker-size'],
     kinds: {
-      '--perspective': 'value',
-      '--lift': 'value',
       '--scene-size': 'length',
       '--layer-gap': 'length',
       '--node-size': 'length',
       '--grid-size': 'length',
       '--marker-size': 'length',
     },
-    note: '--scene-angle-* 與 --perspective 是 three.js 相機（M3-07）要對齊的共用視角。偏好減少動態時 --tilt、--lift 歸零。',
+    note: '--scene-angle-* 是 three.js 相機（M3-07）要對齊的共用視角。偏好減少動態時 --tilt 歸零。',
   },
   {
-    id: 'layout',
-    title: '版面',
+    id: 'scene-values',
+    title: '3D 場景數值',
     layer: 'scale',
-    kind: 'length',
-    patterns: ['--content-max-width', '--reading-max-width', '--touch-target', '--progress-height', '--hero-', '--backdrop-soft-opacity', '--z-'],
-    kinds: {
-      '--content-max-width': 'value',
-      '--reading-max-width': 'value',
-      '--hero-min-height': 'value',
-      '--hero-image-share': 'value',
-      '--hero-copy-share': 'value',
-      '--hero-narrow-offset': 'value',
-      '--backdrop-soft-opacity': 'value',
-      '--z-raised': 'value',
-      '--z-overlay': 'value',
-    },
+    kind: 'value',
+    patterns: ['--perspective', '--lift'],
+    note: '--perspective 與 --scene-angle-* 一起對齊 three.js 相機。偏好減少動態時 --lift 歸零。',
+  },
+  { id: 'layout-size', title: '版面尺寸', layer: 'scale', kind: 'length', patterns: ['--touch-target', '--progress-height'] },
+  {
+    id: 'layout-values',
+    title: '版面數值',
+    layer: 'scale',
+    kind: 'value',
+    patterns: ['--content-max-width', '--reading-max-width', '--hero-', '--backdrop-soft-opacity', '--z-'],
   },
 ];
 
@@ -118,8 +116,9 @@ const matches = (pattern, name) => (pattern.endsWith('-') ? name.startsWith(patt
  * Sorts token names into groups, in declaration order within each group.
  * @param {string[]} names token names from tokens.css
  * @param {Group[]} [groups]
- * @returns {{ groups: (Group & { tokens: { name: string, kind: Kind }[] })[], ungrouped: string[], unused: string[] }}
- *   `ungrouped`: shown tokens no group matches; `unused`: patterns that match no token
+ * @returns {{ groups: (Group & { tokens: { name: string, kind: Kind }[] })[], ungrouped: string[], unused: string[], mixed: string[] }}
+ *   `ungrouped`: shown tokens no group matches; `unused`: patterns that match no token;
+ *   `mixed`: ids of groups with both `value` and other kinds
  */
 export function groupTokens(names, groups = GROUPS) {
   const shown = names.filter((n) => !n.startsWith('--wf-'));
@@ -137,5 +136,8 @@ export function groupTokens(names, groups = GROUPS) {
     result[i].tokens.push({ name, kind: g.kinds?.[name] ?? g.kind });
   }
   const unused = groups.flatMap((g) => g.patterns.filter((p) => !used.has(`${g.id}:${p}`)).map((p) => `${g.id}: ${p}`));
-  return { groups: result, ungrouped, unused };
+  const mixed = result
+    .filter((g) => g.tokens.some((t) => t.kind === 'value') && g.tokens.some((t) => t.kind !== 'value'))
+    .map((g) => g.id);
+  return { groups: result, ungrouped, unused, mixed };
 }

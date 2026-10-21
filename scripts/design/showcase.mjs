@@ -1,7 +1,8 @@
 // Enforces the CLAUDE.md rule "新元件必須同步加到 design-system 展示頁": every component in
 // src/components/ui must be imported by the showcase page, src/pages/design-system/index.astro.
 // Also checks that every token in src/styles/tokens.css belongs to a group in token-groups.mjs,
-// which is what the page renders, and that no group pattern is stale.
+// which is what the page renders, that no group pattern is stale, and that no group mixes `value`
+// tokens with ones that have a specimen.
 // Run: node scripts/design/showcase.mjs
 
 import { readFileSync, readdirSync } from 'node:fs';
@@ -32,12 +33,13 @@ function main() {
   console.log(`${components.length - missing.length}/${components.length} components on the showcase page`);
 
   const names = [...parseTokens(readFileSync(join(ROOT, TOKENS), 'utf8')).keys()];
-  const { groups, ungrouped, unused } = groupTokens(names);
+  const { groups, ungrouped, unused, mixed } = groupTokens(names);
   for (const t of ungrouped) console.log(`${t} is in no group of scripts/design/token-groups.mjs`);
   for (const p of unused) console.log(`scripts/design/token-groups.mjs pattern matches no token: ${p}`);
+  for (const id of mixed) console.log(`scripts/design/token-groups.mjs group mixes value with specimen kinds: ${id}`);
   const grouped = groups.reduce((n, g) => n + g.tokens.length, 0);
   console.log(`${grouped}/${grouped + ungrouped.length} tokens grouped for the showcase page`);
-  if (missing.length || ungrouped.length || unused.length) process.exitCode = 1;
+  if (missing.length || ungrouped.length || unused.length || mixed.length) process.exitCode = 1;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) main();

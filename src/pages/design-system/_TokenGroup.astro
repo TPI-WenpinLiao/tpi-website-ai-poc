@@ -1,7 +1,8 @@
 ---
 // One group of scripts/design/token-groups.mjs on the showcase page: every token with a specimen
 // for its kind, its declared value and, for colors, the resolved value. Primitive colors render as
-// a swatch grid with their contrast against the two extremes of the ink ramp.
+// a swatch grid with their contrast against the two extremes of the ink ramp. A group of `value`
+// tokens (no visual) renders as a name/value table; token-groups.mjs keeps groups from mixing them.
 // Files starting with "_" are not routes.
 import type { Kind } from '../../../scripts/design/token-groups.mjs';
 
@@ -24,6 +25,7 @@ interface Props {
 }
 
 const { title, note, rows, layout = 'rows' } = Astro.props;
+const values = rows.every((r) => r.kind === 'value');
 const sample = 'Aa 昕力 0123';
 // rotateX needs the shared perspective to read as depth; the other angles are flat rotations
 const angle = (name: string) =>
@@ -51,6 +53,19 @@ const angle = (name: string) =>
           </li>
         ))}
       </ul>
+    ) : values ? (
+      <table class="values">
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <th scope="row">
+                <code>{r.name}</code>
+              </th>
+              <td class="value">{r.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     ) : (
       <ul class="rows">
         {rows.map((r) => (
@@ -179,20 +194,34 @@ const angle = (name: string) =>
     grid-row: span 2;
   }
 
-  .kind-value > .specimen {
-    display: none;
-  }
-
   /* Rotated planes reach past their box */
   .kind-angle > .specimen {
     overflow: visible;
     padding-block: var(--space-2);
   }
 
-  :is(.kind-gradient, .kind-length, .kind-duration, .kind-ease, .kind-font-family, .kind-font-size, .kind-font-weight, .kind-letter-spacing, .kind-value)
-    > * {
+  :is(.kind-gradient, .kind-length, .kind-duration, .kind-ease, .kind-font-family, .kind-font-size, .kind-font-weight, .kind-letter-spacing) > * {
     grid-row: auto;
     grid-column: 1 / -1;
+  }
+
+  /* Sized to its content: a flex column would otherwise stretch it and push values far right */
+  .values {
+    align-self: start;
+    border-collapse: collapse;
+  }
+
+  .values th {
+    white-space: nowrap;
+  }
+
+  .values th,
+  .values td {
+    padding: var(--space-3) var(--space-6) var(--space-3) 0;
+    border-block-end: var(--border-width) solid var(--color-border);
+    font-weight: var(--font-weight-regular);
+    text-align: start;
+    vertical-align: baseline;
   }
 
   .bar {
@@ -270,13 +299,9 @@ const angle = (name: string) =>
     }
 
     .row > *,
-    :is(.kind-gradient, .kind-length, .kind-duration, .kind-ease, .kind-font-family, .kind-font-weight, .kind-letter-spacing, .kind-value) > * {
+    :is(.kind-gradient, .kind-length, .kind-duration, .kind-ease, .kind-font-family, .kind-font-weight, .kind-letter-spacing) > * {
       grid-row: auto;
       grid-column: auto;
-    }
-
-    .kind-value > .specimen {
-      display: flex;
     }
 
     /* Large sizes need the full row; name and value go below the sample */

@@ -56,5 +56,13 @@ test('reports patterns that match no token, including ones shadowed by an earlie
 test('every token in tokens.css is grouped', () => {
   const css = readFileSync(new URL('../../src/styles/tokens.css', import.meta.url), 'utf8');
   const r = groupTokens([...parseTokens(css).keys()]);
-  assert.deepEqual([r.ungrouped, r.unused], [[], []]);
+  assert.deepEqual([r.ungrouped, r.unused, r.mixed], [[], [], []]);
+});
+
+test('reports groups that mix value tokens with specimen kinds', () => {
+  const groups = [
+    { id: 'a', title: 'A', layer: 'scale', kind: 'length', patterns: ['--space-'], kinds: { '--space-max': 'value' } },
+    { id: 'b', title: 'B', layer: 'scale', kind: 'value', patterns: ['--z-'] },
+  ];
+  assert.deepEqual(groupTokens(['--space-1', '--space-max', '--z-1'], groups).mixed, ['a']);
 });
