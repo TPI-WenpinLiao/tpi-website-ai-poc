@@ -19,6 +19,9 @@ const EXPLODE = 7;
 const CAMERA_DISTANCE = 30;
 // Narrow heroes have less room above the copy: frame the tower from further back
 const NARROW_HERO_PULLBACK = 16;
+// Narrow chapters: the panel sits at the bottom, so raise the camera target (world units) to bring
+// the module down from under the scroll progress bar into the space above the panel
+const NARROW_CHAPTER_DROP = 3;
 const ORBIT_SWING = 0.35;
 // Progress at which the tower has become four modules (the first chapter's center)
 const SPLIT_END = 0.25;
@@ -143,6 +146,7 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
       // Hero frames the tower; chapters pan to the active module
       const followed = active < 0 ? 0 : (active - (MODULES - 1) / 2) * MODULE_SPACING;
       target.copy(towerCenter).addScaledVector(lateral, followed * split);
+      if (isNarrow()) target.y += NARROW_CHAPTER_DROP * split;
       const swing = tier.path === 'orbit' ? Math.sin(progress * Math.PI * 1.5) * ORBIT_SWING + pointer.x * 0.08 : 0;
       placeCamera(camera, {
         target,
