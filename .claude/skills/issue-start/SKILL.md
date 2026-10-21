@@ -24,7 +24,13 @@ description: 開始處理一張 GitHub issue 時使用（/issue-start <issue 編
 
 **沒有 OPEN 的 PR，但 issue 已關閉或有 MERGED／CLOSED 的 PR：停下**
 
-說明 issue 與 PR 狀態，問使用者要不要重做。不要去找進度檔：舊 branch 刪不掉（雲端 session 刪除 remote branch 會被 403 擋下，#70 實測），上面的進度檔可能已經過時。使用者確認重做後，`git checkout -B <工作 branch> origin/main`，照第 2–6 步提出新計畫
+舊 branch 刪不掉（雲端 session 刪除 remote branch 會被 403 擋下，#70 實測），上面的進度檔可能已經過時，也可能是先前「重做」留下、還沒開 PR 的進度，不能自動接續。
+
+1. 執行下方「找進度檔」的迴圈，排除這些 MERGED／CLOSED PR 的 head branch
+2. 停下回報 issue 與 PR 狀態（含 PR 關閉時間），並列出剩下帶進度檔的 ref 與各自 `git log -1 --format=%ci` 的時間
+3. 問使用者：接續其中一個 ref，或重做
+   - 接續：照下方「接續」第 2 步起執行
+   - 重做：`git checkout -B <工作 branch> origin/main`，照第 2–6 步提出新計畫。列出的 ref 扣掉 `origin/<工作 branch>` 後，寫進第一次 checkpoint 的「待刪除的舊 branch」。`origin/<工作 branch>` 本身在清單裡時（同一個 session 重啟），重做會捨棄它上面的進度，第一次 checkpoint 要用 `git push --force-with-lease`；問使用者時先講明這一點
 
 **issue 開著、沒有任何 PR：找進度檔**
 
