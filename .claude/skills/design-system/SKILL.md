@@ -86,8 +86,15 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Tag` | 標籤 | `neutral`、`brand`、`node`（mono＋發光點，用於模組與技術關鍵字）；有 `href` 才是連結 |
 | `Card` | 列表卡片 | 玻璃面板，hover／focus 時傾斜、亮起漸層外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填 |
 | `FormField` | 表單欄位 | `kind` 區分 text／email／tel／textarea／select／checkbox；hint、error 以 `aria-describedby` 連到欄位，error 加 `aria-invalid` |
+| `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
+
+## 影像
+
+- 抽象 3D 渲染，只用品牌色，不放文字、數字、人物、真實產品。提示詞、規格與素材清單見 `docs/design/image-prompts.md`
+- 檔案放 `src/assets/design/`，用 `node scripts/design/import-image.mjs <來源> <檔名>` 轉成 WebP 品質 95，不直接放 PNG
+- 文字壓在圖上時，圖要讓出文字的位置（hero 的 `--hero-image-share`／`--hero-copy-share`、手機的 `--hero-narrow-offset`），不靠加深遮罩硬撐。換圖後跑 `node scripts/design/a11y-smoke.mjs`
 
 ## 無障礙
 
@@ -103,4 +110,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - `npm run check:design`
   - `scripts/design/contrast.mjs`：兩個 surface 各自檢查 `PAIRS` 每一組
   - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/pages/design-system/`、`BaseLayout` 的 `<style>` 不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
+- build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
+
+不在 `npm run check` 裡、依環境字型與 Chromium 的：`node scripts/design/a11y-smoke.mjs`（圖上文字對比、水平捲動、鍵盤 focus、reduced motion），改到 hero、`Backdrop`、`Surface` 或 focus 樣式後要跑。

@@ -83,10 +83,27 @@ Minimal abstract 3D render on a near-black purple-tinted background (#0a0812), s
 Very light, airy abstract background, off-white with a faint lavender tint (#f6f5fa). Extremely soft, blurred pastel glow of lavender (#d9c4f2) at the top right fading to white, a barely visible fine grid. No objects, no text. Must stay very low contrast so dark body text on top remains easy to read. 3:1 wide banner.
 ```
 
-## 接進來之後
+## 已收到的素材（2026-10-21）
 
-- 1、2、3：放進 `PageHero` 的 `visual` slot，取代 `LayerStack` 當作 3D 場景載入前與減少動態時的靜態圖。也是 M3-07（#54）驗收條件「LCP 元素是靜態圖」要用的圖
-- 4：`Surface` 加背景圖選項，壓在格線下方
-- 5：`Card` 沒有 `image` 時的預設封面
-- 6：亮色 `Surface` 的頂部背景
-- 每張圖接上後重跑 `npm run check:design`，確認文字疊在圖上的區塊仍用 glass 或 scrim，對比照 `contrast.mjs` 的最壞情況計算
+使用者用生圖工具產生 10 張，`ambient-glow-2` 沒有做（一張就夠）。原始檔是 1–2MB 的 PNG，用 `scripts/design/import-image.mjs` 轉成 WebP 品質 95 存進 `src/assets/design/`（共 1.5MB，PSNR 41–45 dB）：
+
+```bash
+node scripts/design/import-image.mjs <來源.png> <檔名（不含副檔名）> [...]
+```
+
+| 檔名 | 尺寸 | 用在 |
+|---|---|---|
+| `hero-data-flow.webp`、`hero-data-flow-mobile.webp` | 1774×887、1122×1402 | `/design-system` hero（`Backdrop`，LCP） |
+| `hero-modular-stack.webp`、`hero-modular-stack-mobile.webp` | 1672×941、1122×1402 | `/design-system`「影像」區塊 |
+| `ambient-glow-1.webp` | 1672×941 | 深色區塊背景（`Backdrop strength="soft"`） |
+| `cover-platform/integration/data/security.webp` | 1600×900 | 卡片封面範例、「影像」區塊 |
+| `reading-header.webp` | 2172×724 | 亮色長文區塊頂部 |
+
+尺寸比要求的小，網頁用夠：hero 最大輸出 1440px 寬。換圖時用同一個檔名重跑 script。
+
+## 接進來的方式
+
+- `Backdrop` 元件（`src/components/ui/Backdrop.astro`）放進 `Surface` 或 `PageHero` 的 `backdrop` slot；圖是裝飾，alt 一律留空
+- hero：桌機版圖只佔右側 `--hero-image-share`（58%），左緣淡出，文字欄限制在 `--hero-copy-share`（45%）；手機版改用 4:5 圖，照原比例貼在頂部，文字從 `--hero-narrow-offset` 往下排。第一版讓圖 `cover` 鋪滿，光束跑到文字下面，1024px 時說明文字對比只有 1.63:1
+- 文字壓在圖上的對比用 `node scripts/design/a11y-smoke.mjs` 實測（五種寬度、每個有背景圖的區塊，取文字範圍內最不利的像素），換圖或改 `Backdrop` 後要重跑
+- M3-07（#54）選定方向後，hero 用該方向的圖當 3D 場景的 LCP 與減少動態時的版本
