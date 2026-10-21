@@ -25,15 +25,7 @@ three.js 是本站第一個大型 client 依賴。ADR 0001 定了「預設零 cl
 3. **不載入的條件**：`prefers-reduced-motion: reduce`、`navigator.connection.saveData`、瀏覽器不支援 WebGL。執行中切換成減少動態時，停止場景、移除 canvas，回到靜態圖
 4. **第一個 frame 畫完才淡入**：track 加上 `data-scene="ready"` 後 canvas 淡入（`--duration-slow`），靜態圖不做任何動畫
 5. **不在畫面上就不畫**：IntersectionObserver 在 track 離開畫面時停止 `requestAnimationFrame`，分頁隱藏（`visibilitychange`）時也停止
-6. **行動版降級**：`(width < 64rem), (pointer: coarse)` 用 `TIERS.mobile`，在場景啟動時決定。構圖（主體偏右或偏上）只看寬度 `(width < 64rem)`，和 CSS 的 `--bp-lg-down` 一致，視窗縮放跨過斷點時跟著改；橫向平板是桌機構圖、行動版預算
-
-   | 設定 | 桌機 | 行動版 |
-   |---|---|---|
-   | `devicePixelRatio` 上限 | 2 | 1.5 |
-   | 方塊數量（`density`） | 每個模組 3×3×3，共 108 塊（1） | 每個模組 2×2×2，共 32 塊（0.35，低於 0.5 就改用 2×2×2） |
-   | antialias | 開 | 關 |
-   | 鏡頭路徑 | 環繞（方位角擺動、推近） | 只沿一個方向移動 |
-   | 滑鼠視差 | 開 | 關 |
+6. **行動版降級**：`(width < 64rem), (pointer: coarse)` 用 `TIERS.mobile`，在場景啟動時決定。構圖（主體偏右或偏上）只看寬度 `(width < 64rem)`，和 CSS 的 `--bp-lg-down` 一致，視窗縮放跨過斷點時跟著改；橫向平板是桌機構圖、行動版預算。行動版降低 `devicePixelRatio` 上限與方塊數量、關掉 antialias 與滑鼠視差、鏡頭只沿一個方向移動，數值只寫在 `src/lib/scene/runtime.ts` 的 `TIERS`
 
 7. **3D 上的文字要能讀**：canvas 上蓋一層和 `Backdrop fade="hero"` 相同的 scrim，文字側維持 `--color-bg`；chapter 的文字放在玻璃面板（`--glass-bg`）上
 8. **量測**：原型頁不進 `npm run check` 的 LHCI（`staticDistDir` 只自動測 5 個 URL），改用以下 script，改到 `Scene3D`、`src/lib/scene/` 或原型頁後要跑
@@ -53,11 +45,11 @@ ADR 0001 的原則不變：頁面預設沒有 client JS。3D 場景是明確選�
 
 ## 結果
 
-`node scripts/design/lighthouse-3d.mjs`（2026-10-21，雲端 session，Lighthouse 12.6.1，3 次取中位數）：
+`node scripts/design/lighthouse-3d.mjs`（2026-10-21，commit `9a130f1`，雲端 session，Lighthouse 12.6.1，3 次取中位數）：
 
 | 頁面 | 行動版 | 桌機 |
 |---|---|---|
-| `/prototypes/modular-stack` | 0.99（TBT 58 ms） | 1（TBT 0 ms） |
+| `/prototypes/modular-stack` | 0.99（TBT 73 ms） | 1（TBT 0 ms） |
 
 LCP 都是 hero 靜態圖，3D chunk 在實測 LCP 與 `load` 之後請求。同一頁的 SEO、accessibility、best-practices 在行動版與桌機都是 1。headless Chromium 用 SwiftShader 軟體算圖，TBT 偏高；真機待 preview 部署後量測。
 
