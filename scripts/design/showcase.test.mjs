@@ -2,7 +2,10 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { missingComponents } from './showcase.mjs';
+import { groupTokens } from './token-groups.mjs';
+import { parseTokens } from './contrast.mjs';
 
 const PAGE = `---
 import Button from '../../components/ui/Button.astro';
@@ -23,4 +26,35 @@ test('imports from other folders do not count', () => {
 
 test('passes when every component is imported', () => {
   assert.deepEqual(missingComponents(['Button.astro', 'Card.astro'], PAGE), []);
+});
+
+test('groups tokens by prefix and by name with its "-" extensions, first match wins', () => {
+  const groups = [
+    { id: 'a', title: 'A', layer: 'scale', kind: 'length', patterns: ['--space-'] },
+    { id: 'b', title: 'B', layer: 'semantic', kind: 'color', patterns: ['--color-text'], kinds: { '--color-text-muted': 'value' } },
+  ];
+  const r = groupTokens(['--space-1', '--color-text', '--color-text-muted', '--color-textual', '--wf-space-1'], groups);
+  assert.deepEqual(r.groups.map((g) => g.tokens), [
+    [{ name: '--space-1', kind: 'length' }],
+    [
+      { name: '--color-text', kind: 'color' },
+      { name: '--color-text-muted', kind: 'value' },
+    ],
+  ]);
+  assert.deepEqual(r.ungrouped, ['--color-textual']);
+  assert.deepEqual(r.unused, []);
+});
+
+test('reports patterns that match no token, including ones shadowed by an earlier group', () => {
+  const groups = [
+    { id: 'a', title: 'A', layer: 'scale', kind: 'length', patterns: ['--space-'] },
+    { id: 'b', title: 'B', layer: 'scale', kind: 'length', patterns: ['--space-1', '--radius-'] },
+  ];
+  assert.deepEqual(groupTokens(['--space-1'], groups).unused, ['b: --space-1', 'b: --radius-']);
+});
+
+test('every token in tokens.css is grouped', () => {
+  const css = readFileSync(new URL('../../src/styles/tokens.css', import.meta.url), 'utf8');
+  const r = groupTokens([...parseTokens(css).keys()]);
+  assert.deepEqual([r.ungrouped, r.unused], [[], []]);
 });

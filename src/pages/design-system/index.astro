@@ -1,7 +1,8 @@
 ---
-// M3-02 review page for the design tokens and base components. Not in navigation.csv or the
-// sitemap; M3-03 (#16) extends this page into the full design-system showcase.
-// Token lists and contrast ratios are read from tokens.css at build time, so they can't drift.
+// Design-system showcase (M3-03, #16): every design token and every base component with its
+// states. Not in navigation.csv or the sitemap.
+// Tokens, their grouping (scripts/design/token-groups.mjs) and contrast ratios are read from
+// tokens.css at build time, so they can't drift; showcase.mjs fails when a token is in no group.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/ui/PageHero.astro';
 import Surface from '../../components/ui/Surface.astro';
@@ -17,7 +18,9 @@ import FormField from '../../components/ui/FormField.astro';
 import Backdrop from '../../components/ui/Backdrop.astro';
 import { Image } from 'astro:assets';
 import tokensCss from '../../styles/tokens.css?raw';
-import { parseSurfaces, resolveColor, checkPairs, PAIRS } from '../../../scripts/design/contrast.mjs';
+import { parseSurfaces, resolveColor, checkPairs, contrastRatio, PAIRS } from '../../../scripts/design/contrast.mjs';
+import { groupTokens, type Group } from '../../../scripts/design/token-groups.mjs';
+import TokenGroup, { type Row } from './_TokenGroup.astro';
 import heroDataFlow from '../../assets/design/hero-data-flow.webp';
 import heroDataFlowMobile from '../../assets/design/hero-data-flow-mobile.webp';
 import heroModularStack from '../../assets/design/hero-modular-stack.webp';
@@ -31,19 +34,30 @@ import coverSecurity from '../../assets/design/cover-security.webp';
 
 const surfaces = parseSurfaces(tokensCss);
 const light = surfaces[0].tokens;
-const names = [...light.keys()];
-const byPrefix = (prefix: string) => names.filter((n) => n.startsWith(prefix));
-const colorNames = [...byPrefix('--color-'), '--glass-bg', '--glass-border'];
+const { groups } = groupTokens([...light.keys()]);
+const byLayer = (layer: Group['layer']) => groups.filter((g) => g.layer === layer);
+const white = resolveColor(light, '--ink-0');
+const black = resolveColor(light, '--ink-950');
+
+/** Rows for one group on one surface; colors also get their literal value. */
+const rows = (group: (typeof groups)[number], tokens: Map<string, string>, primitive = false): Row[] =>
+  group.tokens.map(({ name, kind }) => {
+    const value = tokens.get(name) ?? '';
+    if (kind !== 'color') return { name, kind, value };
+    const resolved = resolveColor(tokens, name);
+    return primitive
+      ? { name, kind, value, ratios: { light: contrastRatio(resolved, white), dark: contrastRatio(resolved, black) } }
+      : { name, kind, value, resolved };
+  });
+
 // Dark first: it is the scene surface the narrative pages open on
-const swatches = [...surfaces].reverse().map(({ name, tokens }) => ({
+const semantic = [...surfaces].reverse().map(({ name, tokens }) => ({
   name,
   tone: name === 'dark' ? ('dark' as const) : ('light' as const),
-  colors: colorNames.map((n) => ({ name: n, value: resolveColor(tokens, n) })),
+  groups: byLayer('semantic').map((g) => ({ ...g, rows: rows(g, tokens) })),
 }));
 const contrast = surfaces.flatMap(({ name, tokens }) => checkPairs(tokens, PAIRS).map((r) => ({ surface: name, ...r })));
 const failed = contrast.filter((r) => !r.ok).length;
-const headingSizes = ['--font-size-display', '--font-size-h1', '--font-size-h2', '--font-size-h3', '--font-size-h4'];
-const spaces = byPrefix('--space-');
 
 const principles = [
   { title: '場景與圖層', body: '深色 surface 是 3D 捲動場景的舞台，內容是浮在上面的玻璃圖層。閱讀為主的頁面改用亮色 surface。' },
@@ -66,7 +80,7 @@ const description =
     <Backdrop slot="backdrop" image={heroDataFlow} mobile={heroDataFlowMobile} fade="hero" focus="end" priority />
     <Fragment slot="actions">
       <Button href="#components-dark" size="lg">看元件</Button>
-      <Button href="#color" size="lg" variant="secondary">看色彩</Button>
+      <Button href="#tokens" size="lg" variant="secondary">看 tokens</Button>
     </Fragment>
   </PageHero>
 
@@ -91,28 +105,32 @@ const description =
       </ol>
     </Surface>
 
+    <Surface tone="light" id="tokens">
+      <SectionHeading
+        index="02"
+        eyebrow="Tokens · Primitives"
+        title="Tokens：原始色階"
+        description="tokens.css 的三層：primitive 是原始色值，只在 tokens.css 內被引用；元件用 semantic 與 scale。本頁的 token 清單在 build 時從 tokens.css 讀出。"
+      />
+      {byLayer('primitive').map((g) => <TokenGroup title={g.title} note={g.note} rows={rows(g, light, true)} layout="swatches" />)}
+    </Surface>
+
     {
-      swatches.map((s) => (
-        <Surface tone={s.tone} id={s.tone === 'dark' ? 'color' : undefined}>
+      semantic.map((s) => (
+        <Surface tone={s.tone} pattern={s.tone === 'dark' ? 'grid' : 'none'} id={`tokens-${s.name}`}>
           <SectionHeading
-            index={s.tone === 'dark' ? '02' : undefined}
-            eyebrow={`Color · ${s.name} surface`}
-            title={s.tone === 'dark' ? '色彩：深色 surface' : '色彩：亮色 surface'}
+            index={s.tone === 'dark' ? '03' : undefined}
+            eyebrow={`Tokens · Semantic · ${s.name} surface`}
+            title={s.tone === 'dark' ? 'Tokens：語意（深色 surface）' : 'Tokens：語意（亮色 surface）'}
             description={
               s.tone === 'dark'
                 ? '敘事頁（首頁、產品、方案）的場景底色。同一組語意 token 名稱，在 data-surface="dark" 底下換成這些值。'
                 : '閱讀頁（blog、法務、長文）的底色，也是 :root 的預設值。'
             }
           />
-          <ul class="swatches">
-            {s.colors.map((c) => (
-              <li class="swatch">
-                <span class="chip" style={`background: var(${c.name})`} />
-                <code>{c.name}</code>
-                <span class="value">{c.value}</span>
-              </li>
-            ))}
-          </ul>
+          {s.groups.map((g) => (
+            <TokenGroup title={g.title} note={g.note} rows={g.rows} />
+          ))}
           {s.tone === 'light' && (
             <details class="contrast">
               <summary>
@@ -152,56 +170,14 @@ const description =
       ))
     }
 
-    <Surface tone="dark" pattern="grid">
-      <SectionHeading index="03" eyebrow="Typography" title="字體" />
-      <p class="note">
-        Inter 做 display 與內文（大字級收緊字距），中文用系統字；JetBrains Mono 只用在編號、eyebrow 與資料標籤。
-      </p>
-      <ul class="type-scale">
-        {
-          headingSizes.map((name) => (
-            <li>
-              <code>{name}</code>
-              <span class="type-sample" style={`font-size: var(${name})`}>
-                昕力資訊 TPIsoftware
-              </span>
-            </li>
-          ))
-        }
-        <li>
-          <code>--font-size-lg / --font-size-base</code>
-          <span class="lead">內文範例：中英混排的行距與字距，Latin text such as API management, Vietnamese such as giải pháp số.</span>
-        </li>
-        <li>
-          <code>--font-mono</code>
-          <span class="mono">01 · API GATEWAY · DATA FLOW · 2026</span>
-        </li>
-      </ul>
-    </Surface>
-
-    <Surface tone="dark">
-      <SectionHeading index="04" eyebrow="Depth & light" title="景深與光" />
-      <h3>三層景深</h3>
-      <div class="depths">
-        <div class="depth" style="box-shadow: var(--shadow-sm)"><code>--shadow-sm</code></div>
-        <div class="depth" style="box-shadow: var(--shadow-md)"><code>--shadow-md</code></div>
-        <div class="depth" style="box-shadow: var(--shadow-lg)"><code>--shadow-lg</code></div>
-        <div class="depth" style="box-shadow: var(--glow-brand)"><code>--glow-brand</code></div>
-        <div class="depth" style="box-shadow: var(--glow-accent)"><code>--glow-accent</code></div>
-      </div>
-      <h3>能量漸層</h3>
-      <div class="energy" role="img" aria-label="紫、品紅、橘的能量漸層"></div>
-      <h3>間距</h3>
-      <ul class="spaces">
-        {
-          spaces.map((name) => (
-            <li>
-              <code>{name}</code>
-              <span class="bar" style={`inline-size: var(${name})`} />
-            </li>
-          ))
-        }
-      </ul>
+    <Surface tone="dark" id="tokens-scale">
+      <SectionHeading
+        index="04"
+        eyebrow="Tokens · Scale"
+        title="Tokens：尺度"
+        description="字體、間距、圓角、線寬、動態、3D 場景與版面。兩個 surface 共用；偏好減少動態時，動態與傾斜相關的值歸零。"
+      />
+      {byLayer('scale').map((g) => <TokenGroup title={g.title} note={g.note} rows={rows(g, light)} />)}
     </Surface>
 
     <Surface tone="dark" pattern="grid" id="imagery">
@@ -425,31 +401,6 @@ const description =
     font-size: var(--font-size-sm);
   }
 
-  .swatches {
-    display: grid;
-    gap: var(--space-3);
-  }
-
-  .swatch {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    column-gap: var(--space-3);
-  }
-
-  .chip {
-    grid-row: span 2;
-    inline-size: var(--space-12);
-    block-size: var(--space-12);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-  }
-
-  .value {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-  }
-
   .contrast summary {
     cursor: pointer;
     font-weight: var(--font-weight-semibold);
@@ -474,73 +425,6 @@ const description =
     border-block-end: var(--border-width) solid var(--color-border);
     text-align: start;
     white-space: nowrap;
-  }
-
-  .type-scale li {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding-block: var(--space-4);
-    border-block-end: var(--border-width) solid var(--color-border);
-  }
-
-  .type-scale code {
-    color: var(--color-text-muted);
-  }
-
-  .type-sample {
-    font-weight: var(--font-weight-bold);
-    line-height: var(--line-height-display);
-    letter-spacing: var(--letter-spacing-display);
-  }
-
-  .lead {
-    max-width: var(--reading-max-width);
-    font-size: var(--font-size-lg);
-  }
-
-  .mono {
-    color: var(--color-text-brand);
-    font-family: var(--font-mono);
-    letter-spacing: var(--letter-spacing-mono);
-  }
-
-  .depths {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-8);
-  }
-
-  .depth {
-    display: grid;
-    place-items: center;
-    inline-size: var(--space-24);
-    block-size: var(--space-24);
-    padding: var(--space-2);
-    border: var(--border-width) solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-bg-subtle);
-    text-align: center;
-  }
-
-  .energy {
-    block-size: var(--space-4);
-    border-radius: var(--radius-pill);
-    background: var(--gradient-energy);
-    box-shadow: var(--glow-brand);
-  }
-
-  .spaces li {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: center;
-    padding-block: var(--space-1);
-  }
-
-  .bar {
-    block-size: var(--space-3);
-    border-radius: var(--radius-pill);
-    background: var(--gradient-energy);
   }
 
   .row {
@@ -620,7 +504,6 @@ const description =
   }
 
   @media (--bp-sm-up) {
-    .swatches,
     .cards {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -636,7 +519,6 @@ const description =
     }
 
     .principles,
-    .swatches,
     .cards {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
