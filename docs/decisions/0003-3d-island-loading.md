@@ -28,7 +28,7 @@ three.js 是本站第一個大型 client 依賴。ADR 0001 定了「預設零 cl
 6. **行動版降級**：`(width < 64rem), (pointer: coarse)` 用 `TIERS.mobile`，在場景啟動時決定。構圖（主體偏右或偏上）只看寬度 `(width < 64rem)`，和 CSS 的 `--bp-lg-down` 一致，視窗縮放跨過斷點時跟著改；橫向平板是桌機構圖、行動版預算。行動版降低 `devicePixelRatio` 上限與方塊數量、關掉 antialias 與滑鼠視差、鏡頭只沿一個方向移動，數值只寫在 `src/lib/scene/runtime.ts` 的 `TIERS`
 
 7. **3D 上的文字要能讀**：canvas 上蓋一層和 `Backdrop fade="hero"` 相同的 scrim，文字側維持 `--color-bg`；chapter 的文字放在玻璃面板（`--glass-bg`）上
-8. **量測**：原型頁不進 `npm run check` 的 LHCI（`staticDistDir` 只自動測 5 個 URL），改用以下 script，改到 `Scene3D`、`src/lib/scene/` 或原型頁後要跑
+8. **量測**：`npm run check` 的 LHCI 用 `staticDistDir` 只自動測前 5 個 URL，順序依檔案系統而定，不保證測到原型頁（#87 處理），也不檢查 3D 的載入時序與 3D 上的文字。改到 `Scene3D`、`src/lib/scene/` 或原型頁後，跑以下 script
    - `node scripts/design/lighthouse-3d.mjs`：performance，並檢查 LCP 元素是靜態圖、3D chunk 的請求時間晚於實測 LCP 與 `load`，不符合時 exit 1
    - `node scripts/design/a11y-smoke.mjs /prototypes/modular-stack`：不開減少動態、等場景畫出第一個 frame，在 track 的 0／25／50／75／100% 量 track 內每行文字和背後最不利像素的對比（375×800、1280×860）
    - `node scripts/design/scene-capture.mjs <dir>`：減少動態時沒有 canvas、沒有 3D chunk 請求；場景執行中切到減少動態時 canvas 被移除
