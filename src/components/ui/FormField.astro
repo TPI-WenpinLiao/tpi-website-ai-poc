@@ -1,6 +1,7 @@
 ---
 // Labelled form control with hint and error text. Hint and error are wired to the control with
 // aria-describedby; an error also sets aria-invalid. Validation itself belongs to M6-01.
+// The textarea value sits inline between its tags: any whitespace there becomes the value.
 import type { HTMLAttributes } from 'astro/types';
 
 type Common = {
@@ -46,9 +47,7 @@ const aria = { 'aria-describedby': describedBy, 'aria-invalid': error ? true : u
           {required && <span class="required">{requiredLabel}</span>}
         </label>
         {props.kind === 'textarea' ? (
-          <textarea class="control" id={id} name={name} rows={props.rows ?? 5} required={required} {...aria}>
-            {props.value}
-          </textarea>
+          <textarea class="control" id={id} name={name} rows={props.rows ?? 5} required={required} {...aria}>{props.value}</textarea>
         ) : props.kind === 'select' ? (
           <select class="control" id={id} name={name} required={required} {...aria}>
             {props.placeholder && (

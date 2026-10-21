@@ -110,7 +110,7 @@
 
   /* Glass: translucent panels floating over the scene. --scene-worst is the backdrop color that
      gives the lowest contrast on this surface; contrast.mjs composites glass over it. */
-  --glass-bg: rgb(255 255 255 / 0.82);
+  --glass-bg: rgb(255 255 255 / 0.9);
   --glass-border: rgb(18 15 29 / 0.08);
   --glass-blur: 16px;
   --scene-worst: var(--ink-950);

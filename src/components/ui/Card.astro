@@ -78,18 +78,19 @@ const Heading = `h${level}` as const;
     pointer-events: none;
   }
 
+  /* :has(:focus-visible), not :focus-within, so a mouse click on the title draws no ring */
   .card:hover,
-  .card:focus-within {
+  .card:has(a:focus-visible) {
     box-shadow: var(--shadow-md), var(--glow-brand);
     transform: perspective(var(--perspective)) rotateX(var(--tilt)) translateY(var(--lift));
   }
 
   .card:hover::before,
-  .card:focus-within::before {
+  .card:has(a:focus-visible)::before {
     opacity: 1;
   }
 
-  .card:focus-within {
+  .card:has(a:focus-visible) {
     outline: var(--focus-ring-width) solid var(--color-focus);
     outline-offset: var(--focus-ring-offset);
   }
