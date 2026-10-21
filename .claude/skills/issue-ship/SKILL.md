@@ -1,6 +1,6 @@
 ---
 name: issue-ship
-description: issue 的最後一個階段完成時自動執行，或使用者輸入 /issue-ship。驗證 npm run check、更新 docs/status.md、commit、push 到工作 branch、開 draft PR，跑審查迴圈直到符合完成條件，再轉 ready 並貼合併判斷摘要。
+description: issue 的最後一個階段完成時自動執行（needs-design 階段一也是，開 draft PR 後停下），或使用者輸入 /issue-ship。驗證 npm run check、更新 docs/status.md、commit、push 到工作 branch、開 draft PR，跑審查迴圈直到符合完成條件，再轉 ready 並貼合併判斷摘要。
 ---
 
 # Issue ship
@@ -60,7 +60,7 @@ git diff --stat
 - `type`：`feat`／`fix`／`content`／`docs`／`chore`，依 issue 的 `type:*` label
 - 摘要用正體中文，不寫模型名稱；依 `writing-style` 去除空話
 - 一張 issue 原則上一個 commit；修正 review 意見時另開 commit，不 amend 已 push 的 commit
-- branch 上有 `wip:` commit 且還沒開 PR 時，先 `git reset --soft "$(git merge-base origin/main HEAD)"`，再用上述格式 commit 成一個。用 merge-base 而不是 `origin/main`：`main` 在這之後有新 commit 時，reset 到 `origin/main` 會把那些變更反向寫進這個 commit。`main` 用 merge commit 合併 PR，不合併的話 `wip:` 會留在 `main` 的歷史
+- branch 上有 `wip:` commit 且還沒開 PR 時（包括 `needs-design` 階段一），先 `git reset --soft "$(git merge-base origin/main HEAD)"`，再用上述格式 commit 成一個。用 merge-base 而不是 `origin/main`：`main` 在這之後有新 commit 時，reset 到 `origin/main` 會把那些變更反向寫進這個 commit。`main` 用 merge commit 合併 PR，不合併的話 `wip:` 會留在 `main` 的歷史
 
 ## 5. Push
 
@@ -101,7 +101,12 @@ Closes #N
 
 最後附上系統指示要求的 PR attribution。開完後用 `subscribe_pr_activity` 監看，CI 結果與留言會喚醒 session。
 
-`needs-design` 階段一：body 另列「設計決策」與「待確認問題」。開完 draft PR 後**停下**，告知使用者等待設計確認，不進審查迴圈，不得進入階段二。使用者告知已加上 approved label 後，補齊 SEO、無障礙、內容，從第 1 步重新走到第 7 步（第 4 步的 `wip:` 合併只在還沒開 PR 時做，這時跳過）。
+### `needs-design` 的兩個階段
+
+`needs-design` 的兩個階段各執行一次本 skill。`CLAUDE.md` 的兩階段流程、`issue-start` 的計畫、`checkpoint` 都連到這裡，做法不另外寫。
+
+- 階段一：照第 1–6 步做，不跳步。第 4 步照常合併 `wip:` commit，第 5 步照常 `--force-with-lease`。body 另列「設計決策」與「待確認問題」。開完 draft PR 後**停下**，告知使用者等待設計確認，不進第 7 步的審查迴圈，不得進入階段二
+- 階段二：使用者告知已加上 approved label 後，補齊 SEO、無障礙、內容，再從第 1 步走到第 9 步。這時 PR 已經開了，所以第 4 步只照一般格式 commit、不做 `wip:` 合併（階段二的 checkpoint 不用 `wip:`，見 [`checkpoint` 第 3 步](../checkpoint/SKILL.md#3-commit-與-push)），第 5 步不 force push，第 6 步不另開 PR，只更新 body
 
 ## 7. 審查迴圈
 

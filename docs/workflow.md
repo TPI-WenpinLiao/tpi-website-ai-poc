@@ -68,7 +68,7 @@ Claude 會依序：
 
 | 情況 | Claude 的行為 | 你要做的事 |
 |---|---|---|
-| issue 帶 `needs-design`，階段一完成 | push 並開 draft PR，列出設計決策與待確認問題 | 看 preview，確認後在 issue 加上 `design-approved`（M2、M3 的關卡用 `ia-approved`、`wireframe-approved`），再告訴 Claude 繼續 |
+| issue 帶 `needs-design`，階段一完成 | 執行 `/issue-ship` 到開 draft PR 為止（`wip:` commit 一樣先合併），列出設計決策與待確認問題，不跑審查迴圈 | 看 preview，確認後在 issue 加上 `design-approved`（M2、M3 的關卡用 `ia-approved`、`wireframe-approved`），再告訴 Claude 繼續 |
 | issue 帶 `needs-input`、計畫外的取捨、審查跑滿輪數上限還沒過 | checkpoint，在 PR（還沒開 PR 時在 issue）留言寫問題與推薦，加上 `needs-decision`，推播通知 | 到 session 回覆。Claude 會拿掉 label 繼續 |
 
 ## 4. 收尾與審查迴圈
@@ -78,10 +78,12 @@ Claude 會依序：
 1. 確認變更範圍（包含 `wip:` commit），刪除進度檔，排除暫存檔與 secrets
 2. 執行 `npm run check`。失敗就停下，不會 push
 3. 更新 `docs/status.md`，寫成這個 PR 合併後的狀態，寫法見 [`issue-ship` 第 3 步](../.claude/skills/issue-ship/SKILL.md#3-更新-docsstatusmd)
-4. commit、push 到工作 branch。有 `wip:` commit 時先合併成一個 commit，再以 `--force-with-lease` push
+4. commit、push 到工作 branch。有 `wip:` commit 時先合併成一個 commit，再以 `--force-with-lease` push，做法見 [`issue-ship` 第 4 步](../.claude/skills/issue-ship/SKILL.md#4-commit)
 5. 開 **draft** PR，監看 CI 與留言。PR body 裡要看 CI 才知道的證據先寫「待 CI」
 6. 審查迴圈：每一輪先等目前 head 的 CI 跑完，把 PR body 的 CI 證據換成目前 head 的 run 連結，再開新的子代理跑 `/pr-review`，結論貼到 PR（開頭「AI 審查第 N 輪」）。有 Act on 就修正、push、等 CI、再審一輪；第 2 輪起會逐項確認上一輪的發現修好了沒。CI 判斷方式見 [`issue-ship` 第 7 步](../.claude/skills/issue-ship/SKILL.md#7-審查迴圈)
 7. 審查沒有發現、驗收條件都有證據、CI 是綠的，就把 PR 轉為 ready，貼「合併判斷摘要」，推播通知你
+
+`needs-design` 的 issue 會執行兩次 `/issue-ship`：階段一走到第 5 項開 draft PR 就停下，等你加上 approved label；階段二不另開 PR，從頭再走一次並跑審查迴圈。見 [`issue-ship` 的「`needs-design` 的兩個階段」](../.claude/skills/issue-ship/SKILL.md#needs-design-的兩個階段)。
 
 完成條件與摘要格式見 [`issue-ship` 第 8 步](../.claude/skills/issue-ship/SKILL.md#8-完成條件轉-ready)。審查跑滿輪數上限還沒過，Claude 會停下找你（第 3 節）。
 
