@@ -2,8 +2,9 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { findViolations } from './token-usage.mjs';
+import { findViolations, declaredProperties } from './token-usage.mjs';
 
+const TOKENS = declaredProperties(':root { --color-text: #000; --space-1: 0.25rem; --space-2: 0.5rem; }');
 const SOURCE = `---
 const x = '#fff 12px'; // frontmatter is not CSS
 ---
@@ -12,6 +13,7 @@ const x = '#fff 12px'; // frontmatter is not CSS
   @import '../../styles/media.css';
   /* 16px in a comment is fine */
   .a {
+    --local: 1;
     color: var(--color-text);
     padding: var(--space-2) 0;
     line-height: 1.5;
@@ -19,27 +21,30 @@ const x = '#fff 12px'; // frontmatter is not CSS
     aspect-ratio: 16 / 9;
     grid-template-columns: auto 1fr;
     transform: translateX(var(--space-1));
+    order: var(--local);
   }
   .b { color: #662E8D; margin: -0.5rem; }
   .c { background: rgb(0 0 0 / 0.1); transition: color 200ms; }
   @media (min-width: 40em) { .d { width: 100%; } }
+  .e { color: var(--color-gone); }
 </style>
 `;
 
-test('allows tokens, unitless numbers, percentages, fr and comments', () => {
-  const lines = findViolations(SOURCE).map((v) => v.line);
-  assert.ok(lines.every((l) => l >= 17), `unexpected violation on lines ${lines}`);
+test('allows tokens, local custom properties, unitless numbers, percentages, fr and comments', () => {
+  const lines = findViolations(SOURCE, TOKENS).map((v) => v.line);
+  assert.ok(lines.every((l) => l >= 19), `unexpected violation on lines ${lines}`);
 });
 
-test('reports hex, color functions, lengths and durations with their line', () => {
+test('reports hex, color functions, lengths, durations and undefined tokens with their line', () => {
   assert.deepEqual(
-    findViolations(SOURCE).map((v) => `${v.line} ${v.rule} ${v.text}`),
+    findViolations(SOURCE, TOKENS).map((v) => `${v.line} ${v.rule} ${v.text}`),
     [
-      '17 hex color #662E8D',
-      '17 length or duration -0.5rem',
-      '18 color function rgb(',
-      '18 length or duration 200ms',
-      '19 length or duration 40em',
+      '19 hex color #662E8D',
+      '19 length or duration -0.5rem',
+      '20 color function rgb(',
+      '20 length or duration 200ms',
+      '21 length or duration 40em',
+      '22 undefined token --color-gone',
     ],
   );
 });

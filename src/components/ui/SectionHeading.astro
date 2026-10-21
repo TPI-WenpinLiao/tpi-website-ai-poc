@@ -1,21 +1,31 @@
 ---
-// Heading block that opens a page section: optional eyebrow, the heading, optional lead text.
-// The level is set by the caller so headings never skip a level (seo-checklist).
+// Heading block that opens a page section: optional index ("01") and mono eyebrow on an energy
+// line, the heading, optional lead text. The level is set by the caller so headings never skip a
+// level (seo-checklist); `size="display"` is for the one statement section per page.
 interface Props {
   title: string;
   level?: 2 | 3;
+  index?: string;
   eyebrow?: string;
   description?: string;
+  size?: 'default' | 'display';
   align?: 'start' | 'center';
 }
 
-const { title, level = 2, eyebrow, description, align = 'start' } = Astro.props;
+const { title, level = 2, index, eyebrow, description, size = 'default', align = 'start' } = Astro.props;
 const Heading = `h${level}` as const;
 ---
 
 <header class:list={['section-heading', align]}>
-  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-  <Heading class:list={['title', `level-${level}`]}>{title}</Heading>
+  {
+    (index || eyebrow) && (
+      <p class="eyebrow">
+        {index && <span class="index">{index}</span>}
+        {eyebrow && <span>{eyebrow}</span>}
+      </p>
+    )
+  }
+  <Heading class:list={['title', `level-${level}`, size]}>{title}</Heading>
   {description && <p class="description">{description}</p>}
 </header>
 
@@ -23,7 +33,7 @@ const Heading = `h${level}` as const;
   .section-heading {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-4);
     max-width: var(--reading-max-width);
   }
 
@@ -36,20 +46,25 @@ const Heading = `h${level}` as const;
   .eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
     margin: 0;
-    color: var(--color-text-accent);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--letter-spacing-eyebrow);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-mono);
     text-transform: uppercase;
   }
 
-  .eyebrow::before {
+  .eyebrow::after {
     content: '';
-    inline-size: var(--space-6);
-    block-size: var(--border-width-strong);
-    background: var(--color-accent);
+    inline-size: var(--space-12);
+    block-size: var(--border-width);
+    background: var(--gradient-energy);
+  }
+
+  .index {
+    color: var(--color-text-accent);
+    font-weight: var(--font-weight-semibold);
   }
 
   .title {
@@ -57,6 +72,8 @@ const Heading = `h${level}` as const;
     color: var(--color-text);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+    text-wrap: balance;
   }
 
   .level-2 {
@@ -65,6 +82,12 @@ const Heading = `h${level}` as const;
 
   .level-3 {
     font-size: var(--font-size-h3);
+  }
+
+  .display {
+    font-size: var(--font-size-display);
+    line-height: var(--line-height-display);
+    letter-spacing: var(--letter-spacing-display);
   }
 
   .description {

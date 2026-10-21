@@ -194,7 +194,19 @@
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --reveal-distance: 2rem;
-  --reveal-range: entry 10% cover 30%;
+
+  /* Scene: the shared isometric viewing angle. The CSS 3D fallback in the hero uses it now; the
+     three.js camera (M3-07) should match it so static and 3D versions line up. */
+  --scene-angle-x: 58deg;
+  --scene-angle-z: -45deg;
+  --scene-size: clamp(13rem, 8rem + 18vw, 22rem);
+  --layer-gap: clamp(1.75rem, 1rem + 2vw, 3rem);
+  --node-size: 0.625rem;
+  --quarter-turn: 90deg;
+
+  /* Stacking */
+  --z-raised: 1;
+  --z-overlay: 100;
 
   /* Layout */
   --content-max-width: 72rem;

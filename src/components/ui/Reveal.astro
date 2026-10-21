@@ -1,0 +1,38 @@
+---
+// Fades and lifts its content in as it scrolls into view, with a CSS scroll-driven animation (no
+// client JS). Browsers without animation-timeline, and visitors who prefer reduced motion, see the
+// content statically. Don't wrap the LCP element (hero heading or image): it would start hidden.
+// `delay` staggers siblings by shifting the start of the scroll range.
+// Scroll-driven animations are written as longhands: Lightning CSS folds `animation` plus
+// `animation-timeline` into one shorthand that browsers reject (scripts/design/dist-css.mjs).
+interface Props {
+  delay?: 0 | 1 | 2 | 3;
+}
+
+const { delay = 0 } = Astro.props;
+---
+
+<div class="reveal" style={`--reveal-step: ${delay}`}>
+  <slot />
+</div>
+
+<style>
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation-name: ui-reveal;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry calc(var(--reveal-step) * 8%) cover 30%;
+      }
+    }
+  }
+
+  @keyframes ui-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(var(--reveal-distance));
+    }
+  }
+</style>

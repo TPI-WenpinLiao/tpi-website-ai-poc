@@ -1,0 +1,131 @@
+---
+// Isometric stack of glass layers joined by an energy beam, drawn in CSS 3D. It is the static
+// stand-in for the 3D scroll scene (M3-07): the same viewing angle (--scene-angle-*), and the same
+// motif shared by both directions (layers = Modular Stack, beam and nodes = Data Flow).
+// As it scrolls out of view the layers spread apart (scroll-driven, no client JS); with reduced
+// motion or without animation-timeline it stays still. Decorative, so hidden from assistive tech.
+interface Props {
+  layers?: 3 | 4 | 5;
+}
+
+const { layers = 4 } = Astro.props;
+---
+
+<div class="scene" aria-hidden="true" style={`--layers: ${layers}`}>
+  <div class="stack">
+    {
+      Array.from({ length: layers }, (_, i) => (
+        <div class:list={['layer', { top: i === layers - 1 }]} style={`--i: ${i}`}>
+          <span class="node" />
+        </div>
+      ))
+    }
+    <div class="beam"></div>
+  </div>
+</div>
+
+<style>
+  .scene {
+    display: grid;
+    place-items: center;
+    inline-size: var(--scene-size);
+    aspect-ratio: 1;
+    perspective: var(--perspective);
+    view-timeline: --layer-stack block;
+  }
+
+  .stack {
+    position: relative;
+    inline-size: 62%;
+    aspect-ratio: 1;
+    transform: translateY(calc(var(--layer-gap) * var(--layers) / 2)) rotateX(var(--scene-angle-x)) rotateZ(var(--scene-angle-z));
+    transform-style: preserve-3d;
+  }
+
+  .layer {
+    position: absolute;
+    inset: 0;
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--glass-bg);
+    background-image:
+      linear-gradient(var(--color-grid-line) var(--border-width), transparent var(--border-width)),
+      linear-gradient(to right, var(--color-grid-line) var(--border-width), transparent var(--border-width));
+    background-size: calc(var(--grid-size) / 4) calc(var(--grid-size) / 4);
+    box-shadow: var(--shadow-md);
+    transform: translateZ(calc(var(--i) * var(--layer-gap)));
+  }
+
+  .top {
+    border-color: var(--color-border-brand);
+    box-shadow: var(--shadow-lg), var(--glow-brand);
+  }
+
+  .node {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--node-size);
+    block-size: var(--node-size);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    box-shadow: var(--glow-accent);
+    transform: translate(-50%, -50%);
+  }
+
+  /* Vertical beam through the layer centers: a strip in the stack plane, stood up along Z */
+  .beam {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--border-width-strong);
+    block-size: calc(var(--layer-gap) * (var(--layers) - 1));
+    background: var(--gradient-energy);
+    box-shadow: var(--glow-brand);
+    transform: translateX(-50%) rotateX(var(--quarter-turn));
+    transform-origin: top;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .node {
+      animation: ui-pulse calc(var(--duration-slow) * 5) var(--ease-standard) infinite alternate;
+      animation-delay: calc(var(--i) * var(--duration-slow));
+    }
+
+    @supports (animation-timeline: view()) {
+      .layer {
+        animation-name: ui-spread;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --layer-stack;
+        animation-range: cover 50% cover 100%;
+      }
+
+      .beam {
+        animation-name: ui-beam;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --layer-stack;
+        animation-range: cover 50% cover 100%;
+      }
+    }
+  }
+
+  @keyframes ui-pulse {
+    to {
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes ui-spread {
+    to {
+      transform: translateZ(calc(var(--i) * var(--layer-gap) * 2));
+    }
+  }
+
+  @keyframes ui-beam {
+    to {
+      transform: translateX(-50%) rotateX(var(--quarter-turn)) scaleY(2);
+    }
+  }
+</style>
