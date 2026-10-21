@@ -1,11 +1,11 @@
 ---
 name: checkpoint
-description: 實作中途保存進度時使用（/checkpoint）。把目前的工作以 WIP commit push 到 session branch，並更新 `.claude/progress/<N>.md`，讓容器回收或 session 中斷後能用 /issue-start 接續。每個計畫階段完成時、停下等使用者回覆之前都要執行。
+description: 實作中途保存進度時使用（/checkpoint）。把目前的工作以 WIP commit push 到工作 branch，並更新 `.claude/progress/<N>.md`，讓容器回收或 session 中斷後能用 /issue-start 接續。每個計畫階段完成時、停下等使用者回覆之前都要執行。
 ---
 
 # Checkpoint
 
-雲端容器閒置一段時間會被回收，沒 push 的工作會消失。checkpoint 把工作和進度檔一起 push 到 session branch，新的 session 執行 `/issue-start <N>` 時從這裡接續，接續流程見 [`issue-start` 第 1 步](../issue-start/SKILL.md#1-同步-branch)。
+雲端容器閒置一段時間會被回收，沒 push 的工作會消失。checkpoint 把工作和進度檔一起 push 到工作 branch（`/issue-start` 第 1 步決定），新的 session 執行 `/issue-start <N>` 時從這裡接續，接續流程見 [`issue-start` 第 1 步](../issue-start/SKILL.md#1-同步-branch)。
 
 ## 何時執行
 
@@ -15,7 +15,7 @@ description: 實作中途保存進度時使用（/checkpoint）。把目前的�
 
 ## 授權
 
-使用者確認 `/issue-start` 的計畫，就同意了這張 issue 的 checkpoint commit 與 push，範圍只限 session branch。checkpoint 不開 PR、不 push `main`。
+使用者確認 `/issue-start` 的計畫，就同意了這張 issue 的 checkpoint commit 與 push，範圍只限工作 branch。checkpoint 不開 PR、不 push `main`。
 
 ## 1. 更新進度檔
 
@@ -36,6 +36,8 @@ description: 實作中途保存進度時使用（/checkpoint）。把目前的�
 ## 目前狀態
 
 <做到哪裡、下一步要做什麼。寫到新 session 不看對話也能接手：要改的檔案、已經決定的做法、試過但放棄的做法>
+
+- 待刪除的舊 branch：<接續時留下的舊 branch；沒有就省略這行>
 
 ## 待使用者決定
 

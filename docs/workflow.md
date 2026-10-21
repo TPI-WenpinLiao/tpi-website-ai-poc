@@ -40,7 +40,7 @@ Claude 依 milestone 順序、每張 issue 的「## 依賴」與關卡 label，�
 
 Claude 會依序：
 
-1. 從最新的 `main` 同步 session 指定的 branch
+1. 決定工作 branch：issue 已有 open PR 就用 PR 的 head branch，否則用 session 指定的 branch，從最新的 `main` 同步
 2. 讀 issue、`CLAUDE.md`、`docs/status.md` 與前置 issue 的產出
 3. 檢查依賴是否關閉、關卡 label 是否齊全
 4. 拿 `docs/status.md` 對照 GitHub 上 issue 與 PR 的實際狀態；對不上的列進計畫，在這張 issue 的 PR 一起修，不另開同步 PR
@@ -49,13 +49,13 @@ Claude 會依序：
 
 **你要做的事**：看環境檢查表與計畫，回覆確認或要修改的地方。計畫中的「需使用者決定」要逐項回答。任一項檢查失敗時 Claude 會停下回報，不會開始實作。
 
-確認計畫也等於同意這張 issue 的 checkpoint commit 與 push（見第 3 節），範圍只限 session branch。
+確認計畫也等於同意這張 issue 的 checkpoint commit 與 push（見第 3 節），範圍只限工作 branch。
 
 ## 3. 實作中
 
 每完成一個階段，以及停下等你回覆之前，Claude 會執行 `/checkpoint`：
 
-- 把工作以 `wip:` commit push 到 session branch。還沒開 PR，所以不會跑 CI，也不會出現 preview
+- 把工作以 `wip:` commit push 到工作 branch。還沒開 PR，所以不會跑 CI，也不會出現 preview
 - 更新 `.claude/progress/<N>.md`，記錄階段計畫、目前狀態、待你決定的事項。每個階段完成了沒，由 commit message 推算（`node scripts/checkpoint/status.mjs <N>`），進度檔不手動維護
 
 雲端容器閒置太久會被回收，checkpoint 過的工作不會消失。session 中斷後，開新 session 輸入 `/issue-start <N>`，Claude 會在 remote 找到進度檔，回報進度後從下一個階段繼續，不再重新提計畫。你也可以隨時輸入 `/checkpoint` 要求保存。`wip:` commit 與進度檔會在 `/issue-ship` 時整理掉，不會進入 `main`。規則見 [`checkpoint/SKILL.md`](../.claude/skills/checkpoint/SKILL.md)。
@@ -82,7 +82,7 @@ Claude 會依序：
 2. 執行 `npm run check`。失敗就停下，不會 push
 3. 更新 `docs/status.md`，寫成這個 PR 合併後的狀態，寫法見 [`issue-ship` 第 3 步](../.claude/skills/issue-ship/SKILL.md#3-更新-docsstatusmd)
 4. 出貨前自我 review：開子代理執行 `/pr-review`（見第 5 節），Act on 的發現修正後重跑檢查，Consider 寫進 PR 的「待確認」
-5. commit、push 到 session branch。有 `wip:` commit 時先合併成一個 commit，再以 `--force-with-lease` push
+5. commit、push 到工作 branch。有 `wip:` commit 時先合併成一個 commit，再以 `--force-with-lease` push
 6. 開 PR：`needs-design` 階段一開 draft，其他開 ready for review。PR body 含 `Closes #N`、變更摘要、驗收方式、preview 檢查重點、待確認
 7. 問你要不要監看 PR
 
@@ -130,6 +130,7 @@ Claude 會依序：
 | 舊 issue 的「在 Claude Code 開啟」連結 | #50 以前（含）建立的 issue 帶的是舊 prompt，仍可使用；也可以改在新 session 輸入 `/issue-start N` |
 | 個人設定的 stop hook 要求 commit | 這是個人層級的 `~/.claude` 設定，不屬於本 repo；需要時自行調整 |
 | session 中斷、容器被回收，或 context 被摘要後不確定進度 | 開新 session 輸入 `/issue-start N`。找到進度檔就接續，上次 checkpoint 之後沒 push 的工作會遺失。找不到進度檔但 branch 上有未合併的 commit 時，Claude 會停下問你要接續還是重開 |
+| PR 的「待確認」列出待刪除的舊 branch | 接續時留下的舊 branch。雲端 session 刪除 remote branch 會被 403 擋下，請在 GitHub 上手動刪除。issue 已關閉或 PR 已合併時，`/issue-start` 會停下，不會去讀舊 branch 上的進度檔 |
 | 上一張 PR 已合併，session 想沿用同一個 branch | `/issue-start` 會從最新的 `main` 重開 branch，不會帶入已合併的 commit |
 
 ## 修改流程

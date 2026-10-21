@@ -11,15 +11,22 @@ description: 開始處理一張 GitHub issue 時使用（/issue-start <issue 編
 
 ## 1. 同步 branch
 
-使用 session 指定的 branch（雲端 session 的系統指示會寫明）；沒有指定時用 `<type>/<N>-<slug>`，type 依 issue 的 `type:*` label。
+本步驟決定**工作 branch**：之後的 checkpoint、`/issue-ship` 都 push 到這裡。預設是 session 指定的 branch（雲端 session 的系統指示會寫明）；沒有指定時用 `<type>/<N>-<slug>`，type 依 issue 的 `type:*` label。接續既有 PR 時改為 PR 的 head branch（見下方）。
 
-先用 `mcp__github__list_pull_requests`（`state: open`）找 body 有 `Closes #<N>` 的 PR。
+先用 `mcp__github__issue_read`（`get`）讀 issue 的 `state` 與 `closed_by_pull_requests`，依序判斷：
 
-**有 open PR：以 PR 的 head branch 為準**
+**issue 已關閉，或有 MERGED／CLOSED 的 PR：停下**
 
-`git fetch origin <head> && git checkout -B <head> origin/<head>`，之後都 push 到這裡，PR 才會更新。其他 branch 上的進度檔一律不看：出貨後舊 branch 還留著時，那上面的進度檔已經過時。head 上有進度檔就照下面的「接續」第 3 步起執行；沒有（例如 `needs-design` 階段一已出貨）就停下說明 PR 狀態，問使用者下一步。
+說明 issue 與 PR 狀態，問使用者要不要重開。不要去找進度檔：舊 branch 刪不掉（雲端 session 刪除 remote branch 會被 403 擋下，#70 實測），上面的進度檔可能已經過時。
 
-**沒有 open PR：找進度檔**
+**有 OPEN 的 PR：工作 branch 是 PR 的 head**
+
+用 `mcp__github__pull_request_read`（`get`）取得 head branch，`git fetch origin <head> && git checkout -B <head> origin/<head>`。其他 branch 上的進度檔一律不看。
+
+- head 上有進度檔：照下方「接續」第 3 步起執行
+- 沒有（例如 `needs-design` 階段一已出貨）：停下說明 PR 狀態。使用者確認繼續後，在這個 branch 上照第 2–6 步提出下一段的計畫
+
+**沒有 PR：找進度檔**
 
 新的 session 會拿到新的 branch 名稱，所以要找遍 remote：
 
@@ -34,14 +41,14 @@ git status -sb
 找到進度檔時接續（[`checkpoint`](../checkpoint/SKILL.md)）：
 
 1. 找到多個 ref 時，取 `git log -1 --format=%ci` 最新的一個；時間相同時優先取 session branch，否則任取，並在回報中列出其他 ref
-2. `git checkout -B <session branch> <該 ref>`。舊 branch 不刪除：雲端 session 刪除 remote branch 會被 403 擋下（#70 實測）。舊 branch 列進之後 PR 的「待確認」，請人工刪除
+2. `git checkout -B <工作 branch> <該 ref>`。舊 branch 刪不掉，把它的名稱寫進進度檔「目前狀態」的「待刪除的舊 branch」，`/issue-ship` 會列進 PR 請人工刪除
 3. 執行 `node scripts/checkpoint/status.mjs <N>`，取得每個階段的狀態與下一步；script 失敗（exit 非 0）就停下回報錯誤，不要自己從 commit 推測。再讀進度檔的「目前狀態」與「待使用者決定」，照常執行第 2、3、5 步（第 4 步的 `status.md` 對照已在原計畫做過，略過）
 4. 回報環境檢查表、已完成的階段、下一步與「待使用者決定」，**不進 Plan 模式**：計畫已確認過，寫在進度檔裡
 5. 「待使用者決定」不是「無」時停下等回覆；否則從下一個階段繼續實作
 
-**沒有進度檔**
+沒有找到進度檔時：
 
-- `git log --oneline origin/main..HEAD` 沒有輸出（新 branch、落後 `main`，或先前的 PR 已合併且之後沒有新 commit）：`git checkout -B <branch> origin/main`
+- `git log --oneline origin/main..HEAD` 沒有輸出（新 branch、落後 `main`，或先前的 PR 已合併且之後沒有新 commit）：`git checkout -B <工作 branch> origin/main`
 - 有輸出：停下說明狀況，問使用者要接續還是重開
 
 ## 2. 讀取資料

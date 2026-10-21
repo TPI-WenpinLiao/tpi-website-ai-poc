@@ -1,6 +1,6 @@
 ---
 name: issue-ship
-description: issue 的實作完成、要收尾時使用（/issue-ship）。驗證 npm run check、更新 docs/status.md、依專案格式 commit、push 到 session branch，並開 PR（needs-design 階段一開 draft，否則 ready for review）。
+description: issue 的實作完成、要收尾時使用（/issue-ship）。驗證 npm run check、更新 docs/status.md、依專案格式 commit、push 到工作 branch，並開 PR（needs-design 階段一開 draft，否則 ready for review）。
 ---
 
 # Issue ship
@@ -18,6 +18,7 @@ git diff --stat
 - 目前 branch 不得是 `main`
 - 從對話或 branch 上的 commit 找出對應的 issue 編號；找不到就問
 - `origin/main...HEAD` 包含 [`checkpoint`](../checkpoint/SKILL.md) 推過的 `wip:` commit，範圍確認要涵蓋它們
+- 進度檔「目前狀態」有「待刪除的舊 branch」時記下來，第 7 步列進 PR 的「待確認」
 - 刪除 `.claude/progress/<N>.md`（`git rm`）；進度檔不得進入 `main`
 - 未追蹤或修改的檔案逐一確認是本 issue 的產出；scratchpad、`.lighthouseci/`、`.lhci-dist/` 等暫存不得 commit
 - 掃一次 diff，不得包含 secrets、token、個人資料
@@ -72,10 +73,10 @@ git diff --stat
 ## 6. Push
 
 ```bash
-git push -u origin <session 指定的 branch>
+git push -u origin <工作 branch>
 ```
 
-只在網路錯誤時重試，最多 4 次（間隔 2s、4s、8s、16s）。不得 push `main`、不得 force push 到他人的 branch。
+工作 branch 由 [`issue-start` 第 1 步](../issue-start/SKILL.md#1-同步-branch)決定。只在網路錯誤時重試，最多 4 次（間隔 2s、4s、8s、16s）。不得 push `main`、不得 force push 到他人的 branch。
 
 第 5 步合併過 `wip:` commit 時，改用 `git push --force-with-lease -u origin <branch>`。這時還沒開 PR，branch 只有本 session 在用，改寫歷史不影響別人。PR 開了之後就不再 force push。
 
