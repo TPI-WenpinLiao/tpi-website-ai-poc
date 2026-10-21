@@ -11,6 +11,13 @@ export default defineConfig({
   build: {
     format: 'file',
   },
+  vite: {
+    css: {
+      // Lightning CSS resolves @custom-media breakpoints from src/styles/media.css (M3-02)
+      transformer: 'lightningcss',
+      lightningcss: { drafts: { customMedia: true } },
+    },
+  },
   i18n: {
     locales: ['zh-TW', 'en', 'vi'],
     defaultLocale: 'zh-TW',

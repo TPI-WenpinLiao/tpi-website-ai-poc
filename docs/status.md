@@ -45,7 +45,7 @@
 - M2-03 URL 規則與語系策略完成（#10，ADR 0002，PR #59）
 - M2-04 內容模型完成（#11，PR #61）
 - M2-05 舊站 redirect map 完成（#12）：`docs/ia/redirects.csv` 涵蓋 inventory 全部網址，可用 `node scripts/ia/redirects.mjs --redirects <file>` 轉成 `_redirects`
-- M2-06 M2 收尾完成（#13）：IA 與 URL 規則寫進 `CLAUDE.md`、`seo-checklist`、`content-migration`
+- M2-06 M2 收尾完成（#13，PR #81）：IA 與 URL 規則寫進 `CLAUDE.md`、`seo-checklist`、`content-migration`
 - PR 審查 skill `/pr-review` 完成（#62，PR #65）
 - `status.md` 改寫合併後的狀態完成（#67）
 - 長時間任務的 checkpoint 機制完成（#69，PR #70）
@@ -58,12 +58,13 @@
 ### M3 設計系統
 
 - M3-01 各模板低保真 wireframe 完成（#14，`wireframe-approved`）：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 vi 與 en 長譯名放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
+- M3-02 design tokens 與元件庫（#15），階段一，等待 `design-approved`
 
 ## 下一步
 
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
 - M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
-- M3-02 design tokens 與元件庫（#15）的依賴 M3-01（#14）已完成，可以開始
+- Review M3-02 審核頁 `/design-system`（PR body 列有設計決策與待確認問題），通過後在 #15 加上 `design-approved`
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
@@ -85,5 +86,5 @@
 - M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（`seo-checklist` 的 JSON-LD 對照改為連到 `content-model.md`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）
 - M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定。`og:locale` 的 en、vi 值要改成「語言_地區」格式，M7 處理
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
-- M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除；`tokens.css` 的 `--wf-*` 由 M3-02 的正式 token 取代。`@media` 不能用 custom property，斷點 64rem 目前以字面值寫在 media query，機制由 M3-02 決定
-- `docs/design/nav-fit.md` 的量測依賴容器字型與 wireframe 的暫定間距，M3-02 定字型與 token 後重跑 `node scripts/wireframe/nav-fit.mjs`
+- M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除，`tokens.css` 的 `--wf-*` 也一起刪。M3-02 起斷點寫在 `src/styles/media.css` 的 `@custom-media`，wireframe 的 media query 已改用
+- `docs/design/nav-fit.md` 的量測用容器字型與 wireframe 的間距（`--wf-space-3` 仍是 12px），M3-02 後 `node scripts/wireframe/nav-fit.mjs --check` 仍通過；正式 header（M4-04）的選單間距與 Inter 字型要另外實測

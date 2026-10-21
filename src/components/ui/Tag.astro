@@ -1,0 +1,38 @@
+---
+// Category or topic label. With href it links to the filtered listing.
+interface Props {
+  href?: string;
+  tone?: 'neutral' | 'brand';
+}
+
+const { href, tone = 'neutral' } = Astro.props;
+const Element = href ? 'a' : 'span';
+---
+
+<Element class:list={['tag', tone]} href={href}><slot /></Element>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-tight);
+    text-decoration: none;
+  }
+
+  .neutral {
+    background: var(--color-bg-muted);
+    color: var(--color-text-muted);
+  }
+
+  .brand {
+    background: var(--color-bg-brand-subtle);
+    color: var(--color-text-brand);
+  }
+
+  a.tag:hover {
+    text-decoration: underline;
+  }
+</style>

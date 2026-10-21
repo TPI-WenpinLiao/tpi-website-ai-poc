@@ -18,9 +18,9 @@ Astro（`output: 'static'`，預設零 client JS，互動才用 island）、Type
 ```
 src/pages/        路由頁面；zh-TW 放根目錄，en、vi 放 en/、vi/
 src/layouts/      版型
-src/styles/       tokens.css（design tokens）
+src/styles/       tokens.css（design tokens）、media.css（斷點）
 public/           靜態檔（_headers、robots.txt）
-scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應）、checkpoint/（進度推算）
+scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、design/（對比與 token 使用檢查）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應）、checkpoint/（進度推算）
 docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）
 .claude/skills/   issue-start、issue-ship、checkpoint、pr-review、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
 .github/          ISSUE_TEMPLATE、workflows、bootstrap（labels / milestones / issues）
@@ -43,7 +43,8 @@ M2 定案的規則，細節以連結的文件為準：
 |---|---|
 | `npm run dev` | 本機開發 |
 | `npm run build` | 產生 `dist/` |
-| `npm run check` | IA 資料檢查 → scripts 測試 → astro check → build → html-validate → Lighthouse CI（推送前必跑） |
+| `npm run check` | IA 資料檢查 → design 檢查 → scripts 測試 → astro check → build → html-validate → Lighthouse CI（推送前必跑） |
+| `npm run check:design` | tokens 的 WCAG 對比，以及元件樣式沒有寫死的數值 |
 | `npm run check:ia` | 驗證 `docs/ia/` 的 IA 資料，並確認 `sitemap.mjs`、`navigation.mjs`、`redirects.mjs` 的產出是最新的（不寫檔） |
 
 Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）執行；HTML 內不可放 `noindex` meta。

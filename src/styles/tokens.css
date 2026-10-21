@@ -1,29 +1,165 @@
 /*
- * Design tokens (placeholder). Values are finalized in M3.
- * Components must reference these custom properties instead of raw values.
+ * Design tokens (M3-02). Rules: .claude/skills/design-system/SKILL.md
+ *
+ * Two layers:
+ * - Primitives (--purple-*, --orange-*, --neutral-*, --red-*, --green-*): raw color values. Only
+ *   referenced inside this file; components never use them.
+ * - Semantic tokens (--color-*, --font-*, --space-*, --radius-*, ...): what components use.
+ *
+ * Brand colors come from the current site's CSS (purple #662e8d, orange #ff6329). Text/background
+ * pairs are checked against WCAG 2.2 AA by scripts/design/contrast.mjs (npm run check:design).
+ * Breakpoints can't be custom properties; they live in src/styles/media.css as @custom-media.
  */
 :root {
-  --color-text: #1a1a1a;
-  --color-text-muted: #4a4a4a;
-  --color-bg: #ffffff;
-  --color-brand: #1a3d7c;
+  /* Primitives: brand purple. 700 is the current site's primary color. */
+  --purple-50: #f6f1fa;
+  --purple-100: #ebdff3;
+  --purple-200: #d6bfe7;
+  --purple-300: #b996d4;
+  --purple-500: #7d45a3;
+  --purple-700: #662e8d;
+  --purple-800: #4f2370;
+  --purple-900: #381850;
 
-  --font-sans: system-ui, -apple-system, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  /* Primitives: accent orange. 500 is the current site's accent; it fails 4.5:1 on white, so text
+     and filled controls use 700. */
+  --orange-50: #fff4ee;
+  --orange-100: #ffe4d6;
+  --orange-300: #ff9a6e;
+  --orange-500: #ff6329;
+  --orange-700: #b83a0b;
+
+  /* Primitives: neutrals and status */
+  --neutral-0: #ffffff;
+  --neutral-50: #f7f7f8;
+  --neutral-100: #eeeef0;
+  --neutral-200: #dedde2;
+  --neutral-300: #c4c3ca;
+  --neutral-500: #74737d;
+  --neutral-600: #5a5962;
+  --neutral-700: #43424a;
+  --neutral-900: #1b1a1f;
+  --red-50: #fdecec;
+  --red-700: #b42318;
+  --green-50: #ecf6ec;
+  --green-700: #22672a;
+
+  /* Color: text */
+  --color-text: var(--neutral-900);
+  --color-text-muted: var(--neutral-600);
+  --color-text-inverse: var(--neutral-0);
+  --color-text-inverse-muted: var(--purple-100);
+  --color-text-brand: var(--purple-700);
+  --color-text-accent: var(--orange-700);
+
+  /* Color: surfaces */
+  --color-bg: var(--neutral-0);
+  --color-bg-subtle: var(--neutral-50);
+  --color-bg-muted: var(--neutral-100);
+  --color-bg-brand: var(--purple-700);
+  --color-bg-brand-strong: var(--purple-900);
+  --color-bg-brand-subtle: var(--purple-50);
+  --color-bg-accent-subtle: var(--orange-50);
+
+  /* Color: lines. border is decorative (cards, dividers); border-strong marks form controls and
+     must reach 3:1 against the background. */
+  --color-border: var(--neutral-200);
+  --color-border-strong: var(--neutral-500);
+  --color-border-brand: var(--purple-200);
+
+  /* Color: interactive */
+  --color-action: var(--purple-700);
+  --color-action-hover: var(--purple-800);
+  --color-action-text: var(--neutral-0);
+  --color-action-subtle-hover: var(--purple-100);
+  --color-link: var(--purple-700);
+  --color-link-hover: var(--purple-900);
+  --color-link-inverse: var(--neutral-0);
+  --color-disabled-bg: var(--neutral-100);
+  --color-disabled-text: var(--neutral-500);
+  --color-focus: var(--orange-700);
+  --color-focus-inverse: var(--orange-300);
+
+  /* Color: decoration only (never text or the only cue of a control) */
+  --color-accent: var(--orange-500);
+  --color-brand: var(--purple-700);
+  --color-brand-soft: var(--purple-300);
+
+  /* Color: status */
+  --color-error: var(--red-700);
+  --color-error-bg: var(--red-50);
+  --color-success: var(--green-700);
+  --color-success-bg: var(--green-50);
+
+  /* Typography. Latin and Vietnamese use self-hosted Inter (@fontsource-variable/inter, loaded in
+     BaseLayout); Chinese falls back to system fonts, no CJK webfont. */
+  --font-sans: "Inter Variable", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
-  --font-size-h1: clamp(1.75rem, 4vw, 2.5rem);
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-h4: 1.125rem;
+  --font-size-h3: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --font-size-h2: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --font-size-h1: clamp(1.75rem, 1.4rem + 1.75vw, 2.75rem);
+  --font-size-display: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.45;
   --line-height-base: 1.7;
+  --letter-spacing-eyebrow: 0.08em;
 
+  /* Spacing: 4px scale. Components may use the scale directly. */
+  --space-1: 0.25rem;
   --space-2: 0.5rem;
+  --space-3: 0.75rem;
   --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-section: clamp(3rem, 2rem + 4vw, 6rem);
+  --space-gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
 
+  /* Shape */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-pill: 62.5rem;
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+  --underline-offset: 0.2em;
+
+  /* Elevation (shadow color is neutral-900 at low alpha) */
+  --shadow-sm: 0 1px 2px rgb(27 26 31 / 0.08);
+  --shadow-md: 0 4px 12px rgb(27 26 31 / 0.1);
+  --shadow-lg: 0 12px 32px rgb(27 26 31 / 0.14);
+
+  /* Motion. Zeroed under prefers-reduced-motion below. */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Layout */
   --content-max-width: 72rem;
+  --reading-max-width: 48rem;
+  --touch-target: 2.75rem;
+  --icon-size: 1.25em;
 
   /*
    * Wireframe-only tokens (M3-01). Used by src/components/wireframe and src/pages/wireframes;
-   * replaced by the real token set in M3-02 and removed with the wireframe pages after M4-04.
-   * Breakpoint: 64rem (1024px) switches header and grids to the mobile layout. Custom properties
-   * cannot be used inside @media, so the value is repeated there; M3-02 decides the mechanism.
+   * removed with the wireframe pages after M4-04. Values with a real equivalent point to it; the
+   * grey fills and the note color stay wireframe-specific on purpose.
    */
   --wf-color-fill: #eef0f2;
   --wf-color-fill-strong: #d5d9de;
@@ -31,19 +167,26 @@
   --wf-color-label: #3d444d;
   --wf-color-note-bg: #fff6d6;
   --wf-color-note-line: #8a6d00;
-  --wf-color-inverse: #ffffff;
-  --wf-font-size-sm: 0.875rem;
-  --wf-font-size-xs: 0.75rem;
+  --wf-color-inverse: var(--color-text-inverse);
+  --wf-font-size-sm: var(--font-size-sm);
+  --wf-font-size-xs: var(--font-size-xs);
   --wf-font-size-h2: 1.375rem;
-  --wf-line-width: 1px;
-  --wf-radius: 4px;
-  --wf-space-1: 0.25rem;
-  --wf-space-3: 0.75rem;
-  --wf-space-6: 1.5rem;
-  --wf-space-12: 3rem;
+  --wf-line-width: var(--border-width);
+  --wf-radius: var(--radius-sm);
+  --wf-space-1: var(--space-1);
+  --wf-space-3: var(--space-3);
+  --wf-space-6: var(--space-6);
+  --wf-space-12: var(--space-12);
   --wf-block-min-height: 6rem;
   --wf-hero-min-height: 18rem;
-  --wf-touch-target: 2.75rem;
+  --wf-touch-target: var(--touch-target);
   --wf-mobile-frame: 23.4375rem; /* 375px */
-  --wf-reading-width: 48rem;
+  --wf-reading-width: var(--reading-max-width);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
 }

@@ -1,0 +1,75 @@
+---
+// Heading block that opens a page section: optional eyebrow, the heading, optional lead text.
+// The level is set by the caller so headings never skip a level (seo-checklist).
+interface Props {
+  title: string;
+  level?: 2 | 3;
+  eyebrow?: string;
+  description?: string;
+  align?: 'start' | 'center';
+}
+
+const { title, level = 2, eyebrow, description, align = 'start' } = Astro.props;
+const Heading = `h${level}` as const;
+---
+
+<header class:list={['section-heading', align]}>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <Heading class:list={['title', `level-${level}`]}>{title}</Heading>
+  {description && <p class="description">{description}</p>}
+</header>
+
+<style>
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: var(--reading-max-width);
+  }
+
+  .center {
+    align-items: center;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    color: var(--color-text-accent);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-eyebrow);
+    text-transform: uppercase;
+  }
+
+  .eyebrow::before {
+    content: '';
+    inline-size: var(--space-6);
+    block-size: var(--border-width-strong);
+    background: var(--color-accent);
+  }
+
+  .title {
+    margin: 0;
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+  }
+
+  .level-2 {
+    font-size: var(--font-size-h2);
+  }
+
+  .level-3 {
+    font-size: var(--font-size-h3);
+  }
+
+  .description {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+</style>

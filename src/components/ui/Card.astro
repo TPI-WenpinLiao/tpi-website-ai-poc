@@ -1,0 +1,126 @@
+---
+// Link card for listings (products, case studies, articles). The whole card is clickable through
+// the title link's ::after, so there is exactly one link per card and its name is the title.
+// Image alt is required; pass alt="" only when the image is purely decorative.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  title: string;
+  href: string;
+  level?: 2 | 3 | 4;
+  eyebrow?: string;
+  description?: string;
+  image?: { src: ImageMetadata; alt: string };
+}
+
+const { title, href, level = 3, eyebrow, description, image } = Astro.props;
+const Heading = `h${level}` as const;
+---
+
+<article class="card">
+  {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes="(width >= 64rem) 22rem, 100vw" />}
+  <div class="body">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <Heading class="title"><a href={href}>{title}</a></Heading>
+    {description && <p class="description">{description}</p>}
+    {
+      Astro.slots.has('meta') && (
+        <div class="meta">
+          <slot name="meta" />
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg);
+    box-shadow: var(--shadow-sm);
+    transition:
+      box-shadow var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard);
+  }
+
+  .card:hover {
+    border-color: var(--color-border-brand);
+    box-shadow: var(--shadow-md);
+  }
+
+  .card:focus-within {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .media {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--color-bg-muted);
+  }
+
+  .body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6);
+  }
+
+  .eyebrow {
+    margin: 0;
+    color: var(--color-text-brand);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  /* Stretch the title link over the card; the card draws the focus ring instead */
+  .title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .title a:focus-visible {
+    outline: none;
+  }
+
+  .card:hover .title a {
+    color: var(--color-link);
+    text-decoration: underline;
+  }
+
+  .description {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block-start: auto;
+    padding-block-start: var(--space-2);
+  }
+</style>

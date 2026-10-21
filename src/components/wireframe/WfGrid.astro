@@ -13,14 +13,16 @@ const { cols = 3, mobile = 1 } = Astro.props;
 </div>
 
 <style>
+  @import '../../styles/media.css';
+
   .wf-grid {
     display: grid;
     grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
     gap: var(--space-4);
   }
 
-  /* 64rem breakpoint, see tokens.css */
-  @media (max-width: 63.99rem) {
+  /* Breakpoint: src/styles/media.css */
+  @media (--bp-lg-down) {
     .wf-grid {
       grid-template-columns: repeat(var(--cols-mobile), minmax(0, 1fr));
     }

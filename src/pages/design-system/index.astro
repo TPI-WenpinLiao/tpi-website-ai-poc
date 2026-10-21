@@ -1,0 +1,434 @@
+---
+// M3-02 review page for the design tokens and base components. Not in navigation.csv or the
+// sitemap; M3-03 (#16) extends this page into the full design-system showcase.
+// Token lists and contrast ratios are read from tokens.css at build time, so they can't drift.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Link from '../../components/ui/Link.astro';
+import Tag from '../../components/ui/Tag.astro';
+import Card from '../../components/ui/Card.astro';
+import FormField from '../../components/ui/FormField.astro';
+import tokensCss from '../../styles/tokens.css?raw';
+import { parseTokens, resolveColor, checkPairs, PAIRS } from '../../../scripts/design/contrast.mjs';
+import sample from '../../assets/design-system/sample.svg';
+
+const tokens = parseTokens(tokensCss);
+const names = [...tokens.keys()];
+const byPrefix = (prefix: string) => names.filter((n) => n.startsWith(prefix));
+const primitives = names.filter((n) => /^--(purple|orange|neutral|red|green)-/.test(n));
+const colors = byPrefix('--color-').map((name) => ({ name, hex: resolveColor(tokens, name) }));
+const pairs = checkPairs(tokens, PAIRS);
+const fontSizes = byPrefix('--font-size-');
+const spaces = byPrefix('--space-');
+const radii = byPrefix('--radius-');
+const shadows = byPrefix('--shadow-');
+
+const title = 'Design system 審核｜TPIsoftware 昕力資訊';
+const description =
+  'M3-02 design tokens 與基礎元件的審核頁：色彩、字體、間距、圓角、陰影，以及按鈕、連結、卡片、標題區、表單欄位、標籤的各種狀態。';
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHero
+    eyebrow="M3-02 審核頁"
+    title="Design tokens 與元件"
+    description="本頁本身的標題區就是 PageHero 元件。色票與對比數字在 build 時讀自 tokens.css，元件的 hover 與 focus 請用滑鼠與 Tab 鍵檢視。"
+  >
+    <Fragment slot="actions">
+      <Button href="#components">看元件</Button>
+      <Button href="#colors" variant="secondary">看色彩</Button>
+    </Fragment>
+  </PageHero>
+
+  <main>
+    <section id="colors" class="section">
+      <SectionHeading eyebrow="Tokens" title="色彩" description="元件只用語意 token（--color-*）；色階 primitive 只在 tokens.css 內引用。" />
+
+      <h3>語意 token</h3>
+      <ul class="swatches">
+        {
+          colors.map((c) => (
+            <li class="swatch">
+              <span class="chip" style={`background: var(${c.name})`} />
+              <code>{c.name}</code>
+              <span class="value">{c.hex}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3>色階 primitive</h3>
+      <ul class="swatches compact">
+        {
+          primitives.map((name) => (
+            <li class="swatch">
+              <span class="chip" style={`background: var(${name})`} />
+              <code>{name}</code>
+              <span class="value">{resolveColor(tokens, name)}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3>對比（WCAG 2.2 AA）</h3>
+      <p class="note">
+        文字 4.5:1、UI 元件與 focus ring 3:1。與 <code>npm run check:design</code> 同一份清單，任何一組不過 build 就失敗。
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">範例</th><th scope="col">前景</th><th scope="col">背景</th><th scope="col">對比</th><th scope="col">門檻</th></tr>
+          </thead>
+          <tbody>
+            {
+              pairs.map((p) => (
+                <tr>
+                  <td>
+                    <span class="sample" style={`color: var(${p.fg}); background: var(${p.bg}); border-color: var(${p.fg})`}>
+                      文字 Aa
+                    </span>
+                  </td>
+                  <td><code>{p.fg}</code></td>
+                  <td><code>{p.bg}</code></td>
+                  <td>{p.ratio.toFixed(2)}</td>
+                  <td>{p.min}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <SectionHeading eyebrow="Tokens" title="字體" description="拉丁字母與越南文用自行託管的 Inter，中文用系統字（PingFang TC、Microsoft JhengHei、Noto Sans TC）。" />
+      <ul class="type-scale">
+        {
+          fontSizes.map((name) => (
+            <li>
+              <code>{name}</code>
+              <span class="type-sample" style={`font-size: var(${name})`}>
+                昕力資訊 TPIsoftware Chuyển đổi số
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <h3>內文範例</h3>
+      <p class="prose">
+        這是一段內文範例，用來檢視 <code>--line-height-base</code> 下中英混排的行距與字距。Latin text such as API
+        management and Vietnamese such as giải pháp số should sit on the same baseline. 內文中的連結長這樣：<Link
+          href="#components">前往元件區</Link
+        >。
+      </p>
+    </section>
+
+    <section class="section">
+      <SectionHeading eyebrow="Tokens" title="間距、圓角與陰影" />
+      <h3>間距</h3>
+      <ul class="spaces">
+        {
+          spaces.map((name) => (
+            <li>
+              <code>{name}</code>
+              <span class="bar" style={`inline-size: var(${name})`} />
+            </li>
+          ))
+        }
+      </ul>
+      <h3>圓角與陰影</h3>
+      <ul class="shapes">
+        {
+          radii.map((name) => (
+            <li class="shape" style={`border-radius: var(${name})`}>
+              <code>{name}</code>
+            </li>
+          ))
+        }
+        {
+          shadows.map((name) => (
+            <li class="shape" style={`box-shadow: var(${name})`}>
+              <code>{name}</code>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section id="components" class="section">
+      <SectionHeading eyebrow="Components" title="元件" description="src/components/ui/ 的基礎元件。範例文字只用來檢視版面，不是網站內容。" />
+
+      <h3>Button</h3>
+      <div class="row">
+        <Button>主要按鈕</Button>
+        <Button variant="secondary">次要按鈕</Button>
+        <Button variant="text">文字按鈕</Button>
+        <Button disabled>停用</Button>
+      </div>
+      <div class="row">
+        <Button size="sm">小型主要</Button>
+        <Button size="sm" variant="secondary">小型次要</Button>
+        <Button href="#components" size="sm" variant="text">連結樣式的按鈕</Button>
+      </div>
+
+      <h3>Link</h3>
+      <div class="row">
+        <Link href="#components">內文連結</Link>
+        <Link href="#components" variant="standalone">獨立連結</Link>
+        <Link href="https://www.tpisoftware.com" external>外部連結</Link>
+      </div>
+      <div class="inverse-panel">
+        <p>深色底上的連結與按鈕：</p>
+        <div class="row">
+          <Link href="#components" variant="standalone" inverse>深色底獨立連結</Link>
+          <Button href="#components" variant="secondary">深色底次要按鈕</Button>
+        </div>
+      </div>
+
+      <h3>Tag</h3>
+      <div class="row">
+        <Tag>中性標籤</Tag>
+        <Tag tone="brand">品牌標籤</Tag>
+        <Tag href="#components" tone="brand">可點的標籤</Tag>
+      </div>
+
+      <h3>SectionHeading</h3>
+      <div class="demo">
+        <SectionHeading level={3} eyebrow="Eyebrow" title="靠左的區塊標題" description="標題層級由呼叫端指定，避免跳級。" />
+      </div>
+      <div class="demo">
+        <SectionHeading level={3} align="center" title="置中的區塊標題" description="沒有 eyebrow 的置中版本。" />
+      </div>
+
+      <h3>Card</h3>
+      <div class="cards">
+        <Card
+          level={4}
+          href="#components"
+          eyebrow="分類"
+          title="有圖片的卡片標題"
+          description="整張卡片可點，但只有標題一個連結。"
+          image={{ src: sample, alt: '幾何圖形示意圖' }}
+        >
+          <Fragment slot="meta"><Tag>標籤一</Tag><Tag>標籤二</Tag></Fragment>
+        </Card>
+        <Card level={4} href="#components" title="沒有圖片的卡片" description="摘要文字最多兩到三行，超過時由內容端截短。" />
+        <Card level={4} href="#components" eyebrow="分類" title="標題較長時換行的卡片標題範例，用來確認行高與間距" />
+      </div>
+
+      <h3>FormField</h3>
+      <form class="form" action="#" method="post">
+        <FormField id="ds-name" name="name" label="姓名" kind="text" autocomplete="name" required />
+        <FormField id="ds-email" name="email" label="Email" kind="email" autocomplete="email" required hint="我們會寄送確認信到這個信箱。" />
+        <FormField
+          id="ds-topic"
+          name="topic"
+          label="洽詢主題"
+          kind="select"
+          placeholder="請選擇"
+          options={[
+            { value: 'a', label: '選項一' },
+            { value: 'b', label: '選項二' },
+          ]}
+        />
+        <FormField id="ds-phone" name="phone" label="電話" kind="tel" autocomplete="tel" value="abc" error="電話格式不正確，請只輸入數字。" />
+        <FormField id="ds-message" name="message" label="需求說明" kind="textarea" rows={4} />
+        <FormField id="ds-agree" name="agree" label="我同意隱私權政策" kind="checkbox" required />
+        <div class="row">
+          <Button type="submit" disabled>送出（審核頁不送出）</Button>
+        </div>
+      </form>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  @import '../../styles/media.css';
+
+  main {
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+    padding: 0 var(--space-gutter) var(--space-section);
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-block-start: var(--space-section);
+  }
+
+  h3 {
+    margin: var(--space-6) 0 0;
+    font-size: var(--font-size-h4);
+  }
+
+  .note,
+  .prose {
+    max-width: var(--reading-max-width);
+    margin: 0;
+  }
+
+  .note {
+    color: var(--color-text-muted);
+  }
+
+  code {
+    font-size: var(--font-size-sm);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .swatch {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: var(--space-3);
+  }
+
+  .chip {
+    grid-row: span 2;
+    inline-size: var(--space-12);
+    block-size: var(--space-12);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .value {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+
+  th,
+  td {
+    padding: var(--space-2) var(--space-3);
+    border-block-end: var(--border-width) solid var(--color-border);
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  .sample {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border: var(--border-width) solid;
+    border-radius: var(--radius-sm);
+  }
+
+  .type-scale li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  .type-sample {
+    line-height: var(--line-height-tight);
+  }
+
+  .spaces li {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    padding-block: var(--space-1);
+  }
+
+  .bar {
+    block-size: var(--space-4);
+    background: var(--color-brand-soft);
+  }
+
+  .shapes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+  }
+
+  .shape {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--space-16);
+    block-size: var(--space-16);
+    padding: var(--space-2);
+    border: var(--border-width) solid var(--color-border);
+    background: var(--color-bg);
+    text-align: center;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .inverse-panel {
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-brand);
+    color: var(--color-text-inverse);
+  }
+
+  .inverse-panel p {
+    margin: 0 0 var(--space-3);
+  }
+
+  .demo {
+    padding: var(--space-6);
+    border: var(--border-width) dashed var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-width: var(--reading-max-width);
+  }
+
+  @media (--bp-sm-up) {
+    .swatches,
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .swatches,
+    .cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .compact {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+// Title area of an inner page: breadcrumb slot, the page's single h1, optional lead and actions.
+// The home page hero is a separate design (M3-04, M3-07).
+interface Props {
+  title: string;
+  eyebrow?: string;
+  description?: string;
+}
+
+const { title, eyebrow, description } = Astro.props;
+---
+
+<div class="page-hero">
+  <div class="inner">
+    <slot name="breadcrumb" />
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    {description && <p class="description">{description}</p>}
+    {
+      Astro.slots.has('actions') && (
+        <div class="actions">
+          <slot name="actions" />
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .page-hero {
+    border-block-end: var(--border-width) solid var(--color-border-brand);
+    background: var(--color-bg-brand-subtle);
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+    padding: var(--space-12) var(--space-gutter);
+  }
+
+  .eyebrow {
+    margin: 0;
+    color: var(--color-text-brand);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  h1 {
+    max-width: var(--reading-max-width);
+    margin: 0;
+    color: var(--color-text);
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+  }
+
+  .description {
+    max-width: var(--reading-max-width);
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-block-start: var(--space-2);
+  }
+</style>

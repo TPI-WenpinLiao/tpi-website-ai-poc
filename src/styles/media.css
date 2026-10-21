@@ -1,0 +1,9 @@
+/*
+ * Breakpoints (M3-02). @media can't read custom properties, so breakpoints are @custom-media,
+ * resolved at build time by Lightning CSS (astro.config.mjs, drafts.customMedia).
+ * Every <style> that uses one must `@import` this file; a missing import fails the build with
+ * "Custom media query --bp-* is not defined". The file emits no CSS of its own.
+ */
+@custom-media --bp-sm-up (width >= 40rem);
+@custom-media --bp-lg-up (width >= 64rem);
+@custom-media --bp-lg-down (width < 64rem);
