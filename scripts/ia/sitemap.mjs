@@ -9,7 +9,7 @@
 import { readFile } from 'node:fs/promises';
 import { readCsv, csvCell } from '../inventory/csv.mjs';
 import { routeKey, ROUTE_ALIASES } from '../inventory/routes.mjs';
-import { depth, emit, replaceSection } from './generated.mjs';
+import { PATH_PATTERN, depth, emit, matchRoute, normalizeSlug, replaceSection } from './generated.mjs';
 
 const INVENTORY = 'docs/research/inventory.csv';
 const NODES = 'docs/ia/nodes.csv';
@@ -26,8 +26,6 @@ const LOCALES = ['zh-TW', 'en', 'vi'];
 // Kinds without a template of their own: external links, downloadable files, and nav-only groupings
 const UNTEMPLATED = new Set(['external', 'asset', 'group']);
 const KINDS = new Set(['page', 'collection', ...UNTEMPLATED]);
-// URL rule from docs/decisions/0002-url-and-locale.md: lowercase kebab-case segments or {placeholder}, no trailing slash
-const PATH_PATTERN = /^\/$|^(\/([a-z0-9]+(-[a-z0-9]+)*|\{[a-z]+\}))+$/;
 
 const errors = [];
 
@@ -61,16 +59,6 @@ function validateNodes(nodes, templates) {
   return byId;
 }
 
-function lookup(routes, key) {
-  if (routes.has(key)) return key;
-  // Longest matching "/prefix/*" pattern
-  let best;
-  for (const route of routes.keys()) {
-    if (route.endsWith('/*') && key.startsWith(route.slice(0, -1)) && (!best || route.length > best.length)) best = route;
-  }
-  return best;
-}
-
 function mapRow(row, ctx) {
   const { routes, byId, used, subCategory } = ctx;
   // Blog articles (including the three mis-typed as categories) join the article collection.
@@ -90,7 +78,7 @@ function mapRow(row, ctx) {
   }
   if (row.page_type === 'news') return { node: 'news-article' };
 
-  const route = lookup(routes, keyOf(row.final_url));
+  const route = matchRoute(routes, keyOf(row.final_url));
   if (!route) {
     errors.push(`no route-map entry for ${keyOf(row.final_url)}: ${row.url}`);
     return {};
@@ -103,15 +91,14 @@ function mapRow(row, ctx) {
 // A slug equal to a category slug or "page" takes the old category segment as prefix.
 // Merge rows take the slug of their target, the first URL in disposition_reason (scripts/inventory/audit.mjs).
 function assignBlogSlugs(mapped, nodes) {
-  const clean = (s) => s.toLowerCase().replace(/-+/g, '-').replace(/^-|-$/g, '');
   const reserved = new Set(['page', ...nodes.filter((n) => n.parent === 'blog' && n.kind === 'page').map((n) => n.path.split('/').pop())]);
   const articles = mapped.filter((r) => r.node === 'blog-post');
   const kept = new Map();
   const seen = new Map();
   for (const r of articles.filter((a) => a.disposition !== 'merge')) {
     const segments = new URL(r.url).pathname.split('/').filter(Boolean);
-    let slug = clean(segments.at(-1));
-    if (reserved.has(slug)) slug = clean(`${segments.at(-2)}-${slug}`);
+    let slug = normalizeSlug(segments.at(-1));
+    if (reserved.has(slug)) slug = normalizeSlug(`${segments.at(-2)}-${slug}`);
     if (reserved.has(slug) || !PATH_PATTERN.test(`/${slug}`)) errors.push(`blog slug "${slug}" breaks the URL rule (ADR 0002): ${r.url}`);
     const key = `${r.locale} ${slug}`;
     if (seen.has(key)) errors.push(`duplicate blog slug ${key}: ${seen.get(key)} and ${r.url}`);
