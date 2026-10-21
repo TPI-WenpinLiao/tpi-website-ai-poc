@@ -1,0 +1,320 @@
+---
+import WfLayout from '../../layouts/WfLayout.astro';
+import WfSection from '../../components/wireframe/WfSection.astro';
+import WfHeader from '../../components/wireframe/WfHeader.astro';
+import WfLink from '../../components/wireframe/WfLink.astro';
+import { header, utility, type NavItem } from '../../lib/wireframe/ia';
+import { navFitSets } from '../../lib/wireframe/header-labels';
+
+const top = (key: string): NavItem => {
+  const item = header.find((h) => h.key === key);
+  if (!item) throw new Error(`navigation.csv has no header item ${key}`);
+  return item;
+};
+const products = top('產品');
+const [overview, ...families] = products.children;
+const dropdowns = header.filter((h) => h.children.length > 0 && h.key !== '產品');
+// navigation.csv notes such as「Agentic AI 標記」become a badge on the item
+const badge = (item: NavItem) => (item.note.endsWith('標記') ? item.note.replace(/\s*標記$/, '') : '');
+const contact = utility.find((u) => u.key === 'contact');
+const locales = [
+  { lang: 'zh-TW', label: '中文' },
+  { lang: 'en', label: 'English' },
+  { lang: 'vi', label: 'Tiếng Việt' },
+];
+---
+
+<WfLayout
+  title="導覽 wireframe"
+  description="M3-01 導覽 wireframe：產品 mega menu、其他下拉選單、語系切換與行動版選單的展開狀態，以及 en、vi 選單寬度測試。"
+>
+  <p slot="notes">
+    選單項目讀自 <code>docs/ia/navigation.csv</code>，規則見 <code>docs/ia/navigation.md</code>。這頁以靜態畫格呈現展開狀態；展開、Esc、焦點管理等行為在 M4-04 實作。
+  </p>
+
+  <WfSection title="產品 mega menu（桌機）" note="點「產品」展開。總覽頁在第一項，下方 4 欄為產品家族，欄標題可點到家族頁。">
+    <div class="panel">
+      {overview && <a class="overview" href={overview.href}>{overview.label} →</a>}
+      <div class="mega">
+        {
+          families.map((family) => (
+            <div>
+              <a class="family" href={family.href}>{family.label}</a>
+              <ul>
+                {family.children.map((item) => (
+                  <li>
+                    <a href={item.href}>{item.label}</a>
+                    {badge(item) && <span class="badge">{badge(item)}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </WfSection>
+
+  <WfSection title="其他下拉選單（桌機）" note="同一時間只展開一個；總覽頁放第一項。外部連結加 ↗。">
+    <div class="dropdowns">
+      {
+        dropdowns.map((menu) => (
+          <div class="panel">
+            <p class="menu-title">{menu.label} ▴</p>
+            <ul>
+              {menu.children.map((item) => (
+                <li>
+                  <WfLink item={item} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+      <div class="panel">
+        <p class="menu-title">語系切換 ▴</p>
+        <ul>
+          {
+            locales.map((l) => (
+              <li lang={l.lang}>
+                <a href="/wireframes/navigation">{l.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="hint">切到同一節點的其他語系；該語系沒有這頁時連到該語系首頁（ADR 0002）</p>
+      </div>
+    </div>
+  </WfSection>
+
+  <WfSection title="行動版選單（展開）" note="漢堡按鈕開啟全螢幕選單。第一層是手風琴；產品只展開到家族，點家族再展開產品。語系切換在「聯絡我們」上方，兩者固定在底部。">
+    <div class="phone">
+      <div class="phone-bar">
+        <span class="logo">TPIsoftware</span>
+        <span class="phone-icons">搜尋　✕</span>
+      </div>
+      <ul class="accordion">
+        <li>
+          <p class="acc open">{products.label} ▴</p>
+          <ul>
+            {overview && <li><a href={overview.href}>{overview.label}</a></li>}
+            {
+              families.map((family, i) => (
+                <li>
+                  <p class:list={['acc', { open: i === 0 }]}>
+                    {family.label} {i === 0 ? '▴' : '▾'}
+                  </p>
+                  {i === 0 && (
+                    <ul>
+                      <li>
+                        <a href={family.href}>{family.label} 總覽</a>
+                      </li>
+                      {family.children.map((item) => (
+                        <li>
+                          <a href={item.href}>{item.label}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+        </li>
+        {
+          header.slice(1).map((item) =>
+            item.children.length > 0 ? (
+              <li>
+                <p class="acc">{item.label} ▾</p>
+              </li>
+            ) : (
+              <li>
+                <a class="acc" href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+      <div class="phone-bottom">
+        <p class="locales">
+          {
+            locales.map((l) => (
+              <span lang={l.lang}>{l.label}</span>
+            ))
+          }
+        </p>
+        <a class="cta" href={contact?.href}>{contact?.label}</a>
+      </div>
+    </div>
+  </WfSection>
+
+  <WfSection
+    title="1280px 寬度測試"
+    note="header 第一層與工具列以 zh-TW、en、vi 標籤各排一列，不換行。en、vi 是量測用標籤，不是翻譯；結果由 scripts/wireframe/nav-fit.mjs 量測，寫在 docs/design/nav-fit.md。"
+  >
+    <div class="fit">
+      {
+        navFitSets.map((set) => (
+          <div class="fit-case">
+            <p class="fit-name">{set.id}</p>
+            <WfHeader labels={set} fit navLabel={`主選單寬度測試（${set.id}）`} />
+          </div>
+        ))
+      }
+    </div>
+  </WfSection>
+</WfLayout>
+
+<style>
+  .panel {
+    padding: var(--space-4);
+    border: var(--wf-line-width) solid var(--wf-color-line);
+    border-radius: var(--wf-radius);
+    background: var(--color-bg);
+    font-size: var(--wf-font-size-sm);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding-block: var(--wf-space-1);
+  }
+
+  .panel :global(a),
+  a {
+    color: var(--color-text);
+  }
+
+  .overview,
+  .family,
+  .menu-title {
+    display: inline-block;
+    margin: 0 0 var(--space-2);
+    font-weight: 700;
+  }
+
+  .mega {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .badge {
+    margin-inline-start: var(--wf-space-1);
+    padding-inline: var(--wf-space-1);
+    border: var(--wf-line-width) solid var(--wf-color-line);
+    border-radius: var(--wf-radius);
+    font-size: var(--wf-font-size-xs);
+  }
+
+  .dropdowns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .hint {
+    margin: var(--space-2) 0 0;
+    color: var(--wf-color-label);
+    font-size: var(--wf-font-size-xs);
+  }
+
+  .phone {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--wf-mobile-frame);
+    border: var(--wf-line-width) solid var(--wf-color-line);
+    border-radius: var(--wf-radius);
+    font-size: var(--wf-font-size-sm);
+  }
+
+  .phone-bar,
+  .phone-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .phone-bar {
+    border-block-end: var(--wf-line-width) solid var(--wf-color-fill-strong);
+  }
+
+  .logo {
+    font-weight: 700;
+  }
+
+  .accordion {
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .accordion ul {
+    padding-inline-start: var(--space-4);
+  }
+
+  .acc {
+    display: block;
+    margin: 0;
+    padding-block: var(--space-2);
+    font-weight: 700;
+  }
+
+  .acc.open {
+    color: var(--color-brand);
+  }
+
+  .phone-bottom {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+    border-block-start: var(--wf-line-width) solid var(--wf-color-fill-strong);
+  }
+
+  .locales {
+    display: flex;
+    gap: var(--space-4);
+    margin: 0;
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--wf-touch-target);
+    border-radius: var(--wf-radius);
+    background: var(--color-brand);
+    color: var(--wf-color-inverse);
+    text-decoration: none;
+  }
+
+  .fit {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    overflow-x: auto;
+  }
+
+  .fit-name {
+    margin: 0;
+    font-size: var(--wf-font-size-xs);
+    font-weight: 700;
+  }
+
+  /* 64rem breakpoint, see tokens.css */
+  @media (max-width: 63.99rem) {
+    .mega {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dropdowns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+// Column grid for wireframe blocks; collapses to `mobile` columns below the 64rem breakpoint
+interface Props {
+  cols?: number;
+  mobile?: number;
+}
+
+const { cols = 3, mobile = 1 } = Astro.props;
+---
+
+<div class="wf-grid" style={`--cols: ${cols}; --cols-mobile: ${mobile}`}>
+  <slot />
+</div>
+
+<style>
+  .wf-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  /* 64rem breakpoint, see tokens.css */
+  @media (max-width: 63.99rem) {
+    .wf-grid {
+      grid-template-columns: repeat(var(--cols-mobile), minmax(0, 1fr));
+    }
+  }
+</style>

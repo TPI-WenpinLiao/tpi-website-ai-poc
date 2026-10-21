@@ -18,4 +18,32 @@
   --space-8: 2rem;
 
   --content-max-width: 72rem;
+
+  /*
+   * Wireframe-only tokens (M3-01). Used by src/components/wireframe and src/pages/wireframes;
+   * replaced by the real token set in M3-02 and removed with the wireframe pages after M4-04.
+   * Breakpoint: 64rem (1024px) switches header and grids to the mobile layout. Custom properties
+   * cannot be used inside @media, so the value is repeated there; M3-02 decides the mechanism.
+   */
+  --wf-color-fill: #eef0f2;
+  --wf-color-fill-strong: #d5d9de;
+  --wf-color-line: #6b7480;
+  --wf-color-label: #3d444d;
+  --wf-color-note-bg: #fff6d6;
+  --wf-color-note-line: #8a6d00;
+  --wf-color-inverse: #ffffff;
+  --wf-font-size-sm: 0.875rem;
+  --wf-font-size-xs: 0.75rem;
+  --wf-font-size-h2: 1.375rem;
+  --wf-line-width: 1px;
+  --wf-radius: 4px;
+  --wf-space-1: 0.25rem;
+  --wf-space-3: 0.75rem;
+  --wf-space-6: 1.5rem;
+  --wf-space-12: 3rem;
+  --wf-block-min-height: 6rem;
+  --wf-hero-min-height: 18rem;
+  --wf-touch-target: 2.75rem;
+  --wf-mobile-frame: 23.4375rem; /* 375px */
+  --wf-reading-width: 48rem;
 }

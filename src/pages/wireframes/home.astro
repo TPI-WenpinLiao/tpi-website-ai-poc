@@ -1,0 +1,60 @@
+---
+import WfLayout from '../../layouts/WfLayout.astro';
+import WfSection from '../../components/wireframe/WfSection.astro';
+import WfBlock from '../../components/wireframe/WfBlock.astro';
+import WfGrid from '../../components/wireframe/WfGrid.astro';
+import { children } from '../../lib/wireframe/ia';
+
+const families = children('products');
+const industries = children('industries');
+const services = children('services');
+---
+
+<WfLayout
+  template="home"
+  title="home 模板"
+  description="首頁 wireframe：hero 與主要轉換，依受眾任務分成產品家族、產業方案、服務三個入口，再接成功案例、最新文章與新聞。"
+>
+  <WfBlock
+    size="hero"
+    label="Hero"
+    fields={['i18n：標語', 'i18n：說明']}
+    note="主要 CTA「聯絡我們」，次要 CTA 連到產品總覽。文案在 i18n 字串檔（content-model：首頁不建 collection）"
+  />
+
+  <WfSection title="產品家族" note="依產品找。卡片：家族名稱、description、連到家族頁">
+    <WfGrid cols={4} mobile={1}>
+      {families.map((n) => <WfBlock label={n.title} fields={['hub.title', 'hub.description']} />)}
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="產業方案" note="依產業找">
+    <WfGrid cols={3} mobile={1}>
+      {industries.map((n) => <WfBlock label={n.title} fields={['hub.title', 'hub.tagline']} />)}
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="服務" note="找導入與顧問服務。行動版改成 2 欄的短卡片">
+    <WfGrid cols={3} mobile={2}>
+      {services.map((n) => <WfBlock size="sm" label={n.title} />)}
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="成功案例" note="精選 3 則，連到成功案例列表">
+    <WfGrid cols={3} mobile={1}>
+      {[1, 2, 3].map((i) => <WfBlock label={`案例卡片 ${i}`} fields={['client', 'industry', 'coverImage', 'title']} />)}
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="最新文章與新聞" note="部落格 2 則、新聞 1 則，各連到列表頁">
+    <WfGrid cols={3} mobile={1}>
+      <WfBlock label="文章卡片" fields={['coverImage', 'category', 'title', 'publishedAt']} />
+      <WfBlock label="文章卡片" fields={['coverImage', 'category', 'title', 'publishedAt']} />
+      <WfBlock label="新聞卡片" fields={['coverImage', 'newsType', 'title', 'publishedAt']} />
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="CTA">
+    <WfBlock label="聯絡業務" fields={['i18n：標語']} note="按鈕連到聯絡我們；與 header 的「聯絡我們」同一個目的地" />
+  </WfSection>
+</WfLayout>

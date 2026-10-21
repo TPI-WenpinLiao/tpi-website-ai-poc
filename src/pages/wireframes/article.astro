@@ -1,0 +1,46 @@
+---
+import WfLayout from '../../layouts/WfLayout.astro';
+import WfSection from '../../components/wireframe/WfSection.astro';
+import WfBlock from '../../components/wireframe/WfBlock.astro';
+import WfGrid from '../../components/wireframe/WfGrid.astro';
+import WfBreadcrumb from '../../components/wireframe/WfBreadcrumb.astro';
+---
+
+<WfLayout
+  template="article"
+  title="article 模板"
+  description="文章頁 wireframe：blog 文章與新聞內頁共用。依序是標題區、封面、窄版內文與 tag，最後接相關產品與同分類的相關文章。"
+>
+  <p slot="notes">範例節點：blog 文章。新聞內頁以 newsType 取代 category，沒有作者。</p>
+
+  <WfBreadcrumb node="blog-post" />
+
+  <div class="narrow">
+    <WfBlock size="sm" label="標題區" fields={['category', 'title（h1）', 'author', 'publishedAt', 'updatedAt']} />
+    <WfBlock size="hero" label="封面" fields={['coverImage']} />
+    <WfBlock size="lg" label="內文" fields={['Markdown 內文']} note="閱讀寬度比版面窄；h2、h3、圖片、表格、程式碼" />
+    <WfBlock size="sm" label="tag" fields={['tags']} note="連到部落格列表的 tag 篩選" />
+  </div>
+
+  <WfSection title="相關產品" note="relatedOfferings">
+    <WfGrid cols={3} mobile={1}>
+      {[1, 2, 3].map(() => <WfBlock size="sm" label="產品卡片" fields={['offering.title', 'offering.description']} />)}
+    </WfGrid>
+  </WfSection>
+
+  <WfSection title="相關文章" note="同分類的其他文章">
+    <WfGrid cols={3} mobile={1}>
+      {[1, 2, 3].map(() => <WfBlock label="文章卡片" fields={['coverImage', 'title', 'publishedAt']} />)}
+    </WfGrid>
+  </WfSection>
+</WfLayout>
+
+<style>
+  .narrow {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: var(--wf-reading-width);
+    margin-block-start: var(--space-4);
+  }
+</style>
