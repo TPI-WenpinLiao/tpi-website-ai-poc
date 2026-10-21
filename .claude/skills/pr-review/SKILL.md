@@ -1,19 +1,20 @@
 ---
 name: pr-review
-description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編號]）。對照 issue 驗收條件找反例、執行本專案固定檢查，程式碼交給 /code-review，發現依 Act on／Consider 分類並輸出可貼到 PR 的審查意見。使用者說「審查 PR」「review PR #N」「幫我看這個 PR」時也適用；/issue-ship 的出貨前自我 review 也用本 skill。
+description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編號]）。對照 issue 驗收條件找反例、執行本專案固定檢查，程式碼交給 /code-review，發現依 Act on／Consider 分類並輸出可貼到 PR 的審查意見。使用者說「審查 PR」「review PR #N」「幫我看這個 PR」時也適用；/issue-ship 的審查迴圈也用本 skill。
 ---
 
 # PR review
 
 > 判斷框架改寫自 pstack 的 `interrogate`（lead-judgment）與 `thermo-nuclear-review`，見 [`../THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md)
 
-本 skill 預設唯讀：只把審查意見輸出到對話，不修改 repo，也不在 PR 上留言。使用者明確要求時才發留言（第 7 步）。
+本 skill 預設唯讀：只把審查意見輸出到對話，不修改 repo，也不在 PR 上留言。使用者明確要求時才發留言（第 7 步）；`/issue-ship` 審查迴圈的留言由主 session 發，見該 skill 第 7 步。
 
 ## 在改動的 session 審查時交給子代理
 
-審查對象是本 session 寫的變更時（`/issue-ship` 的自我 review、審查本 session 開的 PR 或推過的 commit），不要自己審，改用 Agent tool 開一個子代理執行本 skill。作者的脈絡會讓人看不出自己的盲點，子代理從零開始讀 diff 與 issue，比較容易找到反例。
+審查對象是本 session 寫的變更時（`/issue-ship` 的審查迴圈、審查本 session 開的 PR 或推過的 commit），不要自己審，改用 Agent tool 開一個子代理執行本 skill。作者的脈絡會讓人看不出自己的盲點，子代理從零開始讀 diff 與 issue，比較容易找到反例。
 
 - 子代理的 prompt 只給：審查對象（PR 編號、git range，或 repo 路徑加 branch）、issue 編號、本檔路徑，以及「依本檔第 1–7 步執行、唯讀、不留言，依第 7 步格式輸出」
+- 第 2 輪以後（`/issue-ship` 的審查迴圈），另外附上一輪的 Act on 與「未修好」逐條原文，並要求「逐項標已修好或未修好，同時重審整份 diff」。只附發現本身，不附修法的說明
 - 不要把實作時的推論、計畫內容或「哪裡應該沒問題」寫進 prompt；PR body 與 commit message 讓子代理自己讀
 - 子代理回報後，由本 session 判斷每個發現是否成立（第 6 步的原則同樣適用），再轉述給使用者或依 `/issue-ship` 處理
 - 審查別人的 PR、或本 session 沒有改動過的變更時，直接在本 session 執行
@@ -26,7 +27,7 @@ description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編�
 | git range（`/pr-review 949533f..36b3634`） | range 內的 commit | `git diff <base>..<head>`、`git log <base>..<head>` | commit message 的 `（#N）` |
 | 無參數 | 目前 branch | `git diff origin/main...HEAD`、`git diff HEAD`，加上 `git status --short` 列出的未追蹤檔案（`git diff` 不含新檔，要直接讀） | commit message 或對話；找不到就問 |
 
-- 無參數是 `/issue-ship` 開 PR 前的自我 review。git range 用於審查已合併 PR 的歷史版本
+- `/issue-ship` 的審查迴圈用 PR 編號。無參數用於開 PR 前手動審查目前 branch，git range 用於審查已合併 PR 的歷史版本
 - git range 與無參數都視為尚未合併的狀態審查
 - PR 已合併或關閉時，在結論註明，照常審查
 
@@ -57,7 +58,7 @@ description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編�
 | 產生檔與 script 一致 | diff 有 script 或它的產出檔時，重跑 script，`git diff --exit-code` 必須沒有差異；再跑一次結果相同 |
 | 文件與資料來源一致 | 手寫的表格或清單在描述某個資料檔的某一類列時（例如「不進導覽的節點」對應 `navigation.csv` 的 `none` 列），把兩邊的 ID 各列成一份清單再比對：文件有、資料檔那一類沒有的，以及反過來的，都是發現。ID 只在別的資料檔（例如 `nodes.csv`）存在不算對上。手寫數字要從資料檔重新算一次。script 重跑沒有差異不代表手寫段落正確 |
 | `docs/status.md` 寫的是合併後的狀態 | 依 [`issue-ship` 第 3 步](../issue-ship/SKILL.md#3-更新-docsstatusmd)，假設這個 diff 已合併，逐項查：(1) 本 issue 寫成完成（`needs-design` 階段一寫中間狀態），寫「待合併」也是發現 (2) 其他還沒合併的 PR 沒有寫成完成 (3) 列出的 issue 已關閉、PR 已合併的寫成完成；已關閉的 issue 與有 open PR 的 issue 都有自己一行（查法同 `issue-start` 第 4 步的 3、4） (4)「下一步」沒有留著本 issue 的項目；寫「可以開始」的 issue，依賴在合併後確實都已關閉。(2)–(4) 用 `mcp__github__issue_read`／`pull_request_read` 查 |
-| checkpoint 的產物沒有進 PR | PR：`get_files` 沒有 `.claude/progress/`，`get_commits` 沒有 `wip:` 開頭的 commit。無參數（`/issue-ship` 的自我 review，在第 5 步合併 commit 之前）：工作區已經沒有 `.claude/progress/<N>.md`（第 1 步 `git rm` 過）；branch 上的 `wip:` commit 由第 5 步合併，不算發現。規則見 [`checkpoint`](../checkpoint/SKILL.md) |
+| checkpoint 的產物沒有進 PR | PR：`get_files` 沒有 `.claude/progress/`，`get_commits` 沒有 `wip:` 開頭的 commit。無參數（還沒開 PR 的 branch）：branch 上的 `wip:` commit 會在 `/issue-ship` 合併，不算發現。規則見 [`checkpoint`](../checkpoint/SKILL.md) |
 | 同一個決定只放在一個地方 | 同一份清單、數字、規則不得在兩個檔案各寫一份；第二份改為連結 |
 | devex 沒有被破壞 | 環境變數名稱、npm scripts、`.nvmrc`、SessionStart hook 有變動時，`docs/onboarding.md` 或 `docs/workflow.md` 有同步更新 |
 
@@ -86,6 +87,8 @@ diff 有動到 `src/`、`scripts/`、`.github/` 或設定檔時，執行內建�
 
 ## 7. 輸出
 
+有上一輪的發現清單時，先逐項確認：重現當時的反例或重讀當時指出的位置，標「已修好」或「未修好」，未修好的寫出現在仍成立的證據。上一輪列過的發現只寫在「上一輪的發現」，不再列進 Act on；Act on 只放這一輪新找到的。
+
 在對話中輸出一段可直接貼到 PR 的 markdown，依 `writing-style`：
 
 ```markdown
@@ -98,9 +101,20 @@ diff 有動到 `src/`、`scripts/`、`.github/` 或設定檔時，執行內建�
 
 ### Consider
 - `<檔案>:<行>`：<問題>。<一行理由>
+
+### 上一輪的發現
+- 已修好：<發現>
+- 未修好：<發現>。<仍成立的證據>
+
+### 驗收條件缺證據
+- <條件>：<PR body 寫了什麼、缺什麼>
+
+Act on: <N>｜上一輪未修好: <N>｜驗收條件缺證據: <N>
 ```
 
-- 沒有的類別整段省略；完全沒有發現時只寫結論
+- 沒有的類別整段省略；完全沒有發現時只寫結論與最後的結論行
+- 最後一行固定是結論行，三個數字都要寫，沒有就寫 0。`/issue-ship` 的審查迴圈只看這一行決定下一步
+- 「驗收條件缺證據」：issue 的驗收條件在 PR body「驗收方式」沒有對應，或只寫「已確認」而沒有指令輸出、檔案、數字。驗收條件實際不成立的是 Act on，不重複算進這裡。審查對象不是 PR 時（git range、無參數）沒有 PR body，這一項寫 0
 - 不列 Noted 與 Dismissed
 
 使用者明確要求留言時，用 `mcp__github__add_issue_comment` 在 PR 發一則留言，內容同上，結尾附系統指示要求的 attribution footer。只發一則，不逐行留 review comment。

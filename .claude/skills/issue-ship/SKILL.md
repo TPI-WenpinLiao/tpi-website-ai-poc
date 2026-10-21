@@ -1,11 +1,11 @@
 ---
 name: issue-ship
-description: issue 的實作完成、要收尾時使用（/issue-ship）。驗證 npm run check、更新 docs/status.md、依專案格式 commit、push 到工作 branch，並開 PR（needs-design 階段一開 draft，否則 ready for review）。
+description: issue 的最後一個階段完成時自動執行，或使用者輸入 /issue-ship。驗證 npm run check、更新 docs/status.md、commit、push 到工作 branch、開 draft PR，跑審查迴圈直到符合完成條件，再轉 ready 並貼合併判斷摘要。
 ---
 
 # Issue ship
 
-使用者呼叫 `/issue-ship` 即視為同意本次 commit、push 與開 PR。若是 Claude 自行判斷要收尾，先問使用者，不要直接執行。
+計畫的最後一個階段完成時自動執行，不再詢問：使用者確認計畫時（自動模式下是輸入 `/issue-start N`）已同意本 issue 的 commit、push、開 PR 與審查迴圈。使用者輸入 `/issue-ship` 也一樣。合併由使用者決定，本 skill 不合併 PR。
 
 ## 1. 確認範圍
 
@@ -18,7 +18,7 @@ git diff --stat
 - 目前 branch 不得是 `main`
 - 從對話或 branch 上的 commit 找出對應的 issue 編號；找不到就問
 - `origin/main...HEAD` 包含 [`checkpoint`](../checkpoint/SKILL.md) 推過的 `wip:` commit，範圍確認要涵蓋它們
-- 進度檔「目前狀態」有「待刪除的舊 branch」時記下來，第 7 步列進 PR 的「待確認」
+- 進度檔「目前狀態」有「待刪除的舊 branch」時記下來，第 6 步列進 PR 的「待確認」
 - 刪除 `.claude/progress/<N>.md`（`git rm`）；進度檔不得進入 `main`
 - 未追蹤或修改的檔案逐一確認是本 issue 的產出；scratchpad、`.lighthouseci/`、`.lhci-dist/` 等暫存不得 commit
 - 掃一次 diff，不得包含 secrets、token、個人資料
@@ -44,15 +44,7 @@ git diff --stat
   - 加上本 issue 產生的待決事項
 - 「待辦備忘」只放跨 issue、需要記住的事
 
-## 4. 出貨前自我 review
-
-執行 `/pr-review`（不帶參數，審查目前 branch）。依該 skill 的規定交給子代理執行。固定檢查與分類規則只寫在 [`../pr-review/SKILL.md`](../pr-review/SKILL.md)，本步驟不另列。
-
-- Act on：修正後重跑第 2 步，再跑一次 `/pr-review`
-- Consider：寫進 PR 的「待確認」
-- 本步驟不在 PR 上留言（此時還沒有 PR）
-
-## 5. Commit
+## 4. Commit
 
 訊息格式（與既有 history 一致）：
 
@@ -70,7 +62,7 @@ git diff --stat
 - 一張 issue 原則上一個 commit；修正 review 意見時另開 commit，不 amend 已 push 的 commit
 - branch 上有 `wip:` commit 且還沒開 PR 時，先 `git reset --soft "$(git merge-base origin/main HEAD)"`，再用上述格式 commit 成一個。用 merge-base 而不是 `origin/main`：`main` 在這之後有新 commit 時，reset 到 `origin/main` 會把那些變更反向寫進這個 commit。`main` 用 merge commit 合併 PR，不合併的話 `wip:` 會留在 `main` 的歷史
 
-## 6. Push
+## 5. Push
 
 ```bash
 git push -u origin <工作 branch>
@@ -78,14 +70,13 @@ git push -u origin <工作 branch>
 
 工作 branch 由 [`issue-start` 第 1 步](../issue-start/SKILL.md#1-同步-branch)決定。只在網路錯誤時重試，最多 4 次（間隔 2s、4s、8s、16s）。不得 push `main`、不得 force push 到他人的 branch。
 
-第 5 步合併過 `wip:` commit 時，改用 `git push --force-with-lease -u origin <branch>`。這時還沒開 PR，branch 只有本 session 在用，改寫歷史不影響別人。PR 開了之後就不再 force push。
+第 4 步合併過 `wip:` commit 時，改用 `git push --force-with-lease -u origin <branch>`。這時還沒開 PR，branch 只有本 session 在用，改寫歷史不影響別人。PR 開了之後就不再 force push。
 
-## 7. 開 PR
+## 6. 開 draft PR
 
-用 `mcp__github__create_pull_request`，base 為 `main`。工作 branch 已經有 OPEN PR 時（接續既有 PR），不另開，push 後依需要用 `mcp__github__update_pull_request` 更新 body。
+用 `mcp__github__create_pull_request`，base 為 `main`，**一律開 draft**：審查迴圈跑完才轉 ready。工作 branch 已經有 OPEN PR 時（接續既有 PR），不另開，push 後依需要用 `mcp__github__update_pull_request` 更新 body。
 
 - **title**：issue 標題（含 `[Mx-xx]` 或 `[chore]` 前綴）
-- **draft**：issue 有 `needs-design` 且尚無 `design-approved`（或 M2／M3 對應的 approved label）→ `true`；其他 → `false`
 - **body** 必含以下段落：
 
 ```markdown
@@ -95,7 +86,7 @@ Closes #N
 - …（交付物與主要數字）
 
 ## 驗收方式
-- 對照 issue 的每條驗收條件，寫出怎麼驗證、結果
+- 對照 issue 的每條驗收條件，寫出怎麼驗證、結果（指令輸出、檔案、數字）
 - `npm run check` 通過
 
 ## Preview 檢查重點
@@ -105,18 +96,67 @@ Closes #N
 - 不確定的內容、與計畫不同之處（沒有就省略）
 ```
 
-最後附上系統指示要求的 PR attribution。
+最後附上系統指示要求的 PR attribution。開完後用 `subscribe_pr_activity` 監看，CI 結果與留言會喚醒 session。
 
-### `needs-design` 階段一
+`needs-design` 階段一：body 另列「設計決策」與「待確認問題」。開完 draft PR 後**停下**，告知使用者等待設計確認，不進審查迴圈，不得進入階段二。使用者告知已加上 approved label 後，補齊 SEO、無障礙、內容，從第 1 步重新走到第 7 步（第 4 步的 `wip:` 合併只在還沒開 PR 時做，這時跳過）。
 
-PR body 另列「設計決策」與「待確認問題」。開完 draft PR 後**停下**，告知使用者等待設計確認，不得進入階段二。
+## 7. 審查迴圈
 
-### `needs-design` 階段二
+由主 session 執行：子代理不能再開子代理，所以不要把整個迴圈交給子代理。環境裡沒有 Agent tool 時，不要自己審自己的變更，照 [`checkpoint` 的「停下找人」](../checkpoint/SKILL.md#停下找人)處理。
 
-使用者告知已加上 approved label 後，補齊 SEO、無障礙、內容，`npm run check` 通過後 push，再用 `mcp__github__update_pull_request` 把 `draft` 設為 `false`。
+每一輪：
 
-## 8. 回報
+1. 用 Agent tool 開一個**新的**子代理執行 `/pr-review <PR 編號>`，依 [`pr-review`](../pr-review/SKILL.md) 的「在改動的 session 審查時交給子代理」給 prompt。第 2 輪起，把上一輪的 Act on 與「未修好」逐條原文附進 prompt
+2. 由本 session 判斷每個發現是否成立（`pr-review` 第 6 步的原則），再用 `mcp__github__add_issue_comment` 把審查意見貼到 PR：第一行寫「AI 審查第 N 輪」，最後是 `pr-review` 第 7 步的結論行，結尾附系統指示要求的 attribution footer
+3. 依結論行決定：
+   - 全部是 0：檢查第 8 步的完成條件
+   - 不是 0 且已達輪數上限（[`checkpoint` 的「停下找人」](../checkpoint/SKILL.md#停下找人)）：照該節停下找人
+   - 其他：修正。每個修正用一般 commit（`fix: <摘要>（#N）`），跑第 2 步，push（不 force push），進下一輪
+4. Consider：是本 PR 引入的缺陷就當成 Act on 修；其他的記下來，寫進合併判斷摘要
 
-- PR 連結（完整 URL 的 markdown link）
-- 一兩句摘要與 review 重點
-- 詢問是否要用 `subscribe_pr_activity` 監看 CI 與 review 留言
+CI 失敗時先修 CI，修完的 push 照常進下一輪審查。
+
+在審查迴圈停下找人時，checkpoint 的 commit 不寫「階段」（`fix: 審查迴圈第 <N> 輪停下等決定（#N）`）：開 PR 時 `wip:` 已合併，`status.mjs` 推算不到之前的階段。進度檔「目前狀態」第一行寫「審查迴圈第 <N> 輪，等使用者決定」，`/issue-start` 接續時依此回到本步驟。使用者回覆後，不論是繼續修或接受現狀，回覆後的第一個 commit（`fix: 依審查決定繼續（#N）`）就 `git rm` 進度檔，不另做 checkpoint。
+
+## 8. 完成條件，轉 ready
+
+以下全部成立才算完成：
+
+- 最新一輪審查的結論行全部是 0（沒有 Act on、沒有上一輪未修好、沒有缺證據的驗收條件），而且那一輪審的就是目前的 head。之後又 push 過（例如修了 Consider）就再跑一輪
+- 最新的 head 上，本機 `npm run check` 通過，PR 上的 CI 也是綠的（`mcp__github__pull_request_read` 的 `get_check_runs`）
+- PR 裡沒有 `.claude/progress/`
+
+例外：因審查迴圈達輪數上限停下找人，使用者回覆「接受現狀」時，結論行可以不是 0。合併判斷摘要的結論寫「需要你決定」，逐條列出還沒清零的發現。CI 綠燈與沒有進度檔兩項仍要成立。
+
+成立後：
+
+1. 用 `mcp__github__update_pull_request` 把 `draft` 設為 `false`，並更新 body 的「驗收方式」與「待確認」
+2. 用 `mcp__github__add_issue_comment` 在 PR 貼合併判斷摘要（格式見下），結尾附 attribution footer
+3. 用 `PushNotification` 推播一行：PR 編號與結論（環境裡沒有這個工具時略過）
+
+### 合併判斷摘要
+
+```markdown
+## 合併判斷摘要
+
+**結論**：建議合併／不建議合併（理由）／需要你決定（問題與推薦）
+
+### 變更重點
+- 3 到 5 行
+
+### 驗收條件
+- [x] <條件>：<證據>
+
+### 審查紀錄
+- 共 N 輪。第 1 輪：<修了什麼>；第 2 輪：…
+
+### 沒有處理的 Consider
+- <項目>：<一行理由>（沒有就寫「無」）
+
+### 你要看的地方
+- <preview 頁面與斷點，或要讀的文件段落>
+```
+
+## 9. 回報
+
+在對話中寫出：PR 連結（完整 URL 的 markdown link）、合併判斷摘要的結論、審查輪數。保持 PR 的監看，直到 PR 合併或關閉。

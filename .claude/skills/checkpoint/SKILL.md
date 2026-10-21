@@ -10,12 +10,34 @@ description: 實作中途保存進度時使用（/checkpoint）。把目前的�
 ## 何時執行
 
 - 計畫中的一個階段完成時
-- 停下等使用者回覆之前（計畫外的取捨、`needs-input` 提問、`needs-design` 階段一以外的任何暫停）
+- 停下找人之前（見下方「停下找人」）
 - 使用者輸入 `/checkpoint` 時
 
 ## 授權
 
-使用者確認 `/issue-start` 的計畫，就同意了這張 issue 的 checkpoint commit 與 push，範圍只限工作 branch。checkpoint 不開 PR、不 push `main`。
+使用者確認 `/issue-start` 的計畫（自動模式下是輸入 `/issue-start N`），就同意了這張 issue 的 checkpoint commit 與 push，範圍只限工作 branch。checkpoint 不開 PR、不 push `main`。
+
+## 停下找人
+
+停止條件只寫在這裡，`issue-start`、`issue-ship` 連過來：
+
+- 實作中出現計畫外、需要使用者選的取捨，或修正需要改變計畫範圍
+- `needs-input` 的內容要由使用者提供
+- `/issue-ship` 的審查迴圈跑滿 3 輪，最新一輪的結論行仍不是全部 0
+
+`needs-design` 階段一出貨後的停下不走這裡，照 `CLAUDE.md` 的兩階段流程。
+
+做法：
+
+1. 執行本 skill 第 1–3 步（階段做到一半就寫 `進行中`）
+2. 留言寫問題、選項與推薦，以及推薦的理由：已開 PR 就留在 PR（`mcp__github__add_issue_comment`，PR 編號），還沒開就留在 issue。第一行寫「需要你決定」，結尾附系統指示要求的 attribution footer
+3. 在 issue 加上 `needs-decision` label（`mcp__github__issue_write`，`update`，保留原有 label）
+4. 用 `PushNotification` 推播一行：issue 編號、要決定什麼。環境裡沒有這個工具時略過，靠第 2、3 步的留言與 label
+5. 在對話中寫出同樣的問題，停下等回覆
+6. 使用者回覆後（在原 session，或在新 session 用 `/issue-start N` 接續後回覆都一樣）：拿掉 `needs-decision`，把決定寫進進度檔「目前狀態」，「待使用者決定」改回「無」，馬上 checkpoint 一次，再繼續。審查迴圈中的停下例外：照 `issue-ship` 第 7 步，回覆後的第一個 commit 直接刪除進度檔
+7. 因審查迴圈達輪數上限而停下時，使用者的回覆可能是：
+   - 繼續修：輪數從 1 重新計算
+   - 接受現狀：照 [`issue-ship` 第 8 步](../issue-ship/SKILL.md#8-完成條件轉-ready)的「使用者接受現狀」轉 ready
 
 ## 1. 更新進度檔
 
@@ -65,9 +87,9 @@ wip: 階段 <k> 完成：<摘要>（#N）
 ```
 
 - 階段完成時寫 `完成`；階段做到一半、停下等回覆時寫 `進行中`
-- commit 後、push 前跑 `node scripts/checkpoint/status.mjs <N>`，確認輸出的狀態符合預期；不符時 `git commit --amend` 修正 message（還沒 push，不影響別人）。`wip:` commit 的 message 不符合這個格式時 script 會失敗，接續的 session 也會停下
+- commit 後、push 前跑 `node scripts/checkpoint/status.mjs <N>`（審查迴圈停下時的 commit 不寫階段，跳過這項檢查，見 [`issue-ship` 第 7 步](../issue-ship/SKILL.md#7-審查迴圈)），確認輸出的狀態符合預期；不符時 `git commit --amend` 修正 message（還沒 push，不影響別人）。`wip:` commit 的 message 不符合這個格式時 script 會失敗，接續的 session 也會停下
 
-push 方式與重試規則同 [`issue-ship` 第 6 步](../issue-ship/SKILL.md#6-push)。`wip:` commit 會在 `/issue-ship` 時合併成一個 commit，不會進入 `main`。
+push 方式與重試規則同 [`issue-ship` 第 5 步](../issue-ship/SKILL.md#5-push)。`wip:` commit 會在 `/issue-ship` 時合併成一個 commit，不會進入 `main`。
 
 branch 已經有 open PR 時（例如 `needs-design` 階段二），PR 開了就不能再改寫歷史，`wip:` 合併不掉。這時 commit message 的 `wip` 換成 issue 的 type，例如 `feat: 階段 2 完成：<摘要>（#N）`，script 一樣能推算；進度檔照寫，`/issue-ship` 收尾時刪除。
 
