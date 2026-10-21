@@ -1,0 +1,17 @@
+---
+// Direction B of the 3D scroll prototype (M3-07, #54)
+import PrototypePage from './_PrototypePage.astro';
+import image from '../../assets/design/hero-modular-stack.webp';
+import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
+---
+
+<PrototypePage
+  direction={{
+    id: 'modular-stack',
+    name: 'B Modular Stack',
+    summary: '等角視角的 3D 方塊隨捲動拆解、翻轉，再重組成各產品家族的模組。',
+    image,
+    mobile,
+  }}
+  other={{ id: 'data-flow', name: 'A Data Flow' }}
+/>

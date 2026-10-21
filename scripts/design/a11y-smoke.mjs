@@ -180,7 +180,9 @@ async function main([path = '/design-system']) {
 
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 860 });
-    await page.goto(url, { waitUntil: 'networkidle0' });
+    // Not networkidle0: a running 3D scene (Scene3D) keeps the renderer busy and it never fires
+    await page.goto(url, { waitUntil: 'load' });
+    await page.evaluate(() => document.fonts.ready);
     const focus = await focusProblems(page);
     report(`keyboard focus (${focus.checked} focusable elements)`, focus.problems);
 

@@ -1,0 +1,126 @@
+---
+// 3D scroll scene island (M3-07, #54; loading strategy in ADR 0003). Put it in a PageHero's
+// `backdrop` slot after the Backdrop that holds the static image, inside an element marked
+// `data-scene-track` (the hero plus the sections the scene plays behind).
+// The static Backdrop stays the LCP and the complete fallback. three.js loads only after the
+// page's load event and an idle callback, and never with prefers-reduced-motion: reduce, Save-Data
+// or without WebGL. Once the first frame is drawn the track gets data-scene="ready" and the canvas
+// fades in over the static image; it is fixed to the viewport so it keeps playing while the
+// track's later sections (which must then drop their background) scroll over it.
+// Decorative, so hidden from assistive tech.
+interface Props {
+  direction: 'data-flow' | 'modular-stack';
+}
+
+const { direction } = Astro.props;
+---
+
+<div class="scene-3d" data-scene-host={direction} aria-hidden="true" hidden></div>
+
+<script>
+  import type { SceneFactory } from '../../lib/scene/runtime';
+
+  const LOADERS: Record<string, () => Promise<{ default: SceneFactory }>> = {
+    'data-flow': () => import('../../lib/scene/data-flow'),
+    'modular-stack': () => import('../../lib/scene/modular-stack'),
+  };
+  const IDLE_TIMEOUT = 2000;
+
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Network Information API is not in TypeScript's DOM lib
+  const saveData = () => {
+    const connection: unknown = Reflect.get(navigator, 'connection');
+    return typeof connection === 'object' && connection !== null && Reflect.get(connection, 'saveData') === true;
+  };
+
+  const supportsWebGL = () => {
+    const canvas = document.createElement('canvas');
+    return Boolean(canvas.getContext('webgl2') ?? canvas.getContext('webgl'));
+  };
+
+  const afterLoad = () =>
+    new Promise<void>((resolve) => {
+      if (document.readyState === 'complete') resolve();
+      else addEventListener('load', () => resolve(), { once: true });
+    });
+
+  const idle = () =>
+    new Promise<void>((resolve) => {
+      if ('requestIdleCallback' in window) requestIdleCallback(() => resolve(), { timeout: IDLE_TIMEOUT });
+      else setTimeout(resolve, IDLE_TIMEOUT);
+    });
+
+  async function boot(host: HTMLElement) {
+    const load = LOADERS[host.dataset.sceneHost ?? ''];
+    const track = host.closest<HTMLElement>('[data-scene-track]');
+    if (!load || !track || reduceMotion.matches || saveData()) return;
+
+    await afterLoad();
+    await idle();
+    if (reduceMotion.matches || !supportsWebGL()) return;
+
+    const [{ mount }, { default: factory }] = await Promise.all([import('../../lib/scene/runtime'), load()]);
+    host.hidden = false;
+    const stop = mount({
+      host,
+      track,
+      factory,
+      onReady: () => {
+        track.dataset.scene = 'ready';
+      },
+    });
+
+    // Turning on reduced motion while the scene plays falls back to the static image
+    reduceMotion.addEventListener(
+      'change',
+      () => {
+        stop();
+        host.hidden = true;
+        delete track.dataset.scene;
+      },
+      { once: true },
+    );
+  }
+
+  for (const host of document.querySelectorAll<HTMLElement>('[data-scene-host]')) void boot(host);
+</script>
+
+<style>
+  @import '../../styles/media.css';
+
+  .scene-3d {
+    position: fixed;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition-property: opacity;
+    transition-duration: var(--duration-slow);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  :global([data-scene='ready']) .scene-3d {
+    opacity: 1;
+  }
+
+  .scene-3d :global(canvas) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Same scrim as Backdrop fade="hero": text keeps to plain --color-bg on the start side (desktop)
+     and in the lower part (narrow), and the scene plays on the other side */
+  .scene-3d::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 35%, var(--color-bg) 75%);
+  }
+
+  @media (--bp-lg-up) {
+    .scene-3d::after {
+      background: linear-gradient(to right, var(--color-bg) 35%, transparent 65%);
+    }
+  }
+</style>

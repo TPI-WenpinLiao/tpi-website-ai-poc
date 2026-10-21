@@ -10,6 +10,7 @@ import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Reveal from '../../components/ui/Reveal.astro';
 import ScrollProgress from '../../components/ui/ScrollProgress.astro';
 import LayerStack from '../../components/ui/LayerStack.astro';
+import Scene3D from '../../components/ui/Scene3D.astro';
 import Button from '../../components/ui/Button.astro';
 import Link from '../../components/ui/Link.astro';
 import Tag from '../../components/ui/Tag.astro';
@@ -460,6 +461,12 @@ const description =
       <h3>CSS 3D 圖層（LayerStack）</h3>
       <p class="note">同一個等角視角的 CSS 版本，不需要圖片，捲出畫面時圖層分開。用在不值得放一張大圖的區塊。</p>
       <LayerStack />
+      <h3>3D 捲動場景（Scene3D）</h3>
+      <p class="note">
+        three.js 的場景，放在 PageHero 的 backdrop slot、靜態主視覺之後，並包在 <code>data-scene-track</code> 裡；首屏載入完、瀏覽器閒置後才載入，減少動態、省流量或不支援 WebGL 時只顯示靜態圖。
+        本頁沒有 track，所以不會啟動；實際效果見 <Link href="/prototypes/data-flow">方向 A 原型</Link>、<Link href="/prototypes/modular-stack">方向 B 原型</Link>。
+      </p>
+      <Scene3D direction="data-flow" />
     </Surface>
 
     <Surface tone="light" width="reading" id="reading">

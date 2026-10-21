@@ -1,0 +1,17 @@
+---
+// Direction A of the 3D scroll prototype (M3-07, #54)
+import PrototypePage from './_PrototypePage.astro';
+import image from '../../assets/design/hero-data-flow.webp';
+import mobile from '../../assets/design/hero-data-flow-mobile.webp';
+---
+
+<PrototypePage
+  direction={{
+    id: 'data-flow',
+    name: 'A Data Flow',
+    summary: '光點與光束組成的 3D 網路，鏡頭隨捲動前進，流線分流到各產品家族的節點。',
+    image,
+    mobile,
+  }}
+  other={{ id: 'modular-stack', name: 'B Modular Stack' }}
+/>
