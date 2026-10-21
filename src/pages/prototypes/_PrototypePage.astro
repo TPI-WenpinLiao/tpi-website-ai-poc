@@ -15,7 +15,6 @@ import Surface from '../../components/ui/Surface.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import ScrollProgress from '../../components/ui/ScrollProgress.astro';
 import Button from '../../components/ui/Button.astro';
-import Tag from '../../components/ui/Tag.astro';
 import Link from '../../components/ui/Link.astro';
 import { children, node } from '../../lib/wireframe/ia';
 
@@ -66,7 +65,7 @@ const services = children('services');
             <div class="chapter">
               <div class="panel">
                 <SectionHeading index={String(i + 1).padStart(2, '0')} eyebrow="Product family" title={f.title} />
-                <ul class="products">
+                <ul class="items">
                   {f.products.map((p) => (
                     <li class="text-phrase">{p.title}</li>
                   ))}
@@ -80,14 +79,10 @@ const services = children('services');
 
     <Surface tone="dark">
       <SectionHeading index="05" eyebrow="Services" title="服務" />
-      <ul class="tags">
-        {
-          services.map((s) => (
-            <li>
-              <Tag tone="brand">{s.title}</Tag>
-            </li>
-          ))
-        }
+      <ul class="items columns">
+        {services.map((s) => (
+          <li class="text-phrase">{s.title}</li>
+        ))}
       </ul>
     </Surface>
 
@@ -140,43 +135,36 @@ const services = children('services');
     backdrop-filter: blur(var(--glass-blur));
   }
 
-  /* One product per row: equal-width rows on a hairline grid, so long names wrap under their own
-     first line instead of making uneven pills */
-  .products {
+  /* One product or service per row: equal-width rows on a hairline grid, so long names wrap under
+     their own first line instead of making uneven pills */
+  .items {
     display: grid;
     margin: 0;
     padding: 0;
-    border-block-start: var(--border-width) solid var(--glass-border);
     list-style: none;
   }
 
-  .products li {
+  .items li {
     display: grid;
     grid-template-columns: var(--space-2) minmax(0, 1fr);
     gap: var(--space-3);
     align-items: center;
     padding-block: var(--space-3);
-    border-block-end: var(--border-width) solid var(--glass-border);
+    /* Every row draws both lines and overlaps the one above, so the top line breaks at the column
+       gaps like the others */
+    border-block: var(--border-width) solid var(--glass-border);
+    margin-block-start: calc(var(--border-width) * -1);
     color: var(--color-text);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-snug);
   }
 
-  .products li::before {
+  .items li::before {
     content: '';
     block-size: var(--space-2);
     border-radius: var(--radius-pill);
     background: var(--color-accent);
     box-shadow: var(--glow-accent);
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin: 0;
-    padding: 0;
-    list-style: none;
   }
 
   p {
@@ -191,7 +179,19 @@ const services = children('services');
     }
   }
 
+  /* The services section is full width: rows flow into columns instead of stretching */
+  @media (--bp-sm-up) {
+    .columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-8);
+    }
+  }
+
   @media (--bp-lg-up) {
+    .columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .panel {
       max-inline-size: calc(var(--content-max-width) * var(--hero-copy-share));
     }
