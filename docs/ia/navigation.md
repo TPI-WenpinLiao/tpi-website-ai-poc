@@ -20,7 +20,7 @@ header 第一層：產品｜產業方案｜服務｜成功案例｜資源｜公�
 | 資源 | 下拉選單 | 資源總覽、部落格、4 份白皮書、活動、昕力大學（外部連結） |
 | 公司 | 下拉選單 | 關於我們、合作夥伴、媒體中心、人才招募（外部連結） |
 
-footer 有 6 欄：產品、產業方案、服務、資源、公司、法務。法務頁只出現在 footer 最底列，與版權聲明同列。
+footer 有 5 欄：產品、產業方案、服務、資源、公司。欄的下方是最底列，放版權聲明與 4 個法務頁，法務頁只出現在這裡。現站也是這樣排（首頁 HTML 的 `footer-bottom`，法務連結與版權聲明同一區）。
 
 ### 工具列
 
@@ -75,8 +75,9 @@ M4-04 實作、M4-05 axe 檢查時對照下列項目。
 |---|---|---|
 | `textualanalysis`、`interactivehealth`、`insurebrick`、`insurering`、`gis` | sitemap 標為「待確認是否仍銷售」，現站也不在導覽 | 所屬產品家族頁或產業頁內文 |
 | `digilogs-detection` | 同上，且為第四層 | digiLogs 產品頁 |
-| 部落格 5 個分類 | 部落格頁內的分類篩選 | 部落格列表頁 |
-| `utilities` 群組（搜尋結果、訂閱流程、感謝頁、404 等） | 功能頁 | 搜尋按鈕、表單送出後；電子報訂閱另放在 footer |
+| `digirunner-cloud`、`digilogs-iso27001` | 第四層 | 上一層產品頁（digiRunner、digiLogs） |
+| 部落格 5 個分類（`blog-ai`、`blog-digital-transformation`、`blog-enterprise-management`、`blog-esg`、`blog-use-cases`） | 部落格頁內的分類篩選 | 部落格列表頁 |
+| `utilities` 群組（搜尋結果、訂閱流程、感謝頁、404 等） | 功能頁；script 豁免，不列在 `navigation.csv` 的 `none` | 搜尋按鈕、表單送出後；電子報訂閱另放在 footer |
 
 ## 個別項目的決定
 
@@ -85,7 +86,7 @@ M4-04 實作、M4-05 axe 檢查時對照下列項目。
 | OrientAI 位置 | zh-TW、en 為獨立的「Agentic AI」群組；vi 放在 DigiLism 下 | AI（SysTalk.ai）家族的第一項，加「Agentic AI」標記 | sitemap 已放在 `family-ai`；獨立群組只有一個產品，會讓產品選單多一欄。三語統一 |
 | AISO | zh-TW、en、vi 都是 header 第一層的單一連結 | 服務選單的第一項 | sitemap 放在 `services` 底下；第一層留給受眾任務 |
 | 合作夥伴 | en、vi 是第一層，zh-TW 不在 header | 「公司」選單與 footer | 合作夥伴不是本站受眾（`audience-and-goals.md`）；zh-TW 現站內容幾乎為空 |
-| 法務頁 | footer，連到 PDF | 只在 footer 最底列 | 同 sitemap；PDF 改 HTML 頁 |
+| 法務頁 | footer 最底列，與版權聲明同列，連到 PDF | 只在 footer 最底列，不另成一欄 | 沿用現站位置；PDF 改 HTML 頁 |
 | 昕力大學、人才招募 | 昕力大學在「資源」；人才招募不在導覽 | 昕力大學在「資源」，人才招募在「公司」，都是外部連結 | 獨立應用，只放入口（`sitemap.md`）；人才招募提供求職者入口但不建頁 |
 | 第一層命名 | 公司 | 沿用「公司」 | 現站三語都用；不會跟子項目「關於我們」重複 |
 | 既有客戶、媒體與投資人的專屬入口 | 無 | 先不加 | 媒體用「公司 > 媒體中心」，既有客戶用「聯絡我們」；有具體需求時再加節點（`audience-and-goals.md` 問題 1） |
@@ -139,14 +140,16 @@ node scripts/ia/navigation.mjs --check   # 同樣的檢查，不寫檔；本檔�
 
 | 檔案 | 內容 | 維護方式 |
 |---|---|---|
-| [`navigation.csv`](./navigation.csv) | 導覽項目：`area`（`utility`／`header`／`footer`／`none`）、`parent`、`node`、`label`、`note`；列的順序就是呈現順序 | 手寫，導覽的唯一來源 |
-| 本檔「自動產生的段落」 | header 結構圖、footer 欄位、節點位置對照、統計 | `navigation.mjs` 產生 |
+| [`navigation.csv`](./navigation.csv) | 導覽項目：`area`（`utility`／`header`／`footer`／`footer-bottom`／`none`）、`parent`、`node`、`label`、`note`；列的順序就是呈現順序 | 手寫，導覽的唯一來源 |
+| 本檔「自動產生的段落」 | header 結構圖、footer 欄位與最底列、節點位置對照、統計 | `navigation.mjs` 產生 |
 
 `navigation.csv` 的寫法：
 
 - `node` 是 `nodes.csv` 的 id；只用來展開選單、沒有頁面的項目（例如「產品」「公司」）`node` 留空，寫 `label`
 - `label` 留空時用節點的 `title`
 - `parent` 填上層項目的 `node`，上層沒有 `node` 時填它的 `label`；上層必須寫在前面的列
+- `area` 為 `footer` 是欄：欄標題一列（只寫 `label`），底下的項目 `parent` 填欄標題
+- `area` 為 `footer-bottom` 是欄下方的最底列，與版權聲明同列；只放節點，不寫 `parent`
 - `area` 為 `none` 表示刻意不放進導覽，`note` 必須寫原因
 
 script 不連網路，同一份輸入重跑，輸出逐位元組相同。下列情況以 exit 1 結束：
@@ -155,9 +158,10 @@ script 不連網路，同一份輸入重跑，輸出逐位元組相同。下列�
 - 工具列、header、footer 放了 `kind` 不是 `page`／`external` 的節點（群組、集合、下載檔沒有單一頁面可連）
 - `label` 含 `"` 或 `|`（會破壞產生的 Mermaid 與表格）
 - footer 的欄標題不是 `label`，或 footer 超過兩層
+- footer 最底列的列寫了 `parent`，或沒有 `node`
 - `parent` 找不到，或寫在子項目之後
 - `legal`、`utilities` 本身或底下的節點出現在 header 選單
-- sitemap 深度 3 以內的頁面與外部連結（`utilities` 群組除外）沒有出現在任何區域，也沒列為 `none`
+- sitemap 的頁面與外部連結（`utilities` 群組除外，不限深度）沒有出現在任何區域，也沒列為 `none`
 - `none` 的列沒寫 `note`，或同一節點同時在 `none` 與其他區域
 
 ## 自動產生的段落
@@ -281,19 +285,23 @@ flowchart LR
 
 ### footer
 
-| 產品 | 產業方案 | 服務 | 資源 | 公司 | 法務 |
-|---|---|---|---|---|---|
-| 產品總覽 | 金融 | 服務總覽 | 成功案例 | 關於我們 | 隱私權政策 |
-| AI（SysTalk.ai） | 政府與公部門 | AISO 主權 AI | 部落格 | 合作夥伴 | 使用條款 |
-| 數位轉型（DigiLism） | 製造業 | 委外服務 | 活動 | 媒體中心 | 免責聲明 |
-| 資安（GadoSecurity） |  | 雲端整合服務 | 昕力大學 | 人才招募 | 資訊安全政策 |
-| ESG 與能源（ESGswift） |  | ChatGPT 企業服務 |  | 聯絡我們 |  |
-|  |  | UI/UX 數位產品設計 |  | 訂閱電子報 |  |
-|  |  | ESG 永續發展與顧問服務 |  |  |  |
+| 產品 | 產業方案 | 服務 | 資源 | 公司 |
+|---|---|---|---|---|
+| 產品總覽 | 金融 | 服務總覽 | 成功案例 | 關於我們 |
+| AI（SysTalk.ai） | 政府與公部門 | AISO 主權 AI | 部落格 | 合作夥伴 |
+| 數位轉型（DigiLism） | 製造業 | 委外服務 | 活動 | 媒體中心 |
+| 資安（GadoSecurity） |  | 雲端整合服務 | 昕力大學 | 人才招募 |
+| ESG 與能源（ESGswift） |  | ChatGPT 企業服務 |  | 聯絡我們 |
+|  |  | UI/UX 數位產品設計 |  | 訂閱電子報 |
+|  |  | ESG 永續發展與顧問服務 |  |  |
+
+最底列：
+
+版權聲明｜隱私權政策｜使用條款｜免責聲明｜資訊安全政策
 
 ### 節點在導覽中的位置
 
-sitemap 中深度 3 以內的頁面與外部連結（不含功能頁群組）都要出現在 header、footer 或工具列，或列為「不進導覽」並寫理由。script 依此檢查。更深的節點有出現在 navigation.csv 時也列出。
+sitemap 中所有頁面與外部連結（不含功能頁群組）都要出現在 header、footer 或工具列，或列為「不進導覽」並寫理由。script 依此檢查。
 
 | 節點 | 位置 |
 |---|---|
@@ -312,7 +320,9 @@ sitemap 中深度 3 以內的頁面與外部連結（不含功能頁群組）都
 | 　　　OrientAI 企業級 Agentic AI 平台（`orient-ai`） | header：產品 > AI（SysTalk.ai） > OrientAI 企業級 Agentic AI 平台 |
 | 　　數位轉型（DigiLism）（`family-dx`） | header：產品 > 數位轉型（DigiLism）<br/>footer：產品 > 數位轉型（DigiLism） |
 | 　　　digiRunner API 管理平台（`digirunner`） | header：產品 > 數位轉型（DigiLism） > digiRunner API 管理平台 |
+| 　　　　digiRunner on Cloud（`digirunner-cloud`） | 不進導覽：第四層，從上一層產品頁連結 |
 | 　　　digiLogs 集中化日誌管理平台（`digilogs`） | header：產品 > 數位轉型（DigiLism） > digiLogs 集中化日誌管理平台 |
+| 　　　　ISO27001 日誌存錄（`digilogs-iso27001`） | 不進導覽：第四層，從上一層產品頁連結 |
 | 　　　　digiLogs 日誌分析（`digilogs-detection`） | 不進導覽：待確認是否仍銷售；第四層，從 digiLogs 產品頁連結 |
 | 　　　digiMars 大數據管理平台（`digimars`） | header：產品 > 數位轉型（DigiLism） > digiMars 大數據管理平台 |
 | 　　　digiFlexis 企業流程管理平台（`digiflexis`） | header：產品 > 數位轉型（DigiLism） > digiFlexis 企業流程管理平台 |
@@ -357,17 +367,17 @@ sitemap 中深度 3 以內的頁面與外部連結（不含功能頁群組）都
 | 　　媒體中心（`media-center`） | header：公司 > 媒體中心<br/>footer：公司 > 媒體中心 |
 | 　　人才招募（`hr`） | header：公司 > 人才招募<br/>footer：公司 > 人才招募 |
 | 　聯絡我們（`contact`） | 工具列：聯絡我們<br/>footer：公司 > 聯絡我們 |
-| 　　隱私權政策（`privacy`） | footer：法務 > 隱私權政策 |
-| 　　使用條款（`terms`） | footer：法務 > 使用條款 |
-| 　　免責聲明（`disclaimer`） | footer：法務 > 免責聲明 |
-| 　　資訊安全政策（`security-policy`） | footer：法務 > 資訊安全政策 |
+| 　　隱私權政策（`privacy`） | footer 最底列：隱私權政策 |
+| 　　使用條款（`terms`） | footer 最底列：使用條款 |
+| 　　免責聲明（`disclaimer`） | footer 最底列：免責聲明 |
+| 　　資訊安全政策（`security-policy`） | footer 最底列：資訊安全政策 |
 | 　　站內搜尋（`search`） | 工具列：搜尋 |
 | 　　電子報訂閱（`subscribe`） | footer：公司 > 訂閱電子報 |
 
 ### 統計
 
-| header 第一層 | header 項目 | footer 欄 | footer 項目 | 不進導覽 |
-|--:|--:|--:|--:|--:|
-| 6 | 52 | 6 | 29 | 11 |
+| header 第一層 | header 項目 | footer 欄 | footer 項目 | footer 最底列 | 不進導覽 |
+|--:|--:|--:|--:|--:|--:|
+| 6 | 52 | 5 | 25 | 4 | 13 |
 
 <!-- generated by scripts/ia/navigation.mjs: end -->
