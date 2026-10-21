@@ -169,7 +169,8 @@ async function main() {
     await writeFile(out, redirects.text);
   }
   const count = (s) => rows.filter((r) => r.status === s).length;
-  console.log(`${inventory.length} inventory URLs → ${count('301')} redirects (incl. ${FALLBACKS.length} catch-alls), ${count('200')} unchanged; _redirects: ${redirects.static} static, ${redirects.dynamic} dynamic${check ? ', output up to date' : ''}${out && !check ? `, written to ${out}` : ''}`);
+  const otherHost = rows.filter((r) => r.status === '301' && new URL(r.from).host !== MAIN_HOST).length;
+  console.log(`${inventory.length} inventory URLs → ${count('301')} redirects (incl. ${FALLBACKS.length} catch-alls), ${count('200')} unchanged; _redirects: ${redirects.static} static, ${redirects.dynamic} dynamic, ${otherHost} on other hosts left out${check ? ', output up to date' : ''}${out && !check ? `, written to ${out}` : ''}`);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) await main();

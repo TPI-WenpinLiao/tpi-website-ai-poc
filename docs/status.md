@@ -4,7 +4,7 @@
 
 ## 目前 milestone
 
-**M1 盤點與研究**（剩 M1-06 收尾）；M2 進行中
+**M1 盤點與研究**（剩 M1-06 收尾）；M2、M3 進行中
 
 ## 進度
 
@@ -44,7 +44,7 @@
 - M2-02 導覽定案完成（#9，`ia-approved`，PR #60）
 - M2-03 URL 規則與語系策略完成（#10，ADR 0002，PR #59）
 - M2-04 內容模型完成（#11，PR #61）
-- M2-05 舊站 redirect map 完成（#12）：`docs/ia/redirects.csv` 涵蓋 inventory 全部 1,306 個網址，可用 `node scripts/ia/redirects.mjs --redirects <file>` 轉成 `_redirects`
+- M2-05 舊站 redirect map 完成（#12）：`docs/ia/redirects.csv` 涵蓋 inventory 全部網址，可用 `node scripts/ia/redirects.mjs --redirects <file>` 轉成 `_redirects`
 - PR 審查 skill `/pr-review` 完成（#62，PR #65）
 - `status.md` 改寫合併後的狀態完成（#67）
 - 長時間任務的 checkpoint 機制完成（#69，PR #70）
@@ -79,7 +79,7 @@
 - 工作流程 skills：`/issue-start`、`/checkpoint`、`/issue-ship`、`/pr-review`、`/next-issue`，使用說明見 `docs/workflow.md`（#50、#62、#69、#71）。沒有 `needs-design`、`needs-input`，計畫也沒有待決事項的 issue 走自動模式，人工只負責啟動、回覆 `needs-decision`、看合併判斷摘要後合併。專案固定檢查只寫在 `.claude/skills/pr-review/SKILL.md`
 - 已從 pstack 導入 `typescript-best-practices`、`writing-style`、`CLAUDE.md` 工作原則、`/issue-ship` 自我 review（#50，#62 移到 `/pr-review`）。pstack 的 `create-verification-skill`（以 Playwright 實際操作網站並留存證據）待 M4-05（#24）品質關卡擴充時評估
 - 日文版：M2-01 決定不支援，M2-05 將 `/ja/*` 301 到 `/en`（現站 `/ja`、`/ja/partners` 回 500）
-- M2-05：`www.tpisoftware.vn` 的 398 筆轉址不能放進 `_redirects`（不支援網域層級），`.vn` 網域去留決定後改用 Bulk Redirects 等方式處理
+- M2-05：`www.tpisoftware.vn` 的轉址不能放進 `_redirects`（不支援網域層級），`.vn` 網域去留決定後改用 Bulk Redirects 等方式處理
 - M1-04：表單建議沿用現站 `/tpi/api/*` 後端，需後端開放新站網域的 CORS 並確認 reCAPTCHA 設定；GTM 等追蹤碼由新站重新規劃，不沿用現站 4 個容器；.com 站內搜尋 API 目前回 500（見 `docs/research/features.md`）
 - M1-05：主要轉換為聯絡業務；新站只用 GTM、需要 cookie 同意機制、Facebook Pixel 與 Ahrefs 不沿用；成功指標包含自然搜尋流量，但沒有 GA4／Search Console 權限，量測方式待定（見 `docs/research/audience-and-goals.md`）
 - M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（`seo-checklist` 的 JSON-LD 對照改為連到 `content-model.md`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）

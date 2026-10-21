@@ -15,7 +15,7 @@
 | `status` | `301`：要轉址；`200`：路徑不變，不需轉址，轉換時略過 |
 | `note` | 依據：`<disposition>：<節點 id>`，drop 列寫找到目標的方式 |
 
-目前 1,309 列：inventory 1,306 列加 3 列萬用規則，其中 1,086 列 `301`、223 列 `200`（`node scripts/ia/redirects.mjs` 的輸出）。
+列數、`301` 與 `200` 的筆數，以及 `_redirects` 的規則數，看 `node scripts/ia/redirects.mjs` 的輸出。
 
 ## 對照規則
 
@@ -49,8 +49,8 @@ script 另外檢查：
 node scripts/ia/redirects.mjs --redirects public/_redirects
 ```
 
-- 輸出 `www.tpisoftware.com` 的 301 列：靜態規則在前，萬用規則在後（Cloudflare 對同一來源採用最上面一條）。目前 686 筆靜態、2 筆動態
-- `www.tpisoftware.vn` 的 398 列不輸出：`_redirects` 不支援網域層級轉址。`.vn` 網域上線後是否保留（ADR 0002「影響」）決定後，用 Cloudflare Bulk Redirects 或 `.vn` 網域自己的設定處理
+- 輸出 `www.tpisoftware.com` 的 301 列：靜態規則在前，萬用規則在後（Cloudflare 對同一來源採用最上面一條）
+- `www.tpisoftware.vn` 的列不輸出：`_redirects` 不支援網域層級轉址。`.vn` 網域上線後是否保留（ADR 0002「影響」）決定後，用 Cloudflare Bulk Redirects 或 `.vn` 網域自己的設定處理
 - 新路由在 M4 才建立，目前不寫進 `public/`
 
 ## 待確認
