@@ -1,17 +1,180 @@
 ---
-// Direction B of the 3D scroll prototype (M3-07, #54)
-import PrototypePage from './_PrototypePage.astro';
+// Home page 3D scroll prototype (M3-07, #54), direction B Modular Stack, chosen over A Data Flow.
+// Not in nodes.csv, navigation.csv or the sitemap; removed once M3-04 turns it into the home page.
+// The hero and the product-family chapters form the scene track: the static hero image is the
+// LCP and the complete fallback; the 3D scene (Scene3D) plays behind the chapters as they scroll.
+// Copy comes from the current site only: product and service names from docs/ia/nodes.csv, the
+// heading from the current /about-us h1.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import Backdrop from '../../components/ui/Backdrop.astro';
+import Scene3D from '../../components/ui/Scene3D.astro';
+import Surface from '../../components/ui/Surface.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import ScrollProgress from '../../components/ui/ScrollProgress.astro';
+import Button from '../../components/ui/Button.astro';
+import { children, node } from '../../lib/wireframe/ia';
 import image from '../../assets/design/hero-modular-stack.webp';
 import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
+
+const title = 'Modular Stack 3D 捲動原型｜TPIsoftware 昕力資訊';
+const description =
+  '昕力資訊官網改版的首頁 3D 捲動原型：等角視角的 3D 方塊隨捲動拆解、翻轉，再重組成 AI、數位轉型、資安、ESG 與能源四個產品家族的模組。';
+
+const FAMILIES = ['family-ai', 'family-dx', 'family-security', 'family-esg'];
+const families = FAMILIES.map((id) => ({ ...node(id), products: children(id) }));
+const services = children('services');
 ---
 
-<PrototypePage
-  direction={{
-    id: 'modular-stack',
-    name: 'B Modular Stack',
-    summary: '等角視角的 3D 方塊隨捲動拆解、翻轉，再重組成各產品家族的模組。',
-    image,
-    mobile,
-  }}
-  other={{ id: 'data-flow', name: 'A Data Flow' }}
-/>
+<BaseLayout title={title} description={description}>
+  <ScrollProgress />
+  <main>
+    <div class="track" data-scene-track>
+      <PageHero
+        eyebrow="TPIsoftware 昕力資訊"
+        title={'以頂尖科技\u200b為企業賦能'}
+        description="AI、數位轉型、資安、ESG 與能源四個產品家族，加上導入、雲端與設計服務。"
+      >
+        <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
+        <Scene3D slot="backdrop" direction="modular-stack" />
+        <Fragment slot="actions">
+          <Button href="#families" size="lg">看產品家族</Button>
+          <Button href="#services" size="lg" variant="secondary">看服務</Button>
+        </Fragment>
+      </PageHero>
+
+      <section class="chapters" data-surface="dark" id="families" aria-label="產品家族">
+        {
+          families.map((f, i) => (
+            <div class="chapter">
+              <div class="panel">
+                <SectionHeading index={String(i + 1).padStart(2, '0')} eyebrow="Product family" title={f.title} />
+                <ul class="items">
+                  {f.products.map((p) => (
+                    <li class="text-phrase">{p.title}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))
+        }
+      </section>
+    </div>
+
+    <Surface tone="dark" id="services">
+      <SectionHeading index="05" eyebrow="Services" title="服務" />
+      <ul class="items columns">
+        {services.map((s) => (
+          <li class="text-phrase">{s.title}</li>
+        ))}
+      </ul>
+    </Surface>
+
+    <Surface tone="light" width="reading">
+      <SectionHeading eyebrow="Prototype" title="關於這個原型" />
+      <p>
+        這是官網改版首頁的 3D 捲動原型：等角視角的 3D 方塊隨捲動拆解、翻轉，再重組成各產品家族的模組。
+        3D 在首屏顯示後才載入；偏好減少動態、不支援 WebGL 或開啟省流量時，只顯示上方的靜態主視覺。
+      </p>
+    </Surface>
+  </main>
+</BaseLayout>
+
+<style>
+  @import '../../styles/media.css';
+
+  /* Stays above the hero, whose backdrop layer will hold the fixed 3D canvas */
+  .chapters {
+    position: relative;
+    z-index: var(--z-raised);
+  }
+
+  /* Once the scene draws, the chapters let it show through */
+  [data-scene='ready'] .chapters {
+    background: transparent;
+  }
+
+  .chapter {
+    box-sizing: content-box;
+    display: grid;
+    align-items: center;
+    min-block-size: 100svh;
+    max-inline-size: var(--content-max-width);
+    margin-inline: auto;
+    padding-inline: var(--space-gutter);
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--space-8);
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    background: var(--glass-bg);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(var(--glass-blur));
+  }
+
+  /* One product or service per row: equal-width rows on a hairline grid, so long names wrap under
+     their own first line instead of making uneven pills */
+  .items {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .items li {
+    display: grid;
+    grid-template-columns: var(--space-2) minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: center;
+    padding-block: var(--space-3);
+    /* Every row draws both lines and overlaps the one above, so the top line breaks at the column
+       gaps like the others */
+    border-block: var(--border-width) solid var(--glass-border);
+    margin-block-start: calc(var(--border-width) * -1);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
+  }
+
+  .items li::before {
+    content: '';
+    block-size: var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    box-shadow: var(--glow-accent);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  /* Narrow screens: the scene plays in the upper part (runtime FOCUS_SHIFT), the panel sits below */
+  @media (--bp-lg-down) {
+    .chapter {
+      align-items: end;
+      padding-block-end: var(--space-12);
+    }
+  }
+
+  /* The services section is full width: rows flow into columns instead of stretching */
+  @media (--bp-sm-up) {
+    .columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-8);
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .panel {
+      max-inline-size: calc(var(--content-max-width) * var(--hero-copy-share));
+    }
+  }
+</style>

@@ -1,4 +1,4 @@
-// Lighthouse for the 3D scroll prototypes (M3-07, #54), mobile and desktop. `npm run check` does not
+// Lighthouse for the 3D scroll prototype (M3-07, #54), mobile and desktop. `npm run check` does not
 // cover these pages: LHCI's staticDistDir audits only the first 5 URLs it finds.
 // Each page and form factor runs RUNS times; the run with the median performance score is
 // reported, as a Markdown table for the PR. The 3D chunk (src/lib/scene/runtime, with three.js)

@@ -9,7 +9,7 @@
 // track's later sections (which must then drop their background) scroll over it.
 // Decorative, so hidden from assistive tech.
 interface Props {
-  direction: 'data-flow' | 'modular-stack';
+  direction: 'modular-stack';
 }
 
 const { direction } = Astro.props;
@@ -21,7 +21,6 @@ const { direction } = Astro.props;
   import type { SceneFactory } from '../../lib/scene/runtime';
 
   const LOADERS: Record<string, () => Promise<{ default: SceneFactory }>> = {
-    'data-flow': () => import('../../lib/scene/data-flow'),
     'modular-stack': () => import('../../lib/scene/modular-stack'),
   };
   const IDLE_TIMEOUT = 2000;

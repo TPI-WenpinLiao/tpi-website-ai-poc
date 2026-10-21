@@ -1,4 +1,4 @@
-// Screenshots of the 3D scroll prototypes (M3-07, #54) at several scroll positions, on desktop and
+// Screenshots of the 3D scroll prototype (M3-07, #54) at several scroll positions, on desktop and
 // mobile, plus a reduced-motion run that must show no canvas and request no 3D chunk.
 // Headless Chromium renders WebGL with SwiftShader (software), so frames show the look of the
 // scene, not its real frame rate.
@@ -6,7 +6,7 @@
 // track at a steady pace (needs ffmpeg on PATH, used by puppeteer's screencast).
 // Run after `npm run build`:
 //   node scripts/design/scene-capture.mjs [--video] <out-dir> [path ...]
-// Paths default to both prototypes. Prints one JSON line per page and viewport.
+// Paths default to PATHS. Prints one JSON line per page and viewport.
 
 import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -14,7 +14,7 @@ import puppeteer from 'puppeteer-core';
 import { serve } from '../lib/static-server.mjs';
 
 const DIST = resolve(import.meta.dirname, '../../dist');
-export const PATHS = ['/prototypes/data-flow', '/prototypes/modular-stack'];
+export const PATHS = ['/prototypes/modular-stack'];
 export const VIEWPORTS = [
   { name: 'desktop', width: 1440, height: 900, isMobile: false },
   { name: 'mobile', width: 390, height: 844, isMobile: true },
@@ -24,7 +24,7 @@ const STOPS = [0, 0.25, 0.5, 0.75, 1];
 // SwiftShader is slow; give the deferred import and the first frames time to land
 const SCENE_TIMEOUT = 20_000;
 // Chunks of src/lib/scene: three.js lives in runtime's. Scene3D's own loader is not one of them.
-const SCENE_CHUNK = /\/(runtime|data-flow|modular-stack)\.[\w-]+\.js$/;
+const SCENE_CHUNK = /\/(runtime|modular-stack)\.[\w-]+\.js$/;
 export const LAUNCH_ARGS = ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'];
 
 const slug = (path) => path.replace(/^\//, '').replaceAll('/', '-');
