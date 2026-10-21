@@ -1,0 +1,37 @@
+---
+// Thin energy-gradient bar at the top of the viewport that fills as the page scrolls. Pure CSS
+// (scroll-driven animation); decorative, so hidden from assistive tech. Not rendered where the
+// browser lacks animation-timeline or the visitor prefers reduced motion.
+---
+
+<div class="progress" aria-hidden="true"></div>
+
+<style>
+  .progress {
+    display: none;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: var(--z-overlay);
+        display: block;
+        block-size: var(--progress-height);
+        background: var(--gradient-energy);
+        transform-origin: left;
+        animation-name: ui-progress;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root);
+      }
+    }
+  }
+
+  @keyframes ui-progress {
+    from {
+      transform: scaleX(0);
+    }
+  }
+</style>

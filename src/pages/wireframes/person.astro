@@ -44,13 +44,15 @@ import WfBreadcrumb from '../../components/wireframe/WfBreadcrumb.astro';
 </WfLayout>
 
 <style>
+  @import '../../styles/media.css';
+
   .span {
     display: grid;
     grid-column: span 2;
   }
 
-  /* 64rem breakpoint, see tokens.css */
-  @media (max-width: 63.99rem) {
+  /* Breakpoint: src/styles/media.css */
+  @media (--bp-lg-down) {
     .span {
       grid-column: auto;
     }

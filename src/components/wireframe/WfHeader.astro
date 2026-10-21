@@ -55,6 +55,8 @@ const contact = utility.find((u) => u.key === 'contact');
 </header>
 
 <style>
+  @import '../../styles/media.css';
+
   .wf-header {
     border-block-end: var(--wf-line-width) solid var(--wf-color-line);
     background: var(--color-bg);
@@ -166,8 +168,8 @@ const contact = utility.find((u) => u.key === 'contact');
     flex: 0 0 auto;
   }
 
-  /* 64rem breakpoint, see tokens.css */
-  @media (max-width: 63.99rem) {
+  /* Breakpoint: src/styles/media.css */
+  @media (--bp-lg-down) {
     .wf-header:not(.fit) .primary,
     .wf-header:not(.fit) .locale {
       display: none;

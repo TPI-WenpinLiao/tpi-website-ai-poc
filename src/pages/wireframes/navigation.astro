@@ -168,6 +168,8 @@ const locales = [
 </WfLayout>
 
 <style>
+  @import '../../styles/media.css';
+
   .panel {
     padding: var(--space-4);
     border: var(--wf-line-width) solid var(--wf-color-line);
@@ -307,8 +309,8 @@ const locales = [
     font-weight: 700;
   }
 
-  /* 64rem breakpoint, see tokens.css */
-  @media (max-width: 63.99rem) {
+  /* Breakpoint: src/styles/media.css */
+  @media (--bp-lg-down) {
     .mega {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }

@@ -1,0 +1,138 @@
+---
+// Decorative image behind a Surface (put it in the Surface's or PageHero's `backdrop` slot).
+// Images live in src/assets/design (docs/design/image-prompts.md); they carry no information, so
+// alt is always empty. A scrim fades the image into --color-bg on the side where text sits:
+// - fade="hero": on desktop the image takes only the end side and fades in from its start edge,
+//   so the copy on the start side sits on plain --color-bg (cover-cropping a full-bleed image let
+//   bright beams run under the text: 1.63:1 at 1024px). With a `mobile` image the narrow layout
+//   swaps to it full-bleed, subject on top, fading to --color-bg toward the bottom where text sits
+// - fade="bottom": fades out toward the bottom edge (ambient glows, the reading header)
+// - fade="none"
+// `priority` marks the LCP image (the hero): eager load and high fetch priority.
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  image: ImageMetadata;
+  mobile?: ImageMetadata;
+  fade?: 'hero' | 'bottom' | 'none';
+  strength?: 'full' | 'soft';
+  focus?: 'center' | 'end' | 'top';
+  priority?: boolean;
+}
+
+const { image, mobile, fade = 'none', strength = 'full', focus = 'center', priority = false } = Astro.props;
+
+const FORMATS = ['avif', 'webp'] as const;
+
+async function sources(src: ImageMetadata, widths: number[]) {
+  const sizes = [...new Set(widths.filter((w) => w < src.width).concat(src.width))];
+  return Promise.all(
+    FORMATS.map(async (format) => {
+      const variants = await Promise.all(sizes.map((width) => getImage({ src, width, format })));
+      return { type: `image/${format}`, srcset: variants.map((v, i) => `${v.src} ${sizes[i]}w`).join(', ') };
+    }),
+  );
+}
+
+// HTML can't read @custom-media; this is --bp-lg-down from src/styles/media.css
+const NARROW = '(width < 64rem)';
+const mobileSources = mobile ? await sources(mobile, [480, 800]) : [];
+const imageSources = await sources(image, [960, 1440]);
+const fallback = await getImage({ src: image, width: Math.min(1440, image.width), format: 'webp' });
+---
+
+<div class:list={['backdrop', `fade-${fade}`, `strength-${strength}`, `focus-${focus}`, { 'has-mobile': mobile }]} aria-hidden="true">
+  <picture>
+    {mobileSources.map((s) => <source media={NARROW} type={s.type} srcset={s.srcset} sizes="100vw" />)}
+    {imageSources.map((s) => <source type={s.type} srcset={s.srcset} sizes="100vw" />)}
+    <img
+      src={fallback.src}
+      width={fallback.attributes.width ?? image.width}
+      height={fallback.attributes.height ?? image.height}
+      alt=""
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      decoding="async"
+    />
+  </picture>
+</div>
+
+<style>
+  @import '../../styles/media.css';
+
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  picture,
+  img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  img {
+    object-fit: cover;
+  }
+
+  .focus-center img {
+    object-position: center;
+  }
+
+  .focus-end img {
+    object-position: right center;
+  }
+
+  .focus-top img {
+    object-position: center top;
+  }
+
+  .strength-soft picture {
+    opacity: var(--backdrop-soft-opacity);
+  }
+
+  .backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .fade-hero picture {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: var(--hero-image-share);
+    mask-image: linear-gradient(to right, transparent 15%, black 60%);
+  }
+
+  .fade-bottom::after {
+    background: linear-gradient(to bottom, transparent 40%, var(--color-bg));
+  }
+
+  @media (--bp-lg-down) {
+    .fade-hero picture {
+      position: static;
+      inline-size: 100%;
+      mask-image: none;
+    }
+
+    /* The 4:5 mobile image keeps its own aspect at the top instead of cover-scaling to the hero's
+       height; its lower half is dark by design and fades out, and PageHero starts the copy there */
+    .fade-hero.has-mobile picture,
+    .fade-hero.has-mobile img {
+      block-size: auto;
+    }
+
+    .fade-hero.has-mobile picture {
+      mask-image: linear-gradient(to bottom, black 55%, transparent);
+    }
+
+    .fade-hero:not(.has-mobile)::after {
+      background: linear-gradient(to top, var(--color-bg) 35%, transparent);
+    }
+  }
+</style>

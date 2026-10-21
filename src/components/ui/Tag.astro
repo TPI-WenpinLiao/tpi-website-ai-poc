@@ -1,0 +1,62 @@
+---
+// Label for a category, topic or data point. `node` is the data-flow label: mono text with a
+// glowing signal dot, for product modules and technical keywords. With href it links to the
+// filtered listing.
+interface Props {
+  href?: string;
+  tone?: 'neutral' | 'brand' | 'node';
+}
+
+const { href, tone = 'neutral' } = Astro.props;
+const Element = href ? 'a' : 'span';
+---
+
+<Element class:list={['tag', tone]} href={href}><slot /></Element>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border: var(--border-width) solid transparent;
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-tight);
+    text-decoration: none;
+  }
+
+  .neutral {
+    background: var(--color-bg-muted);
+    color: var(--color-text-muted);
+  }
+
+  .brand {
+    background: var(--color-bg-brand-subtle);
+    color: var(--color-text-brand);
+  }
+
+  .node {
+    border-color: var(--color-border);
+    background: var(--color-bg-subtle);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-mono);
+    text-transform: uppercase;
+  }
+
+  .node::before {
+    content: '';
+    inline-size: var(--space-2);
+    block-size: var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    box-shadow: var(--glow-accent);
+  }
+
+  a.tag:hover {
+    border-color: var(--color-border-brand);
+    text-decoration: underline;
+  }
+</style>

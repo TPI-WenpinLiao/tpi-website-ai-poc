@@ -7,13 +7,13 @@
 // Results depend on the installed fonts, so --check is not part of npm run check.
 
 import { execFileSync } from 'node:child_process';
-import { createReadStream, existsSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { createServer } from 'node:http';
-import { extname, join, normalize } from 'node:path';
+import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import { emit, replaceSection } from '../ia/generated.mjs';
+import { serve } from '../lib/static-server.mjs';
 
 const DIST = 'dist';
 const DOC = 'docs/design/nav-fit.md';
@@ -25,7 +25,6 @@ const WIDTHS = [375, DESKTOP];
 // Liberation Sans has Arial's metrics; Inter is a common UI face; DejaVu Sans is a wide worst case.
 export const FONTS = ['Liberation Sans', 'Inter', 'DejaVu Sans'];
 const CJK_FALLBACK = 'WenQuanYi Zen Hei';
-const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml' };
 
 // A row fits when its content is no wider than the space inside the row's padding
 export const fits = ({ content, available }) => content <= available;
@@ -43,22 +42,6 @@ export function renderSection({ rows, overflow }) {
   for (const p of overflow) out.push(`| \`${p.page}\` | ${WIDTHS.map((w) => (p.widths[w] ? '❌ 有' : '✅ 無')).join(' | ')} |`);
   out.push('', MARK_END);
   return out.join('\n');
-}
-
-function serve(root) {
-  const server = createServer((req, res) => {
-    const path = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname));
-    let file = join(root, path);
-    if (existsSync(`${file}.html`)) file = `${file}.html`;
-    else if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
-    if (!file.startsWith(root) || !existsSync(file)) {
-      res.writeHead(404).end();
-      return;
-    }
-    res.writeHead(200, { 'content-type': TYPES[extname(file)] ?? 'application/octet-stream' });
-    createReadStream(file).pipe(res);
-  });
-  return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(server)));
 }
 
 function assertFonts() {

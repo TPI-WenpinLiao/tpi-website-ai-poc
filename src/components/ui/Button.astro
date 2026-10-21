@@ -1,0 +1,119 @@
+---
+// Button or button-styled link. With href it renders <a> (navigation); without, <button> (action).
+// A link can't be disabled, so `disabled` only exists on the button variant.
+// primary: solid action color that lifts and glows on hover. secondary: energy-gradient outline.
+// text: no frame. All variants follow the surrounding data-surface.
+import type { HTMLAttributes } from 'astro/types';
+
+type Common = {
+  variant?: 'primary' | 'secondary' | 'text';
+  size?: 'sm' | 'md' | 'lg';
+};
+
+type Props = Common &
+  (
+    | ({ href: string; type?: never } & Omit<HTMLAttributes<'a'>, 'href' | 'type'>)
+    | ({ href?: undefined; type?: 'button' | 'submit' | 'reset'; disabled?: boolean } & Omit<
+        HTMLAttributes<'button'>,
+        'type' | 'disabled'
+      >)
+  );
+
+const { variant = 'primary', size = 'md', type = 'button', class: className, ...rest } = Astro.props;
+const classes = ['btn', variant, size, className];
+---
+
+{
+  'href' in rest && rest.href !== undefined ? (
+    <a class:list={classes} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button class:list={classes} type={type} {...rest}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--touch-target);
+    padding: var(--space-2) var(--space-6);
+    border: var(--border-width-strong) solid transparent;
+    border-radius: var(--radius-md);
+    font: inherit;
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform var(--duration-base) var(--ease-out-expo),
+      box-shadow var(--duration-base) var(--ease-out-expo),
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+  }
+
+  .sm {
+    min-height: var(--space-10);
+    padding: var(--space-1) var(--space-4);
+    font-size: var(--font-size-sm);
+  }
+
+  .lg {
+    min-height: var(--space-12);
+    padding: var(--space-3) var(--space-8);
+    font-size: var(--font-size-lg);
+  }
+
+  .primary {
+    background: var(--color-action);
+    color: var(--color-action-text);
+  }
+
+  .primary:hover {
+    background: var(--color-action-hover);
+    box-shadow: var(--glow-brand);
+    transform: translateY(var(--lift));
+  }
+
+  /* Gradient outline: an opaque fill on the padding box, the energy gradient on the border box */
+  .secondary {
+    background:
+      linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+      var(--gradient-energy) border-box;
+    color: var(--color-text);
+  }
+
+  .secondary:hover {
+    background:
+      linear-gradient(var(--color-action-subtle-hover), var(--color-action-subtle-hover)) padding-box,
+      var(--gradient-energy) border-box;
+    box-shadow: var(--glow-accent);
+    transform: translateY(var(--lift));
+  }
+
+  .text {
+    padding-inline: var(--space-2);
+    background: transparent;
+    color: var(--color-link);
+  }
+
+  .text:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+    text-underline-offset: var(--underline-offset);
+  }
+
+  .btn:disabled {
+    border-color: transparent;
+    background: var(--color-disabled-bg);
+    color: var(--color-disabled-text);
+    box-shadow: none;
+    transform: none;
+    cursor: not-allowed;
+  }
+</style>

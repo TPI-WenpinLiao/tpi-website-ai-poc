@@ -1,0 +1,140 @@
+---
+// Opening scene of a page: dark surface with the coordinate grid, mono eyebrow, the page's single
+// h1 at display size, lead text, actions, and a `visual` slot. The visual is where the 3D scroll
+// scene mounts (M3-07); until it loads it must show a static fallback, which is also the LCP
+// candidate, so never fade the hero in. Breadcrumbs go in the `breadcrumb` slot.
+// The `backdrop` slot takes a full-bleed Backdrop (fade="hero", priority) behind the copy: the copy
+// keeps to the start side on desktop (--hero-copy-share, clear of the image's --hero-image-share)
+// and to the lower half on narrow screens, where the scrim is.
+import Surface from './Surface.astro';
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  description?: string;
+  tone?: 'light' | 'dark';
+}
+
+const { title, eyebrow, description, tone = 'dark' } = Astro.props;
+const hasVisual = Astro.slots.has('visual');
+const hasBackdrop = Astro.slots.has('backdrop');
+---
+
+<Surface tone={tone} pattern="grid" class="page-hero">
+  {
+    hasBackdrop && (
+      <Fragment slot="backdrop">
+        <slot name="backdrop" />
+      </Fragment>
+    )
+  }
+  <div class:list={['layout', { split: hasVisual, 'has-backdrop': hasBackdrop }]}>
+    <div class="copy">
+      <slot name="breadcrumb" />
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1>{title}</h1>
+      {description && <p class="description">{description}</p>}
+      {
+        Astro.slots.has('actions') && (
+          <div class="actions">
+            <slot name="actions" />
+          </div>
+        )
+      }
+    </div>
+    {
+      hasVisual && (
+        <div class="visual">
+          <slot name="visual" />
+        </div>
+      )
+    }
+  </div>
+</Surface>
+
+<style>
+  @import '../../styles/media.css';
+
+  .layout {
+    display: grid;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    color: var(--color-text-brand);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-mono);
+    text-transform: uppercase;
+  }
+
+  .eyebrow::before {
+    content: '';
+    inline-size: var(--space-2);
+    block-size: var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    box-shadow: var(--glow-accent);
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: var(--font-size-display);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-display);
+    letter-spacing: var(--letter-spacing-display);
+    text-wrap: balance;
+  }
+
+  .description {
+    max-width: var(--reading-max-width);
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xl);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-block-start: var(--space-2);
+  }
+
+  /* Narrow screens: the copy starts below the subject of the 4:5 backdrop image */
+  .has-backdrop {
+    padding-block-start: var(--hero-narrow-offset);
+  }
+
+  .has-backdrop .copy {
+    max-inline-size: calc(var(--content-max-width) * var(--hero-copy-share));
+  }
+
+  .visual {
+    display: grid;
+    place-items: center;
+  }
+
+  @media (--bp-lg-up) {
+    .has-backdrop {
+      min-block-size: var(--hero-min-height);
+      padding-block-start: 0;
+      align-content: center;
+    }
+
+    .split {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    }
+  }
+</style>

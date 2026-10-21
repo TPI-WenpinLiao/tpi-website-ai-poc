@@ -37,6 +37,8 @@ import WfLink from './WfLink.astro';
 </footer>
 
 <style>
+  @import '../../styles/media.css';
+
   .wf-footer {
     margin-block-start: var(--wf-space-12);
     border-block-start: var(--wf-line-width) solid var(--wf-color-line);
@@ -97,8 +99,8 @@ import WfLink from './WfLink.astro';
     gap: var(--space-2) var(--space-4);
   }
 
-  /* 64rem breakpoint, see tokens.css */
-  @media (max-width: 63.99rem) {
+  /* Breakpoint: src/styles/media.css */
+  @media (--bp-lg-down) {
     .columns {
       grid-template-columns: repeat(2, 1fr);
       gap: var(--space-4);
