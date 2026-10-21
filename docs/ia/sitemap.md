@@ -15,6 +15,7 @@ node scripts/ia/sitemap.mjs           # 產生 page-map.csv、sitemap-summary.js
 ```
 
 - `sitemap.mjs` 不連網路，結果固定：同一份輸入重跑，輸出逐位元組相同
+- `node scripts/ia/sitemap.mjs --check` 做同樣的檢查，但不寫檔，只比對產出與磁碟上的檔案；有檔案過期時列出檔名並 exit 1。`npm run check` 的第一步 `npm run check:ia` 會執行它，改了輸入沒重跑就會失敗
 - 下列情況 script 以 exit 1 結束：節點的 `path` 不符 ADR 0002 的格式；keep／rewrite／merge 的列找不到節點；route-map 指向不存在的節點，或有沒被任何列用到的路由；節點的 parent、kind、模板不合法；沒有對應列的節點沒寫備註
 
 | 檔案 | 內容 | 維護方式 |

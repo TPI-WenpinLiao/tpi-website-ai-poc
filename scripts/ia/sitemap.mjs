@@ -4,10 +4,12 @@
 // maps every keep / rewrite / merge row to a sitemap node (and blog articles to their new slug), writes docs/ia/page-map.csv and
 // docs/ia/sitemap-summary.json, and regenerates the marked section of docs/ia/sitemap.md.
 // Re-run after editing any input or re-running scripts/inventory/audit.mjs: node scripts/ia/sitemap.mjs
+// With --check it validates the same way but only compares the outputs to the files on disk (npm run check:ia).
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { readCsv, csvCell } from '../inventory/csv.mjs';
 import { routeKey, ROUTE_ALIASES } from '../inventory/routes.mjs';
+import { depth, emit, replaceSection } from './generated.mjs';
 
 const INVENTORY = 'docs/research/inventory.csv';
 const NODES = 'docs/ia/nodes.csv';
@@ -144,12 +146,6 @@ function mermaid(nodes) {
   return lines.join('\n');
 }
 
-function depth(n, byId) {
-  let d = 0;
-  for (let cur = n; cur.parent; cur = byId.get(cur.parent)) d++;
-  return d;
-}
-
 function generatedSection(nodes, templates, byId, counts) {
   const count = (id, locale) => counts.get(id)?.[locale] ?? 0;
   const total = (id) => LOCALES.reduce((s, l) => s + count(id, l), 0);
@@ -219,7 +215,6 @@ async function main() {
 
   const columns = ['url', 'locale', 'page_type', 'disposition', 'node', 'template', 'blog_category', 'blog_slug'];
   const csv = [columns.join(','), ...mapped.map((r) => columns.map((c) => csvCell(r[c])).join(','))].join('\n');
-  await writeFile(PAGE_MAP, `﻿${csv}\n`);
 
   const byTemplate = {};
   for (const r of mapped) byTemplate[r.template] = (byTemplate[r.template] ?? 0) + 1;
@@ -232,18 +227,17 @@ async function main() {
     byNode: Object.fromEntries(nodes.filter((n) => counts.has(n.id)).map((n) => [n.id, counts.get(n.id)])),
     nodesWithoutRows: nodes.filter((n) => !counts.has(n.id)).map((n) => n.id),
   };
-  await writeFile(SUMMARY, `${JSON.stringify(summary, null, 2)}\n`);
+  const doc = replaceSection(await readFile(DOC, 'utf8'), MARK_START, MARK_END, generatedSection(nodes, templates, byId, counts));
 
-  const doc = await readFile(DOC, 'utf8');
-  const start = doc.indexOf(MARK_START);
-  const end = doc.indexOf(MARK_END);
-  if (start < 0 || end < start) {
-    console.error(`${DOC}: generated section markers not found`);
-    process.exit(1);
-  }
-  await writeFile(DOC, doc.slice(0, start) + generatedSection(nodes, templates, byId, counts) + doc.slice(end + MARK_END.length));
+  const check = process.argv.includes('--check');
+  const stale = await emit([
+    [PAGE_MAP, `﻿${csv}\n`],
+    [SUMMARY, `${JSON.stringify(summary, null, 2)}\n`],
+    [DOC, doc],
+  ], { check, rerun: 'node scripts/ia/sitemap.mjs' });
+  if (stale.length) process.exit(1);
 
-  console.log(`${mapped.length} rows mapped to ${counts.size} of ${nodes.length} nodes:`, summary.byDisposition);
+  console.log(`${mapped.length} rows mapped to ${counts.size} of ${nodes.length} nodes${check ? ', outputs up to date' : ''}:`, summary.byDisposition);
 }
 
 await main();

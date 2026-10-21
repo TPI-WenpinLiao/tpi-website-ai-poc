@@ -2,9 +2,11 @@
 // Reads the hand-written docs/ia/navigation.csv and docs/ia/nodes.csv, checks the navigation against
 // the sitemap, and regenerates the marked section of docs/ia/navigation.md.
 // Re-run after editing either CSV: node scripts/ia/navigation.mjs
+// With --check it validates the same way but only compares the output to the file on disk (npm run check:ia).
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { readCsv } from '../inventory/csv.mjs';
+import { depth, emit, replaceSection } from './generated.mjs';
 
 const NODES = 'docs/ia/nodes.csv';
 const NAV = 'docs/ia/navigation.csv';
@@ -24,12 +26,6 @@ const NOT_IN_HEADER = new Set(['legal', 'utilities']);
 const LINKABLE = new Set(['page', 'external']);
 
 const errors = [];
-
-function depth(n, byId) {
-  let d = 0;
-  for (let cur = n; cur.parent; cur = byId.get(cur.parent)) d++;
-  return d;
-}
 
 function ancestors(n, byId) {
   const out = [];
@@ -144,16 +140,14 @@ async function main() {
     process.exit(1);
   }
 
-  const doc = await readFile(DOC, 'utf8');
-  const start = doc.indexOf(MARK_START);
-  const end = doc.indexOf(MARK_END);
-  if (start < 0 || end < start) {
-    console.error(`${DOC}: generated section markers not found`);
-    process.exit(1);
-  }
-  await writeFile(DOC, doc.slice(0, start) + generatedSection(trees, nodes.filter((n) => required.includes(n) || AREAS.some((a) => trees[a].items.has(n.id))), byId) + doc.slice(end + MARK_END.length));
+  const listed = nodes.filter((n) => required.includes(n) || AREAS.some((a) => trees[a].items.has(n.id)));
+  const doc = replaceSection(await readFile(DOC, 'utf8'), MARK_START, MARK_END, generatedSection(trees, listed, byId));
 
-  console.log(`header ${trees.header.items.size} items, footer ${trees.footer.items.size}, none ${trees.none.items.size}`);
+  const check = process.argv.includes('--check');
+  const stale = await emit([[DOC, doc]], { check, rerun: 'node scripts/ia/navigation.mjs' });
+  if (stale.length) process.exit(1);
+
+  console.log(`header ${trees.header.items.size} items, footer ${trees.footer.items.size}, none ${trees.none.items.size}${check ? ', output up to date' : ''}`);
 }
 
 await main();
