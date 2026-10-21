@@ -227,7 +227,7 @@ async function main() {
     byNode: Object.fromEntries(nodes.filter((n) => counts.has(n.id)).map((n) => [n.id, counts.get(n.id)])),
     nodesWithoutRows: nodes.filter((n) => !counts.has(n.id)).map((n) => n.id),
   };
-  const doc = replaceSection(await readFile(DOC, 'utf8'), MARK_START, MARK_END, generatedSection(nodes, templates, byId, counts));
+  const doc = replaceSection(await readFile(DOC, 'utf8'), DOC, MARK_START, MARK_END, generatedSection(nodes, templates, byId, counts));
 
   const check = process.argv.includes('--check');
   const stale = await emit([

@@ -9,11 +9,12 @@ export function depth(n, byId) {
   return d;
 }
 
-// Replace the text between two marker comments, markers included; `section` must start and end with them
-export function replaceSection(doc, start, end, section) {
+// Replace the text between two marker comments in `doc` (read from `path`), markers included;
+// `section` must start and end with them
+export function replaceSection(doc, path, start, end, section) {
   const from = doc.indexOf(start);
   const to = doc.indexOf(end);
-  if (from < 0 || to < from) throw new Error(`generated section markers not found: ${start}`);
+  if (from < 0 || to < from) throw new Error(`${path}: generated section markers not found`);
   return doc.slice(0, from) + section + doc.slice(to + end.length);
 }
 

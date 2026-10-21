@@ -141,7 +141,7 @@ async function main() {
   }
 
   const listed = nodes.filter((n) => required.includes(n) || AREAS.some((a) => trees[a].items.has(n.id)));
-  const doc = replaceSection(await readFile(DOC, 'utf8'), MARK_START, MARK_END, generatedSection(trees, listed, byId));
+  const doc = replaceSection(await readFile(DOC, 'utf8'), DOC, MARK_START, MARK_END, generatedSection(trees, listed, byId));
 
   const check = process.argv.includes('--check');
   const stale = await emit([[DOC, doc]], { check, rerun: 'node scripts/ia/navigation.mjs' });

@@ -17,12 +17,12 @@ test('depth counts parents up to the root', () => {
 
 test('replaceSection swaps the marked section and keeps the rest', () => {
   const doc = `intro\n${START}\nold\n${END}\noutro\n`;
-  assert.equal(replaceSection(doc, START, END, `${START}\nnew\n${END}`), `intro\n${START}\nnew\n${END}\noutro\n`);
+  assert.equal(replaceSection(doc, 'x.md', START, END, `${START}\nnew\n${END}`), `intro\n${START}\nnew\n${END}\noutro\n`);
 });
 
 test('replaceSection rejects missing or reversed markers', () => {
-  assert.throws(() => replaceSection('no markers', START, END, ''), /markers not found/);
-  assert.throws(() => replaceSection(`${END}\n${START}`, START, END, ''), /markers not found/);
+  assert.throws(() => replaceSection('no markers', 'x.md', START, END, ''), /^Error: x\.md: generated section markers not found$/);
+  assert.throws(() => replaceSection(`${END}\n${START}`, 'x.md', START, END, ''), /markers not found/);
 });
 
 test('emit writes outputs, and in check mode reports stale or missing files without writing', async (t) => {
