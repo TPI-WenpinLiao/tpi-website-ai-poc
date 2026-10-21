@@ -47,6 +47,10 @@ export const nodes: IaNode[] = readRows(nodesCsv, 'nodes.csv', ['id', 'parent', 
 const byId = new Map(nodes.map((n) => [n.id, n]));
 const navRows = readRows(navCsv, 'navigation.csv', ['area', 'parent', 'node', 'label', 'note']);
 
+// Wireframe links go to the wireframe of the target's template, so the prototype is clickable and
+// never links to a route that does not exist yet. External links have no wireframe and no href.
+export const wireframeHref = (n: IaNode) => (n.template ? `/wireframes/${n.template}` : undefined);
+
 export function node(id: string): IaNode {
   const n = byId.get(id);
   if (!n) throw new Error(`unknown node: ${id}`);
@@ -64,7 +68,7 @@ function navTree(area: string): NavItem[] {
         return {
           key,
           label: r.label || n?.title || key,
-          href: n?.path || undefined,
+          href: n ? wireframeHref(n) : undefined,
           external: n?.kind === 'external',
           note: r.note,
           children: build(key),

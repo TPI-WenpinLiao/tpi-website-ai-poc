@@ -2,6 +2,7 @@
 import WfLayout from '../../layouts/WfLayout.astro';
 import WfSection from '../../components/wireframe/WfSection.astro';
 import WfHeader from '../../components/wireframe/WfHeader.astro';
+import WfLink from '../../components/wireframe/WfLink.astro';
 import { header, utility, type NavItem } from '../../lib/wireframe/ia';
 import { navFitSets } from '../../lib/wireframe/header-labels';
 
@@ -25,7 +26,7 @@ const locales = [
 
 <WfLayout
   title="導覽 wireframe"
-  description="M3-01 導覽 wireframe：產品 mega menu、其他下拉選單、語系切換、行動版選單的展開狀態，以及 en、vi 選單在 1280px 的寬度測試。"
+  description="M3-01 導覽 wireframe：產品 mega menu、其他下拉選單、語系切換與行動版選單的展開狀態，以及 en、vi 選單寬度測試。"
 >
   <p slot="notes">
     選單項目讀自 <code>docs/ia/navigation.csv</code>，規則見 <code>docs/ia/navigation.md</code>。這頁以靜態畫格呈現展開狀態；展開、Esc、焦點管理等行為在 M4-04 實作。
@@ -63,8 +64,7 @@ const locales = [
             <ul>
               {menu.children.map((item) => (
                 <li>
-                  <a href={item.href}>{item.label}</a>
-                  {item.external && (<><span aria-hidden="true">↗</span><span class="sr-only">（外部連結）</span></>)}
+                  <WfLink item={item} />
                 </li>
               ))}
             </ul>
@@ -186,6 +186,7 @@ const locales = [
     padding-block: var(--wf-space-1);
   }
 
+  .panel :global(a),
   a {
     color: var(--color-text);
   }

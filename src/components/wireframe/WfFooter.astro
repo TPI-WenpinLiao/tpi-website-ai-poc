@@ -2,6 +2,7 @@
 // Wireframe footer (docs/ia/navigation.md): 5 columns from navigation.csv, then the bottom row
 // with the copyright notice and the legal pages in the current site's order.
 import { footer, footerBottom } from '../../lib/wireframe/ia';
+import WfLink from './WfLink.astro';
 ---
 
 <footer class="wf-footer">
@@ -13,10 +14,7 @@ import { footer, footerBottom } from '../../lib/wireframe/ia';
           <ul>
             {col.children.map((item) => (
               <li>
-                <a href={item.href}>
-                  {item.label}
-                  {item.external && (<><span aria-hidden="true">↗</span><span class="sr-only">（外部連結）</span></>)}
-                </a>
+                <WfLink item={item} />
               </li>
             ))}
           </ul>
@@ -30,7 +28,7 @@ import { footer, footerBottom } from '../../lib/wireframe/ia';
       {
         footerBottom.map((item) => (
           <li>
-            <a href={item.href}>{item.label}</a>
+            <WfLink item={item} />
           </li>
         ))
       }
@@ -70,12 +68,12 @@ import { footer, footerBottom } from '../../lib/wireframe/ia';
     list-style: none;
   }
 
-  .col li a {
+  .col li > :global(*) {
     display: inline-block;
     padding-block: var(--wf-space-1);
   }
 
-  a {
+  .wf-footer :global(a) {
     color: var(--color-text);
   }
 

@@ -1,0 +1,27 @@
+---
+// Menu link in the wireframes. External entries have no wireframe to link to, so they render as
+// text marked ↗; an <a> without href would fail Lighthouse crawlable-anchors.
+import type { NavItem } from '../../lib/wireframe/ia';
+
+interface Props {
+  item: NavItem;
+}
+
+const { item } = Astro.props;
+---
+
+{
+  item.href ? (
+    <a href={item.href}>{item.label}</a>
+  ) : (
+    <span>
+      {item.label}
+      {item.external && (
+        <>
+          <span aria-hidden="true">↗</span>
+          <span class="sr-only">（外部連結，網址待定）</span>
+        </>
+      )}
+    </span>
+  )
+}

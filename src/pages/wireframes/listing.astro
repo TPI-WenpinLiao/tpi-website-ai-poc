@@ -12,7 +12,7 @@ const categories = children('blog').filter((n) => n.kind === 'page');
 <WfLayout
   template="listing"
   title="listing 模板"
-  description="列表頁 wireframe：部落格首頁與分類、媒體中心、活動、成功案例列表共用。標題、篩選、卡片格線與分頁。"
+  description="列表頁 wireframe：部落格首頁與分類、媒體中心、活動、成功案例列表共用。頁面標題、精選、篩選、卡片格線與頁碼分頁。"
 >
   <p slot="notes">
     範例節點：部落格。篩選依列表不同：部落格是分類（{categories.map((n) => n.title).join('、')}）與 tag，成功案例是產業，媒體中心是新聞類型。

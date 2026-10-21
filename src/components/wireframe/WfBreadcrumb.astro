@@ -1,6 +1,6 @@
 ---
 // Breadcrumb derived from nodes.csv parents (docs/ia/navigation.md「SEO」)
-import { breadcrumb } from '../../lib/wireframe/ia';
+import { breadcrumb, wireframeHref } from '../../lib/wireframe/ia';
 
 interface Props {
   node: string;
@@ -13,7 +13,7 @@ const trail = breadcrumb(Astro.props.node);
   <ol>
     {
       trail.map((n, i) => (
-        <li>{i < trail.length - 1 ? <a href={n.path}>{n.title}</a> : <span aria-current="page">{n.title}</span>}</li>
+        <li>{i < trail.length - 1 ? <a href={wireframeHref(n)}>{n.title}</a> : <span aria-current="page">{n.title}</span>}</li>
       ))
     }
   </ol>

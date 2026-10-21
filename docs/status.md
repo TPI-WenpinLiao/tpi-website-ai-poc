@@ -44,6 +44,7 @@
 - M2-02 導覽定案完成（#9，`ia-approved`，PR #60）
 - M2-03 URL 規則與語系策略完成（#10，ADR 0002，PR #59）
 - M2-04 內容模型完成（#11，PR #61）
+- M2-05 舊站 redirect map（#12，PR #79），待合併
 - PR 審查 skill `/pr-review` 完成（#62，PR #65）
 - `status.md` 改寫合併後的狀態完成（#67）
 - 長時間任務的 checkpoint 機制完成（#69，PR #70）
@@ -55,13 +56,13 @@
 
 ### M3 設計系統
 
-- M3-01 wireframe（#14），階段一，等待 wireframe-approved：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 en、vi 放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
+- M3-01 各模板低保真 wireframe 完成（#14，`wireframe-approved`）：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 en、vi 放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
 
 ## 下一步
 
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
-- M2-05 redirect map（#12）的依賴（#8、#10）都已完成，可以開始；轉址規則依 ADR 0002，blog 文章的新 slug 用 `docs/ia/page-map.csv` 的 `blog_slug` 欄
-- Review M3-01 wireframe（preview 的 `/wireframes`），確認後在 #14 加上 `wireframe-approved`
+- Review M2-05 redirect map（PR #79）後合併；與本 PR 都改了 `docs/status.md`，後合併的一方要解衝突
+- M3-02 design tokens 與元件庫（#15）的依賴 M3-01（#14）已完成，可以開始
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
