@@ -19,7 +19,8 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 所有樣式值（色彩、字級、行高、間距、圓角、陰影、斷點、角度、動畫時間）只能引用 `src/styles/tokens.css` 的 CSS custom properties
 - 需要新 token 時先加到 `tokens.css` 並在 PR 中說明用途，不得在元件內寫死數值
 - 不使用 UI framework 或 utility CSS framework
-- 元件樣式寫在 `.astro` 的 scoped `<style>`；全域樣式只放在 `BaseLayout`（`box-sizing`、`body`、`[data-surface='dark']`、`:focus-visible`、`.sr-only`）
+- 元件樣式寫在 `.astro` 的 scoped `<style>`；全域樣式只放在 `BaseLayout`（`box-sizing`、`body`、標題與 `.text-phrase` 的換行、`[data-surface='dark']`、`:focus-visible`、`.sr-only`）
+- 中文換行：標題與 `.text-phrase`（hero 與區塊的引言、卡片說明、`Tag`）只在空格與標點斷行，不會把「數位轉型」斷成「數位轉／型」。內文段落不加。沒有空格與標點的標題用 U+200B 標出可斷行的位置（見 `PageHero`）
 - 頁面元件在 `src/components/ui/`，新元件同步加到 `/design-system`，寫法見「展示頁」
 
 ## 尺寸計算

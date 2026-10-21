@@ -34,7 +34,7 @@ const Heading = `h${level}` as const;
       )
     }
     <Heading class="title"><a href={href}>{title}</a></Heading>
-    {description && <p class="description">{description}</p>}
+    {description && <p class="description text-phrase">{description}</p>}
     {
       Astro.slots.has('meta') && (
         <div class="meta">
