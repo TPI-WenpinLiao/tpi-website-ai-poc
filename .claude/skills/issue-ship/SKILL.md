@@ -82,7 +82,7 @@ git push -u origin <工作 branch>
 
 ## 7. 開 PR
 
-用 `mcp__github__create_pull_request`，base 為 `main`。
+用 `mcp__github__create_pull_request`，base 為 `main`。工作 branch 已經有 OPEN PR 時（接續既有 PR），不另開，push 後依需要用 `mcp__github__update_pull_request` 更新 body。
 
 - **title**：issue 標題（含 `[Mx-xx]` 或 `[chore]` 前綴）
 - **draft**：issue 有 `needs-design` 且尚無 `design-approved`（或 M2／M3 對應的 approved label）→ `true`；其他 → `false`

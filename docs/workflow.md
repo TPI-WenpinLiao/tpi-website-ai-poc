@@ -40,7 +40,7 @@ Claude 依 milestone 順序、每張 issue 的「## 依賴」與關卡 label，�
 
 Claude 會依序：
 
-1. 決定工作 branch：issue 已有 open PR 就用 PR 的 head branch，否則用 session 指定的 branch，從最新的 `main` 同步
+1. 決定工作 branch：issue 已有 open PR 就用 PR 的 head branch；否則用 session 指定的 branch，有進度檔就從進度檔所在的 branch 接續，沒有就從最新的 `main` 開始
 2. 讀 issue、`CLAUDE.md`、`docs/status.md` 與前置 issue 的產出
 3. 檢查依賴是否關閉、關卡 label 是否齊全
 4. 拿 `docs/status.md` 對照 GitHub 上 issue 與 PR 的實際狀態；對不上的列進計畫，在這張 issue 的 PR 一起修，不另開同步 PR

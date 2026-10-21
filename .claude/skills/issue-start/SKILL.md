@@ -15,18 +15,18 @@ description: 開始處理一張 GitHub issue 時使用（/issue-start <issue 編
 
 先用 `mcp__github__issue_read`（`get`）讀 issue 的 `state` 與 `closed_by_pull_requests`，依序判斷：
 
-**issue 已關閉，或有 MERGED／CLOSED 的 PR：停下**
-
-說明 issue 與 PR 狀態，問使用者要不要重開。不要去找進度檔：舊 branch 刪不掉（雲端 session 刪除 remote branch 會被 403 擋下，#70 實測），上面的進度檔可能已經過時。
-
 **有 OPEN 的 PR：工作 branch 是 PR 的 head**
 
-用 `mcp__github__pull_request_read`（`get`）取得 head branch，`git fetch origin <head> && git checkout -B <head> origin/<head>`。其他 branch 上的進度檔一律不看。
+用 `mcp__github__pull_request_read`（`get`）取得 head branch，`git fetch origin <head> && git checkout -B <head> origin/<head>`。其他 branch 上的進度檔一律不看。回報時寫明「工作 branch 是 PR head `<head>`，不是 session branch」。
 
 - head 上有進度檔：照下方「接續」第 3 步起執行
-- 沒有（例如 `needs-design` 階段一已出貨）：停下說明 PR 狀態。使用者確認繼續後，在這個 branch 上照第 2–6 步提出下一段的計畫
+- 沒有（例如 `needs-design` 階段一已出貨，或要修 review 意見）：停下說明 PR 狀態。使用者確認繼續後，在這個 branch 上照第 2–6 步提出下一段的計畫
 
-**沒有 PR：找進度檔**
+**沒有 OPEN 的 PR，但 issue 已關閉或有 MERGED／CLOSED 的 PR：停下**
+
+說明 issue 與 PR 狀態，問使用者要不要重做。不要去找進度檔：舊 branch 刪不掉（雲端 session 刪除 remote branch 會被 403 擋下，#70 實測），上面的進度檔可能已經過時。使用者確認重做後，`git checkout -B <工作 branch> origin/main`，照第 2–6 步提出新計畫
+
+**issue 開著、沒有任何 PR：找進度檔**
 
 新的 session 會拿到新的 branch 名稱，所以要找遍 remote：
 
@@ -41,7 +41,7 @@ git status -sb
 找到進度檔時接續（[`checkpoint`](../checkpoint/SKILL.md)）：
 
 1. 找到多個 ref 時，取 `git log -1 --format=%ci` 最新的一個；時間相同時優先取 session branch，否則任取，並在回報中列出其他 ref
-2. `git checkout -B <工作 branch> <該 ref>`。舊 branch 刪不掉，把它的名稱寫進進度檔「目前狀態」的「待刪除的舊 branch」，`/issue-ship` 會列進 PR 請人工刪除
+2. `git checkout -B <工作 branch> <該 ref>`。舊 branch 刪不掉，第一次 checkpoint 時寫進進度檔「目前狀態」的「待刪除的舊 branch」，`/issue-ship` 會列進 PR 請人工刪除。要寫的是：進度檔原本列的舊 branch，加上這次迴圈找到的所有 ref，扣掉 `origin/<工作 branch>` 本身（同一個 session 重啟時就是它，不能刪）
 3. 執行 `node scripts/checkpoint/status.mjs <N>`，取得每個階段的狀態與下一步；script 失敗（exit 非 0）就停下回報錯誤，不要自己從 commit 推測。再讀進度檔的「目前狀態」與「待使用者決定」，照常執行第 2、3、5 步（第 4 步的 `status.md` 對照已在原計畫做過，略過）
 4. 回報環境檢查表、已完成的階段、下一步與「待使用者決定」，**不進 Plan 模式**：計畫已確認過，寫在進度檔裡
 5. 「待使用者決定」不是「無」時停下等回覆；否則從下一個階段繼續實作
