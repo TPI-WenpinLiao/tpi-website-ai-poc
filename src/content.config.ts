@@ -9,6 +9,7 @@ import { nodeIds, nodes } from './lib/ia/nodes';
 const LOCALES = ['zh-TW', 'en', 'vi'] as const;
 const INDUSTRIES = ['finance', 'government', 'manufacturing'] as const;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const ENTRY_ID = new RegExp(`^(?:${LOCALES.join('|')})/${SLUG.source.slice(1, -1)}$`);
 
 type ImageFn = () => z.ZodType;
 
@@ -29,7 +30,9 @@ function localizedGlob(collection: string) {
 }
 
 const text = z.string().trim().min(1);
-const date = z.coerce.date();
+// YAML parses an unquoted 2026-10-20 as a Date; a quoted one stays a string. z.coerce.date() would also
+// turn an empty value or a number into 1970-01-01, so only these two forms are accepted.
+const date = z.union([z.date(), z.iso.date().transform((s) => new Date(s))], { error: 'expected a YYYY-MM-DD date' });
 const httpUrl = z.url({ protocol: /^https?$/ });
 
 // Shared and migration-tracking fields ("共用欄位", "遷移追蹤欄位")
@@ -61,7 +64,8 @@ function ref<C extends 'offering' | 'case-study' | 'blog' | 'tag'>(collection: C
   return z
     .string()
     .superRefine((id, ctx) => {
-      const exists = collection === 'tag' ? tagIds().has(id) : existsSync(`src/content/${collection}/${id}.md`);
+      // The id shape check also keeps `../` out of the path below
+      const exists = collection === 'tag' ? tagIds().has(id) : ENTRY_ID.test(id) && existsSync(`src/content/${collection}/${id}.md`);
       if (!exists) ctx.addIssue({ code: 'custom', message: `${collection} entry "${id}" does not exist` });
     })
     .pipe(reference(collection));

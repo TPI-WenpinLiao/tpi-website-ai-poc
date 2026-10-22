@@ -468,7 +468,7 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 | collection 名稱 | 同內容類型：`offering`、`hub`、`case-study`、`blog`、`news`、`page`、`person`、`whitepaper`、`organization`，tag 清單是 `tag` |
 | 內容檔位置 | `src/content/<collection>/<locale>/<slug>.md`，例如 `src/content/news/zh-TW/585.md`。entry id 是 `<locale>/<slug>` |
 | 有 `node` 的類型 | 檔名用節點 id（`src/content/offering/zh-TW/digirunner.md`），URL 仍取 `nodes.csv` 的 `path` |
-| `ref(collection)` | 寫 entry id，含語系：`offerings: [zh-TW/digirunner]`；tag 寫 tag id：`tags: [ai-application]` |
+| `ref(collection)` | 寫 entry id，含語系：`offerings: [zh-TW/digirunner]`；tag 寫 tag id：`tags: [ai-application]`。schema 不擋引用 `draft: true` 的項目，模板（M4-04）列出引用時要濾掉 draft |
 | `node`、`offeringNode`、blog `category` | 合法值由 `nodes.csv` 推出（[`src/lib/ia/nodes.ts`](../../src/lib/ia/nodes.ts)），新增節點不用改 schema |
 | 圖片 | 圖檔放 `src/assets/<content-type>/<slug>/`，frontmatter 寫相對於內容檔的路徑 |
 | `organization` | `src/content/organization/<locale>.yaml`，entry id 是語系。只有本表欄位，沒有共用欄位與遷移追蹤欄位 |
@@ -476,7 +476,8 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 
 下列情況 `astro check` 與 `astro build` 會失敗：
 
-- 缺必填欄位、型別或 enum 不符、日期無法解析
+- 缺必填欄位、型別或 enum 不符
+- 日期不是 `YYYY-MM-DD`：留空、數字、`10/20/2026` 都會失敗
 - 出現本檔沒有的欄位（所有物件都不接受未定義的欄位）
 - 語系目錄不是 `zh-TW`、`en`、`vi`，或 slug 不是小寫英數與 `-`
 - `node`、`offeringNode`、`category` 不在 `nodes.csv` 對應的節點裡，tag 不在 `tags.yaml`

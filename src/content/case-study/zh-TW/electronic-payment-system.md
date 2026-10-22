@@ -1,5 +1,6 @@
 ---
-# Only the title comes from the current site (a case card on /solutions/uiux); every other value
+# Only the title comes from the current site (a case card on /solutions/uiux); every other value,
+# including publishedAt (the date this sample was written, not a site date),
 # waits for the content owner, so the entry stays a draft.
 title: 電子支付系統
 description: 待人工提供
