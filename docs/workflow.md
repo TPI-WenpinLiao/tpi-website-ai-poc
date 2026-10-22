@@ -22,7 +22,7 @@ flowchart LR
 Claude 依 milestone 順序、每張 issue 的「## 依賴」與關卡 label，列出：
 
 - **可開始**：依賴都已完成，可以平行開不同 session
-- **進行中**：已有 open PR
+- **進行中**：已有 open PR；等你加 approved label 的（例如 `needs-design` 階段一）會註明。`docs/status.md` 不列這些 issue
 - **需人工決定**：帶 `needs-decision`，Claude 停下等你回覆
 - **需人工提供**：帶 `needs-input`，內容要由你提供
 - **等待中**：還有依賴沒完成
@@ -44,7 +44,7 @@ Claude 會依序：
 1. 決定工作 branch：issue 已有 open PR 就用 PR 的 head branch；否則用 session 指定的 branch，有進度檔就從進度檔所在的 branch 接續，沒有就從最新的 `main` 開始。issue 已關閉或 PR 已結束時會停下，列出帶進度檔的 branch 與時間，讓你選擇接續或重做
 2. 讀 issue、`CLAUDE.md`、`docs/status.md` 與前置 issue 的產出
 3. 檢查依賴是否關閉、關卡 label 是否齊全
-4. 拿 `docs/status.md` 對照 GitHub 上 issue 與 PR 的實際狀態；對不上的列進計畫，在這張 issue 的 PR 一起修，不另開同步 PR
+4. 拿 `docs/status.md` 對照 GitHub 上已關閉的 issue；對不上的列進計畫，在這張 issue 的 PR 一起修，不另開同步 PR。`status.md` 不列其他 open PR，進行中的 issue 用 `/next-issue` 看
 5. 執行環境檢查：Node 版本與 `.nvmrc` 一致、`node_modules` 存在、`npm run check` 通過；issue 需要時測試現站連線
 6. 回報環境檢查表，提出計畫。計畫會把實作拆成幾個階段，每個階段寫出完成條件
 
@@ -77,7 +77,7 @@ Claude 會依序：
 
 1. 確認變更範圍（包含 `wip:` commit），刪除進度檔，排除暫存檔與 secrets
 2. 執行 `npm run check`。失敗就停下，不會 push
-3. 更新 `docs/status.md`，寫成這個 PR 合併後的狀態，寫法見 [`issue-ship` 第 3 步](../.claude/skills/issue-ship/SKILL.md#3-更新-docsstatusmd)
+3. 更新 `docs/status.md`，寫成這個 PR 合併後的狀態：只寫本 issue 與已關閉的 issue，不寫其他 open PR，所以平行的 PR 不會讓彼此的 `status.md` 過時。寫法見 [`issue-ship` 第 3 步](../.claude/skills/issue-ship/SKILL.md#3-更新-docsstatusmd)
 4. commit、push 到工作 branch。有 `wip:` commit 時先合併成一個 commit，再以 `--force-with-lease` push，做法見 [`issue-ship` 第 4 步](../.claude/skills/issue-ship/SKILL.md#4-commit)
 5. 開 **draft** PR，監看 CI 與留言。PR body 裡要看 CI 才知道的證據先寫「待 CI」
 6. 審查迴圈：每一輪先等目前 head 的 CI 跑完，把 PR body 的 CI 證據換成目前 head 的 run 連結，再開新的子代理跑 `/pr-review`，結論貼到 PR（開頭「AI 審查第 N 輪」）。有 Act on 就修正、push、等 CI、再審一輪；第 2 輪起會逐項確認上一輪的發現修好了沒。CI 判斷方式見 [`issue-ship` 第 7 步](../.claude/skills/issue-ship/SKILL.md#7-審查迴圈)
