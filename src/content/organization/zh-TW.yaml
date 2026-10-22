@@ -1,7 +1,8 @@
-# Source: https://www.tpisoftware.com/about-us「昕力據點」 (offices: first two only), logo from the site header
+# Source: https://www.tpisoftware.com/about-us「昕力據點」 (offices: first two only); logo from the brand
+# team's PNG exports (scripts/design/import-brand.mjs)
 name: 昕力資訊
 alternateName: [TPIsoftware]
-logo: ../../assets/organization/zh-tw/logo.png
+logo: ../../assets/brand/logo-vertical-color.png
 offices:
   - id: taipei
     name: 台北總部

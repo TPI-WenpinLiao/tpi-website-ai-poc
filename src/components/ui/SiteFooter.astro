@@ -1,9 +1,12 @@
 ---
 // Site footer (M3-04, #17): brand and contact details, the link columns and the legal row, all
-// from docs/ia/navigation.csv (src/lib/ia/navigation.ts); contact details and copyright from the
-// current site (src/data/site.ts). Dark surface, so it closes every page the same way.
+// from docs/ia/navigation.csv (src/lib/ia/navigation.ts); the phone is the headquarters office of
+// the organization data file (src/content/organization), Email and copyright come from the current
+// site (src/data/site.ts). Dark surface, so it closes every page the same way.
 import { footer, footerBottom, node } from '../../lib/ia/navigation';
+import { getEntry } from 'astro:content';
 import { company } from '../../data/site';
+import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
 import logo from '../../assets/brand/logo-horizontal-white.png';
@@ -13,6 +16,10 @@ const LOGO_HEIGHT = 48;
 
 const home = node('home');
 const contact = node('contact');
+const locale = localeFromPath(normalizePath(Astro.url.pathname));
+const org = await getEntry('organization', locale);
+const phone = org?.data.offices.find((o) => o.headquarters)?.phone;
+if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a headquarters phone for the footer`);
 ---
 
 <footer class="site-footer" data-surface="dark">
@@ -25,7 +32,7 @@ const contact = node('contact');
         <dl class="contact">
           <div>
             <dt>電話</dt>
-            <dd><a href={`tel:${company.phone.text.replaceAll(' ', '')}`}>{company.phone.text.replaceAll(' ', '\u00a0')}</a></dd>
+            <dd><a href={`tel:${phone.replaceAll(' ', '')}`}>{phone.replaceAll(' ', '\u00a0')}</a></dd>
           </div>
           <div>
             <dt>Email</dt>

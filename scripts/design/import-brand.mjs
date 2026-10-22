@@ -17,8 +17,10 @@ const ASSETS = join(ROOT, 'src/assets/brand');
 const PUBLIC = join(ROOT, 'public');
 
 // White on the dark surfaces (the symbol in the header; the horizontal logo in the footer and the OG
-// image); color for light surfaces; the color symbol for icons
+// image); color for light surfaces; the color symbol for icons; the color vertical logo is the
+// organization logo (src/content/organization, JSON-LD)
 export const LOGOS = [
+  { source: 'TPI_Logo_Color Vertical Logo_Ch.png', name: 'logo-vertical-color' },
   { source: 'TPI_Logo_White Symbol.png', name: 'logo-symbol-white' },
   { source: 'TPI_Logo_White Horizontal Logo_Ch-En.png', name: 'logo-horizontal-white' },
   { source: 'TPI_Logo_Color Horizontal Logo_Ch-En.png', name: 'logo-horizontal-color' },

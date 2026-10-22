@@ -14,9 +14,9 @@ export const quoted = (text: string, url: string, quote?: string): Sourced => ({
   source: quote ? { url, quote } : { url },
 });
 
-// Company contact details and copyright, as in the current site's footer
+// Email and copyright, as in the current site's footer. The phone number lives with the offices in
+// src/content/organization (one place for company data)
 export const company = {
-  phone: quoted('+886 2 2658 0508', HOME),
   email: quoted('service@tpisoftware.com', HOME),
   copyright: quoted('©2026 TPIsoftware All rights reserved', HOME),
 };

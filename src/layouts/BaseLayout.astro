@@ -56,6 +56,7 @@ const imageUrl = new URL(image.src, Astro.site).href;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
     <meta name="twitter:image:alt" content={image.alt} />
+    <slot name="head" />
   </head>
   <body>
     <slot />
