@@ -27,8 +27,9 @@ const FAMILIES = ['family-ai', 'family-dx', 'family-security', 'family-esg'];
 const flatten = (items: NavItem[]): string[] => items.flatMap((i) => [i.key, ...flatten(i.children)]);
 const navOrder = flatten(header);
 const rank = (id: string) => (navOrder.includes(id) ? navOrder.indexOf(id) : navOrder.length);
+// Card headings drop the brand in brackets: nodes.csv titles such as 「AI（SysTalk.ai）」 show as 「AI」
 const families = FAMILIES.map((id) => ({
-  ...node(id),
+  heading: node(id).title.replace(/（[^）]*）$/, ''),
   products: children(id).toSorted((a, b) => rank(a.id) - rank(b.id)),
 }));
 const services = children('services');
@@ -56,7 +57,7 @@ const services = children('services');
           families.map((f, i) => (
             <div class="chapter">
               <div class="panel">
-                <SectionHeading index={String(i + 1).padStart(2, '0')} eyebrow="Product family" title={f.title} />
+                <SectionHeading index={String(i + 1).padStart(2, '0')} eyebrow="Product family" title={f.heading} />
                 <ul class="items">
                   {f.products.map((p) => (
                     <li class="text-phrase">{p.title}</li>
