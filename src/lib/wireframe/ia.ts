@@ -1,19 +1,8 @@
 // IA data for the M3-01 wireframes, read from docs/ia at build time so menus never drift from
 // navigation.csv (the single source of the navigation, see docs/ia/navigation.md).
-import { parseCsv } from '../../../scripts/inventory/csv.mjs';
 import navCsv from '../../../docs/ia/navigation.csv?raw';
-import nodesCsv from '../../../docs/ia/nodes.csv?raw';
 import templatesCsv from '../../../docs/ia/templates.csv?raw';
-
-export interface IaNode {
-  id: string;
-  parent: string;
-  title: string;
-  template: string;
-  kind: string;
-  path: string;
-  note: string;
-}
+import { nodes, readRows, type IaNode } from '../ia/nodes';
 
 export interface NavItem {
   key: string;
@@ -30,20 +19,6 @@ export interface Template {
   nodes: IaNode[];
 }
 
-// Parse a CSV and keep only `columns`, failing the build when one is missing
-function readRows<K extends string>(text: string, file: string, columns: readonly K[]): Record<K, string>[] {
-  return parseCsv(text.replace(/^﻿/, '')).map((row, i) =>
-    Object.fromEntries(
-      columns.map((c) => {
-        const v = row[c];
-        if (typeof v !== 'string') throw new Error(`${file} row ${i + 2}: missing column ${c}`);
-        return [c, v];
-      }),
-    ) as Record<K, string>,
-  );
-}
-
-export const nodes: IaNode[] = readRows(nodesCsv, 'nodes.csv', ['id', 'parent', 'title', 'template', 'kind', 'path', 'note']);
 const byId = new Map(nodes.map((n) => [n.id, n]));
 const navRows = readRows(navCsv, 'navigation.csv', ['area', 'parent', 'node', 'label', 'note']);
 
