@@ -4,14 +4,14 @@
 
 ## 目前 milestone
 
-**M3 設計系統**、**M4 開發骨架**；M1 剩 M1-06 收尾（#7）
+**M3 設計系統**、**M4 開發骨架**
 
 ## 進度
 
 | Milestone | 狀態 |
 |---|---|
 | M0 基礎建設 | 完成 |
-| M1 盤點與研究 | 進行中（剩 M1-06 收尾） |
+| M1 盤點與研究 | 完成 |
 | M2 資訊架構 | 完成 |
 | M3 設計系統 | 進行中 |
 | M4 開發骨架 | 進行中 |
@@ -22,7 +22,7 @@
 
 ## Issue
 
-寫法見 [`issue-ship` 第 3 步](../.claude/skills/issue-ship/SKILL.md#3-更新-docsstatusmd)。
+寫法見 [`issue-ship` 第 3 步](../.claude/skills/issue-ship/SKILL.md#3-更新-docsstatusmd)。只列已關閉的 issue；有 open PR 的 issue 不在這裡，用 `/next-issue` 查。
 
 ### M0 基礎建設
 
@@ -35,6 +35,7 @@
 - M1-03 SEO 基線完成（#4）
 - M1-04 功能盤點完成（#5）
 - M1-05 受眾與轉換目標完成（#6）
+- M1-06 M1 收尾完成（#7）：`content-migration` 補上 `to_confirm`、失效連結、blog 與新聞內文來源、新聞發布日、外部網域圖片的規則
 - 雲端 session 品質關卡修正完成（#47，PR #48），已驗證新 session 不需手動設定即可通過 `npm run check`
 - 工作流程 skills 與 pstack 導入完成（#50，PR #51）
 
@@ -63,6 +64,7 @@
 - M3-07 3D scroll 視覺方向原型完成（#54，`design-approved`）：選定方向 B Modular Stack，原型頁 `/prototypes/modular-stack`（three.js，`Scene3D` island），A Data Flow 已刪除；ADR 0003 載入策略；`node scripts/design/lighthouse-3d.mjs` 行動版 0.99、桌機 1，`a11y-smoke.mjs` 加上 3D 場景上的文字對比
 - `issues.yml` 與 GitHub issue 對齊完成（#88）：補 M3-07～09、M3-04/05 的依賴改為 M3-02、M3-07；`node scripts/bootstrap/diff.mjs` 比對兩邊，目前差異 0、重跑 bootstrap 不會新建 issue
 - `needs-design` 階段一改走 `/issue-ship` 完成（#84）：`CLAUDE.md`、`issue-start`、`checkpoint`、`workflow.md` 都連到 `issue-ship` 的「`needs-design` 的兩個階段」，`wip:` 合併只寫在 `issue-ship` 第 4 步。#16 留在 `main` 的 `wip:` commit（`1b3a5fe`、`a2508f8`）不改寫
+- `status.md` 不再列其他 open PR 完成（#94）：「Issue」段落只列已關閉的 issue，進行中的用 `/next-issue` 查；`node scripts/status/check.mjs` 在 `npm run check` 擋下「待合併」
 
 ### M4 開發骨架
 
