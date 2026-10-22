@@ -1,0 +1,61 @@
+---
+// The <head> items seo-checklist requires on every page: title, description, canonical, hreflang,
+// Open Graph, Twitter and JSON-LD. Pages hand BaseLayout the data; nothing else writes these tags.
+// No robots meta: the site is kept out of search engines by public/_headers and robots.txt only.
+import { localeLinks } from '../../lib/i18n/alternates';
+import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
+import { staticRoutes } from '../../lib/i18n/routes';
+import { hreflangAlternates } from '../../lib/seo/hreflang';
+import { serializeJsonLd, type JsonLdGraph } from '../../lib/seo/jsonld/shared';
+import { pageTitle, SITE_NAME } from '../../lib/seo/meta';
+import { DEFAULT_OG_IMAGE, type OgImage } from '../../lib/seo/og';
+
+export interface Props {
+  // The page topic; the site name is appended unless titleSuffix is false (the home page)
+  title: string;
+  titleSuffix?: boolean;
+  description: string;
+  // Falls back to the site-wide default (content-model.md `ogImage`)
+  image?: OgImage;
+  type?: 'website' | 'article';
+  jsonLd?: JsonLdGraph;
+  // URL paths of this page's other locale versions, for pages built through a dynamic route
+  // (static pages are found in staticRoutes), as LocaleSwitcher takes them
+  translations?: readonly string[];
+}
+
+const { title, titleSuffix = true, description, image = DEFAULT_OG_IMAGE, type = 'website', jsonLd, translations = [] } = Astro.props;
+if (!Astro.site) throw new Error('astro.config.mjs must set site for canonical and og:url');
+const site = Astro.site;
+const fullTitle = titleSuffix ? pageTitle(title) : title;
+// canonical URLs have no .html, /index or trailing slash; the locale comes from the URL prefix (ADR 0002)
+const pathname = normalizePath(Astro.url.pathname);
+const canonical = new URL(pathname, site).href;
+const ogLocale = localeFromPath(pathname).replace('-', '_');
+const imageUrl = new URL(image.src, site).href;
+const alternates = hreflangAlternates(
+  localeLinks({ path: pathname, routes: new Set([...staticRoutes, ...translations.map(normalizePath)]) }),
+  site,
+);
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+<meta property="og:type" content={type} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:width" content={String(image.width)} />
+<meta property="og:image:height" content={String(image.height)} />
+<meta property="og:image:alt" content={image.alt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={image.alt} />
+{jsonLd && <script type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />}

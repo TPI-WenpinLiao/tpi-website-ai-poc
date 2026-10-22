@@ -12,13 +12,13 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseCsv } from '../inventory/csv.mjs';
 import { groupTokens, tokenNames } from './token-groups.mjs';
+import { INTERNAL_PATHS as INTERNAL } from '../../src/lib/seo/indexing.ts';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const COMPONENTS = 'src/components/ui';
 const PAGE = 'src/pages/design-system/index.astro';
 const TOKENS = 'src/styles/tokens.css';
 const NODES = 'docs/ia/nodes.csv';
-const INTERNAL = ['/design-system', '/wireframes', '/prototypes'];
 
 /**
  * Components the page source does not import from components/ui.

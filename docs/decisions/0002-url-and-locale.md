@@ -55,13 +55,13 @@
 
 ### canonical
 
-每頁指向自己，用絕對網址，沒有尾斜線、`.html` 或 query string。由 `src/layouts/BaseLayout.astro` 產生。
+每頁指向自己，用絕對網址，沒有尾斜線、`.html` 或 query string。由 `src/components/seo/Seo.astro` 產生。
 
 ### hreflang 與 x-default
 
 - 每頁列出實際存在的語系版本，包含自己；沒有內容的語系不列
 - `x-default` 指向 zh-TW 版本。該頁沒有 zh-TW 版本時（例如只有 vi 的 blog 文章）不輸出 `x-default`
-- 實作在 M7
+- M4-03 起由 `src/components/seo/Seo.astro` 輸出（`src/lib/seo/hreflang.ts`），`dist/sitemap.xml` 的 `xhtml:link` 用同一個函式；只有 zh-TW 頁面時，每頁列出自己與 `x-default`
 
 ### 缺翻譯的頁面
 
@@ -120,5 +120,5 @@ export default defineConfig({
 - M2-05 redirect map 的轉址來源：`www.tpisoftware.com/vn/*` 與 `www.tpisoftware.vn/*` → `/vi/*`；大寫路徑 → 小寫；`/blog/{category}/{slug}` → `/blog/{slug}`；`/ja/*` → `/en`
 - `www.tpisoftware.vn` 網域在新站上線後是否保留為轉址來源，與正式網域一起決定
 - M4 路由依本 ADR 建立 `src/pages/` 結構；分頁路徑用 `page/[n]`
-- M4-02 實作語言切換，M4-03 輸出 hreflang（用同一份語系版本清單），M7 補翻譯內容與驗證 hreflang、`x-default`。`og:locale` 需要「語言_地區」格式（例如 `en_US`、`vi_VN`），目前 `BaseLayout.astro` 對 en、vi 輸出的是 `en`、`vi`，M7 一併修正
+- M4-02 實作語言切換，M4-03 輸出 hreflang（用同一份語系版本清單），M7 補翻譯內容與驗證 hreflang、`x-default`。`og:locale` 需要「語言_地區」格式（例如 `en_US`、`vi_VN`），目前 `Seo.astro` 對 en、vi 輸出的是 `en`、`vi`，M7 一併修正
 - 正式網域決定後只改 `astro.config.mjs` 的 `site`（或 `SITE_URL` 環境變數），路徑規則不變

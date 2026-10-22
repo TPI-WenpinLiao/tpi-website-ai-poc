@@ -24,7 +24,7 @@ import SceneChapter from '../components/ui/SceneChapter.astro';
 import { children, header, node, type NavItem } from '../lib/ia/navigation';
 import { latest } from '../lib/latest-posts';
 import { SCENE_FAMILIES } from '../lib/scene/families';
-import { homeJsonLd } from '../lib/seo/home-jsonld';
+import { homeJsonLd } from '../lib/seo/jsonld/home';
 import { localeFromPath, normalizePath } from '../lib/i18n/paths';
 import { getEntry } from 'astro:content';
 import { cases, contactCta, familyLines, hero, industryLines, orientAi } from '../data/home';
@@ -91,8 +91,7 @@ const jsonLd = homeJsonLd({
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 ---
 
-<BaseLayout title={title} description={description}>
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd).replaceAll('<', '\\u003c')} />
+<BaseLayout title={title} titleSuffix={false} description={description} jsonLd={jsonLd}>
   <SiteHeader />
   <!-- After the header: same z-index, so the later one paints the bar on top of the header -->
   <ScrollProgress />

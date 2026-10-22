@@ -25,7 +25,7 @@ import SiteHeader from '../../components/ui/SiteHeader.astro';
 import SiteFooter from '../../components/ui/SiteFooter.astro';
 import { breadcrumb, children, node } from '../../lib/ia/navigation';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
-import { offeringJsonLd } from '../../lib/seo/offering-jsonld';
+import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
 import { DEFAULT_OG_IMAGE } from '../../lib/seo/og';
 import { about } from '../../lib/latest-posts';
 import { sceneFamily } from '../../lib/scene/families';
@@ -43,7 +43,7 @@ const { data } = entry;
 const self = node(data.node);
 const family = node(self.parent);
 
-const title = `${data.title}｜TPIsoftware 昕力資訊`;
+const title = data.seoTitle ?? data.title;
 // Family brand in brackets, as on the home page: 「數位轉型（DigiLism）」 → DigiLism
 const brand = /（([^）]*)）$/.exec(family.title)?.[1] ?? family.title;
 const contact = node('contact');
@@ -107,8 +107,7 @@ const jsonLd = offeringJsonLd({
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 ---
 
-<BaseLayout title={title} description={data.description} image={ogImage}>
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd).replaceAll('<', '\\u003c')} />
+<BaseLayout title={title} description={data.description} image={ogImage} jsonLd={jsonLd}>
   <SiteHeader />
   <ScrollProgress />
   <InPageNav label="本頁目錄" items={anchors} />
