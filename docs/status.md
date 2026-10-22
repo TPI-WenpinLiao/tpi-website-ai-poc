@@ -108,5 +108,4 @@
 - M3-07 的原型頁（`src/pages/prototypes/modular-stack.astro`）在 M3-04 把場景做成正式首頁後刪除；`scene-capture.mjs`、`lighthouse-3d.mjs` 的預設路徑與 `showcase.mjs` 的 `/prototypes` 一起改
 - M4-03（#22）加 sitemap 時排除 `/design-system`、`/wireframes`、`/prototypes`，做法見 `design-system` skill「展示頁」
 - `npm run check` 的 LHCI 用 `staticDistDir` 自動探索，只測前 5 個 URL（M3-07 時 build 出 16 頁只測 5 頁），其餘頁面沒有 Lighthouse 關卡，由 #87 處理
-- blog 封面圖放在 `tpi.dev`，雲端 session 的網路政策擋下（proxy 403）。M4-01 的 blog 範例暫用 `src/assets/design/cover-platform.webp`；M5-04 下載封面前要把 `tpi.dev` 加進環境的 Allowed domains，或改在本機執行
 - `docs/design/nav-fit.md` 的量測用容器字型與 wireframe 的間距（`--wf-space-3` 仍是 12px），M3-02 後 `node scripts/wireframe/nav-fit.mjs --check` 仍通過；正式 header（M4-04）的選單間距與 Inter 字型要另外實測

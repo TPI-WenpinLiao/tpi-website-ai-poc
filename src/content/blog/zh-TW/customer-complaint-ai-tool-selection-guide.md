@@ -7,10 +7,8 @@ tags: [ai-application]
 publishedAt: 2026-09-11
 author: TPIsoftware
 authorType: Organization
-# Placeholder until M5: the original cover is on tpi.dev, which the cloud session cannot reach
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1aaad1-2937-612a-81f6-0b7fa23ee3a6.png
-coverImage: ../../../assets/design/cover-platform.webp
-draft: true
+coverImage: ../../../assets/blog/customer-complaint-ai-tool-selection-guide/cover.png
 sourceUrl: https://www.tpisoftware.com/blog/ai/customer-complaint-ai-tool-selection-guide
 migratedAt: 2026-10-20
 sourceUpdatedAt: 2026-09-11
