@@ -5,7 +5,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 # Design system
 
-> 狀態：M3-02（#15）定案 tokens 與基礎元件，M3-03（#16）補齊 `/design-system` 展示頁，M3-07（#54）選定 3D 方向 B Modular Stack 並加上 `Scene3D`。M3-04（#17）把場景做成首頁，方塊材質寫成 `--scene-block-*`、`--scene-rim-*`；M3 收尾 issue 再更新本檔。
+> 狀態：M3-02（#15）定案 tokens 與基礎元件，M3-03（#16）補齊 `/design-system` 展示頁，M3-07（#54）選定 3D 方向 B Modular Stack 並加上 `Scene3D`。M3-04（#17）把場景做成首頁，方塊材質寫成 `--scene-block-*`、`--scene-rim-*`；M3-05（#18）做產品頁，加上 `Breadcrumb`、`InPageNav`、`Faq`、`SceneChapter` 與 `Scene3D` 的 `family`；M3 收尾 issue 再更新本檔。
 
 ## 設計方向
 
@@ -93,7 +93,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；小圓角（`--radius-md`）；primary 發光上浮、secondary 漸層外框、text；`disabled` 只存在於 `<button>` |
 | `Link` | 內文連結、獨立連結 | 內文連結一律底線；`external` 加 ↗ 與「（外部網站）」螢幕閱讀器文字 |
 | `Tag` | 標籤 | `neutral`、`brand`、`node`（mono＋發光點，用於模組與技術關鍵字）；有 `href` 才是連結 |
-| `Card` | 列表卡片 | 玻璃面板，hover／focus 時傾斜、亮起漸層外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`size="sm"` 是只有標題、手機上一列兩張的短卡 |
+| `Card` | 列表卡片 | 玻璃面板，hover／focus 時傾斜、亮起漸層外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`size="sm"` 是只有標題、手機上一列兩張的短卡；沒有 `href` 是不能點的靜態面板（功能、應用情境），meta 裡的 `Tag` 連結各自可點 |
 | `FormField` | 表單欄位 | `kind` 區分 text／email／tel／textarea／select／checkbox；hint、error 以 `aria-describedby` 連到欄位，error 加 `aria-invalid` |
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
@@ -101,13 +101,18 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Scene3D` | three.js 3D 捲動場景 | 見下方「3D 場景」 |
 | `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，不需要 client JS；`--header-height` 高、sticky 的深色玻璃列；寬度小於 64rem 收進「選單」 |
 | `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts` |
+| `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面 |
+| `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動 |
+| `Faq` | 常見問題 | 原生 `<details>`，零 JS |
+| `SceneChapter` | 3D 場景上的章節 | 見「3D 場景」 |
 
 ## 3D 場景
 
 `Scene3D` 是 three.js 的 island，載入策略與理由見 [ADR 0003](../../../docs/decisions/0003-3d-island-loading.md)。
 
 - 放在 `PageHero` 的 `backdrop` slot、靜態 `Backdrop`（`priority`）之後；靜態圖是 LCP，也是減少動態、Save-Data、不支援 WebGL 時的完整版本
-- hero 與要讓場景透出的區塊包在同一個 `data-scene-track` 元素裡，捲動進度以它計算。canvas 固定在 viewport，track 裡 hero 之後的區塊要寫 `[data-scene='ready'] .x { background: transparent; }`，並用 `position: relative` 與 `--z-raised` 疊在 hero 之上
+- hero 與要讓場景透出的區塊包在同一個 `data-scene-track` 元素裡，捲動進度以它計算。hero 之後的章節用 `SceneChapter`（每章佔滿一個 viewport、文字在玻璃面板上、場景 ready 後背景透明並疊在 hero 之上），不要自己寫透明背景
+- 產品頁用 `Scene3D` 的 `family`（`sceneFamily()`，`src/lib/scene/families.ts`），只畫該家族的模組，每一章點亮一組方塊，組數取 track 裡 `SceneChapter` 的數量（M3-05）
 - 場景上的文字放在玻璃面板（`--glass-bg`）或 scrim 那一側，不直接壓在方塊上
 - 新場景寫成 `src/lib/scene/<名稱>.ts`，default export 一個 `SceneFactory`，加進 `Scene3D` 的 `LOADERS`；數量依 `tier.density` 減少，讓行動版降級生效（降級的數值只寫在 `runtime.ts` 的 `TIERS`）
 - 改到 `Scene3D`、`src/lib/scene/` 或用到它的頁面後，跑 ADR 0003「量測」的三個 script
@@ -149,7 +154,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 - `npm run check:design`
   - `scripts/design/contrast.mjs`：兩個 surface 各自檢查 `PAIRS` 每一組
-  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/pages/design-system/`、`BaseLayout`、首頁 `src/pages/index.astro` 的 `<style>` 不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
+  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/pages/design-system/`、`src/pages/products/`、`BaseLayout`、首頁 `src/pages/index.astro` 的 `<style>` 不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
   - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import；`tokens.css` 每個 token（`--wf-*` 除外）都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；`/design-system`、`/wireframes` 不得出現在 `docs/ia/nodes.csv`
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand

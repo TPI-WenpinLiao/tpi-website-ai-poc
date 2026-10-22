@@ -171,7 +171,8 @@ async function focusProblems(page) {
       const el = document.activeElement;
       if (!el || el === document.body) return null;
       const own = getComputedStyle(el);
-      const card = el.closest('.card');
+      // A card's title link is drawn by the card; other links in a card (a Tag in a static card) draw their own
+      const card = el.closest('.card .title') ? el.closest('.card') : null;
       const ring = card ? getComputedStyle(card) : own;
       return {
         label: `${el.tagName.toLowerCase()} "${(el.textContent || el.getAttribute('name') || '').trim().slice(0, 20)}"`,

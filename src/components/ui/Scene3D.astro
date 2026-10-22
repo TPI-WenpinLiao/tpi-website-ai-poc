@@ -7,15 +7,18 @@
 // or without WebGL. Once the first frame is drawn the track gets data-scene="ready" and the canvas
 // fades in over the static image; it is fixed to the viewport so it keeps playing while the
 // track's later sections (which must then drop their background) scroll over it.
+// `family` (0–3, the home page's family order: AI, digital transformation, security, ESG) shows only
+// that family's module, for product pages; its blocks light up one group per chapter.
 // Decorative, so hidden from assistive tech.
 interface Props {
   direction: 'modular-stack';
+  family?: 0 | 1 | 2 | 3;
 }
 
-const { direction } = Astro.props;
+const { direction, family } = Astro.props;
 ---
 
-<div class="scene-3d" data-scene-host={direction} aria-hidden="true" hidden></div>
+<div class="scene-3d" data-scene-host={direction} data-scene-family={family} aria-hidden="true" hidden></div>
 
 <script>
   import type { SceneFactory } from '../../lib/scene/runtime';
@@ -77,6 +80,7 @@ const { direction } = Astro.props;
       host,
       track,
       factory,
+      family: host.dataset.sceneFamily ? Number(host.dataset.sceneFamily) : undefined,
       onReady: () => {
         track.dataset.scene = 'ready';
       },

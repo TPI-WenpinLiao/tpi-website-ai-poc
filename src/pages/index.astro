@@ -20,8 +20,10 @@ import LayerStack from '../components/ui/LayerStack.astro';
 import Reveal from '../components/ui/Reveal.astro';
 import SiteHeader from '../components/ui/SiteHeader.astro';
 import SiteFooter from '../components/ui/SiteFooter.astro';
+import SceneChapter from '../components/ui/SceneChapter.astro';
 import { children, header, node, type NavItem } from '../lib/ia/navigation';
 import { latest } from '../lib/latest-posts';
+import { SCENE_FAMILIES } from '../lib/scene/families';
 import { homeJsonLd } from '../lib/seo/home-jsonld';
 import { localeFromPath, normalizePath } from '../lib/i18n/paths';
 import { getEntry } from 'astro:content';
@@ -36,15 +38,14 @@ const title = 'TPIsoftware 昕力資訊｜以頂尖科技為企業賦能';
 const description =
   '昕力資訊以客戶利益為導向，致力於提供創新技術及軟體解決方案：AI、數位轉型、資安、ESG 與能源四個產品家族，以及委外、雲端整合、UI/UX 設計與 ESG 顧問等服務。';
 
-// The scene builds one module per family, in this order (src/lib/scene/modular-stack.ts)
-const FAMILIES = ['family-ai', 'family-dx', 'family-security', 'family-esg'];
 // Products are the ones the header lists, in its order (navigation.csv, e.g. OrientAI first).
 // Products left out of the navigation are 待確認 whether they are still sold (nodes.csv note,
 // sitemap.md decision 2), so the home page doesn't show them either.
 const flatten = (items: NavItem[]): string[] => items.flatMap((i) => [i.key, ...flatten(i.children)]);
 const navOrder = flatten(header);
 // Card headings drop the brand in brackets: nodes.csv titles such as 「AI（SysTalk.ai）」 show as 「AI」
-const families = FAMILIES.map((id) => {
+// One chapter per family, in the scene's module order
+const families = SCENE_FAMILIES.map((id) => {
   const family = node(id);
   return {
     id,
@@ -106,29 +107,27 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
         </Fragment>
       </PageHero>
 
-      <section class="chapters" data-surface="dark" aria-labelledby="families-title">
+      <section aria-labelledby="families-title">
         <h2 id="families-title" class="sr-only">產品家族</h2>
         {
           families.map((f, i) => (
-            <div class="chapter">
-              <div class="panel">
-                <SectionHeading
-                  level={3}
-                  index={String(i + 1).padStart(2, '0')}
-                  eyebrow={f.brand ?? 'Product family'}
-                  title={f.heading}
-                  description={f.line}
-                />
-                <ul class="items">
-                  {f.products.map((p) => (
-                    <li class="text-phrase">
-                      <a href={p.path}>{p.title}</a>
-                    </li>
-                  ))}
-                </ul>
-                <Link href={f.href}>看{spaced(f.heading)}產品家族</Link>
-              </div>
-            </div>
+            <SceneChapter>
+              <SectionHeading
+                level={3}
+                index={String(i + 1).padStart(2, '0')}
+                eyebrow={f.brand ?? 'Product family'}
+                title={f.heading}
+                description={f.line}
+              />
+              <ul class="items">
+                {f.products.map((p) => (
+                  <li class="text-phrase">
+                    <a href={p.path}>{p.title}</a>
+                  </li>
+                ))}
+              </ul>
+              <Link href={f.href}>看{spaced(f.heading)}產品家族</Link>
+            </SceneChapter>
           ))
         }
       </section>
@@ -245,40 +244,6 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
 <style>
   @import '../styles/media.css';
-
-  /* Stays above the hero, whose backdrop layer holds the fixed 3D canvas */
-  .chapters {
-    position: relative;
-    z-index: var(--z-raised);
-  }
-
-  /* Once the scene draws, the chapters let it show through */
-  [data-scene='ready'] .chapters {
-    background: transparent;
-  }
-
-  .chapter {
-    box-sizing: content-box;
-    display: grid;
-    align-items: center;
-    min-block-size: 100svh;
-    max-inline-size: var(--content-max-width);
-    margin-inline: auto;
-    padding-inline: var(--space-gutter);
-  }
-
-  .panel {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: var(--space-6);
-    padding: var(--space-8);
-    border: var(--border-width) solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    background: var(--glass-bg);
-    box-shadow: var(--shadow-md);
-    backdrop-filter: blur(var(--glass-blur));
-  }
 
   /* One product per row: equal-width rows on a hairline grid, so long names wrap under their own
      first line instead of making uneven pills */
@@ -405,14 +370,6 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
     box-shadow: var(--glow-brand);
   }
 
-  /* Narrow screens: the scene plays in the upper part (runtime FOCUS_SHIFT), the panel sits below */
-  @media (--bp-lg-down) {
-    .chapter {
-      align-items: end;
-      padding-block-end: var(--space-12);
-    }
-  }
-
   @media (--bp-sm-up) {
     .cols-3 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -430,10 +387,6 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
     .spotlight {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    }
-
-    .panel {
-      max-inline-size: calc(var(--content-max-width) * var(--hero-copy-share));
     }
 
     .items {

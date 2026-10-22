@@ -3,6 +3,8 @@
 // viewer, lights an energy-gradient rim and glows on hover. The whole card is clickable through the
 // title link's ::after, so there is exactly one link per card and its name is the title.
 // Image alt is required; pass alt="" only when the image is purely decorative.
+// Without href the card is a static panel (offering features and use cases): no link, no hover or
+// focus state; links in the meta slot (a Tag) stay their own.
 // size="sm" is the short card for title-only lists laid out two to a row on phones (home services).
 // data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
 import { Image } from 'astro:assets';
@@ -10,7 +12,7 @@ import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
-  href: string;
+  href?: string;
   level?: 2 | 3 | 4;
   index?: string;
   eyebrow?: string;
@@ -34,7 +36,7 @@ const {
 const Heading = `h${level}` as const;
 ---
 
-<article class:list={['card', size]} data-preview-state={previewState}>
+<article class:list={['card', size, { linked: href }]} data-preview-state={previewState}>
   {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes="(width >= 64rem) 22rem, 100vw" />}
   <div class="body">
     {
@@ -45,7 +47,7 @@ const Heading = `h${level}` as const;
         </p>
       )
     }
-    <Heading class="title"><a href={href}>{title}</a></Heading>
+    <Heading class="title">{href ? <a href={href}>{title}</a> : title}</Heading>
     {description && <p class="description text-phrase">{description}</p>}
     {
       Astro.slots.has('meta') && (
@@ -95,18 +97,18 @@ const Heading = `h${level}` as const;
   }
 
   /* :has(:focus-visible), not :focus-within, so a mouse click on the title draws no ring */
-  .card:is(:hover, [data-preview-state='hover']),
-  .card:is(:has(a:focus-visible), [data-preview-state='focus']) {
+  .linked:is(:hover, [data-preview-state='hover']),
+  .linked:is(:has(.title a:focus-visible), [data-preview-state='focus']) {
     box-shadow: var(--shadow-md), var(--glow-brand);
     transform: perspective(var(--perspective)) rotateX(var(--tilt)) translateY(var(--lift));
   }
 
-  .card:is(:hover, [data-preview-state='hover'])::before,
-  .card:is(:has(a:focus-visible), [data-preview-state='focus'])::before {
+  .linked:is(:hover, [data-preview-state='hover'])::before,
+  .linked:is(:has(.title a:focus-visible), [data-preview-state='focus'])::before {
     opacity: 1;
   }
 
-  .card:is(:has(a:focus-visible), [data-preview-state='focus']) {
+  .linked:is(:has(.title a:focus-visible), [data-preview-state='focus']) {
     outline: var(--focus-ring-width) solid var(--color-focus);
     outline-offset: var(--focus-ring-offset);
   }
@@ -182,7 +184,7 @@ const Heading = `h${level}` as const;
     outline: none;
   }
 
-  .card:is(:hover, [data-preview-state='hover']) .title a {
+  .linked:is(:hover, [data-preview-state='hover']) .title a {
     color: var(--color-link);
   }
 

@@ -1,0 +1,305 @@
+---
+// Product page, direction B Modular Stack (M3-05, #18), with digiRunner as the sample of the
+// offering template. Structure follows the approved wireframe (/wireframes/offering); M4-04 turns
+// it into the layout every offering page shares.
+// Copy comes from the content entry (src/content/offering/zh-TW/digirunner.md, checked against the
+// current site by scripts/design/offering-content.mjs). Names, paths and parents come from
+// docs/ia (src/lib/ia/navigation.ts). Blocks without data are left out, so is their anchor.
+// The hero and the feature chapters form the scene track (Scene3D, ADR 0003), as on the home page.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import Backdrop from '../../components/ui/Backdrop.astro';
+import Scene3D from '../../components/ui/Scene3D.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import ScrollProgress from '../../components/ui/ScrollProgress.astro';
+import Button from '../../components/ui/Button.astro';
+import Surface from '../../components/ui/Surface.astro';
+import Card from '../../components/ui/Card.astro';
+import Tag from '../../components/ui/Tag.astro';
+import Reveal from '../../components/ui/Reveal.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import InPageNav from '../../components/ui/InPageNav.astro';
+import Faq from '../../components/ui/Faq.astro';
+import SceneChapter from '../../components/ui/SceneChapter.astro';
+import SiteHeader from '../../components/ui/SiteHeader.astro';
+import SiteFooter from '../../components/ui/SiteFooter.astro';
+import { children, node } from '../../lib/ia/navigation';
+import { about } from '../../lib/latest-posts';
+import { sceneFamily } from '../../lib/scene/families';
+import { getCollection, getEntry } from 'astro:content';
+import { contactCta } from '../../data/home';
+import image from '../../assets/design/hero-modular-stack.webp';
+import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
+import coverData from '../../assets/design/cover-data.webp';
+import coverIntegration from '../../assets/design/cover-integration.webp';
+import coverPlatform from '../../assets/design/cover-platform.webp';
+
+const entry = await getEntry('offering', 'zh-TW/digirunner');
+if (!entry) throw new Error('src/content/offering/zh-TW/digirunner.md is missing');
+const { data } = entry;
+const self = node(data.node);
+const family = node(self.parent);
+
+const title = `${data.title}｜TPIsoftware 昕力資訊`;
+// Family brand in brackets, as on the home page: 「數位轉型（DigiLism）」 → DigiLism
+const brand = /（([^）]*)）$/.exec(family.title)?.[1] ?? family.title;
+const contact = node('contact');
+// Main call to action by the entry's cta (content-model.md); 預約演示 is the current site's wording
+const CTA_LABELS = { contact: contact.title, demo: '預約演示' } as const;
+const ctaLabel = CTA_LABELS[data.cta];
+
+const features = data.features ?? [];
+const INDUSTRY_NODES = { finance: 'industry-finance', government: 'industry-government', manufacturing: 'industry-manufacturing' } as const;
+const useCases = (data.useCases ?? []).map((u) => ({ ...u, hub: u.industry ? node(INDUSTRY_NODES[u.industry]) : undefined }));
+// Fourth-level pages under this product (navigation.md: linked from here, not from the header)
+const related = children(self.id).filter((n) => n.kind === 'page');
+// Whitepapers point at their offering (whitepaper.offeringNode); the digiRunner one is still a draft
+// until its file is known (待確認), so drafts are listed here for the design review
+const whitepapers = (await getCollection('whitepaper', (w) => w.id.startsWith('zh-TW/') && w.data.offeringNode === self.id)).map((w) => ({
+  title: w.data.title,
+  cover: w.data.coverImage,
+  href: node(w.data.node).path,
+}));
+const downloads = data.downloads ?? [];
+// Until M5 fills blog.relatedOfferings: current-site posts that name the product
+const COVERS = [coverData, coverIntegration, coverPlatform];
+const posts = about('blog', 'digiRunner', 3).map((p, i) => ({ ...p, cover: COVERS[i % COVERS.length] }));
+const faq = data.faq ?? [];
+
+const anchors = [
+  { href: '#features', label: '功能', show: features.length > 0 },
+  { href: '#use-cases', label: '應用情境', show: useCases.length > 0 },
+  { href: '#related', label: '相關產品', show: related.length > 0 },
+  { href: '#downloads', label: '下載', show: whitepapers.length + downloads.length > 0 },
+  { href: '#faq', label: '常見問題', show: faq.length > 0 },
+  { href: '#posts', label: '相關文章', show: posts.length > 0 },
+].filter((a) => a.show);
+
+const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
+---
+
+<BaseLayout title={title} description={data.description}>
+  <SiteHeader />
+  <ScrollProgress />
+  <InPageNav label={`${data.title}頁內導覽`} items={anchors} />
+  <main id="main">
+    <div class="track" data-scene-track>
+      <PageHero eyebrow={brand} title={data.title} description={data.tagline}>
+        <Breadcrumb slot="breadcrumb" node={self.id} />
+        <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
+        <Scene3D slot="backdrop" direction="modular-stack" family={sceneFamily(family.id)} />
+        <Fragment slot="actions">
+          <Button href={contact.path} size="lg">{ctaLabel}</Button>
+          {features.length > 0 && <Button href="#features" size="lg" variant="secondary">看功能</Button>}
+        </Fragment>
+      </PageHero>
+
+      {
+        features.length > 0 && (
+          <section id="features" class="target" aria-labelledby="features-title">
+            <h2 id="features-title" class="sr-only">功能</h2>
+            {features.map((f, i) => (
+              <SceneChapter>
+                <SectionHeading level={3} index={String(i + 1).padStart(2, '0')} eyebrow={self.title} title={f.title} />
+                <p class="feature-body">{f.body}</p>
+              </SceneChapter>
+            ))}
+          </section>
+        )
+      }
+    </div>
+
+    {
+      useCases.length > 0 && (
+        <Surface tone="dark" pattern="grid" id="use-cases" class="target">
+          <SectionHeading eyebrow="Use cases" title="應用情境" />
+          <ul class="cards cols-3">
+            {useCases.map((u, i) => (
+              <li>
+                <Reveal delay={stagger(i)}>
+                  <Card title={u.title} index={String(i + 1).padStart(2, '0')} description={u.body}>
+                    {u.hub && (
+                      <Tag slot="meta" href={u.hub.path} tone="brand">
+                        {u.hub.title}
+                      </Tag>
+                    )}
+                  </Card>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+        </Surface>
+      )
+    }
+
+    {
+      (related.length > 0 || whitepapers.length + downloads.length > 0) && (
+        <Surface tone="dark">
+          <div class="pair">
+            {related.length > 0 && (
+              <div id="related" class="target">
+                <SectionHeading eyebrow="Related" title="相關產品" />
+                <ul class="cards">
+                  {related.map((n) => (
+                    <li>
+                      <Card title={n.title} href={n.path} eyebrow={self.title} size="sm" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {whitepapers.length + downloads.length > 0 && (
+              <div id="downloads" class="target">
+                <SectionHeading eyebrow="Downloads" title="下載" />
+                <ul class="cards">
+                  {whitepapers.map((w) => (
+                    <li>
+                      <Card title={w.title} href={w.href} eyebrow={node('resources').title} image={w.cover && { src: w.cover, alt: '' }} />
+                    </li>
+                  ))}
+                  {downloads.map((d) => (
+                    <li>
+                      <Card title={d.label} href={d.file} size="sm" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </Surface>
+      )
+    }
+
+    {
+      faq.length > 0 && (
+        <Surface tone="dark" width="reading" id="faq" class="target">
+          <SectionHeading eyebrow="FAQ" title="常見問題" />
+          <div class="faq">
+            <Faq items={faq} />
+          </div>
+        </Surface>
+      )
+    }
+
+    {
+      posts.length > 0 && (
+        <Surface tone="light" id="posts" class="target">
+          <div class="section-head">
+            <SectionHeading eyebrow="Insights" title="相關文章" />
+            <Button href={node('blog').path} variant="text">{node('blog').title}</Button>
+          </div>
+          <ul class="cards cols-3">
+            {posts.map((p, i) => (
+              <li>
+                <Reveal delay={stagger(i)}>
+                  <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }}>
+                    {p.published && (
+                      <time slot="meta" datetime={p.published}>
+                        {p.published.replaceAll('-', '/')}
+                      </time>
+                    )}
+                  </Card>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+        </Surface>
+      )
+    }
+
+    <Surface tone="dark" pattern="grid">
+      <div class="cta">
+        <SectionHeading eyebrow="Contact" title={contactCta.title.text} description={contactCta.description.text} align="center" />
+        <Button href={contact.path} size="lg">{ctaLabel}</Button>
+      </div>
+    </Surface>
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  @import '../../styles/media.css';
+
+  /* Anchored sections land below the sticky header, and from --bp-lg-up also below the in-page bar */
+  .target {
+    scroll-margin-block-start: var(--header-height);
+  }
+
+  /* A paragraph, not the heading's lead: .text-phrase would break these long lines only at
+     punctuation and start lines with a comma */
+  .feature-body {
+    max-inline-size: var(--reading-max-width);
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  .cards {
+    display: grid;
+    gap: var(--space-6);
+    margin: var(--space-10) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Cards in a row share the tallest one's height, through Reveal's wrapper */
+  .cards > li,
+  .cards > li > :global(*),
+  .cards :global(.card) {
+    block-size: 100%;
+  }
+
+  /* Related products and downloads side by side on wide screens */
+  .pair {
+    display: grid;
+    gap: var(--space-section);
+  }
+
+  .faq {
+    margin-block-start: var(--space-10);
+  }
+
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  /* Closing call to action: centered, framed by the energy gradient, as on the home page */
+  .cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-12) var(--space-6);
+    border: var(--border-width) solid transparent;
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+      var(--gradient-energy) border-box;
+    box-shadow: var(--glow-brand);
+  }
+
+  @media (--bp-sm-up) {
+    .cols-3 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .target {
+      scroll-margin-block-start: calc(var(--header-height) + var(--touch-target) + var(--space-2));
+    }
+
+    .cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .pair {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

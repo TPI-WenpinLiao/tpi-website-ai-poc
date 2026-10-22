@@ -65,6 +65,10 @@ export interface SceneContext {
   isNarrow: () => boolean;
   /** Reads a unitless number token (e.g. --scene-rim-width) from the host's computed style */
   readNumber: (name: string) => number;
+  /** Chapters in the track after the hero (SceneChapter, data-scene-chapter) */
+  chapters: number;
+  /** Scene3D's `family`: show only that product family's module (product pages) */
+  family?: number;
 }
 
 export interface SceneInstance {
@@ -146,10 +150,11 @@ interface MountOptions {
   factory: SceneFactory;
   /** Called once the first frame is on the canvas */
   onReady: () => void;
+  family?: number;
 }
 
 /** Starts the scene; returns a function that stops it and frees GPU resources. */
-export function mount({ host, track, factory, onReady }: MountOptions): () => void {
+export function mount({ host, track, factory, onReady, family }: MountOptions): () => void {
   const tier = pickTier();
   const perspective = readLength(css(host, '--perspective'));
   const renderer = new WebGLRenderer({ antialias: tier.antialias, powerPreference: 'low-power' });
@@ -167,6 +172,8 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
     view: readView(host),
     isNarrow: narrowLayout,
     readNumber: (name) => readNumber(host, name),
+    chapters: Math.max(1, track.querySelectorAll('[data-scene-chapter]').length),
+    family,
   });
 
   const resize = () => {

@@ -1,0 +1,73 @@
+---
+// One full-viewport chapter the 3D scroll scene (Scene3D) plays behind, with its copy on a glass
+// panel so it reads over the blocks (ADR 0003). Put chapters after the PageHero inside the same
+// `data-scene-track` element; the scene's progress counts through them, and the scene reads how many
+// there are (data-scene-chapter). Once the scene has drawn
+// its first frame, the chapter drops its background so the fixed canvas shows through, and it
+// stays above the hero, whose backdrop layer holds the canvas. Without the scene (reduced motion,
+// Save-Data, no WebGL) chapters are plain dark sections.
+// Narrow screens: the scene plays in the upper part (runtime FOCUS_SHIFT), the panel sits at the
+// bottom.
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+---
+
+<div class="scene-chapter" data-surface="dark" data-scene-chapter id={id}>
+  <div class="inner">
+    <div class="panel">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  @import '../../styles/media.css';
+
+  .scene-chapter {
+    position: relative;
+    z-index: var(--z-raised);
+  }
+
+  .inner {
+    box-sizing: content-box;
+    display: grid;
+    align-items: center;
+    min-block-size: 100svh;
+    max-inline-size: var(--content-max-width);
+    margin-inline: auto;
+    padding-inline: var(--space-gutter);
+  }
+
+  :global([data-scene='ready']) .scene-chapter {
+    background: transparent;
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--space-6);
+    padding: var(--space-8);
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    background: var(--glass-bg);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(var(--glass-blur));
+  }
+
+  @media (--bp-lg-down) {
+    .inner {
+      align-items: end;
+      padding-block-end: var(--space-12);
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .panel {
+      max-inline-size: calc(var(--content-max-width) * var(--hero-copy-share));
+    }
+  }
+</style>

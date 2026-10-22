@@ -16,8 +16,8 @@ import puppeteer from 'puppeteer-core';
 import { serve } from '../lib/static-server.mjs';
 
 const DIST = resolve(import.meta.dirname, '../../dist');
-// Pages with a Scene3D track: the home page (M3-04, #17)
-export const PATHS = ['/'];
+// Pages with a Scene3D track: the home page (M3-04, #17) and the product page (M3-05, #18)
+export const PATHS = ['/', '/products/digirunner'];
 export const VIEWPORTS = [
   { name: 'desktop', width: 1440, height: 900, isMobile: false },
   { name: 'mobile', width: 390, height: 844, isMobile: true },

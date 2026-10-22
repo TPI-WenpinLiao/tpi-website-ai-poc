@@ -37,7 +37,7 @@ three.js 是本站第一個大型 client 依賴。ADR 0001 定了「預設零 cl
 
 ADR 0001 的原則不變：頁面預設沒有 client JS。3D 場景是明確選擇的 island，條件是：
 
-- 只放在敘事頁的 hero。M3-04 起用在首頁；產品頁是否使用由 M3-05（#18）決定
+- 只放在敘事頁的 hero 與緊接在後的章節。M3-04 起用在首頁；M3-05（#18）決定產品頁也用，但只放 hero 與功能章節，其餘區塊用 CSS（`LayerStack`、`Surface pattern="grid"`）
 - 沒有它頁面內容完整，關掉它的條件由使用者偏好與裝置決定
 - 初始載入只多 1.5 KB 的 loader，three.js 不影響 FCP 與 LCP
 
@@ -55,8 +55,23 @@ LCP 都是 hero 靜態圖，3D chunk 在實測 LCP 與 `load` 之後請求。同
 
 `a11y-smoke.mjs` 的 3D 文字對比 10 個量測點都通過。拿掉 scrim 與面板玻璃再量，375×800 的 25% 位置與 1280×860 的 100% 位置會失敗（例如 eyebrow 1.14:1），確認這項檢查量得到場景的影響。
 
+## 產品頁（M3-05）
+
+- `Scene3D` 加上 `family`（0–3，順序在 `src/lib/scene/families.ts`），場景只畫該家族的一個模組：hero 顯示完整的模組，第一章拆開、翻轉後重組，之後持續播放該家族的動態，每一章點亮一組對角的方塊並往外推。組數等於 track 裡 `SceneChapter`（`data-scene-chapter`）的數量
+- 載入策略、降級、減少動態的規則與首頁相同；three.js chunk 由兩頁共用，換頁時從快取讀取
+- `scene-capture.mjs` 的 `PATHS` 加上 `/products/digirunner`，`lighthouse-3d.mjs` 一併量測
+
+`node scripts/design/lighthouse-3d.mjs / /products/digirunner`（2026-10-22，雲端 session，3 次取中位數）：
+
+| 頁面 | 行動版 | 桌機 |
+|---|---|---|
+| `/` | 0.97（TBT 93 ms） | 1（TBT 26 ms） |
+| `/products/digirunner` | 0.98（TBT 90 ms） | 1（TBT 18 ms） |
+
+兩頁的 LCP 都是 hero 靜態圖，3D chunk 在實測 LCP 與 `load` 之後請求。`a11y-smoke.mjs /products/digirunner` 的 3D 文字對比 10 個量測點都通過。
+
 ## 取捨
 
 - three.js 130 KB gzip 是在閒置時下載，行動網路上仍會用到流量。Save-Data 開啟時不載入；要更省，可以改成捲動接近 hero 底部時才載入，代價是第一次捲動時場景還沒出現
-- canvas 固定在 viewport（`position: fixed`），讓場景在 chapter 捲過時持續播放。M3-04 起 canvas 從 sticky header 下緣開始（`--header-height`），構圖和 header 下方的靜態主視覺一致；行動版 hero 另外把方塊塔拉遠、往上移（`modular-stack.ts` 的 `NARROW_HERO_*`），不壓到 eyebrow。track 裡在 hero 之後的區塊要在 ready 後改成透明背景，否則會擋住場景。M3-04 決定不做成元件的 slot：目前只有首頁使用，寫法在 `src/pages/index.astro` 的 `.chapters`；M3-05 的產品頁也要用時再抽成元件
+- canvas 固定在 viewport（`position: fixed`），讓場景在 chapter 捲過時持續播放。M3-04 起 canvas 從 sticky header 下緣開始（`--header-height`），構圖和 header 下方的靜態主視覺一致；行動版 hero 另外把方塊塔拉遠、往上移（`modular-stack.ts` 的 `NARROW_HERO_*`），不壓到 eyebrow。track 裡在 hero 之後的區塊要在 ready 後改成透明背景，否則會擋住場景。M3-05 產品頁也要用，抽成 `SceneChapter` 元件，首頁與產品頁共用
 - 3D 文字對比是在雲端的軟體算圖下量測，場景隨時間微動，量到的是當下那一格；改場景的亮度、位置或 scrim 後要重跑
