@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { unquotedDateErrors } from './dates.mjs';
+import { FRONTMATTER, unquotedDateErrors } from './dates.mjs';
 
 const md = (frontmatter) => `---\n${frontmatter}\n---\n\nBody 2026-02-30\n`;
 
@@ -39,4 +39,16 @@ test('block scalars and flow lists: text stays text, dates are checked', () => {
   assert.deepEqual(unquotedDateErrors(md('challenge: |\n  2026-10-20 10:00\nsummary: >\n  2026-02-30\ndates: [2026-02-29, x]')), [
     '"2026-02-29" is not an existing YYYY-MM-DD date',
   ]);
+});
+
+test('finds frontmatter after leading blank lines and rejects TOML frontmatter', () => {
+  assert.deepEqual(unquotedDateErrors(`\n\n${md('publishedAt: 2026-02-30')}`), ['"2026-02-30" is not an existing YYYY-MM-DD date']);
+  assert.deepEqual(unquotedDateErrors('+++\npublishedAt = 2026-10-20T10:00:00Z\n+++\n'), ['frontmatter must be YAML between --- fences']);
+});
+
+test('FRONTMATTER finds the same block as Astro', async () => {
+  // Astro's helper is a dependency of astro, not of this repo; a newer Astro that changes the regex fails here
+  const { extractFrontmatter } = await import('@astrojs/internal-helpers/frontmatter');
+  const samples = ['---\na: 1\n---\n', '\uFEFF---\na: 1\n---\n', '\n  \n---\na: 1\n---\n', '+++\na = 1\n+++\n', 'text\n---\na: 1\n---\n', 'no frontmatter'];
+  for (const s of samples) assert.equal(FRONTMATTER.exec(s)?.[2], extractFrontmatter(s), JSON.stringify(s));
 });
