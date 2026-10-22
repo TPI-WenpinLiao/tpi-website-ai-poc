@@ -5,6 +5,11 @@
 import { footer, footerBottom, node } from '../../lib/ia';
 import { company } from '../../data/site';
 import Button from './Button.astro';
+import { Image } from 'astro:assets';
+import logo from '../../assets/brand/logo-horizontal-white.png';
+
+// Rendered height in px; matches --logo-height-lg (3rem)
+const LOGO_HEIGHT = 48;
 
 const home = node('home');
 const contact = node('contact');
@@ -15,8 +20,7 @@ const contact = node('contact');
     <div class="top">
       <div class="company">
         <a class="brand" href={home.path}>
-          <span class="mark" aria-hidden="true"></span>
-          TPIsoftware<span class="sr-only">昕力資訊（回首頁）</span>
+          <Image class="logo" src={logo} alt="TPIsoftware 昕力資訊（回首頁）" height={LOGO_HEIGHT} densities={[1, 2]} />
         </a>
         <dl class="contact">
           <div>
@@ -113,27 +117,14 @@ const contact = node('contact');
 
   .brand {
     display: flex;
-    gap: var(--space-2);
     align-items: center;
     min-block-size: var(--touch-target);
-    color: var(--color-text);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: var(--letter-spacing-tight);
   }
 
-  .brand:hover {
-    text-decoration: none;
-  }
-
-  /* Same stand-in mark as SiteHeader until the brand files arrive (#56) */
-  .mark {
-    inline-size: var(--space-4);
-    block-size: var(--space-4);
-    border-radius: var(--radius-sm);
-    background: var(--gradient-energy);
-    box-shadow: var(--glow-brand);
-    transform: rotate(var(--scene-angle-z));
+  .logo {
+    display: block;
+    inline-size: auto;
+    block-size: var(--logo-height-lg);
   }
 
   .contact {

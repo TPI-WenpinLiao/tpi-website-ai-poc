@@ -1,10 +1,10 @@
 // Renders the site-wide default Open Graph image, public/og/default.png (1200×630), from
-// src/styles/tokens.css and the self-hosted fonts, so the image follows the design tokens instead of
-// being drawn by hand. Content is only the company name and design motifs: no slogan or figures.
-// Pages without their own ogImage fall back to it (docs/ia/content-model.md, BaseLayout.astro).
-// Output depends on the fonts installed for Chinese (system fallback), like nav-fit.mjs, so it is
-// not part of `npm run check`. Rerun after changing tokens or fonts; the same environment gives the
-// same PNG.
+// src/styles/tokens.css, so the image follows the design tokens instead of being drawn by hand.
+// Content is only the company logo (src/assets/brand, from import-brand.mjs) and design motifs: no
+// text, slogan or figures. Pages without their own ogImage fall back to it
+// (docs/ia/content-model.md, BaseLayout.astro).
+// Output depends on the local Chromium, so it is not part of `npm run check`. Rerun after changing
+// tokens or the logo; the same environment gives the same PNG.
 // Run: node scripts/design/og-image.mjs [out=public/og/default.png]
 
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -17,14 +17,8 @@ const ROOT = resolve(import.meta.dirname, '../..');
 export const WIDTH = 1200;
 export const HEIGHT = 630;
 
-const fontCss = (pkg) =>
-  readFileSync(join(ROOT, 'node_modules', pkg, 'index.css'), 'utf8').replaceAll(
-    './files/',
-    pathToFileURL(join(ROOT, 'node_modules', pkg, 'files')).href + '/',
-  );
-
 /** HTML for the image. Layout values are fixed pixels: the canvas is a fixed-size image. */
-export function template(tokensCss, fonts) {
+export function template(tokensCss, logo) {
   const layers = [0, 1, 2, 3]
     .map((i) => `<div class="layer${i === 3 ? ' top' : ''}" style="--i:${i}"><span class="node"></span></div>`)
     .join('');
@@ -33,7 +27,6 @@ export function template(tokensCss, fonts) {
 <head>
 <meta charset="utf-8">
 <style>
-${fonts}
 ${tokensCss}
 * { box-sizing: border-box; }
 html, body { margin: 0; }
@@ -70,18 +63,9 @@ body {
   flex-direction: column;
   gap: 20px;
 }
-.name {
-  margin: 0;
-  font-size: 104px;
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-display);
-  letter-spacing: var(--letter-spacing-display);
-}
-.name-zh {
-  margin: 0;
-  font-size: 56px;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.04em;
+.logo {
+  display: block;
+  height: 160px;
 }
 .line {
   width: 320px;
@@ -139,8 +123,7 @@ body {
 <div class="glow"></div>
 <div class="scene" aria-hidden="true"><div class="stack">${layers}</div></div>
 <div class="copy">
-  <p class="name">TPIsoftware</p>
-  <p class="name-zh">昕力資訊</p>
+  <img class="logo" src="${logo}" alt="TPIsoftware 昕力資訊">
   <div class="line"></div>
 </div>
 </body>
@@ -150,7 +133,7 @@ body {
 async function main([out = join(ROOT, 'public/og/default.png')]) {
   const html = template(
     readFileSync(join(ROOT, 'src/styles/tokens.css'), 'utf8'),
-    fontCss('@fontsource-variable/inter'),
+    `data:image/png;base64,${readFileSync(join(ROOT, 'src/assets/brand/logo-horizontal-white.png')).toString('base64')}`,
   );
   const dir = mkdtempSync(join(tmpdir(), 'og-'));
   const file = join(dir, 'og.html');
@@ -160,11 +143,6 @@ async function main([out = join(ROOT, 'public/og/default.png')]) {
     const page = await browser.newPage();
     await page.setViewport({ width: WIDTH, height: HEIGHT, deviceScaleFactor: 1 });
     await page.goto(pathToFileURL(file).href, { waitUntil: 'networkidle0' });
-    await page.evaluate(() => document.fonts.ready);
-    const missing = await page.evaluate(() =>
-      ['32px "Inter Variable"'].filter((f) => !document.fonts.check(f)),
-    );
-    if (missing.length) throw new Error(`fonts not loaded: ${missing.join(', ')}`);
     mkdirSync(dirname(out), { recursive: true });
     await page.screenshot({ path: out, type: 'png' });
     console.log(`wrote ${out} (${WIDTH}×${HEIGHT})`);

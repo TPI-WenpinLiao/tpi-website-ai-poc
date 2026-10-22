@@ -9,6 +9,8 @@
 // `open` draws one menu open (a first-level label, or 'mobile'), for the /design-system page only.
 import { header, node, type NavItem } from '../../lib/ia';
 import Button from './Button.astro';
+import { Image } from 'astro:assets';
+import logo from '../../assets/brand/logo-horizontal-white.png';
 
 interface Props {
   // Accessible name of the <nav>; must be unique when several headers share a page
@@ -17,6 +19,8 @@ interface Props {
 }
 
 const { navLabel = '主選單', open } = Astro.props;
+// Rendered height in px; matches --logo-height (2.5rem) so the 1x/2x files fit the box
+const LOGO_HEIGHT = 40;
 const home = node('home');
 const contact = node('contact');
 const search = node('search');
@@ -35,9 +39,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
 <header class="site-header" data-surface="dark">
   <div class="bar">
     <a class="brand" href={home.path}>
-      <span class="mark" aria-hidden="true"></span>
-      <span class="wordmark">TPIsoftware</span>
-      <span class="sr-only">昕力資訊（回首頁）</span>
+      <Image class="logo" src={logo} alt="TPIsoftware 昕力資訊（回首頁）" height={LOGO_HEIGHT} densities={[1, 2]} loading="eager" />
     </a>
 
     <nav class="desktop-nav" aria-label={navLabel}>
@@ -204,23 +206,15 @@ const isMega = (item: NavItem) => groups(item).length > 0;
   .brand {
     display: flex;
     flex-shrink: 0;
-    gap: var(--space-2);
     align-items: center;
     min-block-size: var(--touch-target);
-    color: var(--color-text);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: var(--letter-spacing-tight);
-    text-decoration: none;
   }
 
-  /* Stand-in mark until the brand files arrive (#56): an energy-gradient block at the scene angle */
-  .mark {
-    inline-size: var(--space-4);
-    block-size: var(--space-4);
-    border-radius: var(--radius-sm);
-    background: var(--gradient-energy);
-    box-shadow: var(--glow-brand);
-    transform: rotate(var(--scene-angle-z));
+  /* The white logo: the header is always the dark surface */
+  .logo {
+    display: block;
+    inline-size: auto;
+    block-size: var(--logo-height);
   }
 
   /* First-level menu: desktop only. Not named .primary: Button's variant class would match it */
