@@ -62,7 +62,7 @@
 - M3-02 design tokens 與元件庫完成（#15，`design-approved`）：深色場景與亮色閱讀頁的雙 surface、光與景深、捲動動態、12 個元件與 `/design-system` 審核頁；影像素材與提示詞見 `docs/design/image-prompts.md`
 - M3-03 design-system 展示頁完成（#16，`design-approved`）：`/design-system` 列出全部 152 個 token（三層分組）與 5 個互動元件的狀態矩陣；全域改為 `box-sizing: border-box`
 - M3-04 首頁高保真完成（#17，`design-approved`）：方向 B 的場景做成首頁 `/`（原型頁已刪除），結構照 `/wireframes/home`；文案取自現站（`src/data/home.ts`、`src/data/site.ts`，`node scripts/design/home-content.mjs` 逐筆比對現站）；新元件 `SiteHeader`（原生 `<details>` 選單，零 client JS，含「跳到主要內容」）、`SiteFooter`，`Card` 加上 `size="sm"`；公司 logo 由 `node scripts/design/import-brand.mjs` 匯入；首頁 JSON-LD（`Organization`、`WebSite`）讀 `organization` collection；方塊材質 tokens `--scene-block-*`、`--scene-rim-*`
-- M3-05 產品頁高保真（#18），階段一，等待 `design-approved`：digiRunner 做成 `/products/digirunner`，結構照 `/wireframes/offering`，內容讀 offering collection（`node scripts/design/offering-content.mjs` 比對現站）；新元件 `Breadcrumb`、`InPageNav`、`Faq`、`SceneChapter`，`Card` 可以不帶 `href`；`Scene3D` 加上 `family`，只畫該產品家族的模組（ADR 0003「產品頁」）
+- M3-05 產品頁高保真完成（#18，`design-approved`）：digiRunner 做成 `/products/digirunner`，結構照 `/wireframes/offering`，內容讀 offering collection（`node scripts/design/offering-content.mjs` 比對現站）；新元件 `Breadcrumb`、`InPageNav`、`Faq`、`SceneChapter`，`Card` 可以不帶 `href`；`Scene3D` 加上 `family`，窄螢幕依 `PageHero` 的視覺區取景、跨斷點時重建 tier（ADR 0003）；JSON-LD `SoftwareApplication`＋`BreadcrumbList`（`src/lib/seo/offering-jsonld.ts`）；header 選單一次只開一個，點選單外或按 Esc 收起
 - M3-07 3D scroll 視覺方向原型完成（#54，`design-approved`）：選定方向 B Modular Stack，原型頁 `/prototypes/modular-stack`（three.js，`Scene3D` island），A Data Flow 已刪除；ADR 0003 載入策略；`node scripts/design/lighthouse-3d.mjs` 行動版 0.99、桌機 1，`a11y-smoke.mjs` 加上 3D 場景上的文字對比
 - `issues.yml` 與 GitHub issue 對齊完成（#88）：補 M3-07～09、M3-04/05 的依賴改為 M3-02、M3-07；`node scripts/bootstrap/diff.mjs` 比對兩邊，目前差異 0、重跑 bootstrap 不會新建 issue
 - `needs-design` 階段一改走 `/issue-ship` 完成（#84）：`CLAUDE.md`、`issue-start`、`checkpoint`、`workflow.md` 都連到 `issue-ship` 的「`needs-design` 的兩個階段」，`wip:` 合併只寫在 `issue-ship` 第 4 步。#16 留在 `main` 的 `wip:` commit（`1b3a5fe`、`a2508f8`）不改寫
@@ -75,10 +75,10 @@
 
 ## 下一步
 
-- 審核 M3-05 產品頁（#18）的 draft PR，通過後加上 `design-approved`，再進階段二（SEO、無障礙、內容完整度）
+- M3-06 M3 收尾（#19）可以開始
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
-- M4-03 共用 SEO 層（#22）可以開始；hreflang 用 `localeLinks()` 中 `target: 'page'` 的項目；首頁的 JSON-LD（`src/lib/seo/home-jsonld.ts`，經 `BaseLayout` 的 `head` slot 輸出）一併移進共用 SEO 層
+- M4-03 共用 SEO 層（#22）可以開始；hreflang 用 `localeLinks()` 中 `target: 'page'` 的項目；首頁與產品頁的 JSON-LD（`src/lib/seo/home-jsonld.ts`、`offering-jsonld.ts`，經 `BaseLayout` 的 `head` slot 輸出）一併移進共用 SEO 層
 - M5-04 部落格與新聞批次轉換 script（#29）可以開始
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
 - M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
@@ -110,6 +110,7 @@
 - M3-04 的 `SiteHeader`、`SiteFooter` 目前由首頁與產品頁自己放；M4-04 移進共用 layout，補上其餘的選單鍵盤操作並量測 en、vi 的正式 header 寬度。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
 - 首頁行動版 Lighthouse performance 0.95（`node scripts/design/lighthouse-3d.mjs`，2026-10-22），剛好在門檻上：header＋footer 多一個 render-blocking CSS，約 150 ms；全部 inline CSS 對 LCP 沒有幫助。M4-04 把 header、footer 移進共用 layout 時，連同 preview 真機量測再處理
 - 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；M5 遷移文章後改讀 content collections 並刪除這個檔案。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
+- M3-05：現站 digiRunner 頁有 content-model 沒有欄位的段落（AI Gateway、AI Governance、五大應用、四大機制、API Composer／沙盒／即時主控台、資安、金檢合規），產品頁沒有放；M5-01（#26）前請內容負責人決定刪減或擴充 content model。`useCases.industry` 沒有保險、醫療、物聯網，這三個情境沒有產業連結
 - M4-03（#22）加 sitemap 時排除 `/design-system`、`/wireframes`、`/prototypes`，做法見 `design-system` skill「展示頁」
 - `npm run check` 的 LHCI 用 `staticDistDir` 自動探索，只測前 5 個 URL（M3-07 時 build 出 16 頁只測 5 頁），其餘頁面沒有 Lighthouse 關卡，由 #87 處理
 - `docs/design/nav-fit.md` 的量測用容器字型與 wireframe 的間距（`--wf-space-3` 仍是 12px），M3-02 後 `node scripts/wireframe/nav-fit.mjs --check` 仍通過；正式 header（M4-04）的選單間距與 Inter 字型要另外實測

@@ -1,6 +1,8 @@
 ---
 title: digiRunner API 管理平台
-description: 昕力資訊 digiRunner 企業級 API 管理平台，為現有後端服務設立一致性的 API 閘道，提供完整 API 開發設計、部署發佈、權限控管、資安管理、API 組合與串接等，滿足全方位的管理需求，可說是企業數位轉型的利器！
+# The current site's meta description, cut to the seo-checklist length (60–80 full-width
+# characters): the closing praise is dropped, the facts are unchanged
+description: 昕力資訊 digiRunner 企業級 API 管理平台，為現有後端服務設立一致性的 API 閘道，提供 API 開發設計、部署發佈、權限控管、資安管理、API 組合與串接等完整管理功能。
 translationKey: digirunner
 node: digirunner
 kind: product

@@ -3,26 +3,16 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/tokens.css';
 import { localeFromPath, normalizePath } from '../lib/i18n/paths';
-
-interface OgImage {
-  // Site-relative path or absolute URL
-  src: string;
-  width: number;
-  height: number;
-  alt: string;
-}
+import { DEFAULT_OG_IMAGE, type OgImage } from '../lib/seo/og';
 
 interface Props {
   title: string;
   description: string;
-  // Falls back to the site-wide default (content-model.md `ogImage`), rendered by
-  // scripts/design/og-image.mjs
+  // Falls back to the site-wide default (content-model.md `ogImage`)
   image?: OgImage;
 }
 
-const DEFAULT_IMAGE: OgImage = { src: '/og/default.png', width: 1200, height: 630, alt: 'TPIsoftware 昕力資訊' };
-
-const { title, description, image = DEFAULT_IMAGE } = Astro.props;
+const { title, description, image = DEFAULT_OG_IMAGE } = Astro.props;
 // canonical URLs have no .html, /index or trailing slash; the locale comes from the URL prefix (ADR 0002)
 const pathname = normalizePath(Astro.url.pathname);
 const lang = localeFromPath(pathname);

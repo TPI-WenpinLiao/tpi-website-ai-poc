@@ -23,7 +23,10 @@ import Faq from '../../components/ui/Faq.astro';
 import SceneChapter from '../../components/ui/SceneChapter.astro';
 import SiteHeader from '../../components/ui/SiteHeader.astro';
 import SiteFooter from '../../components/ui/SiteFooter.astro';
-import { children, node } from '../../lib/ia/navigation';
+import { breadcrumb, children, node } from '../../lib/ia/navigation';
+import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
+import { offeringJsonLd } from '../../lib/seo/offering-jsonld';
+import { DEFAULT_OG_IMAGE } from '../../lib/seo/og';
 import { about } from '../../lib/latest-posts';
 import { sceneFamily } from '../../lib/scene/families';
 import { getCollection, getEntry } from 'astro:content';
@@ -75,13 +78,34 @@ const anchors = [
   { href: '#posts', label: '相關文章', show: posts.length > 0 },
 ].filter((a) => a.show);
 
+// Structured data (content-model.md「offering」): the entry, its nodes.csv trail and the
+// organization data file of this page's locale
+const pathname = normalizePath(Astro.url.pathname);
+const locale = localeFromPath(pathname);
+const org = await getEntry('organization', locale);
+if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
+if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
+// Page image: heroImage, else ogImage, else the site default (content-model.md「共用欄位」)
+const pageImage = data.heroImage ?? data.ogImage;
+const ogImage = pageImage && { src: pageImage.src, width: pageImage.width, height: pageImage.height, alt: data.title };
+const jsonLd = offeringJsonLd({
+  offering: data,
+  org: org.data,
+  site: Astro.site,
+  url: new URL(pathname, Astro.site).href,
+  imageUrl: new URL((ogImage ?? DEFAULT_OG_IMAGE).src, Astro.site).href,
+  trail: breadcrumb(self.id),
+  inLanguage: locale,
+});
+
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 ---
 
-<BaseLayout title={title} description={data.description}>
+<BaseLayout title={title} description={data.description} image={ogImage}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd).replaceAll('<', '\\u003c')} />
   <SiteHeader />
   <ScrollProgress />
-  <InPageNav label={`${data.title}頁內導覽`} items={anchors} />
+  <InPageNav label="本頁目錄" items={anchors} />
   <main id="main">
     <div class="track" data-scene-track>
       <PageHero eyebrow={brand} title={data.title} description={data.tagline}>
