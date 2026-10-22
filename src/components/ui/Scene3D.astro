@@ -100,9 +100,11 @@ const { direction } = Astro.props;
 <style>
   @import '../../styles/media.css';
 
+  /* Fixed below the sticky SiteHeader, so the scene's framing matches the static hero image,
+     which also starts under the header */
   .scene-3d {
     position: fixed;
-    inset: 0;
+    inset: var(--header-height) 0 0;
     opacity: 0;
     pointer-events: none;
     transition-property: opacity;

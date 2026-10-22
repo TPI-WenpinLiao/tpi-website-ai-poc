@@ -6,6 +6,9 @@
 // outside click or Esc, one menu at a time and the keyboard model are M4-04's; so are the search box
 // (M6) and the locale switch (M4-02), which link to their targets for now.
 // Below 64rem the menu collapses behind one 選單 disclosure that lists every group.
+// The first focusable element is the 跳到主要內容 link to `skipTo` (the page's <main id>); pages
+// showing more than one header, like /design-system, pass skipTo={false} on the extra ones.
+// While the 選單 sheet is open the page behind it does not scroll (CSS :has, no client JS).
 // `open` draws one menu open (a first-level label, or 'mobile'), for the /design-system page only.
 import { header, node, type NavItem } from '../../lib/ia/navigation';
 import Button from './Button.astro';
@@ -15,10 +18,12 @@ import logo from '../../assets/brand/logo-symbol-white.png';
 interface Props {
   // Accessible name of the <nav>; must be unique when several headers share a page
   navLabel?: string;
+  // Fragment of the page's main content, or false for no skip link
+  skipTo?: `#${string}` | false;
   open?: string;
 }
 
-const { navLabel = '主選單', open } = Astro.props;
+const { navLabel = '主選單', skipTo = '#main', open } = Astro.props;
 // Rendered height in px; matches --logo-height (2rem) so the 1x/2x files fit the box
 const LOGO_HEIGHT = 32;
 const home = node('home');
@@ -37,6 +42,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
 ---
 
 <header class="site-header" data-surface="dark">
+  {skipTo && <a class="skip" href={skipTo}>跳到主要內容</a>}
   <div class="bar">
     <a class="brand" href={home.path}>
       <Image class="logo" src={logo} alt="TPIsoftware 昕力資訊（回首頁）" height={LOGO_HEIGHT} densities={[1, 2]} loading="eager" />
@@ -183,6 +189,32 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     border-block-end: var(--border-width) solid var(--glass-border);
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
+  }
+
+  /* Off screen until focused, then shown over the bar's start */
+  .skip {
+    position: absolute;
+    inset-block-start: calc(var(--header-height) * -1);
+    inset-inline-start: var(--space-gutter);
+    z-index: var(--z-raised);
+    display: flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--color-action);
+    color: var(--color-action-text);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+  }
+
+  .skip:focus {
+    inset-block-start: var(--space-2);
+  }
+
+  /* The open 選單 sheet covers the page: keep the page behind it from scrolling */
+  :global(html:has(.site-header .mobile[open])) {
+    overflow: hidden;
   }
 
   .bar {

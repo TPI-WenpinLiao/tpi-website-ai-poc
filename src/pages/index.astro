@@ -77,7 +77,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 <BaseLayout title={title} description={description}>
   <ScrollProgress />
   <SiteHeader />
-  <main>
+  <main id="main">
     <div class="track" data-scene-track>
       <PageHero eyebrow="TPIsoftware 昕力資訊" title={hero.title.text} description={hero.description.text}>
         <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
