@@ -107,7 +107,7 @@
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除，`tokens.css` 的 `--wf-*` 也一起刪。M3-02 起斷點寫在 `src/styles/media.css` 的 `@custom-media`，wireframe 的 media query 已改用
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
-- M3-04 的 `SiteHeader`、`SiteFooter` 目前由首頁自己放；M4-04 移進共用 layout，補上選單互動（點外面關閉、Esc、一次只開一個）並量測 en、vi 的正式 header 寬度。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
+- M3-04 的 `SiteHeader`、`SiteFooter` 目前由首頁與產品頁自己放；M4-04 移進共用 layout，補上其餘的選單鍵盤操作並量測 en、vi 的正式 header 寬度。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
 - 首頁行動版 Lighthouse performance 0.95（`node scripts/design/lighthouse-3d.mjs`，2026-10-22），剛好在門檻上：header＋footer 多一個 render-blocking CSS，約 150 ms；全部 inline CSS 對 LCP 沒有幫助。M4-04 把 header、footer 移進共用 layout 時，連同 preview 真機量測再處理
 - 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；M5 遷移文章後改讀 content collections 並刪除這個檔案。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - M4-03（#22）加 sitemap 時排除 `/design-system`、`/wireframes`、`/prototypes`，做法見 `design-system` skill「展示頁」
