@@ -11,7 +11,7 @@ description: 找出下一張可以開始的 issue 並產生開場提示詞時使
 
 用 `mcp__github__list_issues`（`state: OPEN`、`orderBy: CREATED_AT`、`direction: ASC`、`fields: [number, title, labels, body]`），依 `pageInfo.endCursor` 翻頁到底。依賴中出現、但不在 open 清單的 issue，用 `mcp__github__issue_read` 確認狀態與 label。
 
-再用 `mcp__github__list_pull_requests`（`state: open`）取得 open PR，body 含 `Closes #N` 的 issue 視為「進行中」，不列入可開始；目前 session 正在處理的 issue 也一樣。
+再用 `mcp__github__list_pull_requests`（`state: open`、`fields: [number, title, body, draft]`）取得 open PR，body 含 `Closes #N` 的 issue 歸入「進行中」，不列入可開始；目前 session 正在處理的 issue 也一樣。`docs/status.md` 不列進行中的 issue（[`issue-ship` 第 3 步](../issue-ship/SKILL.md#3-更新-docsstatusmd)），這份清單只由本 skill 從 GitHub 查。
 
 ## 2. 判斷可否開始
 
@@ -27,6 +27,7 @@ description: 找出下一張可以開始的 issue 並產生開場提示詞時使
 | 類別 | 條件 |
 |---|---|
 | 需人工決定 | 帶 `needs-decision`：Claude 停下等人決定，問題在 issue 或 PR 的最新留言（不論依賴，都列在最前面） |
+| 進行中 | 有 open PR（body 含 `Closes #N`）。issue 帶 `needs-design` 或 issue 本身有「## 關卡」段落，且還沒有對應的 approved label 時，註明「等待 `<label>`」 |
 | 可開始 | 依賴全部滿足，且沒有 `needs-input` |
 | 需人工提供 | 依賴滿足，但有 `needs-input`（Claude 只能整理與提問） |
 | 等待中 | 有依賴未滿足（列出卡在哪幾張） |
@@ -50,4 +51,6 @@ description: 找出下一張可以開始的 issue 並產生開場提示詞時使
 補充：本 issue 需要連到現站並量測 Lighthouse／CWV；需要 API key 時列為 needs-input，不要要求貼上 credentials。
 ```
 
-4. 「需人工決定」列在結論之前，附 issue 或 PR 留言的連結；「需人工提供」與「等待中」各用一兩行帶過
+4. 「需人工決定」列在結論之前，附 issue 或 PR 留言的連結
+5. 「進行中」每張一行：issue、PR 連結、draft 或 ready，等待 approved label 的寫出 label，這些是等人工設計確認的關卡
+6. 「需人工提供」與「等待中」各用一兩行帶過

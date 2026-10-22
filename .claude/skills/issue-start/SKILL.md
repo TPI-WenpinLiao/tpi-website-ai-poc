@@ -78,8 +78,8 @@ git status -sb
 
 `status.md` 應該描述 main 目前的狀態。對照 GitHub 找出對不上的地方，在本 issue 的 PR 一起修，不另開同步 PR。判斷規則見 [`issue-ship` 第 3 步](../issue-ship/SKILL.md#3-更新-docsstatusmd)。
 
-1. 列出 `status.md`「待辦備忘」以外每個 `#N`、`PR #N`，以及寫的狀態（完成／可以開始）
-2. 用 `mcp__github__issue_read`（`get`）查實際狀態：「Issue」段落的 issue 要已關閉；「可以開始」的 issue 另外查它的依賴是否都已關閉
+1. 列出 `status.md`「待辦備忘」以外每個 `#N`、`PR #N`，以及寫的狀態（完成／階段一／可以開始）
+2. 用 `mcp__github__issue_read`（`get`）查實際狀態：「Issue」段落中本 issue 以外的 issue 要已關閉；本 issue 的行依 `issue-ship` 第 3 步的寫法（例如接續 `needs-design` 階段二時的「階段一」），不算對不上。「可以開始」的 issue 另外查它的依賴是否都已關閉
 3. 用 `mcp__github__list_issues`（`state: CLOSED`）列出已關閉的 issue，「Issue」段落沒有這張 issue 的一行也算對不上；只在別的句子裡提到 `#N` 不算有列
 
 有 open PR 的 issue 不在 `status.md`，不用對照。

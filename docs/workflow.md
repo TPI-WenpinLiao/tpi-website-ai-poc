@@ -22,7 +22,7 @@ flowchart LR
 Claude 依 milestone 順序、每張 issue 的「## 依賴」與關卡 label，列出：
 
 - **可開始**：依賴都已完成，可以平行開不同 session
-- **進行中**：已有 open PR
+- **進行中**：已有 open PR；等你加 approved label 的（例如 `needs-design` 階段一）會註明。`docs/status.md` 不列這些 issue
 - **需人工決定**：帶 `needs-decision`，Claude 停下等你回覆
 - **需人工提供**：帶 `needs-input`，內容要由你提供
 - **等待中**：還有依賴沒完成
