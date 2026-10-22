@@ -10,7 +10,7 @@
 import { header, node, type NavItem } from '../../lib/ia';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
-import logo from '../../assets/brand/logo-horizontal-white.png';
+import logo from '../../assets/brand/logo-symbol-white.png';
 
 interface Props {
   // Accessible name of the <nav>; must be unique when several headers share a page
@@ -19,8 +19,8 @@ interface Props {
 }
 
 const { navLabel = '主選單', open } = Astro.props;
-// Rendered height in px; matches --logo-height (2.5rem) so the 1x/2x files fit the box
-const LOGO_HEIGHT = 40;
+// Rendered height in px; matches --logo-height (2rem) so the 1x/2x files fit the box
+const LOGO_HEIGHT = 32;
 const home = node('home');
 const contact = node('contact');
 const search = node('search');
@@ -210,7 +210,8 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     min-block-size: var(--touch-target);
   }
 
-  /* The white logo: the header is always the dark surface */
+  /* The white symbol only: the header is always the dark surface, and the bar has no room to spare
+     for the full logo's two lines of text; the footer shows the full logo */
   .logo {
     display: block;
     inline-size: auto;
