@@ -5,6 +5,7 @@ import { localeLinks } from '../i18n/alternates.ts';
 import { normalizePath } from '../i18n/paths.ts';
 import { hreflangAlternates } from './hreflang.ts';
 import { inSitemap } from './indexing.ts';
+import { canonicalUrl } from './meta.ts';
 
 const escapeXml = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[c] ?? c);
@@ -19,7 +20,7 @@ export function sitemapXml(paths: readonly string[], site: URL): string {
       const links = hreflangAlternates(localeLinks({ path, routes }), site).map(
         (a) => `    <xhtml:link rel="alternate" hreflang="${escapeXml(a.hreflang)}" href="${escapeXml(a.href)}"/>`,
       );
-      return ['  <url>', `    <loc>${escapeXml(new URL(path, site).href)}</loc>`, ...links, '  </url>'].join('\n');
+      return ['  <url>', `    <loc>${escapeXml(canonicalUrl(path, site))}</loc>`, ...links, '  </url>'].join('\n');
     });
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
