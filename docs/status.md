@@ -68,7 +68,6 @@
 
 ### M4 開發骨架
 
-- M4-01 Content collections 與 Zod schema（#20，PR #91），待合併
 - M4-02 i18n 路由完成（#21）：語系設定與路徑工具在 `src/lib/i18n/`（`astro.config.mjs` 的 `locales` 從這裡 import），語系切換元件 `LocaleSwitcher`；未翻譯的頁面不產生，切換時連到該語系首頁，連首頁都沒有的語系不列（ADR 0002）；`node scripts/i18n/routes.mjs` 在 build 後檢查 `<html lang>` 與切換連結
 
 ## 下一步
