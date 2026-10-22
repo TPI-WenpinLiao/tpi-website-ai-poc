@@ -27,6 +27,8 @@ const { direction, family } = Astro.props;
     'modular-stack': () => import('../../lib/scene/modular-stack'),
   };
   const IDLE_TIMEOUT = 2000;
+  // Wait for a resize across the low-power breakpoint to settle before rebuilding the scene
+  const TIER_DEBOUNCE = 200;
 
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -72,24 +74,42 @@ const { direction, family } = Astro.props;
     await idle();
     if (reduceMotion.matches || !supportsWebGL()) return;
 
-    const [{ mount }, { default: factory }] = await Promise.all([import('../../lib/scene/runtime'), load()]);
+    const [{ mount, LOW_POWER }, { default: factory }] = await Promise.all([import('../../lib/scene/runtime'), load()]);
     // Reduced motion may have been turned on while the chunk downloaded
     if (reduceMotion.matches) return;
     host.hidden = false;
-    const stop = mount({
-      host,
-      track,
-      factory,
-      family: host.dataset.sceneFamily ? Number(host.dataset.sceneFamily) : undefined,
-      onReady: () => {
-        track.dataset.scene = 'ready';
-      },
-    });
+    const start = () =>
+      mount({
+        host,
+        track,
+        factory,
+        family: host.dataset.sceneFamily ? Number(host.dataset.sceneFamily) : undefined,
+        onReady: () => {
+          track.dataset.scene = 'ready';
+        },
+      });
+    let stop = start();
+
+    // The rendering tier (block count, camera path, DPR) is picked when the scene starts, so a
+    // resize across the low-power breakpoint rebuilds it. data-scene stays "ready" meanwhile, so the
+    // static image doesn't flash in for the one frame the new canvas takes.
+    const lowPower = matchMedia(LOW_POWER);
+    let rebuild = 0;
+    const onTierChange = () => {
+      clearTimeout(rebuild);
+      rebuild = window.setTimeout(() => {
+        stop();
+        stop = start();
+      }, TIER_DEBOUNCE);
+    };
+    lowPower.addEventListener('change', onTierChange);
 
     // Turning on reduced motion while the scene plays falls back to the static image
     reduceMotion.addEventListener(
       'change',
       () => {
+        clearTimeout(rebuild);
+        lowPower.removeEventListener('change', onTierChange);
         stop();
         host.hidden = true;
         delete track.dataset.scene;

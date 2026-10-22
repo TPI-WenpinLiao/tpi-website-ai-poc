@@ -67,8 +67,9 @@ export function worstContrast(image, rect, text) {
 }
 
 /**
- * Text lines inside the elements matching `selector` that are in the viewport, measured against the
- * worst pixel behind them: the text is made transparent and the page screenshotted.
+ * Text lines inside the elements matching `selector` that are in the viewport and not covered by
+ * another element, measured against the worst pixel behind them: the text is made transparent and
+ * the page screenshotted.
  * @param {import('puppeteer-core').Page} page @param {string} selector
  */
 async function textContrast(page, selector) {
@@ -84,6 +85,9 @@ async function textContrast(page, selector) {
         range.selectNodeContents(node);
         for (const r of range.getClientRects()) {
           if (r.bottom < 0 || r.top > innerHeight || r.width === 0) continue;
+          // Lines under something else, such as the sticky header, aren't visible to measure
+          const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+          if (hit && !root.contains(hit)) continue;
           out.push({
             text: node.textContent.trim().slice(0, 24),
             color: style.color,

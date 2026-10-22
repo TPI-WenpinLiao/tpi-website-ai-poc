@@ -87,7 +87,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | 元件 | 用途 | 重點 |
 |---|---|---|
 | `Surface` | 頁面區塊 | `tone` 切換亮暗；`pattern="grid"` 畫由上往下淡出的座標格線；`width="reading"` 收窄到閱讀寬度 |
-| `PageHero` | 頁面開場 | 預設深色＋格線；輸出該頁唯一的 h1（display 字級）；`visual` slot 放 3D 場景或其靜態版本 |
+| `PageHero` | 頁面開場 | 預設深色＋格線；輸出該頁唯一的 h1（display 字級）；`visual` slot 放 3D 場景或其靜態版本；`breadcrumb` slot 是 hero 頂端獨立的一列；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」） |
 | `LayerStack` | 3D 場景的靜態版本 | CSS 3D 玻璃圖層＋能量光束，捲出畫面時分開；裝飾用，`aria-hidden` |
 | `SectionHeading` | 區塊標題 | `index`（`01`）＋mono eyebrow＋漸層線；`level` 由呼叫端指定，避免跳級；`size="display"` 每頁最多一次 |
 | `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；小圓角（`--radius-md`）；primary 發光上浮、secondary 漸層外框、text；`disabled` 只存在於 `<button>` |
@@ -112,6 +112,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 - 放在 `PageHero` 的 `backdrop` slot、靜態 `Backdrop`（`priority`）之後；靜態圖是 LCP，也是減少動態、Save-Data、不支援 WebGL 時的完整版本
 - hero 與要讓場景透出的區塊包在同一個 `data-scene-track` 元素裡，捲動進度以它計算。hero 之後的章節用 `SceneChapter`（每章佔滿一個 viewport、文字在玻璃面板上、場景 ready 後背景透明並疊在 hero 之上），不要自己寫透明背景
+- 窄螢幕的取景由 runtime 量 `PageHero` 的 `data-hero-visual` 決定（中心與鏡頭距離 `fitDistance()`），不要在場景裡寫 header、頁內導覽列的高度；改到 hero 的版面後跑 `scene-capture.mjs`，它也檢查跨斷點 resize 後的 tier（ADR 0003「窄螢幕的取景」）
 - 產品頁用 `Scene3D` 的 `family`（`sceneFamily()`，`src/lib/scene/families.ts`），只畫該家族的模組，每一章點亮一組方塊，組數取 track 裡 `SceneChapter` 的數量（M3-05）
 - 場景上的文字放在玻璃面板（`--glass-bg`）或 scrim 那一側，不直接壓在方塊上
 - 新場景寫成 `src/lib/scene/<名稱>.ts`，default export 一個 `SceneFactory`，加進 `Scene3D` 的 `LOADERS`；數量依 `tier.density` 減少，讓行動版降級生效（降級的數值只寫在 `runtime.ts` 的 `TIERS`）

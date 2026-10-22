@@ -1,7 +1,8 @@
 ---
 // Breadcrumb trail from home to a nodes.csv node, derived from the node's parents (group nodes are
-// skipped; docs/ia/navigation.md「SEO」). The last item is the current page, not a link. Goes in
-// PageHero's `breadcrumb` slot. The BreadcrumbList JSON-LD comes from the same trail (M4-03).
+// skipped; docs/ia/navigation.md「SEO」). The last item is the current page, not a link; below
+// --bp-lg-up it is only read out, since the page's h1 follows. Goes in PageHero's `breadcrumb`
+// slot. The BreadcrumbList JSON-LD comes from the same trail (M4-03).
 import { breadcrumb } from '../../lib/ia/navigation';
 
 interface Props {
@@ -25,6 +26,8 @@ const trail = breadcrumb(node);
 </nav>
 
 <style>
+  @import '../../styles/media.css';
+
   ol {
     display: flex;
     flex-wrap: wrap;
@@ -36,6 +39,26 @@ const trail = breadcrumb(node);
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-snug);
+  }
+
+  /* Narrow screens: one row, so the row height PageHero plans for (--hero-crumb-space) holds and
+     the hero image and 3D scene line up with the layout. The current page is the h1 right below,
+     so it is hidden visually but still read out; a trail too long for the row scrolls sideways. */
+  @media (--bp-lg-down) {
+    ol {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      white-space: nowrap;
+    }
+
+    li:last-child {
+      position: absolute;
+      inline-size: var(--border-width);
+      block-size: var(--border-width);
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
   }
 
   li {

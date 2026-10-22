@@ -529,6 +529,12 @@ const description =
         title="影像"
         description="抽象 3D 渲染，只用品牌色，不放文字、人物或真實產品。素材與提示詞見 docs/design/image-prompts.md。"
       />
+      <h3>PageHero 的窄螢幕版面</h3>
+      <p class="note">
+        寬度小於 64rem 時，hero 由上而下是麵包屑（只有一列，目前頁只給螢幕閱讀器讀）、視覺區、文字。視覺區高
+        <code>--space-section</code> ＋ <code>--hero-narrow-offset</code>，靜態圖的主體和 3D 方塊都放在它的中央；3D 依
+        <code>data-hero-visual</code> 量出來的位置取景。有麵包屑的範例見<Link href="/products/digirunner">產品頁</Link>，沒有的見<Link href="/">首頁</Link>。
+      </p>
       <h3>主視覺：兩個 3D 方向的靜態版本</h3>
       <div class="directions">
         {

@@ -222,7 +222,15 @@
   --backdrop-soft-opacity: 0.55;
   --hero-image-share: 58%;
   --hero-copy-share: 0.45;
-  --hero-narrow-offset: 62vw;
+  /* Narrow heroes (--bp-lg-down): the 4:5 mobile image sits on top and the copy starts below its
+     subject. The visual area above the copy is --space-section + --hero-narrow-offset tall; the
+     offset is capped so tablets keep the call to action on the first screen, and the image width
+     is capped in the same ratio (22rem / 0.62) so its subject still fits the area. Below a
+     breadcrumb row the image moves down by --hero-image-drop (PageHero sets it). */
+  --hero-narrow-offset: min(62vw, 22rem);
+  --hero-narrow-image-max: 35.5rem;
+  --hero-crumb-space: calc(var(--space-6) + var(--touch-target));
+  --hero-image-drop: 0;
 
   /* Layout */
   --content-max-width: 72rem;

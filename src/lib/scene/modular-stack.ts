@@ -21,10 +21,8 @@ const MODULE_SPACING = 9;
 const LIFT = 2.2;
 const EXPLODE = 7;
 const CAMERA_DISTANCE = 30;
-// Narrow heroes have less room above the copy: frame the tower from further back, and lower the
-// camera target (world units) so the tower sits clear of the eyebrow under the sticky header
-const NARROW_HERO_PULLBACK = 24;
-const NARROW_HERO_RAISE = 2;
+// Narrow heroes frame the tower in PageHero's visual area: the runtime centers it there and
+// fitDistance sets how far back the camera is (ADR 0003)
 // Narrow chapters: the panel sits at the bottom, so raise the camera target (world units) to bring
 // the module down from under the scroll progress bar into the space above the panel
 const NARROW_CHAPTER_DROP = 3;
@@ -32,10 +30,9 @@ const ORBIT_SWING = 0.35;
 // Single-module framing (family): closer, since the module is a quarter of the tower; the lit
 // group moves this far out from the center (world units), the family motion plays at this strength
 const SINGLE_DISTANCE = 16;
-// Narrow screens: from further back, and with the module held above the panel at the bottom of each
-// chapter (the target sits lower, so the module shows higher)
-const SINGLE_NARROW_PULLBACK = 8;
-const SINGLE_NARROW_CHAPTER_PULLBACK = 6;
+// Narrow chapters: from further back, and with the module held above the panel at the bottom of
+// each chapter (the target sits lower, so the module shows higher)
+const SINGLE_NARROW_CHAPTER_PULLBACK = 14;
 const SINGLE_NARROW_LIFT = 2;
 const SINGLE_PUSH = 0.8;
 const SINGLE_EFFECT = 0.6;
@@ -83,13 +80,16 @@ const FRAGMENT = /* glsl */ `
   }
 `;
 
-const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, isNarrow, readNumber, chapters, family }) => {
+const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, isNarrow, readNumber, chapters, family, fitDistance }) => {
   const edge = tier.density < 0.5 ? EDGE.reduced : EDGE.full;
   const perModule = edge ** 3;
   const single = family !== undefined;
   const modules = single ? 1 : MODULES;
   const count = perModule * modules;
   const step = BLOCK + GAP;
+  // Height on screen of the hero's tower (or single module), in world units: its height seen from
+  // the camera's elevation plus the depth of its top face
+  const heroSize = modules * edge * step * Math.cos(view.elevation) + edge * step * Math.SQRT2 * Math.sin(view.elevation);
 
   // Row of modules runs along the camera's lateral axis, so all four stay in view
   const lateral = new Vector3(Math.cos(view.azimuth), 0, -Math.sin(view.azimuth));
@@ -254,12 +254,15 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
       const followed = single ? 0 : (Math.max(0, chapter) - (MODULES - 1) / 2) * MODULE_SPACING;
       target.copy(towerCenter).addScaledVector(lateral, followed * split);
       if (isNarrow()) {
-        target.y += single ? -SINGLE_NARROW_LIFT * split - NARROW_HERO_RAISE * (1 - split) : NARROW_CHAPTER_DROP * split - NARROW_HERO_RAISE * (1 - split);
+        target.y += (single ? -SINGLE_NARROW_LIFT : NARROW_CHAPTER_DROP) * split;
       }
       const swing = tier.path === 'orbit' ? Math.sin(progress * Math.PI * 1.5) * ORBIT_SWING + pointer.x * 0.08 : 0;
-      const distance = single
-        ? SINGLE_DISTANCE + (isNarrow() ? SINGLE_NARROW_PULLBACK + SINGLE_NARROW_CHAPTER_PULLBACK * split : 0)
-        : CAMERA_DISTANCE + (isNarrow() ? NARROW_HERO_PULLBACK * (1 - split) : 0) - split * (tier.path === 'orbit' ? 8 : 4);
+      const chapterDistance = single
+        ? SINGLE_DISTANCE + (isNarrow() ? SINGLE_NARROW_CHAPTER_PULLBACK * split : 0)
+        : CAMERA_DISTANCE - split * (tier.path === 'orbit' ? 8 : 4);
+      // Narrow heroes start at the distance that fits the visual area, then ease to the chapters'
+      const fit = isNarrow() ? fitDistance(heroSize) : undefined;
+      const distance = fit === undefined ? chapterDistance : fit + (chapterDistance - fit) * split;
       placeCamera(camera, {
         target,
         distance,

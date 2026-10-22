@@ -8,7 +8,9 @@
 // track at a steady pace (needs ffmpeg on PATH, used by puppeteer's screencast).
 // Run after `npm run build`:
 //   node scripts/design/scene-capture.mjs [--video] <out-dir> [path ...]
-// Paths default to PATHS. Prints one JSON line per page and viewport.
+// Then for each page, a resize across the low-power breakpoint while the scene plays (mobile →
+// desktop and back): the scene must rebuild with the new tier (data-scene-tier) and one canvas.
+// Paths default to PATHS. Prints one JSON line per page and viewport, and per resize.
 
 import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -95,6 +97,34 @@ async function capture(browser, base, path, viewport, outDir, reducedMotion) {
   return { page: path, viewport: viewport.name, reducedMotion, ready, switchedOff, sceneRequests: sceneRequests.length, ...state, errors };
 }
 
+// Scene3D waits TIER_DEBOUNCE (200 ms) before rebuilding; then the first frames need SwiftShader time
+const REBUILD_WAIT = 2500;
+
+/** Loads at `from`, resizes to `to` while the scene plays, and screenshots the hero. @param {import('puppeteer-core').Browser} browser */
+async function resized(browser, base, path, from, to, outDir) {
+  const page = await browser.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.setViewport({ width: from.width, height: from.height, isMobile: from.isMobile, hasTouch: from.isMobile });
+  await page.goto(`${base}${path}`, { waitUntil: 'load' });
+  const ready = await page
+    .waitForSelector('[data-scene="ready"]', { timeout: SCENE_TIMEOUT })
+    .then(() => true)
+    .catch(() => false);
+  const before = await page.evaluate(() => document.querySelector('[data-scene-tier]')?.getAttribute('data-scene-tier'));
+  await page.setViewport({ width: to.width, height: to.height, isMobile: to.isMobile, hasTouch: to.isMobile });
+  await sleep(REBUILD_WAIT);
+  await page.screenshot({ path: `${outDir}/${slug(path)}-${from.name}-to-${to.name}.png` });
+  const state = await page.evaluate(() => ({
+    tier: document.querySelector('[data-scene-tier]')?.getAttribute('data-scene-tier'),
+    canvas: document.querySelectorAll('canvas').length,
+    ready: document.querySelector('[data-scene-track]')?.getAttribute('data-scene') === 'ready',
+  }));
+  await page.close();
+  const expected = to.isMobile ? 'mobile' : 'desktop';
+  return { page: path, resize: `${from.name} → ${to.name}`, loaded: ready, before, ...state, expected, errors };
+}
+
 // Seconds of hold on the hero, then of scrolling through the track
 const VIDEO_HOLD = 2;
 const VIDEO_SCROLL = 14;
@@ -165,6 +195,12 @@ async function main() {
           const bad = reducedMotion ? result.canvas > 0 || result.sceneRequests > 0 : !result.ready || !result.switchedOff;
           if (bad || result.errors.length || result.scrollWidth > result.width) failed = true;
         }
+      }
+      if (video) continue;
+      for (const [from, to] of [VIEWPORTS.toReversed(), VIEWPORTS]) {
+        const result = await resized(browser, base, path, from, to, outDir);
+        console.log(JSON.stringify(result));
+        if (!result.loaded || result.tier !== result.expected || result.canvas !== 1 || !result.ready || result.errors.length) failed = true;
       }
     }
   } finally {

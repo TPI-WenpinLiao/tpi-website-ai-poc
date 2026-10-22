@@ -127,7 +127,12 @@ const fallback = await getImage({ src: image, width: Math.min(1440, image.width)
       block-size: auto;
     }
 
+    /* Capped on tablets so the subject fits PageHero's visual area (--hero-narrow-image-max), and
+       moved below the breadcrumb row when there is one (--hero-image-drop) */
     .fade-hero.has-mobile picture {
+      max-inline-size: var(--hero-narrow-image-max);
+      margin-inline: auto;
+      translate: 0 var(--hero-image-drop);
       mask-image: linear-gradient(to bottom, black 55%, transparent);
     }
 
