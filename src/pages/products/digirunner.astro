@@ -70,12 +70,16 @@ const downloads = data.downloads ?? [];
 const COVERS = [coverData, coverIntegration, coverPlatform];
 const posts = about('blog', 'digiRunner', 3).map((p, i) => ({ ...p, cover: COVERS[i % COVERS.length] }));
 const faq = data.faq ?? [];
+const hasDownloads = whitepapers.length + downloads.length > 0;
+// Related products and downloads share a row on wide screens when both are there; alone, related
+// products take the three-column card grid
+const split = related.length > 0 && hasDownloads;
 
 const anchors = [
   { href: '#features', label: '功能', show: features.length > 0 },
   { href: '#use-cases', label: '應用情境', show: useCases.length > 0 },
   { href: '#related', label: '相關產品', show: related.length > 0 },
-  { href: '#downloads', label: '下載', show: whitepapers.length + downloads.length > 0 },
+  { href: '#downloads', label: '下載', show: hasDownloads },
   { href: '#faq', label: '常見問題', show: faq.length > 0 },
   { href: '#posts', label: '相關文章', show: posts.length > 0 },
 ].filter((a) => a.show);
@@ -159,13 +163,13 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
     }
 
     {
-      (related.length > 0 || whitepapers.length + downloads.length > 0) && (
+      (related.length > 0 || hasDownloads) && (
         <Surface tone="dark">
-          <div class="pair">
+          <div class:list={['pair', { split }]}>
             {related.length > 0 && (
               <div id="related" class="target">
                 <SectionHeading eyebrow="Related" title="相關產品" />
-                <ul class="cards">
+                <ul class:list={['cards', { 'cols-3': !split }]}>
                   {related.map((n) => (
                     <li>
                       <Card title={n.title} href={n.path} eyebrow={self.title} size="sm" />
@@ -174,7 +178,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
                 </ul>
               </div>
             )}
-            {whitepapers.length + downloads.length > 0 && (
+            {hasDownloads && (
               <div id="downloads" class="target">
                 <SectionHeading eyebrow="Downloads" title="下載" />
                 <ul class="cards">
@@ -275,7 +279,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
     block-size: 100%;
   }
 
-  /* Related products and downloads side by side on wide screens */
+  /* Related products and downloads side by side on wide screens, when both are there */
   .pair {
     display: grid;
     gap: var(--space-section);
@@ -323,7 +327,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .pair {
+    .pair.split {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       align-items: start;
     }
