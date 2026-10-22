@@ -14,7 +14,7 @@ three.js 是本站第一個大型 client 依賴。ADR 0001 定了「預設零 cl
 |---|---|---|
 | `Scene3D.astro_astro_type_script_*.js` | 判斷條件、延後載入 | 1.5 KB |
 | `runtime.*.js` | `src/lib/scene/runtime.ts`＋three.js | 130 KB（未壓縮 528 KB） |
-| `modular-stack.*.js` | 方向 B 的場景 | 1.6 KB |
+| `modular-stack.*.js` | 方向 B 的場景 | 1.9 KB |
 
 ## 決策
 

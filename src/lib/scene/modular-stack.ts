@@ -148,15 +148,17 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
       moved.copy(local).applyAxisAngle(Y_AXIS, angle);
       effectRotation.setFromAxisAngle(Y_AXIS, angle);
     },
-    // Digital transformation: a pulse runs out from the center and the blocks spin
+    // Digital transformation: a pulse runs out from the center and the blocks rock on a tilted axis.
+    // Angles here stay bounded (periodic in t): `a` changes while scrolling between chapters, and
+    // a times an ever-growing angle would spin the blocks faster the longer the page is open
     (c, a, t) => {
       const r = c.length();
       const wave = 0.5 + 0.5 * Math.sin(t * 1.8 - r * 1.4);
       moved.copy(local);
       if (r > 0) moved.addScaledVector(c, (a * wave * 1.2 * step) / r);
-      effectRotation.setFromAxisAngle(SPIN_AXIS, a * t * 0.7);
+      effectRotation.setFromAxisAngle(SPIN_AXIS, a * 0.9 * Math.sin(t * 1.1 + r * 0.8));
     },
-    // Security: the outer blocks orbit the core as a shield; the core beats
+    // Security: the outer blocks orbit the core as a shield and sway as they go; the core beats
     (c, a, t) => {
       if (c.lengthSq() === 0) {
         moved.copy(local);
@@ -166,7 +168,7 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
       }
       const theta = Math.atan2(c.z, c.x) + c.y * 0.6 + t * 0.6;
       moved.set(Math.cos(theta) * shell, c.y * step * 0.9, Math.sin(theta) * shell).sub(local).multiplyScalar(a).add(local);
-      effectRotation.setFromAxisAngle(Y_AXIS, -theta * a);
+      effectRotation.setFromAxisAngle(Y_AXIS, a * 0.6 * Math.sin(theta));
     },
     // ESG and energy: columns rise and fall like a level meter
     (c, a, t) => {
