@@ -4,7 +4,7 @@
 
 ## 目前 milestone
 
-**M3 設計系統**；M1 剩 M1-06 收尾（#7）
+**M3 設計系統**、**M4 開發骨架**；M1 剩 M1-06 收尾（#7）
 
 ## 進度
 
@@ -14,7 +14,7 @@
 | M1 盤點與研究 | 進行中（剩 M1-06 收尾） |
 | M2 資訊架構 | 完成 |
 | M3 設計系統 | 進行中 |
-| M4 開發骨架 | 未開始 |
+| M4 開發骨架 | 進行中 |
 | M5 內容遷移 | 未開始 |
 | M6 功能 | 未開始 |
 | M7 多語系 | 未開始 |
@@ -64,12 +64,17 @@
 - `issues.yml` 與 GitHub issue 對齊完成（#88）：補 M3-07～09、M3-04/05 的依賴改為 M3-02、M3-07；`node scripts/bootstrap/diff.mjs` 比對兩邊，目前差異 0、重跑 bootstrap 不會新建 issue
 - `needs-design` 階段一改走 `/issue-ship` 完成（#84）：`CLAUDE.md`、`issue-start`、`checkpoint`、`workflow.md` 都連到 `issue-ship` 的「`needs-design` 的兩個階段」，`wip:` 合併只寫在 `issue-ship` 第 4 步。#16 留在 `main` 的 `wip:` commit（`1b3a5fe`、`a2508f8`）不改寫
 
+### M4 開發骨架
+
+- M4-01 content collections 與 Zod schema 完成（#20）：`src/content.config.ts` 定義 9 個內容類型與 `tag`，每個 collection 一筆 zh-TW 範例；不合法的 frontmatter（含不存在的 `ref`）讓 `astro check` 與 build 失敗；tag 清單由 `node scripts/content/tags.mjs` 產生。寫法見 `docs/ia/content-model.md`「Astro 實作」
+
 ## 下一步
 
 - M3-04 首頁高保真（#17）、M3-05 產品頁高保真（#18）可以開始，兩張都以 3D 方向 B Modular Stack 製作
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
-- 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
+- M4-02 i18n 路由（#21）、M5-04 部落格與新聞批次轉換 script（#29）可以開始
+- 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
 - M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
@@ -97,4 +102,5 @@
 - M3-07 的原型頁（`src/pages/prototypes/modular-stack.astro`）在 M3-04 把場景做成正式首頁後刪除；`scene-capture.mjs`、`lighthouse-3d.mjs` 的預設路徑與 `showcase.mjs` 的 `/prototypes` 一起改
 - M4-03（#22）加 sitemap 時排除 `/design-system`、`/wireframes`、`/prototypes`，做法見 `design-system` skill「展示頁」
 - `npm run check` 的 LHCI 用 `staticDistDir` 自動探索，只測前 5 個 URL（M3-07 時 build 出 16 頁只測 5 頁），其餘頁面沒有 Lighthouse 關卡，由 #87 處理
+- blog 封面圖放在 `tpi.dev`，雲端 session 的網路政策擋下（proxy 403）。M4-01 的 blog 範例暫用 `src/assets/design/cover-platform.webp`；M5-04 下載封面前要把 `tpi.dev` 加進環境的 Allowed domains，或改在本機執行
 - `docs/design/nav-fit.md` 的量測用容器字型與 wireframe 的間距（`--wf-space-3` 仍是 12px），M3-02 後 `node scripts/wireframe/nav-fit.mjs --check` 仍通過；正式 header（M4-04）的選單間距與 Inter 字型要另外實測

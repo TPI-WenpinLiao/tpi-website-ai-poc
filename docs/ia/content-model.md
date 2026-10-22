@@ -3,7 +3,7 @@
 新站每種內容類型的欄位、型別、必填與對應的 JSON-LD。M4-01 依本檔寫 Astro content collections 的 Zod schema，M5 依本檔寫遷移 script。
 
 - 輸入：[`sitemap.md`](./sitemap.md) 的節點與模板（[`nodes.csv`](./nodes.csv)、[`templates.csv`](./templates.csv)）、[`blog-categories.csv`](./blog-categories.csv)、[`content-migration`](../../.claude/skills/content-migration/SKILL.md) 的 frontmatter 規則
-- 範圍：本檔只定欄位。URL 形式與語系前綴見 [ADR 0002](../decisions/0002-url-and-locale.md)（M2-03），目錄結構與 Zod 寫法由 M4-01 決定，選單由 M2-02 決定
+- 範圍：本檔只定欄位。URL 形式與語系前綴見 [ADR 0002](../decisions/0002-url-and-locale.md)（M2-03），目錄結構與 schema 寫法見 [Astro 實作](#astro-實作m4-01)（M4-01），選單由 M2-02 決定
 - 範例值都取自現站 2026-10-20 的實際資料，每個範例附來源。現站沒有內容的類型，範例只列欄位，值寫「待人工提供」
 
 ## 原則
@@ -11,7 +11,7 @@
 1. 一個內容類型對應一個 collection（或一個資料檔），一個模板可以服務多個內容類型（`article` 模板服務 `blog` 與 `news`）
 2. 階層只存在 `nodes.csv`。單頁內容用 `node` 指回節點，不在 frontmatter 重複 parent、排序或所屬家族。麵包屑、子頁卡片、所屬家族都由 `node` 從 `nodes.csv` 推出
 3. 能從檔案路徑推出的值（語系、slug）不寫進 frontmatter
-4. 重複出現的結構（功能、應用情境、據點、經歷）放 frontmatter 陣列，敘述文字放 Markdown 內文。卡片與 JSON-LD 需要結構化資料；是否導入 MDX 由 M4-01 決定
+4. 重複出現的結構（功能、應用情境、據點、經歷）放 frontmatter 陣列，敘述文字放 Markdown 內文。卡片與 JSON-LD 需要結構化資料。內文用 Markdown，不導入 MDX（M4-01）
 5. 分類、tag、新聞類型都用受控清單（enum 或資料檔），不開放自由輸入
 6. JSON-LD 只用頁面上真的有的資料。沒有真實來源的價格、評分、地址不輸出
 
@@ -215,7 +215,7 @@ tags: [ai-application]
 publishedAt: 2026-09-11
 author: TPIsoftware
 authorType: Organization
-coverImage: ./cover.png   # 原圖 https://tpi.dev/tpi-dev/private/article/IMG/1f1aaad1-2937-612a-81f6-0b7fa23ee3a6.png
+coverImage: ../../../assets/blog/customer-complaint-ai-tool-selection-guide/cover.png   # 原圖 https://tpi.dev/tpi-dev/private/article/IMG/1f1aaad1-2937-612a-81f6-0b7fa23ee3a6.png
 sourceUrl: https://www.tpisoftware.com/blog/ai/customer-complaint-ai-tool-selection-guide
 migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-09-11
@@ -247,7 +247,7 @@ tag 用英文 slug，三語共用。初始清單由現站子分類合併同義�
 | `sustainable-development` | — | — | `green-transformation/sustainable-development`（29） |
 | `neo4j` | `Featured/Neo4j`（3，另設 `featured: true`） | — | — |
 
-tag 的顯示名稱（三語）放在 tag 清單資料檔，由 M4-01 建立。
+tag 清單與三語顯示名稱放在 `src/content/tags.yaml`，由 `node scripts/content/tags.mjs` 依上表產生，名稱取現站分類 API 的子分類名稱，不手改。上表某語系是 `—` 的 tag 沒有該語系的名稱。
 
 JSON-LD：`BlogPosting`
 
@@ -296,7 +296,7 @@ description: 昕力資訊（7781）發表七款 AI 專用機並同步於 AISO �
 translationKey: "585"   # en 版 586、vi 版 587 填同一個值
 newsType: press
 publishedAt: 2026-10-15
-coverImage: ./cover.jpg   # 原圖 /images/news/585/news-2026-10-15-1792036052577.jpg
+coverImage: ../../../assets/news/585/cover.jpg   # 原圖 /images/news/585/news-2026-10-15-1792036052577.jpg
 sourceUrl: https://www.tpisoftware.com/media-center/585
 migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-10-16
@@ -415,7 +415,7 @@ JSON-LD：`WebPage`，`mainEntity` 為 `DigitalDocument`：`name` ← `title`、
 
 ## organization（公司資料檔）
 
-全站一份資料檔（三語各一份或一份含三語欄位，由 M4-01 決定），供首頁、`about`、`contact`、footer 與所有 JSON-LD 的 `publisher` 使用。
+每個語系一份資料檔（`src/content/organization/<locale>.yaml`），供首頁、`about`、`contact`、footer 與所有 JSON-LD 的 `publisher` 使用。
 
 | 欄位 | 型別 | 必填 | 說明 |
 |---|---|---|---|
@@ -453,11 +453,36 @@ JSON-LD：
 
 | 模板 | 理由 |
 |---|---|
-| `home` | 首頁由其他 collection 組成（精選產品、案例、文章、新聞）。標題與描述等少量文案放在 i18n 字串檔，由 M4-01 決定位置 |
+| `home` | 首頁由其他 collection 組成（精選產品、案例、文章、新聞）。標題與描述等少量文案放在 i18n 字串檔，位置由 M4-02（i18n 路由）決定 |
 | `listing` | 列表頁（blog 首頁與分類、媒體中心、活動、成功案例列表）的內容是其他 collection 的項目。標題與描述依節點寫在 i18n 字串檔；blog 分類頁的標題取 `nodes.csv` 的 `title` |
 | `utility` | 搜尋、訂閱流程、感謝頁、下載中繼頁、404 是功能頁，文案放 i18n 字串檔，行為由 M6 決定。下載中繼頁（`/download/{product}`）的產品與檔案取自 `offering.downloads[].file` |
 
 活動（`events`）列表的項目來源（現站是否有活動資料、要不要建 `event` collection）在 M6 決定。
+
+## Astro 實作（M4-01）
+
+schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的欄位時，同一個 PR 也要改 schema。
+
+| 項目 | 寫法 |
+|---|---|
+| collection 名稱 | 同內容類型：`offering`、`hub`、`case-study`、`blog`、`news`、`page`、`person`、`whitepaper`、`organization`，tag 清單是 `tag` |
+| 內容檔位置 | `src/content/<collection>/<locale>/<slug>.md`，例如 `src/content/news/zh-TW/585.md`。entry id 是 `<locale>/<slug>` |
+| 有 `node` 的類型 | 檔名用節點 id（`src/content/offering/zh-TW/digirunner.md`），URL 仍取 `nodes.csv` 的 `path` |
+| `ref(collection)` | 寫 entry id，含語系：`offerings: [zh-TW/digirunner]`；tag 寫 tag id：`tags: [ai-application]` |
+| `node`、`offeringNode`、blog `category` | 合法值由 `nodes.csv` 推出（[`src/lib/ia/nodes.ts`](../../src/lib/ia/nodes.ts)），新增節點不用改 schema |
+| 圖片 | 圖檔放 `src/assets/<content-type>/<slug>/`，frontmatter 寫相對於內容檔的路徑 |
+| `organization` | `src/content/organization/<locale>.yaml`，entry id 是語系。只有本表欄位，沒有共用欄位與遷移追蹤欄位 |
+| 範例內容 | 每個 collection 各一筆 zh-TW，取自本檔的範例。含「待人工提供」等暫代值的設 `draft: true` |
+
+下列情況 `astro check` 與 `astro build` 會失敗：
+
+- 缺必填欄位、型別或 enum 不符、日期無法解析
+- 出現本檔沒有的欄位（所有物件都不接受未定義的欄位）
+- 語系目錄不是 `zh-TW`、`en`、`vi`，或 slug 不是小寫英數與 `-`
+- `node`、`offeringNode`、`category` 不在 `nodes.csv` 對應的節點裡，tag 不在 `tags.yaml`
+- `ref` 指到不存在的內容檔。Astro 的 `reference()` 遇到不存在的 id 只記錄錯誤、build 仍然 exit 0（Astro 7.4.1 實測），所以 schema 先檢查檔案存在
+- 本檔寫的條件必填：`sourceUrl` 非空時的 `migratedAt`、產業 hub 的 `industry`（必須等於節點 id 去掉 `industry-`）、`client.disclosed: false` 時的 `clientDescription`、法務頁的 `effectiveDate`
+- `organization.offices` 不是剛好一個 `headquarters: true`，或據點 id 重複
 
 ## 待確認
 
@@ -467,6 +492,6 @@ JSON-LD：
 | `商業週刊`、`科技報橘` 為作者的 6 篇是否有轉載授權 | 內容負責人 | M5 是否遷移 |
 | blog 三語版本的對應：API 沒有跨語系欄位 | 內容負責人 | M7 的 `translationKey` |
 | 白皮書檔案的實際位置（現站在表單送出後提供） | 後端負責人 | `whitepaper.file` |
-| tag 清單（上表）的合併方式與顯示名稱 | 專案負責人 | M4-01 tag 資料檔 |
+| tag 清單（上表）的合併方式與顯示名稱。`src/content/tags.yaml` 目前的名稱取自現站，例如 `ai-solutions` 的 zh-TW 名稱是「人工智慧」 | 專案負責人 | 改上表後重跑 `node scripts/content/tags.mjs` |
 | 現站案例分類對應到 `case-study.industry` 的方式 | 內容負責人 | 建 `case-study` 時 |
 | `offering.kind` 的歸類：`inventory.csv` 的 `page_type` 是依 URL 推定，例如 `/solutions/smartclaim` 與 `/solutions/insurering` 實際是否為產品；`systalk-chat` 的現站頁面同時判為 product 與 service（各 3 列）、`greenswift` 有 1 列 campaign、`orient-ai` 與 `aiso` 判為 service 但新聞稱「自研 OrientAI 系列軟體」、`uiux` 判為 solution 但內容是設計服務 | 內容負責人 | M5 |
