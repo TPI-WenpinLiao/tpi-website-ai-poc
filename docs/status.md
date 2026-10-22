@@ -66,11 +66,6 @@
 - `issues.yml` 與 GitHub issue 對齊完成（#88）：補 M3-07～09、M3-04/05 的依賴改為 M3-02、M3-07；`node scripts/bootstrap/diff.mjs` 比對兩邊，目前差異 0、重跑 bootstrap 不會新建 issue
 - `needs-design` 階段一改走 `/issue-ship` 完成（#84）：`CLAUDE.md`、`issue-start`、`checkpoint`、`workflow.md` 都連到 `issue-ship` 的「`needs-design` 的兩個階段」，`wip:` 合併只寫在 `issue-ship` 第 4 步。#16 留在 `main` 的 `wip:` commit（`1b3a5fe`、`a2508f8`）不改寫
 
-### M4 開發骨架
-
-- M4-01 Content collections 與 Zod schema（#20，PR #91），待合併
-- M4-02 i18n 路由（#21，PR #90），待合併
-
 ## 下一步
 
 - 審核 M3-04 首頁高保真（#17）的 draft PR，通過後加上 `design-approved`
