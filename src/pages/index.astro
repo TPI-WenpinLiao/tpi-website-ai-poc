@@ -3,8 +3,8 @@
 // follows the approved home wireframe (/wireframes/home).
 // The hero and the product-family chapters form the scene track: the static hero image is the LCP
 // and the complete fallback, and the 3D scene (Scene3D, ADR 0003) plays behind the chapters as
-// they scroll. Names, paths and order come from docs/ia (src/lib/ia.ts); copy comes from the
-// current site through src/data/home.ts.
+// they scroll. Names, paths and order come from docs/ia (src/lib/ia/navigation.ts); copy comes
+// from the current site through src/data/home.ts.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/ui/PageHero.astro';
 import Backdrop from '../components/ui/Backdrop.astro';
@@ -20,7 +20,7 @@ import LayerStack from '../components/ui/LayerStack.astro';
 import Reveal from '../components/ui/Reveal.astro';
 import SiteHeader from '../components/ui/SiteHeader.astro';
 import SiteFooter from '../components/ui/SiteFooter.astro';
-import { children, header, node, type NavItem } from '../lib/ia';
+import { children, header, node, type NavItem } from '../lib/ia/navigation';
 import { latest } from '../lib/latest-posts';
 import { cases, contactCta, familyLines, hero, industryLines, orientAi } from '../data/home';
 import image from '../assets/design/hero-modular-stack.webp';

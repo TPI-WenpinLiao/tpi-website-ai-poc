@@ -1,13 +1,13 @@
 ---
 // Site header (M3-04, #17): brand, the first-level menu, search, locale and the 聯絡我們 button,
-// all from docs/ia/navigation.csv (src/lib/ia.ts). Sticky on a dark glass bar, so it reads the
-// same over the hero, the 3D scene and the light sections below.
+// all from docs/ia/navigation.csv (src/lib/ia/navigation.ts). Sticky on a dark glass bar, so it
+// reads the same over the hero, the 3D scene and the light sections below.
 // Menus are native <details> disclosures: they open and close without client JS. Closing on an
 // outside click or Esc, one menu at a time and the keyboard model are M4-04's; so are the search box
 // (M6) and the locale switch (M4-02), which link to their targets for now.
 // Below 64rem the menu collapses behind one 選單 disclosure that lists every group.
 // `open` draws one menu open (a first-level label, or 'mobile'), for the /design-system page only.
-import { header, node, type NavItem } from '../../lib/ia';
+import { header, node, type NavItem } from '../../lib/ia/navigation';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
 import logo from '../../assets/brand/logo-symbol-white.png';

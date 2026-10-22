@@ -1,19 +1,8 @@
-// IA data read from docs/ia at build time, so pages and menus never drift from nodes.csv and
-// navigation.csv (the single source of the navigation, see docs/ia/navigation.md). Links go to the
-// node's path; the M3-01 wireframes (src/lib/wireframe/ia.ts) map them to wireframe pages instead.
-import { parseCsv } from '../../scripts/inventory/csv.mjs';
-import navCsv from '../../docs/ia/navigation.csv?raw';
-import nodesCsv from '../../docs/ia/nodes.csv?raw';
-
-export interface IaNode {
-  id: string;
-  parent: string;
-  title: string;
-  template: string;
-  kind: string;
-  path: string;
-  note: string;
-}
+// Navigation read from docs/ia/navigation.csv (the single source of the navigation, see
+// docs/ia/navigation.md), with nodes from nodes.ts. Links go to the node's path; the M3-01
+// wireframes (src/lib/wireframe/ia.ts) map them to wireframe pages instead.
+import navCsv from '../../../docs/ia/navigation.csv?raw';
+import { nodes, readRows, type IaNode } from './nodes';
 
 export interface NavItem {
   key: string;
@@ -26,20 +15,6 @@ export interface NavItem {
 
 export type NavHref = (n: IaNode) => string | undefined;
 
-// Parse a CSV and keep only `columns`, failing the build when one is missing
-export function readRows<K extends string>(text: string, file: string, columns: readonly K[]): Record<K, string>[] {
-  return parseCsv(text.replace(/^﻿/, '')).map((row, i) =>
-    Object.fromEntries(
-      columns.map((c) => {
-        const v = row[c];
-        if (typeof v !== 'string') throw new Error(`${file} row ${i + 2}: missing column ${c}`);
-        return [c, v];
-      }),
-    ) as Record<K, string>,
-  );
-}
-
-export const nodes: IaNode[] = readRows(nodesCsv, 'nodes.csv', ['id', 'parent', 'title', 'template', 'kind', 'path', 'note']);
 const byId = new Map(nodes.map((n) => [n.id, n]));
 const navRows = readRows(navCsv, 'navigation.csv', ['area', 'parent', 'node', 'label', 'note']);
 

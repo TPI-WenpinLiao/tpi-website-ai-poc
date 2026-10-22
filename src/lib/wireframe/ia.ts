@@ -1,10 +1,12 @@
-// IA data for the M3-01 wireframes: the shared IA (src/lib/ia.ts) with links pointing to the
-// wireframe of each target's template, so the prototype is clickable and never links to a route
-// that does not exist yet. External links have no wireframe and no href.
+// IA data for the M3-01 wireframes: the shared navigation (src/lib/ia/navigation.ts) with links
+// pointing to the wireframe of each target's template, so the prototype is clickable and never
+// links to a route that does not exist yet. External links have no wireframe and no href.
 import templatesCsv from '../../../docs/ia/templates.csv?raw';
-import { navTree, nodes, readRows, type IaNode, type NavHref } from '../ia';
+import { nodes, readRows, type IaNode } from '../ia/nodes';
+import { navTree, type NavHref } from '../ia/navigation';
 
-export { breadcrumb, children, node, nodes, type IaNode, type NavItem } from '../ia';
+export { breadcrumb, children, node, type NavItem } from '../ia/navigation';
+export { nodes, type IaNode } from '../ia/nodes';
 
 export interface Template {
   id: string;

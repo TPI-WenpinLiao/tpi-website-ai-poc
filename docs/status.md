@@ -103,7 +103,7 @@
 - M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除，`tokens.css` 的 `--wf-*` 也一起刪。M3-02 起斷點寫在 `src/styles/media.css` 的 `@custom-media`，wireframe 的 media query 已改用
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
 - M3-04 的 `SiteHeader`、`SiteFooter` 目前由首頁自己放；M4-04 移進共用 layout，補上選單互動（點外面關閉、Esc、一次只開一個）並量測 en、vi 的正式 header 寬度。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
-- 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；M5 遷移文章後改讀 content collections 並刪除這個檔案。`src/lib/ia.ts` 是正式頁面用的 IA 讀取，刪 wireframe 時保留
+- 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；M5 遷移文章後改讀 content collections 並刪除這個檔案。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - M4-03（#22）加 sitemap 時排除 `/design-system`、`/wireframes`、`/prototypes`，做法見 `design-system` skill「展示頁」
 - `npm run check` 的 LHCI 用 `staticDistDir` 自動探索，只測前 5 個 URL（M3-07 時 build 出 16 頁只測 5 頁），其餘頁面沒有 Lighthouse 關卡，由 #87 處理
 - `docs/design/nav-fit.md` 的量測用容器字型與 wireframe 的間距（`--wf-space-3` 仍是 12px），M3-02 後 `node scripts/wireframe/nav-fit.mjs --check` 仍通過；正式 header（M4-04）的選單間距與 Inter 字型要另外實測

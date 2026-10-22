@@ -99,7 +99,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
 | `Scene3D` | three.js 3D 捲動場景 | 見下方「3D 場景」 |
-| `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia.ts`）；選單是原生 `<details>`，不需要 client JS；`--header-height` 高、sticky 的深色玻璃列；寬度小於 64rem 收進「選單」 |
+| `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，不需要 client JS；`--header-height` 高、sticky 的深色玻璃列；寬度小於 64rem 收進「選單」 |
 | `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts` |
 
 ## 3D 場景

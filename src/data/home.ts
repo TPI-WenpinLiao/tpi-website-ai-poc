@@ -3,7 +3,7 @@
 // itself). `node scripts/design/home-content.mjs` fetches each source and fails when a quote is no
 // longer on the page; it ignores whitespace and U+200B, so a heading the current site splits over
 // two elements (「AI」「智慧理賠」) still matches.
-// Names, paths and order come from docs/ia (src/lib/ia.ts), not from here.
+// Names, paths and order come from docs/ia (src/lib/ia/navigation.ts), not from here.
 // Blocks the current site has no copy for are left out and listed as 待確認 in the PR.
 
 import { HOME, quoted, type Sourced } from './site.ts';

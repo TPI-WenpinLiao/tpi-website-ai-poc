@@ -6,7 +6,8 @@
 import inventoryCsv from '../../docs/research/inventory.csv?raw';
 import pageMapCsv from '../../docs/ia/page-map.csv?raw';
 import redirectsCsv from '../../docs/ia/redirects.csv?raw';
-import { node, readRows } from './ia';
+import { readRows } from './ia/nodes';
+import { node } from './ia/navigation';
 
 export interface Post {
   kind: 'blog' | 'news';
