@@ -7,7 +7,7 @@ import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import { staticRoutes } from '../../lib/i18n/routes';
 import { hreflangAlternates } from '../../lib/seo/hreflang';
 import { serializeJsonLd, type JsonLdGraph } from '../../lib/seo/jsonld/shared';
-import { pageTitle, SITE_NAME } from '../../lib/seo/meta';
+import { canonicalUrl, pageTitle, SITE_NAME } from '../../lib/seo/meta';
 import { DEFAULT_OG_IMAGE, type OgImage } from '../../lib/seo/og';
 
 export interface Props {
@@ -30,7 +30,7 @@ const site = Astro.site;
 const fullTitle = titleSuffix ? pageTitle(title) : title;
 // canonical URLs have no .html, /index or trailing slash; the locale comes from the URL prefix (ADR 0002)
 const pathname = normalizePath(Astro.url.pathname);
-const canonical = new URL(pathname, site).href;
+const canonical = canonicalUrl(pathname, site);
 const ogLocale = localeFromPath(pathname).replace('-', '_');
 const imageUrl = new URL(image.src, site).href;
 const alternates = hreflangAlternates(

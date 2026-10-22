@@ -26,6 +26,7 @@ import SiteFooter from '../../components/ui/SiteFooter.astro';
 import { breadcrumb, children, node } from '../../lib/ia/navigation';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
+import { canonicalUrl } from '../../lib/seo/meta';
 import { DEFAULT_OG_IMAGE } from '../../lib/seo/og';
 import { about } from '../../lib/latest-posts';
 import { sceneFamily } from '../../lib/scene/families';
@@ -98,7 +99,7 @@ const jsonLd = offeringJsonLd({
   offering: data,
   org: org.data,
   site: Astro.site,
-  url: new URL(pathname, Astro.site).href,
+  url: canonicalUrl(pathname, Astro.site),
   imageUrl: new URL((ogImage ?? DEFAULT_OG_IMAGE).src, Astro.site).href,
   trail: breadcrumb(self.id),
   inLanguage: locale,

@@ -25,7 +25,7 @@ description: 新增或修改任何頁面、版型、內容時使用。列出每�
 | 列表分頁 | 第一頁不帶頁碼，第 2 頁起 `/{列表路徑}/page/{n}`，canonical 指向自己；篩選用分類頁路徑，不用 query string 產生要被收錄的頁面（ADR 0002） |
 | 結構化資料 | 依下表輸出 JSON-LD |
 | hreflang | 每頁列出實際存在的語系版本（含自己），雙向對應；`x-default` 指向 zh-TW 版，沒有 zh-TW 版的頁面不輸出 `x-default`（ADR 0002，由 `Seo.astro` 產生） |
-| sitemap | `dist/sitemap.xml` 列出所有頁面的 canonical 與 hreflang，排除 `/design-system`、`/wireframes`、`/prototypes` 與 404（`src/lib/seo/indexing.ts`）。由 build 時的 `src/integrations/sitemap.ts` 產生；`robots.txt` 不加 `Sitemap:` |
+| sitemap | `dist/sitemap.xml` 列出所有頁面的 canonical 與 hreflang，排除內部頁與 404（清單見 `src/lib/seo/indexing.ts`）。由 build 時的 `src/integrations/sitemap.ts` 產生；`robots.txt` 不加 `Sitemap:` |
 
 ## 頁面怎麼寫
 

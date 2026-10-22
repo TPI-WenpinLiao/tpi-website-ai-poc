@@ -63,7 +63,7 @@ export const isoDate = (date: Date) => date.toISOString().slice(0, 10);
 export interface PageContext {
   /** Absolute site origin (Astro.site) */
   site: URL;
-  /** The page's canonical URL */
+  /** The page's canonical URL (canonicalUrl() in ../meta.ts) */
   url: string;
   /** Page language (BCP 47), e.g. zh-TW */
   inLanguage: string;
