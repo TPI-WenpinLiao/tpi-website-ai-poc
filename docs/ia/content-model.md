@@ -477,7 +477,7 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 下列情況 `astro check` 與 `astro build` 會失敗：
 
 - 缺必填欄位、型別或 enum 不符
-- 日期不是 `YYYY-MM-DD`：留空、數字、`10/20/2026` 都會失敗
+- 日期不是 `YYYY-MM-DD`：留空、數字、`10/20/2026`、帶時間的 `2026-10-20T10:00:00` 都會失敗。例外：沒加引號的不存在日期（`2026-02-30`）會先被 YAML 進位成 `2026-03-02`，schema 看不出來；加引號的 `"2026-02-30"` 會失敗
 - 出現本檔沒有的欄位（所有物件都不接受未定義的欄位）
 - 語系目錄不是 `zh-TW`、`en`、`vi`，或 slug 不是小寫英數與 `-`
 - `node`、`offeringNode`、`category` 不在 `nodes.csv` 對應的節點裡，tag 不在 `tags.yaml`

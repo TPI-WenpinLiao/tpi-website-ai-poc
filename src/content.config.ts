@@ -30,9 +30,14 @@ function localizedGlob(collection: string) {
 }
 
 const text = z.string().trim().min(1);
-// YAML parses an unquoted 2026-10-20 as a Date; a quoted one stays a string. z.coerce.date() would also
-// turn an empty value or a number into 1970-01-01, so only these two forms are accepted.
-const date = z.union([z.date(), z.iso.date().transform((s) => new Date(s))], { error: 'expected a YYYY-MM-DD date' });
+// YAML parses an unquoted 2026-10-20 as a Date at UTC midnight; a quoted one stays a string. z.coerce.date()
+// would also turn an empty value or a number into 1970-01-01, so only these two forms are accepted. A Date
+// with a time came from an unquoted datetime. YAML rolls an unquoted 2026-02-30 over to 2026-03-02 before
+// the schema sees it, so that typo cannot be caught here.
+const isMidnightUtc = (d: Date) => d.getTime() % 86_400_000 === 0;
+const date = z.union([z.date().refine(isMidnightUtc, { error: 'expected a YYYY-MM-DD date without a time' }), z.iso.date().transform((s) => new Date(s))], {
+  error: 'expected a YYYY-MM-DD date',
+});
 const httpUrl = z.url({ protocol: /^https?$/ });
 
 // Shared and migration-tracking fields ("共用欄位", "遷移追蹤欄位")
