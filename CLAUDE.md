@@ -20,7 +20,7 @@ src/pages/        路由頁面；zh-TW 放根目錄，en、vi 放 en/、vi/
 src/layouts/      版型
 src/styles/       tokens.css（design tokens）、media.css（斷點）
 public/           靜態檔（_headers、robots.txt）
-scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、design/（對比、token 使用、輸出 CSS 檢查、預設 OG 圖、圖片匯入、瀏覽器無障礙實測）、seo/（heading 檢查）、lib/（共用的靜態伺服器）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應）、checkpoint/（進度推算）、bootstrap/（`issues.yml` 與 GitHub issue 的比對）
+scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、design/（對比、token 使用、輸出 CSS 檢查、預設 OG 圖、圖片匯入、瀏覽器無障礙實測）、seo/（heading 檢查）、i18n/（語系路由檢查）、lib/（共用的靜態伺服器）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應）、checkpoint/（進度推算）、bootstrap/（`issues.yml` 與 GitHub issue 的比對）
 docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）
 .claude/skills/   issue-start、issue-ship、checkpoint、pr-review、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
 .github/          ISSUE_TEMPLATE、workflows、bootstrap（labels / milestones / issues）
@@ -33,6 +33,7 @@ M2 定案的規則，細節以連結的文件為準：
 - 頁面階層只寫在 `docs/ia/nodes.csv`。新增頁面先加節點，路徑取節點的 `path`；麵包屑、子頁卡片由 `parent` 推出，不從 URL 推導
 - 導覽只讀 `docs/ia/navigation.csv`（`docs/ia/navigation.md`），不在元件裡另寫一份選單
 - URL：zh-TW 不加前綴，en、vi 加 `/en`、`/vi`；路徑只用小寫英文、數字與 `-`，不加尾斜線（`/` 除外），slug 三語共用。完整規則見 ADR 0002
+- 語系前綴與路徑正規化一律用 `src/lib/i18n/` 的函式，不在元件裡手接 `/en`；未翻譯的頁面不產生（不設 `i18n.fallback`）
 - 現站頁面在新站的位置看 `docs/ia/page-map.csv`，舊網址的轉址看 `docs/ia/redirects.csv`
 - `page-map.csv`、`redirects.csv`、`sitemap-summary.json`、`blog-categories.csv` 與 `sitemap.md`、`navigation.md` 的自動產生段落由 `scripts/ia/` 產生，不手改；改了輸入就重跑對應 script。`npm run check:ia` 會擋下過期的產出，`blog-categories.csv` 要連現站，不在檢查範圍
 - 內容類型的欄位與 JSON-LD 見 `docs/ia/content-model.md`
@@ -43,7 +44,7 @@ M2 定案的規則，細節以連結的文件為準：
 |---|---|
 | `npm run dev` | 本機開發 |
 | `npm run build` | 產生 `dist/` |
-| `npm run check` | IA 資料檢查 → design 檢查 → scripts 測試 → astro check → build → 輸出 CSS 與 heading 檢查 → html-validate → Lighthouse CI（推送前必跑） |
+| `npm run check` | IA 資料檢查 → design 檢查 → scripts 測試 → astro check → build → 輸出 CSS、heading 與語系路由檢查 → html-validate → Lighthouse CI（推送前必跑） |
 | `npm run check:design` | tokens 的 WCAG 對比、元件樣式沒有寫死的數值、每個元件都在 `/design-system` 展示頁上 |
 | `npm run check:ia` | 驗證 `docs/ia/` 的 IA 資料，並確認 `sitemap.mjs`、`navigation.mjs`、`redirects.mjs` 的產出是最新的（不寫檔） |
 
