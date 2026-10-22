@@ -16,6 +16,8 @@ import Link from '../../components/ui/Link.astro';
 import Tag from '../../components/ui/Tag.astro';
 import LocaleSwitcher from '../../components/ui/LocaleSwitcher.astro';
 import Card from '../../components/ui/Card.astro';
+import SiteHeader from '../../components/ui/SiteHeader.astro';
+import SiteFooter from '../../components/ui/SiteFooter.astro';
 import FormField from '../../components/ui/FormField.astro';
 import Backdrop from '../../components/ui/Backdrop.astro';
 import { Image } from 'astro:assets';
@@ -108,6 +110,7 @@ const toc = [
   { id: 'tokens-scale', label: '尺度' },
   { id: 'components-dark', label: '元件（深）' },
   { id: 'components-light', label: '元件（亮）' },
+  { id: 'chrome', label: '頁首與頁尾' },
   { id: 'imagery', label: '影像' },
   { id: 'reading', label: '長文' },
 ];
@@ -402,6 +405,10 @@ const description =
               <Card level={4} href={`#components-${tone}`} index="04" title="沒有圖片的卡片" description="玻璃面板，背景的格線與 3D 場景會透出來。" />
             </li>
             <li class="state">
+              <span class="state-label">size="sm"</span>
+              <Card level={4} href={`#components-${tone}`} title="只有標題的短卡片" size="sm" />
+            </li>
+            <li class="state">
               <span class="state-label">長標題</span>
               <Card
                 level={4}
@@ -447,6 +454,30 @@ const description =
         </Surface>
       ))
     }
+
+    <Surface tone="dark" id="chrome">
+      <SectionHeading
+        eyebrow="Site chrome"
+        title="頁首與頁尾"
+        description="選單是原生的 details 展開，不需要 client JS；點外面關閉、Esc 與一次只開一個由 M4-04 補上。寬度小於 64rem 時第一層收進「選單」。"
+      />
+      <h3>SiteHeader</h3>
+      <div class="chrome-demo">
+        <SiteHeader navLabel="主選單（展示：預設）" skipTo={false} />
+      </div>
+      <h3>SiteHeader：產品 mega menu 展開（示意）</h3>
+      <div class="chrome-demo open" inert>
+        <SiteHeader navLabel="主選單（展示：產品展開）" skipTo={false} open="產品" />
+      </div>
+      <h3>SiteHeader：下拉選單展開（示意）</h3>
+      <div class="chrome-demo open-short" inert>
+        <SiteHeader navLabel="主選單（展示：公司展開）" skipTo={false} open="公司" />
+      </div>
+      <h3>SiteFooter</h3>
+      <div class="chrome-demo">
+        <SiteFooter />
+      </div>
+    </Surface>
 
     <Surface tone="dark" pattern="grid" id="imagery">
       <SectionHeading
@@ -495,7 +526,7 @@ const description =
       <h3>3D 捲動場景（Scene3D）</h3>
       <p class="note">
         three.js 的場景，放在 PageHero 的 backdrop slot、靜態主視覺之後，並包在 <code>data-scene-track</code> 裡；首屏載入完、瀏覽器閒置後才載入，減少動態、省流量或不支援 WebGL 時只顯示靜態圖。
-        本頁沒有 track，所以不會啟動；實際效果見 <Link href="/prototypes/modular-stack">Modular Stack 原型</Link>。
+        本頁沒有 track，所以不會啟動；實際效果見<Link href="/">首頁</Link>。
       </p>
       <Scene3D direction="modular-stack" />
     </Surface>
@@ -606,6 +637,21 @@ const description =
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-3);
+  }
+
+  /* Header and footer previews: the sticky header stays inside its frame, and open menus get room */
+  .chrome-demo {
+    overflow: hidden;
+    border: var(--border-width) dashed var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .open {
+    min-block-size: calc(var(--space-24) * 7.5);
+  }
+
+  .open-short {
+    min-block-size: calc(var(--space-24) * 3.5);
   }
 
   .demo {

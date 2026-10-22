@@ -1,0 +1,477 @@
+---
+// Site header (M3-04, #17): brand, the first-level menu, search, locale and the 聯絡我們 button,
+// all from docs/ia/navigation.csv (src/lib/ia/navigation.ts). Sticky on a dark glass bar, so it
+// reads the same over the hero, the 3D scene and the light sections below.
+// Menus are native <details> disclosures: they open and close without client JS. Closing on an
+// outside click or Esc, one menu at a time and the keyboard model are M4-04's; the search box is M6's
+// and links to its page for now.
+// The language menu lists the same entries as LocaleSwitcher (localeLinks, ADR 0002): locales
+// without a built page or home are left out, so it doesn't render while zh-TW is the only one.
+// Below 64rem the menu collapses behind one 選單 disclosure that lists every group.
+// The first focusable element is the 跳到主要內容 link to `skipTo` (the page's <main id>); pages
+// showing more than one header, like /design-system, pass skipTo={false} on the extra ones.
+// While the 選單 sheet is open the page behind it does not scroll (CSS :has, no client JS).
+// `open` draws one menu open (a first-level label, or 'mobile'), for the /design-system page only.
+import { header, node, type NavItem } from '../../lib/ia/navigation';
+import { localeLinks } from '../../lib/i18n/alternates';
+import { LOCALE_NAMES } from '../../lib/i18n/locales';
+import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
+import { staticRoutes } from '../../lib/i18n/routes';
+import Button from './Button.astro';
+import { Image } from 'astro:assets';
+import logo from '../../assets/brand/logo-symbol-white.png';
+
+interface Props {
+  // Accessible name of the <nav>; must be unique when several headers share a page
+  navLabel?: string;
+  // Fragment of the page's main content, or false for no skip link
+  skipTo?: `#${string}` | false;
+  open?: string;
+}
+
+const { navLabel = '主選單', skipTo = '#main', open } = Astro.props;
+// Rendered height in px; matches --logo-height (2rem) so the 1x/2x files fit the box
+const LOGO_HEIGHT = 32;
+const home = node('home');
+const contact = node('contact');
+const search = node('search');
+const path = normalizePath(Astro.url.pathname);
+const locales = localeLinks({ path, routes: staticRoutes });
+const currentLocale = localeFromPath(path);
+// The 產品 menu is the mega menu: its overview link on top, then one column per family with its
+// products below the family link
+const groups = (item: NavItem) => item.children.filter((c) => c.children.length > 0);
+const isMega = (item: NavItem) => groups(item).length > 0;
+---
+
+<header class="site-header" data-surface="dark">
+  {skipTo && <a class="skip" href={skipTo}>跳到主要內容</a>}
+  <div class="bar">
+    <a class="brand" href={home.path}>
+      <Image class="logo" src={logo} alt="TPIsoftware 昕力資訊（回首頁）" height={LOGO_HEIGHT} densities={[1, 2]} loading="eager" />
+    </a>
+
+    <nav class="desktop-nav" aria-label={navLabel}>
+      <ul class="top">
+        {
+          header.map((item) => (
+            <li class:list={{ mega: isMega(item) }}>
+              <details open={open === item.label}>
+                <summary>
+                  {item.label}
+                  <span class="caret" aria-hidden="true" />
+                </summary>
+                <div class="menu">
+                  {isMega(item) ? (
+                    <>
+                      <ul class="overview">
+                        {item.children
+                          .filter((c) => c.children.length === 0)
+                          .map((c) => (
+                            <li>
+                              <a class="menu-link" href={c.href}>
+                                {c.label}
+                              </a>
+                            </li>
+                          ))}
+                      </ul>
+                      <ul class="columns" style={`--mega-columns: ${groups(item).length}`}>
+                        {groups(item).map((g) => (
+                          <li>
+                            <a class="menu-link group" href={g.href}>
+                              {g.label}
+                            </a>
+                            <ul>
+                              {g.children.map((p) => (
+                                <li>
+                                  <a class="menu-link" href={p.href}>
+                                    {p.label}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <ul>
+                      {item.children.map((c) => (
+                        <li>
+                          <a class="menu-link" href={c.href}>
+                            {c.label}
+                            {c.external && <span class="sr-only">（獨立網站）</span>}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </details>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="tools">
+      <a class="icon" href={search.path}>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6"></circle><path d="m15 15 5 5"></path></svg>
+        <span class="sr-only">{search.title}</span>
+      </a>
+      {
+        locales.length > 1 && (
+          <details class="locale" open={open === 'locale'}>
+            <summary>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="8.5" />
+                <path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17M12 3.5c-2.5 2.6-2.5 14.4 0 17" />
+              </svg>
+              <span class="sr-only">語言：</span>
+              {LOCALE_NAMES[currentLocale]}
+            </summary>
+            <ul class="menu">
+              {locales.map((l) => (
+                <li>
+                  <a class="menu-link" href={l.href} lang={l.locale} hreflang={l.locale} aria-current={l.current ? 'page' : undefined}>
+                    {LOCALE_NAMES[l.locale]}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+      }
+      <div class="cta">
+        <Button href={contact.path} size="sm">{contact.title}</Button>
+      </div>
+      <details class="mobile" open={open === 'mobile'}>
+        <summary class="icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+          <span class="sr-only">選單</span>
+        </summary>
+        <nav class="sheet" aria-label={`${navLabel}（行動版）`}>
+          {
+            header.map((item) => (
+              <div>
+                <p class="sheet-title">{item.label}</p>
+                <ul>
+                  {item.children.map((c) => (
+                    <li>
+                      <a class="menu-link" href={c.href}>
+                        {c.label}
+                        {c.external && <span class="sr-only">（獨立網站）</span>}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+          {
+            locales.length > 1 && (
+              <div>
+                <p class="sheet-title">語言</p>
+                <ul>
+                  {locales.map((l) => (
+                    <li>
+                      <a class="menu-link" href={l.href} lang={l.locale} hreflang={l.locale} aria-current={l.current ? 'page' : undefined}>
+                        {LOCALE_NAMES[l.locale]}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+          <Button href={contact.path}>{contact.title}</Button>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  @import '../../styles/media.css';
+
+  .site-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--z-overlay);
+    border-block-end: var(--border-width) solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+  }
+
+  /* Off screen until focused, then shown over the bar's start */
+  .skip {
+    position: absolute;
+    inset-block-start: calc(var(--header-height) * -1);
+    inset-inline-start: var(--space-gutter);
+    z-index: var(--z-raised);
+    display: flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--color-action);
+    color: var(--color-action-text);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+  }
+
+  .skip:focus {
+    inset-block-start: var(--space-2);
+  }
+
+  /* The open 選單 sheet covers the page: keep the page behind it from scrolling. Only below 64rem,
+     where the sheet shows: rotating a tablet past it hides the sheet but leaves <details> open */
+  @media (--bp-lg-down) {
+    :global(html:has(.site-header .mobile[open])) {
+      overflow: hidden;
+    }
+  }
+
+  .bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    box-sizing: content-box;
+    max-inline-size: var(--content-max-width);
+    min-block-size: var(--header-height);
+    margin-inline: auto;
+    padding-inline: var(--space-gutter);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .brand {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    min-block-size: var(--touch-target);
+  }
+
+  /* The white symbol only: the header is always the dark surface, and the bar has no room to spare
+     for the full logo's two lines of text; the footer shows the full logo */
+  .logo {
+    display: block;
+    inline-size: auto;
+    block-size: var(--logo-height);
+  }
+
+  /* First-level menu: desktop only. Not named .primary: Button's variant class would match it */
+  .desktop-nav {
+    display: none;
+  }
+
+  .top {
+    display: flex;
+    gap: var(--space-1);
+  }
+
+  summary {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    list-style: none;
+    transition-property: background-color, color;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:hover,
+  details[open] > summary {
+    background: var(--color-bg-muted);
+  }
+
+  .caret {
+    inline-size: var(--space-2);
+    block-size: var(--space-2);
+    border-block-end: var(--border-width-strong) solid currentcolor;
+    border-inline-end: var(--border-width-strong) solid currentcolor;
+    transform: translateY(calc(var(--space-1) * -0.5)) rotate(calc(var(--quarter-turn) / 2));
+    transition-property: transform;
+    transition-duration: var(--duration-fast);
+  }
+
+  details[open] .caret {
+    transform: translateY(calc(var(--space-1) * 0.5)) rotate(calc(var(--quarter-turn) * -1.5));
+  }
+
+  /* Dropdowns hang from their item; the mega menu spans the bar */
+  details {
+    position: relative;
+  }
+
+  .mega,
+  .mega details {
+    position: static;
+  }
+
+  .menu {
+    position: absolute;
+    inset-block-start: calc(100% + var(--space-2));
+    inset-inline-start: 0;
+    min-inline-size: calc(var(--space-24) * 2.5);
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-subtle);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .mega .menu {
+    inset-inline: var(--space-gutter);
+    padding: var(--space-6);
+  }
+
+  .overview {
+    margin-block-end: var(--space-4);
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(var(--mega-columns), minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  .menu-link {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
+    text-decoration: none;
+  }
+
+  .menu-link:hover {
+    background: var(--color-bg-muted);
+    color: var(--color-text);
+  }
+
+  .menu-link[aria-current] {
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* Family links head their column, underlined by the energy line */
+  .group {
+    margin-block-end: var(--space-2);
+    border-block-end: var(--border-width) solid var(--color-border-brand);
+    border-radius: 0;
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .tools {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin-inline-start: auto;
+  }
+
+  .icon {
+    display: grid;
+    place-items: center;
+    inline-size: var(--touch-target);
+    min-block-size: var(--touch-target);
+    padding: 0;
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+  }
+
+  .icon:hover {
+    background: var(--color-bg-muted);
+  }
+
+  svg {
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: var(--icon-stroke);
+    stroke-linecap: round;
+  }
+
+  .locale .menu {
+    inset-inline: auto 0;
+  }
+
+  /* Phones: logo, search and the menu button; 聯絡我們 and the locale move into the sheet. The
+     mobile disclosure is static so the sheet positions against the header, not the button */
+  .mobile {
+    position: static;
+  }
+
+  .cta,
+  .locale {
+    display: none;
+  }
+
+  /* The header's backdrop-filter makes it the containing block of fixed descendants, so the sheet
+     hangs from the header's bottom edge and fills the rest of the viewport */
+  .sheet {
+    position: fixed;
+    inset: 100% 0 auto;
+    block-size: calc(100dvh - var(--header-height));
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    padding: var(--space-6) var(--space-gutter) var(--space-12);
+    overflow-y: auto;
+    background: var(--color-bg);
+  }
+
+  .sheet-title {
+    margin: 0 0 var(--space-2);
+    padding-inline: var(--space-3);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: var(--letter-spacing-mono);
+    text-transform: uppercase;
+  }
+
+  .sheet ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--space-24) * 2), 1fr));
+  }
+
+  @media (--bp-sm-up) {
+    .cta,
+    .locale {
+      display: block;
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .desktop-nav {
+      display: block;
+    }
+
+    .mobile {
+      display: none;
+    }
+  }
+</style>

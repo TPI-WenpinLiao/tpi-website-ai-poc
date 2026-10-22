@@ -6,7 +6,7 @@
 
 ## 背景
 
-M3-02 把敘事頁定為深色場景，hero 底下要有隨捲動變化的 3D 場景（`design-system` skill「設計方向」）。M3-07 用 three.js 做了兩個方向的原型：A Data Flow（光點與光束的網路）與 B Modular Stack（等角視角的方塊隨捲動拆解、翻轉、重組）。人工選定 B，A 的頁面與場景已刪除，原型頁是 `/prototypes/modular-stack`。
+M3-02 把敘事頁定為深色場景，hero 底下要有隨捲動變化的 3D 場景（`design-system` skill「設計方向」）。M3-07 用 three.js 做了兩個方向的原型：A Data Flow（光點與光束的網路）與 B Modular Stack（等角視角的方塊隨捲動拆解、翻轉、重組）。人工選定 B，A 的頁面與場景已刪除。M3-04（#17）把 B 做成首頁 `/`，原型頁 `/prototypes/modular-stack` 已刪除。
 
 three.js 是本站第一個大型 client 依賴。ADR 0001 定了「預設零 client JS，互動才用 island」，Lighthouse 關卡要求 performance ≥ 0.95。實測 `npm run build` 的輸出：
 
@@ -30,14 +30,14 @@ three.js 是本站第一個大型 client 依賴。ADR 0001 定了「預設零 cl
 7. **3D 上的文字要能讀**：canvas 上蓋一層和 `Backdrop fade="hero"` 相同的 scrim，文字側維持 `--color-bg`；chapter 的文字放在玻璃面板（`--glass-bg`）上
 8. **量測**：`npm run check` 的 LHCI 用 `staticDistDir` 只自動測前 5 個 URL，順序依檔案系統而定，不保證測到原型頁（#87 處理），也不檢查 3D 的載入時序與 3D 上的文字。改到 `Scene3D`、`src/lib/scene/` 或原型頁後，跑以下 script
    - `node scripts/design/lighthouse-3d.mjs`：performance，並檢查 LCP 元素是靜態圖、3D chunk 的請求時間晚於實測 LCP 與 `load`，不符合時 exit 1
-   - `node scripts/design/a11y-smoke.mjs /prototypes/modular-stack`：不開減少動態、等場景畫出第一個 frame，在 track 的 0／25／50／75／100% 量 track 內每行文字和背後最不利像素的對比（375×800、1280×860）
+   - `node scripts/design/a11y-smoke.mjs /`：不開減少動態、等場景畫出第一個 frame，在 track 的 0／25／50／75／100% 量 track 內每行文字和背後最不利像素的對比（375×800、1280×860）
    - `node scripts/design/scene-capture.mjs <dir>`：減少動態時沒有 canvas、沒有 3D chunk 請求；場景執行中切到減少動態時 canvas 被移除
 
 ## 與「預設零 client JS」的關係
 
 ADR 0001 的原則不變：頁面預設沒有 client JS。3D 場景是明確選擇的 island，條件是：
 
-- 只放在敘事頁的 hero（M3-04 決定哪些模板使用）
+- 只放在敘事頁的 hero。M3-04 起用在首頁；產品頁是否使用由 M3-05（#18）決定
 - 沒有它頁面內容完整，關掉它的條件由使用者偏好與裝置決定
 - 初始載入只多 1.5 KB 的 loader，three.js 不影響 FCP 與 LCP
 
@@ -58,5 +58,5 @@ LCP 都是 hero 靜態圖，3D chunk 在實測 LCP 與 `load` 之後請求。同
 ## 取捨
 
 - three.js 130 KB gzip 是在閒置時下載，行動網路上仍會用到流量。Save-Data 開啟時不載入；要更省，可以改成捲動接近 hero 底部時才載入，代價是第一次捲動時場景還沒出現
-- canvas 固定在 viewport（`position: fixed`），讓場景在 chapter 捲過時持續播放。track 裡在 hero 之後的區塊要在 ready 後改成透明背景，否則會擋住場景。這個寫法目前只在原型頁，M3-04 決定是否做成元件的 slot
+- canvas 固定在 viewport（`position: fixed`），讓場景在 chapter 捲過時持續播放。M3-04 起 canvas 從 sticky header 下緣開始（`--header-height`），構圖和 header 下方的靜態主視覺一致；行動版 hero 另外把方塊塔拉遠、往上移（`modular-stack.ts` 的 `NARROW_HERO_*`），不壓到 eyebrow。track 裡在 hero 之後的區塊要在 ready 後改成透明背景，否則會擋住場景。M3-04 決定不做成元件的 slot：目前只有首頁使用，寫法在 `src/pages/index.astro` 的 `.chapters`；M3-05 的產品頁也要用時再抽成元件
 - 3D 文字對比是在雲端的軟體算圖下量測，場景隨時間微動，量到的是當下那一格；改場景的亮度、位置或 scrim 後要重跑

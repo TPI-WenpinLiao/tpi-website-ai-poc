@@ -1,17 +1,12 @@
-// IA data for the M3-01 wireframes, read from docs/ia at build time so menus never drift from
-// navigation.csv (the single source of the navigation, see docs/ia/navigation.md).
-import navCsv from '../../../docs/ia/navigation.csv?raw';
+// IA data for the M3-01 wireframes: the shared navigation (src/lib/ia/navigation.ts) with links
+// pointing to the wireframe of each target's template, so the prototype is clickable and never
+// links to a route that does not exist yet. External links have no wireframe and no href.
 import templatesCsv from '../../../docs/ia/templates.csv?raw';
 import { nodes, readRows, type IaNode } from '../ia/nodes';
+import { navTree, type NavHref } from '../ia/navigation';
 
-export interface NavItem {
-  key: string;
-  label: string;
-  href?: string;
-  external: boolean;
-  note: string;
-  children: NavItem[];
-}
+export { breadcrumb, children, node, type NavItem } from '../ia/navigation';
+export { nodes, type IaNode } from '../ia/nodes';
 
 export interface Template {
   id: string;
@@ -19,54 +14,14 @@ export interface Template {
   nodes: IaNode[];
 }
 
-const byId = new Map(nodes.map((n) => [n.id, n]));
-const navRows = readRows(navCsv, 'navigation.csv', ['area', 'parent', 'node', 'label', 'note']);
+export const wireframeHref: NavHref = (n) => (n.template ? `/wireframes/${n.template}` : undefined);
 
-// Wireframe links go to the wireframe of the target's template, so the prototype is clickable and
-// never links to a route that does not exist yet. External links have no wireframe and no href.
-export const wireframeHref = (n: IaNode) => (n.template ? `/wireframes/${n.template}` : undefined);
-
-export function node(id: string): IaNode {
-  const n = byId.get(id);
-  if (!n) throw new Error(`unknown node: ${id}`);
-  return n;
-}
-
-function navTree(area: string): NavItem[] {
-  const rows = navRows.filter((r) => r.area === area);
-  const build = (parent: string): NavItem[] =>
-    rows
-      .filter((r) => r.parent === parent)
-      .map((r) => {
-        const n = r.node ? node(r.node) : undefined;
-        const key = r.node || r.label;
-        return {
-          key,
-          label: r.label || n?.title || key,
-          href: n ? wireframeHref(n) : undefined,
-          external: n?.kind === 'external',
-          note: r.note,
-          children: build(key),
-        };
-      });
-  return build('');
-}
-
-export const utility = navTree('utility');
-export const header = navTree('header');
-export const footer = navTree('footer');
-export const footerBottom = navTree('footer-bottom');
+export const utility = navTree('utility', wireframeHref);
+export const header = navTree('header', wireframeHref);
+export const footer = navTree('footer', wireframeHref);
+export const footerBottom = navTree('footer-bottom', wireframeHref);
 
 export const templates: Template[] = readRows(templatesCsv, 'templates.csv', ['id', 'purpose']).map((t) => ({
   ...t,
   nodes: nodes.filter((n) => n.template === t.id),
 }));
-
-// Breadcrumb trail from home to `id`; group nodes have no page and are skipped
-export function breadcrumb(id: string): IaNode[] {
-  const trail: IaNode[] = [];
-  for (let cur = byId.get(id); cur; cur = byId.get(cur.parent)) if (cur.kind !== 'group') trail.unshift(cur);
-  return trail;
-}
-
-export const children = (id: string) => nodes.filter((n) => n.parent === id && n.kind !== 'asset');

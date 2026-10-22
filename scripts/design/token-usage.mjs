@@ -13,7 +13,7 @@ import { pathToFileURL } from 'node:url';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const DIRS = ['src/components/ui', 'src/pages/design-system'];
-const FILES = ['src/layouts/BaseLayout.astro'];
+const FILES = ['src/layouts/BaseLayout.astro', 'src/pages/index.astro'];
 const TOKENS = 'src/styles/tokens.css';
 
 const RULES = [

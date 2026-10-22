@@ -3,6 +3,7 @@
 // viewer, lights an energy-gradient rim and glows on hover. The whole card is clickable through the
 // title link's ::after, so there is exactly one link per card and its name is the title.
 // Image alt is required; pass alt="" only when the image is purely decorative.
+// size="sm" is the short card for title-only lists laid out two to a row on phones (home services).
 // data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -15,14 +16,25 @@ interface Props {
   eyebrow?: string;
   description?: string;
   image?: { src: ImageMetadata; alt: string };
+  size?: 'md' | 'sm';
   'data-preview-state'?: 'hover' | 'focus';
 }
 
-const { title, href, level = 3, index, eyebrow, description, image, 'data-preview-state': previewState } = Astro.props;
+const {
+  title,
+  href,
+  level = 3,
+  index,
+  eyebrow,
+  description,
+  image,
+  size = 'md',
+  'data-preview-state': previewState,
+} = Astro.props;
 const Heading = `h${level}` as const;
 ---
 
-<article class="card" data-preview-state={previewState}>
+<article class:list={['card', size]} data-preview-state={previewState}>
   {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes="(width >= 64rem) 22rem, 100vw" />}
   <div class="body">
     {
@@ -46,6 +58,8 @@ const Heading = `h${level}` as const;
 </article>
 
 <style>
+  @import '../../styles/media.css';
+
   .card {
     position: relative;
     display: flex;
@@ -135,6 +149,21 @@ const Heading = `h${level}` as const;
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-snug);
     letter-spacing: var(--letter-spacing-tight);
+  }
+
+  .sm .body {
+    padding: var(--space-4);
+  }
+
+  /* Phones fit two short cards per row, so the longest service name (9 characters) keeps to one line */
+  .sm .title {
+    font-size: var(--font-size-sm);
+  }
+
+  @media (--bp-sm-up) {
+    .sm .title {
+      font-size: var(--font-size-base);
+    }
   }
 
   .title a {

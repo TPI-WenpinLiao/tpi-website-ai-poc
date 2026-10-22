@@ -1,0 +1,223 @@
+---
+// Site footer (M3-04, #17): brand and contact details, the link columns and the legal row, all
+// from docs/ia/navigation.csv (src/lib/ia/navigation.ts); the phone is the headquarters office of
+// the organization data file (src/content/organization), Email and copyright come from the current
+// site (src/data/site.ts). Dark surface, so it closes every page the same way.
+import { footer, footerBottom, node } from '../../lib/ia/navigation';
+import { getEntry } from 'astro:content';
+import { company } from '../../data/site';
+import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
+import Button from './Button.astro';
+import { Image } from 'astro:assets';
+import logo from '../../assets/brand/logo-horizontal-white.png';
+
+// Rendered height in px; matches --logo-height-lg (3rem)
+const LOGO_HEIGHT = 48;
+
+const home = node('home');
+const contact = node('contact');
+const locale = localeFromPath(normalizePath(Astro.url.pathname));
+const org = await getEntry('organization', locale);
+const phone = org?.data.offices.find((o) => o.headquarters)?.phone;
+if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a headquarters phone for the footer`);
+---
+
+<footer class="site-footer" data-surface="dark">
+  <div class="inner">
+    <div class="top">
+      <div class="company">
+        <a class="brand" href={home.path}>
+          <Image class="logo" src={logo} alt="TPIsoftware 昕力資訊（回首頁）" height={LOGO_HEIGHT} densities={[1, 2]} />
+        </a>
+        <dl class="contact">
+          <div>
+            <dt>電話</dt>
+            <dd><a href={`tel:${phone.replaceAll(' ', '')}`}>{phone.replaceAll(' ', '\u00a0')}</a></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a href={`mailto:${company.email.text}`}>{company.email.text}</a></dd>
+          </div>
+        </dl>
+        <Button href={contact.path} variant="secondary" size="sm">{contact.title}</Button>
+      </div>
+
+      <nav class="columns" aria-label="頁尾選單">
+        {
+          footer.map((group) => (
+            <div>
+              <p class="group">{group.label}</p>
+              <ul>
+                {group.children.map((c) => (
+                  <li>
+                    <a href={c.href}>
+                      {c.label}
+                      {c.external && <span class="sr-only">（獨立網站）</span>}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+
+    <div class="bottom">
+      <p class="copyright">{company.copyright.text}</p>
+      <ul class="legal" aria-label="法務資訊">
+        {
+          footerBottom.map((l) => (
+            <li>
+              <a href={l.href}>{l.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  @import '../../styles/media.css';
+
+  .site-footer {
+    border-block-start: var(--border-width) solid var(--glass-border);
+  }
+
+  .inner {
+    box-sizing: content-box;
+    max-inline-size: var(--content-max-width);
+    margin-inline: auto;
+    padding: var(--space-16) var(--space-gutter) var(--space-8);
+  }
+
+  ul,
+  dl,
+  dd {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+  }
+
+  .top {
+    display: grid;
+    gap: var(--space-12);
+  }
+
+  .company {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--space-6);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+  }
+
+  .logo {
+    display: block;
+    inline-size: auto;
+    block-size: var(--logo-height-lg);
+  }
+
+  .contact {
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+  }
+
+  .contact div {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  dt {
+    min-inline-size: var(--space-12);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-mono);
+    line-height: var(--line-height-base);
+    text-transform: uppercase;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8) var(--space-6);
+  }
+
+  .group {
+    margin: 0 0 var(--space-3);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .columns a {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
+  }
+
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-8);
+    align-items: center;
+    justify-content: space-between;
+    margin-block-start: var(--space-12);
+    padding-block-start: var(--space-6);
+    border-block-start: var(--border-width) solid var(--glass-border);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+
+  .copyright {
+    margin: 0;
+  }
+
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-6);
+  }
+
+  .legal a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+  }
+
+  @media (--bp-sm-up) {
+    .columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .top {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    }
+
+    .columns {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+</style>

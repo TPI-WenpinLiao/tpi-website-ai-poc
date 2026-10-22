@@ -63,6 +63,8 @@ export interface SceneContext {
   view: { elevation: number; azimuth: number };
   /** Whether the page uses the narrow layout right now (--bp-lg-down) */
   isNarrow: () => boolean;
+  /** Reads a unitless number token (e.g. --scene-rim-width) from the host's computed style */
+  readNumber: (name: string) => number;
 }
 
 export interface SceneInstance {
@@ -92,6 +94,13 @@ export const smoothstep = (edge0: number, edge1: number, x: number) => {
 };
 
 const css = (el: Element, name: string) => getComputedStyle(el).getPropertyValue(name).trim();
+
+function readNumber(el: Element, name: string): number {
+  const value = css(el, name);
+  const n = Number(value);
+  if (value === '' || !Number.isFinite(n)) throw new Error(`expected ${name} to be a number, got "${value}"`);
+  return n;
+}
 
 function readAngle(value: string): number {
   const m = /^(-?[\d.]+)deg$/.exec(value);
@@ -150,7 +159,15 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(50, 1, 0.1, 400);
-  const instance = factory({ scene, camera, tier, palette, view: readView(host), isNarrow: narrowLayout });
+  const instance = factory({
+    scene,
+    camera,
+    tier,
+    palette,
+    view: readView(host),
+    isNarrow: narrowLayout,
+    readNumber: (name) => readNumber(host, name),
+  });
 
   const resize = () => {
     const { clientWidth: w, clientHeight: h } = host;

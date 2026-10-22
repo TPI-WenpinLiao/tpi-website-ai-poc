@@ -204,6 +204,14 @@
   --node-size: 0.625rem;
   --quarter-turn: 90deg;
 
+  /* Direction B Modular Stack block material (M3-04), read by src/lib/scene/modular-stack.ts:
+     how far the face color moves from --color-bg toward --color-border-brand, the rim width as a
+     share of the face, and the rim brightness for idle and active modules */
+  --scene-block-tint: 0.35;
+  --scene-rim-width: 0.06;
+  --scene-rim-glow: 0.9;
+  --scene-rim-glow-active: 2.3;
+
   /* Stacking */
   --z-raised: 1;
   --z-overlay: 100;
@@ -221,6 +229,11 @@
   --reading-max-width: 46rem;
   --touch-target: 2.75rem;
   --progress-height: 3px;
+  --header-height: 4rem;
+  --logo-height: 2rem;
+  --logo-height-lg: 3rem;
+  --icon-size: 1.25rem;
+  --icon-stroke: 1.75;
 
   /*
    * Wireframe-only tokens (M3-01). Used by src/components/wireframe and src/pages/wireframes;

@@ -1,6 +1,7 @@
-// Screenshots of the 3D scroll prototype (M3-07, #54) at several scroll positions, on desktop and
-// mobile, plus a reduced-motion run that must show no canvas and request no 3D chunk, and a switch
-// to reduced motion while the scene plays, which must remove the canvas and leave the static image.
+// Screenshots of the 3D scroll scene (M3-07, #54; the home page since M3-04) at several scroll
+// positions, on desktop and mobile, plus a reduced-motion run that must show no canvas and request
+// no 3D chunk, and a switch to reduced motion while the scene plays, which must remove the canvas
+// and leave the static image.
 // Headless Chromium renders WebGL with SwiftShader (software), so frames show the look of the
 // scene, not its real frame rate.
 // With --video it records instead: one WebM per page and viewport, scrolling through the whole
@@ -15,7 +16,8 @@ import puppeteer from 'puppeteer-core';
 import { serve } from '../lib/static-server.mjs';
 
 const DIST = resolve(import.meta.dirname, '../../dist');
-export const PATHS = ['/prototypes/modular-stack'];
+// Pages with a Scene3D track: the home page (M3-04, #17)
+export const PATHS = ['/'];
 export const VIEWPORTS = [
   { name: 'desktop', width: 1440, height: 900, isMobile: false },
   { name: 'mobile', width: 390, height: 844, isMobile: true },
@@ -28,7 +30,8 @@ const SCENE_TIMEOUT = 20_000;
 const SCENE_CHUNK = /\/(runtime|modular-stack)\.[\w-]+\.js$/;
 export const LAUNCH_ARGS = ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'];
 
-const slug = (path) => path.replace(/^\//, '').replaceAll('/', '-');
+// File name for a page; the home page (/) is `home`
+const slug = (path) => path.replace(/^\//, '').replaceAll('/', '-') || 'home';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /** Scrolls so that `fraction` of the scene track has passed. @param {import('puppeteer-core').Page} page */
