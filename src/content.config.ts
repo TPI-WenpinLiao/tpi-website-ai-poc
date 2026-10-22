@@ -5,9 +5,9 @@ import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { parse } from 'yaml';
 import { unquotedDateErrors } from '../scripts/content/dates.mjs';
+import { LOCALES } from './lib/i18n/locales';
 import { nodeIds, nodes } from './lib/ia/nodes';
 
-const LOCALES = ['zh-TW', 'en', 'vi'] as const;
 const INDUSTRIES = ['finance', 'government', 'manufacturing'] as const;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ENTRY_ID = new RegExp(`^(?:${LOCALES.join('|')})/${SLUG.source.slice(1, -1)}$`);
