@@ -18,7 +18,7 @@ const tpl = template ? templates.find((t) => t.id === template) : undefined;
 if (template && !tpl) throw new Error(`templates.csv has no template ${template}`);
 ---
 
-<BaseLayout title={`${title}｜wireframe｜TPIsoftware 昕力資訊`} description={description}>
+<BaseLayout title={`${title}｜wireframe`} description={description}>
   <a class="skip" href="#main">跳到主要內容</a>
   <div class="annotation">
     <div class="inner">

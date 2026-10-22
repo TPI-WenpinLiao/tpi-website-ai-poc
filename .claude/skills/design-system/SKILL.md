@@ -120,7 +120,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 ## 展示頁
 
-`/design-system`（`src/pages/design-system/`）是 tokens 與元件的參考頁，不在導覽與 sitemap 裡。
+`/design-system`（`src/pages/design-system/`）是 tokens 與元件的參考頁，不在導覽與 sitemap 裡（內部頁清單在 `src/lib/seo/indexing.ts`）。
 
 - Tokens 由 `tokens.css` 在 build 時讀出，依 `scripts/design/token-groups.mjs` 分組渲染（`_TokenGroup.astro`）。新增 token 時，讓它落進某一組；需要新的組時加在 `GROUPS`，並以 `kind` 指定範例的畫法
 - 沒有合適範例的 token（z-index、比例、`clamp()` 高度等）用 `kind: 'value'`，放在整組都是 `value` 的組，渲染成名稱／值表格。同一組混用 `value` 與有範例的 kind 時，範例欄會空著，`showcase.mjs` 會擋
@@ -133,7 +133,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
   focus 由 `BaseLayout` 的 `:focus-visible, [data-preview-state='focus']` 統一處理；元件自己畫 focus 的（`Card`）也要寫成同樣的形式。`data-preview-state` 只用在展示頁
 - 預覽用的複本加 `inert`：不進 Tab 順序、不被報讀，可操作的是「預設」那一份（#16 實測：Tab 停點 109 → 65）。矩陣表格加 `caption.sr-only` 說明示意欄不能操作
-- `/design-system`、`/wireframes` 不得出現在 `docs/ia/nodes.csv`（導覽只能指向節點，sitemap 也由節點產生），`showcase.mjs` 會擋。M4 加 sitemap 時要排除這兩個路徑，並把檢查接到 sitemap 的輸出
+- 內部頁（`src/lib/seo/indexing.ts` 的 `INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`（導覽只能指向節點），`showcase.mjs` 會擋。sitemap 由 build 出的頁面產生並排除這些路徑，`scripts/seo/meta.mjs` 檢查 sitemap 的輸出
 
 ## 影像
 

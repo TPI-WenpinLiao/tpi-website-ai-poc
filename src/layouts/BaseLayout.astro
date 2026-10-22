@@ -2,23 +2,13 @@
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/tokens.css';
+import Seo, { type Props as SeoProps } from '../components/seo/Seo.astro';
 import { localeFromPath, normalizePath } from '../lib/i18n/paths';
-import { DEFAULT_OG_IMAGE, type OgImage } from '../lib/seo/og';
 
-interface Props {
-  title: string;
-  description: string;
-  // Falls back to the site-wide default (content-model.md `ogImage`)
-  image?: OgImage;
-}
+// Every SEO prop goes to Seo (src/components/seo/Seo.astro)
+type Props = SeoProps;
 
-const { title, description, image = DEFAULT_OG_IMAGE } = Astro.props;
-// canonical URLs have no .html, /index or trailing slash; the locale comes from the URL prefix (ADR 0002)
-const pathname = normalizePath(Astro.url.pathname);
-const lang = localeFromPath(pathname);
-const canonical = new URL(pathname, Astro.site).href;
-const ogLocale = lang.replace('-', '_');
-const imageUrl = new URL(image.src, Astro.site).href;
+const lang = localeFromPath(normalizePath(Astro.url.pathname));
 ---
 
 <!doctype html>
@@ -26,27 +16,9 @@ const imageUrl = new URL(image.src, Astro.site).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    <Seo {...Astro.props} />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content={ogLocale} />
-    <meta property="og:site_name" content="TPIsoftware 昕力資訊" />
-    <meta property="og:image" content={imageUrl} />
-    <meta property="og:image:width" content={String(image.width)} />
-    <meta property="og:image:height" content={String(image.height)} />
-    <meta property="og:image:alt" content={image.alt} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={imageUrl} />
-    <meta name="twitter:image:alt" content={image.alt} />
-    <slot name="head" />
   </head>
   <body>
     <slot />
