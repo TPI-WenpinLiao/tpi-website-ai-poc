@@ -13,7 +13,7 @@ import Surface from '../../components/ui/Surface.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import ScrollProgress from '../../components/ui/ScrollProgress.astro';
 import Button from '../../components/ui/Button.astro';
-import { children, node } from '../../lib/wireframe/ia';
+import { children, header, node, type NavItem } from '../../lib/wireframe/ia';
 import image from '../../assets/design/hero-modular-stack.webp';
 import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
 
@@ -22,7 +22,15 @@ const description =
   '昕力資訊官網改版的首頁 3D 捲動原型：等角視角的 3D 方塊隨捲動拆解、翻轉，再重組成 AI、數位轉型、資安、ESG 與能源四個產品家族的模組。';
 
 const FAMILIES = ['family-ai', 'family-dx', 'family-security', 'family-esg'];
-const families = FAMILIES.map((id) => ({ ...node(id), products: children(id) }));
+// Products follow the header navigation's order (navigation.csv, e.g. OrientAI first); products
+// not in the navigation keep their nodes.csv order after those that are
+const flatten = (items: NavItem[]): string[] => items.flatMap((i) => [i.key, ...flatten(i.children)]);
+const navOrder = flatten(header);
+const rank = (id: string) => (navOrder.includes(id) ? navOrder.indexOf(id) : navOrder.length);
+const families = FAMILIES.map((id) => ({
+  ...node(id),
+  products: children(id).toSorted((a, b) => rank(a.id) - rank(b.id)),
+}));
 const services = children('services');
 ---
 

@@ -30,6 +30,9 @@ const narrowLayout = () => matchMedia('(width < 64rem)').matches;
 // gets the desktop layout but the mobile tier). Picked once, when the scene starts.
 const LOW_POWER = '(width < 64rem), (pointer: coarse)';
 
+// How fast the damped progress follows the scroll position, per second
+const PROGRESS_DAMPING = 6;
+
 // Fraction of the viewport the scene's center moves off the middle
 const FOCUS_SHIFT = { wide: 0.22, narrow: 0.3 };
 
@@ -43,7 +46,7 @@ export interface Palette {
 }
 
 export interface Frame {
-  /** Scroll progress through the scene track, 0–1 */
+  /** Scroll progress through the scene track, 0–1, damped so it never jumps between frames */
   progress: number;
   /** Seconds since the scene started */
   time: number;
@@ -181,13 +184,20 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
     return span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 0;
   };
 
+  // Scenes see a damped progress: wheel and keyboard scrolling arrive in steps, and feeding those
+  // straight into the camera reads as cuts. After a pause (hidden tab, track off screen) the large
+  // time step lets it catch up at once.
   const start = performance.now();
+  let last = start;
+  let damped = progress();
   let raf = 0;
   let visible = true;
   let ready = false;
-  const frame = () => {
+  const frame = (now: number) => {
     raf = 0;
-    instance.update({ progress: progress(), time: (performance.now() - start) / 1000, pointer });
+    damped += (progress() - damped) * (1 - Math.exp(((last - now) / 1000) * PROGRESS_DAMPING));
+    last = now;
+    instance.update({ progress: damped, time: (now - start) / 1000, pointer });
     renderer.render(scene, camera);
     if (!ready) {
       ready = true;
