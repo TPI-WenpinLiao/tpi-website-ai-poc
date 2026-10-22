@@ -85,5 +85,5 @@ LCP 都是 hero 靜態圖，3D chunk 在實測 LCP 與 `load` 之後請求。同
 ## 取捨
 
 - three.js 130 KB gzip 是在閒置時下載，行動網路上仍會用到流量。Save-Data 開啟時不載入；要更省，可以改成捲動接近 hero 底部時才載入，代價是第一次捲動時場景還沒出現
-- canvas 固定在 viewport（`position: fixed`），讓場景在 chapter 捲過時持續播放。M3-04 起 canvas 從 sticky header 下緣開始（`--header-height`），構圖和 header 下方的靜態主視覺一致；行動版 hero 另外把方塊塔拉遠、往上移（`modular-stack.ts` 的 `NARROW_HERO_*`），不壓到 eyebrow。track 裡在 hero 之後的區塊要在 ready 後改成透明背景，否則會擋住場景。M3-05 產品頁也要用，抽成 `SceneChapter` 元件，首頁與產品頁共用
+- canvas 固定在 viewport（`position: fixed`），讓場景在 chapter 捲過時持續播放。M3-04 起 canvas 從 sticky header 下緣開始（`--header-height`），構圖和 header 下方的靜態主視覺一致；窄螢幕 hero 的取景依 `PageHero` 的視覺區決定（見「窄螢幕的取景」）。track 裡 hero 之後的區塊用 `SceneChapter`，它在 ready 後改成透明背景，不擋住場景；M3-05 起首頁與產品頁共用
 - 3D 文字對比是在雲端的軟體算圖下量測，場景隨時間微動，量到的是當下那一格；改場景的亮度、位置或 scrim 後要重跑

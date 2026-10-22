@@ -56,9 +56,11 @@ const INDUSTRY_NODES = { finance: 'industry-finance', government: 'industry-gove
 const useCases = (data.useCases ?? []).map((u) => ({ ...u, hub: u.industry ? node(INDUSTRY_NODES[u.industry]) : undefined }));
 // Fourth-level pages under this product (navigation.md: linked from here, not from the header)
 const related = children(self.id).filter((n) => n.kind === 'page');
-// Whitepapers point at their offering (whitepaper.offeringNode); the digiRunner one is still a draft
-// until its file is known (待確認), so drafts are listed here for the design review
-const whitepapers = (await getCollection('whitepaper', (w) => w.id.startsWith('zh-TW/') && w.data.offeringNode === self.id)).map((w) => ({
+// Whitepapers point at their offering (whitepaper.offeringNode); drafts have no page, so they are
+// left out (content-model.md「Astro 實作」)
+const whitepapers = (
+  await getCollection('whitepaper', (w) => w.id.startsWith('zh-TW/') && !w.data.draft && w.data.offeringNode === self.id)
+).map((w) => ({
   title: w.data.title,
   cover: w.data.coverImage,
   href: node(w.data.node).path,

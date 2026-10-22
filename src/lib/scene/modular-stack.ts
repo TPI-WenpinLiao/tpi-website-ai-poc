@@ -36,8 +36,6 @@ const SINGLE_NARROW_CHAPTER_PULLBACK = 14;
 const SINGLE_NARROW_LIFT = 2;
 const SINGLE_PUSH = 0.8;
 const SINGLE_EFFECT = 0.6;
-// Progress at which the tower has become four modules (the first chapter's center)
-const SPLIT_END = 0.25;
 // Share of each chapter step the camera holds on a module before gliding to the next (each end)
 const DWELL = 0.3;
 const Y_AXIS = new Vector3(0, 1, 0);
@@ -203,6 +201,9 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
     },
   ];
 
+  // Progress at which the tower has become its modules: the first chapter's center (chapterAt = 0)
+  const splitEnd = 1 / chapters;
+
   /**
    * Continuous chapter coordinate: -1 in the hero, m while chapter m is centered. Between two
    * chapters it holds on each end (DWELL) and eases across, so the camera never snaps.
@@ -215,8 +216,8 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
 
   return {
     update({ progress, time, pointer }) {
-      // 0 → SPLIT_END: break apart, flip and regroup; then one active module per chapter
-      const split = smoothstep(0, SPLIT_END, progress);
+      // 0 → splitEnd: break apart, flip and regroup; then one active module per chapter
+      const split = smoothstep(0, splitEnd, progress);
       const burst = Math.sin(split * Math.PI);
       const chapter = chapterAt(progress);
       uniforms.uActive.value = chapter;
