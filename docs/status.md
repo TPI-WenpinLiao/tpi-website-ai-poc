@@ -69,12 +69,14 @@
 ### M4 開發骨架
 
 - M4-01 content collections 與 Zod schema 完成（#20）：`src/content.config.ts` 定義 9 個內容類型與 `tag`，每個 collection 一筆 zh-TW 範例；不合法的 frontmatter（含不存在的 `ref`）讓 `astro check` 與 build 失敗；tag 清單由 `node scripts/content/tags.mjs` 產生。寫法見 `docs/ia/content-model.md`「Astro 實作」
+- M4-02 i18n 路由完成（#21）：語系設定與路徑工具在 `src/lib/i18n/`（`astro.config.mjs` 的 `locales` 從這裡 import），語系切換元件 `LocaleSwitcher`；未翻譯的頁面不產生，切換時連到該語系首頁，連首頁都沒有的語系不列（ADR 0002）；`node scripts/i18n/routes.mjs` 在 build 後檢查 `<html lang>` 與切換連結
 
 ## 下一步
 
 - M3-05 產品頁高保真（#18）可以開始，以 3D 方向 B Modular Stack 製作
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
+- M4-03 共用 SEO 層（#22）可以開始；hreflang 用 `localeLinks()` 中 `target: 'page'` 的項目
 - M5-04 部落格與新聞批次轉換 script（#29）可以開始
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
 - M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
@@ -98,6 +100,8 @@
 - M1-05：主要轉換為聯絡業務；新站只用 GTM、需要 cookie 同意機制、Facebook Pixel 與 Ahrefs 不沿用；成功指標包含自然搜尋流量，但沒有 GA4／Search Console 權限，量測方式待定（見 `docs/research/audience-and-goals.md`）
 - M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（`seo-checklist` 的 JSON-LD 對照改為連到 `content-model.md`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）
 - M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定。`og:locale` 的 en、vi 值要改成「語言_地區」格式，M7 處理
+- 首頁、listing、utility 模板的 i18n 字串檔（`docs/ia/content-model.md`「不建 collection 的模板」）位置未定：M4-02 只做了語系路由與切換元件，由 M4-04（#23）建模板時決定
+- `LocaleSwitcher` 的 landmark 名稱（語言／Language／Ngôn ngữ）是暫定譯文，M7-01 詞彙表（#38）定案後替換
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除，`tokens.css` 的 `--wf-*` 也一起刪。M3-02 起斷點寫在 `src/styles/media.css` 的 `@custom-media`，wireframe 的 media query 已改用
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 專屬的細節（方塊材質、邊緣光）在 M3-04 補進 tokens

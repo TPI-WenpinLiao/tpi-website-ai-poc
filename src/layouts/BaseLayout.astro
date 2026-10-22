@@ -2,6 +2,7 @@
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/tokens.css';
+import { localeFromPath, normalizePath } from '../lib/i18n/paths';
 
 interface OgImage {
   // Site-relative path or absolute URL
@@ -14,7 +15,6 @@ interface OgImage {
 interface Props {
   title: string;
   description: string;
-  lang?: string;
   // Falls back to the site-wide default (content-model.md `ogImage`), rendered by
   // scripts/design/og-image.mjs
   image?: OgImage;
@@ -22,9 +22,10 @@ interface Props {
 
 const DEFAULT_IMAGE: OgImage = { src: '/og/default.png', width: 1200, height: 630, alt: 'TPIsoftware 昕力資訊' };
 
-const { title, description, lang = 'zh-TW', image = DEFAULT_IMAGE } = Astro.props;
-// build.format 'file' makes pathname end in .html; canonical URLs have no extension or trailing slash (ADR 0002)
-const pathname = Astro.url.pathname.replace(/\.html$/, '').replace(/(^|\/)index$/, '') || '/';
+const { title, description, image = DEFAULT_IMAGE } = Astro.props;
+// canonical URLs have no .html, /index or trailing slash; the locale comes from the URL prefix (ADR 0002)
+const pathname = normalizePath(Astro.url.pathname);
+const lang = localeFromPath(pathname);
 const canonical = new URL(pathname, Astro.site).href;
 const ogLocale = lang.replace('-', '_');
 const imageUrl = new URL(image.src, Astro.site).href;
