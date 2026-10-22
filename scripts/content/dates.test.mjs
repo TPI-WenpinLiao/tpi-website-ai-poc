@@ -1,5 +1,6 @@
 // Tests for scripts/content/dates.mjs. Run: npm run test:scripts
 
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseYaml } from '@astrojs/internal-helpers/yaml';
@@ -41,4 +42,10 @@ test('YAML_OPTIONS parse values the same way as Astro', () => {
   // A newer Astro that changes its YAML options fails here instead of silently letting dates through
   const samples = ['a: 2026-10-20', 'a: 2026-02-30', 'a: 2026-10-20T10:0:0', 'a: !!timestamp "2026-02-30"', 'a: "2026-10-20"', 'b: &x 1\nc: *x', 'base: &b {x: 1}\nd: {<<: *b, y: 2}'];
   for (const s of samples) assert.deepEqual(parseDocument(s, YAML_OPTIONS).toJS(), parseYaml(s), s);
+});
+
+test('@astrojs/internal-helpers in devDependencies is the version astro uses', () => {
+  // Otherwise an astro upgrade installs its own copy and dates.mjs keeps reading the old YAML options
+  const pkg = (path) => JSON.parse(readFileSync(new URL(`../../node_modules/${path}/package.json`, import.meta.url), 'utf8'));
+  assert.equal(pkg('@astrojs/internal-helpers').version, pkg('astro').dependencies['@astrojs/internal-helpers']);
 });
