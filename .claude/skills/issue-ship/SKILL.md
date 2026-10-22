@@ -33,11 +33,13 @@ git diff --stat
 
 - 「最後更新」改為今天。與其他 PR 衝突時取較新的日期
 - 「進度」表只寫 milestone 層級的狀態：未開始／進行中／完成
-- 「Issue」段落一個 issue 一行，已關閉的 issue 與有 open PR 的 issue 都要列。放在所屬 milestone 的小標下，依 bootstrap-id（`M2-03`）排序；沒有 bootstrap-id 的排在該小標最後。沒有 milestone 的 issue（例如 `[chore]`）放在 issue 關閉當時「進度」表中編號最大的「進行中」milestone；還沒關閉的（包括本 issue）以寫入當下為準
+- 「Issue」段落一個 issue 一行，只列已關閉的 issue 與本 issue。放在所屬 milestone 的小標下，依 bootstrap-id（`M2-03`）排序；沒有 bootstrap-id 的排在該小標最後。沒有 milestone 的 issue（例如 `[chore]`）放在 issue 關閉當時「進度」表中編號最大的「進行中」milestone；本 issue 以寫入當下為準
 - 本 issue 寫成合併後的狀態：`M2-03 URL 規則與語系策略完成（#10）`
   - 不寫 PR 編號：開 PR 前還不知道編號，PR 可從 issue 的 `closed_by_pull_requests` 查到。既有條目的 PR 編號保留
   - `needs-design` 階段一的 draft PR 合併前要先拿到 approved label，這時還不算完成，寫成 `M3-01 wireframe（#13），階段一，等待 wireframe-approved`；階段二的 PR 再改成完成
-- 其他 issue 依 GitHub 實際狀態寫：issue 已關閉的寫完成；有 open PR 的寫 `M2-04 內容模型（#11，PR #61），待合併`，不得寫完成
+- 其他已關閉的 issue 寫完成。`main` 上缺的行（`/issue-start` 第 4 步找到的）在本 PR 補上
+- 其他 open PR 的 issue 不寫，也不寫「待合併」。那一行由那個 PR 自己寫成合併後的狀態，合併時帶進 `main`；哪些 issue 進行中由 `/next-issue` 從 GitHub 查。舊規則要求列出其他 open PR，平行的 session 每開一個 PR，其他 PR 的 `status.md` 就過時，每次 push 都多一輪審查與 CI（PR #90 連續兩輪被報 PR #91、#92、#93），各 PR 也互相衝突。`node scripts/status/check.mjs`（`npm run check` 的一部分）擋下含「待合併」的行
+- 本 PR 開了之後，其他 PR 合併、issue 關閉，都不用回頭改本 PR 的 `status.md`：那些行由各自的 PR 帶進 `main`。`/pr-review` 的固定檢查依此判斷
 - 「下一步」用無編號清單
   - 移除本 issue 的項目
   - 加上合併後才成立的項目，例如「M2-06 可以開始」。寫之前用 `mcp__github__issue_read` 確認該 issue「## 依賴」的其他 issue 都已關閉，只差本 issue

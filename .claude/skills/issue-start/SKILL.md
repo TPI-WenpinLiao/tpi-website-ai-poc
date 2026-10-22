@@ -78,10 +78,11 @@ git status -sb
 
 `status.md` 應該描述 main 目前的狀態。對照 GitHub 找出對不上的地方，在本 issue 的 PR 一起修，不另開同步 PR。判斷規則見 [`issue-ship` 第 3 步](../issue-ship/SKILL.md#3-更新-docsstatusmd)。
 
-1. 列出 `status.md`「待辦備忘」以外每個 `#N`、`PR #N`，以及寫的狀態（完成／待合併／階段一／可以開始）
-2. 用 `mcp__github__issue_read`（`get`）與 `mcp__github__pull_request_read`（`get`）查實際狀態；「可以開始」的 issue 另外查它的依賴是否都已關閉
-3. 用 `mcp__github__list_pull_requests`（`state: open`）列出 open PR。body 有 `Closes #N` 時，`status.md` 沒寫 `PR #N`，或 `#N` 沒有自己一行寫出狀態，都算對不上；只在別的句子裡提到 `#N` 不算有列
-4. 用 `mcp__github__list_issues`（`state: CLOSED`）列出已關閉的 issue，「Issue」段落沒有這張 issue 的一行也算對不上
+1. 列出 `status.md`「待辦備忘」以外每個 `#N`、`PR #N`，以及寫的狀態（完成／可以開始）
+2. 用 `mcp__github__issue_read`（`get`）查實際狀態：「Issue」段落的 issue 要已關閉；「可以開始」的 issue 另外查它的依賴是否都已關閉
+3. 用 `mcp__github__list_issues`（`state: CLOSED`）列出已關閉的 issue，「Issue」段落沒有這張 issue 的一行也算對不上；只在別的句子裡提到 `#N` 不算有列
+
+有 open PR 的 issue 不在 `status.md`，不用對照。
 
 對不上的寫進計畫的「`status.md` 同步」一項。這一步不擋計畫，沒有對不上的就在環境檢查表寫「一致」。
 
