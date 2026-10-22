@@ -26,7 +26,7 @@ const Heading = `h${level}` as const;
     )
   }
   <Heading class:list={['title', `level-${level}`, size]}>{title}</Heading>
-  {description && <p class="description">{description}</p>}
+  {description && <p class="description text-phrase">{description}</p>}
 </header>
 
 <style>

@@ -197,30 +197,30 @@
   dependsOn: [M3-02]
 
 - id: M3-04
-  title: 首頁高保真（兩種視覺方向）
+  title: 首頁高保真（方向 B Modular Stack）
   milestone: M3
   labels: [type:feature, needs-design]
   gate: design-approved
-  goal: 以兩種視覺方向製作首頁高保真，由人工選定方向。
+  goal: 以 M3-07 選定的 3D 方向 B Modular Stack 製作首頁高保真。
   deliverables:
-    - 兩個視覺方向的首頁（桌機與行動版）
+    - 方向 B 的首頁（桌機與行動版）
   acceptance:
-    - 兩方向都只用 tokens 與元件庫
+    - 只用 tokens 與元件庫
     - 內容使用現站事實，不捏造數據或客戶
-    - 人工選定後加上 `design-approved`
+    - 人工審核通過後加上 `design-approved`
   dependsOn: [M3-02]
 
 - id: M3-05
-  title: 產品頁高保真（兩種視覺方向）
+  title: 產品頁高保真（方向 B Modular Stack）
   milestone: M3
   labels: [type:feature, needs-design]
   gate: design-approved
-  goal: 以與首頁一致的兩種視覺方向製作產品頁高保真。
+  goal: 以 M3-07 選定的 3D 方向 B Modular Stack 製作產品頁高保真，與 M3-04 的首頁一致。
   deliverables:
-    - 兩個視覺方向的產品頁（桌機與行動版）
+    - 方向 B 的產品頁（桌機與行動版）
   acceptance:
-    - 與 M3-04 的方向一一對應
-    - 人工選定後加上 `design-approved`
+    - 與 M3-04 的首頁使用同一套方向 B 的視覺
+    - 人工審核通過後加上 `design-approved`
   dependsOn: [M3-02]
 
 - id: M3-06

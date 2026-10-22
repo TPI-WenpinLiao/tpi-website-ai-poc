@@ -3,7 +3,7 @@
 // Also checks that every token in src/styles/tokens.css belongs to a group in token-groups.mjs,
 // which is what the page renders, that no group pattern is stale, and that no group mixes `value`
 // tokens with ones that have a specimen.
-// Internal pages (/design-system, /wireframes) must stay out of docs/ia/nodes.csv: navigation.csv can
+// Internal pages (/design-system, /wireframes, /prototypes) must stay out of docs/ia/nodes.csv: navigation.csv can
 // only point at nodes and the sitemap is built from them, so this keeps them out of both.
 // Run: node scripts/design/showcase.mjs
 
@@ -18,7 +18,7 @@ const COMPONENTS = 'src/components/ui';
 const PAGE = 'src/pages/design-system/index.astro';
 const TOKENS = 'src/styles/tokens.css';
 const NODES = 'docs/ia/nodes.csv';
-const INTERNAL = ['/design-system', '/wireframes'];
+const INTERNAL = ['/design-system', '/wireframes', '/prototypes'];
 
 /**
  * Components the page source does not import from components/ui.

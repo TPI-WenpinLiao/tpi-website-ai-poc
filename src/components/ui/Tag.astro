@@ -13,7 +13,7 @@ const { href, tone = 'neutral', 'data-preview-state': previewState } = Astro.pro
 const Element = href ? 'a' : 'span';
 ---
 
-<Element class:list={['tag', tone]} href={href} data-preview-state={previewState}><slot /></Element>
+<Element class:list={['tag', 'text-phrase', tone]} href={href} data-preview-state={previewState}><slot /></Element>
 
 <style>
   .tag {

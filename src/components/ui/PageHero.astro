@@ -6,6 +6,8 @@
 // The `backdrop` slot takes a full-bleed Backdrop (fade="hero", priority) behind the copy: the copy
 // keeps to the start side on desktop (--hero-copy-share, clear of the image's --hero-image-share)
 // and to the lower half on narrow screens, where the scrim is.
+// Headings break Chinese only at spaces and punctuation (BaseLayout). A title with neither, such as
+// 以頂尖科技為企業賦能, marks where it may break with U+200B (zero-width space): '以頂尖科技\u200b為企業賦能'.
 import Surface from './Surface.astro';
 
 interface Props {
@@ -33,7 +35,7 @@ const hasBackdrop = Astro.slots.has('backdrop');
       <slot name="breadcrumb" />
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
       <h1>{title}</h1>
-      {description && <p class="description">{description}</p>}
+      {description && <p class="description text-phrase">{description}</p>}
       {
         Astro.slots.has('actions') && (
           <div class="actions">

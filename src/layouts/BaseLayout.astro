@@ -78,6 +78,18 @@ const imageUrl = new URL(image.src, Astro.site).href;
     background: var(--color-bg);
   }
 
+  /* Short display text breaks Chinese only at spaces and punctuation, never inside a word
+     (數位轉／型, 與能／源): headings, and lead text or labels marked .text-phrase. A run too long for
+     the line still breaks anywhere instead of overflowing; a line-start full-width opening bracket
+     drops its blank half where the font supports it (PingFang TC, Noto Sans TC). Not for body
+     paragraphs, where breaks only at punctuation would leave ragged lines. */
+  :is(h1, h2, h3, h4, h5, h6),
+  .text-phrase {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    text-spacing-trim: trim-start;
+  }
+
   /* Semantic tokens switch on any data-surface="dark" element; give it the matching paint */
   [data-surface='dark'] {
     background: var(--color-bg);
