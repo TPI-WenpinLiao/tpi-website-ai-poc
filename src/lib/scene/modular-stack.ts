@@ -5,7 +5,7 @@
 // modules, holding on each one while its chapter is on screen.
 // Blocks are one InstancedMesh; the rim is drawn in the fragment shader from the face UVs, so
 // there is no edge geometry.
-import { BoxGeometry, Color, InstancedBufferAttribute, InstancedMesh, Matrix4, Quaternion, ShaderMaterial, Vector3 } from 'three';
+import { BoxGeometry, Color, InstancedBufferAttribute, InstancedMesh, Matrix4, Quaternion, ShaderMaterial, Vector2, Vector3 } from 'three';
 import { placeCamera, smoothstep, type SceneFactory } from './runtime';
 
 // Blocks per module edge: desktop modules are 3×3×3, mobile 2×2×2 (tier density below 0.5)
@@ -52,6 +52,7 @@ const FRAGMENT = /* glsl */ `
   uniform vec3 uBase;
   uniform vec3 uLight;
   uniform float uRim;
+  uniform vec2 uRimGlow;
   varying vec2 vUv;
   varying vec3 vNormal;
   varying vec3 vColor;
@@ -62,12 +63,12 @@ const FRAGMENT = /* glsl */ `
     float rim = smoothstep(uRim, 0.0, edge);
     float shade = 0.55 + 0.45 * max(dot(vNormal, uLight), 0.0);
     vec3 face = mix(uBase, vColor, 0.18 + 0.22 * vActive) * shade;
-    vec3 color = face + vColor * rim * (0.9 + 1.4 * vActive);
+    vec3 color = face + vColor * rim * mix(uRimGlow.x, uRimGlow.y, vActive);
     gl_FragColor = vec4(color, 1.0);
   }
 `;
 
-const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, isNarrow }) => {
+const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, isNarrow, readNumber }) => {
   const edge = tier.density < 0.5 ? EDGE.reduced : EDGE.full;
   const perModule = edge ** 3;
   const count = perModule * MODULES;
@@ -103,9 +104,11 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
   const geometry = new BoxGeometry(BLOCK, BLOCK, BLOCK);
   const uniforms = {
     uActive: { value: -1 },
-    uBase: { value: palette.bg.clone().lerp(palette.line, 0.35) },
+    // Block material from tokens.css (--scene-block-*, --scene-rim-*)
+    uBase: { value: palette.bg.clone().lerp(palette.line, readNumber('--scene-block-tint')) },
     uLight: { value: new Vector3(0.4, 1, 0.6).normalize() },
-    uRim: { value: 0.06 },
+    uRim: { value: readNumber('--scene-rim-width') },
+    uRimGlow: { value: new Vector2(readNumber('--scene-rim-glow'), readNumber('--scene-rim-glow-active')) },
   };
   const material = new ShaderMaterial({
     uniforms,

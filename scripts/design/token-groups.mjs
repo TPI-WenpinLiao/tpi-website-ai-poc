@@ -98,16 +98,16 @@ export const GROUPS = [
     title: '3D 場景數值',
     layer: 'scale',
     kind: 'value',
-    patterns: ['--perspective', '--lift'],
-    note: '--perspective 與 --scene-angle-* 一起對齊 three.js 相機。偏好減少動態時 --lift 歸零。',
+    patterns: ['--perspective', '--lift', '--scene-block-', '--scene-rim-'],
+    note: '--perspective 與 --scene-angle-* 一起對齊 three.js 相機。偏好減少動態時 --lift 歸零。--scene-block-*、--scene-rim-* 是方向 B 方塊的材質（M3-04）。',
   },
-  { id: 'layout-size', title: '版面尺寸', layer: 'scale', kind: 'length', patterns: ['--touch-target', '--progress-height'] },
+  { id: 'layout-size', title: '版面尺寸', layer: 'scale', kind: 'length', patterns: ['--touch-target', '--progress-height', '--header-height', '--icon-size'] },
   {
     id: 'layout-values',
     title: '版面數值',
     layer: 'scale',
     kind: 'value',
-    patterns: ['--content-max-width', '--reading-max-width', '--hero-', '--backdrop-soft-opacity', '--z-'],
+    patterns: ['--content-max-width', '--reading-max-width', '--hero-', '--backdrop-soft-opacity', '--z-', '--icon-stroke'],
   },
 ];
 
