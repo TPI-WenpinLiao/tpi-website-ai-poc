@@ -65,8 +65,13 @@
 
 ### 缺翻譯的頁面
 
-- 不設定 Astro 的 `i18n.fallback`。fallback 會在缺翻譯的語系產生轉址頁或內容重複的頁面
-- 語言切換時，目標語系沒有這一頁就連到該語系首頁（M7 實作）
+- 不設定 Astro 的 `i18n.fallback`。fallback 會在缺翻譯的語系產生轉址頁或內容重複的頁面。en、vi 沒有對應的頁面檔或內容，就不產生頁面
+- 語言切換的目標，依序判斷：
+  1. 目標語系有這一頁：連到這一頁
+  2. 沒有這一頁，但有該語系首頁：連到該語系首頁
+  3. 連首頁都沒有（M7 翻譯前的 en、vi）：不列這個語系，不產生指向不存在頁面的連結。只剩目前語系時不輸出切換元件
+- 「有這一頁」的判斷：`src/pages/` 的靜態頁面檔由 build 時列出；動態路由（content collection）的頁面由頁面依 `translationKey` 傳入其他語系版本的路徑
+- 實作在 M4-02（#21）：語系設定與路徑工具在 `src/lib/i18n/`，切換元件是 `src/components/ui/LocaleSwitcher.astro`。`node scripts/i18n/routes.mjs` 在 build 後檢查每頁的 `<html lang>` 與 URL 前綴相符、切換連結都指到 build 出來的頁面
 
 ### Astro 設定
 
@@ -97,7 +102,9 @@ export default defineConfig({
 | `build.format: 'file'` | `src/pages/about.astro` 與 `src/pages/about/index.astro` 都輸出 `about.html`，`src/pages/en/index.astro` 輸出 `en.html`，Cloudflare Pages 以無尾斜線的路徑提供 |
 | `trailingSlash: 'never'` | dev server 也用無尾斜線的路徑，與正式環境一致（Astro 文件建議 `file` 搭配 `never`） |
 
-`build.format: 'file'` 時 `Astro.url.pathname` 會帶 `.html`，canonical 與之後的 hreflang、語言切換連結都要去掉 `.html` 與結尾的 `/index`，做法見 `BaseLayout.astro`。
+`locales` 與 `defaultLocale` 從 `src/lib/i18n/locales.ts` import，語系清單只寫在那裡。
+
+`build.format: 'file'` 時 `Astro.url.pathname` 會帶 `.html`，canonical、hreflang、語言切換連結都要去掉 `.html` 與結尾的 `/index`：一律用 `src/lib/i18n/paths.ts` 的 `normalizePath`。
 
 ## 理由
 
@@ -113,5 +120,5 @@ export default defineConfig({
 - M2-05 redirect map 的轉址來源：`www.tpisoftware.com/vn/*` 與 `www.tpisoftware.vn/*` → `/vi/*`；大寫路徑 → 小寫；`/blog/{category}/{slug}` → `/blog/{slug}`；`/ja/*` → `/en`
 - `www.tpisoftware.vn` 網域在新站上線後是否保留為轉址來源，與正式網域一起決定
 - M4 路由依本 ADR 建立 `src/pages/` 結構；分頁路徑用 `page/[n]`
-- M7 實作 hreflang、`x-default` 與語言切換。`og:locale` 需要「語言_地區」格式（例如 `en_US`、`vi_VN`），目前 `BaseLayout.astro` 對 en、vi 輸出的是 `en`、`vi`，M7 一併修正
+- M4-02 實作語言切換，M4-03 輸出 hreflang（用同一份語系版本清單），M7 補翻譯內容與驗證 hreflang、`x-default`。`og:locale` 需要「語言_地區」格式（例如 `en_US`、`vi_VN`），目前 `BaseLayout.astro` 對 en、vi 輸出的是 `en`、`vi`，M7 一併修正
 - 正式網域決定後只改 `astro.config.mjs` 的 `site`（或 `SITE_URL` 環境變數），路徑規則不變

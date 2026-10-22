@@ -4,7 +4,7 @@
 
 ## 目前 milestone
 
-**M3 設計系統**
+**M3 設計系統**、**M4 開發骨架**
 
 ## 進度
 
@@ -14,7 +14,7 @@
 | M1 盤點與研究 | 完成 |
 | M2 資訊架構 | 完成 |
 | M3 設計系統 | 進行中 |
-| M4 開發骨架 | 未開始 |
+| M4 開發骨架 | 進行中 |
 | M5 內容遷移 | 未開始 |
 | M6 功能 | 未開始 |
 | M7 多語系 | 未開始 |
@@ -66,11 +66,16 @@
 - `needs-design` 階段一改走 `/issue-ship` 完成（#84）：`CLAUDE.md`、`issue-start`、`checkpoint`、`workflow.md` 都連到 `issue-ship` 的「`needs-design` 的兩個階段」，`wip:` 合併只寫在 `issue-ship` 第 4 步。#16 留在 `main` 的 `wip:` commit（`1b3a5fe`、`a2508f8`）不改寫
 - `status.md` 不再列其他 open PR 完成（#94）：「Issue」段落只列已關閉的 issue，進行中的用 `/next-issue` 查；`node scripts/status/check.mjs` 在 `npm run check` 擋下「待合併」
 
+### M4 開發骨架
+
+- M4-02 i18n 路由完成（#21）：語系設定與路徑工具在 `src/lib/i18n/`（`astro.config.mjs` 的 `locales` 從這裡 import），語系切換元件 `LocaleSwitcher`；未翻譯的頁面不產生，切換時連到該語系首頁，連首頁都沒有的語系不列（ADR 0002）；`node scripts/i18n/routes.mjs` 在 build 後檢查 `<html lang>` 與切換連結
+
 ## 下一步
 
 - M3-05 產品頁高保真（#18）可以開始，以 3D 方向 B Modular Stack 製作
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
+- M4-03 共用 SEO 層（#22）在 M4-01（#20）完成後可以開始；hreflang 用 `localeLinks()` 中 `target: 'page'` 的項目
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
 - M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
@@ -93,6 +98,8 @@
 - M1-05：主要轉換為聯絡業務；新站只用 GTM、需要 cookie 同意機制、Facebook Pixel 與 Ahrefs 不沿用；成功指標包含自然搜尋流量，但沒有 GA4／Search Console 權限，量測方式待定（見 `docs/research/audience-and-goals.md`）
 - M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（`seo-checklist` 的 JSON-LD 對照改為連到 `content-model.md`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）
 - M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定。`og:locale` 的 en、vi 值要改成「語言_地區」格式，M7 處理
+- 首頁、listing、utility 模板的 i18n 字串檔（`docs/ia/content-model.md`「不建 collection 的模板」）位置未定：M4-02 只做了語系路由與切換元件，由 M4-04（#23）建模板時決定
+- `LocaleSwitcher` 的 landmark 名稱（語言／Language／Ngôn ngữ）是暫定譯文，M7-01 詞彙表（#38）定案後替換
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除，`tokens.css` 的 `--wf-*` 也一起刪。M3-02 起斷點寫在 `src/styles/media.css` 的 `@custom-media`，wireframe 的 media query 已改用
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 專屬的細節（方塊材質、邊緣光）在 M3-04 補進 tokens
