@@ -79,7 +79,7 @@
     - 更新 `CLAUDE.md`、`.claude/skills/content-migration/SKILL.md`、`docs/status.md`
   acceptance:
     - 規則變更有對應的理由（ADR 或 PR 說明）
-    - "`docs/status.md` 指向 M2"
+    - "`docs/status.md` 將 M1 標為完成"
   dependsOn: [M1-01, M1-02, M1-03, M1-04, M1-05]
 
 # ---------------------------------------------------------------- M2
