@@ -3,14 +3,20 @@
 // all from docs/ia/navigation.csv (src/lib/ia/navigation.ts). Sticky on a dark glass bar, so it
 // reads the same over the hero, the 3D scene and the light sections below.
 // Menus are native <details> disclosures: they open and close without client JS. Closing on an
-// outside click or Esc, one menu at a time and the keyboard model are M4-04's; so are the search box
-// (M6) and the locale switch (M4-02), which link to their targets for now.
+// outside click or Esc, one menu at a time and the keyboard model are M4-04's; the search box is M6's
+// and links to its page for now.
+// The language menu lists the same entries as LocaleSwitcher (localeLinks, ADR 0002): locales
+// without a built page or home are left out, so it doesn't render while zh-TW is the only one.
 // Below 64rem the menu collapses behind one 選單 disclosure that lists every group.
 // The first focusable element is the 跳到主要內容 link to `skipTo` (the page's <main id>); pages
 // showing more than one header, like /design-system, pass skipTo={false} on the extra ones.
 // While the 選單 sheet is open the page behind it does not scroll (CSS :has, no client JS).
 // `open` draws one menu open (a first-level label, or 'mobile'), for the /design-system page only.
 import { header, node, type NavItem } from '../../lib/ia/navigation';
+import { localeLinks } from '../../lib/i18n/alternates';
+import { LOCALE_NAMES } from '../../lib/i18n/locales';
+import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
+import { staticRoutes } from '../../lib/i18n/routes';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
 import logo from '../../assets/brand/logo-symbol-white.png';
@@ -29,12 +35,9 @@ const LOGO_HEIGHT = 32;
 const home = node('home');
 const contact = node('contact');
 const search = node('search');
-// The locale switch has no node of its own: the three locale roots (ADR 0002)
-const LOCALES = [
-  { label: '繁體中文', href: '/', lang: 'zh-TW', current: true },
-  { label: 'English', href: '/en', lang: 'en', current: false },
-  { label: 'Tiếng Việt', href: '/vi', lang: 'vi', current: false },
-];
+const path = normalizePath(Astro.url.pathname);
+const locales = localeLinks({ path, routes: staticRoutes });
+const currentLocale = localeFromPath(path);
 // The 產品 menu is the mega menu: its overview link on top, then one column per family with its
 // products below the family link
 const groups = (item: NavItem) => item.children.filter((c) => c.children.length > 0);
@@ -116,23 +119,29 @@ const isMega = (item: NavItem) => groups(item).length > 0;
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6"></circle><path d="m15 15 5 5"></path></svg>
         <span class="sr-only">{search.title}</span>
       </a>
-      <details class="locale" open={open === 'locale'}>
-        <summary>
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17M12 3.5c-2.5 2.6-2.5 14.4 0 17"></path></svg>
-          <span class="sr-only">語言：</span>中文
-        </summary>
-        <ul class="menu">
-          {
-            LOCALES.map((l) => (
-              <li>
-                <a class="menu-link" href={l.href} lang={l.lang} hreflang={l.lang} aria-current={l.current ? 'true' : undefined}>
-                  {l.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </details>
+      {
+        locales.length > 1 && (
+          <details class="locale" open={open === 'locale'}>
+            <summary>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="8.5" />
+                <path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17M12 3.5c-2.5 2.6-2.5 14.4 0 17" />
+              </svg>
+              <span class="sr-only">語言：</span>
+              {LOCALE_NAMES[currentLocale]}
+            </summary>
+            <ul class="menu">
+              {locales.map((l) => (
+                <li>
+                  <a class="menu-link" href={l.href} lang={l.locale} hreflang={l.locale} aria-current={l.current ? 'page' : undefined}>
+                    {LOCALE_NAMES[l.locale]}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+      }
       <div class="cta">
         <Button href={contact.path} size="sm">{contact.title}</Button>
       </div>
@@ -158,20 +167,22 @@ const isMega = (item: NavItem) => groups(item).length > 0;
               </div>
             ))
           }
-          <div>
-            <p class="sheet-title">語言</p>
-            <ul>
-              {
-                LOCALES.map((l) => (
-                  <li>
-                    <a class="menu-link" href={l.href} lang={l.lang} hreflang={l.lang} aria-current={l.current ? 'true' : undefined}>
-                      {l.label}
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
+          {
+            locales.length > 1 && (
+              <div>
+                <p class="sheet-title">語言</p>
+                <ul>
+                  {locales.map((l) => (
+                    <li>
+                      <a class="menu-link" href={l.href} lang={l.locale} hreflang={l.locale} aria-current={l.current ? 'page' : undefined}>
+                        {LOCALE_NAMES[l.locale]}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
           <Button href={contact.path}>{contact.title}</Button>
         </nav>
       </details>
