@@ -1,0 +1,83 @@
+---
+// Locale switcher (ADR 0002, docs/ia/navigation.md): plain links, no client JS. Each entry goes to
+// the same page in that locale, or to that locale's home when the page isn't translated; locales
+// without a built home are left out, and nothing renders while only the current locale is left.
+// Each name is written in its own language with a matching lang. Placement and the dropdown in the
+// header are M4-04's.
+// Pages built through a dynamic route pass the URL paths of their other locale versions as
+// `translations`. `links` replaces the computed entries (the /design-system page only), and
+// data-preview-state on a link draws the hover or focus state statically there.
+import { localeLinks, type LocaleLink } from '../../lib/i18n/alternates';
+import { LOCALE_NAMES, type Locale } from '../../lib/i18n/locales';
+import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
+import { staticRoutes } from '../../lib/i18n/routes';
+
+interface Props {
+  translations?: readonly string[];
+  // Overrides the localized landmark name; each switcher on a page needs a unique one (html-validate
+  // unique-landmark counts inert copies too)
+  label?: string;
+  links?: readonly (LocaleLink & { preview?: 'hover' | 'focus' })[];
+}
+
+// Interim wording until the M7 glossary (#38)
+const LABELS: Record<Locale, string> = { 'zh-TW': '語言', en: 'Language', vi: 'Ngôn ngữ' };
+
+const path = normalizePath(Astro.url.pathname);
+const { translations = [], label, links = localeLinks({ path, routes: new Set([...staticRoutes, ...translations.map(normalizePath)]) }) } =
+  Astro.props;
+---
+
+{
+  links.length > 1 && (
+    <nav class="locale-switcher" aria-label={label ?? LABELS[localeFromPath(path)]}>
+      <ul>
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              lang={link.locale}
+              hreflang={link.locale}
+              aria-current={link.current ? 'page' : undefined}
+              data-preview-state={'preview' in link ? link.preview : undefined}
+            >
+              {LOCALE_NAMES[link.locale]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    color: var(--color-link);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    text-underline-offset: var(--underline-offset);
+  }
+
+  a:is(:hover, [data-preview-state='hover']) {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+  }
+
+  /* Not a link color: the current locale is where the reader already is */
+  a[aria-current='page'] {
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+  }
+</style>

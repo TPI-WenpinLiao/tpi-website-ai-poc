@@ -14,6 +14,7 @@ import Scene3D from '../../components/ui/Scene3D.astro';
 import Button from '../../components/ui/Button.astro';
 import Link from '../../components/ui/Link.astro';
 import Tag from '../../components/ui/Tag.astro';
+import LocaleSwitcher from '../../components/ui/LocaleSwitcher.astro';
 import Card from '../../components/ui/Card.astro';
 import SiteHeader from '../../components/ui/SiteHeader.astro';
 import SiteFooter from '../../components/ui/SiteFooter.astro';
@@ -89,6 +90,12 @@ const linkVariants = [
   { name: 'standalone', variant: 'standalone', label: '獨立連結', external: false },
   { name: 'inline + external', variant: 'inline', label: '外部連結', external: true },
 ] as const;
+// zh-TW is the current page, en has this page, vi only has its home; hover and focus go on en
+const localeDemo = (tone: 'dark' | 'light', preview?: PreviewState) => [
+  { locale: 'zh-TW' as const, href: `#components-${tone}`, target: 'page' as const, current: true },
+  { locale: 'en' as const, href: `#components-${tone}`, target: 'page' as const, current: false, preview },
+  { locale: 'vi' as const, href: `#components-${tone}`, target: 'home' as const, current: false },
+];
 const tagTones = [
   { tone: 'neutral', label: '中性標籤' },
   { tone: 'brand', label: '品牌標籤' },
@@ -338,6 +345,30 @@ const description =
               </tbody>
             </table>
           </div>
+
+          <h3>LocaleSwitcher</h3>
+          <div class="table-wrap">
+            <table class="matrix">
+              <caption class="sr-only">LocaleSwitcher 的狀態，以 English 示範。Hover、Focus 欄是靜態示意，不能操作。</caption>
+              <thead>
+                <tr>
+                  {linkStates.map((st) => <th scope="col">{st.label}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {linkStates.map((st) => (
+                    <td inert={st.preview !== undefined}>
+                      <LocaleSwitcher label={`語言（${tone === 'dark' ? '深色' : '亮色'} surface 範例，${st.label}）`} links={localeDemo(tone, st.preview)} />
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">
+            目前語系（中文）不用連結色。實際頁面上，該語系沒有這一頁時連到該語系首頁，連首頁都沒有的語系不列出；只剩目前語系時整個元件不輸出。
+          </p>
 
           <h3>SectionHeading</h3>
           <div class="demo">
