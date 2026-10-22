@@ -69,6 +69,7 @@
 
 ### M4 開發骨架
 
+- M4-01 content collections 與 Zod schema 完成（#20）：`src/content.config.ts` 定義 9 個內容類型與 `tag`，每個 collection 一筆 zh-TW 範例；不合法的 frontmatter（含不存在的 `ref`）讓 `astro check` 與 build 失敗；tag 清單由 `node scripts/content/tags.mjs` 產生。寫法見 `docs/ia/content-model.md`「Astro 實作」
 - M4-02 i18n 路由完成（#21）：語系設定與路徑工具在 `src/lib/i18n/`（`astro.config.mjs` 的 `locales` 從這裡 import），語系切換元件 `LocaleSwitcher`；未翻譯的頁面不產生，切換時連到該語系首頁，連首頁都沒有的語系不列（ADR 0002）；`node scripts/i18n/routes.mjs` 在 build 後檢查 `<html lang>` 與切換連結
 
 ## 下一步
@@ -77,8 +78,9 @@
 - M3-05 產品頁高保真（#18）可以開始，以 3D 方向 B Modular Stack 製作，與首頁共用 `SiteHeader`、`SiteFooter`
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
-- M4-03 共用 SEO 層（#22）在 M4-01（#20）完成後可以開始；hreflang 用 `localeLinks()` 中 `target: 'page'` 的項目
-- 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單
+- M4-03 共用 SEO 層（#22）可以開始；hreflang 用 `localeLinks()` 中 `target: 'page'` 的項目
+- M5-04 部落格與新聞批次轉換 script（#29）可以開始
+- 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
 - M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）

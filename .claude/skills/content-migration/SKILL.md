@@ -30,7 +30,7 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 
 ## Frontmatter
 
-每個遷移的內容檔都必須包含下列欄位。各內容類型的完整欄位見 [`docs/ia/content-model.md`](../../../docs/ia/content-model.md)，實際寫法以 M4-01 的 Zod schema 為準：
+每個遷移的內容檔都必須包含下列欄位。各內容類型的完整欄位見 [`docs/ia/content-model.md`](../../../docs/ia/content-model.md)，實際寫法以 [`src/content.config.ts`](../../../src/content.config.ts) 為準，內容檔位置與 `ref` 的寫法見 [`content-model.md`「Astro 實作」](../../../docs/ia/content-model.md#astro-實作m4-01)：
 
 ```yaml
 sourceUrl: https://www.tpisoftware.com/...   # 現站原始頁面
@@ -41,7 +41,7 @@ migratedAt: 2026-10-20                       # 擷取日期
 
 ## 圖片
 
-- 下載到 `src/assets/<content-type>/<slug>/`，檔名用小寫 kebab-case 英文。內文引用外部網域的圖片（`blog.tpisoftware.com`、`tpi.dev`、`s3.amazonaws.com` 等）也一樣下載，不直接引用外部網址（[`features.md`「其他第三方嵌入」](../../../docs/research/features.md#其他第三方嵌入)）
+- 下載到 `src/assets/<content-type>/<slug>/`，檔名用小寫 kebab-case 英文；frontmatter 寫相對於內容檔的路徑（`coverImage: ../../../assets/news/585/cover.jpg`）。內文引用外部網域的圖片（`blog.tpisoftware.com`、`tpi.dev`、`s3.amazonaws.com` 等）也一樣下載，不直接引用外部網址（[`features.md`「其他第三方嵌入」](../../../docs/research/features.md#其他第三方嵌入)）
 - 用 `astro:assets` 的 `<Image>` / `<Picture>` 輸出，不放 `public/`
 - 必須補上描述性 alt（依圖片實際內容撰寫，不寫「圖片」「banner」）
 - 低解析度或帶浮水印的圖不直接使用，在 PR 列為待替換
