@@ -35,7 +35,6 @@
 - M1-03 SEO 基線完成（#4）
 - M1-04 功能盤點完成（#5）
 - M1-05 受眾與轉換目標完成（#6）
-- M1-06 M1 收尾（#7，PR #92），待合併
 - 雲端 session 品質關卡修正完成（#47，PR #48），已驗證新 session 不需手動設定即可通過 `npm run check`
 - 工作流程 skills 與 pstack 導入完成（#50，PR #51）
 
@@ -61,7 +60,6 @@
 - M3-01 各模板低保真 wireframe 完成（#14，`wireframe-approved`）：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 vi 與 en 長譯名放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
 - M3-02 design tokens 與元件庫完成（#15，`design-approved`）：深色場景與亮色閱讀頁的雙 surface、光與景深、捲動動態、12 個元件與 `/design-system` 審核頁；影像素材與提示詞見 `docs/design/image-prompts.md`
 - M3-03 design-system 展示頁完成（#16，`design-approved`）：`/design-system` 列出全部 152 個 token（三層分組）與 5 個互動元件的狀態矩陣；全域改為 `box-sizing: border-box`
-- M3-04 首頁高保真（#17，PR #93），階段一，等待 design-approved
 - M3-07 3D scroll 視覺方向原型完成（#54，`design-approved`）：選定方向 B Modular Stack，原型頁 `/prototypes/modular-stack`（three.js，`Scene3D` island），A Data Flow 已刪除；ADR 0003 載入策略；`node scripts/design/lighthouse-3d.mjs` 行動版 0.99、桌機 1，`a11y-smoke.mjs` 加上 3D 場景上的文字對比
 - `issues.yml` 與 GitHub issue 對齊完成（#88）：補 M3-07～09、M3-04/05 的依賴改為 M3-02、M3-07；`node scripts/bootstrap/diff.mjs` 比對兩邊，目前差異 0、重跑 bootstrap 不會新建 issue
 - `needs-design` 階段一改走 `/issue-ship` 完成（#84）：`CLAUDE.md`、`issue-start`、`checkpoint`、`workflow.md` 都連到 `issue-ship` 的「`needs-design` 的兩個階段」，`wip:` 合併只寫在 `issue-ship` 第 4 步。#16 留在 `main` 的 `wip:` commit（`1b3a5fe`、`a2508f8`）不改寫
@@ -69,7 +67,6 @@
 ### M4 開發骨架
 
 - M4-01 content collections 與 Zod schema 完成（#20）：`src/content.config.ts` 定義 9 個內容類型與 `tag`，每個 collection 一筆 zh-TW 範例；不合法的 frontmatter（含不存在的 `ref`）讓 `astro check` 與 build 失敗；tag 清單由 `node scripts/content/tags.mjs` 產生。寫法見 `docs/ia/content-model.md`「Astro 實作」
-- M4-02 i18n 路由（#21，PR #90），待合併
 
 ## 下一步
 
