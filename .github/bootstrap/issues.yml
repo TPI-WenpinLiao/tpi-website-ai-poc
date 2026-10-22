@@ -1,6 +1,8 @@
 # Issue title is rendered as "[<id>] <title>" and used for idempotent matching.
 # `gate`: the label a human adds after review; the issue is not done until it is present.
+# `gateNote`: replaces the default sentence of the gate section (optional).
 # `dependsOn`: ids resolved to issue numbers at bootstrap time (must appear earlier in this file).
+# Issues edited on GitHub must be mirrored here; `node scripts/bootstrap/diff.mjs` lists the differences.
 
 # ---------------------------------------------------------------- M1
 - id: M1-01
@@ -196,32 +198,57 @@
     - 不出現在正式導覽與 sitemap 中
   dependsOn: [M3-02]
 
+- id: M3-07
+  title: 3D scroll 視覺方向原型
+  milestone: M3
+  labels: [type:feature, needs-design]
+  gate: design-approved
+  gateNote: 人工選定方向後加上 `design-approved`，M3-04、M3-05 才能開始。
+  goal: |-
+    以兩種 3D scroll 視覺方向製作首頁 hero 原型，驗證效果與效能可以並存，選定的方向作為 M3-04、M3-05 高保真的基礎。
+
+    - 方向 A Data Flow：光點與光束組成的 3D 網路，鏡頭隨捲動前進，流線分流到各產品節點
+    - 方向 B Modular Stack：等角視角的 3D 方塊隨捲動拆解、翻轉、重組
+  deliverables:
+    - 兩個原型頁，放在不進導覽、不進 sitemap 的路徑（路徑於 PR 中提出）
+    - 3D 以 three.js 程式生成（粒子、幾何體、shader），不使用外部模型檔
+    - "`docs/decisions/` 新增 ADR：3D island 的載入策略，以及與「預設零 client JS」原則如何並存"
+    - PR 附兩案的行動版與桌機版 Lighthouse 數字與錄影
+  acceptance:
+    - LCP 元素是靜態圖，3D 在首屏顯示後才載入
+    - "`prefers-reduced-motion: reduce` 時只顯示靜態版"
+    - 行動版有降級設定（粒子數、鏡頭複雜度）
+    - 兩案的行動版 Lighthouse performance 都量測並記錄；未達 0.95 的列出原因與改善方式
+    - 文字內容使用現站事實，不捏造數據或客戶
+    - 人工選定方向後加上 `design-approved`
+  dependsOn: []
+
 - id: M3-04
   title: 首頁高保真（方向 B Modular Stack）
   milestone: M3
   labels: [type:feature, needs-design]
   gate: design-approved
-  goal: 以 M3-07 選定的 3D 方向 B Modular Stack 製作首頁高保真。
+  goal: 以 M3-07（#54）選定的 3D 方向 B Modular Stack 製作首頁高保真。原型見 `/prototypes/modular-stack`，載入策略見 `docs/decisions/0003-3d-island-loading.md`。
   deliverables:
     - 方向 B 的首頁（桌機與行動版）
   acceptance:
     - 只用 tokens 與元件庫
     - 內容使用現站事實，不捏造數據或客戶
     - 人工審核通過後加上 `design-approved`
-  dependsOn: [M3-02]
+  dependsOn: [M3-02, M3-07]
 
 - id: M3-05
   title: 產品頁高保真（方向 B Modular Stack）
   milestone: M3
   labels: [type:feature, needs-design]
   gate: design-approved
-  goal: 以 M3-07 選定的 3D 方向 B Modular Stack 製作產品頁高保真，與 M3-04 的首頁一致。
+  goal: 以 M3-07（#54）選定的 3D 方向 B Modular Stack 製作產品頁高保真，與 M3-04（#17）的首頁一致。
   deliverables:
     - 方向 B 的產品頁（桌機與行動版）
   acceptance:
     - 與 M3-04 的首頁使用同一套方向 B 的視覺
     - 人工審核通過後加上 `design-approved`
-  dependsOn: [M3-02]
+  dependsOn: [M3-02, M3-07]
 
 - id: M3-06
   title: M3 收尾：更新 CLAUDE.md 與 skills
@@ -235,6 +262,46 @@
     - skill 涵蓋 token 命名、元件清單與新增元件流程
     - "`docs/status.md` 指向 M4"
   dependsOn: [M3-01, M3-02, M3-03, M3-04, M3-05]
+
+- id: M3-08
+  title: 動態規範（motion tokens、reduced-motion、效能預算）
+  milestone: M3
+  labels: [type:docs]
+  goal: 依 M3-07 選定的方向，定義全站動態的使用規則，讓 3D 與一般動畫在各頁一致且不影響可用性。
+  deliverables:
+    - "`src/styles/tokens.css` 新增動態 tokens（duration、easing、delay）"
+    - |-
+      `docs/design/motion.md`：
+        - 可用的效果清單與適用頁面（真 3D 只用於首頁與產品頁亮點段落；其他頁面使用 CSS 偽 3D 或不使用）
+        - `prefers-reduced-motion` 規則
+        - 效能預算：3D island 的 JS 大小上限、行動版降級條件
+    - 更新 `.claude/skills/design-system/SKILL.md` 的動態段落
+  acceptance:
+    - 每種效果都定義 reduced-motion 時的替代呈現
+    - 效能預算有具體數字，並說明量測方式
+    - 動態只引用 tokens，不寫死時間與 easing
+  dependsOn: [M3-07]
+
+- id: M3-09
+  title: 品牌素材與視覺資產
+  milestone: M3
+  labels: [type:docs, needs-input]
+  goal: 收集新站設計需要的品牌素材。內容由人工提供，Claude 只整理與提問。
+  deliverables:
+    - "`docs/design/brand-assets.md`：素材清單、來源、授權狀態、待補項目"
+    # The GitHub issue has a paragraph and list after the deliverables list; kept in the last item.
+    - |-
+      素材檔放在 repo 中約定的位置（路徑於 PR 中提出）
+
+      需要提供：
+
+      - logo 原始檔（SVG 優先）與各種版本（橫式、直式、反白）
+      - 既有的品牌色、字體、VI 規範（若有）
+      - 3D 方向若需要具體物件（例如立體 logo），由誰製作；需要時另行評估地端 Blender MCP
+  acceptance:
+    - 每項素材註明來源與使用授權
+    - 尚未提供的項目列為待確認
+  dependsOn: []
 
 # ---------------------------------------------------------------- M4
 - id: M4-01

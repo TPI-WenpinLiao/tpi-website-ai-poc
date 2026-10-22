@@ -129,6 +129,7 @@ PR 開了之後 session 會持續監看，CI 失敗、review 留言都會自動�
 | 環境檢查 `npm run check` 失敗 | 先看 Claude 回報的錯誤；SessionStart hook 問題見 `onboarding.md` 的「SessionStart hook 行為」 |
 | 沒有出現計畫確認畫面（session 重啟後常見） | Claude 會把計畫貼在對話中，直接回覆確認即可 |
 | 舊 issue 的「在 Claude Code 開啟」連結 | #50 以前（含）建立的 issue 帶的是舊 prompt，仍可使用；也可以改在新 session 輸入 `/issue-start N` |
+| 在 GitHub 上新增或修改 `[Mx-xx]` issue | 同步改 `.github/bootstrap/issues.yml`，再執行 `node scripts/bootstrap/diff.mjs`，確認「差異」與「重跑 bootstrap 會新建的 issue」都是 0。不需要 GitHub 權杖（repo 公開） |
 | 個人設定的 stop hook 要求 commit | 這是個人層級的 `~/.claude` 設定，不屬於本 repo；需要時自行調整 |
 | session 中斷、容器被回收，或 context 被摘要後不確定進度 | 開新 session 輸入 `/issue-start N`。找到進度檔就接續，上次 checkpoint 之後沒 push 的工作會遺失。找不到進度檔但 branch 上有未合併的 commit 時，Claude 會停下問你要接續還是重開 |
 | PR 的「待確認」列出待刪除的舊 branch | 接續時留下的舊 branch。雲端 session 刪除 remote branch 會被 403 擋下，請在 GitHub 上手動刪除。issue 已關閉或 PR 已結束時，`/issue-start` 會停下，列出帶進度檔的 branch、各自最後 commit 時間與 PR 關閉時間；比 PR 關閉時間早的通常已經過時，選重做即可 |

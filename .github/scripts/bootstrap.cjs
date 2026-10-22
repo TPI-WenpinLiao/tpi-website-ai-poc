@@ -26,7 +26,8 @@ function renderBody(issue, idToNumber) {
     `## 依賴\n\n${deps}`,
   ];
   if (issue.gate) {
-    sections.push(`## 關卡\n\n本 issue 為關卡 issue：人工審核通過後加上 \`${issue.gate}\`，後續 issue 才能開始。`);
+    const note = issue.gateNote ?? `人工審核通過後加上 \`${issue.gate}\`，後續 issue 才能開始。`;
+    sections.push(`## 關卡\n\n本 issue 為關卡 issue：${note}`);
   }
   return sections.join('\n\n');
 }
@@ -42,6 +43,7 @@ function validate(labels, milestones, issues) {
     for (const l of [...issue.labels, ...(issue.gate ? [issue.gate] : [])]) {
       if (!labelNames.has(l)) errors.push(`${issue.id}: unknown label ${l}`);
     }
+    if (issue.gateNote && !issue.gate) errors.push(`${issue.id}: gateNote without gate`);
     for (const d of issue.dependsOn ?? []) {
       if (!seen.has(d)) errors.push(`${issue.id}: dependency ${d} must be defined earlier`);
     }
@@ -135,3 +137,4 @@ module.exports = async function bootstrap({ github, context, core }) {
 module.exports.validate = validate;
 module.exports.renderBody = renderBody;
 module.exports.load = load;
+module.exports.issueTitle = issueTitle;
