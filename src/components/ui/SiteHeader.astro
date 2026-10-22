@@ -160,6 +160,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                     <li>
                       <a class="menu-link" href={c.href}>
                         {c.label}
+                        {c.external && <span class="sr-only">（獨立網站）</span>}
                       </a>
                     </li>
                   ))}
@@ -223,9 +224,12 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     inset-block-start: var(--space-2);
   }
 
-  /* The open 選單 sheet covers the page: keep the page behind it from scrolling */
-  :global(html:has(.site-header .mobile[open])) {
-    overflow: hidden;
+  /* The open 選單 sheet covers the page: keep the page behind it from scrolling. Only below 64rem,
+     where the sheet shows: rotating a tablet past it hides the sheet but leaves <details> open */
+  @media (--bp-lg-down) {
+    :global(html:has(.site-header .mobile[open])) {
+      overflow: hidden;
+    }
   }
 
   .bar {

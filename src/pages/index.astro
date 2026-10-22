@@ -38,11 +38,11 @@ const description =
 
 // The scene builds one module per family, in this order (src/lib/scene/modular-stack.ts)
 const FAMILIES = ['family-ai', 'family-dx', 'family-security', 'family-esg'];
-// Products follow the header navigation's order (navigation.csv, e.g. OrientAI first); products
-// not in the navigation keep their nodes.csv order after those that are
+// Products are the ones the header lists, in its order (navigation.csv, e.g. OrientAI first).
+// Products left out of the navigation are 待確認 whether they are still sold (nodes.csv note,
+// sitemap.md decision 2), so the home page doesn't show them either.
 const flatten = (items: NavItem[]): string[] => items.flatMap((i) => [i.key, ...flatten(i.children)]);
 const navOrder = flatten(header);
-const rank = (id: string) => (navOrder.includes(id) ? navOrder.indexOf(id) : navOrder.length);
 // Card headings drop the brand in brackets: nodes.csv titles such as 「AI（SysTalk.ai）」 show as 「AI」
 const families = FAMILIES.map((id) => {
   const family = node(id);
@@ -53,12 +53,13 @@ const families = FAMILIES.map((id) => {
     href: family.path,
     line: familyLines[id]?.text,
     products: children(id)
-      .filter((p) => p.path)
-      .toSorted((a, b) => rank(a.id) - rank(b.id)),
+      .filter((p) => navOrder.includes(p.id))
+      .toSorted((a, b) => navOrder.indexOf(a.id) - navOrder.indexOf(b.id)),
   };
 });
-// Latin words get a space on each side next to Chinese (「看 AI 產品家族」)
-const spaced = (word: string) => (/^[A-Za-z]/.test(word) ? ` ${word} ` : word);
+// A space between Chinese and an adjoining Latin letter, on that side only (「看 AI 產品家族」,
+// 「看 ESG 與能源產品家族」)
+const spaced = (word: string) => `${/^[A-Za-z]/.test(word) ? ' ' : ''}${word}${/[A-Za-z]$/.test(word) ? ' ' : ''}`;
 const contact = node('contact');
 const products = node('products');
 
@@ -91,8 +92,9 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
 <BaseLayout title={title} description={description}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd).replaceAll('<', '\\u003c')} />
-  <ScrollProgress />
   <SiteHeader />
+  <!-- After the header: same z-index, so the later one paints the bar on top of the header -->
+  <ScrollProgress />
   <main id="main">
     <div class="track" data-scene-track>
       <PageHero eyebrow="TPIsoftware 昕力資訊" title={hero.title.text} description={hero.description.text}>
@@ -218,7 +220,11 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
             <li>
               <Reveal delay={stagger(i)}>
                 <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }}>
-                  <time slot="meta" datetime={p.date}>{p.date.replaceAll('-', '/')}</time>
+                  {p.published && (
+                    <time slot="meta" datetime={p.published}>
+                      {p.published.replaceAll('-', '/')}
+                    </time>
+                  )}
                 </Card>
               </Reveal>
             </li>

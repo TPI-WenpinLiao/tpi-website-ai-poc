@@ -14,8 +14,11 @@ export interface Post {
   title: string;
   /** Category for blog posts (blog-category node title), 新聞 for news */
   label: string;
-  /** YYYY-MM-DD, the current site's last update */
+  /** YYYY-MM-DD, the current site's last update; orders the posts */
   date: string;
+  /** YYYY-MM-DD publish date, only when the inventory's date is one (blog atcDate, news showDate);
+      most news only has the API's updateDate, an edit time, so no date is shown for it */
+  published?: string;
   href: string;
   sourceUrl: string;
 }
@@ -23,7 +26,17 @@ export interface Post {
 const KINDS = { 'blog-post': 'blog', news: 'news' } as const;
 const isKind = (t: string): t is keyof typeof KINDS => t in KINDS;
 
-const inventory = readRows(inventoryCsv, 'inventory.csv', ['url', 'locale', 'page_type', 'h1', 'last_updated', 'disposition']);
+const inventory = readRows(inventoryCsv, 'inventory.csv', [
+  'url',
+  'locale',
+  'page_type',
+  'h1',
+  'last_updated',
+  'last_updated_source',
+  'disposition',
+]);
+// inventory.csv last_updated_source values that are publish dates (docs/research/content-audit.md 已知限制)
+const PUBLISH_DATE_SOURCES = new Set(['cms-api:atcDate', 'news-api:showDate']);
 const categoryOf = new Map(
   readRows(pageMapCsv, 'page-map.csv', ['url', 'blog_category']).map((r) => [r.url, r.blog_category]),
 );
@@ -40,6 +53,7 @@ function toPost(row: (typeof inventory)[number]): Post | undefined {
     title: row.h1,
     label: kind === 'news' ? node('news-article').title : category ? node(category).title : node('blog').title,
     date: row.last_updated,
+    ...(PUBLISH_DATE_SOURCES.has(row.last_updated_source) ? { published: row.last_updated } : {}),
     href,
     sourceUrl: row.url,
   };
