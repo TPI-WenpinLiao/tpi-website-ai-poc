@@ -20,6 +20,10 @@ import SiteHeader from '../../components/ui/SiteHeader.astro';
 import SiteFooter from '../../components/ui/SiteFooter.astro';
 import FormField from '../../components/ui/FormField.astro';
 import Backdrop from '../../components/ui/Backdrop.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import InPageNav from '../../components/ui/InPageNav.astro';
+import Faq from '../../components/ui/Faq.astro';
+import SceneChapter from '../../components/ui/SceneChapter.astro';
 import { Image } from 'astro:assets';
 import tokensCss from '../../styles/tokens.css?raw';
 import { parseSurfaces, resolveColor, checkPairs, contrastRatio, PAIRS } from '../../../scripts/design/contrast.mjs';
@@ -134,13 +138,7 @@ const description =
     </Fragment>
   </PageHero>
 
-  <nav class="toc" aria-label="本頁目錄" data-surface="dark">
-    <ul>
-      {toc.map((t) => (
-        <li><a href={`#${t.id}`}>{t.label}</a></li>
-      ))}
-    </ul>
-  </nav>
+  <InPageNav label="本頁目錄" stick="top" items={toc.map((t) => ({ href: `#${t.id}`, label: t.label }))} />
 
   <main>
     <Surface tone="dark" id="principles">
@@ -409,6 +407,12 @@ const description =
               <Card level={4} href={`#components-${tone}`} title="只有標題的短卡片" size="sm" />
             </li>
             <li class="state">
+              <span class="state-label">沒有 href</span>
+              <Card level={4} index="06" title="不能點的卡片" description="功能、應用情境等不是連結的項目：沒有 hover 與 focus，meta 裡的標籤連結各自可點。">
+                <Tag slot="meta" href={`#components-${tone}`} tone="brand">產業標籤連結</Tag>
+              </Card>
+            </li>
+            <li class="state">
               <span class="state-label">長標題</span>
               <Card
                 level={4}
@@ -419,6 +423,32 @@ const description =
                 image={{ src: coverData, alt: '' }}
               />
             </li>
+          </ul>
+
+          <h3>Breadcrumb</h3>
+          <div class="demo">
+            <Breadcrumb node="digirunner" label={`麵包屑（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
+          </div>
+          <p class="note">項目由 nodes.csv 的 parent 推出，group 節點略過；最後一項是目前頁面，不是連結。</p>
+
+          <h3>Faq</h3>
+          <ul class="faq-states">
+            {[
+              { label: '預設', preview: undefined },
+              { label: 'Hover', preview: 'hover' as const },
+              { label: 'Focus', preview: 'focus' as const },
+            ].map((st) => (
+              <li class="state" inert={st.preview !== undefined}>
+                <span class="state-label">{st.label}</span>
+                <Faq
+                  data-preview-state={st.preview}
+                  items={[
+                    { question: '問題的標題，點一下展開答案', answer: '答案是純文字，來自內容檔的 faq 欄位。' },
+                    { question: '第二個問題', answer: '每一題各自展開，不需要 client JS。' },
+                  ]}
+                />
+              </li>
+            ))}
           </ul>
 
           <h3>FormField</h3>
@@ -459,7 +489,7 @@ const description =
       <SectionHeading
         eyebrow="Site chrome"
         title="頁首與頁尾"
-        description="選單是原生的 details 展開，不需要 client JS；點外面關閉、Esc 與一次只開一個由 M4-04 補上。寬度小於 64rem 時第一層收進「選單」。"
+        description="選單是原生的 details 展開，共用同一個 name，一次只開一個；點選單外或按 Esc 會收起（一小段 script）。寬度小於 64rem 時第一層收進「選單」。"
       />
       <h3>SiteHeader</h3>
       <div class="chrome-demo">
@@ -473,6 +503,19 @@ const description =
       <div class="chrome-demo open-short" inert>
         <SiteHeader navLabel="主選單（展示：公司展開）" skipTo={false} open="公司" />
       </div>
+      <h3>InPageNav</h3>
+      <div class="chrome-demo">
+        <InPageNav
+          label="頁內錨點（展示）"
+          items={[
+            { href: '#chrome', label: '功能' },
+            { href: '#chrome', label: '應用情境' },
+            { href: '#chrome', label: '相關產品' },
+            { href: '#chrome', label: '常見問題' },
+          ]}
+        />
+      </div>
+      <p class="note">有 SiteHeader 的頁面用 stick="header"：寬度 64rem 以上時固定在頁首下方，手機上隨頁面捲走、選項多時在列內橫向捲動。本頁頂端的目錄是 stick="top"。</p>
       <h3>SiteFooter</h3>
       <div class="chrome-demo">
         <SiteFooter />
@@ -486,6 +529,12 @@ const description =
         title="影像"
         description="抽象 3D 渲染，只用品牌色，不放文字、人物或真實產品。素材與提示詞見 docs/design/image-prompts.md。"
       />
+      <h3>PageHero 的窄螢幕版面</h3>
+      <p class="note">
+        寬度小於 64rem 時，hero 由上而下是麵包屑（只有一列，目前頁只給螢幕閱讀器讀）、視覺區、文字。視覺區高
+        <code>--space-section</code> ＋ <code>--hero-narrow-offset</code>，靜態圖的主體和 3D 方塊都放在它的中央；3D 依
+        <code>data-hero-visual</code> 量出來的位置取景。有麵包屑的範例見<Link href="/products/digirunner">產品頁</Link>，沒有的見<Link href="/">首頁</Link>。
+      </p>
       <h3>主視覺：兩個 3D 方向的靜態版本</h3>
       <div class="directions">
         {
@@ -526,9 +575,15 @@ const description =
       <h3>3D 捲動場景（Scene3D）</h3>
       <p class="note">
         three.js 的場景，放在 PageHero 的 backdrop slot、靜態主視覺之後，並包在 <code>data-scene-track</code> 裡；首屏載入完、瀏覽器閒置後才載入，減少動態、省流量或不支援 WebGL 時只顯示靜態圖。
-        本頁沒有 track，所以不會啟動；實際效果見<Link href="/">首頁</Link>。
+        本頁沒有 track，所以不會啟動；實際效果見<Link href="/">首頁</Link>與<Link href="/products/digirunner">產品頁</Link>（<code>family</code>：只畫一個產品家族的模組）。
       </p>
       <Scene3D direction="modular-stack" />
+      <h3>場景上的章節（SceneChapter）</h3>
+      <p class="note">放在 track 裡 hero 之後，每章佔滿一個 viewport，文字放在玻璃面板上；場景畫出第一格後章節背景變透明，讓場景透出來。手機上面板靠下，上半部留給場景。</p>
+      <SceneChapter>
+        <h4>章節面板</h4>
+        <p>首頁的產品家族與產品頁的四個「零」都用這個元件。</p>
+      </SceneChapter>
     </Surface>
 
     <Surface tone="light" width="reading" id="reading">
@@ -660,7 +715,8 @@ const description =
     border-radius: var(--radius-lg);
   }
 
-  .cards {
+  .cards,
+  .faq-states {
     display: grid;
     gap: var(--space-6);
   }
@@ -713,43 +769,6 @@ const description =
 
 
   /* Dark glass on every section: most of the page is the dark scene surface */
-  .toc {
-    position: sticky;
-    inset-block-start: 0;
-    z-index: var(--z-raised);
-    border-block-end: var(--border-width) solid var(--glass-border);
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-  }
-
-  /* Scrolls sideways inside the bar on narrow screens, never the page */
-  .toc ul {
-    display: flex;
-    gap: var(--space-1);
-    box-sizing: content-box;
-    max-inline-size: var(--content-max-width);
-    margin-inline: auto;
-    padding: var(--space-1) var(--space-gutter);
-    overflow-x: auto;
-  }
-
-  .toc a {
-    display: inline-flex;
-    align-items: center;
-    min-block-size: var(--touch-target);
-    padding-inline: var(--space-3);
-    border-radius: var(--radius-md);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .toc a:hover {
-    background: var(--color-bg-muted);
-    color: var(--color-text);
-  }
-
   /* Sections land below the sticky bar */
   main :global([id]) {
     scroll-margin-block-start: calc(var(--touch-target) + var(--space-2));

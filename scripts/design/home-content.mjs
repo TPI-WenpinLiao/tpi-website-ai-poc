@@ -6,19 +6,9 @@
 //
 //   node scripts/design/home-content.mjs
 import { request } from '../inventory/http.mjs';
+import { pageText, squash } from '../lib/page-text.mjs';
 import * as home from '../../src/data/home.ts';
 import * as site from '../../src/data/site.ts';
-
-const squash = (s) => s.replace(/[\s\u200b]+/g, '');
-
-// Visible text of an HTML page: drop scripts, styles and tags, decode the entities the site uses
-function pageText(html) {
-  return html
-    .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&');
-}
 
 // Every { text, source } entry anywhere in the module's exports
 function collect(value, path = []) {

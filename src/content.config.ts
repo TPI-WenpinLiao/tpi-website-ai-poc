@@ -1,6 +1,6 @@
 // Content collections (M4-01). Fields follow docs/ia/content-model.md; keep the two in sync.
 import { existsSync, readFileSync } from 'node:fs';
-import { defineCollection, reference } from 'astro:content';
+import { defineCollection, reference, type ImageFunction } from 'astro:content';
 import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { parse } from 'yaml';
@@ -12,7 +12,7 @@ const INDUSTRIES = ['finance', 'government', 'manufacturing'] as const;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ENTRY_ID = new RegExp(`^(?:${LOCALES.join('|')})/${SLUG.source.slice(1, -1)}$`);
 
-type ImageFn = () => z.ZodType;
+type ImageFn = ImageFunction;
 
 // Entries live at <collection>/<locale>/<slug>.md; the id keeps both so the same slug can exist per locale.
 // glob's default id is slugified (lowercased), which would turn zh-TW into zh-tw.

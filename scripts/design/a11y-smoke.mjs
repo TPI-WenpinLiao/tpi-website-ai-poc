@@ -67,23 +67,39 @@ export function worstContrast(image, rect, text) {
 }
 
 /**
- * Text lines inside the elements matching `selector` that are in the viewport, measured against the
- * worst pixel behind them: the text is made transparent and the page screenshotted.
+ * Text lines inside the elements matching `selector` that are in the viewport and not covered by
+ * another element, measured against the worst pixel behind them: the text is made transparent and
+ * the page screenshotted.
  * @param {import('puppeteer-core').Page} page @param {string} selector
  */
 async function textContrast(page, selector) {
-  const lines = await page.evaluate((selector) => {
+  const { lines, covered } = await page.evaluate((selector) => {
     const out = [];
+    let covered = 0;
     for (const root of document.querySelectorAll(selector)) {
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
       for (let node = walker.nextNode(); node; node = walker.nextNode()) {
         const el = node.parentElement;
         if (!el || !node.textContent?.trim() || el.closest('[aria-hidden="true"], .sr-only')) continue;
+        // Visually hidden some other way (clipped to a pixel box, like Breadcrumb's current page on
+        // narrow screens): read out, never drawn
+        let clipped = false;
+        for (let a = el; a && !clipped; a = a.parentElement) {
+          const box = a.getBoundingClientRect();
+          clipped = box.width <= 1 && box.height <= 1;
+        }
+        if (clipped) continue;
         const style = getComputedStyle(el);
         const range = document.createRange();
         range.selectNodeContents(node);
         for (const r of range.getClientRects()) {
           if (r.bottom < 0 || r.top > innerHeight || r.width === 0) continue;
+          // Lines under something else, such as the sticky header, aren't visible to measure
+          const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+          if (hit && !root.contains(hit)) {
+            covered += 1;
+            continue;
+          }
           out.push({
             text: node.textContent.trim().slice(0, 24),
             color: style.color,
@@ -94,7 +110,7 @@ async function textContrast(page, selector) {
         }
       }
     }
-    return out;
+    return { lines: out, covered };
   }, selector);
   const hide = await page.addStyleTag({
     // Transitions off: otherwise the screenshot catches text halfway through fading to transparent
@@ -108,11 +124,29 @@ async function textContrast(page, selector) {
     const min = minimumRatio(line.size, line.weight);
     if (ratio < min) problems.push(`"${line.text}" ${ratio.toFixed(2)} < ${min}`);
   }
-  return { checked: lines.length, problems };
+  return { checked: lines.length, covered, problems };
 }
 
 /**
- * Text-over-image problems in one section with a Backdrop, scrolled into view.
+ * Scrolls back by the height of the bars stuck to the top of the viewport (the sticky header, and
+ * on wide screens the in-page bar), so the top of what was scrolled to is not under them. Bars are
+ * the sticky or fixed elements starting in the top quarter that are under half the viewport tall
+ * (the fixed 3D canvas is not one).
+ * @param {import('puppeteer-core').Page} page
+ */
+async function clearTopBars(page) {
+  await page.evaluate(() => {
+    const bottoms = [...document.querySelectorAll('body *')]
+      .filter((el) => ['sticky', 'fixed'].includes(getComputedStyle(el).position))
+      .map((el) => el.getBoundingClientRect())
+      .filter((r) => r.top < innerHeight / 4 && r.bottom > 0 && r.height < innerHeight / 2)
+      .map((r) => r.bottom);
+    scrollBy(0, -Math.max(0, ...bottoms));
+  });
+}
+
+/**
+ * Text-over-image problems in one section with a Backdrop, scrolled into view below the top bars.
  * @param {import('puppeteer-core').Page} page @param {number} index
  */
 async function textOverImages(page, index) {
@@ -122,6 +156,7 @@ async function textOverImages(page, index) {
     section.setAttribute('data-a11y-measure', '');
     section.scrollIntoView({ block: 'start' });
   }, index);
+  await clearTopBars(page);
   return textContrast(page, '[data-a11y-measure]');
 }
 
@@ -152,6 +187,8 @@ async function textOverScene(page) {
       const top = track.getBoundingClientRect().top + scrollY;
       scrollTo(0, top + (track.offsetHeight - innerHeight) * f);
     }, stop);
+    // The track's start is the hero, which the first screen shows below the top bars
+    if (stop === 0) await clearTopBars(page);
     // Let the canvas fade in and the camera settle on the new position
     await new Promise((r) => setTimeout(r, 1200));
     results.push({ stop, ...(await textContrast(page, '[data-scene-track]')) });
@@ -171,7 +208,8 @@ async function focusProblems(page) {
       const el = document.activeElement;
       if (!el || el === document.body) return null;
       const own = getComputedStyle(el);
-      const card = el.closest('.card');
+      // A card's title link is drawn by the card; other links in a card (a Tag in a static card) draw their own
+      const card = el.closest('.card .title') ? el.closest('.card') : null;
       const ring = card ? getComputedStyle(card) : own;
       return {
         label: `${el.tagName.toLowerCase()} "${(el.textContent || el.getAttribute('name') || '').trim().slice(0, 20)}"`,
@@ -221,7 +259,7 @@ async function main([path = '/design-system']) {
       for (let i = 0; i < sections; i += 1) {
         await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => r(null))));
         const text = await textOverImages(page, i);
-        report(`${width}×${height} text over image, section ${i + 1}/${sections} (${text.checked} lines in view)`, text.problems);
+        report(`${width}×${height} text over image, section ${i + 1}/${sections} (${text.checked} lines in view, ${text.covered} covered)`, text.problems);
       }
       await page.close();
     }
@@ -233,7 +271,7 @@ async function main([path = '/design-system']) {
       await page.goto(url, { waitUntil: 'load' });
       await page.evaluate(() => document.fonts.ready);
       for (const r of await textOverScene(page)) {
-        report(`${width}×${height} text over 3D scene at ${r.stop * 100}% (${r.checked} lines in view)`, r.problems);
+        report(`${width}×${height} text over 3D scene at ${r.stop * 100}% (${r.checked} lines in view, ${r.covered ?? 0} covered)`, r.problems);
       }
       await page.close();
     }

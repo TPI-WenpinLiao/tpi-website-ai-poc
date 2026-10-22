@@ -1,0 +1,97 @@
+---
+// Breadcrumb trail from home to a nodes.csv node, derived from the node's parents (group nodes are
+// skipped; docs/ia/navigation.md「SEO」). The last item is the current page, not a link; below
+// --bp-lg-up it is only read out, since the page's h1 follows. Goes in PageHero's `breadcrumb`
+// slot. The BreadcrumbList JSON-LD comes from the same trail (M4-03).
+import { breadcrumb } from '../../lib/ia/navigation';
+
+interface Props {
+  node: string;
+  // Landmark name; only pages with more than one breadcrumb (/design-system) need another
+  label?: string;
+}
+
+const { node, label = '麵包屑' } = Astro.props;
+const trail = breadcrumb(node);
+---
+
+<nav class="breadcrumb" aria-label={label}>
+  <ol>
+    {
+      trail.map((n, i) => (
+        <li class="text-phrase">{i < trail.length - 1 ? <a href={n.path}>{n.title}</a> : <span aria-current="page">{n.title}</span>}</li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  @import '../../styles/media.css';
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
+  }
+
+  /* Narrow screens: one row, so the row height PageHero plans for (--hero-crumb-space) holds and
+     the hero image and 3D scene line up with the layout. The current page is the h1 right below,
+     so it is hidden visually but still read out; a trail too long for the row scrolls sideways. */
+  @media (--bp-lg-down) {
+    ol {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      white-space: nowrap;
+    }
+
+    li:last-child {
+      position: absolute;
+      inline-size: var(--border-width);
+      block-size: var(--border-width);
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  /* Separator: a slash in the accent color, with empty alt text so screen readers skip it */
+  li + li::before {
+    content: '/' / '';
+    color: var(--color-text-accent);
+    font-family: var(--font-mono);
+  }
+
+  /* Links keep the touch-target height; the row wraps between items, never inside a name */
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: var(--underline-offset);
+    transition: text-decoration-color var(--duration-fast) var(--ease-standard);
+  }
+
+  a:is(:hover, [data-preview-state='hover']) {
+    color: var(--color-text);
+    text-decoration-color: currentColor;
+  }
+
+  [aria-current='page'] {
+    color: var(--color-text);
+  }
+</style>

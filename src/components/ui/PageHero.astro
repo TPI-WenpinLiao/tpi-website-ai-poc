@@ -2,10 +2,13 @@
 // Opening scene of a page: dark surface with the coordinate grid, mono eyebrow, the page's single
 // h1 at display size, lead text, actions, and a `visual` slot. The visual is where the 3D scroll
 // scene mounts (M3-07); until it loads it must show a static fallback, which is also the LCP
-// candidate, so never fade the hero in. Breadcrumbs go in the `breadcrumb` slot.
+// candidate, so never fade the hero in. Breadcrumbs go in the `breadcrumb` slot: their own row at
+// the top of the hero, outside the copy, at every width.
 // The `backdrop` slot takes a full-bleed Backdrop (fade="hero", priority) behind the copy: the copy
 // keeps to the start side on desktop (--hero-copy-share, clear of the image's --hero-image-share)
-// and to the lower half on narrow screens, where the scrim is.
+// and to the lower half on narrow screens, where the scrim is. On narrow screens the hero runs
+// breadcrumb row → visual area → copy; the visual area is an empty element marked
+// data-hero-visual, which the 3D runtime measures to frame the scene (ADR 0003).
 // Headings break Chinese only at spaces and punctuation (BaseLayout). A title with neither, such as
 // 以頂尖科技為企業賦能, marks where it may break with U+200B (zero-width space): '以頂尖科技\u200b為企業賦能'.
 import Surface from './Surface.astro';
@@ -20,9 +23,12 @@ interface Props {
 const { title, eyebrow, description, tone = 'dark' } = Astro.props;
 const hasVisual = Astro.slots.has('visual');
 const hasBackdrop = Astro.slots.has('backdrop');
+const hasCrumbs = Astro.slots.has('breadcrumb');
+// Below a breadcrumb row the narrow backdrop image moves down by the row's height (Backdrop)
+const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : undefined;
 ---
 
-<Surface tone={tone} pattern="grid" class="page-hero">
+<Surface tone={tone} pattern="grid" class="page-hero" style={imageDrop}>
   {
     hasBackdrop && (
       <Fragment slot="backdrop">
@@ -30,27 +36,36 @@ const hasBackdrop = Astro.slots.has('backdrop');
       </Fragment>
     )
   }
-  <div class:list={['layout', { split: hasVisual, 'has-backdrop': hasBackdrop }]}>
-    <div class="copy">
-      <slot name="breadcrumb" />
-      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h1>{title}</h1>
-      {description && <p class="description text-phrase">{description}</p>}
+  <div class:list={['hero-body', { 'has-backdrop': hasBackdrop, 'has-crumbs': hasCrumbs }]}>
+    {
+      hasCrumbs && (
+        <div class="crumbs">
+          <slot name="breadcrumb" />
+        </div>
+      )
+    }
+    {hasBackdrop && <div class="hero-visual" data-hero-visual aria-hidden="true" />}
+    <div class:list={['layout', { split: hasVisual, 'has-backdrop': hasBackdrop }]}>
+      <div class="copy">
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        <h1>{title}</h1>
+        {description && <p class="description text-phrase">{description}</p>}
+        {
+          Astro.slots.has('actions') && (
+            <div class="actions">
+              <slot name="actions" />
+            </div>
+          )
+        }
+      </div>
       {
-        Astro.slots.has('actions') && (
-          <div class="actions">
-            <slot name="actions" />
+        hasVisual && (
+          <div class="visual">
+            <slot name="visual" />
           </div>
         )
       }
     </div>
-    {
-      hasVisual && (
-        <div class="visual">
-          <slot name="visual" />
-        </div>
-      )
-    }
   </div>
 </Surface>
 
@@ -114,9 +129,20 @@ const hasBackdrop = Astro.slots.has('backdrop');
     margin-block-start: var(--space-2);
   }
 
-  /* Narrow screens: the copy starts below the subject of the 4:5 backdrop image */
-  .has-backdrop {
-    padding-block-start: var(--hero-narrow-offset);
+  /* The breadcrumb row sits --space-6 below the hero's top edge instead of the section padding */
+  .has-crumbs {
+    margin-block-start: calc(var(--space-6) - var(--space-section));
+  }
+
+  /* Narrow screens: the visual area (the 4:5 backdrop image's subject, or the 3D scene) runs from
+     the top of the hero, or from the breadcrumb row, down to the copy. It takes over the section's
+     top padding, so without a breadcrumb the copy starts where it did with plain padding. */
+  .hero-body.has-backdrop:not(.has-crumbs) {
+    margin-block-start: calc(var(--space-section) * -1);
+  }
+
+  .hero-visual {
+    block-size: calc(var(--space-section) + var(--hero-narrow-offset));
   }
 
   .has-backdrop .copy {
@@ -129,9 +155,17 @@ const hasBackdrop = Astro.slots.has('backdrop');
   }
 
   @media (--bp-lg-up) {
-    .has-backdrop {
+    .hero-body.has-backdrop:not(.has-crumbs) {
+      margin-block-start: 0;
+    }
+
+    .hero-visual {
+      display: none;
+    }
+
+    /* The copy centers in the hero's height; the breadcrumb row above takes no part */
+    .layout.has-backdrop {
       min-block-size: var(--hero-min-height);
-      padding-block-start: 0;
       align-content: center;
     }
 

@@ -1,0 +1,104 @@
+---
+// Frequently asked questions as an accordion of native <details>, so it needs no client JS.
+// Each question opens on its own; the answer is plain text from the content entry (offering.faq).
+// The FAQPage JSON-LD is the SEO layer's job (M4-03), from the same items.
+interface Props {
+  items: { question: string; answer: string }[];
+  // For the /design-system page only: draws the first question in that state
+  'data-preview-state'?: 'hover' | 'focus';
+}
+
+const { items, 'data-preview-state': previewState } = Astro.props;
+---
+
+<div class="faq">
+  {
+    items.map((item, i) => (
+      <details>
+        <summary data-preview-state={i === 0 ? previewState : undefined}>
+          <span class="question text-phrase">{item.question}</span>
+          <span class="marker" aria-hidden="true" />
+        </summary>
+        <p class="answer">{item.answer}</p>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  details {
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    transition: box-shadow var(--duration-base) var(--ease-standard);
+  }
+
+  details[open] {
+    box-shadow: var(--glow-brand);
+  }
+
+  summary {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    min-block-size: var(--touch-target);
+    padding: var(--space-4) var(--space-6);
+    border-radius: inherit;
+    color: var(--color-text);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+    list-style: none;
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:is(:hover, [data-preview-state='hover']) {
+    color: var(--color-link);
+  }
+
+  /* Plus that turns into a minus: two bars, the vertical one folds away when open */
+  .marker {
+    position: relative;
+    flex: none;
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+  }
+
+  .marker::before,
+  .marker::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    block-size: var(--border-width-strong);
+    border-radius: var(--radius-pill);
+    background: var(--gradient-energy);
+    translate: 0 -50%;
+    transition: rotate var(--duration-base) var(--ease-out-expo);
+  }
+
+  .marker::after {
+    rotate: var(--quarter-turn);
+  }
+
+  details[open] .marker::after {
+    rotate: none;
+  }
+
+  .answer {
+    margin: 0;
+    padding: 0 var(--space-6) var(--space-6);
+    color: var(--color-text-muted);
+  }
+</style>

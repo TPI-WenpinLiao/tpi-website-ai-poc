@@ -2,9 +2,10 @@
 // Site header (M3-04, #17): brand, the first-level menu, search, locale and the 聯絡我們 button,
 // all from docs/ia/navigation.csv (src/lib/ia/navigation.ts). Sticky on a dark glass bar, so it
 // reads the same over the hero, the 3D scene and the light sections below.
-// Menus are native <details> disclosures: they open and close without client JS. Closing on an
-// outside click or Esc, one menu at a time and the keyboard model are M4-04's; the search box is M6's
-// and links to its page for now.
+// Menus are native <details> disclosures sharing one `name`, so opening one closes the others
+// without client JS. A small script closes the open menu on a click outside it, and on Esc (focus
+// goes back to its summary). The rest of the keyboard model is M4-04's; the search box is M6's and
+// links to its page for now.
 // The language menu lists the same entries as LocaleSwitcher (localeLinks, ADR 0002): locales
 // without a built page or home are left out, so it doesn't render while zh-TW is the only one.
 // Below 64rem the menu collapses behind one 選單 disclosure that lists every group.
@@ -32,6 +33,8 @@ interface Props {
 const { navLabel = '主選單', skipTo = '#main', open } = Astro.props;
 // Rendered height in px; matches --logo-height (2rem) so the 1x/2x files fit the box
 const LOGO_HEIGHT = 32;
+// One exclusive group per header; /design-system shows several headers, each with its own navLabel
+const menuGroup = `site-menu-${navLabel}`;
 const home = node('home');
 const contact = node('contact');
 const search = node('search');
@@ -56,7 +59,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
         {
           header.map((item) => (
             <li class:list={{ mega: isMega(item) }}>
-              <details open={open === item.label}>
+              <details name={menuGroup} open={open === item.label}>
                 <summary>
                   {item.label}
                   <span class="caret" aria-hidden="true" />
@@ -121,7 +124,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
       </a>
       {
         locales.length > 1 && (
-          <details class="locale" open={open === 'locale'}>
+          <details class="locale" name={menuGroup} open={open === 'locale'}>
             <summary>
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <circle cx="12" cy="12" r="8.5" />
@@ -145,7 +148,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
       <div class="cta">
         <Button href={contact.path} size="sm">{contact.title}</Button>
       </div>
-      <details class="mobile" open={open === 'mobile'}>
+      <details class="mobile" name={menuGroup} open={open === 'mobile'}>
         <summary class="icon">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
           <span class="sr-only">選單</span>
@@ -190,6 +193,26 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     </div>
   </div>
 </header>
+
+<script>
+  // Close open header menus on a click outside them and on Esc. The /design-system previews are
+  // inert and drawn open on purpose, so they are left alone.
+  const openMenus = () =>
+    [...document.querySelectorAll<HTMLDetailsElement>('.site-header details[open]')].filter((d) => !d.closest('[inert]'));
+
+  document.addEventListener('click', (e) => {
+    for (const menu of openMenus()) if (!(e.target instanceof Node && menu.contains(e.target))) menu.open = false;
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    for (const menu of openMenus()) {
+      const hadFocus = menu.contains(document.activeElement);
+      menu.open = false;
+      if (hadFocus) menu.querySelector('summary')?.focus();
+    }
+  });
+</script>
 
 <style>
   @import '../../styles/media.css';

@@ -27,14 +27,18 @@ export const TIERS = {
 // src/styles/media.css. Read it live, since the viewport can cross it after the scene starts.
 const narrowLayout = () => matchMedia('(width < 64rem)').matches;
 // The rendering budget also drops on touch devices, whatever their layout (a landscape tablet
-// gets the desktop layout but the mobile tier). Picked once, when the scene starts.
-const LOW_POWER = '(width < 64rem), (pointer: coarse)';
+// gets the desktop layout but the mobile tier). Picked when the scene starts; Scene3D restarts the
+// scene when this query flips (a window resized across the breakpoint).
+export const LOW_POWER = '(width < 64rem), (pointer: coarse)';
 
 // How fast the damped progress follows the scroll position, per second
 const PROGRESS_DAMPING = 6;
 
-// Fraction of the viewport the scene's center moves off the middle
+// Fraction of the viewport the scene's center moves off the middle: to the end side on wide
+// layouts, up on narrow ones once the hero has scrolled away (chapters, panel at the bottom)
 const FOCUS_SHIFT = { wide: 0.22, narrow: 0.3 };
+// Narrow heroes: share of the visual area's height the scene's subject fills (fitDistance)
+const NARROW_FILL = 0.8;
 
 export const pickTier = (): Tier => (matchMedia(LOW_POWER).matches ? TIERS.mobile : TIERS.desktop);
 
@@ -65,6 +69,15 @@ export interface SceneContext {
   isNarrow: () => boolean;
   /** Reads a unitless number token (e.g. --scene-rim-width) from the host's computed style */
   readNumber: (name: string) => number;
+  /** Chapters in the track after the hero (SceneChapter, data-scene-chapter) */
+  chapters: number;
+  /** Scene3D's `family`: show only that product family's module (product pages) */
+  family?: number;
+  /**
+   * Narrow layout: camera distance at which an object `size` world units tall fills the hero's
+   * visual area (PageHero's data-hero-visual). Undefined on wide layouts and without one.
+   */
+  fitDistance: (size: number) => number | undefined;
 }
 
 export interface SceneInstance {
@@ -146,10 +159,11 @@ interface MountOptions {
   factory: SceneFactory;
   /** Called once the first frame is on the canvas */
   onReady: () => void;
+  family?: number;
 }
 
 /** Starts the scene; returns a function that stops it and frees GPU resources. */
-export function mount({ host, track, factory, onReady }: MountOptions): () => void {
+export function mount({ host, track, factory, onReady, family }: MountOptions): () => void {
   const tier = pickTier();
   const perspective = readLength(css(host, '--perspective'));
   const renderer = new WebGLRenderer({ antialias: tier.antialias, powerPreference: 'low-power' });
@@ -159,6 +173,26 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(50, 1, 0.1, 400);
+  host.dataset.sceneTier = tier.kind;
+
+  // Narrow heroes frame the scene in PageHero's visual area: between the breadcrumb row (or
+  // whatever bar is above the hero) and the copy, measured at scroll 0 in the host's coordinates,
+  // so no header or bar height is written here. Measured again on every resize.
+  const heroVisual = track.querySelector<HTMLElement>('[data-hero-visual]');
+  let visual: { top: number; bottom: number; pageBottom: number } | undefined;
+  const measureVisual = () => {
+    const r = heroVisual?.getBoundingClientRect();
+    if (!r?.height || !narrowLayout()) return undefined;
+    const hostTop = host.getBoundingClientRect().top;
+    return { top: r.top + scrollY - hostTop, bottom: r.bottom + scrollY - hostTop, pageBottom: r.bottom + scrollY };
+  };
+  const fitDistance = (size: number) => {
+    const h = host.clientHeight;
+    if (!visual || !h) return undefined;
+    const px = (visual.bottom - visual.top) * NARROW_FILL;
+    return (size * h) / (px * 2 * Math.tan((camera.fov * Math.PI) / 360));
+  };
+
   const instance = factory({
     scene,
     camera,
@@ -167,7 +201,28 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
     view: readView(host),
     isNarrow: narrowLayout,
     readNumber: (name) => readNumber(host, name),
+    chapters: Math.max(1, track.querySelectorAll('[data-scene-chapter]').length),
+    family,
+    fitDistance,
   });
+
+  // Where the scene's center sits on the canvas. Wide: the end side, as the static image's subject
+  // (Backdrop fade="hero"). Narrow: the middle of the hero's visual area, moving up with it as the
+  // page scrolls and easing to the chapters' framing as the area scrolls away.
+  const applyOffset = () => {
+    const { clientWidth: w, clientHeight: h } = host;
+    if (!w || !h) return;
+    let shift = { x: -w * FOCUS_SHIFT.wide, y: 0 };
+    if (narrowLayout()) {
+      const chapters = h * FOCUS_SHIFT.narrow;
+      // The visual area scrolls with the page, so the scene follows it like the static image does
+      const hero = visual ? h / 2 - ((visual.top + visual.bottom) / 2 - scrollY) : chapters;
+      const away = visual ? smoothstep(0, visual.pageBottom, scrollY) : 1;
+      shift = { x: 0, y: hero + (chapters - hero) * away };
+    }
+    camera.setViewOffset(w, h, shift.x, shift.y, w, h);
+    camera.updateProjectionMatrix();
+  };
 
   const resize = () => {
     const { clientWidth: w, clientHeight: h } = host;
@@ -177,11 +232,8 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.fov = fovFor(h, perspective);
-    // Center the scene where the static image's subject is: the end side on wide screens, the
-    // upper part on narrow ones (Backdrop fade="hero")
-    const shift = narrowLayout() ? { x: 0, y: h * FOCUS_SHIFT.narrow } : { x: -w * FOCUS_SHIFT.wide, y: 0 };
-    camera.setViewOffset(w, h, shift.x, shift.y, w, h);
-    camera.updateProjectionMatrix();
+    visual = measureVisual();
+    applyOffset();
   };
   resize();
   const resizeObserver = new ResizeObserver(resize);
@@ -214,6 +266,7 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
     raf = 0;
     damped += (progress() - damped) * (1 - Math.exp(((last - now) / 1000) * PROGRESS_DAMPING));
     last = now;
+    applyOffset();
     instance.update({ progress: damped, time: (now - start) / 1000, pointer });
     renderer.render(scene, camera);
     if (!ready) {
@@ -245,5 +298,6 @@ export function mount({ host, track, factory, onReady }: MountOptions): () => vo
     instance.dispose();
     renderer.dispose();
     renderer.domElement.remove();
+    delete host.dataset.sceneTier;
   };
 }

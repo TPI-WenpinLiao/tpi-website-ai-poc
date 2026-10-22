@@ -7,15 +7,18 @@
 // or without WebGL. Once the first frame is drawn the track gets data-scene="ready" and the canvas
 // fades in over the static image; it is fixed to the viewport so it keeps playing while the
 // track's later sections (which must then drop their background) scroll over it.
+// `family` (0–3, the home page's family order: AI, digital transformation, security, ESG) shows only
+// that family's module, for product pages; its blocks light up one group per chapter.
 // Decorative, so hidden from assistive tech.
 interface Props {
   direction: 'modular-stack';
+  family?: 0 | 1 | 2 | 3;
 }
 
-const { direction } = Astro.props;
+const { direction, family } = Astro.props;
 ---
 
-<div class="scene-3d" data-scene-host={direction} aria-hidden="true" hidden></div>
+<div class="scene-3d" data-scene-host={direction} data-scene-family={family} aria-hidden="true" hidden></div>
 
 <script>
   import type { SceneFactory } from '../../lib/scene/runtime';
@@ -24,6 +27,8 @@ const { direction } = Astro.props;
     'modular-stack': () => import('../../lib/scene/modular-stack'),
   };
   const IDLE_TIMEOUT = 2000;
+  // Wait for a resize across the low-power breakpoint to settle before rebuilding the scene
+  const TIER_DEBOUNCE = 200;
 
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -69,23 +74,42 @@ const { direction } = Astro.props;
     await idle();
     if (reduceMotion.matches || !supportsWebGL()) return;
 
-    const [{ mount }, { default: factory }] = await Promise.all([import('../../lib/scene/runtime'), load()]);
+    const [{ mount, LOW_POWER }, { default: factory }] = await Promise.all([import('../../lib/scene/runtime'), load()]);
     // Reduced motion may have been turned on while the chunk downloaded
     if (reduceMotion.matches) return;
     host.hidden = false;
-    const stop = mount({
-      host,
-      track,
-      factory,
-      onReady: () => {
-        track.dataset.scene = 'ready';
-      },
-    });
+    const start = () =>
+      mount({
+        host,
+        track,
+        factory,
+        family: host.dataset.sceneFamily ? Number(host.dataset.sceneFamily) : undefined,
+        onReady: () => {
+          track.dataset.scene = 'ready';
+        },
+      });
+    let stop = start();
+
+    // The rendering tier (block count, camera path, DPR) is picked when the scene starts, so a
+    // resize across the low-power breakpoint rebuilds it. data-scene stays "ready" meanwhile, so the
+    // static image doesn't flash in for the one frame the new canvas takes.
+    const lowPower = matchMedia(LOW_POWER);
+    let rebuild = 0;
+    const onTierChange = () => {
+      clearTimeout(rebuild);
+      rebuild = window.setTimeout(() => {
+        stop();
+        stop = start();
+      }, TIER_DEBOUNCE);
+    };
+    lowPower.addEventListener('change', onTierChange);
 
     // Turning on reduced motion while the scene plays falls back to the static image
     reduceMotion.addEventListener(
       'change',
       () => {
+        clearTimeout(rebuild);
+        lowPower.removeEventListener('change', onTierChange);
         stop();
         host.hidden = true;
         delete track.dataset.scene;

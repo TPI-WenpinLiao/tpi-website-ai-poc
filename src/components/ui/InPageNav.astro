@@ -1,0 +1,79 @@
+---
+// Bar of in-page anchors to the sections of a long page (the offering template's 功能／應用情境／…,
+// the /design-system table of contents). List only sections the page renders.
+// Scrolls sideways inside the bar on narrow screens, never the page. `stick="header"` is for pages
+// with SiteHeader: the bar sticks under the header from --bp-lg-up only, so on phones the header
+// alone stays on screen. `stick="top"` sticks to the top at every width (pages without a header).
+// The page gives its section targets a scroll-margin-block-start so they land below the bars.
+interface Props {
+  items: { href: string; label: string }[];
+  label: string;
+  stick?: 'header' | 'top';
+}
+
+const { items, label, stick = 'header' } = Astro.props;
+---
+
+<nav class:list={['in-page-nav', stick]} aria-label={label} data-surface="dark">
+  <ul>
+    {
+      items.map((i) => (
+        <li>
+          <a href={i.href}>{i.label}</a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  @import '../../styles/media.css';
+
+  .in-page-nav {
+    position: relative;
+    z-index: var(--z-raised);
+    border-block-end: var(--border-width) solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+  }
+
+  .top {
+    position: sticky;
+    inset-block-start: 0;
+  }
+
+  @media (--bp-lg-up) {
+    .header {
+      position: sticky;
+      inset-block-start: var(--header-height);
+    }
+  }
+
+  ul {
+    display: flex;
+    gap: var(--space-1);
+    box-sizing: content-box;
+    max-inline-size: var(--content-max-width);
+    margin: 0 auto;
+    padding: var(--space-1) var(--space-gutter);
+    overflow-x: auto;
+    list-style: none;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  a:is(:hover, [data-preview-state='hover']) {
+    background: var(--color-bg-muted);
+    color: var(--color-text);
+  }
+</style>

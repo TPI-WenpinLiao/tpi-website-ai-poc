@@ -3,6 +3,9 @@
 // and reassembles the blocks into four modules, one per product family. The module of the
 // current chapter lifts, lights up and plays its own motion (EFFECTS); the camera glides between
 // modules, holding on each one while its chapter is on screen.
+// With `family` (product pages, M3-05) the scene is that family's module alone: the hero shows it
+// whole, the first chapter breaks it apart and flips it back together, and from then on it plays
+// its family's motion while each chapter lights one diagonal group of blocks and pushes it out.
 // Blocks are one InstancedMesh; the rim is drawn in the fragment shader from the face UVs, so
 // there is no edge geometry.
 import { BoxGeometry, Color, InstancedBufferAttribute, InstancedMesh, Matrix4, Quaternion, ShaderMaterial, Vector2, Vector3 } from 'three';
@@ -18,16 +21,21 @@ const MODULE_SPACING = 9;
 const LIFT = 2.2;
 const EXPLODE = 7;
 const CAMERA_DISTANCE = 30;
-// Narrow heroes have less room above the copy: frame the tower from further back, and lower the
-// camera target (world units) so the tower sits clear of the eyebrow under the sticky header
-const NARROW_HERO_PULLBACK = 24;
-const NARROW_HERO_RAISE = 2;
+// Narrow heroes frame the tower in PageHero's visual area: the runtime centers it there and
+// fitDistance sets how far back the camera is (ADR 0003)
 // Narrow chapters: the panel sits at the bottom, so raise the camera target (world units) to bring
 // the module down from under the scroll progress bar into the space above the panel
 const NARROW_CHAPTER_DROP = 3;
 const ORBIT_SWING = 0.35;
-// Progress at which the tower has become four modules (the first chapter's center)
-const SPLIT_END = 0.25;
+// Single-module framing (family): closer, since the module is a quarter of the tower; the lit
+// group moves this far out from the center (world units), the family motion plays at this strength
+const SINGLE_DISTANCE = 16;
+// Narrow chapters: from further back, and with the module held above the panel at the bottom of
+// each chapter (the target sits lower, so the module shows higher)
+const SINGLE_NARROW_CHAPTER_PULLBACK = 14;
+const SINGLE_NARROW_LIFT = 2;
+const SINGLE_PUSH = 0.8;
+const SINGLE_EFFECT = 0.6;
 // Share of each chapter step the camera holds on a module before gliding to the next (each end)
 const DWELL = 0.3;
 const Y_AXIS = new Vector3(0, 1, 0);
@@ -70,36 +78,43 @@ const FRAGMENT = /* glsl */ `
   }
 `;
 
-const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, isNarrow, readNumber }) => {
+const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, isNarrow, readNumber, chapters, family, fitDistance }) => {
   const edge = tier.density < 0.5 ? EDGE.reduced : EDGE.full;
   const perModule = edge ** 3;
-  const count = perModule * MODULES;
+  const single = family !== undefined;
+  const modules = single ? 1 : MODULES;
+  const count = perModule * modules;
   const step = BLOCK + GAP;
+  // Height on screen of the hero's tower (or single module), in world units: its height seen from
+  // the camera's elevation plus the depth of its top face
+  const heroSize = modules * edge * step * Math.cos(view.elevation) + edge * step * Math.SQRT2 * Math.sin(view.elevation);
 
   // Row of modules runs along the camera's lateral axis, so all four stay in view
   const lateral = new Vector3(Math.cos(view.azimuth), 0, -Math.sin(view.azimuth));
 
-  // Tower: the modules stacked on top of each other. Row: modules side by side.
+  // Tower: the modules stacked on top of each other. Row: modules side by side. A single module
+  // stays where it is in both.
   const tower: Vector3[] = [];
   const row: Vector3[] = [];
   const outward: Vector3[] = [];
   const axes: Vector3[] = [];
   // Block position in its module's own grid, centered on the module (x, z) and its middle layer (y)
   const cell: Vector3[] = [];
+  // Which module a block belongs to; for a single module, which chapter lights it (diagonal groups)
   const module = new Float32Array(count);
   const center = (edge - 1) / 2;
-  for (let m = 0; m < MODULES; m += 1) {
+  for (let m = 0; m < modules; m += 1) {
     for (let k = 0; k < perModule; k += 1) {
       const x = (k % edge) - center;
       const z = (Math.floor(k / edge) % edge) - center;
       const y = Math.floor(k / edge ** 2);
       const local = new Vector3(x * step, y * step, z * step);
-      tower.push(local.clone().setY(local.y + m * edge * step - (MODULES * edge * step) / 2));
-      row.push(local.clone().addScaledVector(lateral, (m - (MODULES - 1) / 2) * MODULE_SPACING).setY(local.y - center * step));
+      tower.push(local.clone().setY(local.y + m * edge * step - (modules * edge * step) / 2));
+      row.push(single ? (tower.at(-1)?.clone() ?? local) : local.clone().addScaledVector(lateral, (m - (MODULES - 1) / 2) * MODULE_SPACING).setY(local.y - center * step));
       outward.push(new Vector3(x, (Math.random() - 0.5) * 2, z).normalize().multiplyScalar(EXPLODE * (0.6 + Math.random() * 0.6)));
       axes.push([new Vector3(1, 0, 0), new Vector3(0, 0, 1), new Vector3(0, 1, 0)][(m + k) % 3] ?? new Vector3(0, 1, 0));
       cell.push(new Vector3(x, y - center, z));
-      module[m * perModule + k] = m;
+      module[m * perModule + k] = single ? ((k % edge) + (Math.floor(k / edge) % edge) + y) % chapters : m;
     }
   }
 
@@ -123,7 +138,8 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
   for (let n = 0; n < count; n += 1) {
     const m = module[n] ?? 0;
     const [a, b, c] = palette.energy;
-    const t = m / (MODULES - 1);
+    // A single module runs through the whole energy gradient, one stop per group
+    const t = single ? m / Math.max(1, chapters - 1) : m / (MODULES - 1);
     color.copy(t < 0.5 ? a : b).lerp(t < 0.5 ? b : c, t < 0.5 ? t * 2 : t * 2 - 1);
     blocks.setColorAt(n, color);
   }
@@ -185,20 +201,23 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
     },
   ];
 
+  // Progress at which the tower has become its modules: the first chapter's center (chapterAt = 0)
+  const splitEnd = 1 / chapters;
+
   /**
    * Continuous chapter coordinate: -1 in the hero, m while chapter m is centered. Between two
    * chapters it holds on each end (DWELL) and eases across, so the camera never snaps.
    */
   const chapterAt = (progress: number) => {
-    const c = Math.min(MODULES - 1, Math.max(-1, progress * MODULES - 1));
+    const c = Math.min(chapters - 1, Math.max(-1, progress * chapters - 1));
     const i = Math.floor(c);
     return i + smoothstep(DWELL, 1 - DWELL, c - i);
   };
 
   return {
     update({ progress, time, pointer }) {
-      // 0 → SPLIT_END: break apart, flip and regroup; then one active module per chapter
-      const split = smoothstep(0, SPLIT_END, progress);
+      // 0 → splitEnd: break apart, flip and regroup; then one active module per chapter
+      const split = smoothstep(0, splitEnd, progress);
       const burst = Math.sin(split * Math.PI);
       const chapter = chapterAt(progress);
       uniforms.uActive.value = chapter;
@@ -209,27 +228,45 @@ const createModularStack: SceneFactory = ({ scene, camera, tier, palette, view, 
         const stagger = smoothstep(0, 1, split * 1.4 - ((n % perModule) / perModule) * 0.4);
         position.copy(tower[n] ?? position).lerp(row[n] ?? position, stagger).addScaledVector(outward[n] ?? position, burst);
         const a = Math.max(0, 1 - Math.abs(m - chapter));
-        position.y += a * LIFT + Math.sin(time * 0.8 + m) * 0.15;
         rotation.setFromAxisAngle(axes[n] ?? Y_AXIS, stagger * Math.PI * 0.5);
         scale.setScalar(1);
-        if (a > 0) {
+        if (single) {
+          // The family's motion once the module has regrouped; the lit group pushes outward
+          position.y += Math.sin(time * 0.8) * 0.15;
+          if (c.lengthSq() > 0) position.addScaledVector(local.copy(c).normalize(), a * split * SINGLE_PUSH);
           local.copy(c).multiplyScalar(step);
-          EFFECTS[m]?.(c, a, time);
+          EFFECTS[family]?.(c, split * SINGLE_EFFECT, time);
           position.add(moved.sub(local));
           rotation.premultiply(effectRotation);
+        } else {
+          position.y += a * LIFT + Math.sin(time * 0.8 + m) * 0.15;
+          if (a > 0) {
+            local.copy(c).multiplyScalar(step);
+            EFFECTS[m]?.(c, a, time);
+            position.add(moved.sub(local));
+            rotation.premultiply(effectRotation);
+          }
         }
         blocks.setMatrixAt(n, matrix.compose(position, rotation, scale));
       }
       blocks.instanceMatrix.needsUpdate = true;
 
-      // Hero frames the tower; chapters glide to the current module
-      const followed = (Math.max(0, chapter) - (MODULES - 1) / 2) * MODULE_SPACING;
+      // Hero frames the tower; chapters glide to the current module. A single module stays put.
+      const followed = single ? 0 : (Math.max(0, chapter) - (MODULES - 1) / 2) * MODULE_SPACING;
       target.copy(towerCenter).addScaledVector(lateral, followed * split);
-      if (isNarrow()) target.y += NARROW_CHAPTER_DROP * split - NARROW_HERO_RAISE * (1 - split);
+      if (isNarrow()) {
+        target.y += (single ? -SINGLE_NARROW_LIFT : NARROW_CHAPTER_DROP) * split;
+      }
       const swing = tier.path === 'orbit' ? Math.sin(progress * Math.PI * 1.5) * ORBIT_SWING + pointer.x * 0.08 : 0;
+      const chapterDistance = single
+        ? SINGLE_DISTANCE + (isNarrow() ? SINGLE_NARROW_CHAPTER_PULLBACK * split : 0)
+        : CAMERA_DISTANCE - split * (tier.path === 'orbit' ? 8 : 4);
+      // Narrow heroes start at the distance that fits the visual area, then ease to the chapters'
+      const fit = isNarrow() ? fitDistance(heroSize) : undefined;
+      const distance = fit === undefined ? chapterDistance : fit + (chapterDistance - fit) * split;
       placeCamera(camera, {
         target,
-        distance: CAMERA_DISTANCE + (isNarrow() ? NARROW_HERO_PULLBACK * (1 - split) : 0) - split * (tier.path === 'orbit' ? 8 : 4),
+        distance,
         elevation: view.elevation + (tier.parallax ? pointer.y * 0.05 : 0),
         azimuth: view.azimuth + swing,
       });

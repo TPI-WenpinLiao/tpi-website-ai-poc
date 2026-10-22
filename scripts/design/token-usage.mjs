@@ -12,7 +12,7 @@ import { join, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const ROOT = resolve(import.meta.dirname, '../..');
-const DIRS = ['src/components/ui', 'src/pages/design-system'];
+const DIRS = ['src/components/ui', 'src/pages/design-system', 'src/pages/products'];
 const FILES = ['src/layouts/BaseLayout.astro', 'src/pages/index.astro'];
 const TOKENS = 'src/styles/tokens.css';
 
