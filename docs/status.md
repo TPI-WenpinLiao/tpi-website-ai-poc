@@ -4,14 +4,14 @@
 
 ## 目前 milestone
 
-**M3 設計系統**；M1 剩 M1-06 收尾（#7）
+**M3 設計系統**
 
 ## 進度
 
 | Milestone | 狀態 |
 |---|---|
 | M0 基礎建設 | 完成 |
-| M1 盤點與研究 | 進行中（剩 M1-06 收尾） |
+| M1 盤點與研究 | 完成 |
 | M2 資訊架構 | 完成 |
 | M3 設計系統 | 進行中 |
 | M4 開發骨架 | 未開始 |
@@ -35,6 +35,7 @@
 - M1-03 SEO 基線完成（#4）
 - M1-04 功能盤點完成（#5）
 - M1-05 受眾與轉換目標完成（#6）
+- M1-06 M1 收尾完成（#7）：`content-migration` 補上 `to_confirm`、失效連結、blog 與新聞內文來源、新聞發布日、外部網域圖片的規則
 - 雲端 session 品質關卡修正完成（#47，PR #48），已驗證新 session 不需手動設定即可通過 `npm run check`
 - 工作流程 skills 與 pstack 導入完成（#50，PR #51）
 
@@ -60,10 +61,15 @@
 - M3-01 各模板低保真 wireframe 完成（#14，`wireframe-approved`）：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 vi 與 en 長譯名放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
 - M3-02 design tokens 與元件庫完成（#15，`design-approved`）：深色場景與亮色閱讀頁的雙 surface、光與景深、捲動動態、12 個元件與 `/design-system` 審核頁；影像素材與提示詞見 `docs/design/image-prompts.md`
 - M3-03 design-system 展示頁完成（#16，`design-approved`）：`/design-system` 列出全部 152 個 token（三層分組）與 5 個互動元件的狀態矩陣；全域改為 `box-sizing: border-box`
-- M3-04 首頁高保真（#17），階段一，等待 `design-approved`：方向 B 的場景做成首頁 `/`（原型頁已刪除），結構照 `/wireframes/home`；文案取自現站（`src/data/home.ts`、`src/data/site.ts`，`node scripts/design/home-content.mjs` 逐筆比對現站）；新元件 `SiteHeader`（原生 `<details>` 選單，零 client JS）、`SiteFooter`，`Card` 加上 `size="sm"`；方塊材質 tokens `--scene-block-*`、`--scene-rim-*`
+- M3-04 首頁高保真（#17，PR #93），階段一，等待 `design-approved`：方向 B 的場景做成首頁 `/`（原型頁已刪除），結構照 `/wireframes/home`；文案取自現站（`src/data/home.ts`、`src/data/site.ts`，`node scripts/design/home-content.mjs` 逐筆比對現站）；新元件 `SiteHeader`（原生 `<details>` 選單，零 client JS）、`SiteFooter`，`Card` 加上 `size="sm"`；方塊材質 tokens `--scene-block-*`、`--scene-rim-*`
 - M3-07 3D scroll 視覺方向原型完成（#54，`design-approved`）：選定方向 B Modular Stack，原型頁 `/prototypes/modular-stack`（three.js，`Scene3D` island），A Data Flow 已刪除；ADR 0003 載入策略；`node scripts/design/lighthouse-3d.mjs` 行動版 0.99、桌機 1，`a11y-smoke.mjs` 加上 3D 場景上的文字對比
 - `issues.yml` 與 GitHub issue 對齊完成（#88）：補 M3-07～09、M3-04/05 的依賴改為 M3-02、M3-07；`node scripts/bootstrap/diff.mjs` 比對兩邊，目前差異 0、重跑 bootstrap 不會新建 issue
 - `needs-design` 階段一改走 `/issue-ship` 完成（#84）：`CLAUDE.md`、`issue-start`、`checkpoint`、`workflow.md` 都連到 `issue-ship` 的「`needs-design` 的兩個階段」，`wip:` 合併只寫在 `issue-ship` 第 4 步。#16 留在 `main` 的 `wip:` commit（`1b3a5fe`、`a2508f8`）不改寫
+
+### M4 開發骨架
+
+- M4-01 Content collections 與 Zod schema（#20，PR #91），待合併
+- M4-02 i18n 路由（#21，PR #90），待合併
 
 ## 下一步
 
