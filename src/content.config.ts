@@ -4,7 +4,7 @@ import { defineCollection, reference } from 'astro:content';
 import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { parse } from 'yaml';
-import { unquotedDateErrors } from '../scripts/content/dates.mjs';
+import { frontmatterDateErrors } from '../scripts/content/dates.mjs';
 import { LOCALES } from './lib/i18n/locales';
 import { nodeIds, nodes } from './lib/ia/nodes';
 
@@ -21,7 +21,7 @@ function localizedGlob(collection: string) {
     pattern: '**/*.md',
     base: `./src/content/${collection}`,
     generateId: ({ entry, base }) => {
-      const dateErrors = unquotedDateErrors(readFileSync(new URL(entry, base), 'utf8'));
+      const dateErrors = frontmatterDateErrors(readFileSync(new URL(entry, base), 'utf8'));
       if (dateErrors.length) throw new Error(`${collection}/${entry}: ${dateErrors.join('; ')}`);
       const [locale, slug, ...rest] = entry.replace(/\.md$/, '').split('/');
       if (!LOCALES.some((l) => l === locale) || !slug || rest.length || !SLUG.test(slug)) {
@@ -33,7 +33,7 @@ function localizedGlob(collection: string) {
 }
 
 const text = z.string().trim().min(1);
-// YAML parses an unquoted 2026-10-20 as a Date (checked by unquotedDateErrors); a quoted one stays a string.
+// YAML parses an unquoted 2026-10-20 as a Date (checked by frontmatterDateErrors); a quoted one stays a string.
 // z.coerce.date() would also turn an empty value or a number into 1970-01-01, so only these two forms are accepted.
 const date = z.union([z.date(), z.iso.date().transform((s) => new Date(s))], { error: 'expected a YYYY-MM-DD date' });
 const httpUrl = z.url({ protocol: /^https?$/ });

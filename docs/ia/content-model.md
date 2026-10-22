@@ -477,7 +477,7 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 下列情況 `astro check` 與 `astro build` 會失敗：
 
 - 缺必填欄位、型別或 enum 不符
-- 日期不是存在的 `YYYY-MM-DD`：留空、數字、`10/20/2026`、`2026-02-30`、帶時間的 `2026-10-20T00:00:00Z` 都會失敗。YAML 會把沒加引號的 `2026-02-30` 進位成 `2026-03-02`、把 datetime 轉成 `Date`，所以沒加引號的日期另外由 [`scripts/content/dates.mjs`](../../scripts/content/dates.mjs) 讀原始 frontmatter 檢查
+- 日期不是存在的 `YYYY-MM-DD`：留空、數字、`10/20/2026`、`2026-02-30`、帶時間的 `2026-10-20T00:00:00Z` 都會失敗。YAML 會把沒加引號的 `2026-02-30` 進位成 `2026-03-02`、把 datetime 轉成 `Date`，所以 [`scripts/content/dates.mjs`](../../scripts/content/dates.mjs) 用和 Astro 相同的 YAML 選項讀原始 frontmatter，凡是會被讀成日期的值，原文都必須是存在的 `YYYY-MM-DD`；TOML（`+++`）frontmatter 不接受
 - 出現本檔沒有的欄位（所有物件都不接受未定義的欄位）
 - 語系目錄不是 `zh-TW`、`en`、`vi`，或 slug 不是小寫英數與 `-`
 - `node`、`offeringNode`、`category` 不在 `nodes.csv` 對應的節點裡，tag 不在 `tags.yaml`
