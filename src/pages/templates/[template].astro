@@ -1,14 +1,15 @@
 ---
 // Preview of each template with sample data (M4-04, #23): the first zh-TW entry the template
 // serves, drafts included, which no real route builds (content-model.md: drafts have no page).
-// The listing preview is the blog's real first page, so it shows published posts only.
+// The listing preview is the blog's real first page (published posts only, PAGE_SIZE of them);
+// the contact preview uses the contact page entry when there is one.
 // Internal page (src/lib/seo/indexing.ts); PageLayout marks it as a preview. The home template
 // is the home page itself, so it has no preview here.
 import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import { node } from '../../lib/ia/navigation';
 import { templates } from '../../lib/ia/templates';
-import { entryLocale } from '../../lib/content/entries';
+import { entryLocale, paginate } from '../../lib/content/entries';
 import { listing } from '../../lib/content/listings';
 import { DEFAULT_LOCALE } from '../../lib/i18n/locales';
 import OfferingTemplate from '../../layouts/templates/OfferingTemplate.astro';
@@ -35,6 +36,8 @@ async function sample<T>(entries: Promise<T[]>): Promise<T> {
 }
 const ofTemplate = (e: { id: string; data: { node: string } }) => inLocale(e) && node(e.data.node).template === template;
 const blogListing = template === 'listing' ? await listing('blog', locale) : undefined;
+const blogPages = blogListing && paginate(blogListing.items);
+const contactEntry = template === 'contact' ? (await getCollection('page', (e) => inLocale(e) && e.data.node === 'contact'))[0] : undefined;
 ---
 
 {template === 'offering' && <OfferingTemplate entry={await sample(getCollection('offering', ofTemplate))} />}
@@ -44,6 +47,10 @@ const blogListing = template === 'listing' ? await listing('blog', locale) : und
 {template === 'article' && <ArticleTemplate kind="blog" entry={await sample(getCollection('blog', inLocale))} />}
 {template === 'case-study' && <CaseStudyTemplate entry={await sample(getCollection('case-study', inLocale))} />}
 {template === 'person' && <PersonTemplate entry={await sample(getCollection('person', inLocale))} />}
-{blogListing && <ListingTemplate id="blog" locale={locale} items={blogListing.items} featured={blogListing.featured} page={1} pages={1} />}
-{template === 'contact' && <ContactTemplate locale={locale} />}
+{
+  blogListing && blogPages && (
+    <ListingTemplate id="blog" locale={locale} items={blogPages[0] ?? []} featured={blogListing.featured} page={1} pages={blogPages.length} />
+  )
+}
+{template === 'contact' && <ContactTemplate locale={locale} entry={contactEntry} />}
 {template === 'utility' && <UtilityTemplate kind="not-found" locale={locale} />}

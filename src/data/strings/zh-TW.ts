@@ -18,6 +18,8 @@ const pages: Record<string, string> = {
   search: '搜尋昕力資訊網站的產品、解決方案、文章與新聞。',
   subscribe: '訂閱昕力資訊電子報。',
   'subscribe-result': '昕力資訊電子報的訂閱結果。',
+  unsubscribe: '取消訂閱昕力資訊電子報。',
+  cancelrecord: '取消昕力資訊的訂閱紀錄。',
   thanks: '感謝您與昕力資訊聯絡。',
   'not-found': '找不到您要的頁面，可以從搜尋或常用入口繼續瀏覽。',
   download: '昕力資訊產品文件下載。',
@@ -114,6 +116,7 @@ export const zhTW = {
     recommended: '推薦內容',
     downloads: '下載檔案',
     subscribeSubmit: '訂閱',
+    unsubscribeSubmit: '取消訂閱',
   },
   pages,
   offering: {

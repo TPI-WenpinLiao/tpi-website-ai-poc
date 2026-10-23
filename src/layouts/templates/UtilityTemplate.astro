@@ -1,7 +1,8 @@
 ---
-// utility template (M4-04, #23): search, newsletter sign-up and result, thank-you, 404 and the
-// download page of an offering, one column on the light surface. Structure follows
-// the M3-01 utility wireframe (#14). Copy is in src/data/strings; the behavior is M6's (search with Pagefind,
+// utility template (M4-04, #23): search, newsletter sign-up, its result and unsubscribing
+// (unsubscribe, cancelrecord: the current site asks only for the Email), thank-you, 404 and the
+// download page of an offering, one column on the light surface. Structure follows the M3-01
+// utility wireframe (#14). Copy is in src/data/strings; the behavior is M6's (search with Pagefind,
 // the sign-up form's provider, what a thank-you page offers), so forms have no action yet.
 // 404, search and the pages after a form is sent stay out of the sitemap (FLOW_PATHS in
 // src/lib/seo/indexing.ts).
@@ -20,10 +21,11 @@ import { breadcrumb, entryTrail, localeHref, node, nodeHref } from '../../lib/ia
 import { breadcrumbList, graph } from '../../lib/seo/jsonld/shared';
 import { entryLocale } from '../../lib/content/entries';
 import type { Locale } from '../../lib/i18n/locales';
+import type { UtilityPage } from '../../lib/ia/utility';
 import { pageDescription, strings } from '../../data/strings';
 
 type Props = (
-  | { kind: 'search' | 'subscribe' | 'subscribe-result' | 'thanks' | 'not-found'; locale: Locale }
+  | { kind: UtilityPage | 'not-found'; locale: Locale }
   | { kind: 'download'; offering: CollectionEntry<'offering'> }
 ) & { translations?: readonly string[] };
 
@@ -67,6 +69,14 @@ const jsonLd = props.kind === 'not-found' ? undefined : graph(breadcrumbList(tra
           <FormField kind="email" id="email" name="email" label={t.form.email} autocomplete="email" required />
           <FormField kind="checkbox" id="consent" name="consent" label={t.form.consent} required />
           <Button type="submit" size="lg">{u.subscribeSubmit}</Button>
+        </form>
+      )
+    }
+    {
+      (props.kind === 'unsubscribe' || props.kind === 'cancelrecord') && (
+        <form class="stack">
+          <FormField kind="email" id="email" name="email" label={t.form.email} autocomplete="email" required />
+          <Button type="submit" size="lg">{u.unsubscribeSubmit}</Button>
         </form>
       )
     }

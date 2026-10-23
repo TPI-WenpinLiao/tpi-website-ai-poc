@@ -10,9 +10,10 @@ export function isInternal(path: string): boolean {
 }
 
 // Site pages that are only steps of a flow, with no content of their own to find through search:
-// 404, the search results and the pages after a form is sent (#23). nodes.csv paths, checked by
+// 404, the search results, the pages after a form is sent and the unsubscribe pages reached from
+// e-mails (#23). nodes.csv paths, checked by
 // scripts/seo/indexing.test.mjs
-export const FLOW_PATHS = ['/404', '/search', '/thanks', '/subscribe/result'] as const;
+export const FLOW_PATHS = ['/404', '/search', '/thanks', '/subscribe/result', '/unsubscribe', '/cancelrecord'] as const;
 
 // Pages listed in the sitemap: everything built except internal pages and flow pages
 export const inSitemap = (path: string) => !isInternal(path) && !FLOW_PATHS.some((p) => p === stripLocale(path));

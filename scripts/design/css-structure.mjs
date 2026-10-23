@@ -79,6 +79,16 @@ export function withoutGlobal(s) {
   return out;
 }
 
+/** The selector without pseudo-classes and pseudo-elements, which scope nothing: `:global(body):has(x)` is still all global. @param {string} s */
+export function withoutPseudo(s) {
+  let out = s;
+  for (let prev = ''; prev !== out; ) {
+    prev = out;
+    out = out.replace(/::?[\w-]+(\([^()]*\))?/g, '');
+  }
+  return out;
+}
+
 /** Contents of each :global(...) in a selector. @param {string} s */
 function globalParts(s) {
   const parts = [];
@@ -132,7 +142,7 @@ export function structureProblems(files, stylesheets) {
       for (const sel of r.selector.split(',').map((s) => s.trim())) {
         if (!sel.includes(':global(')) continue;
         // 2. fully global selector
-        if (!/[\w.#[*]/.test(withoutGlobal(sel)) && !r.comment.includes('global-ok:')) {
+        if (!/[\w.#[*]/.test(withoutPseudo(withoutGlobal(sel))) && !r.comment.includes('global-ok:')) {
           problems.push(`${file}:${r.line}: "${sel}" is entirely :global; scope it under the component, or say why with a global-ok: comment`);
         }
         // 3. another module's class inside :global

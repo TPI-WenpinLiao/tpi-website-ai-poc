@@ -109,7 +109,7 @@
 - M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定。`og:locale` 的 en、vi 值要改成「語言_地區」格式，M7 處理
 - i18n 字串檔在 `src/data/strings/<locale>.ts`（M4-04 決定）：介面字串與 listing、utility、contact 頁的描述。這些頁沒有內容檔，只為有字串檔的語系產生；描述是暫定文案，上線前由內容負責人替換。首頁文案仍在 `src/data/home.ts`
 - `LocaleSwitcher` 的 landmark 名稱（語言／Language／Ngôn ngữ）是暫定譯文，M7-01 詞彙表（#38）定案後替換
-- M7 加 en、vi 字串檔前要處理（PR #98 審查第 1 輪）：listing、contact、utility 頁的 `translations` 現在把每個有字串檔的語系都算進去，en 的列表頁數比 zh-TW 少時，hreflang 與語言選單會指向不存在的 `/page/n`；`localeHref` 一律加語系前綴，不確認該語系有那一頁，部分翻譯時選單連結會 404；`scripts/i18n/routes.mjs` 的跨語系檢查會把 en、vi 頁上指向檔案的連結（下載頁）當成頁面連結誤報
+- M7 加 en、vi 字串檔前要處理（PR #98 審查第 1 輪）：listing、contact、utility 頁的 `translations` 現在把每個有字串檔的語系都算進去，en 的列表頁數比 zh-TW 少時，hreflang 與語言選單會指向不存在的 `/page/n`；`localeHref` 一律加語系前綴，不確認該語系有那一頁，部分翻譯時選單連結會 404；`scripts/i18n/routes.mjs` 的跨語系檢查會把 en、vi 頁上指向檔案的連結（下載頁）當成頁面連結誤報；聯絡頁只在有字串檔的語系找 contact entry，且只取第一筆，多的會被忽略；聯絡頁 hero 的說明（`src/data/home.ts` 的 `contactCta`）與 eyebrow「Contact」只有 zh-TW
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
 - `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56

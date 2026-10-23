@@ -40,6 +40,14 @@ test('an entirely :global selector fails unless a global-ok comment says why', (
   assert.deepEqual(check([['src/components/ui/A.astro', astro('/* global-ok: scroll lock */\n:global(html) { overflow: hidden; }')]]), []);
 });
 
+test('an entirely :global selector followed by a pseudo-class still fails', () => {
+  for (const sel of [':global(.x):hover', ':global(body):has(dialog[open])', ':global(html)::before']) {
+    const problems = check([['src/components/ui/A.astro', astro(`${sel} { color: red; }`)]]);
+    assert.equal(problems.length, 1, sel);
+  }
+  assert.deepEqual(check([['src/components/ui/A.astro', astro('.a:global(.x):hover { color: red; }')]]), []);
+});
+
 test("a class of another component inside :global fails", () => {
   const problems = check([
     ['src/components/ui/Card.astro', astro('.card { color: red; }')],

@@ -23,6 +23,7 @@ import ListingTemplate from '../layouts/templates/ListingTemplate.astro';
 import ContactTemplate from '../layouts/templates/ContactTemplate.astro';
 import UtilityTemplate from '../layouts/templates/UtilityTemplate.astro';
 import { nodes } from '../lib/ia/nodes';
+import { isUtilityPage, UTILITY_ELSEWHERE, type UtilityPage } from '../lib/ia/utility';
 import { LOCALES, type Locale } from '../lib/i18n/locales';
 import { localizePath } from '../lib/i18n/paths';
 import { listing } from '../lib/content/listings';
@@ -42,7 +43,7 @@ type Page =
   | { kind: 'person'; entry: CollectionEntry<'person'> }
   | { kind: 'listing'; id: string; locale: Locale; items: EntryCard[]; featured: EntryCard | undefined; page: number; pages: number }
   | { kind: 'contact'; locale: Locale; entry: CollectionEntry<'page'> | undefined }
-  | { kind: 'utility'; id: 'search' | 'subscribe' | 'subscribe-result' | 'thanks'; locale: Locale }
+  | { kind: 'utility'; id: UtilityPage; locale: Locale }
   | { kind: 'download'; entry: CollectionEntry<'offering'> };
 type Props = Page & { translations: string[] };
 
@@ -51,7 +52,9 @@ export const getStaticPaths = (async () => {
   async function nodePages() {
     const locales = LOCALES.filter(hasStrings);
     const versions = (path: string, locale: Locale) => locales.filter((l) => l !== locale).map((l) => localizePath(path, l));
-    const UTILITIES = ['search', 'subscribe', 'subscribe-result', 'thanks'] as const;
+    const utilities = nodes.filter((n) => n.template === 'utility' && !(UTILITY_ELSEWHERE as readonly string[]).includes(n.id));
+    const unknown = utilities.filter((n) => !isUtilityPage(n.id)).map((n) => n.id);
+    if (unknown.length) throw new Error(`utility nodes without a UtilityTemplate page: ${unknown.join(', ')} (src/lib/ia/utility.ts)`);
     const out = [];
     for (const locale of locales) {
       for (const n of nodes.filter((n) => n.template === 'listing')) {
@@ -80,7 +83,7 @@ export const getStaticPaths = (async () => {
       const contact = localizePath(node('contact').path, locale);
       const entry = (await getCollection('page', (e) => e.data.node === 'contact' && entryLocale(e.id) === locale && isPublished(e)))[0];
       out.push({ params: { path: contact.slice(1) }, props: { kind: 'contact', locale, entry, translations: versions(contact, locale) } satisfies Props });
-      for (const id of UTILITIES) {
+      for (const id of utilities.map((n) => n.id).filter(isUtilityPage)) {
         const path = localizePath(node(id).path, locale);
         out.push({ params: { path: path.slice(1) }, props: { kind: 'utility', id, locale, translations: versions(path, locale) } satisfies Props });
       }
