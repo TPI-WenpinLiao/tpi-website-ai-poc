@@ -11,7 +11,7 @@ M5-01（#26）把現站的產品頁搬進 `offering` 與 `hub` collection，只�
 | `offering` | digirunner、digirunner-cloud、digilogs、digilogs-iso27001、digilogs-detection、digimars、digiflexis、digicare、systalk-chat、systalk-viki、systalk-coach、systalk-audit、systalk-icr、systalk-rpa、gadodido、gadoscout、greenswift、electriswift、insurebrick | digirunner 沿用 M3-05 的版本 |
 | `hub` | products、family-ai、family-dx、family-esg、family-security、industry-finance、industry-government | family-security 是 `draft: true` 的新頁 |
 
-不在範圍：`/solutions/*` 的頁面與 `orient-ai`、`aiso`（M5-02），en、vi（M7-02、M7-03）。
+不在範圍：`/solutions/*` 的頁面（M5-02），en、vi（M7-02、M7-03），以及 `orient-ai`、`aiso`。後兩頁的 `page_type` 是 `service`，M5-02 也沒有搬，目前沒有 issue 承接（`docs/status.md`「下一步」）。
 
 ## 寫法
 
@@ -76,7 +76,7 @@ node scripts/content/offering-files.mjs
 | insurebrick | `to_confirm`：不在導覽，是否仍銷售；現站 description 講市場不講產品，改從頁面介紹取句；「業界唯一微服務設計的基礎架構」「28 個模組」、6 種導入領域未搬 |
 | greenswift | 「通過國際查證機構核發 AUP 認證」的機構與效期（ESGswift 頁寫 ARES）；FAQ 有未來式的說法，可能已過時：「未來我們也會推出係數管理中心」「多場所報告書功能正在開發中」「未來還將整合 ISO 14067 和 ISO 14068」；方案表、六大盤查步驟、儀表板說明未搬；`/carbon` 的 `<title>` 與 description 是 vikibundle 頁的（現站錯誤），經濟型方案價格（每支產品 15 萬）、第三方查證機構名稱（愛法諾、亞瑞士）、5 題 FAQ、短網址申請連結未搬；修正半形句點 |
 | electriswift | MODEL、CONVERGE 等五步驟、平均節電與電費節省的數字、能源管理法說明未搬；工業廠房情境 `industry` 填 manufacturing（製造業 hub 目前是 draft） |
-| family-ai | 主頁的「已為全球超過 1.4億用戶」、一日應用情境、SysTalk.Service 導入前中後未搬；`highlights` 取自併入的 `systalk-ai-phison`，但該頁以 AISO 為名、介紹與群聯電子 aiDAPTIV+ 合作的 AI 一體機（2025 AI AWARD、回應快 25 倍、70B–200B 模型），可能更適合放在 `aiso` 節點（M5-02）；該頁 FAQ 4 題、方案表、影片 2 支未搬 |
+| family-ai | 主頁的「已為全球超過 1.4億用戶」、一日應用情境、SysTalk.Service 導入前中後未搬；`highlights` 取自併入的 `systalk-ai-phison`，但該頁以 AISO 為名、介紹與群聯電子 aiDAPTIV+ 合作的 AI 一體機（2025 AI AWARD、回應快 25 倍、70B–200B 模型），可能更適合放在 `aiso` 節點（目前沒有 issue 承接）；該頁 FAQ 4 題、方案表、影片 2 支未搬 |
 | family-dx | IDC 報告下載（表單，M6）、整合綜效 4 項、服務能力 5 項未搬；`highlights` 只放「DigiLism 為何與眾不同？」6 項 |
 | family-esg | ESG 國際認證標準清單、「降低 30% 人力成本」「平均節能 15%」等數字、ESG 顧問段落（`esg-advisory` 節點）未搬 |
 | family-security | 新頁，介紹文字需人工提供；提供前是 draft |
