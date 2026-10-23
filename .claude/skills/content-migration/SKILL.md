@@ -22,6 +22,10 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 - 內文裡連到現站的連結，用 `redirects.csv` 的 `from` → `to` 改成新站路徑；對照不到的列為待確認，不要留現站網址
 - 內文裡的失效連結列在 [`broken-links.csv`](../../../docs/research/broken-links.csv)（`found_on` 是所在頁面），依 [`content-audit.md`「失效連結」](../../../docs/research/content-audit.md#失效連結)的類型修正或移除
 
+## blog 與新聞用 script 轉換
+
+blog 文章與新聞不手寫內容檔，用 `node scripts/content/migrate/migrate.mjs` 從現站轉換。要修正的內容（alt、description、`authorType`）寫進 `scripts/content/migrate/overrides.yaml`，不直接改產出檔。用法、轉換規則與報告欄位見 [`docs/content/migration.md`](../../../docs/content/migration.md)。
+
 ## 搬移前先看稽核結果
 
 - 該頁在 `inventory.csv` 的 `to_confirm` 有值時（未翻譯、title 錯誤、授權未確認等），照抄進 PR 的待確認，處理方式見 [`content-audit.md`「內容負責人要確認」](../../../docs/research/content-audit.md#內容負責人要確認)
@@ -41,7 +45,7 @@ migratedAt: 2026-10-20                       # 擷取日期
 
 ## 圖片
 
-- 下載到 `src/assets/<content-type>/<slug>/`，檔名用小寫 kebab-case 英文；frontmatter 寫相對於內容檔的路徑（`coverImage: ../../../assets/news/585/cover.jpg`）。內文引用外部網域的圖片（`blog.tpisoftware.com`、`tpi.dev`、`s3.amazonaws.com` 等）也一樣下載，不直接引用外部網址（[`features.md`「其他第三方嵌入」](../../../docs/research/features.md#其他第三方嵌入)）
+- 下載到 `src/assets/<content-type>/<locale>/<slug>/`（不同語系可能有相同 slug），檔名用小寫 kebab-case 英文；frontmatter 寫相對於內容檔的路徑（`coverImage: ../../../assets/news/zh-TW/585/cover.jpg`）。內文引用外部網域的圖片（`blog.tpisoftware.com`、`tpi.dev`、`s3.amazonaws.com` 等）也一樣下載，不直接引用外部網址（[`features.md`「其他第三方嵌入」](../../../docs/research/features.md#其他第三方嵌入)）
 - 用 `astro:assets` 的 `<Image>` / `<Picture>` 輸出，不放 `public/`
 - 必須補上描述性 alt（依圖片實際內容撰寫，不寫「圖片」「banner」）
 - 低解析度或帶浮水印的圖不直接使用，在 PR 列為待替換

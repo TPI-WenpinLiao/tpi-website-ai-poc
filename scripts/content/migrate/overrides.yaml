@@ -1,0 +1,13 @@
+# Manual fixes applied on top of scripts/content/migrate/migrate.mjs output, so a re-run keeps them.
+# Key: <blog|news>/<locale>/<slug>. Usage: docs/content/migration.md「人工修正」
+#
+# blog/zh-TW/customer-complaint-ai-tool-selection-guide:
+#   frontmatter:
+#     description: 改寫後的 description
+#     authorType: Person
+#   alt:
+#     <內文圖的檔名>.png: 圖片內容的描述
+
+news/zh-TW/585:
+  alt:
+    news-2026-10-15-1792045444257.jpg: 昕力資訊與 AISO 的標誌，右側是 AISO AI 專用機的機身

@@ -215,7 +215,7 @@ tags: [ai-application]
 publishedAt: 2026-09-11
 author: TPIsoftware
 authorType: Organization
-coverImage: ../../../assets/blog/customer-complaint-ai-tool-selection-guide/cover.png   # 原圖 https://tpi.dev/tpi-dev/private/article/IMG/1f1aaad1-2937-612a-81f6-0b7fa23ee3a6.png
+coverImage: ../../../assets/blog/zh-TW/customer-complaint-ai-tool-selection-guide/cover.png   # 原圖 https://tpi.dev/tpi-dev/private/article/IMG/1f1aaad1-2937-612a-81f6-0b7fa23ee3a6.png
 sourceUrl: https://www.tpisoftware.com/blog/ai/customer-complaint-ai-tool-selection-guide
 migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-09-11
@@ -286,7 +286,16 @@ zh-TW 60 列、en 48 列、vi 42 列（`page-map.csv` 的 `news-article` 節點�
 | `newsletter` | 7 | 電子報 | 11 |
 | （不建） | 2 | 未知 | 0 |
 
-現站名稱取自 <https://www.tpisoftware.com/media-center> 頁面資料的 `newsType`。`newsTypeId: 2` 有 55 篇已發布，但不出現在媒體中心頁面，日期在 2018–2022 年，多為活動與技術小聚，M1-02 稽核後沒有任何一篇保留，因此不建這個值。篇數取自新聞 API 與 `page-map.csv` 的交集。
+en、vi 的 `newsTypeId` 是另外編號的，依現站名稱對到同一個 `newsType`（M5-04 加入，待內容負責人確認）：
+
+| `newsType` | en `newsTypeId`（名稱） | vi `newsTypeId`（名稱） |
+|---|---|---|
+| `press` | 4（News） | 9（Tin tức） |
+| `product` | 6（Products） | 11（Sản phẩm） |
+| `newsletter` | 8（Newsletter） | — |
+| （不建） | 5（不出現在媒體中心頁面） | 10（不出現在媒體中心頁面） |
+
+現站名稱取自 <https://www.tpisoftware.com/media-center>、<https://www.tpisoftware.com/en/media-center>、<https://www.tpisoftware.vn/media-center> 頁面資料的 `newsType`。`page-map.csv` 保留的 en、vi 新聞沒有 5 與 10。`newsTypeId: 2` 有 55 篇已發布，但不出現在媒體中心頁面，日期在 2018–2022 年，多為活動與技術小聚，M1-02 稽核後沒有任何一篇保留，因此不建這個值。篇數取自新聞 API 與 `page-map.csv` 的交集。
 
 範例（取自新聞 API `/tpi/api/News?languages=tw` 的 id 585，文章 <https://www.tpisoftware.com/media-center/585>）：
 
@@ -296,7 +305,7 @@ description: 昕力資訊（7781）發表七款 AI 專用機並同步於 AISO �
 translationKey: "585"   # en 版 586、vi 版 587 填同一個值
 newsType: press
 publishedAt: 2026-10-15
-coverImage: ../../../assets/news/585/cover.jpg   # 原圖 /images/news/585/news-2026-10-15-1792036052577.jpg
+coverImage: ../../../assets/news/zh-TW/585/cover.jpg   # 原圖 /images/news/585/news-2026-10-15-1792036052577.jpg
 sourceUrl: https://www.tpisoftware.com/media-center/585
 migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-10-16
@@ -470,7 +479,7 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 | 有 `node` 的類型 | 檔名用節點 id（`src/content/offering/zh-TW/digirunner.md`），URL 仍取 `nodes.csv` 的 `path` |
 | `ref(collection)` | 寫 entry id，含語系：`offerings: [zh-TW/digirunner]`；tag 寫 tag id：`tags: [ai-application]`。schema 不擋引用 `draft: true` 的項目，模板（M4-04）列出引用時要濾掉 draft |
 | `node`、`offeringNode`、blog `category` | 合法值由 `nodes.csv` 推出（[`src/lib/ia/nodes.ts`](../../src/lib/ia/nodes.ts)），新增節點不用改 schema |
-| 圖片 | 圖檔放 `src/assets/<content-type>/<slug>/`，frontmatter 寫相對於內容檔的路徑 |
+| 圖片 | 圖檔放 `src/assets/<content-type>/<locale>/<slug>/`（不同語系可能有相同 slug），frontmatter 寫相對於內容檔的路徑 |
 | `organization` | `src/content/organization/<locale>.yaml`，entry id 是語系。只有本表欄位，沒有共用欄位與遷移追蹤欄位 |
 | 範例內容 | 每個 collection 各一筆 zh-TW，取自本檔的範例。含「待人工提供」等暫代值的設 `draft: true` |
 

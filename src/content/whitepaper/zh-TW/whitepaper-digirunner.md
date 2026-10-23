@@ -5,7 +5,7 @@ translationKey: whitepaper-digirunner
 node: whitepaper-digirunner
 offeringNode: digirunner
 # https://www.tpisoftware.com/images/api-strategies-whitepaper/section02/dgr-image-ch.png
-coverImage: ../../../assets/whitepaper/whitepaper-digirunner/cover.png
+coverImage: ../../../assets/whitepaper/zh-TW/whitepaper-digirunner/cover.png
 form: whitepaper
 file: 待確認
 draft: true
