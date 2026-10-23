@@ -43,6 +43,8 @@ const LOGO_HEIGHT = 32;
 // One exclusive group per header; /design-system shows several headers, each with its own navLabel
 const menuGroup = `site-menu-${navLabel}`;
 const header = localizedNav('header', currentLocale);
+// The link to the page being shown (docs/ia/navigation.md「無障礙」)
+const current = (href: string | undefined) => (href === path ? 'page' : undefined);
 const contact = node('contact');
 const search = node('search');
 // The 產品 menu is the mega menu: its overview link on top, then one column per family with its
@@ -76,7 +78,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                           .filter((c) => c.children.length === 0)
                           .map((c) => (
                             <li>
-                              <a class="menu-link" href={c.href}>
+                              <a class="menu-link" href={c.href} aria-current={current(c.href)}>
                                 {c.label}
                               </a>
                             </li>
@@ -85,13 +87,13 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                       <ul class="columns" style={`--mega-columns: ${groups(item).length}`}>
                         {groups(item).map((g) => (
                           <li>
-                            <a class="menu-link group" href={g.href}>
+                            <a class="menu-link group" href={g.href} aria-current={current(g.href)}>
                               {g.label}
                             </a>
                             <ul>
                               {g.children.map((p) => (
                                 <li>
-                                  <a class="menu-link" href={p.href}>
+                                  <a class="menu-link" href={p.href} aria-current={current(p.href)}>
                                     {p.label}
                                   </a>
                                 </li>
@@ -105,7 +107,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                     <ul>
                       {item.children.map((c) => (
                         <li>
-                          <a class="menu-link" href={c.href}>
+                          <a class="menu-link" href={c.href} aria-current={current(c.href)}>
                             {c.label}
                             {c.external && <span class="sr-only">{t.externalSite}</span>}
                           </a>
@@ -165,7 +167,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                 <ul>
                   {item.children.map((c) => (
                     <li>
-                      <a class="menu-link" href={c.href}>
+                      <a class="menu-link" href={c.href} aria-current={current(c.href)}>
                         {c.label}
                         {c.external && <span class="sr-only">{t.externalSite}</span>}
                       </a>
@@ -199,10 +201,12 @@ const isMega = (item: NavItem) => groups(item).length > 0;
 </header>
 
 <script>
-  // Close open header menus on a click outside them and on Esc. The /design-system previews are
-  // inert and drawn open on purpose, so they are left alone.
-  const openMenus = () =>
-    [...document.querySelectorAll<HTMLDetailsElement>('.site-header details[open]')].filter((d) => !d.closest('[inert]'));
+  // Keyboard and pointer behavior of the header menus (docs/ia/navigation.md「無障礙」): a click
+  // outside, Esc, or focus moving out closes a menu; the 選單 sheet makes the rest of the page inert
+  // while open. The /design-system previews are inert and drawn open on purpose, so they are left
+  // alone.
+  const live = (d: Element) => !d.closest('[inert]');
+  const openMenus = () => [...document.querySelectorAll<HTMLDetailsElement>('.site-header details[open]')].filter(live);
 
   document.addEventListener('click', (e) => {
     for (const menu of openMenus()) if (!(e.target instanceof Node && menu.contains(e.target))) menu.open = false;
@@ -216,6 +220,46 @@ const isMega = (item: NavItem) => groups(item).length > 0;
       if (hadFocus) menu.querySelector('summary')?.focus();
     }
   });
+
+  // Tabbing out of a dropdown closes it. Focus that goes nowhere (a click on the page) is left to
+  // the click handler, so clicking inside an open menu keeps it open.
+  document.addEventListener('focusout', (e) => {
+    const menu = e.target instanceof Element ? e.target.closest<HTMLDetailsElement>('.site-header details[open]:not(.mobile)') : null;
+    if (menu && live(menu) && e.relatedTarget instanceof Node && !menu.contains(e.relatedTarget)) menu.open = false;
+  });
+
+  // Everything on the page outside `sheet`: the siblings of the sheet and of each of its ancestors
+  function outside(sheet: Element): Element[] {
+    const out: Element[] = [];
+    for (let el: Element | null = sheet; el?.parentElement; el = el.parentElement) {
+      for (const sibling of el.parentElement.children) if (sibling !== el && !sibling.hasAttribute('inert')) out.push(sibling);
+      if (el.parentElement === document.body) break;
+    }
+    return out;
+  }
+
+  // The 選單 sheet: while it is open the rest of the page can't be focused or read out, and focus
+  // starts on its first link; once closed, focus goes back to its button
+  for (const mobile of [...document.querySelectorAll<HTMLDetailsElement>('.site-header details.mobile')].filter(live)) {
+    let background: Element[] = [];
+    mobile.addEventListener('toggle', () => {
+      if (mobile.open) {
+        background = outside(mobile);
+        for (const el of background) el.setAttribute('inert', '');
+        mobile.querySelector<HTMLElement>('.sheet a')?.focus();
+      } else {
+        for (const el of background) el.removeAttribute('inert');
+        background = [];
+        const focus = document.activeElement;
+        if (!focus || focus === document.body || mobile.contains(focus)) mobile.querySelector('summary')?.focus();
+      }
+    });
+    // The sheet only shows below --bp-lg-up (64rem): widening the window closes it, so the page
+    // doesn't stay inert behind a hidden sheet
+    matchMedia('(width >= 64rem)').addEventListener('change', (e) => {
+      if (e.matches) mobile.open = false;
+    });
+  }
 </script>
 
 <style>
