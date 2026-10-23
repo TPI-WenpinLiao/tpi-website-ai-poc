@@ -1,8 +1,8 @@
-// Checks that the copy in the zh-TW offering and hub entries is still on their current-site pages
-// (M3-05, #18; hubs and merged pages since M5-01, #26): tagline, features, useCases, faq and
-// highlights of every entry that isn't a draft. A line counts as found when it is on any of the
-// entry's sourceUrl pages (merged pages list several), after correcting the typos in CORRECTIONS.
-// Same matching as scripts/design/home-content.mjs.
+// Checks that the copy in the offering and hub entries is still on their current-site pages
+// (M3-05, #18; all locales since M5-02, #27; hubs and merged pages since M5-01, #26): tagline,
+// features, useCases, faq and highlights of every entry that isn't a draft. A line counts as found
+// when it is on any of the entry's sourceUrl pages (merged pages list several), after correcting the
+// typos in CORRECTIONS. Same matching as scripts/design/home-content.mjs.
 // Needs network access to www.tpisoftware.com, so it is not part of `npm run check`.
 //
 //   node scripts/design/offering-content.mjs
@@ -20,15 +20,17 @@ const CORRECTIONS = [
   ['提升盤查效率.', '提升盤查效率。'],
 ];
 
-const DIRS = ['offering', 'hub'].map((c) => new URL(`../../src/content/${c}/zh-TW/`, import.meta.url));
+const COLLECTIONS = ['offering', 'hub'];
 
 const frontmatter = (md) => parse(/^---\n([\s\S]*?)\n---/.exec(md)?.[1] ?? '');
 const pairs = (items, key, fields) => (items ?? []).flatMap((item, i) => fields.map((f) => [`${key}.${i}.${f}`, item[f]]));
 
 const checks = [];
-for (const dir of DIRS) {
-  for (const file of (await readdir(dir)).filter((f) => f.endsWith('.md')).sort()) {
-    const data = frontmatter(await readFile(join(dir.pathname, file), 'utf8'));
+for (const collection of COLLECTIONS) {
+  const dir = new URL(`../../src/content/${collection}/`, import.meta.url).pathname;
+  const files = (await readdir(dir, { recursive: true })).filter((f) => f.endsWith('.md')).sort();
+  for (const file of files) {
+    const data = frontmatter(await readFile(join(dir, file), 'utf8'));
     const urls = [data.sourceUrl].flat().filter(Boolean);
     if (data.draft || urls.length === 0) continue;
     const texts = [
@@ -38,8 +40,7 @@ for (const dir of DIRS) {
       ...pairs(data.faq, 'faq', ['question', 'answer']),
       ...pairs(data.highlights, 'highlights', ['title', 'body']),
     ];
-    const name = `${dir.pathname.split('/').at(-3)}/${file}`;
-    checks.push(...texts.map(([path, text]) => ({ file: name, path, text, urls })));
+    checks.push(...texts.map(([path, text]) => ({ file: `${collection}/${file}`, path, text, urls })));
   }
 }
 

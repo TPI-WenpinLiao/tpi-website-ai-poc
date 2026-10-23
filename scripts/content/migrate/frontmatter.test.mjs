@@ -122,6 +122,15 @@ test('values YAML would misread are quoted', () => {
   assert.match(serializeFrontmatter({ title: '2026-10-15' }), /^title: "2026-10-15"$/m);
 });
 
+test('serializeFrontmatter writes arrays of objects as block lists, leaving out undefined fields', async () => {
+  const { parse } = await import('yaml');
+  const { YAML_OPTIONS } = await import('../dates.mjs');
+  const features = [{ title: '零停機服務', body: 'a: b' }, { title: 'x', body: 'y', industry: undefined }];
+  const text = serializeFrontmatter({ features });
+  assert.equal(text, ['---', 'features:', '  - title: 零停機服務', '    body: "a: b"', '  - title: x', '    body: y', '---', ''].join('\n'));
+  assert.deepEqual(parse(text.replace(/^---\n|---\n$/g, ''), YAML_OPTIONS).features, [{ title: '零停機服務', body: 'a: b' }, { title: 'x', body: 'y' }]);
+});
+
 test('tricky strings read back unchanged with the options Astro parses frontmatter with', async () => {
   const { parse } = await import('yaml');
   const { YAML_OPTIONS } = await import('../dates.mjs');
