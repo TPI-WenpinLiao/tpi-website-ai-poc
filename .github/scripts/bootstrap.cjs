@@ -13,11 +13,13 @@ const pause = () => new Promise((resolve) => setTimeout(resolve, process.env.BOO
 
 const issueTitle = (issue) => `[${issue.id}] ${issue.title}`;
 
+// A dependency is a bootstrap id, or { issue, note } for an issue outside this file (e.g. a [chore])
+const renderDependency = (dep, idToNumber) =>
+  typeof dep === 'object' ? `- #${dep.issue}（${dep.note}）` : idToNumber.has(dep) ? `- #${idToNumber.get(dep)}（${dep}）` : `- ${dep}`;
+
 function renderBody(issue, idToNumber) {
   const list = (items) => items.map((i) => `- ${i}`).join('\n');
-  const deps = issue.dependsOn?.length
-    ? issue.dependsOn.map((id) => (idToNumber.has(id) ? `- #${idToNumber.get(id)}（${id}）` : `- ${id}`)).join('\n')
-    : '無';
+  const deps = issue.dependsOn?.length ? issue.dependsOn.map((d) => renderDependency(d, idToNumber)).join('\n') : '無';
   const sections = [
     `<!-- bootstrap-id: ${issue.id} -->`,
     `## 目標\n\n${issue.goal}`,
@@ -45,7 +47,10 @@ function validate(labels, milestones, issues) {
     }
     if (issue.gateNote && !issue.gate) errors.push(`${issue.id}: gateNote without gate`);
     for (const d of issue.dependsOn ?? []) {
-      if (!seen.has(d)) errors.push(`${issue.id}: dependency ${d} must be defined earlier`);
+      if (typeof d === 'object') {
+        if (!Number.isInteger(d.issue) || d.issue < 1) errors.push(`${issue.id}: dependency issue must be a positive integer`);
+        if (typeof d.note !== 'string' || !d.note.trim()) errors.push(`${issue.id}: dependency #${d.issue} needs a note`);
+      } else if (!seen.has(d)) errors.push(`${issue.id}: dependency ${d} must be defined earlier`);
     }
     for (const key of ['title', 'goal', 'deliverables', 'acceptance']) {
       if (!issue[key]) errors.push(`${issue.id}: missing ${key}`);
