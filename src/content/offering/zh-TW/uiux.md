@@ -1,12 +1,27 @@
 ---
-# kind follows inventory.csv page_type; content-model.md lists uiux's kind as 待確認
 title: UI/UX 數位產品設計解決方案
-description: 數位時代來臨，要成功抓住客戶的心，吸睛的介面設計與良好的用戶體驗是關鍵。透過 UI 整體介面設計，與 UX 流程與架構設計，兩者相輔相成的運行並用，進而建構全面的網站形象。
+description: 吸睛的介面設計與良好的用戶體驗，是抓住客戶的關鍵。透過 UI 整體介面設計與 UX 流程與架構設計相輔相成，建構全面的網站形象。
 translationKey: uiux
 node: uiux
 kind: solution
+tagline: 以人為本打造脫穎而出的互動式設計
+features:
+  - title: 專注使用者調查與研究
+    body: 透過需求訪談、精確洞察用戶需求，協助企業梳理與優化產品的功能資訊。
+  - title: 定義資訊架構與功能流程
+    body: 針對調研結果與使用需求，規劃功能架構流程，以線框稿確認資訊邏輯與版塊順序。
+  - title: 結合美學與易用性
+    body: 訂定平台風格調與視覺引導動線，並定義設計規範，確保介面操作一致性。
+  - title: 創新想法完美落地
+    body: 編寫製作成網頁瀏覽格式和實現動態腳本，並針對裝置尺寸斷點驗證測試。
+useCases:
+  - title: 形象網站
+    body: 透過使用者洞察，從當地使用者角度出發，除了傳承母集團企業形象，亦塑造在地化新元素，鮮明的視覺設計，情境式的描述產品，認真雕琢每一個設計細節，規劃契合企業形象與設計體驗一致性的形象網頁。
+  - title: Global FIS全球飛航資訊系統
+    body: 協助國際型航空企業重塑全球飛航資訊系統，整合網頁及行動平台介面設計與操作一致性，讓機組人員可隨時掌握航班關鍵起降資訊，串連航程空中與地面狀況，異常事件發生時快速盤查並給予必要資訊，即時提供指引與幫助。
+  - title: 電子支付系統
+    body: 結合社群與支付，提供P2P轉帳、分帳，電支交易等服務，從日常交易到週期性帳單處理。介面設計遵循Line集團規範，適度引導與透過文字字級與字重區分資訊內容權重，讓使用者一眼掌握帳戶餘額與消費動態。
 cta: contact
-draft: true
 sourceUrl: https://www.tpisoftware.com/solutions/uiux
-migratedAt: 2026-10-22
+migratedAt: 2026-10-23
 ---

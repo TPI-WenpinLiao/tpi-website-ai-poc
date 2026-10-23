@@ -1,6 +1,6 @@
-// Checks that the copy in the zh-TW offering entries is still on their current-site page
-// (M3-05, #18): tagline, features and useCases of every entry that isn't a draft, against the
-// first sourceUrl. Same matching as scripts/design/home-content.mjs.
+// Checks that the copy in the offering entries is still on their current-site page
+// (M3-05, #18; all locales since M5-02, #27): tagline, features and useCases of every entry that
+// isn't a draft, against the first sourceUrl. Same matching as scripts/design/home-content.mjs.
 // Needs network access to www.tpisoftware.com, so it is not part of `npm run check`.
 //
 //   node scripts/design/offering-content.mjs
@@ -10,12 +10,13 @@ import { parse } from 'yaml';
 import { request } from '../inventory/http.mjs';
 import { pageText, squash } from '../lib/page-text.mjs';
 
-const DIR = new URL('../../src/content/offering/zh-TW/', import.meta.url);
+const DIR = new URL('../../src/content/offering/', import.meta.url);
 
 const frontmatter = (md) => parse(/^---\n([\s\S]*?)\n---/.exec(md)?.[1] ?? '');
 
 const checks = [];
-for (const file of (await readdir(DIR)).filter((f) => f.endsWith('.md')).sort()) {
+const files = (await readdir(DIR.pathname, { recursive: true })).filter((f) => f.endsWith('.md')).sort();
+for (const file of files) {
   const data = frontmatter(await readFile(join(DIR.pathname, file), 'utf8'));
   const url = [data.sourceUrl].flat()[0];
   if (data.draft || !url) continue;
