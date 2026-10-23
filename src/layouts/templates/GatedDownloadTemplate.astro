@@ -16,6 +16,7 @@ import CardGrid from '../../components/ui/CardGrid.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import Button from '../../components/ui/Button.astro';
 import FormField from '../../components/ui/FormField.astro';
+import FormPanel from '../../components/ui/FormPanel.astro';
 import { breadcrumb, localeHref, node } from '../../lib/ia/navigation';
 import { entryLocale } from '../../lib/content/entries';
 import { whitepaperJsonLd } from '../../lib/seo/jsonld/whitepaper';
@@ -84,8 +85,8 @@ const jsonLd = whitepaperJsonLd({
         }
       </div>
 
-      <form class="form" aria-labelledby="request-title">
-        <h2 id="request-title" class="form-title">{t.download.request}</h2>
+      <div class="request">
+        <FormPanel id="request-title" title={t.download.request}>
         <FormField kind="text" id="name" name="name" label={f.name} autocomplete="name" required />
         <FormField kind="tel" id="phone" name="phone" label={f.phone} autocomplete="tel" required />
         <FormField kind="email" id="email" name="email" label={f.email} autocomplete="email" required />
@@ -93,7 +94,8 @@ const jsonLd = whitepaperJsonLd({
         <FormField kind="text" id="job" name="job" label={f.jobTitle} autocomplete="organization-title" required />
         <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required />
         <Button type="submit" size="lg">{t.download.submit}</Button>
-      </form>
+        </FormPanel>
+      </div>
     </div>
   </Surface>
 
@@ -148,30 +150,12 @@ const jsonLd = whitepaperJsonLd({
     color: var(--color-text-accent);
   }
 
-  /* The request form on a raised panel, so it reads as the page's one task */
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    padding: var(--space-8);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-bg-subtle);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .form-title {
-    margin: 0;
-    font-size: var(--font-size-h3);
-    line-height: var(--line-height-snug);
-  }
-
   @media (--bp-lg-up) {
     .split {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
-    .form {
+    .request {
       position: sticky;
       inset-block-start: calc(var(--header-height) + var(--space-6));
     }

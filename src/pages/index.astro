@@ -18,6 +18,7 @@ import Tag from '../components/ui/Tag.astro';
 import LayerStack from '../components/ui/LayerStack.astro';
 import Reveal from '../components/ui/Reveal.astro';
 import SceneChapter from '../components/ui/SceneChapter.astro';
+import CardGrid from '../components/ui/CardGrid.astro';
 import ContactCta from '../components/ui/ContactCta.astro';
 import { children, header, node, type NavItem } from '../lib/ia/navigation';
 import { latest } from '../lib/latest-posts';
@@ -150,7 +151,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
     <div class="blocks">
       <div>
         <SectionHeading eyebrow="Industries" title={node('industries').title} />
-        <ul class="cards cols-3">
+        <CardGrid>
           {
             industries.map((n, i) => (
               <li>
@@ -160,12 +161,12 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
               </li>
             ))
           }
-        </ul>
+        </CardGrid>
       </div>
 
       <div>
         <SectionHeading eyebrow="Services" title={node('services').title} />
-        <ul class="cards cols-3 compact">
+        <CardGrid compact>
           {
             services.map((n, i) => (
               <li>
@@ -175,15 +176,14 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
               </li>
             ))
           }
-        </ul>
+        </CardGrid>
       </div>
 
       <div>
-        <div class="section-head">
-          <SectionHeading eyebrow="Success stories" title={successStories.title} />
-          <Button href={successStories.path} variant="secondary">所有{successStories.title}</Button>
-        </div>
-        <ul class="cards cols-3">
+        <SectionHeading eyebrow="Success stories" title={successStories.title}>
+          <Button slot="action" href={successStories.path} variant="secondary">所有{successStories.title}</Button>
+        </SectionHeading>
+        <CardGrid>
           {
             caseCards.map((c, i) => (
               <li>
@@ -193,36 +193,29 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
               </li>
             ))
           }
-        </ul>
+        </CardGrid>
       </div>
     </div>
   </Surface>
 
   <Surface tone="light">
-    <div class="section-head">
-      <SectionHeading eyebrow="Insights" title="最新文章與新聞" />
-      <div class="section-links">
+    <SectionHeading eyebrow="Insights" title="最新文章與新聞">
+      <Fragment slot="action">
         <Button href={blog.path} variant="text">{blog.title}</Button>
         <Button href={news.path} variant="text">{news.title}</Button>
-      </div>
-    </div>
-    <ul class="cards cols-3">
+      </Fragment>
+    </SectionHeading>
+    <CardGrid>
       {
         posts.map((p, i) => (
           <li>
             <Reveal delay={stagger(i)}>
-              <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }}>
-                {p.published && (
-                  <time slot="meta" datetime={p.published}>
-                    {p.published.replaceAll('-', '/')}
-                  </time>
-                )}
-              </Card>
+              <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }} date={p.published} />
             </Reveal>
           </li>
         ))
       }
-    </ul>
+    </CardGrid>
   </Surface>
 
   <ContactCta />
@@ -306,57 +299,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
     gap: var(--space-section);
   }
 
-  /* Card grids: one column on phones; compact (services) keeps two short cards per row */
-  .cards {
-    display: grid;
-    gap: var(--space-6);
-    margin: var(--space-10) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  /* Cards in a row share the tallest one's height, through Reveal's wrapper */
-  .cards > li,
-  .cards > li > :global(*),
-  .cards :global(.card) {
-    block-size: 100%;
-  }
-
-  .compact {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-4);
-  }
-
-  .section-head {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-6);
-    align-items: end;
-    justify-content: space-between;
-  }
-
-  .section-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-
-  @media (--bp-sm-up) {
-    .cols-3 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .compact {
-      gap: var(--space-6);
-    }
-  }
-
   @media (--bp-lg-up) {
-    .cols-3 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
     .spotlight {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }

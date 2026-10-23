@@ -11,6 +11,7 @@ import Surface from '../../components/ui/Surface.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import Button from '../../components/ui/Button.astro';
 import FormField from '../../components/ui/FormField.astro';
+import FormPanel from '../../components/ui/FormPanel.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import { localizedNav, node } from '../../lib/ia/navigation';
 import type { Locale } from '../../lib/i18n/locales';
@@ -40,8 +41,7 @@ if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
 
   <Surface tone="light">
     <div class="split">
-      <form class="form" aria-labelledby="form-title">
-        <h2 id="form-title" class="form-title">{t.contact.request}</h2>
+      <FormPanel id="form-title" title={t.contact.request}>
         <div class="fields">
           <FormField kind="text" id="name" name="name" label={f.name} autocomplete="name" required />
           <FormField kind="tel" id="phone" name="phone" label={f.phone} autocomplete="tel" required />
@@ -58,7 +58,7 @@ if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
         <FormField kind="textarea" id="message" name="message" label={t.contact.message} rows={5} />
         <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required />
         <Button type="submit" size="lg">{t.contact.submit}</Button>
-      </form>
+      </FormPanel>
 
       <section class="offices">
         <SectionHeading level={2} eyebrow="Offices" title={t.contact.offices} />
@@ -89,23 +89,6 @@ if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
     display: grid;
     gap: var(--space-12);
     align-items: start;
-  }
-
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    padding: var(--space-8);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-bg-subtle);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .form-title {
-    margin: 0;
-    font-size: var(--font-size-h3);
-    line-height: var(--line-height-snug);
   }
 
   .fields {

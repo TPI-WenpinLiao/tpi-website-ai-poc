@@ -64,6 +64,8 @@ const { label, items } = Astro.props;
     color: var(--color-text);
   }
 
+  /* shared-ok: the selected state of FilterBar and Pagination; a base.css class would lose to
+     each control's scoped colors and border */
   .chip[aria-current='page'] {
     border-color: transparent;
     background: var(--color-action);

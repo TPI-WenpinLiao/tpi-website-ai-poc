@@ -93,6 +93,8 @@ const previewed = pages.find((n) => n !== current);
     background: var(--color-bg-muted);
   }
 
+  /* shared-ok: the selected state of FilterBar and Pagination; a base.css class would lose to
+     each control's scoped colors and border */
   [aria-current='page'] {
     border-color: transparent;
     background: var(--color-action);

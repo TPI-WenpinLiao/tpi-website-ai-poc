@@ -21,6 +21,8 @@ import Prose from '../../components/ui/Prose.astro';
 import FilterBar from '../../components/ui/FilterBar.astro';
 import Pagination from '../../components/ui/Pagination.astro';
 import EmptyState from '../../components/ui/EmptyState.astro';
+import FormPanel from '../../components/ui/FormPanel.astro';
+import TagList from '../../components/ui/TagList.astro';
 import Card from '../../components/ui/Card.astro';
 import SiteHeader from '../../components/ui/SiteHeader.astro';
 import SiteFooter from '../../components/ui/SiteFooter.astro';
@@ -439,6 +441,32 @@ const description =
               </li>
             ))}
           </CardGrid>
+
+          <h3>SectionHeading：action slot</h3>
+          <SectionHeading level={3} eyebrow="Insights" title="區塊標題與整區連結">
+            <Button slot="action" href={`#components-${tone}`} variant="text">看全部</Button>
+          </SectionHeading>
+
+          <h3>CardGrid compact</h3>
+          <CardGrid compact>
+            {['短卡一', '短卡二', '短卡三'].map((title) => (
+              <li>
+                <Card level={4} title={title} size="sm" href={`#components-${tone}`} />
+              </li>
+            ))}
+          </CardGrid>
+
+          <h3>TagList</h3>
+          <TagList items={['AI 應用', '數位轉型', '永續發展']} label={`標籤（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
+          <TagList items={['碳盤查', '能源轉型']} tone="node" label={`專長（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
+
+          <h3>FormPanel</h3>
+          <FormPanel id={`form-panel-${tone}`} title={`表單標題（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`}>
+            <FormField kind="text" id={`form-panel-name-${tone}`} name="name" label="姓名" required />
+            <FormField kind="checkbox" id={`form-panel-consent-${tone}`} name="consent" label="個資同意" required />
+            <Button type="submit">送出</Button>
+          </FormPanel>
+          <p class="note">頁面唯一的表單（聯絡、索取文件）放在這個面板裡；送出由 M6-01 處理。</p>
 
           <h3>FilterBar</h3>
           <ul class="states">

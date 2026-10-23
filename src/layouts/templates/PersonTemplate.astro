@@ -10,7 +10,7 @@ import PageLayout from '../PageLayout.astro';
 import PageHero from '../../components/ui/PageHero.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Surface from '../../components/ui/Surface.astro';
-import Tag from '../../components/ui/Tag.astro';
+import TagList from '../../components/ui/TagList.astro';
 import Button from '../../components/ui/Button.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
@@ -72,13 +72,7 @@ const jsonLd = personJsonLd({
       data.expertise && (
         <section class="expertise">
           <SectionHeading eyebrow="Expertise" title={t.person.expertise} />
-          <ul class="tags">
-            {data.expertise.map((e) => (
-              <li>
-                <Tag tone="node">{e}</Tag>
-              </li>
-            ))}
-          </ul>
+          <TagList items={data.expertise} tone="node" />
         </section>
       )
     }
@@ -117,13 +111,10 @@ const jsonLd = personJsonLd({
     box-shadow: var(--shadow-lg);
   }
 
-  .tags {
+  .expertise {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin: var(--space-8) 0 0;
-    padding: 0;
-    list-style: none;
+    flex-direction: column;
+    gap: var(--space-8);
   }
 
   .lists {

@@ -125,7 +125,7 @@ const blog = node('blog');
 
     {
       features.length > 0 && (
-        <section id="features" class="target" aria-labelledby="features-title">
+        <section id="features" class="anchor-target" aria-labelledby="features-title">
           <h2 id="features-title" class="sr-only">{t.offering.features}</h2>
           {features.map((f, i) => (
             <SceneChapter>
@@ -140,7 +140,7 @@ const blog = node('blog');
 
   {
     useCases.length > 0 && (
-      <Surface tone="dark" pattern="grid" id="use-cases" class="target">
+      <Surface tone="dark" pattern="grid" id="use-cases" class="anchor-target">
         <SectionHeading eyebrow="Use cases" title={t.offering.useCases} />
         <CardGrid>
           {useCases.map((u, i) => (
@@ -166,7 +166,7 @@ const blog = node('blog');
       <Surface tone="dark">
         <div class:list={['pair', { split }]}>
           {related.length > 0 && (
-            <div id="related" class="target">
+            <div id="related" class="anchor-target">
               <SectionHeading eyebrow="Related" title={t.offering.related} />
               <CardGrid cols={split ? 1 : 3}>
                 {related.map((n) => (
@@ -178,7 +178,7 @@ const blog = node('blog');
             </div>
           )}
           {hasDownloads && (
-            <div id="downloads" class="target">
+            <div id="downloads" class="anchor-target">
               <SectionHeading eyebrow="Downloads" title={t.offering.downloads} />
               <CardGrid cols={1}>
                 {whitepapers.map((w) => (
@@ -201,7 +201,7 @@ const blog = node('blog');
 
   {
     faq.length > 0 && (
-      <Surface tone="dark" width="reading" id="faq" class="target">
+      <Surface tone="dark" width="reading" id="faq" class="anchor-target">
         <SectionHeading eyebrow="FAQ" title={t.offering.faq} />
         <div class="faq">
           <Faq items={faq} />
@@ -212,22 +212,17 @@ const blog = node('blog');
 
   {
     posts.length > 0 && (
-      <Surface tone="light" id="posts" class="target">
-        <div class="section-head">
-          <SectionHeading eyebrow="Insights" title={t.relatedPosts} />
-          <Button href={nodeHref('blog', locale)} variant="text">{blog.title}</Button>
-        </div>
+      <Surface tone="light" id="posts" class="anchor-target">
+        <SectionHeading eyebrow="Insights" title={t.relatedPosts}>
+          <Button slot="action" href={nodeHref('blog', locale)} variant="text">
+            {blog.title}
+          </Button>
+        </SectionHeading>
         <CardGrid>
           {posts.map((p, i) => (
             <li>
               <Reveal delay={stagger(i)}>
-                <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }}>
-                  {p.published && (
-                    <time slot="meta" datetime={p.published}>
-                      {p.published.replaceAll('-', '/')}
-                    </time>
-                  )}
-                </Card>
+                <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }} date={p.published} />
               </Reveal>
             </li>
           ))}
@@ -242,10 +237,6 @@ const blog = node('blog');
 <style>
   @import '../../styles/media.css';
 
-  /* Anchored sections land below the sticky header, and from --bp-lg-up also below the in-page bar */
-  .target {
-    scroll-margin-block-start: var(--header-height);
-  }
 
   /* A paragraph, not the heading's lead: .text-phrase would break these long lines only at
      punctuation and start lines with a comma */
@@ -266,19 +257,7 @@ const blog = node('blog');
     margin-block-start: var(--space-10);
   }
 
-  .section-head {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-6);
-    align-items: end;
-    justify-content: space-between;
-  }
-
   @media (--bp-lg-up) {
-    .target {
-      scroll-margin-block-start: calc(var(--header-height) + var(--touch-target) + var(--space-2));
-    }
-
     .pair.split {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       align-items: start;

@@ -69,13 +69,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
           <h2 id="featured-title" class="sr-only">
             {t.listing.featured}
           </h2>
-          <Card level={3} title={featured.title} href={featured.href} eyebrow={featured.eyebrow} description={featured.description} image={featured.image}>
-            {featured.date && (
-              <time slot="meta" datetime={featured.date}>
-                {featured.date.replaceAll('-', '/')}
-              </time>
-            )}
-          </Card>
+          <Card level={3} title={featured.title} href={featured.href} eyebrow={featured.eyebrow} description={featured.description} image={featured.image} date={featured.date} />
         </article>
       )
     }
@@ -86,13 +80,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
           {items.map((p, i) => (
             <li>
               <Reveal delay={stagger(i)}>
-                <Card level={2} title={p.title} href={p.href} eyebrow={p.eyebrow} description={p.description} image={p.image}>
-                  {p.date && (
-                    <time slot="meta" datetime={p.date}>
-                      {p.date.replaceAll('-', '/')}
-                    </time>
-                  )}
-                </Card>
+                <Card level={2} title={p.title} href={p.href} eyebrow={p.eyebrow} description={p.description} image={p.image} date={p.date} />
               </Reveal>
             </li>
           ))}

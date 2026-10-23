@@ -13,7 +13,7 @@ import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Surface from '../../components/ui/Surface.astro';
 import Card from '../../components/ui/Card.astro';
 import CardGrid from '../../components/ui/CardGrid.astro';
-import Tag from '../../components/ui/Tag.astro';
+import TagList from '../../components/ui/TagList.astro';
 import Reveal from '../../components/ui/Reveal.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import Prose from '../../components/ui/Prose.astro';
@@ -118,20 +118,14 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   <Surface tone="light" width="reading">
     {/* sizes: --reading-max-width (46rem) plus the gutters */}
     <Image class="cover" src={data.coverImage} alt="" widths={[720, 1440]} sizes="(width >= 50rem) 46rem, 100vw" loading="eager" fetchpriority="high" />
-    <Prose>
-      <Content />
-    </Prose>
     {
-      tagNames.length > 0 && (
-        <ul class="tags" aria-label={t.article.tags}>
-          {tagNames.map((name) => (
-            <li>
-              <Tag>{name}</Tag>
-            </li>
-          ))}
-        </ul>
+      entry.body?.trim() && (
+        <Prose>
+          <Content />
+        </Prose>
       )
     }
+    {tagNames.length > 0 && <TagList items={tagNames} label={t.article.tags} />}
   </Surface>
 
   {
@@ -157,13 +151,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
           {more.map((p, i) => (
             <li>
               <Reveal delay={stagger(i)}>
-                <Card title={p.title} href={p.href} eyebrow={p.eyebrow} image={p.image}>
-                  {p.date && (
-                    <time slot="meta" datetime={p.date}>
-                      {p.date.replaceAll('-', '/')}
-                    </time>
-                  )}
-                </Card>
+                <Card title={p.title} href={p.href} eyebrow={p.eyebrow} image={p.image} date={p.date} />
               </Reveal>
             </li>
           ))}
@@ -197,16 +185,6 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
     display: block;
     inline-size: 100%;
     block-size: auto;
-    margin-block-end: var(--space-12);
     border-radius: var(--radius-lg);
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin: var(--space-12) 0 0;
-    padding: 0;
-    list-style: none;
   }
 </style>

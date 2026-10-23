@@ -254,6 +254,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
   /* The open 選單 sheet covers the page: keep the page behind it from scrolling. Only below 64rem,
      where the sheet shows: rotating a tablet past it hides the sheet but leaves <details> open */
   @media (--bp-lg-down) {
+    /* global-ok: scroll locking has to be set on <html>, outside the header */
     :global(html:has(.site-header .mobile[open])) {
       overflow: hidden;
     }

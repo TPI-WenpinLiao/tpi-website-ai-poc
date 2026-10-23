@@ -81,12 +81,16 @@ const jsonLd = pageJsonLd({
   </PageHero>
 
   <Surface tone="light" width="reading">
-    <Prose>
-      <Content />
-    </Prose>
+    {
+      entry.body?.trim() && (
+        <Prose>
+          <Content />
+        </Prose>
+      )
+    }
     {
       sections.map((s) => (
-        <section id={s.id} class="section target">
+        <section id={s.id} class="section anchor-target">
           <SectionHeading title={s.heading} />
           <Prose>
             {s.paragraphs.map((p) => (
@@ -109,8 +113,6 @@ const jsonLd = pageJsonLd({
 </PageLayout>
 
 <style>
-  @import '../../styles/media.css';
-
   .meta {
     display: flex;
     gap: var(--space-2);
@@ -129,16 +131,11 @@ const jsonLd = pageJsonLd({
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
+  }
+
+  /* Space between sections, not above the first */
+  .section:not(:first-child) {
     margin-block-start: var(--space-16);
   }
 
-  .target {
-    scroll-margin-block-start: var(--header-height);
-  }
-
-  @media (--bp-lg-up) {
-    .target {
-      scroll-margin-block-start: calc(var(--header-height) + var(--touch-target) + var(--space-2));
-    }
-  }
 </style>

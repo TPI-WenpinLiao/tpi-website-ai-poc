@@ -19,9 +19,28 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 所有樣式值（色彩、字級、行高、間距、圓角、陰影、斷點、角度、動畫時間）只能引用 `src/styles/tokens.css` 的 CSS custom properties
 - 需要新 token 時先加到 `tokens.css` 並在 PR 中說明用途，不得在元件內寫死數值
 - 不使用 UI framework 或 utility CSS framework
-- 元件樣式寫在 `.astro` 的 scoped `<style>`。傳給子元件的元素會帶上父層的 scope，父層的 class 名稱不要和子元件內部的 class 重複（#17 實測：頁面的 `.grid` 套到 `Surface pattern="grid"`、header 的 `.primary` 套到 `Button` 的 primary）；全域樣式只放在 `BaseLayout`（`box-sizing`、`body`、標題與 `.text-phrase` 的換行、`[data-surface='dark']`、`:focus-visible`、`.sr-only`）
+- 元件樣式寫在 `.astro` 的 scoped `<style>`。傳給子元件的元素會帶上父層的 scope，父層的 class 名稱不要和子元件內部的 class 重複（#17 實測：頁面的 `.grid` 套到 `Surface pattern="grid"`、header 的 `.primary` 套到 `Button` 的 primary）。全域樣式與共用規則的分層見下方「CSS 分層」
 - 中文換行：標題與 `.text-phrase`（hero 與區塊的引言、卡片說明、`Tag`）只在空格與標點斷行，不會把「數位轉型」斷成「數位轉／型」。內文段落不加。沒有空格與標點的標題用 U+200B 標出可斷行的位置（見 `PageHero`）
 - 頁面元件在 `src/components/ui/`，新元件同步加到 `/design-system`，寫法見「展示頁」
+
+## CSS 分層
+
+樣式分四層，越上層越共用。新樣式先找能放的最上層，不要在頁面裡再寫一份。
+
+| 層 | 位置 | 放什麼 |
+|---|---|---|
+| tokens | `src/styles/tokens.css`、`media.css` | design tokens（三層，見「Token 分層」）與斷點 |
+| base | `src/styles/base.css`（只由 `BaseLayout` import） | reset（`box-sizing`、`body`）、標題與 `.text-phrase` 的換行、`[data-surface='dark']` 的底色、`:focus-visible`、跨元件的工具類（`.sr-only`、`.anchor-target`、`.signal-dot`） |
+| 元件 | `src/components/ui/*.astro` 的 scoped `<style>` | 跨頁共用的區塊：卡片格線（`CardGrid`）、表單面板（`FormPanel`）、標籤列（`TagList`）、長文排版（`Prose`）等 |
+| 模板與頁面 | `src/layouts/templates/`、`src/pages/` 的 scoped `<style>` | 只屬於這個模板或頁面的版面 |
+
+- 兩個以上的模板或頁面要用同一組樣式時，抽成元件（有結構、有 props）或 `base.css` 的工具類（只有一兩條、套在任何元素上都成立，例如捲動定位）。不要複製
+- 元件不改別的元件：不用 `:global(.其他元件的 class)` 伸進去調整，要調整就給那個元件加 prop（例：`Card` 的 `date`、`SectionHeading` 的 `action` slot、`CardGrid` 的 `compact`）
+- `:global()` 只能接在自己的 class 後面，作用在 slot 或 Markdown 帶進來的元素（`.prose :global(h2)`、`.card-grid > :global(li)`）。整個選擇器都是 `:global` 的規則會影響元件外部，只有不得不時才寫，並在前一行寫 `/* global-ok: 理由 */`（例：`SiteHeader` 展開選單時鎖住 `<html>` 的捲動）
+- 不寫 `<style is:global>`；全域樣式只進 `base.css`
+- 兩個元件刻意共用同一組宣告、又抽不出來時（例：`FilterBar` 與 `Pagination` 的選取狀態，`base.css` 的 class 會被元件 scoped 的 specificity 蓋掉），在規則前一行寫 `/* shared-ok: 理由 */`
+
+前四條由 `node scripts/design/css-structure.mjs`（`npm run check:design`）擋下：`src` 下多出的樣式表、`<style is:global>`、沒有 `global-ok:` 的全域選擇器、`:global()` 裡出現別的 `.astro` 定義的 class、同一組 4 條以上的宣告出現在兩個檔案（沒有 `shared-ok:`）。lint 抓不到的（抽成元件還是工具類、`global-ok:`／`shared-ok:` 的理由是否成立）在 `/pr-review` 的固定檢查人工判斷。
 
 ## 尺寸計算
 
@@ -86,14 +105,14 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 | 元件 | 用途 | 重點 |
 |---|---|---|
-| `Surface` | 頁面區塊 | `tone` 切換亮暗；`pattern="grid"` 畫由上往下淡出的座標格線；`width="reading"` 收窄到閱讀寬度 |
-| `PageHero` | 頁面開場 | 預設深色＋格線；輸出該頁唯一的 h1（display 字級）；`visual` slot 放 3D 場景或其靜態版本；`breadcrumb` slot 是 hero 頂端獨立的一列；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」） |
+| `Surface` | 頁面區塊 | `tone` 切換亮暗；`pattern="grid"` 畫由上往下淡出的座標格線；`width="reading"` 收窄到閱讀寬度；同 tone 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
+| `PageHero` | 頁面開場 | 預設深色＋格線；輸出該頁唯一的 h1（display 字級）；`visual` slot 放 3D 場景或其靜態版本；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」） |
 | `LayerStack` | 3D 場景的靜態版本 | CSS 3D 玻璃圖層＋能量光束，捲出畫面時分開；裝飾用，`aria-hidden` |
-| `SectionHeading` | 區塊標題 | `index`（`01`）＋mono eyebrow＋漸層線；`level` 由呼叫端指定，避免跳級；`size="display"` 每頁最多一次 |
+| `SectionHeading` | 區塊標題 | `index`（`01`）＋mono eyebrow＋漸層線；`level` 由呼叫端指定，避免跳級；`size="display"` 每頁最多一次；`action` slot 放整區的連結（同一列靠右） |
 | `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；小圓角（`--radius-md`）；primary 發光上浮、secondary 漸層外框、text；`disabled` 只存在於 `<button>` |
 | `Link` | 內文連結、獨立連結 | 內文連結一律底線；`external` 加 ↗ 與「（外部網站）」螢幕閱讀器文字 |
 | `Tag` | 標籤 | `neutral`、`brand`、`node`（mono＋發光點，用於模組與技術關鍵字）；有 `href` 才是連結 |
-| `Card` | 列表卡片 | 玻璃面板，hover／focus 時傾斜、亮起漸層外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`size="sm"` 是只有標題、手機上一列兩張的短卡；沒有 `href` 是不能點的靜態面板（功能、應用情境），meta 裡的 `Tag` 連結各自可點 |
+| `Card` | 列表卡片 | 玻璃面板，hover／focus 時傾斜、亮起漸層外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`size="sm"` 是只有標題、手機上一列兩張的短卡；`date` 在 meta 列顯示日期；沒有 `href` 是不能點的靜態面板（功能、應用情境），meta 裡的 `Tag` 連結各自可點 |
 | `FormField` | 表單欄位 | `kind` 區分 text／email／tel／textarea／select／checkbox；hint、error 以 `aria-describedby` 連到欄位，error 加 `aria-invalid` |
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
@@ -101,9 +120,17 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Scene3D` | three.js 3D 捲動場景 | 見下方「3D 場景」 |
 | `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的深色玻璃列；寬度小於 64rem 收進「選單」 |
 | `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts` |
-| `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面 |
+| `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴 |
 | `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動 |
 | `Faq` | 常見問題 | 原生 `<details>`，零 JS |
+| `CardGrid` | 卡片列表 | 手機一欄、`--bp-sm-up` 兩欄、`--bp-lg-up` 三欄（`cols`）；同一列等高；`compact` 讓手機也一列兩張短卡 |
+| `ContactCta` | 每頁最後的聯絡區塊 | 文案取自現站；按鈕連到目前語系的聯絡我們，`label` 可換成「預約演示」 |
+| `Prose` | 長文 | Markdown 內文的排版，`:global()` 只作用在自己內部 |
+| `FilterBar` | 列表篩選 | 有 `href` 的項目是連結（blog 分類），沒有的是標籤；窄螢幕在列內橫向捲動 |
+| `Pagination` | 列表分頁 | 第 2 頁起 `/page/n`（ADR 0002）；只有一頁不輸出 |
+| `EmptyState` | 沒有項目時 | 虛線框、標題、說明與 `action` slot |
+| `FormPanel` | 頁面唯一的表單 | 有標題的面板，表單以標題命名；送出由 M6-01 處理 |
+| `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
 | `SceneChapter` | 3D 場景上的章節 | 見「3D 場景」 |
 
 ## 3D 場景
@@ -155,7 +182,8 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 - `npm run check:design`
   - `scripts/design/contrast.mjs`：兩個 surface 各自檢查 `PAIRS` 每一組
-  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/pages/design-system/`、`src/pages/products/`、`BaseLayout`、首頁 `src/pages/index.astro` 的 `<style>` 不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
+  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/layouts/`、`src/pages/` 所有 `.astro`（wireframe 除外）與 `src/styles/base.css` 的樣式不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
+  - `scripts/design/css-structure.mjs`：「CSS 分層」的規則
   - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import；`tokens.css` 每個 token（`--wf-*` 除外）都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；`/design-system`、`/wireframes` 不得出現在 `docs/ia/nodes.csv`
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand

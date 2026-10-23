@@ -1,15 +1,17 @@
 ---
 // List of cards (Card) under a section heading: one column on phones, two from --bp-sm-up and
 // `cols` from --bp-lg-up. Cards in a row share the tallest one's height, also through a Reveal
-// wrapper. Put each card in its own <li>.
+// wrapper. Put each card in its own <li>. `compact` keeps two short cards (Card size="sm") per row
+// on phones too, with a smaller gap there (home page services).
 interface Props {
   cols?: 1 | 2 | 3;
+  compact?: boolean;
 }
 
-const { cols = 3 } = Astro.props;
+const { cols = 3, compact = false } = Astro.props;
 ---
 
-<ul class="card-grid" data-cols={cols}>
+<ul class:list={['card-grid', { compact }]} data-cols={cols}>
   <slot />
 </ul>
 
@@ -24,15 +26,24 @@ const { cols = 3 } = Astro.props;
     list-style: none;
   }
 
+  /* The card fills its item (Card is block-size: 100%) */
   .card-grid > :global(li),
-  .card-grid > :global(li > *),
-  .card-grid :global(.card) {
+  .card-grid > :global(li > *) {
     block-size: 100%;
+  }
+
+  .compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
   }
 
   @media (--bp-sm-up) {
     .card-grid:not([data-cols='1']) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .compact {
+      gap: var(--space-6);
     }
   }
 
