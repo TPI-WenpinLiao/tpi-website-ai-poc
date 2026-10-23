@@ -3,6 +3,7 @@
   "rules": {
     "no-inline-style": "off",
     "doctype-style": "off",
-    "void-style": "off"
+    "void-style": "off",
+    "valid-id": ["error", { "relaxed": true }]
   }
 }

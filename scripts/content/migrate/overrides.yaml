@@ -1,0 +1,9 @@
+# Manual fixes applied on top of scripts/content/migrate/migrate.mjs output, so a re-run keeps them.
+# Key: <blog|news>/<locale>/<slug>. Usage: docs/content/migration.md「人工修正」
+#
+# blog/zh-TW/customer-complaint-ai-tool-selection-guide:
+#   frontmatter:
+#     description: 改寫後的 description
+#     authorType: Person
+#   alt:
+#     <內文圖的檔名>.png: 圖片內容的描述

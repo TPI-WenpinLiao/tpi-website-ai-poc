@@ -7,6 +7,7 @@ import { writeFile, mkdir } from 'node:fs/promises';
 import { parse } from 'node-html-parser';
 import { request } from './http.mjs';
 import { csvCell } from './csv.mjs';
+import { payloadArticleBody } from '../lib/nuxt-payload.mjs';
 
 const COM = 'https://www.tpisoftware.com';
 const VN = 'https://www.tpisoftware.vn';
@@ -409,20 +410,6 @@ async function analyzePdf(url) {
     extraNotes: size ? [`size:${Math.round(size / 1024)}KB`] : [],
     links: [],
   };
-}
-
-// Blog article bodies are not in the SSR DOM: they ship as an HTML string in the Nuxt payload
-// (`content:"…"`) and are rendered client-side. Take the longest such string and decode it.
-function payloadArticleBody(html) {
-  const payload = html.slice(html.indexOf('window.__NUXT__'));
-  const strings = [...payload.matchAll(/content:"((?:[^"\\]|\\.)*)"/g)].map((m) => m[1]);
-  if (!strings.length) return null;
-  const raw = strings.reduce((a, b) => (b.length > a.length ? b : a));
-  try {
-    return JSON.parse(`"${raw.replace(/\\'/g, "'").replace(/\\x([0-9a-fA-F]{2})/g, '\\u00$1')}"`);
-  } catch {
-    return null;
-  }
 }
 
 // News bodies are separate HTML files fetched client-side from /file{htmlpath}.
