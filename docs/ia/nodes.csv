@@ -45,7 +45,7 @@ uiux,services,UI/UX 數位產品設計,offering,page,/solutions/uiux,
 esg-advisory,services,ESG 永續發展與顧問服務,offering,page,/esg-advisory,
 esg-advisor,esg-advisory,ESG 顧問個人頁,person,collection,/esg-advisory/{slug},
 success-stories,home,成功案例,listing,page,/success-story,
-case-study,success-stories,成功案例內頁,case-study,collection,/success-story/{slug},現站沒有內頁，案例清單與客戶授權確認後才建
+case-study,success-stories,成功案例內頁,case-study,collection,/success-story/{slug},現站沒有內頁，M5-03 由列表卡片轉成內頁；客戶授權待確認
 resources,home,資源,hub,page,/resource,
 blog,resources,部落格,listing,page,/blog,
 blog-ai,blog,AI,listing,page,/blog/ai,
