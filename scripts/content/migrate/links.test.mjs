@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { linkResolver, siteKey } from './links.mjs';
+import { inLocale, linkResolver, siteKey } from './links.mjs';
 
 const resolve = linkResolver(
   [
@@ -41,4 +41,19 @@ test('unmapped and broken links are kept and reported; other links pass through'
 
 test('a link to where an inventory URL lands maps like the inventory URL', () => {
   assert.deepEqual(resolve('https://www.tpisoftware.vn/about-us', BASE), { href: '/vi/about' });
+});
+
+test('with a locale, links that map into another locale move to the same page in that locale', () => {
+  assert.deepEqual(resolve('https://www.tpisoftware.vn/about-us', BASE, 'vi'), { href: '/vi/about' });
+  assert.deepEqual(resolve('https://www.tpisoftware.com/', BASE, 'vi'), { href: '/vi', note: 'link moved into vi: / → /vi' });
+  assert.deepEqual(resolve('https://www.tpisoftware.vn', BASE, 'zh-TW'), { href: '/', note: 'link moved into zh-TW: /vi → /' });
+});
+
+test('inLocale swaps the locale prefix', () => {
+  assert.equal(inLocale('/en/products/digirunner', 'zh-TW'), '/products/digirunner');
+  assert.equal(inLocale('/products/digirunner#spec', 'vi'), '/vi/products/digirunner#spec');
+  assert.equal(inLocale('/en', 'vi'), '/vi');
+  assert.equal(inLocale('/', 'en'), '/en');
+  assert.equal(inLocale('/vi', 'zh-TW'), '/');
+  assert.equal(inLocale('/envoy', 'vi'), '/vi/envoy');
 });

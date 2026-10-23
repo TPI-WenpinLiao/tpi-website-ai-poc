@@ -10,8 +10,9 @@ export const ORGANIZATION_AUTHORS = new Set(['TPIsoftware', '昕力資訊', '昕
 // does not show (zh-TW 2, en 5, vi 10) have no value.
 export const NEWS_TYPES = { 1: 'press', 3: 'product', 7: 'newsletter', 4: 'press', 6: 'product', 8: 'newsletter', 9: 'press', 11: 'product' };
 
-// content-audit.md「已知限制」: news published before this day were kept on updateDate and need a check
-export const NEWS_REVIEW_BEFORE = '2024-01-01';
+// content-audit.md「已知限制」: news published before this day were kept on updateDate and need a check.
+// Same date as NEWS_CUTOFF in scripts/inventory/audit.mjs; change both together
+export const NEWS_REVIEW_BEFORE = '2026-01-01';
 
 // <title> is `${seoTitle ?? title}｜TPIsoftware 昕力資訊` (pageTitle in src/lib/seo/meta.ts; frontmatter.test.mjs
 // checks they match) and html-validate's long-title rule allows 70 characters

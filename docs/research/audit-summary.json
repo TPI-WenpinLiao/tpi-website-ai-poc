@@ -1,12 +1,12 @@
 {
   "rows": 1306,
-  "newsCutoff": "2024-01-01",
-  "blogStaleBefore": "2022-01-01",
+  "newsCutoff": "2026-01-01",
+  "blogCutoff": "2026-01-01",
   "byDisposition": {
     "rewrite": 164,
-    "drop": 413,
-    "merge": 80,
-    "keep": 649
+    "drop": 947,
+    "merge": 78,
+    "keep": 117
   },
   "byDispositionLocale": {
     "rewrite": {
@@ -15,20 +15,20 @@
       "vi": 49
     },
     "drop": {
-      "zh-TW": 257,
-      "en": 126,
-      "vi": 28,
+      "zh-TW": 399,
+      "en": 223,
+      "vi": 323,
       "ja": 2
     },
     "merge": {
       "zh-TW": 36,
-      "en": 24,
-      "vi": 20
+      "en": 23,
+      "vi": 19
     },
     "keep": {
-      "zh-TW": 178,
-      "en": 123,
-      "vi": 348
+      "zh-TW": 36,
+      "en": 27,
+      "vi": 54
     }
   },
   "byPageTypeDisposition": {
@@ -58,8 +58,8 @@
       "keep": 3
     },
     "blog-post": {
-      "keep": 467,
-      "merge": 2
+      "keep": 57,
+      "drop": 412
     },
     "utility": {
       "rewrite": 15
@@ -83,8 +83,8 @@
       "rewrite": 3
     },
     "news": {
-      "drop": 381,
-      "keep": 150
+      "drop": 503,
+      "keep": 28
     },
     "pdf": {
       "rewrite": 8,
@@ -111,8 +111,8 @@
       "rewrite": 3
     }
   },
-  "toConfirm": 204,
-  "overrides": 17,
+  "toConfirm": 108,
+  "overrides": 31,
   "localeGaps": [
     {
       "route": "/chatgpt-enterprise",

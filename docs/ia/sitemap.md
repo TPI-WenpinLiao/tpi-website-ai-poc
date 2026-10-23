@@ -292,7 +292,7 @@ flowchart LR
 | `hub` | 產品總覽、產品家族、產業方案、服務總覽、資源：介紹 + 子頁卡片 + 相關案例與文章 | 11 | 22 |
 | `offering` | 產品、產品子頁、解決方案、服務共用：功能、情境、案例、CTA（聯絡業務／預約 demo）；差異由 M2-04 的欄位處理 | 32 | 102 |
 | `listing` | blog 首頁與分類、媒體中心、活動、成功案例列表：卡片列表 + 篩選 + 分頁 | 9 | 64 |
-| `article` | blog 文章、新聞內頁 | 2 | 622 |
+| `article` | blog 文章、新聞內頁 | 2 | 88 |
 | `case-study` | 成功案例內頁（現站沒有內頁，先保留模板位置） | 1 | 0 |
 | `person` | ESG 顧問個人頁 | 1 | 25 |
 | `gated-download` | 白皮書與文件索取：摘要 + 表單，送出後取得檔案 | 4 | 9 |
@@ -360,7 +360,7 @@ flowchart LR
 | 　　　企業管理（`blog-enterprise-management`） | `listing` | `/blog/enterprise-management` | 6 | 4 | 4 |  |
 | 　　　ESG 與綠色轉型（`blog-esg`） | `listing` | `/blog/esg` | 1 | 1 | 4 |  |
 | 　　　應用情境（`blog-use-cases`） | `listing` | `/blog/use-cases` | 3 | 3 | 0 |  |
-| 　　　blog 文章（`blog-post`） | `article` | `/blog/{slug}` | 106 | 67 | 299 |  |
+| 　　　blog 文章（`blog-post`） | `article` | `/blog/{slug}` | 14 | 9 | 37 |  |
 | 　　digiRunner 白皮書（`whitepaper-digirunner`） | `gated-download` | `/whitepaper/api-strategies` | 1 | 1 | 1 |  |
 | 　　digiLogs 白皮書（`whitepaper-digilogs`） | `gated-download` | `/whitepaper/digilogs` | 1 | 1 | 1 |  |
 | 　　GreenSwift 碳盤指南（`whitepaper-greenswift`） | `gated-download` | `/whitepaper/greenswift` | 1 | 0 | 0 |  |
@@ -370,7 +370,7 @@ flowchart LR
 | 　關於我們（`about`） | `content` | `/about-us` | 1 | 1 | 1 |  |
 | 　　合作夥伴（`partners`） | `content` | `/partners` | 1 | 1 | 1 | zh-TW 現站內容幾乎為空，zh-TW 版需人工提供內容 |
 | 　　媒體中心（`media-center`） | `listing` | `/media-center` | 1 | 1 | 1 |  |
-| 　　　新聞（`news-article`） | `article` | `/media-center/{id}` | 60 | 48 | 42 |  |
+| 　　　新聞（`news-article`） | `article` | `/media-center/{id}` | 10 | 9 | 9 |  |
 | 　　人才招募（`hr`） | external | `/hr` | 1 | 0 | 0 | 獨立應用，只放入口連結 |
 | 　聯絡我們（`contact`） | `contact` | `/contact-us` | 1 | 1 | 1 |  |
 | 　法務與政策（`legal`） | group |  | 0 | 0 | 0 | 只在 footer 出現 |

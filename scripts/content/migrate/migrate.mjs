@@ -15,7 +15,7 @@ import { parseTagTable } from '../tags.mjs';
 import { cachedFetcher, writeAtomic } from './cache.mjs';
 import { applyOverrides, blogFrontmatter, Commented, Day, frontmatterNotes, newsFrontmatter, serializeFrontmatter, tagLookup } from './frontmatter.mjs';
 import { prepare, toMarkdown } from './html-to-markdown.mjs';
-import { dataUrlBytes, fileNames, imageExt } from './images.mjs';
+import { dataUrlBytes, fileNames, imageExt, optimizeImage } from './images.mjs';
 import { linkResolver } from './links.mjs';
 import { blogArticles, blogBody, newsBody, newsImageUrl, newsItems } from './sources.mjs';
 
@@ -51,20 +51,22 @@ export function entryText(data, body, existing, date) {
 }
 
 /**
- * Overrides file: entry id → { frontmatter?: {...}, alt?: { <image file>: <alt> } }.
- * @returns {Record<string, { frontmatter?: Record<string, unknown>, alt?: Record<string, string> }>}
+ * Overrides file: entry id → { frontmatter?: {...}, alt?: { <image file>: <alt> }, dropImagesFrom?: [<host or image URL>] }.
+ * @returns {Record<string, { frontmatter?: Record<string, unknown>, alt?: Record<string, string>, dropImagesFrom?: string[] }>}
  */
 export function parseOverrides(text) {
   const all = parseYaml(text) ?? {};
   for (const [id, o] of Object.entries(all)) {
     if (!/^(?:blog|news)\/(?:zh-TW|en|vi)\/[a-z0-9-]+$/.test(id)) throw new Error(`${OVERRIDES}: "${id}" is not <blog|news>/<locale>/<slug>`);
-    const extra = Object.keys(o ?? {}).filter((k) => k !== 'frontmatter' && k !== 'alt');
-    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (frontmatter, alt)`);
+    const extra = Object.keys(o ?? {}).filter((k) => !['frontmatter', 'alt', 'dropImagesFrom'].includes(k));
+    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (frontmatter, alt, dropImagesFrom)`);
+    const drop = o?.dropImagesFrom;
+    if (drop !== undefined && !(Array.isArray(drop) && drop.length && drop.every((h) => typeof h === 'string'))) throw new Error(`${OVERRIDES}: ${id} dropImagesFrom must be a list of hosts or image URLs`);
   }
   return all;
 }
 
-/** Download every image (cover first); throws on the first one that fails. */
+/** Download every image (cover first), downscaled and re-encoded; throws on the first one that fails. */
 async function fetchImages(get, urls) {
   const images = [];
   for (const url of urls) {
@@ -79,7 +81,7 @@ async function fetchImages(get, urls) {
     }
     const ext = imageExt(bytes);
     if (!ext) throw new Error(`image ${url.slice(0, 120)}: not a format astro:assets reads`);
-    images.push({ url, ext, bytes });
+    images.push({ url, ...(await optimizeImage(bytes, ext)) });
   }
   return images;
 }
@@ -103,7 +105,10 @@ async function syncImages(dir, images, names) {
  */
 export async function convert({ get, type, id, slug, coverUrl, html, base, frontmatter, override, resolveLink, date }) {
   const notes = [];
-  const prepared = prepare(html, base);
+  const drop = override?.dropImagesFrom ?? [];
+  const prepared = prepare(html, base, { drop });
+  const unusedDrop = drop.filter((d) => !prepared.dropped.some((url) => url === d || new URL(url).hostname === d));
+  if (unusedDrop.length) throw new Error(`${OVERRIDES}: dropImagesFrom entries the entry has no images from: ${unusedDrop.join(', ')}`);
   notes.push(...prepared.notes);
   const images = await fetchImages(get, [coverUrl, ...prepared.images]);
   const names = fileNames(images);
@@ -120,7 +125,7 @@ export async function convert({ get, type, id, slug, coverUrl, html, base, front
       return { path: assetRef(type, id, file), alt, file };
     },
     link: (href) => {
-      const r = resolveLink(href, base);
+      const r = resolveLink(href, base, id.split('/')[0]);
       if (r.note) notes.push(r.note);
       return r.href;
     },
@@ -257,6 +262,20 @@ async function main() {
   }
 
   if (!args.type && !args.locale && !args.only) {
+    // Entries that left page-map.csv (their disposition became drop): remove what an earlier run wrote
+    for (const type of TYPES) {
+      for (const locale of LOCALES) {
+        const dir = `src/content/${type}/${locale}`;
+        if (!existsSync(dir)) continue;
+        for (const file of (await readdir(dir)).filter((f) => f.endsWith('.md'))) {
+          const id = `${locale}/${file.slice(0, -3)}`;
+          if (seen.has(`${type}/${id}`)) continue;
+          await rm(join(dir, file));
+          await rm(assetDir(type, id), { recursive: true, force: true });
+          report.push({ type, locale, id, sourceUrl: '', status: 'removed', notes: ['not in page-map.csv'] });
+        }
+      }
+    }
     const stale = Object.keys(overrides).filter((id) => !seen.has(id));
     if (stale.length) report.push({ type: '', locale: '', id: '', sourceUrl: '', status: 'failed', notes: [`${OVERRIDES} has entries that are not migrated: ${stale.join(', ')}`] });
   }
@@ -270,11 +289,11 @@ function printSummary(report) {
   const counts = new Map();
   for (const r of report) {
     const key = `${r.type || '-'} ${r.locale || '-'}`;
-    const c = counts.get(key) ?? { written: 0, unchanged: 0, skipped: 0, failed: 0 };
+    const c = counts.get(key) ?? { written: 0, unchanged: 0, removed: 0, skipped: 0, failed: 0 };
     c[r.status] += 1;
     counts.set(key, c);
   }
-  for (const [key, c] of counts) console.log(`${key}: written ${c.written}, unchanged ${c.unchanged}, skipped ${c.skipped}, failed ${c.failed}`);
+  for (const [key, c] of counts) console.log(`${key}: written ${c.written}, unchanged ${c.unchanged}, removed ${c.removed}, skipped ${c.skipped}, failed ${c.failed}`);
   for (const r of report.filter((r) => r.status === 'failed')) console.log(`failed ${r.type}/${r.id || r.sourceUrl}: ${r.notes[0]}`);
 }
 

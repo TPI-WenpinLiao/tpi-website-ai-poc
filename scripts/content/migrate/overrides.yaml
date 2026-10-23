@@ -7,7 +7,119 @@
 #     authorType: Person
 #   alt:
 #     <內文圖的檔名>.png: 圖片內容的描述
+#   dropImagesFrom: [blog.tpisoftware.com]   # 源站壞掉時，捨棄這些主機的內文圖
 
 news/zh-TW/585:
   alt:
-    news-2026-10-15-1792045444257.jpg: 昕力資訊與 AISO 的標誌，右側是 AISO AI 專用機的機身
+    news-2026-10-15-1792045444257.webp: 昕力資訊與 AISO 的標誌，右側是 AISO AI 專用機的機身
+  frontmatter:
+    description: 昕力資訊發表七款 AI 專用機並於 AISO 官網上架，結合自研 OrientAI 軟體與地端硬體，涵蓋法務、人資、教育與企業 AI 治理四大場域。
+
+blog/zh-TW/ai-gateway-for-enterprise-ai-security:
+  frontmatter:
+    description: 生成式 AI 帶來權限失控與資料外洩風險。本文說明 digiRunner AI Gateway 如何以 RBAC、Guardrail 與行為稽核治理企業 AI。
+
+blog/zh-TW/ai-infrastructure-operations-governance:
+  frontmatter:
+    description: 探討企業如何透過 AI Gateway 與 digiRunner 管理生成式 AI、LLM 及 AI 模型整合，降低維運成本，並提升 AI 基礎建設與治理能力。
+
+blog/zh-TW/ai-token-cost-management:
+  frontmatter:
+    description: Token 是企業使用生成式 AI 的重要成本單位。本文解析 Token 經濟、傑文斯悖論、AI ROI 與管理策略，協助企業提升 AI 使用效率。
+
+blog/zh-TW/carbonfootprint:
+  frontmatter:
+    description: 中小企業如何從產品碳足跡入手，應對 CBAM 與供應鏈碳排要求？本文說明分階段策略與數位工具，累積碳數據，為 ESG 報告與淨零策略做準備。
+
+blog/zh-TW/carbonfootprint-quick-implementation-sme:
+  frontmatter:
+    description: 中小企業不必一次完成複雜的碳管理。透過碳足跡輕量導入與數位工具，免高額顧問費即可建立符合 ISO 標準的碳數據能力，回應綠色供應鏈需求。
+
+blog/zh-TW/cbam-carbon-compliance-guide:
+  frontmatter:
+    description: 本文整理台灣出口企業準備 CBAM 碳稅合規的重點，說明納管範圍、內含排放與申報需求，並比較產品碳足跡計算與 CBAM 排放計算的差異。
+
+blog/zh-TW/customer-complaint-ai-tool-selection-guide:
+  frontmatter:
+    description: 降低客訴的 AI 工具怎麼選？本文解析金融客服的客訴風險與人工抽檢限制，說明 AI 自動化語音質檢如何透過語意分析與情緒辨識，提早發現高風險互動。
+
+blog/zh-TW/enterprise-grade-apim:
+  frontmatter:
+    description: API 管理平台（APIM）是連接傳統基礎設施與前瞻技術的樞紐。隨著量子技術走向雲端，本文探討企業如何透過 APIM 整合量子運算資源與導入策略。
+  alt:
+    1f0fa848-190c-6bd6-81f6-0b7fa23ee3a6.webp: APIM 整合量子服務流程圖：用戶端應用程式經 API 管理平台、身分驗證與成本控管、非同步任務佇列送至量子運算提供者 QCaaS，結果暫存區再回傳平台
+
+blog/zh-TW/healthcare-fhir-data-platform-7-steps:
+  frontmatter:
+    description: 本文解析 FHIR、數據中台與醫療資料治理的關係，以及醫療系統整合的 7 大實戰步驟，協助醫療院所建立智慧醫療所需的資料能力。
+
+blog/zh-TW/what-is-agentic-ai-platform:
+  frontmatter:
+    description: 本文解析代理式 AI、AI Agent 與 Agentic AI 平台的差異，說明多 Agent 協作、治理機制與平台架構，並介紹 OrientAI 如何落地。
+
+blog/zh-TW/what-is-scope3:
+  frontmatter:
+    description: 範疇三是什麼？本文拆解範疇一、二、三的分類與差異，說明中小企業面對供應鏈碳排放時常見的數據收集難題，以及有效執行範疇三碳盤查的實務做法。
+  alt:
+    1f0e7847-7227-691a-81f6-0b7fa23ee3a6.webp: 中小企業常見排放源：圓餅圖顯示範疇三占大宗，表格列出範疇一至三的排放來源與盤查規範
+
+blog/zh-TW/why-companies-need-custom-ai-knowledge:
+  frontmatter:
+    description: 企業建立專屬 AI 知識庫的價值，不在於補足大型語言模型的知識，而是劃定「知識邊界」，讓 AI 在特定專業場景中依據最新、可信的企業資料精準回答。
+
+blog/zh-TW/why-enterprises-need-ai-appliance:
+  frontmatter:
+    description: 本文揭示公有雲 AI 潛藏的資料外洩風險，說明企業 AI 主權與知識主權的重要性，以及企業為何需要部署「AI 一體機」，掌控內部知識資產並保障資料安全。
+
+news/zh-TW/559:
+  frontmatter:
+    description: 昕力資訊舉行 AISO 主權 AI 產業聯盟簽署儀式，攜手群聯電子等 12 間軟硬體夥伴與指導單位工研院展開策略合作，國泰金控與台達電子並當場與聯盟完成簽約。
+  alt:
+    news-2026-03-25-1774407820762.webp: AISO 主權 AI 產業聯盟簽約記者會，與會者在台上手按發光球體啟動聯盟成立
+    news-2026-03-25-1774408137142.webp: 四位代表在 AISO 主權 AI 產業聯盟背板前展示簽署的 MOU 並比讚
+
+news/zh-TW/562:
+  frontmatter:
+    description: 昕力資訊從上百件智慧醫療方案中脫穎而出，獲選衛福部第一屆「臺灣 50 優良 SMART 應用程式：醫學 AI 類」優質應用。
+  alt:
+    news-2026-04-21-1776759741539.webp: 得獎者手持獎座合影，標題：昕力資訊獲衛福部「臺灣 50 優良 SMART 應用程式獎」，接軌 FHIR 國際標準
+    news-2026-04-21-1776739585186.webp: 第一屆臺灣 50 優良 SMART 應用程式頒獎典禮，健保署署長頒發獎座予昕力資訊研發部長陳瑞泰
+
+news/zh-TW/565:
+  frontmatter:
+    description: 昕力資訊攜手 AISO 聯盟夥伴群聯電子與精英電腦參加 2026 COMPUTEX，6 月 2 日至 5 日在南港展覽館展示 AI 技術與軟硬體整合方案。
+  alt:
+    news-2026-05-27-1779846968050.webp: 昕力資訊 | AISO 主視覺：「昕力資訊於 2026 COMPUTEX InnoVEX 展出 聯手策略夥伴展示 AISO 一體機整合方案」
+
+news/zh-TW/568:
+  frontmatter:
+    description: 昕力資訊導入 Intel Xeon 6 處理器與 Arc Pro B60 GPU，作為企業 AI 方案的核心運算底層，並成為英特爾夥伴聯盟的一員。
+  alt:
+    news-2026-06-22-1782125081768.webp: 藍色處理器晶片主視覺：「昕力資訊導入 Intel Xeon 6 處理器 定義主權AI運算新標準」
+
+news/zh-TW/571:
+  frontmatter:
+    description: 昕力資訊於 6 月 23 日協同資策會、群聯電子與智聯服務舉辦製造業 AI 落地研討會，聚焦地端 AI 部署，為導入 Agentic AI 的組織提供路徑。
+  alt:
+    news-2026-07-03-1783062054132.webp: 研討會講者手持昕力資訊、AISO、資策會標語牌合影，標題「AISO 一體機整合方案 加速 Agentic AI 落地」
+    news-2026-07-01-1782888617768.webp: 五位講者在「製造業 AI 落地攻略：打造企業專屬 AI 架構」投影前手持昕力資訊、AISO、資策會標語牌合影
+
+news/zh-TW/572:
+  frontmatter:
+    description: 昕力資訊與美國 Juxta 簽署代理協議，取得「全域定位系統」技術的代理與整合權利，規劃整合至 AI 軟硬體一體化架構，應用於國安、災害應變與智慧物流等場域。
+  alt:
+    news-2026-07-27-1785149200456.webp: 昕力資訊 | Juxta 主視覺：「昕力資訊跨足國防科技 攜手美商 Juxta 引進尖端「全域定位」科技」，背景為數位城市網格
+
+news/zh-TW/575:
+  frontmatter:
+    description: 昕力資訊領軍 AISO 聯盟上架 AI 筆電與軟硬整合一體機，包括自營品牌「AISO 1」，以自研 Agentic AI 平台 OrientAI 為軟體核心。
+  alt:
+    news-2026-08-14-1786696391614.webp: 新聞主視覺：昕力資訊領軍 AISO 聯盟推出一系列 AI 主機，以軟體定義硬體搶攻地端市場
+
+news/zh-TW/580:
+  frontmatter:
+    description: 昕力 AI 智慧碳管理平台 GreenSwift 協助越南台商和鼎隆建築進行數位化碳盤查，產出符合國際標準的盤查報告書，可直接提交第三方查驗機構認證。
+
+news/zh-TW/582:
+  frontmatter:
+    description: 昕力資訊連續兩年獲臺北市友善育兒事業獎績優事業組，今年推出「昕守爸媽」親職支持平台，並以 AISO AI 一體機解決方案獲 2026 臺灣 AI 卓越獎優品。

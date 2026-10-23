@@ -24,8 +24,8 @@
 | [`offering`](#offering產品解決方案服務) | `offering` | 32 個 `offering` 節點 | 102 | 產品 `SoftwareApplication`；解決方案與服務 `Service` |
 | [`hub`](#hub產品家族產業方案服務總覽) | `hub` | 11 個 `hub` 節點 | 22 | `CollectionPage` |
 | [`case-study`](#case-study成功案例) | `case-study` | `case-study` | 0 | `Article` |
-| [`blog`](#blog部落格文章) | `article` | `blog-post` | 472 | `BlogPosting` |
-| [`news`](#news新聞) | `article` | `news-article` | 150 | `NewsArticle` |
+| [`blog`](#blog部落格文章) | `article` | `blog-post` | 60 | `BlogPosting` |
+| [`news`](#news新聞) | `article` | `news-article` | 28 | `NewsArticle` |
 | [`page`](#page公司頁與法務頁) | `content`、`contact` | `about`、`partners`、`contact`、法務 4 頁 | 17 | `AboutPage`、`ContactPage`、`WebPage` |
 | [`person`](#personesg-顧問) | `person` | `esg-advisor` | 25 | `ProfilePage` + `Person` |
 | [`whitepaper`](#whitepaper白皮書) | `gated-download` | 4 個 `whitepaper-*` 節點 | 9 | `WebPage` + `DigitalDocument` |
@@ -190,7 +190,7 @@ JSON-LD：`Article`，`headline` ← `title`、`description` ← `description`�
 
 ## blog（部落格文章）
 
-zh-TW 106 列、en 67 列、vi 299 列（`page-map.csv` 的 `blog-post` 節點，含 2 列 merge）。
+zh-TW 14 列、en 9 列、vi 37 列（`page-map.csv` 的 `blog-post` 節點；M5-05 起只保留 2026 年的文章）。
 
 | 欄位 | 型別 | 必填 | 說明 | 現站來源（blog API） |
 |---|---|---|---|---|
@@ -215,7 +215,7 @@ tags: [ai-application]
 publishedAt: 2026-09-11
 author: TPIsoftware
 authorType: Organization
-coverImage: ../../../assets/blog/zh-TW/customer-complaint-ai-tool-selection-guide/cover.png   # 原圖 https://tpi.dev/tpi-dev/private/article/IMG/1f1aaad1-2937-612a-81f6-0b7fa23ee3a6.png
+coverImage: ../../../assets/blog/zh-TW/customer-complaint-ai-tool-selection-guide/cover.webp   # 原圖 https://tpi.dev/tpi-dev/private/article/IMG/1f1aaad1-2937-612a-81f6-0b7fa23ee3a6.png
 sourceUrl: https://www.tpisoftware.com/blog/ai/customer-complaint-ai-tool-selection-guide
 migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-09-11
@@ -267,7 +267,7 @@ JSON-LD：`BlogPosting`
 
 ## news（新聞）
 
-zh-TW 60 列、en 48 列、vi 42 列（`page-map.csv` 的 `news-article` 節點）。
+zh-TW 10 列、en 9 列、vi 9 列（`page-map.csv` 的 `news-article` 節點；M5-05 起只保留 2026 年的新聞）。
 
 | 欄位 | 型別 | 必填 | 說明 | 現站來源（新聞 API） |
 |---|---|---|---|---|
@@ -281,9 +281,9 @@ zh-TW 60 列、en 48 列、vi 42 列（`page-map.csv` 的 `news-article` 節點�
 
 | `newsType` | 現站 `newsTypeId` | 現站名稱 | 保留的 zh-TW 篇數 |
 |---|---|---|--:|
-| `press` | 1 | 新聞快報 | 48 |
-| `product` | 3 | 產品消息 | 1 |
-| `newsletter` | 7 | 電子報 | 11 |
+| `press` | 1 | 新聞快報 | 10 |
+| `product` | 3 | 產品消息 | 0 |
+| `newsletter` | 7 | 電子報 | 0 |
 | （不建） | 2 | 未知 | 0 |
 
 en、vi 的 `newsTypeId` 是另外編號的，依現站名稱對到同一個 `newsType`（M5-04 加入，待內容負責人確認）：
@@ -295,7 +295,7 @@ en、vi 的 `newsTypeId` 是另外編號的，依現站名稱對到同一個 `ne
 | `newsletter` | 8（Newsletter） | — |
 | （不建） | 5（不出現在媒體中心頁面） | 10（不出現在媒體中心頁面） |
 
-現站名稱取自 <https://www.tpisoftware.com/media-center>、<https://www.tpisoftware.com/en/media-center>、<https://www.tpisoftware.vn/media-center> 頁面資料的 `newsType`。`page-map.csv` 保留的 en、vi 新聞沒有 5 與 10。`newsTypeId: 2` 有 55 篇已發布，但不出現在媒體中心頁面，日期在 2018–2022 年，多為活動與技術小聚，M1-02 稽核後沒有任何一篇保留，因此不建這個值。篇數取自新聞 API 與 `page-map.csv` 的交集。
+現站名稱取自 <https://www.tpisoftware.com/media-center>、<https://www.tpisoftware.com/en/media-center>、<https://www.tpisoftware.vn/media-center> 頁面資料的 `newsType`。`page-map.csv` 保留的 en、vi 新聞沒有 5 與 10。`newsTypeId: 2` 有 55 篇已發布，但不出現在媒體中心頁面，日期在 2018–2022 年，多為活動與技術小聚，M1-02 稽核後沒有任何一篇保留，因此不建這個值。篇數取自新聞 API 與 `page-map.csv` 的交集；M5-05 改為只保留 2026 年的新聞後，三個語系保留的都是 `press`，`product`、`newsletter` 留在 schema 給之後的新聞。
 
 範例（取自新聞 API `/tpi/api/News?languages=tw` 的 id 585，文章 <https://www.tpisoftware.com/media-center/585>）：
 
@@ -305,7 +305,7 @@ description: 昕力資訊（7781）發表七款 AI 專用機並同步於 AISO �
 translationKey: "585"   # en 版 586、vi 版 587 填同一個值
 newsType: press
 publishedAt: 2026-10-15
-coverImage: ../../../assets/news/zh-TW/585/cover.jpg   # 原圖 /images/news/585/news-2026-10-15-1792036052577.jpg
+coverImage: ../../../assets/news/zh-TW/585/cover.webp   # 原圖 /images/news/585/news-2026-10-15-1792036052577.jpg
 sourceUrl: https://www.tpisoftware.com/media-center/585
 migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-10-16
@@ -498,8 +498,8 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 
 | 項目 | 誰確認 | 影響 |
 |---|---|---|
-| blog `author` 的現站資料品質：zh-TW 有 `TPIsowftware` 拼錯、`商業週刊`／`科技報橘` 等轉載來源；vi 272 篇作者（API 的 `authorName`）為 `kay`，其中 90 篇的後台帳號（`uidName`）是 `Kay Tăng Tấn Khôi`，`kay` 是否就是此人、要不要顯示全名；另有 15 篇作者為空值 | 內容負責人 | M5 的 `author` 與 `authorType` 怎麼填 |
-| `商業週刊`、`科技報橘` 為作者的 6 篇是否有轉載授權 | 內容負責人 | M5 是否遷移 |
+| blog `author` 的現站資料品質。M5-05 只遷移 2026 年的文章後剩下：zh-TW 1 篇 `TPIsowftware`（拼錯）；vi 34 篇作者（API 的 `authorName`）為 `kay`，部分文章的後台帳號（`uidName`）是 `Kay Tăng Tấn Khôi`，`kay` 是否就是此人、要不要顯示全名 | 內容負責人 | `author` 與 `authorType` 怎麼填 |
+| `商業週刊`、`科技報橘` 為作者的 6 篇是否有轉載授權：M5-05 的保留門檻後 6 篇都在 2026 年以前、不遷移，不再需要確認 | — | — |
 | blog 三語版本的對應：API 沒有跨語系欄位 | 內容負責人 | M7 的 `translationKey` |
 | 白皮書檔案的實際位置（現站在表單送出後提供） | 後端負責人 | `whitepaper.file` |
 | tag 清單（上表）的合併方式與顯示名稱。`src/content/tags.yaml` 目前的名稱取自現站，例如 `ai-solutions` 的 zh-TW 名稱是「人工智慧」 | 專案負責人 | 改上表後重跑 `node scripts/content/tags.mjs` |

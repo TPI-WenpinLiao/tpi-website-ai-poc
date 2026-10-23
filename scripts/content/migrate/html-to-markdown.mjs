@@ -22,14 +22,31 @@ const isTrackingPixel = (img) =>
 const isEmoji = (img) => /(^|\s)(emoji|wp-smiley)(\s|$)/.test(img.getAttribute('class') ?? '') || /\/\/s\.w\.org\/images\/core\/emoji\//.test(img.getAttribute('src') ?? '');
 
 /**
+ * The caption of an image: the paragraph right after it (no empty paragraph between) that is italic all
+ * the way through, as the blog editor writes 「圖：…」 and 「圖片來源：…」. A figure's figcaption counts too.
+ */
+function captionOf(node) {
+  const figcaption = node.parentNode?.rawTagName?.toLowerCase() === 'figure' ? node.parentNode.querySelector('figcaption') : null;
+  if (figcaption) return figcaption;
+  let next = node.nextSibling;
+  while (next && next.nodeType === 3 && !next.text.trim()) next = next.nextSibling;
+  if (next?.rawTagName?.toLowerCase() !== 'p' || !next.text.trim()) return null;
+  const italic = next.querySelectorAll('em, i').filter((el) => !el.parentNode.closest('em, i'));
+  const squash = (t) => t.replace(/\s/g, '');
+  return squash(italic.map((el) => el.text).join('')) === squash(next.text) ? next : null;
+}
+
+/**
  * Clean the HTML: drop scripts and embeds, unwrap spans, keep only the attributes Markdown can carry,
  * fix heading levels (the page h1 is the title, so the body starts at h2 and never skips a level),
  * resolve image URLs against `base`.
  * @param {string} html
  * @param {string} base URL the HTML came from
- * @returns {{ html: string, images: string[], notes: string[] }}
+ * @param {{ drop?: string[] }} [options] hosts, or whole image URLs, whose images are removed instead of
+ *   downloaded (overrides.yaml dropImagesFrom); `dropped` lists them
+ * @returns {{ html: string, images: string[], dropped: string[], notes: string[] }}
  */
-export function prepare(html, base) {
+export function prepare(html, base, { drop = [] } = {}) {
   const root = parse(html, { comment: false });
   const notes = [];
   for (const el of root.querySelectorAll('script, style, noscript')) el.remove();
@@ -56,6 +73,7 @@ export function prepare(html, base) {
   if (changed.length) notes.push(`headings changed: ${changed.join(' ')}`);
 
   const images = [];
+  const dropped = [];
   let pixels = 0;
   for (const img of root.querySelectorAll('img')) {
     if (isTrackingPixel(img)) {
@@ -74,6 +92,18 @@ export function prepare(html, base) {
       continue;
     }
     const url = src.startsWith('data:') ? src : new URL(src, base).href;
+    if (!url.startsWith('data:') && (drop.includes(url) || drop.includes(new URL(url).hostname))) {
+      // WordPress wraps images in a link to the full-size file; that link and the caption go with the image
+      const link = img.parentNode?.rawTagName?.toLowerCase() === 'a' && img.parentNode.childNodes.every((n) => n === img || !n.text.trim()) ? img.parentNode : null;
+      const caption = captionOf(link ?? img);
+      (link ?? img).remove();
+      caption?.remove();
+      if (!dropped.includes(url)) {
+        dropped.push(url);
+        notes.push(`image dropped (dropImagesFrom): ${url}${caption ? ` with caption "${caption.text.trim()}"` : ''}`);
+      }
+      continue;
+    }
     img.setAttribute('src', url);
     if (!images.includes(url)) images.push(url);
   }
@@ -91,7 +121,7 @@ export function prepare(html, base) {
   for (const p of root.querySelectorAll('p')) {
     if (!p.text.replace(/[\s ​]/g, '') && !p.querySelector('img')) p.remove();
   }
-  return { html: root.toString(), images, notes };
+  return { html: root.toString(), images, dropped, notes };
 }
 
 const PUNCT = /[\p{P}\p{S}]/u;

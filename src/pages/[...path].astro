@@ -1,8 +1,9 @@
 ---
 // Every page built from content or from nodes.csv, other than the home and 404 pages (ADR 0002):
-// - one per published collection entry, in the entry's locale. Node-based entries (offering, hub,
-//   page, whitepaper) live at their nodes.csv path and the node's template picks the layout; blog,
-//   news, case-study and person entries fill their collection node's path (src/lib/content/urls.ts)
+// - one per published collection entry, in the entry's locale once that locale has interface copy
+//   (src/data/strings). Node-based entries (offering, hub, page, whitepaper) live at their nodes.csv
+//   path and the node's template picks the layout; blog, news, case-study and person entries fill
+//   their collection node's path (src/lib/content/urls.ts)
 // - listing, contact and utility nodes in every locale with interface copy (src/data/strings);
 //   listings are split into pages at {path}/page/{n}. The contact page takes the locale's `page`
 //   entry for its node when there is one
@@ -95,11 +96,15 @@ export const getStaticPaths = (async () => {
     all: E[],
     pathOf: (e: E) => string,
     page: (e: E) => Page,
-  ) =>
-    all.filter(isPublished).map((e) => ({
+  ) => {
+    // Templates need the locale's interface copy, so entries of a locale without it (en and vi until
+    // M7) are content only: no page, and no hreflang pointing at one
+    const built = all.filter((e) => hasStrings(entryLocale(e.id)));
+    return built.filter(isPublished).map((e) => ({
       params: { path: pathOf(e).slice(1) },
-      props: { ...page(e), translations: translationPaths(e, all, pathOf) } satisfies Props,
+      props: { ...page(e), translations: translationPaths(e, built, pathOf) } satisfies Props,
     }));
+  };
   const paths = [
     ...route(await getCollection('offering'), nodeEntryPath, (entry) => ({ kind: 'offering', entry })),
     ...route(await getCollection('hub'), nodeEntryPath, (entry) => ({ kind: 'hub', entry })),
