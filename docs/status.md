@@ -78,7 +78,7 @@
 ### M5 內容遷移
 
 - M5-04 部落格與新聞批次轉換 script 完成（#29）：`node scripts/content/migrate/migrate.mjs` 依 `page-map.csv` 把現站 blog 與新聞轉成內容檔，圖片下載到 `src/assets/<type>/<locale>/<slug>/`（內容圖的目錄規則改為含語系，whitepaper 範例一起搬）；人工修正寫在 `scripts/content/migrate/overrides.yaml`，重跑結果不變。用法與報告欄位見 `docs/content/migration.md`。全量試跑 622 列（併入 merge 列後 620 篇）：轉出 533 篇、`astro check` 通過；失敗 87 篇，其中 69 篇的圖片網域被雲端環境的 network policy 擋下、15 篇 vi 現站沒有作者、3 篇不在 blog API。試跑產出不 commit，只重新產生兩筆範例。en、vi 的 `newsTypeId` 依現站名稱對應（`content-model.md`「news」，待確認）。html-validate 的 `valid-id` 改為 `relaxed`（數字開頭的標題產生的 id）
-- M5-05 部落格與新聞遷移完成（#30）：`migrate.mjs` 全量轉出 568 篇（blog zh-TW 94、en 61、vi 277，新聞 zh-TW 49、en 45、vi 42）與 838 張圖，失敗 52 篇列在 PR。圖片下載後縮到最大寬 1600 px、存成 WebP（516 MB → 70 MB）。`blog.tpisoftware.com` 的 HTTPS 壞掉：配圖的 30 篇用 `overrides.yaml` 的 `dropImagesFrom` 拿掉圖與圖說後轉換，圖是內容本體的 15 篇不轉。zh-TW 的 `seoTitle`、`description`、內文圖 alt 寫進 `overrides.yaml`；en、vi 延到 M7。collection 頁只對有字串檔的語系產生（en、vi 的內容先進版控，M7 補字串檔後產生頁面），內文跨語系連結改成本篇語系的同一頁。抽查用 `node scripts/content/migrate/spot-check.mjs`（`docs/content/migration.md`「抽查」）
+- M5-05 部落格與新聞遷移完成（#30）：`migrate.mjs` 全量轉出 568 篇（blog zh-TW 94、en 61、vi 277，新聞 zh-TW 49、en 45、vi 42）與 836 張圖，失敗 52 篇列在 PR。圖片下載後縮到最大寬 1600 px、存成 WebP（516 MB → 70 MB）。`blog.tpisoftware.com` 的 HTTPS 壞掉：配圖的 30 篇用 `overrides.yaml` 的 `dropImagesFrom` 拿掉圖與圖說後轉換，圖是內容本體的 15 篇不轉。zh-TW 的 `seoTitle`、`description`、內文圖 alt 寫進 `overrides.yaml`；en、vi 延到 M7。collection 頁只對有字串檔的語系產生（en、vi 的內容先進版控，M7 補字串檔後產生頁面），內文跨語系連結改成本篇語系的同一頁。抽查用 `node scripts/content/migrate/spot-check.mjs`（`docs/content/migration.md`「抽查」）
 
 ## 下一步
 
