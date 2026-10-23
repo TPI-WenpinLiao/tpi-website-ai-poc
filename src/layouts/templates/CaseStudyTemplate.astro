@@ -41,7 +41,7 @@ const client = data.client.disclosed ? data.client.name : data.clientDescription
 const results = data.results ?? [];
 
 // Drafts are left out of the offerings list (content-model.md「Astro 實作」); JSON-LD names the same ones
-const used = new Set(data.offerings.map((r) => r.id));
+const used = new Set((data.offerings ?? []).map((r) => r.id));
 const offerings = await getCollection('offering', (o) => inLocale(o) && used.has(o.id));
 const others = (await getCollection('case-study', (c) => inLocale(c) && c.id !== entry.id))
   .toSorted((a, b) => Number(b.data.industry === data.industry) - Number(a.data.industry === data.industry))
@@ -64,6 +64,9 @@ const jsonLd = caseStudyJsonLd({
   offerings: offerings.map((o) => ({ kind: o.data.kind, name: o.data.title, url: new URL(nodeEntryPath(o), site).href })),
 });
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
+// Migrated cases have only the Markdown body (M5-03, #28), so the challenge part is left out and
+// the approach part is numbered 01
+const approachIndex = data.challenge ? '02' : '01';
 ---
 
 <PageLayout
@@ -102,14 +105,18 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   }
 
   <Surface tone="light" width="reading">
+    {
+      data.challenge && (
+        <section class="part">
+          <SectionHeading index="01" eyebrow="Challenge" title={t.caseStudy.challenge} />
+          <Prose><p>{data.challenge}</p></Prose>
+        </section>
+      )
+    }
     <section class="part">
-      <SectionHeading index="01" eyebrow="Challenge" title={t.caseStudy.challenge} />
-      <Prose><p>{data.challenge}</p></Prose>
-    </section>
-    <section class="part">
-      <SectionHeading index="02" eyebrow="Approach" title={t.caseStudy.solution} />
+      <SectionHeading index={approachIndex} eyebrow="Approach" title={t.caseStudy.solution} />
       <Prose>
-        <p>{data.solution}</p>
+        {data.solution && <p>{data.solution}</p>}
         <Content />
       </Prose>
     </section>

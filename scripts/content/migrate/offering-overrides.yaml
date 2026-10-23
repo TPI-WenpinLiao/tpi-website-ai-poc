@@ -1,0 +1,49 @@
+# Manual fixes applied on top of scripts/content/migrate/offerings.mjs output, so a re-run keeps them.
+# Key: <locale>/<node>. Usage: docs/content/migration.md「解決方案頁」
+#
+# zh-TW/gis:
+#   frontmatter:
+#     description: 改寫後的 description（null 拿掉欄位）
+#   useCaseIndustry:
+#     0: finance   # useCases[0] 連到 /industries/finance
+
+# zh-TW descriptions over 80 characters (seo-checklist), shortened from the current site's meta
+# description without adding facts. en and vi wait for M7 like the blog (status.md 待辦備忘).
+zh-TW/gis:
+  frontmatter:
+    description: 藉由 GIS 空間數據分析技術及智能定位工具，整合各種圖資與內外部數據，產出可視覺化、利於分析與決策的圖表資訊，提升商業決策與預測的可靠性。
+
+zh-TW/interactivehealth:
+  frontmatter:
+    # The current h1 breaks the name over two lines (「互動式健康 管理服務平台」)
+    title: 互動式健康管理服務平台
+    description: 保險業、醫療院所及企業順應手機 APP 與穿戴裝置的使用習慣，以數位化、遊戲化增加雙向互動，讓個人健康管理與健康狀況監測更為便利及有趣。
+
+zh-TW/smartclaim:
+  frontmatter:
+    description: 保險理賠需投注大量人力進行單據登打、格式整合、資料判定與理賠審核。AI 技術是保險業以數位科技精進流程效率、佈局轉型的數位策略之一。
+
+zh-TW/smartfilling:
+  frontmatter:
+    description: 結合 ICR 智慧光學字元辨識與獨家 Puzzle 自適應 AI 模型的智慧建檔解決方案，快速解析各式文件與重要資料，實現資料歸檔智慧化。
+  # 「金融業應用－傳統文件數位化管理第一步」
+  useCaseIndustry:
+    0: finance
+
+zh-TW/textualanalysis:
+  frontmatter:
+    description: 如何將零散的對話文本轉換成可用資訊，需仰賴文本分析技術：透過段落前後文與龐大資料的分析，提供企業高效且有價值的關鍵資訊。
+
+zh-TW/uiux:
+  frontmatter:
+    description: 吸睛的介面設計與良好的用戶體驗，是抓住客戶的關鍵。透過 UI 整體介面設計與 UX 流程與架構設計相輔相成，建構全面的網站形象。
+
+# 「Financial Industry - A Stepping Stone to Document Digitization」
+en/smartfilling:
+  useCaseIndustry:
+    0: finance
+
+# 「Ngành Tài Chính - Bước đệm cho Số hóa tài liệu」
+vi/smartfilling:
+  useCaseIndustry:
+    0: finance

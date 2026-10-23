@@ -148,6 +148,8 @@ const scalar = (v) => {
   // An unquoted date in overrides.yaml parses as a Date
   if (v instanceof Date) return v.toISOString().slice(0, 10);
   if (Array.isArray(v)) return `[${v.map(scalar).join(', ')}]`;
+  // A nested object (case-study `client`) as a one-line flow mapping; yaml quotes values that need it there
+  if (v && typeof v === 'object') return stringify(v, { ...YAML_OPTIONS, lineWidth: 0, collectionStyle: 'flow' }).trimEnd();
   // Same schema as Astro's parser, so a string that reads as a date there ("2026-10-15") gets quoted.
   // lineWidth 0 keeps long descriptions on one line like the samples.
   const out = stringify(v, { ...YAML_OPTIONS, lineWidth: 0 }).trimEnd();
@@ -155,7 +157,12 @@ const scalar = (v) => {
   return out;
 };
 
-/** Frontmatter block; undefined values are left out. Arrays of URLs are written as block lists. */
+const isRecord = (v) => typeof v === 'object' && v !== null && Object.getPrototypeOf(v) === Object.prototype;
+
+/**
+ * Frontmatter block; undefined values are left out. Arrays of URLs are written as block lists, arrays
+ * of objects (offering features) as block lists of single-line fields.
+ */
 export function serializeFrontmatter(data) {
   const lines = ['---'];
   for (const [key, raw] of Object.entries(data)) {
@@ -164,6 +171,13 @@ export function serializeFrontmatter(data) {
     if (raw instanceof Commented && raw.comment) lines.push(`# ${raw.comment}`);
     if (Array.isArray(value) && key === 'sourceUrl') {
       lines.push(`${key}:`, ...value.map((v) => `  - ${scalar(v)}`));
+    } else if (Array.isArray(value) && value.length && value.every(isRecord)) {
+      lines.push(`${key}:`);
+      for (const item of value) {
+        Object.entries(item)
+          .filter(([, v]) => v !== undefined)
+          .forEach(([k, v], i) => lines.push(`${i ? '    ' : '  - '}${k}: ${scalar(v)}`));
+      }
     } else {
       lines.push(`${key}: ${scalar(value)}`);
     }

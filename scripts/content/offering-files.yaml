@@ -1,0 +1,6 @@
+# Files that offering entries list in `downloads` (M5-01, #26), as current-site URLs.
+# node scripts/content/offering-files.mjs stores each under public/ at the URL's path, so the old URL
+# keeps working (docs/ia/redirects.md「對照規則」); the entry's downloads[].file is that path.
+files:
+  # digirunner-aws-guide in docs/ia/nodes.csv; the en version waits for M7
+  - https://www.tpisoftware.com/pdf/digiRunner%20on%20AWS%20Marketplace_%E8%B2%B7%E5%AE%B6%E6%8C%87%E5%8D%97_v1.4_TC.pdf

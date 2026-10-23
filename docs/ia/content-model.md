@@ -170,23 +170,24 @@ JSON-LD：`CollectionPage`，`name` ← `title`、`description` ← `description
 
 ## case-study（成功案例）
 
-現站沒有案例內頁，案例清單與客戶名稱授權未確認（`sitemap.md`「待確認」）。本節先定欄位，確認後才建內容。
+現站沒有案例內頁。案例是 `/success-story` 列表上的卡片，資料寫在 Nuxt 的 JS chunk 裡（client 端渲染），每筆只有標題、logo、現站分類與一段描述，沒有日期。M5-03（#28）由 `node scripts/content/migrate/case-studies.mjs` 轉成每筆一個內容檔，每筆都有內頁；用法見 [`docs/content/migration.md`「成功案例」](../content/migration.md#成功案例)。
 
-| 欄位 | 型別 | 必填 | 說明 |
-|---|---|---|---|
-| `client` | `{ name: string; disclosed: boolean; logo?: image }` | 是 | `disclosed: false` 時頁面與 JSON-LD 只顯示 `industry` 與 `clientDescription`，不出現 `name` 與 `logo`。`name` 仍要填，供內部 review 對照 |
-| `clientDescription` | `string` | `disclosed: false` 時必填 | 匿名描述，例如「某壽險公司」。待人工提供 |
-| `industry` | `'finance' \| 'government' \| 'manufacturing' \| 'other'` | 是 | 產業頁反查用。現站案例分類（交通、保險、政府、科技、醫療、金融、電信）的對應由內容負責人決定 |
-| `offerings` | `ref(offering)[]` | 是 | 使用的產品或服務，產品頁反查用 |
-| `challenge` | `string` | 是 | 客戶遇到的問題 |
-| `solution` | `string` | 是 | 導入內容 |
-| `results` | `{ label: string; value: string }[]` | 否 | 成果。只能填客戶授權公開的數字 |
-| `coverImage` | `image` | 否 | 主圖 |
-| `publishedAt` | `date` | 是 | 發布日 |
+| 欄位 | 型別 | 必填 | 說明 | 現站來源 |
+|---|---|---|---|---|
+| `client` | `{ name: string; disclosed: boolean; logo?: image }` | 是 | `disclosed: false` 時頁面與 JSON-LD 只顯示 `industry` 與 `clientDescription`，不出現 `name` 與 `logo`。`name` 仍要填，供內部 review 對照 | `name`：描述裡的客戶寫法（`case-studies.yaml` 依 logo 對照）；`logo`：卡片 logo。M5-03 依使用者決定照現站顯示（`disclosed: true`），授權待確認 |
+| `clientDescription` | `string` | `disclosed: false` 時必填 | 匿名描述，例如「某壽險公司」。待人工提供 | — |
+| `industry` | `'finance' \| 'government' \| 'manufacturing' \| 'other'` | 是 | 產業頁反查用 | 卡片的 `type`：`financial`、`insurance` → `finance`；`gov` → `government`；其餘（`tel`、`tech`、`transport`、`medical`、`other`）→ `other`（M5-03 使用者決定） |
+| `offerings` | `ref(offering)[]` | 否 | 使用的產品或服務，產品頁反查用 | 描述明確點名、且 offering 內容檔已存在時才填 |
+| `challenge` | `string` | 否 | 客戶遇到的問題 | — |
+| `solution` | `string` | 否 | 導入內容，顯示在內文之前 | — |
+| `results` | `{ label: string; value: string }[]` | 否 | 成果。只能填客戶授權公開的數字 | — |
+| `coverImage` | `image` | 否 | 主圖 | — |
+| `publishedAt` | `date` | 否 | 發布日。列表依此新到舊排，沒有的排在後面 | 現站沒有 |
+| `order` | `number` | 否 | 沒有 `publishedAt` 的案例在列表上的順序 | 卡片在現站陣列的位置 |
 
-範例：待人工提供。服務頁目前以卡片列出案例名稱（例如 <https://www.tpisoftware.com/solutions/uiux> 的「形象網站」「Global FIS全球飛航資訊系統」「電子支付系統」），沒有內頁可抓。
+內文是現站卡片的描述原文。`challenge`、`solution`、`publishedAt` 原本必填，現站沒有這些資料，M5-03 改為選填（使用者決定）；沒有 `challenge` 時內頁不輸出「挑戰」段落。
 
-JSON-LD：`Article`，`headline` ← `title`、`description` ← `description`、`datePublished` ← `publishedAt`、`image` ← `coverImage`、`about` ← `offerings` 對應的 `SoftwareApplication`／`Service`、`publisher` ← `organization`。`client.disclosed: false` 時不輸出客戶名稱。
+JSON-LD：`Article`，`headline` ← `title`、`description` ← `description`、`datePublished` ← `publishedAt`（沒有就不輸出）、`image` ← `coverImage`、`about` ← `offerings` 對應的 `SoftwareApplication`／`Service`、`publisher` ← `organization`。`client.disclosed: false` 時不輸出客戶名稱。
 
 ## blog（部落格文章）
 
@@ -503,5 +504,5 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 | blog 三語版本的對應：API 沒有跨語系欄位 | 內容負責人 | M7 的 `translationKey` |
 | 白皮書檔案的實際位置（現站在表單送出後提供） | 後端負責人 | `whitepaper.file` |
 | tag 清單（上表）的合併方式與顯示名稱。`src/content/tags.yaml` 目前的名稱取自現站，例如 `ai-solutions` 的 zh-TW 名稱是「人工智慧」 | 專案負責人 | 改上表後重跑 `node scripts/content/tags.mjs` |
-| 現站案例分類對應到 `case-study.industry` 的方式 | 內容負責人 | 建 `case-study` 時 |
+| 現站案例分類對應到 `case-study.industry` 的方式：M5-03 依使用者決定先照上表對應；群創光電（現站「科技」）、卓新工業（「其他」）是否改為 `manufacturing` | 內容負責人 | 產業頁列出的案例 |
 | `offering.kind` 的歸類：`inventory.csv` 的 `page_type` 是依 URL 推定，例如 `/solutions/smartclaim` 與 `/solutions/insurering` 實際是否為產品；`systalk-chat` 的現站頁面同時判為 product 與 service（各 3 列）、`greenswift` 有 1 列 campaign、`orient-ai` 與 `aiso` 判為 service 但新聞稱「自研 OrientAI 系列軟體」、`uiux` 判為 solution 但內容是設計服務 | 內容負責人 | M5 |

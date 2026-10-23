@@ -1,4 +1,6 @@
-# blog 與新聞的批次轉換
+# 內容的批次轉換
+
+blog 與新聞見以下各節；成功案例見[「成功案例」](#成功案例)，解決方案頁見[「解決方案頁」](#解決方案頁)。
 
 `scripts/content/migrate/migrate.mjs` 把現站的 blog 文章與新聞轉成 `src/content/blog/`、`src/content/news/` 的內容檔，圖片下載到 `src/assets/`。要搬哪些文章、slug 與分類，都照 [`page-map.csv`](../ia/page-map.csv)，script 不自行判斷。搬移規則見 [`content-migration` skill](../../.claude/skills/content-migration/SKILL.md)，欄位見 [`content-model.md`](../ia/content-model.md)。
 
@@ -128,3 +130,78 @@ node scripts/content/migrate/spot-check.mjs --report <file.csv> --out <spot-chec
 - **需要看的文章**：轉換後的純文字比現站內文少 10% 以上，或圖片張數對不上（現站張數扣掉 `dropImagesFrom` 移除的圖與追蹤像素）。逐篇對照現站，找出漏掉的內容
 - **抽樣**：每個 type × locale 固定抽 5 篇（以 entry id 的雜湊排序，重跑結果相同），人工對照現站的標題、日期、作者、內文、圖片、表格與連結。zh-TW 看截圖，en、vi 的頁面還不會 build，看內容檔
 - **連不到頁面的站內連結**：`dist/` 有 build 產出時，列出指向不存在頁面的 `<a href>`，例如連到沒有轉換的文章
+
+## 成功案例
+
+`scripts/content/migrate/case-studies.mjs` 把現站 `/success-story` 的案例卡片轉成 `src/content/case-study/` 的內容檔，logo 下載到 `src/assets/case-study/<locale>/<slug>/logo.*`（M5-03，#28）。現站沒有案例內頁，`page-map.csv` 也沒有案例的列：卡片資料（標題、logo、分類、描述）寫在列表頁的一個 Nuxt JS chunk 裡，script 從三語列表頁（zh-TW、en 在 `www.tpisoftware.com`，vi 在 `www.tpisoftware.vn`）找出這個 chunk 再解析。每張卡片轉成一筆有內頁的內容檔（使用者決定）。
+
+```bash
+node scripts/content/migrate/case-studies.mjs --report <file.csv>
+node scripts/content/migrate/case-studies.mjs --dry-run   # 不寫檔，只看筆數與報告
+```
+
+`--refresh` 不讀快取。每次都是全量執行：沒有卡片對應的內容檔與 logo 會刪掉，報告記為 `removed`。
+
+### 轉換規則
+
+- **配對**：en、vi 的卡片以 zh-TW 為準，依 logo（去掉 `02`、`_en`、`-zh` 等語系版本的差異）與分類對齊。vi 少的卡片記為 `missing`
+- **slug**：`case-studies.yaml` 的客戶 slug 加上 en 標題，三語相同，也是 `translationKey`
+- **欄位**：內文是卡片描述原文；`client.name` 取 `case-studies.yaml` 的 `clients`，`disclosed: true`；`industry` 依 `content-model.md`「case-study」的對應表；`order` 是卡片在現站的順序；`offerings` 只在描述寫出產品名稱、且該語系有 offering 內容檔時填（`MENTIONS`），產品頁遷移後重跑就會補上
+- **`seoTitle`**：不同客戶有同名案例（例如兩筆「網路投保系統」），所以寫成「客戶：標題」；標題已有客戶名稱時不寫
+- **zh-TW `description`**：卡片描述大多超過 80 字，濃縮版寫在 `case-studies.yaml` 的 `entries`，只刪減不加內容。en、vi 等 M7
+
+### 報告
+
+| 備註 | 意思 |
+|---|---|
+| `logo W×H` | 原始 logo 尺寸。內頁以 48 px 高顯示 |
+| `client name "…" is not in the description` | 客戶名稱與描述的寫法不同，或描述沒寫客戶（名稱取自 logo），或描述寫的是別的客戶 |
+| `names … (no <locale> offering entry yet)` | 描述寫了產品，但該產品還沒有內容檔 |
+| `dated: …` | 提到獎項或年份的句子，要確認是否過時 |
+| `description is N characters` | 超過 seo-checklist 的長度 |
+| `<title> is N characters` | 加上網站名稱後超過 70 字 |
+
+## 解決方案頁
+
+`scripts/content/migrate/offerings.mjs` 把 `page-map.csv` 中 `page_type` 為 `solution` 的頁面（7 個節點 × 3 語系）轉成 `src/content/offering/<locale>/<node>.md`（M5-02，#27）。`/solutions/greenswift`、`/solutions/insurebrick` 的 `page_type` 是 product，不在這裡。
+
+```bash
+node scripts/content/migrate/offerings.mjs
+node scripts/content/migrate/offerings.mjs --locale zh-TW --only smartclaim
+```
+
+參數 `--locale`、`--refresh` 同上，`--only` 寫節點 id。快取與 `migratedAt` 的規則同「重跑」。
+
+### 欄位對應
+
+7 頁共用現站同一個版型，SSR HTML 就有全部文字，script 依 class 讀取：
+
+| 欄位 | 現站來源 |
+|---|---|
+| `title` | `h1` |
+| `tagline` | hero 的 `.slogan` |
+| `description` | `<meta name="description">` |
+| `features` | `.solution__feature01-item` 的 `h3` 與 `.contents`（4 項） |
+| `useCases` | 「應用情境」或「應用案例」的 `.list-item` 標題與內文 |
+| `kind`、`cta` | 固定 `solution`、`contact` |
+
+offering schema 沒有欄位的段落不搬：介紹段、「流程架構」圖、三項優勢、適用產業、服務客戶 logo、影片（smartclaim）。要搬時先擴充 [`content-model.md`](../ia/content-model.md) 的 offering 欄位與模板。
+
+hero 背景圖（現站 `/images/solution/<node>/banner.png`）也不搬。offering 模板的 hero 用固定的場景圖，`heroImage` 只拿來當 `og:image`，而 banner 的寬高比約 3:1（1920×650 等），不符合 seo-checklist 的 1200×630；模板裁切前不寫 `heroImage`，頁面用預設 OG 圖。
+
+找不到上表任何一項時，script 判定現站版型改了，該頁失敗且不寫檔。
+
+### 人工修正
+
+寫在 `scripts/content/migrate/offering-overrides.yaml`，key 是 `<locale>/<node>`：
+
+- `frontmatter`：同 blog 的 `overrides.yaml`，取代產生的值，`null` 拿掉欄位。zh-TW 的 `description` 超過 80 字時在這裡改寫，只刪減，不加現站沒有的事實
+- `useCaseIndustry`：`{ <useCases 的索引>: finance|government|manufacturing }`，把應用情境連到產業頁，不用複製整段文字
+
+### 比對現站
+
+```bash
+node scripts/design/offering-content.mjs
+```
+
+逐筆確認每個非 draft 的 offering（三個語系）的 `tagline`、`features`、`useCases` 文字仍在第一個 `sourceUrl` 的頁面上，找不到的列 `MISS` 並以 exit 1 結束。`description` 有改寫，不在比對範圍，在 PR 列出原文對照。
