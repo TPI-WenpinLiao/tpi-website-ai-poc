@@ -38,7 +38,7 @@ test('pages written as Seo.astro writes them, with the sitemap built from them, 
 });
 
 test('the sitemap leaves out internal pages and 404, and carries each page\'s hreflang', () => {
-  const entries = readSitemap(site(['/', '/about', '/en/about', '/design-system', '/wireframes/home', '/en/design-system', '/404']));
+  const entries = readSitemap(site(['/', '/about', '/en/about', '/design-system', '/templates/hub', '/en/design-system', '/404']));
   assert.deepEqual(entries.map((e) => e.loc), [url('/'), url('/about'), url('/en/about')]);
   assert.deepEqual(entries[1].alternates, [
     { hreflang: 'zh-TW', href: url('/about') },

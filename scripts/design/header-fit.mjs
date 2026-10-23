@@ -1,7 +1,7 @@
 // Header width check for the site header (M4-04, #23), the follow-up to the M3-01 wireframe
-// measurement (scripts/wireframe/nav-fit.mjs): can the real SiteHeader, in its own font (Inter) and
-// spacing tokens, hold the en and vi first-level labels in one row from the narrowest desktop width
-// (--bp-lg-up, 1024px) up?
+// measurement (docs/design/nav-fit.md; its script went with the wireframes): can the real
+// SiteHeader, in its own font (Inter) and spacing tokens, hold the en and vi first-level labels in
+// one row from the narrowest desktop width (--bp-lg-up, 1024px) up?
 // Serves dist/, opens the home page and, for each label set, rewrites the header labels in place,
 // adds the language menu (not rendered while zh-TW is the only locale) and compares the bar's
 // natural width with the width it has. Regenerates the marked section of docs/design/nav-fit.md.

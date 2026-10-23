@@ -70,7 +70,6 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - glass（`--glass-bg`）是半透明面板，背後可能是 3D 場景最亮的地方。對比以 `--scene-worst`（該 surface 最不利的背景）合成後計算
 - 字型：`--font-sans` 是 Inter＋系統中文字；`--font-mono`（JetBrains Mono）只用在編號、eyebrow、資料標籤。兩者都在 `BaseLayout` import，不載中文 webfont
 - 3D：`--scene-angle-x`、`--scene-angle-z` 是共用的等角視角，`--perspective` 是共用透視距離。`Scene3D` 的 three.js 相機從這些值換算（`src/lib/scene/runtime.ts`），靜態版與 3D 版才會重疊；顏色從 `--gradient-energy`、`--color-bg`、`--color-border-brand` 讀，方塊材質從 `--scene-block-*`、`--scene-rim-*` 讀（`SceneContext.readNumber`），TS 不寫色碼
-- `--wf-*` 只給 M3-01 wireframe 用，M4-04 後隨 wireframe 刪除，新元件不得引用
 
 ## 斷點
 
@@ -182,9 +181,9 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 - `npm run check:design`
   - `scripts/design/contrast.mjs`：兩個 surface 各自檢查 `PAIRS` 每一組
-  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/layouts/`、`src/pages/` 所有 `.astro`（wireframe 除外）與 `src/styles/base.css` 的樣式不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
+  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/layouts/`、`src/pages/` 所有 `.astro` 與 `src/styles/base.css` 的樣式不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
   - `scripts/design/css-structure.mjs`：「CSS 分層」的規則
-  - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import；`tokens.css` 每個 token（`--wf-*` 除外）都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；`/design-system`、`/wireframes` 不得出現在 `docs/ia/nodes.csv`
+  - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import；`tokens.css` 每個 token 都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；內部頁（`INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
 

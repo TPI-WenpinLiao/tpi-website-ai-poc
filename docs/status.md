@@ -58,7 +58,7 @@
 
 ### M3 設計系統
 
-- M3-01 各模板低保真 wireframe 完成（#14，`wireframe-approved`）：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 vi 與 en 長譯名放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
+- M3-01 各模板低保真 wireframe 完成（#14，`wireframe-approved`）：11 個模板與導覽的 wireframe（M4-04 完成後刪除）；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 vi 與 en 長譯名放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
 - M3-02 design tokens 與元件庫完成（#15，`design-approved`）：深色場景與亮色閱讀頁的雙 surface、光與景深、捲動動態、12 個元件與 `/design-system` 審核頁；影像素材與提示詞見 `docs/design/image-prompts.md`
 - M3-03 design-system 展示頁完成（#16，`design-approved`）：`/design-system` 列出全部 152 個 token（三層分組）與 5 個互動元件的狀態矩陣；全域改為 `box-sizing: border-box`
 - M3-04 首頁高保真完成（#17，`design-approved`）：方向 B 的場景做成首頁 `/`（原型頁已刪除），結構照 `/wireframes/home`；文案取自現站（`src/data/home.ts`、`src/data/site.ts`，`node scripts/design/home-content.mjs` 逐筆比對現站）；新元件 `SiteHeader`（原生 `<details>` 選單，零 client JS，含「跳到主要內容」）、`SiteFooter`，`Card` 加上 `size="sm"`；公司 logo 由 `node scripts/design/import-brand.mjs` 匯入；首頁 JSON-LD（`Organization`、`WebSite`）讀 `organization` collection；方塊材質 tokens `--scene-block-*`、`--scene-rim-*`
@@ -106,7 +106,6 @@
 - i18n 字串檔在 `src/data/strings/<locale>.ts`（M4-04 決定）：介面字串與 listing、utility、contact 頁的描述。這些頁沒有內容檔，只為有字串檔的語系產生；描述是暫定文案，上線前由內容負責人替換。首頁文案仍在 `src/data/home.ts`
 - `LocaleSwitcher` 的 landmark 名稱（語言／Language／Ngôn ngữ）是暫定譯文，M7-01 詞彙表（#38）定案後替換
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
-- M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除，`tokens.css` 的 `--wf-*` 也一起刪。M3-02 起斷點寫在 `src/styles/media.css` 的 `@custom-media`，wireframe 的 media query 已改用
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
 - `SiteHeader`、`SiteFooter` 已移進 `PageLayout`（M4-04 階段一）；其餘的選單鍵盤操作在 M4-04 階段二補上。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
 - 首頁行動版 Lighthouse performance 0.95（`node scripts/design/lighthouse-3d.mjs`，2026-10-22），剛好在門檻上：header＋footer 多一個 render-blocking CSS，約 150 ms；全部 inline CSS 對 LCP 沒有幫助。M4-04 把 header、footer 移進共用 layout 時，連同 preview 真機量測再處理

@@ -1,6 +1,6 @@
 // Navigation read from docs/ia/navigation.csv (the single source of the navigation, see
-// docs/ia/navigation.md), with nodes from nodes.ts. Links go to the node's path; the M3-01
-// wireframes (src/lib/wireframe/ia.ts) map them to wireframe pages instead.
+// docs/ia/navigation.md), with nodes from nodes.ts. Links go to the node's page (`href`, in the
+// page's locale for the header and footer).
 import navCsv from '../../../docs/ia/navigation.csv?raw';
 import { nodes, readRows, type IaNode } from './nodes';
 import { DEFAULT_LOCALE, type Locale } from '../i18n/locales';

@@ -5,7 +5,6 @@
 // extend it with "-" (--color-text matches --color-text-muted). The first matching group wins.
 // A group is either all `value` (no visual, rendered as a name/value table) or has no `value`
 // tokens, so a row never shows an empty specimen column; showcase.mjs fails on a mixed group.
-// --wf-* tokens are wireframe-only (M3-01) and not shown.
 
 import { parseSurfaces } from './contrast.mjs';
 
@@ -130,11 +129,10 @@ const matches = (pattern, name) => (pattern.endsWith('-') ? name.startsWith(patt
  *   `mixed`: ids of groups with both `value` and other kinds
  */
 export function groupTokens(names, groups = GROUPS) {
-  const shown = names.filter((n) => !n.startsWith('--wf-'));
   const result = groups.map((g) => ({ ...g, tokens: /** @type {{ name: string, kind: Kind }[]} */ ([]) }));
   const used = new Set();
   const ungrouped = [];
-  for (const name of shown) {
+  for (const name of names) {
     const i = groups.findIndex((g) => g.patterns.some((p) => matches(p, name)));
     if (i === -1) {
       ungrouped.push(name);

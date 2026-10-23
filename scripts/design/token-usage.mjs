@@ -5,8 +5,7 @@
 // Also fails when var(--x) names a custom property that neither tokens.css nor the same file
 // declares, so a renamed or removed token can't silently fall back to nothing.
 // Scope: every .astro file under DIRS, so new pages and templates are checked without listing them,
-// and src/styles/base.css (BASE). The M3-01 wireframe files (WIREFRAME) are out of scope; they are
-// removed after M4-04.
+// and src/styles/base.css (BASE).
 // Run: node scripts/design/token-usage.mjs
 
 import { readFileSync, readdirSync } from 'node:fs';
@@ -15,7 +14,6 @@ import { pathToFileURL } from 'node:url';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const DIRS = ['src/components/ui', 'src/layouts', 'src/pages'];
-const WIREFRAME = ['src/pages/wireframes/', 'src/layouts/WfLayout.astro'];
 const TOKENS = 'src/styles/tokens.css';
 const BASE = 'src/styles/base.css';
 
@@ -58,8 +56,7 @@ function sourceFiles() {
   const astro = DIRS.flatMap((dir) =>
     readdirSync(join(ROOT, dir), { recursive: true })
       .filter((f) => String(f).endsWith('.astro'))
-      .map((f) => join(dir, String(f)).split('\\').join('/'))
-      .filter((f) => !WIREFRAME.some((w) => f.startsWith(w))),
+      .map((f) => join(dir, String(f)).split('\\').join('/')),
   );
   return [...astro, BASE];
 }

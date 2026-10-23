@@ -16,8 +16,6 @@ import { pathToFileURL } from 'node:url';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const DIRS = ['src/components', 'src/layouts', 'src/pages'];
-// M3-01 wireframe files are removed after M4-04 (#23); they predate these rules
-const WIREFRAME = ['src/pages/wireframes/', 'src/layouts/WfLayout.astro', 'src/components/wireframe/'];
 export const STYLESHEETS = ['src/styles/base.css', 'src/styles/media.css', 'src/styles/tokens.css'];
 export const MIN_SHARED = 4;
 
@@ -166,7 +164,7 @@ export function structureProblems(files, stylesheets) {
 
 function main() {
   const walk = (dir) => readdirSync(join(ROOT, dir), { recursive: true }).map((f) => `${dir}/${String(f).split('\\').join('/')}`);
-  const astro = DIRS.flatMap(walk).filter((f) => f.endsWith('.astro') && !WIREFRAME.some((w) => f.startsWith(w)));
+  const astro = DIRS.flatMap(walk).filter((f) => f.endsWith('.astro'));
   const sheets = walk('src').filter((f) => f.endsWith('.css'));
   const files = [...astro, 'src/styles/base.css'].map((file) => ({ file, source: readFileSync(join(ROOT, file), 'utf8') }));
   const problems = structureProblems(files, sheets);
