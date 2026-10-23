@@ -1,6 +1,8 @@
-// Checks that the copy in the zh-TW offering entries is still on their current-site page
-// (M3-05, #18): tagline, features and useCases of every entry that isn't a draft, against the
-// first sourceUrl. Same matching as scripts/design/home-content.mjs.
+// Checks that the copy in the zh-TW offering and hub entries is still on their current-site pages
+// (M3-05, #18; hubs and merged pages since M5-01, #26): tagline, features, useCases, faq and
+// highlights of every entry that isn't a draft. A line counts as found when it is on any of the
+// entry's sourceUrl pages (merged pages list several), after correcting the typos in CORRECTIONS.
+// Same matching as scripts/design/home-content.mjs.
 // Needs network access to www.tpisoftware.com, so it is not part of `npm run check`.
 //
 //   node scripts/design/offering-content.mjs
@@ -10,32 +12,46 @@ import { parse } from 'yaml';
 import { request } from '../inventory/http.mjs';
 import { pageText, squash } from '../lib/page-text.mjs';
 
-const DIR = new URL('../../src/content/offering/zh-TW/', import.meta.url);
+// Typos on the current site that the entries correct, as [current site, entry]; matched after squash
+const CORRECTIONS = [
+  ['開放式APl', '開放式API'],
+  ['HRM等,', 'HRM等，'],
+  ['簡化驗證流程,無需記憶複雜密碼,實現', '簡化驗證流程，無需記憶複雜密碼，實現'],
+  ['提升盤查效率.', '提升盤查效率。'],
+];
+
+const DIRS = ['offering', 'hub'].map((c) => new URL(`../../src/content/${c}/zh-TW/`, import.meta.url));
 
 const frontmatter = (md) => parse(/^---\n([\s\S]*?)\n---/.exec(md)?.[1] ?? '');
+const pairs = (items, key, fields) => (items ?? []).flatMap((item, i) => fields.map((f) => [`${key}.${i}.${f}`, item[f]]));
 
 const checks = [];
-for (const file of (await readdir(DIR)).filter((f) => f.endsWith('.md')).sort()) {
-  const data = frontmatter(await readFile(join(DIR.pathname, file), 'utf8'));
-  const url = [data.sourceUrl].flat()[0];
-  if (data.draft || !url) continue;
-  const texts = [
-    ...(data.tagline ? [['tagline', data.tagline]] : []),
-    ...(data.features ?? []).flatMap((f, i) => [[`features.${i}.title`, f.title], [`features.${i}.body`, f.body]]),
-    ...(data.useCases ?? []).flatMap((u, i) => [[`useCases.${i}.title`, u.title], [`useCases.${i}.body`, u.body]]),
-  ];
-  checks.push(...texts.map(([path, text]) => ({ file, path, text, url })));
+for (const dir of DIRS) {
+  for (const file of (await readdir(dir)).filter((f) => f.endsWith('.md')).sort()) {
+    const data = frontmatter(await readFile(join(dir.pathname, file), 'utf8'));
+    const urls = [data.sourceUrl].flat().filter(Boolean);
+    if (data.draft || urls.length === 0) continue;
+    const texts = [
+      ...(data.tagline ? [['tagline', data.tagline]] : []),
+      ...pairs(data.features, 'features', ['title', 'body']),
+      ...pairs(data.useCases, 'useCases', ['title', 'body']),
+      ...pairs(data.faq, 'faq', ['question', 'answer']),
+      ...pairs(data.highlights, 'highlights', ['title', 'body']),
+    ];
+    const name = `${dir.pathname.split('/').at(-3)}/${file}`;
+    checks.push(...texts.map(([path, text]) => ({ file: name, path, text, urls })));
+  }
 }
 
 const pages = new Map();
-for (const url of new Set(checks.map((c) => c.url))) {
+for (const url of new Set(checks.flatMap((c) => c.urls))) {
   const res = await request(url);
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-  pages.set(url, squash(pageText(await res.text())));
+  pages.set(url, CORRECTIONS.reduce((text, [from, to]) => text.replaceAll(from, to), squash(pageText(await res.text()))));
 }
 let failed = 0;
 for (const c of checks) {
-  const ok = pages.get(c.url).includes(squash(c.text));
+  const ok = c.urls.some((url) => pages.get(url).includes(squash(c.text)));
   if (!ok) failed += 1;
   console.log(`${ok ? 'ok  ' : 'MISS'} ${c.file} ${c.path}: ${c.text}`);
 }
