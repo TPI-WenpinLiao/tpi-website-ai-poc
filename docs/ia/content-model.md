@@ -190,7 +190,7 @@ JSON-LD：`Article`，`headline` ← `title`、`description` ← `description`�
 
 ## blog（部落格文章）
 
-zh-TW 106 列、en 67 列、vi 299 列（`page-map.csv` 的 `blog-post` 節點，含 2 列 merge）。
+zh-TW 14 列、en 9 列、vi 37 列（`page-map.csv` 的 `blog-post` 節點；M5-05 起只保留 2026 年的文章）。
 
 | 欄位 | 型別 | 必填 | 說明 | 現站來源（blog API） |
 |---|---|---|---|---|
@@ -267,7 +267,7 @@ JSON-LD：`BlogPosting`
 
 ## news（新聞）
 
-zh-TW 60 列、en 48 列、vi 42 列（`page-map.csv` 的 `news-article` 節點）。
+zh-TW 10 列、en 9 列、vi 9 列（`page-map.csv` 的 `news-article` 節點；M5-05 起只保留 2026 年的新聞）。
 
 | 欄位 | 型別 | 必填 | 說明 | 現站來源（新聞 API） |
 |---|---|---|---|---|

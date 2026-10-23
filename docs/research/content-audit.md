@@ -85,7 +85,7 @@ node scripts/inventory/audit.mjs
 | `/carbon` | merge | GreenSwift 推廣頁，併入 GreenSwift 產品頁（M2-01 決定） |
 | blog 分類頁 | merge | 併入 M2 定案的新 blog 分類 |
 | blog 分類路由但 h1 為單篇文章（3 列） | keep + 待確認 | page_type 誤判；不在 blog API 清單 |
-| blog 文章（2026-01-01 起） | keep | 57 篇；同標題重複的較舊一篇 merge 至較新一篇。保留門檻 M5-05（#30）由使用者決定 |
+| blog 文章（2026-01-01 起） | keep | 57 篇；同標題重複時較舊一篇 merge 至較新一篇（目前 0 列）。保留門檻 M5-05（#30）由使用者決定 |
 | blog 文章（2026-01-01 前） | drop | 412 篇 |
 | 新聞（2026-01-01 起） | keep | 28 篇（zh-TW 10、en 9、vi 9）。M1-02 的門檻是 2024-01-01，M5-05（#30）由使用者改為 2026-01-01 |
 | 新聞（2026-01-01 前） | drop | 503 篇，含 `updateDate` 在 2026 年、發布日在 2025 年的 14 篇（`audit-overrides.csv`） |
@@ -140,7 +140,7 @@ node scripts/inventory/audit.mjs
 | 拼錯的 vn 路徑 | `/digilgos-logs-management`、`/products/electriwift`、`/esg-advisory/li-shuhi` | 遷移時改為正確路由 |
 | 已下架的 vi blog 文章（500） | `/blog/digital-transformation/esg`、`/blog/enterprise-management/devops` | 確認文章是否刪除；連結改到相關文章或移除 |
 | 被誤植為 URL 的文字 | vi blog 中一段越南文說明被當成 href | 改為正確連結或純文字 |
-| 不存在的短路徑 | `/c/l`、`/c/opt`、`/c/s` 等（出現在保留的電子報型新聞） | 確認原意；無法確認則移除 |
+| 不存在的短路徑 | `/c/l`、`/c/opt`、`/c/s` 等（出現在電子報型新聞，M5-05 後都不遷移） | 確認原意；無法確認則移除 |
 | 不存在的產品頁 | `/en/products/systalk-icr`、vi `/products/systalk-icr` | en／vi 沒有 SysTalk.ICR 頁，見下節 |
 
 ## 語系對應缺口（給 M7）
@@ -155,12 +155,12 @@ zh-TW、en、vi 之間缺頁的內容路由（不含 merge 掉的重複路由，
 
 ## 給 M2 的輸入
 
-- merge + drop 共 493 列（含 M2-01 改為 merge 的頁面）。其中 merge 的 80 列需要 301 到合併目標；drop 的頁面是否 301 到上層列表頁或回 410，由 M2 的轉址策略決定
+- merge + drop 共 1,025 列（含 M2-01 改為 merge 的頁面、M5-05 改為 drop 的 blog 與新聞）。其中 merge 的 78 列需要 301 到合併目標；drop 的頁面是否 301 到上層列表頁或回 410，由 M2 的轉址策略決定
 - notes 的 `redirected from` 共記錄 98 個轉址來源（含 `www.tpisoftware.com/vn/*` 到 `www.tpisoftware.vn/*` 的鏡像），新站上線時一併納入轉址表
 - `page_type` 修正：3 個分類路由實為單篇文章（見上）；`/carbon` 標為 campaign，實為產品推廣頁
 
 ## 已知限制
 
 - 規則依 M1-01 的 crawl 欄位推定，沒有逐頁閱讀內文；事實正確性（數據、客戶、獎項、認證）沒有驗證，M5 遷移時逐頁確認
-- 新聞與 blog 的時效只看 `last_updated`，沒有分析內文。新聞的 `last_updated` 是 API 的 `updateDate`（更新日，不是發布日），因此少數舊內容會因為後來被編輯而落在保留範圍，例如 `/media-center/451`「12月科技生活報」談 2024 巴黎奧運，日期卻是 2025-02-13。M5 遷移新聞時需人工確認實際發布日
+- 新聞與 blog 的時效只看 `last_updated`，沒有分析內文。新聞的 `last_updated` 是 API 的 `updateDate`（更新日，不是發布日），因此少數舊內容會因為後來被編輯而落在保留範圍，例如 `/media-center/451`「12月科技生活報」談 2024 巴黎奧運，日期卻是 2025-02-13。M5-05 用新聞 API 的發布日（`showDate`）比對，發布日早於保留門檻的 14 篇已在 `audit-overrides.csv` 改為 drop
 - blog 分類頁無法從 URL 判斷底下有沒有文章（文章 URL 只帶主分類），因此沒有以「空分類」為由 drop
