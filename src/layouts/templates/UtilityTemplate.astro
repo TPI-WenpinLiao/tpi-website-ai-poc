@@ -15,7 +15,8 @@ import Button from '../../components/ui/Button.astro';
 import FormField from '../../components/ui/FormField.astro';
 import EmptyState from '../../components/ui/EmptyState.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
-import { localeHref, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumb, entryTrail, localeHref, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumbList, graph } from '../../lib/seo/jsonld/shared';
 import { entryLocale } from '../../lib/content/entries';
 import type { Locale } from '../../lib/i18n/locales';
 import { pageDescription, strings } from '../../data/strings';
@@ -37,9 +38,14 @@ const description = pageDescription(locale, id);
 // Ways onward from a dead end or a finished task (wireframe: 常用入口, 推薦內容)
 const onward = (props.kind === 'not-found' ? ['products', 'industries', 'services', 'contact'] : ['products', 'success-stories', 'blog']).map(node);
 const searchHref = nodeHref('search', locale);
+if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
+// Every page but 404 has a BreadcrumbList (content-model.md); the download page's last item is the offering
+const trail =
+  props.kind === 'download' ? entryTrail('download', { title: props.offering.data.title, path: Astro.url.pathname }) : breadcrumb(id);
+const jsonLd = props.kind === 'not-found' ? undefined : graph(breadcrumbList(trail, Astro.site, locale));
 ---
 
-<PageLayout title={title} description={description} translations={props.translations}>
+<PageLayout title={title} description={description} jsonLd={jsonLd} translations={props.translations}>
   <PageHero tone="light" size="compact" title={title} description={description}>
     {props.kind !== 'not-found' && <Breadcrumb slot="breadcrumb" node={id} current={props.kind === 'download' ? props.offering.data.title : undefined} />}
   </PageHero>

@@ -13,7 +13,9 @@ import Button from '../../components/ui/Button.astro';
 import FormField from '../../components/ui/FormField.astro';
 import FormPanel from '../../components/ui/FormPanel.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
-import { localizedNav, node } from '../../lib/ia/navigation';
+import { breadcrumb, localizedNav, node } from '../../lib/ia/navigation';
+import { pageJsonLd } from '../../lib/seo/jsonld/page';
+import { canonicalUrl } from '../../lib/seo/meta';
 import type { Locale } from '../../lib/i18n/locales';
 import { contactCta } from '../../data/home';
 import { pageDescription, strings } from '../../data/strings';
@@ -32,9 +34,21 @@ const productMenu = localizedNav('header', locale).find((item) => item.children.
 const products = (productMenu?.children ?? []).flatMap((family) => family.children.map((p) => ({ value: p.key, label: p.label })));
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
+if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
+const description = pageDescription(locale, 'contact');
+// ContactPage with the organization as mainEntity (content-model.md「page」)
+const jsonLd = pageJsonLd({
+  page: { title: self.title, description, node: 'contact' },
+  org: org.data,
+  site: Astro.site,
+  url: canonicalUrl(Astro.url.pathname, Astro.site),
+  inLanguage: locale,
+  trail: breadcrumb('contact'),
+  logoUrl: new URL(org.data.logo.src, Astro.site).href,
+});
 ---
 
-<PageLayout title={self.title} description={pageDescription(locale, 'contact')} translations={translations}>
+<PageLayout title={self.title} description={description} jsonLd={jsonLd} translations={translations}>
   <PageHero eyebrow="Contact" title={self.title} description={contactCta.description.text}>
     <Breadcrumb slot="breadcrumb" node="contact" />
   </PageHero>

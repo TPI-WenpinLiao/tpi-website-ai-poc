@@ -16,7 +16,8 @@ import FilterBar from '../../components/ui/FilterBar.astro';
 import Pagination from '../../components/ui/Pagination.astro';
 import EmptyState from '../../components/ui/EmptyState.astro';
 import Button from '../../components/ui/Button.astro';
-import { children, localeHref, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumb, children, localeHref, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumbList, graph } from '../../lib/seo/jsonld/shared';
 import { pagePath } from '../../lib/content/entries';
 import type { EntryCard } from '../../lib/content/cards';
 import type { Locale } from '../../lib/i18n/locales';
@@ -55,9 +56,12 @@ const filters = isBlog
 const title = page > 1 ? `${self.title}${t.listing.pageSuffix(page)}` : self.title;
 const description = pageDescription(locale, id);
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
+if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
+// content-model.md gives listings no schema of their own; every non-home page has a BreadcrumbList
+const jsonLd = graph(breadcrumbList(breadcrumb(id), Astro.site, locale));
 ---
 
-<PageLayout title={title} description={page > 1 ? `${description}${t.listing.pageSuffix(page)}` : description} translations={translations}>
+<PageLayout title={title} description={page > 1 ? `${description}${t.listing.pageSuffix(page)}` : description} jsonLd={jsonLd} translations={translations}>
   <PageHero tone="light" size="compact" title={self.title} description={description}>
     <Breadcrumb slot="breadcrumb" node={id} />
   </PageHero>
