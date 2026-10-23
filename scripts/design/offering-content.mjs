@@ -2,7 +2,8 @@
 // (M3-05, #18; all locales since M5-02, #27; hubs and merged pages since M5-01, #26): tagline,
 // features, useCases, faq and highlights of every entry that isn't a draft. A line counts as found
 // when it is on any of the entry's sourceUrl pages (merged pages list several), after correcting the
-// typos in CORRECTIONS. Same matching as scripts/design/home-content.mjs.
+// typos in CORRECTIONS. Same matching as scripts/design/home-content.mjs, except that a FAQ answer
+// is checked sentence by sentence: offerings.mjs joins an answer's paragraph and list items (#106).
 // Needs network access to www.tpisoftware.com, so it is not part of `npm run check`.
 //
 //   node scripts/design/offering-content.mjs
@@ -24,6 +25,8 @@ const COLLECTIONS = ['offering', 'hub'];
 
 const frontmatter = (md) => parse(/^---\n([\s\S]*?)\n---/.exec(md)?.[1] ?? '');
 const pairs = (items, key, fields) => (items ?? []).flatMap((item, i) => fields.map((f) => [`${key}.${i}.${f}`, item[f]]));
+// Sentences and 「title：description」 parts, without the punctuation that joined them
+const pieces = (text) => text.split(/[。.!?！？：:]\s+|[。！？：]/).map((p) => p.replace(/[。.]$/, '')).filter((p) => squash(p));
 
 const checks = [];
 for (const collection of COLLECTIONS) {
@@ -52,7 +55,8 @@ for (const url of new Set(checks.flatMap((c) => c.urls))) {
 }
 let failed = 0;
 for (const c of checks) {
-  const ok = c.urls.some((url) => pages.get(url).includes(squash(c.text)));
+  const parts = /^faq\.\d+\.answer$/.test(c.path) ? pieces(c.text) : [c.text];
+  const ok = c.urls.some((url) => parts.every((p) => pages.get(url).includes(squash(p))));
   if (!ok) failed += 1;
   console.log(`${ok ? 'ok  ' : 'MISS'} ${c.file} ${c.path}: ${c.text}`);
 }
