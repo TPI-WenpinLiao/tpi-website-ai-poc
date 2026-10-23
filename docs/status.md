@@ -82,6 +82,7 @@
 - M5-03 客戶案例遷移完成（#28）：現站沒有案例內頁，`/success-story` 的卡片資料在 Nuxt JS chunk 裡，`node scripts/content/migrate/case-studies.mjs` 轉成每筆一個有內頁的內容檔（zh-TW 61、en 61、vi 58，vi 少 3 筆 RPA 案例）與 logo。使用者決定：每案都有內頁；`case-study` 的 `challenge`、`solution`、`publishedAt`、`offerings` 改選填並加上 `order`；客戶名稱與 logo 照現站顯示（`disclosed: true`），授權待確認；產業對應金融、保險 → `finance`，政府 → `government`，其餘 → `other`。客戶名稱與 zh-TW description 寫在 `case-studies.yaml`，用法見 `docs/content/migration.md`「成功案例」
 - M5-04 部落格與新聞批次轉換 script 完成（#29）：`node scripts/content/migrate/migrate.mjs` 依 `page-map.csv` 把現站 blog 與新聞轉成內容檔，圖片下載到 `src/assets/<type>/<locale>/<slug>/`（內容圖的目錄規則改為含語系，whitepaper 範例一起搬）；人工修正寫在 `scripts/content/migrate/overrides.yaml`，重跑結果不變。用法與報告欄位見 `docs/content/migration.md`。全量試跑 622 列（併入 merge 列後 620 篇）：轉出 533 篇、`astro check` 通過；失敗 87 篇，其中 69 篇的圖片網域被雲端環境的 network policy 擋下、15 篇 vi 現站沒有作者、3 篇不在 blog API。試跑產出不 commit，只重新產生兩筆範例。en、vi 的 `newsTypeId` 依現站名稱對應（`content-model.md`「news」，待確認）。html-validate 的 `valid-id` 改為 `relaxed`（數字開頭的標題產生的 id）
 - M5-05 部落格與新聞遷移完成（#30）：使用者決定 blog 與新聞只遷移 2026-01-01 起的文章，`scripts/inventory/audit.mjs` 的保留門檻改為 2026-01-01（新聞原為 2024-01-01），重跑後 `inventory.csv`、`page-map.csv`、`redirects.csv` 跟著更新，舊文章 301 到列表頁。`migrate.mjs` 轉出 83 篇（blog zh-TW 13、en 8、vi 34，新聞 zh-TW 10、en 9、vi 9）與 128 張圖，失敗 5 篇列在 PR；全量執行會刪掉不在 `page-map.csv` 的內容檔。圖片下載後縮到最大寬 1600 px、存成 WebP。`overrides.yaml` 新增 `dropImagesFrom`（依主機或圖片網址拿掉圖與圖說）。zh-TW 的 `description`、內文圖 alt 寫進 `overrides.yaml`；en、vi 延到 M7。collection 頁只對有字串檔的語系產生（en、vi 的內容先進版控，M7 補字串檔後產生頁面），內文跨語系連結改成本篇語系的同一頁。抽查用 `node scripts/content/migrate/spot-check.mjs`（`docs/content/migration.md`「抽查」）
+- M5-06 公司頁內容遷移完成（#31）：zh-TW 的關於我們、聯絡我們、合作夥伴與 4 個法務頁上線（`/about-us`、`/contact-us`、`/partners`、`/privacy`、`/terms`、`/disclaimer`、`/security-policy`）。公司頁手寫，`node scripts/content/page-content.mjs` 逐行對照現站；法務頁由 `node scripts/content/legal-pdf.mjs` 從現站 PDF 轉換，寫檔前逐字比對 PDF 文字（`docs/content/company-pages.md`）。`organization/zh-TW.yaml` 補齊現站 8 個據點。現站 zh-TW 合作夥伴頁是空的，改用 en 版翻譯。en、vi 的 about、partners、contact 進版控，不產生頁面。en 法務 PDF（2020 年版）、vi 隱私權 PDF（內容是應徵者個資告知）沒有搬
 
 ## 下一步
 
@@ -90,10 +91,12 @@
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
 - `orient-ai`、`aiso`（現站 `page_type` 為 `service`，都在 header 導覽）沒有 issue 承接遷移，M5-01、M5-02 都不含；需要另開 issue，family-ai hub 併入的 `systalk-ai-phison`（AISO AI 一體機）內容可能要一起搬過去，見 `docs/content/products.md`
-- M5-06 公司頁內容遷移（#31）可以開始；遷移時頁面直接由 `src/pages/[...path].astro` 產生，不用另建頁面檔
+- `esg-advisory`（ESG 永續發展與顧問服務，offering）與 ESG 顧問頁（`person`，`page-map.csv` 的 zh-TW 8、en 9、vi 8 列）沒有 issue 承接遷移，M5-02、M5-06 都不含；需要另開 issue。現在只有 M4-01 的範例 `person/zh-TW/chen-zhengrui.md`
+- M5-07 M5 收尾（#32）可以開始
 - 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權
 - 回覆 M5-05（#30）PR 的「待確認」：圖片授權與人物、失敗的 5 篇、作者 `authorType`
 - 首頁與產品頁的最新文章改讀 content collections（#101）可以開始
+- 回覆 M5-06（#31）PR 的「待確認」：合作夥伴頁的翻譯、法務文件是否要法務審閱、資訊安全政策的生效日、en 法務頁的英譯、關於我們的圖片授權
 - 回覆 M5-03（#28）PR 的「待確認」：客戶名稱與 logo 的使用授權、內頁內容只有一段描述、獎項與年份、產業對應
 - 回覆 `docs/content/products.md`「待確認」（M5-01）：banner 圖庫照能否沿用、各頁未搬的段落要刪減或擴充 content model、feature 數量多的產品頁捲動長度、價格與認證等可能過時的說法
 - M6-01 表單（#33）、M6-02 Pagefind 站內搜尋（#34）、M6-03 影片延遲載入（#35）、M6-04 GTM 與 consent 管理（#36）可以開始；表單與搜尋框的版面已在 contact、gated-download、utility 模板，沒有 `action`
@@ -133,3 +136,4 @@
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
 - `npm run check` 的 LHCI 用 `staticDistDir` 自動探索，只測前 5 個 URL（M3-07 時 build 出 16 頁只測 5 頁），其餘頁面沒有 Lighthouse 關卡，由 #87 處理
 - M5-04（#29）、M5-05（#30）：en、vi 的 blog 與新聞已進版控，但沒有字串檔所以不產生頁面。M7 補字串檔前要處理：`<title>` 接上 `｜TPIsoftware 昕力資訊` 後大多超過 70 字（要寫 `seoTitle`，或先決定 en、vi 的後綴規則）、description 過長、內文圖缺 alt，數字看 `migrate.mjs --report` 的 notes；vi 內文原本連到英文頁的連結已改成 `/vi/...`（報告記 24 筆），目標頁要在 vi 存在
+- M5-06（#31）：en、vi 的 `page` 內容檔（about、partners、contact）已進版控。M7 產生這些頁面前要補 `organization/en.yaml`、`vi.yaml`（據點的英文地址取自現站 en 版關於我們）；en 法務頁沒有內容檔，zh-TW 隱私權政策與使用條款已附英譯，可從那裡拆出，或等法務提供；vi 現站 footer 電話（+886 2 8751 1610）與 zh-TW（+886 2 2658 0508）不同，要確認
