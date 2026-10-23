@@ -132,12 +132,16 @@ const caseStudy = defineCollection({
         client: z.strictObject({ name: text, disclosed: z.boolean(), logo: image().optional() }),
         clientDescription: text.optional(),
         industry: z.enum([...INDUSTRIES, 'other']),
-        offerings: z.array(ref('offering')).min(1),
-        challenge: text,
-        solution: text,
+        // The current site's cases are one-paragraph cards (M5-03, #28): no date, no challenge and
+        // solution split, often no named offering; that paragraph is the Markdown body
+        offerings: z.array(ref('offering')).optional(),
+        challenge: text.optional(),
+        solution: text.optional(),
         results: z.array(z.strictObject({ label: text, value: text })).optional(),
         coverImage: image().optional(),
-        publishedAt: date,
+        publishedAt: date.optional(),
+        // Position on the current site's list; orders the cases that have no publishedAt
+        order: z.number().int().nonnegative().optional(),
       })
       .superRefine(requireMigratedAt)
       .superRefine((data, ctx) => {

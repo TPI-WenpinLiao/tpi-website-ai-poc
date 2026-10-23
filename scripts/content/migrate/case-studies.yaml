@@ -1,0 +1,235 @@
+# Manual input for case-studies.mjs (M5-03, #28); docs/content/migration.md「成功案例」.
+#
+# clients: logo key (the card's logo file name without locale variants, logoKey() in case-studies.mjs)
+#   → slug (the start of every case slug of the client) and the client's name per locale, written the
+#   way that locale's descriptions write it. A name the descriptions do not contain is read off the
+#   logo and marked「logo」. Names, logos and the right to show them are to be confirmed (PR #28).
+# entries: entry id → frontmatter that replaces the generated value (title, seoTitle, description).
+#   zh-TW descriptions are rewritten to the seo-checklist length; en and vi wait for M7.
+
+clients:
+  logo-cathay-fh:
+    slug: cathay-financial
+    name: { zh-TW: 國泰金控, en: Cathay Financial Holdings, vi: Cathay Financial Holdings }
+  taishin:
+    slug: taishin
+    name: { zh-TW: 台新銀行, en: Taishin Bank, vi: Ngân hàng Taishin }
+  taipei:
+    slug: taipei-city
+    name: { zh-TW: 臺北市政府, en: Taipei City Government, vi: Chính phủ Thành phố Đài Bắc }
+  sc:
+    slug: standard-chartered
+    name: { zh-TW: 渣打銀行, en: Standard Chartered, vi: Standard Chartered }
+  skbank:
+    slug: shin-kong-bank
+    name: { zh-TW: 新光銀行, en: Shin Kong Bank, vi: Ngân hàng Shin Kong }
+  # The descriptions name 財金資訊 (Financial Information Co., Ltd.) as the partner and 財政部 as the
+  # app's owner; the logo is 財政部's
+  mof:
+    slug: ministry-of-finance
+    name: { zh-TW: 財政部, en: Ministry of Finance, vi: Bộ Tài Chính Đài Loan }
+  cub:
+    slug: cathay-united-bank
+    name: { zh-TW: 國泰世華銀行, en: Cathay United Bank, vi: Cathay United Bank }
+  dbs:
+    slug: dbs
+    name: { zh-TW: 星展, en: DBS, vi: DBS }
+  ipass:
+    slug: ipass
+    name: { zh-TW: 一卡通, en: iPASS Corporation, vi: iPASS Corporation }
+  # Richart is Taishin Bank's digital bank; the card has its own logo
+  richart:
+    slug: taishin-richart
+    name: { zh-TW: 台新銀行, en: Taishin Bank, vi: Ngân hàng Taishin }
+  anz:
+    slug: anz
+    name: { zh-TW: ANZ澳盛銀行, en: ANZ, vi: Ngân hàng ANZ }
+  cardif:
+    slug: bnp-paribas-cardif
+    name: { zh-TW: 法國巴黎人壽, en: BNP Paribas Cardif, vi: BNP Paribas Cardif }
+  fe:
+    slug: far-eastern-bank
+    name: { zh-TW: 遠東商業銀行, en: Far East Commercial Bank, vi: Ngân hàng Far East Commercial }
+  il:
+    slug: innolux
+    name: { zh-TW: 群創光電, en: Innolux, vi: Innolux }
+  # logo
+  johnson:
+    slug: johnson
+    name: { zh-TW: JOHNSON, en: JOHNSON, vi: JOHNSON }
+  taiwanmobile:
+    slug: taiwan-mobile
+    name: { zh-TW: 台灣大哥大, en: Taiwan Mobile, vi: Taiwan Mobile }
+  hotai:
+    slug: hotai
+    name: { zh-TW: 和泰汽車, en: Hotai Auto, vi: Hotai }
+  # logo (華南銀行 HUA NAN BANK); the en title of one card writes Hua Nan Bank
+  hn:
+    slug: hua-nan-bank
+    name: { zh-TW: 華南銀行, en: Hua Nan Bank, vi: Hua Nan Bank }
+  cli:
+    slug: cathay-life
+    name: { zh-TW: 國泰人壽, en: Cathay Life Insurance, vi: Cathay Life }
+  prudential:
+    slug: prudential-taiwan
+    name: { zh-TW: 保德信人壽, en: Prudential Life Insurance, vi: Prudential }
+  # logo (中華電信 Chunghwa Telecom)
+  ct:
+    slug: chunghwa-telecom
+    name: { zh-TW: 中華電信, en: Chunghwa Telecom, vi: Chunghwa Telecom }
+  youbike:
+    slug: youbike
+    name: { zh-TW: YouBike, en: YouBike, vi: YouBike }
+  logo-sinopac:
+    slug: sinopac
+    name: { zh-TW: 永豐銀行, en: Bank SinoPac, vi: Ngân hàng SinoPac }
+  logo-ghs:
+    slug: good-health
+    name: { zh-TW: 好適康, en: Good Health Solutions International Co., vi: Good Health }
+  logo-fjcuh:
+    slug: fu-jen-hospital
+    name: { zh-TW: 輔大醫院, en: Fu Jen Catholic University Hospital, vi: Bệnh viện Fu Jen }
+  # 英國保誠 on the logo; the en and vi descriptions write it like 保德信 (Prudential)
+  logo-prudential:
+    slug: prudential-uk
+    name: { zh-TW: 英國保誠人壽, en: Prudential Life Insurance, vi: Prudential }
+  logo-exw:
+    slug: excellence-wire
+    name: { zh-TW: 卓新工業, en: EXCELLENCE WIRE INDUSTRIAL }
+  bankchb:
+    slug: chang-hwa-bank
+    name: { zh-TW: 彰化銀行, en: Chang Hwa Bank, vi: Chang Hwa Bank }
+  tokio-marine-newa:
+    slug: tokio-marine-newa
+    name: { zh-TW: 新安東京海上產險, en: Tokio Marine Newa, vi: Toki Marine Newa }
+  entie:
+    slug: entie-bank
+    name: { zh-TW: 安泰銀行, en: EnTai Bank, vi: EnTai Bank }
+  taiwan-bank:
+    slug: bank-of-taiwan
+    name: { zh-TW: 臺灣銀行, en: Bank of Taiwan }
+  union:
+    slug: union-insurance
+    name: { zh-TW: 旺旺友聯, en: Union Insurance, vi: Union }
+  # zh-TW: logo (兆豐保險 Chung Kuo Insurance)
+  chungkuo:
+    slug: chung-kuo-insurance
+    name: { zh-TW: 兆豐保險, en: Chung Kuo Insurance, vi: Chung Kuo }
+  # 法國巴黎人壽 on the logo, like cardif
+  bnp:
+    slug: bnp-paribas-cardif-taiwan
+    name: { zh-TW: 法巴人壽, en: Cardif Assurance Vie & Risques Divers, vi: Cardif Assurance Vie & Risques Divers }
+  skfh:
+    slug: shin-kong-life
+    name: { zh-TW: 新光人壽, en: Shin Kong Life, vi: Shin Kong }
+  fubon:
+    slug: fubon-life
+    name: { zh-TW: 富邦人壽, en: Fubon Life Insurance, vi: Fubon Life }
+  china-life-insurance:
+    slug: china-life
+    name: { zh-TW: 中國人壽, en: China Life Insurance, vi: Bảo hiểm Nhân thọ Trung Quốc }
+  cathay-century:
+    slug: cathay-century
+    name: { zh-TW: 國泰產險, en: Cathay Century Insurance, vi: Cathay Century }
+  taiwan-life:
+    slug: taiwan-life
+    name: { zh-TW: 台灣人壽, en: Taiwan Life, vi: Bảo Hiểm Đài Loan }
+  logo-dunqian:
+    slug: dunqian
+    name: { zh-TW: 敦謙國際, en: Dunqian International }
+
+entries:
+  zh-TW/cathay-financial-caas-cathay-pacific-ecosystem-service:
+    description: 昕力資訊協助國泰金控打造『CaaS國泰生態圈服務平台』，將集團服務API化並串接企業夥伴，發展多元金融服務，提升國泰金融集團的數位競爭力。
+  zh-TW/taishin-cash-sales-api-management-platform:
+    description: 與台新銀行合作，以digiRunner模組開發API管理平台，整合現金管理業務模組，讓企業客戶的多通路收付款作業更便利。
+  zh-TW/taipei-city-api-management-platform:
+    description: 為臺北市府建置符合統一標準的API管理平臺，增進各機關系統資料介接、推動資料開放，並協助建立API管理制度，輔導各級機關導入上線。
+  zh-TW/standard-chartered-sc-keyboard-banking:
+    description: 協助渣打銀行建置「專屬手機鍵盤」，用戶綁定設備後，可在LINE、Messenger等社群帳戶上轉帳、發紅包、查詢匯率與交易紀錄。
+  zh-TW/shin-kong-bank-centralized-log-management-platform:
+    description: 新光銀行每日產生以 GB 計的海量數據，導入昕力自有研發產品「digiLog」後，以跨平台 log 查詢、流量監控、即時告警等功能大幅提升管理效率。
+  zh-TW/ministry-of-finance-taiwan-receipt-lottery-app:
+    description: 協助財金資訊建立財政部統一發票兌獎App，具備載具歸戶、發票存摺和自動對獎等功能，採Xamarin.Forms跨平台開發，Android、iOS同步上架。
+  zh-TW/cathay-united-bank-ai-intelligent-customer-service-system:
+    description: 昕力資訊協助國泰世華銀行/國泰人壽打造智能客服系統『阿發』，以AI實現人機協作，提供產品諮詢、查詢保單、信用卡繳費等一站式服務。
+  zh-TW/dbs-card-credit-card-mobile-service-system:
+    description: 協助星展打造客戶專屬信用卡APP與網站，客戶可透過指紋辨識迅速登入，在Card+上使用信用卡相關服務，並隨天氣、溫度、地點變化關心客戶。
+  zh-TW/ipass-line-pay-ipass-account-system:
+    description: 協助一卡通公司建置LINE Pay一卡通帳戶系統，提供虛擬帳戶申請、儲值、生活繳費與乘車碼等功能，採Angular+Ionic開發，不受手機作業系統限制。
+  zh-TW/taishin-richart-digital-banking-system:
+    description: 昕力資訊以金融業的資安與金流串接經驗，協助台新銀行建置Richart數位銀行系統，打造新一代 Bank 3.0，提供聰明消費、高額回饋的數位金融平台。
+  zh-TW/anz-new-generation-of-online-banking:
+    description: 協助ANZ澳盛銀行打造新一代數位網路銀行，並榮獲 Global Finance 2013 World‘s Best Internet Bank Awards。
+  zh-TW/anz-interactive-credit-card-digital-platform:
+    description: 把Machine Learning與Big data技術實現在ANZ澳盛銀行智慧型信用卡客服系統，支援客服人員與客戶即時互動，提升服務品質和客戶滿意度。
+  zh-TW/bnp-paribas-cardif-online-policy-service-system:
+    description: 協助法國巴黎人壽開發保單線上變更(Online Policy Service)系統，讓保戶可自行透過Web介面變更所持有的保單內容，操作簡易。
+  zh-TW/taiwan-mobile-value-added-service-and-mobile-customer:
+    description: 協助台灣大哥大建置VTXM加值服務系統，每年上架超過5萬個產品；並建置會員中心系統、ADP系統專案、雲端入口網站、TV Client 等行動客服系統。
+  zh-TW/hua-nan-bank-sales-force-automation-system:
+    description: 協助建置Sales Force Automation System銷售自動化系統，涵蓋企金、個金與財富管理單位，超過2500人使用，精確掌握銷售目標族群。
+  zh-TW/cathay-united-bank-cross-organizational-point-management:
+    description: 昕力運用區塊鏈技術整合跨平台點數管理系統，整合金融集團各子公司與合作第三方的紅利點數，讓消費者可在實體及線上商店兌換或消費。
+  zh-TW/youbike-ai-customer-service:
+    description: 「YouBike小管家(AI客服)」透過 SysTalk.Chat 在官方網站、App 等渠道建立擬人的客服問答，提供場站資訊、租借狀態等24小時線上服務。
+  zh-TW/sinopac-fun-sport-app:
+    description: 昕力協助永豐銀行建置『汗水不白流』App，整合跨系統串接及監管海量運動數據，讓用戶運動燃燒的卡路里能轉換為信用卡點數回饋。
+  zh-TW/good-health-healthcare-management-app:
+    description: 昕力協助好適康開發個人健康管理App，將每日健康數據儲存於雲端並以圖表呈現，提供就診預約、用藥提醒、疫苗接種記錄與緊急撥號等功能。
+  zh-TW/fu-jen-hospital-healthcare-service-app:
+    description: 昕力協助輔大醫院建置全方位服務App，整合醫院現有系統，提供預約掛號、看診進度查詢、行動繳費、住院申請、慢箋領藥與衛教資訊等功能。
+  zh-TW/prudential-uk-chinese-medicine-physique-testing-app:
+    description: 昕力專案團隊與英國保誠人壽跨國團隊協作，建置多語系的中醫體質檢測App，在全球市場同步上線，透過望、聞、問等步驟提供客製化結果與建議。
+  zh-TW/excellence-wire-robotic-process-automation-rpa:
+    description: 昕力為卓新工業導入RPA流程自動化，針對訂單管理與進出口流程設計八條流程，促使人力與數位系統協作，精簡繁瑣作業、提升營運效率。
+  zh-TW/chang-hwa-bank-transaction-time-monitoring-track-path:
+    description: digiLogs 為彰化銀行蒐集並統合系統資料於單一平台呈現，透過交易路徑地圖與權限分層，在系統發生問題時快速標記問題點並自動示警維運人員。
+  zh-TW/taipei-city-e-receipt-cloud-platform:
+    description: 昕力資訊協助北市府導入橫跨各局處的電子收據平台，透過API介接整批匯入電子收據、支援離線作業，民眾可登入查詢、歸戶已開立的電子收據。
+  zh-TW/tokio-marine-newa-online-insurance-policy-app:
+    description: 昕力資訊協助新安東京海上產險以Xamarin跨平台開發線上保單App，內勤單位可線上查詢、追蹤、同步案件狀態，支援離線作業，將理賠流程數位化。
+  zh-TW/entie-bank-api-management-platform:
+    description: 安泰銀行導入昕力 digiRunner API 管理平台，部署高彈性的APIM介接機制，整合銀行內部服務並提供與 TSP 業者的溝通管道，打造多元數位金融服務。
+  zh-TW/bank-of-taiwan-robotic-process-automation-rpa:
+    description: 協助臺灣銀行重點部門導入50條 RPA 流程，處理耗時、重複性高的工作，並以獨家開發的驗證碼通關模組匯集外部資料，優化業務流程品質與產能。
+  zh-TW/hua-nan-bank-digital-banking-platform:
+    description: 導入微服務與RWD設計，實現信用卡申辦、信貸申請、SnY 數位帳戶開戶線上一站完成，支援OCR光學辨識自動填表、暫存續辦等功能。
+  zh-TW/union-insurance-online-insurance-system:
+    description: 昕力資訊協助旺旺友聯導入網路投保系統，採OTP安全驗證，參考電商導購流程減少商品挑選斷點，並以新穎視覺設計強化品牌形象。
+  zh-TW/chung-kuo-insurance-online-insurance-system:
+    description: 昕力資訊協助建立網路投保系統，內建完整險種並優化流程，導入獨家InsureBrick模組以快速驗證及上架商品，以業務中台與微服務設計保留系統彈性。
+  zh-TW/bnp-paribas-cardif-taiwan-online-insurance-platform:
+    description: 昕力為法巴人壽與產險打造網路投保平台，一套系統適用兩種商品體系，串接多家銀行與信用卡金流，並導入獨家InsureBrick商品快速驗證上架模組。
+  zh-TW/shin-kong-life-group-insurance-plan-system:
+    description: 協助新光人壽建置集中化規則引擎，e化整合產品及計費資料，整體降低50%作業成本、節省60%商品上架時間，優化團險內部資料統整流程。
+  zh-TW/fubon-life-mobile-insurance-web-app:
+    description: 跨平台整合富邦人壽的行動投保網頁及App，導入昕力獨家4種系統模組，可快速上/下架商品、降低錯誤率及照會率，3分鐘快速成案並整合第三方支付。
+  zh-TW/cathay-life-sky-tree-km-platform:
+    description: 協助國泰人壽建置天空樹知識分享平台，作為業務的內部社群空間交流知識與成交經驗，並導入個人化智能推薦系統，提高熱門主題的能見度。
+  zh-TW/cathay-life-centralized-log-management-platform:
+    description: 協助國泰人壽建置日誌集中管理中心，整合跨平台的大量伺服器，劃分管理權限、全時段監控並即時通知負責人員，保障企業資安並強化 IT 治理。
+  zh-TW/prudential-taiwan-life-insurance-marketing-management:
+    description: 協助保德信建置新壽險行銷管理平台，即時算出個人化保障額度與分析退休規劃，整合保戶家族資料與保單，並自動試算業績競賽成績。
+  zh-TW/prudential-taiwan-agent-certification-management-system:
+    description: 協助保德信升級電子化壽險顧問人員與證照管理系統，線上統一管理全台業務人員證照與從業資格狀態，改善耗時費工的流程，促進訓練績效管理。
+  zh-TW/china-life-i-touch-online-insurance-calculator:
+    description: 協助中國人壽優化網路投保試算工具，保戶可線上輸入保險需求、直接產出專屬建議書，提升業務員、保經、保代銷售績效，佈局多通路銷售網。
+  zh-TW/cathay-century-automobile-insurance-system:
+    description: 協助國泰建置車險投保平台，強化個人化訊息設計，並以新穎UIUX設計將商品種類圖像化呈現，讓瀏覽更順暢，提高消費者滿意度與投保意願。
+  zh-TW/cathay-century-automobile-insurance-platform:
+    description: 協助國泰產險建構互動式車險網投平台，結合數據分析提供個人推薦與精準行銷，搭配碎片化保單服務，提升黏著度與投保轉換率。
+  zh-TW/taiwan-life-e-insurance-system:
+    description: 協助台灣人壽建置行動投保系統，自動帶入官方認證的合格業務員，整合保經代通路的6大行動投保流程，並細分12種案件狀態讓業務員隨時追蹤進度。
+  zh-TW/cathay-life-crm-2-0:
+    description: 協助國泰人壽建置CRM2.0，以微服務架構改版升級既有CRM平台，建置K8S微服務平台、自動化上版，確保服務不中斷，提升網路投保整體銷售業績。
+  zh-TW/cathay-century-ai-customer-service-chatbot:
+    description: 協助國泰產險建置智能客服，整合真人文字客服、支援語音辨識，使用者可即時查詢已投保產品、申請理賠、繳費，並透過智能客服申請道路救援。
+  zh-TW/cathay-financial-property-insurance-vietnam-system:
+    description: 協助國泰金控建置越南產險行動辦公室系統，為越南當地唯一線上產險投保App，透過OCR辨識身分證/駕照自動帶入資料，10分鐘內完成投保，離線也能使用。
+  zh-TW/cathay-financial-insurance-vietnam-website:
+    description: 協助國泰金控建置越南產險官網，在地化提供線上投保服務，支援跨國架構以因應當地法規，並以K8架構支援大量使用者同時在線順暢運行。
+  zh-TW/dunqian-robotic-process-automation-rpa:
+    description: 昕力為敦謙國際導入SysTalk.RPA流程自動化方案，自動登入多間網銀抓取近30家飯店營業資訊並串接ERP與訂單系統，節省77%人力與85％作業時間。
+  zh-TW/taipei-city-e-services-online:
+    description: 昕力資訊協助臺北市政府服務平臺升級，串聯MyData平台透過單次授權取用個人化資料簡化申辦，並推出行動版網路申辦、整合台北通App。

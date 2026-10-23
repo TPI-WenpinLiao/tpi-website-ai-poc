@@ -79,6 +79,7 @@
 
 - M5-04 部落格與新聞批次轉換 script 完成（#29）：`node scripts/content/migrate/migrate.mjs` 依 `page-map.csv` 把現站 blog 與新聞轉成內容檔，圖片下載到 `src/assets/<type>/<locale>/<slug>/`（內容圖的目錄規則改為含語系，whitepaper 範例一起搬）；人工修正寫在 `scripts/content/migrate/overrides.yaml`，重跑結果不變。用法與報告欄位見 `docs/content/migration.md`。全量試跑 622 列（併入 merge 列後 620 篇）：轉出 533 篇、`astro check` 通過；失敗 87 篇，其中 69 篇的圖片網域被雲端環境的 network policy 擋下、15 篇 vi 現站沒有作者、3 篇不在 blog API。試跑產出不 commit，只重新產生兩筆範例。en、vi 的 `newsTypeId` 依現站名稱對應（`content-model.md`「news」，待確認）。html-validate 的 `valid-id` 改為 `relaxed`（數字開頭的標題產生的 id）
 - M5-05 部落格與新聞遷移完成（#30）：使用者決定 blog 與新聞只遷移 2026-01-01 起的文章，`scripts/inventory/audit.mjs` 的保留門檻改為 2026-01-01（新聞原為 2024-01-01），重跑後 `inventory.csv`、`page-map.csv`、`redirects.csv` 跟著更新，舊文章 301 到列表頁。`migrate.mjs` 轉出 83 篇（blog zh-TW 13、en 8、vi 34，新聞 zh-TW 10、en 9、vi 9）與 128 張圖，失敗 5 篇列在 PR；全量執行會刪掉不在 `page-map.csv` 的內容檔。圖片下載後縮到最大寬 1600 px、存成 WebP。`overrides.yaml` 新增 `dropImagesFrom`（依主機或圖片網址拿掉圖與圖說）。zh-TW 的 `description`、內文圖 alt 寫進 `overrides.yaml`；en、vi 延到 M7。collection 頁只對有字串檔的語系產生（en、vi 的內容先進版控，M7 補字串檔後產生頁面），內文跨語系連結改成本篇語系的同一頁。抽查用 `node scripts/content/migrate/spot-check.mjs`（`docs/content/migration.md`「抽查」）
+- M5-03 客戶案例遷移完成（#28）：現站沒有案例內頁，`/success-story` 的卡片資料在 Nuxt JS chunk 裡，`node scripts/content/migrate/case-studies.mjs` 轉成每筆一個有內頁的內容檔（zh-TW 61、en 61、vi 58，vi 少 3 筆 RPA 案例）與 logo。使用者決定：每案都有內頁；`case-study` 的 `challenge`、`solution`、`publishedAt`、`offerings` 改選填並加上 `order`；客戶名稱與 logo 照現站顯示（`disclosed: true`），授權待確認；產業對應金融、保險 → `finance`，政府 → `government`，其餘 → `other`。客戶名稱與 zh-TW description 寫在 `case-studies.yaml`，用法見 `docs/content/migration.md`「成功案例」
 
 ## 下一步
 
@@ -86,9 +87,10 @@
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
-- M5-01 產品內容遷移（#26）、M5-02 解決方案內容遷移（#27）、M5-03 客戶案例遷移（#28）、M5-06 公司頁內容遷移（#31）可以開始；遷移時頁面直接由 `src/pages/[...path].astro` 產生，不用另建頁面檔
+- M5-01 產品內容遷移（#26）、M5-02 解決方案內容遷移（#27）、M5-06 公司頁內容遷移（#31）可以開始；產品頁有內容檔後重跑 `case-studies.mjs` 補上案例的 offerings；遷移時頁面直接由 `src/pages/[...path].astro` 產生，不用另建頁面檔
 - 回覆 M5-05（#30）PR 的「待確認」：圖片授權與人物、失敗的 5 篇、作者 `authorType`
-- 首頁的最新文章與新聞改讀 content collections，刪除 `src/lib/latest-posts.ts`（M5-05 不做，會改到已核准的首頁視覺，需要另開 issue）
+- 首頁與產品頁的最新文章改讀 content collections（#101）可以開始
+- 回覆 M5-03（#28）PR 的「待確認」：客戶名稱與 logo 的使用授權、內頁內容只有一段描述、獎項與年份、產業對應
 - M6-01 表單（#33）、M6-02 Pagefind 站內搜尋（#34）、M6-03 影片延遲載入（#35）、M6-04 GTM 與 consent 管理（#36）可以開始；表單與搜尋框的版面已在 contact、gated-download、utility 模板，沒有 `action`
 - 回覆 PR #98「待確認問題」：listing、utility、contact 頁的暫定描述（`src/data/strings/zh-TW.ts` 的 `pages`）、聯絡表單的諮詢產品選項、個資同意與 AI Playbook 欄位文案、`industry: other` 的顯示名稱
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）

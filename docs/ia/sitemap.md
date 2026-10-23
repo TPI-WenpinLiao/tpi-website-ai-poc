@@ -100,7 +100,7 @@ zh-TW 的 `/blog/en` 分類頁沒有文章，併入 blog 首頁。
 | 新頁的介紹文字：資安家族、產業方案總覽、金融、政府、製造業、服務總覽 | 內容負責人（不由 Claude 撰寫） | M5 |
 | OrientAI 放在 AI 家族（zh-TW 導覽是獨立的「Agentic AI」群組，vi 導覽放在 DigiLism 下） | 專案負責人 | M2-02 已決定：維持在 AI 家族，導覽放第一項並加「Agentic AI」標記（`navigation.md`） |
 | `Featured/Neo4j` 3 篇（以 Neo4j 偵測金融詐欺）歸到數位轉型 | 專案負責人 | M5 |
-| 成功案例內頁：現站沒有內頁，案例清單與客戶名稱授權未確認（`content-audit.md`「內容負責人要確認」第 4 項） | 內容負責人 | 確認後才建 `case-study` |
+| 成功案例內頁：現站沒有內頁，M5-03 依使用者決定把列表卡片逐筆轉成內頁（內容只有卡片描述），客戶名稱與 logo 照現站顯示（`content-audit.md`「內容負責人要確認」第 4 項） | 內容負責人 | 客戶授權確認前不上線；內頁要不要擴寫或合併 |
 
 ## 給 M2 其他 issue 的輸入
 
@@ -352,7 +352,7 @@ flowchart LR
 | 　　ESG 永續發展與顧問服務（`esg-advisory`） | `offering` | `/esg-advisory` | 1 | 1 | 1 |  |
 | 　　　ESG 顧問個人頁（`esg-advisor`） | `person` | `/esg-advisory/{slug}` | 8 | 9 | 8 |  |
 | 　成功案例（`success-stories`） | `listing` | `/success-story` | 1 | 1 | 1 |  |
-| 　　成功案例內頁（`case-study`） | `case-study` | `/success-story/{slug}` | 0 | 0 | 0 | 現站沒有內頁，案例清單與客戶授權確認後才建 |
+| 　　成功案例內頁（`case-study`） | `case-study` | `/success-story/{slug}` | 0 | 0 | 0 | 現站沒有內頁，M5-03 由列表卡片轉成內頁；客戶授權待確認 |
 | 　資源（`resources`） | `hub` | `/resource` | 1 | 1 | 1 |  |
 | 　　部落格（`blog`） | `listing` | `/blog` | 2 | 1 | 1 |  |
 | 　　　AI（`blog-ai`） | `listing` | `/blog/ai` | 5 | 3 | 0 |  |
