@@ -159,7 +159,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
   focus 由 `BaseLayout` 的 `:focus-visible, [data-preview-state='focus']` 統一處理；元件自己畫 focus 的（`Card`）也要寫成同樣的形式。`data-preview-state` 只用在展示頁
 - 預覽用的複本加 `inert`：不進 Tab 順序、不被報讀，可操作的是「預設」那一份（#16 實測：Tab 停點 109 → 65）。矩陣表格加 `caption.sr-only` 說明示意欄不能操作
-- 內部頁（`src/lib/seo/indexing.ts` 的 `INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`（導覽只能指向節點），`showcase.mjs` 會擋。sitemap 由 build 出的頁面產生並排除這些路徑，`scripts/seo/meta.mjs` 檢查 sitemap 的輸出
+- 內部頁（`src/lib/seo/indexing.ts` 的 `INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`（導覽只能指向節點），`showcase.mjs` 會擋。sitemap 由 build 出的頁面產生，排除這些路徑與流程頁（`FLOW_PATHS`），`scripts/seo/meta.mjs` 檢查 sitemap 的輸出
 
 ## 影像
 

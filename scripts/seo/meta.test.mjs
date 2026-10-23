@@ -37,7 +37,7 @@ test('pages written as Seo.astro writes them, with the sitemap built from them, 
   assert.deepEqual(metaProblems(pages, site([...pages.keys()])), []);
 });
 
-test('the sitemap leaves out internal pages and 404, and carries each page\'s hreflang', () => {
+test('the sitemap leaves out internal and flow pages, and carries each page\'s hreflang', () => {
   const entries = readSitemap(site(['/', '/about', '/en/about', '/design-system', '/templates/hub', '/en/design-system', '/404']));
   assert.deepEqual(entries.map((e) => e.loc), [url('/'), url('/about'), url('/en/about')]);
   assert.deepEqual(entries[1].alternates, [

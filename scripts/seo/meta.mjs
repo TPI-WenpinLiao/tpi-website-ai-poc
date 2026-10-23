@@ -5,7 +5,8 @@
 // hreflang lists the page itself, every target was built and lists the same set back, x-default
 // points at the zh-TW version exactly when there is one; every JSON-LD block parses, and every page
 // but the home, 404 and internal pages has a BreadcrumbList (content-model.md「內容類型總覽」); the sitemap
-// lists exactly the non-internal pages, by canonical, with the same hreflang as their <head>.
+// lists exactly the pages inSitemap() keeps (no internal or flow pages, src/lib/seo/indexing.ts), by
+// canonical, with the same hreflang as their <head>.
 // Lighthouse only samples a few pages, so this covers all of them.
 // Run after `astro build`: node scripts/seo/meta.mjs [dist]
 
