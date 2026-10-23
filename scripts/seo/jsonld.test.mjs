@@ -87,6 +87,13 @@ test('case study: Article about its offerings, never naming the client', () => {
   assert.ok(!JSON.stringify(doc).includes('機密客戶'));
 });
 
+test('case study: no datePublished without publishedAt (migrated cases have no date)', () => {
+  const caseStudy = { title: 'T', description: 'd', client: { name: '客戶', disclosed: true } };
+  const [article] = caseStudyJsonLd({ ...ctx('/success-story/x'), caseStudy, offerings: [] })['@graph'];
+  assert.equal('datePublished' in article, false);
+  assert.deepEqual(article.about, []);
+});
+
 test('blog: author from authorType, dateModified falls back to publishedAt, keywords only with tags', () => {
   const post = { title: 'T', description: 'd', publishedAt: new Date('2026-03-04'), author: '王小明', authorType: 'Person' };
   const plain = blogPostingJsonLd({ ...ctx('/blog/x'), post, imageUrl: 'i', section: 'AI' })['@graph'][0];
