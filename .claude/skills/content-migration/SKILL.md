@@ -30,7 +30,7 @@ blog 文章與新聞不手寫內容檔，用 `node scripts/content/migrate/migra
 
 - 該頁在 `inventory.csv` 的 `to_confirm` 有值時（未翻譯、title 錯誤、授權未確認等），照抄進 PR 的待確認，處理方式見 [`content-audit.md`「內容負責人要確認」](../../../docs/research/content-audit.md#內容負責人要確認)
 - blog 文章與新聞的內文在 client 端渲染，不在 SSR 的 DOM 裡：blog 內文取自 SSR HTML 中 Nuxt payload（`window.__NUXT__`）的 `content` 字串，新聞內文取自新聞 API 的 `htmlpath` 對應的 `/file{htmlpath}`，見 [`inventory.md`「已知限制」](../../../docs/research/inventory.md#已知限制)
-- 新聞的 `publishedAt` 來源見 [`content-model.md`](../../../docs/ia/content-model.md) 的新聞欄位表。M1-02 依 `inventory.csv` 的 `last_updated`（API 的 `updateDate`，是後台編輯時間）保留 2024-01-01 起的新聞，發布日早於這天的列為待確認，見 [`content-audit.md`「已知限制」](../../../docs/research/content-audit.md#已知限制)
+- 新聞的 `publishedAt` 來源見 [`content-model.md`](../../../docs/ia/content-model.md) 的新聞欄位表。blog 與新聞只遷移 2026-01-01 起的文章（M5-05 由使用者決定，規則在 `scripts/inventory/audit.mjs`）。新聞依 `inventory.csv` 的 `last_updated`（API 的 `updateDate`，是後台編輯時間）判斷，發布日早於門檻的在 `audit-overrides.csv` 改為 drop，`migrate.mjs` 的報告也會標出，見 [`content-audit.md`「已知限制」](../../../docs/research/content-audit.md#已知限制)
 
 ## Frontmatter
 

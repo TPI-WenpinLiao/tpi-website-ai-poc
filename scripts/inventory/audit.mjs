@@ -13,10 +13,10 @@ const BROKEN = 'docs/research/broken-links.csv';
 const OVERRIDES = 'docs/research/audit-overrides.csv';
 const SUMMARY = 'docs/research/audit-summary.json';
 
-// Keep news published on or after this date; older news is not migrated.
-const NEWS_CUTOFF = '2024-01-01';
-// Blog posts published before this date get flagged for an outdated-content check.
-const BLOG_STALE_BEFORE = '2022-01-01';
+// Keep news and blog posts on or after this date; older ones are not migrated (M1-02 set 2024 for news,
+// M5-05 moved both to 2026, #30).
+const NEWS_CUTOFF = '2026-01-01';
+const BLOG_CUTOFF = '2026-01-01';
 
 const CRAWL_COLUMNS = [
   'url', 'final_url', 'status', 'locale', 'page_type', 'title', 'h1', 'last_updated', 'last_updated_source',
@@ -75,7 +75,11 @@ function decide(row, ctx) {
 
   // Case-variant duplicates: the variant not linked from nav merges into the canonical route
   const twin = ctx.caseTwins.get(row.url);
-  if (twin) return out('merge', `大小寫不同的重複路由，內容與 ${twin} 相同，合併至該頁（新站以小寫路由為準並 301）`);
+  if (twin) {
+    // Merging into a page that is not migrated would leave nothing to merge into
+    if (decide(ctx.twinTargets.get(row.url), ctx).disposition === 'drop') return out('drop', `大小寫不同的重複路由，對應的 ${twin} 不遷移`);
+    return out('merge', `大小寫不同的重複路由，內容與 ${twin} 相同，合併至該頁（新站以小寫路由為準並 301）`);
+  }
 
   switch (type) {
     case 'home':
@@ -139,12 +143,11 @@ function decide(row, ctx) {
       return out('merge', '分類列表頁，併入新 IA 的 blog 分類（M2 定案）');
     }
     case 'blog-post': {
+      // Before the duplicate check, so an old post never merges into one that is dropped too
+      if (row.last_updated && row.last_updated < BLOG_CUTOFF) return out('drop', `${BLOG_CUTOFF} 前的 blog 文章，依保留門檻不遷移`);
       if (ctx.blogDupes.get(row.url)) {
         confirm.push(`與 ${ctx.blogDupes.get(row.url)} 標題相同，確認哪一篇為正式版本`);
         return out('merge', `與 ${ctx.blogDupes.get(row.url)} 標題相同的重複文章，合併至較新版本`);
-      }
-      if (row.last_updated && row.last_updated < BLOG_STALE_BEFORE) {
-        confirm.push(`${row.last_updated.slice(0, 4)} 年發布，確認技術與產品資訊是否仍正確`);
       }
       return out('keep', '已發布的 blog 文章，內文保留，依新內容模型轉換格式');
     }
@@ -174,12 +177,17 @@ function buildContext(rows, brokenLinks) {
 
   // Case variants: group by final host + lowercased path; canonical = linked from nav, else lowercase path
   const caseTwins = new Map();
+  const twinTargets = new Map();
   const groups = Map.groupBy(rows, (r) => `${new URL(r.final_url).host}${pathOf(r.final_url).toLowerCase()}`);
   for (const group of groups.values()) {
     if (group.length < 2) continue;
     const isLower = (r) => pathOf(r.final_url) === pathOf(r.final_url).toLowerCase();
     const canonical = group.find(inNav) ?? group.find(isLower) ?? group[0];
-    for (const r of group) if (r !== canonical) caseTwins.set(r.url, canonical.final_url);
+    for (const r of group) {
+      if (r === canonical) continue;
+      caseTwins.set(r.url, canonical.final_url);
+      twinTargets.set(r.url, canonical);
+    }
   }
 
   // Same PDF filename on .com and .vn
@@ -204,7 +212,7 @@ function buildContext(rows, brokenLinks) {
     return map;
   };
 
-  return { brokenOn, caseTwins, pdfCanonical, blogDupes: dupes('blog-post'), newsDupes: dupes('news') };
+  return { brokenOn, caseTwins, twinTargets, pdfCanonical, blogDupes: dupes('blog-post'), newsDupes: dupes('news') };
 }
 
 // ---------- Main ----------
@@ -272,7 +280,7 @@ async function main() {
   const summary = {
     rows: rows.length,
     newsCutoff: NEWS_CUTOFF,
-    blogStaleBefore: BLOG_STALE_BEFORE,
+    blogCutoff: BLOG_CUTOFF,
     byDisposition: countBy(rows, 'disposition'),
     byDispositionLocale: countBy(rows, 'disposition', 'locale'),
     byPageTypeDisposition: countBy(rows, 'page_type', 'disposition'),

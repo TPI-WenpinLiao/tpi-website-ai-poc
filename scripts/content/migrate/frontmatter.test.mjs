@@ -73,7 +73,7 @@ test('news frontmatter maps newsTypeId and uses the zh-TW id as translationKey',
 test('news without a zh-TW version keeps its own id; old news and unknown types are flagged', () => {
   const { data, notes } = newsFrontmatter({ item: { ...item, id: '455', langTW: '', showDate: '2023-05-02' }, sourceUrl: 'x', sourceUpdatedAt: '' });
   assert.equal(data.translationKey, '455');
-  assert.deepEqual(notes, ['publishedAt 2023-05-02 is before 2024-01-01']);
+  assert.deepEqual(notes, ['publishedAt 2023-05-02 is before 2026-01-01']);
   assert.throws(() => newsFrontmatter({ item: { ...item, newsTypeId: 2 }, sourceUrl: 'x', sourceUpdatedAt: '' }), /newsTypeId 2/);
 });
 

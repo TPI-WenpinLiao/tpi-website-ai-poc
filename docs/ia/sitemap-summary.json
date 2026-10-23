@@ -1,15 +1,15 @@
 {
-  "mappedRows": 893,
+  "mappedRows": 359,
   "byDisposition": {
-    "keep": 649,
+    "keep": 117,
     "rewrite": 164,
-    "merge": 80
+    "merge": 78
   },
   "nodes": 81,
   "templates": 11,
   "byTemplate": {
     "": 5,
-    "article": 622,
+    "article": 88,
     "contact": 3,
     "content": 14,
     "gated-download": 9,
@@ -253,9 +253,9 @@
       "en": 3
     },
     "blog-post": {
-      "zh-TW": 106,
-      "en": 67,
-      "vi": 299
+      "zh-TW": 14,
+      "en": 9,
+      "vi": 37
     },
     "whitepaper-digirunner": {
       "zh-TW": 1,
@@ -298,9 +298,9 @@
       "vi": 1
     },
     "news-article": {
-      "zh-TW": 60,
-      "en": 48,
-      "vi": 42
+      "zh-TW": 10,
+      "en": 9,
+      "vi": 9
     },
     "hr": {
       "zh-TW": 1

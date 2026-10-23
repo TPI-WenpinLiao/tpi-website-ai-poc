@@ -16,3 +16,17 @@ https://www.tpisoftware.com/esg-advisory,,,zh-TW 顧問清單沒有 huang-zhijun
 https://www.tpisoftware.com/vn/esg-advisory,,,vi 顧問清單連到拼錯的 /esg-advisory/li-shuhi（500），因此缺少 li-shuhui 頁
 https://www.tpisoftware.com/products/esgswift,,,h1 x6，頁面結構需重整；新站改為 ESGswift 產品家族頁，GreenSwift、ElectriSwift 為子頁（M2-01）
 https://www.tpisoftware.com/en/products/esgswift,,,h1 x6，頁面結構需重整；新站改為 ESGswift 產品家族頁，GreenSwift、ElectriSwift 為子頁（M2-01）
+https://www.tpisoftware.com/media-center/547,drop,發布日 2025-09-05（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.com/media-center/550,drop,發布日 2025-09-30（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.com/media-center/555,drop,發布日 2025-10-03（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.com/media-center/556,drop,發布日 2025-10-29（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.com/en/media-center/517,drop,發布日 2025-03-18（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.com/en/media-center/548,drop,發布日 2025-09-05（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.com/en/media-center/551,drop,發布日 2025-09-30（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.com/en/media-center/553,drop,發布日 2025-10-03（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.com/en/media-center/557,drop,發布日 2025-10-29（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.vn/media-center/518,drop,發布日 2025-03-19（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.vn/media-center/549,drop,發布日 2025-09-05（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.vn/media-center/552,drop,發布日 2025-09-30（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.vn/media-center/554,drop,發布日 2025-10-03（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.vn/media-center/558,drop,發布日 2025-10-29（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,

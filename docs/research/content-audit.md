@@ -71,7 +71,7 @@ node scripts/inventory/audit.mjs
 | 對象 | 處置 | 說明 |
 |---|---|---|
 | HTTP 500（`/ja`、`/ja/partners`、`*/outsourcing/dropdown`） | drop | 現站錯誤頁，無內容 |
-| 大小寫不同的重複路由（`/products/gadoDIDO`、`/orient-aI`、vi blog `AI-viet-van-ban` 等 6 列） | merge | 依 `final_url` 判斷；正規版本取導覽有連到的一個，否則取小寫路由 |
+| 大小寫不同的重複路由（`/products/gadoDIDO`、`/orient-aI` 等 5 列） | merge | 依 `final_url` 判斷；正規版本取導覽有連到的一個，否則取小寫路由。正規版本不遷移時跟著 drop（vi blog `AI-viet-van-ban`，M5-05） |
 | .vn 上與 .com 同名的 PDF | merge | 同一份 AWS Marketplace 買家指南 |
 | 首頁、產品、服務、解決方案、關於、聯絡、列表頁 | rewrite | 依新 IA 重寫結構 |
 | 不在導覽的產品／方案頁 | rewrite + 待確認 | 可能已停售 |
@@ -85,9 +85,10 @@ node scripts/inventory/audit.mjs
 | `/carbon` | merge | GreenSwift 推廣頁，併入 GreenSwift 產品頁（M2-01 決定） |
 | blog 分類頁 | merge | 併入 M2 定案的新 blog 分類 |
 | blog 分類路由但 h1 為單篇文章（3 列） | keep + 待確認 | page_type 誤判；不在 blog API 清單 |
-| blog 文章 | keep | 2022 年前發布者（56 篇）待確認內容是否過時；同標題重複的較舊一篇 merge 至較新一篇 |
-| 新聞（2024-01-01 起） | keep | 150 篇（zh-TW 60、en 48、vi 42） |
-| 新聞（2024-01-01 前） | drop | 381 篇；已決定保留門檻為近期新聞 |
+| blog 文章（2026-01-01 起） | keep | 57 篇；同標題重複的較舊一篇 merge 至較新一篇。保留門檻 M5-05（#30）由使用者決定 |
+| blog 文章（2026-01-01 前） | drop | 412 篇 |
+| 新聞（2026-01-01 起） | keep | 28 篇（zh-TW 10、en 9、vi 9）。M1-02 的門檻是 2024-01-01，M5-05（#30）由使用者改為 2026-01-01 |
+| 新聞（2026-01-01 前） | drop | 503 篇，含 `updateDate` 在 2026 年、發布日在 2025 年的 14 篇（`audit-overrides.csv`） |
 | 新聞內文檔不存在（`/media-center/269`、`279`） | drop | 頁面只有標題 |
 | 不在新聞 API 的 8 篇 zh-TW 新聞（`/media-center/151` 等） | drop + 待確認 | 無日期、內容為英文 |
 
@@ -124,8 +125,8 @@ node scripts/inventory/audit.mjs
 7. **疑似未翻譯**（9 列）：`/en/aiso`、`/en/products/gadoscout`、`/en/resource`、`/en/thanks`、vi `/aiso`、`/products/digilogs/log-detection`、`/products/gadoscout`、`/products/systalk-viki`、`/thanks`
 8. **疑似未發布的 blog 文章**（3 列）：`/blog/ai/what-is-ai-agent-management-platform`、`/en/blog/artifintell/why-ai-needs-knowledge-boundary`、vi `/blog/enterprise-management/gemini-api`（vi 另有 `gemini-api-key` 一篇已發布）
 9. **重複內容**：en blog `financial-examination`（2021）與 `financial-examination-en`（2023）同標題；en 新聞 `/en/media-center/455`、`456`（2024-05）與 `441`、`432`（2023）同標題，疑似重複發布
-10. **2022 年前的 blog 文章**（56 篇）：技術與產品資訊是否仍正確
-11. **新聞日期**：保留門檻依 API 的 `updateDate` 判斷，不是發布日；保留的 150 篇中可能有後來被編輯過的舊新聞（見「已知限制」）
+10. **2022 年前的 blog 文章**：M5-05 起 2026 年前的 blog 不遷移，不再需要確認
+11. **新聞日期**：保留門檻依 API 的 `updateDate` 判斷，不是發布日（見「已知限制」）。M5-05 用發布日比對，`updateDate` 在 2026 年但發布日在 2025 年的 14 篇已在 `audit-overrides.csv` 改為 drop
 12. **vi blog 數量**：vi 有 298 篇，其中 258 篇集中在 2025 年，遠多於 zh-TW（105）與 en（66）。全部列為 keep；是否有內容品質或 SEO 策略上的考量，需 vi 團隊確認
 
 ## 失效連結

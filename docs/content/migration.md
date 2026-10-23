@@ -23,7 +23,7 @@ node scripts/content/migrate/migrate.mjs --type blog --locale zh-TW --only custo
 | `--refresh` | 不讀快取，重新抓現站 |
 | `--report <file.csv>` | 每篇一列的報告，見「報告」 |
 
-結束時 stdout 會印出各類型、各語系的 `written`、`unchanged`、`skipped`、`failed` 篇數。有任何一篇 `failed` 時 exit code 是 1。
+結束時 stdout 會印出各類型、各語系的 `written`、`unchanged`、`removed`、`skipped`、`failed` 篇數。不帶參數的全量執行會刪掉已經不在 `page-map.csv` 的內容檔與圖片資料夾（例如保留門檻改了），報告記為 `removed`。有任何一篇 `failed` 時 exit code 是 1。
 
 轉完要跑 `npx astro check`。schema 不合的內容檔（缺欄位、tag 不在清單）會在這一步擋下，script 不重複檢查 schema。
 
@@ -111,7 +111,7 @@ news/zh-TW/585:
 | `broken link (broken-links.csv): …` | 依 `content-audit.md`「失效連結」修正或移除 |
 | `embed removed: …` | 確認影片是否要放回（M6-03） |
 | `table kept as HTML …` | 檢查表格的顯示 |
-| `publishedAt … is before 2024-01-01` | 新聞發布日早於 M1-02 的保留基準，列為待確認 |
+| `publishedAt … is before 2026-01-01` | 新聞發布日早於保留門檻（`audit.mjs`），在 `audit-overrides.csv` 改為 drop 後重跑 IA script |
 | `to_confirm: …` | `inventory.csv` 的待確認，照抄進 PR |
 | `not in blog-categories.csv: no tags` | 確認文章的子分類 |
 

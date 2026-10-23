@@ -262,6 +262,20 @@ async function main() {
   }
 
   if (!args.type && !args.locale && !args.only) {
+    // Entries that left page-map.csv (their disposition became drop): remove what an earlier run wrote
+    for (const type of TYPES) {
+      for (const locale of LOCALES) {
+        const dir = `src/content/${type}/${locale}`;
+        if (!existsSync(dir)) continue;
+        for (const file of (await readdir(dir)).filter((f) => f.endsWith('.md'))) {
+          const id = `${locale}/${file.slice(0, -3)}`;
+          if (seen.has(`${type}/${id}`)) continue;
+          await rm(join(dir, file));
+          await rm(assetDir(type, id), { recursive: true, force: true });
+          report.push({ type, locale, id, sourceUrl: '', status: 'removed', notes: ['not in page-map.csv'] });
+        }
+      }
+    }
     const stale = Object.keys(overrides).filter((id) => !seen.has(id));
     if (stale.length) report.push({ type: '', locale: '', id: '', sourceUrl: '', status: 'failed', notes: [`${OVERRIDES} has entries that are not migrated: ${stale.join(', ')}`] });
   }
@@ -275,11 +289,11 @@ function printSummary(report) {
   const counts = new Map();
   for (const r of report) {
     const key = `${r.type || '-'} ${r.locale || '-'}`;
-    const c = counts.get(key) ?? { written: 0, unchanged: 0, skipped: 0, failed: 0 };
+    const c = counts.get(key) ?? { written: 0, unchanged: 0, removed: 0, skipped: 0, failed: 0 };
     c[r.status] += 1;
     counts.set(key, c);
   }
-  for (const [key, c] of counts) console.log(`${key}: written ${c.written}, unchanged ${c.unchanged}, skipped ${c.skipped}, failed ${c.failed}`);
+  for (const [key, c] of counts) console.log(`${key}: written ${c.written}, unchanged ${c.unchanged}, removed ${c.removed}, skipped ${c.skipped}, failed ${c.failed}`);
   for (const r of report.filter((r) => r.status === 'failed')) console.log(`failed ${r.type}/${r.id || r.sourceUrl}: ${r.notes[0]}`);
 }
 
