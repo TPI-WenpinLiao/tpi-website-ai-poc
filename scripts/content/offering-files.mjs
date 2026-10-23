@@ -1,6 +1,7 @@
 // Downloads the files that offering entries list in `downloads` (M5-01, #26) from the current site,
-// as listed in scripts/content/offering-files.yaml, and stores them unchanged in public/files/<name>.
-// Responses are cached in .cache/migrate, so a re-run writes the same files.
+// as listed in scripts/content/offering-files.yaml, and stores them unchanged under public/ at their
+// current-site path: download files keep their URL (docs/ia/redirects.md「對照規則」), so the entry's
+// downloads[].file is that path. Responses are cached in .cache/migrate, so a re-run writes the same files.
 // Needs network access to www.tpisoftware.com on the first run.
 //
 //   node scripts/content/offering-files.mjs [--refresh]
@@ -12,17 +13,18 @@ import { cachedFetcher, writeAtomic } from './migrate/cache.mjs';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const MANIFEST = join(import.meta.dirname, 'offering-files.yaml');
-const NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+$/;
 
 /**
- * Validate the manifest and work out where each file goes.
- * @param {{ files?: { name?: string, url?: string }[] }} manifest
+ * Validate the manifest and work out where each file goes: public/ plus the URL's decoded path.
+ * @param {{ files?: string[] }} manifest
  * @returns {{ url: string, path: string }[]}
  */
 export function targets(manifest) {
-  const out = (manifest.files ?? []).map((e, i) => {
-    if (!NAME.test(e.name ?? '')) throw new Error(`files[${i}]: name "${e.name}" must be lowercase kebab-case with an extension`);
-    return { url: new URL(e.url ?? '').href, path: `public/files/${e.name}` };
+  const out = (manifest.files ?? []).map((u, i) => {
+    const url = new URL(u);
+    const path = decodeURIComponent(url.pathname);
+    if (path.endsWith('/') || path.split('/').includes('..')) throw new Error(`files[${i}]: ${u} is not a file URL`);
+    return { url: url.href, path: `public${path}` };
   });
   const seen = new Set();
   for (const t of out) {

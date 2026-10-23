@@ -43,10 +43,11 @@ faq:
   - question: 免費試用期間可使用哪些功能？
     answer: 在免費試用期間，各方案（digiRunner Enterprise High Availability/Standalone 及 digiRunner Lite High Availability/Standalone）所具備的功能皆可使用，且不會收取任何授權費。唯 AWS 會針對每個 Pod 的用量收取基礎建置及流量費用（按時計費）。費用詳情請參考 Amazon EC2 定價 與 AWS Fargate 定價。
 cta: demo
-# digirunner-aws-guide in nodes.csv, downloaded by scripts/content/offering-files.mjs
+# digirunner-aws-guide in nodes.csv, downloaded by scripts/content/offering-files.mjs to its
+# current-site path (download files keep their URL, docs/ia/redirects.md)
 downloads:
   - label: digiRunner on AWS Marketplace 買家指南
-    file: /files/digirunner-aws-marketplace-buyer-guide-zh-tw.pdf
+    file: /pdf/digiRunner%20on%20AWS%20Marketplace_%E8%B2%B7%E5%AE%B6%E6%8C%87%E5%8D%97_v1.4_TC.pdf
 sourceUrl:
   - https://www.tpisoftware.com/products/digirunner-cloud
   - https://www.tpisoftware.com/products/digirunner/awsmarketplace

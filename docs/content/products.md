@@ -4,7 +4,7 @@ M5-01（#26）把現站的產品頁搬進 `offering` 與 `hub` collection，只�
 
 ## 範圍
 
-`page-map.csv` 中 zh-TW、`page_type` 為 `product` 或 `product-index` 的 36 列，加上併入產品頁的 `/carbon`、`/genai-solution` 與 AWS 買家指南 PDF。
+`page-map.csv` 中 zh-TW、`page_type` 為 `product` 或 `product-index` 的 32 列，加上併入產品頁的 `/carbon`、`/genai-solution`，共 34 頁，以及 AWS 買家指南 PDF。
 
 | collection | 內容檔 | 備註 |
 |---|---|---|
@@ -31,9 +31,11 @@ M5-01（#26）把現站的產品頁搬進 `offering` 與 `hub` collection，只�
 # 比對內容檔的 tagline、features、useCases、faq、highlights 是否仍在現站（需要連到現站）
 node scripts/design/offering-content.mjs
 
-# 下載 downloads 列出的檔案到 public/files/（清單在 scripts/content/offering-files.yaml）
+# 下載 downloads 列出的檔案到 public/ 底下的現站路徑（清單在 scripts/content/offering-files.yaml）
 node scripts/content/offering-files.mjs
 ```
+
+下載檔保留現站網址（[`redirects.md`](../ia/redirects.md)「對照規則」），所以檔案放在 `public/` 底下與現站相同的路徑，內容檔的 `downloads[].file` 寫該路徑（百分比編碼）。
 
 `offering-content.mjs` 的一行文字只要出現在該內容檔任一個 `sourceUrl` 頁面上就算找到。內容檔修正了現站錯字時，把〔現站寫法, 內容檔寫法〕加進 script 的 `CORRECTIONS`。2026-10-23 的結果是 471/471。
 
@@ -46,7 +48,8 @@ node scripts/content/offering-files.mjs
 | 現站產品頁的 banner 圖庫照能否沿用、是否要另外製作產品主視覺（`heroImage`） | 內容負責人 |
 | 各頁的「成功案例」段落都有客戶名稱，留給 M5-03（#28）處理；客戶 logo 牆未搬 | 內容負責人 |
 | `features` 每一項在產品頁是一個捲動章節，數量 4–11 項（gadoscout 11、systalk-audit 10）。M3-05 核准時 digirunner 是 4 項，項目多的頁面捲動很長，是否刪減 | 設計、內容負責人 |
-| header 導覽與 products hub 連到還沒有頁面的節點（`/products/gadosecurity`、`/industries`、`/industries/manufacturing`、M5-02 的 `/solutions/*`），在那些頁產生前是失效連結 | 專案負責人 |
+| 還沒有頁面的節點，在那些頁產生前是失效連結：header 導覽（`main` 上已經如此）；`/products` 的子頁卡片與 gadodido、gadoscout 的麵包屑與 `BreadcrumbList` 連到 draft 的 `/products/gadosecurity`；金融、政府產業頁與 insurebrick 的麵包屑連到 `/industries`；electriswift 的製造業情境連到 draft 的 `/industries/manufacturing`；金融、政府產業頁的子頁卡片與 family-ai 的子頁卡片連到 M5-02 的 `/solutions/*` | 專案負責人 |
+| 金融（13 字）、政府與公部門、產品總覽的 `<title>` 短於 `seo-checklist` 的 20–32 字；產業頁是新頁，現站沒有可沿用的標題，要不要加 `seoTitle`、寫什麼 | 內容負責人 |
 
 ### 各頁
 
