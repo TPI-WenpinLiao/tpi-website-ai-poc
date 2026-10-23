@@ -70,5 +70,12 @@ for (const c of checks) {
   if (!ok) failed += 1;
   console.log(`${rewritten ? 'edit' : ok ? 'ok  ' : 'MISS'} ${c.file} ${c.path}: ${c.text}${rewritten ? ` (from ${rewritten})` : ''}`);
 }
+// A key that no longer names a line (sections or items were added or removed) would let another
+// line through unchecked
+const keys = new Set(checks.map((c) => `${c.file} ${c.path}`));
+for (const key of Object.keys(REWRITTEN).filter((k) => !keys.has(k))) {
+  failed += 1;
+  console.log(`STALE REWRITTEN key "${key}": no such line; update it to the line it was written for`);
+}
 console.log(`${checks.length - failed}/${checks.length} lines found on ${pages.size} pages`);
 process.exit(failed ? 1 : 0);

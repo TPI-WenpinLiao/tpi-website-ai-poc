@@ -40,7 +40,7 @@ node scripts/content/legal-pdf.mjs --check   # 不寫檔；內容檔與 PDF 不�
 - 條列符號（`l`、`⮚`）轉成清單，清單項目的英譯留在同一項
 - 第一行（文件標題）與頁碼拿掉，標題由 `title` 提供
 
-寫檔前，script 會把內文去掉空白與轉換加上的 Markdown，和 PDF 文字逐字比對，不一致就停下。所以轉換只改換行與結構，不會改到條文。
+寫檔前，script 會把內文去掉空白與轉換加上的 Markdown，和 PDF 文字逐字比對，不一致就停下。所以轉換只改換行與結構，不會改到條文。比對不含上面拿掉的行：第一行、只有數字的行（頁碼），以及 `dropFrom` 之後的內容。
 
 `title`、`description` 寫在 script 的 `DOCS`。`effectiveDate` 取 PDF 裡寫的修訂日；PDF 沒寫日期時在 `DOCS` 指定，並用 `dateNote` 寫出來源（目前只有資訊安全政策，取 PDF 的修改時間）。
 

@@ -97,7 +97,7 @@ According to Article 3 of the Personal Data Protection Act of the Republic of Ch
 
 - 請求停止蒐集、處理或利用您的個人資料。
 
-Request to discontinue collection, processing, or use of your personal data.
+  Request to discontinue collection, processing, or use of your personal data.
 
 - 請求刪除您的個人資料。
 

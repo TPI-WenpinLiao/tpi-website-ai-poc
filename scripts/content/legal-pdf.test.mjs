@@ -31,6 +31,11 @@ test('list items keep their translation and wrapped lines', () => {
   assert.equal(md, '- 查詢您的個人資料。\n\n  Inquire about your personal data.\n\n- ○六三 非公務機關之蒐集 Collection, processing, and use of personal data\n');
 });
 
+test('a page break between a list item and its translation keeps the translation in the item', () => {
+  const md = convert('標題\n l 請求停止利用您的個人資料。\n\f\n   Request to discontinue use of your personal data.\n l 請求刪除。\n   Request deletion.\n');
+  assert.equal(md, '- 請求停止利用您的個人資料。\n\n  Request to discontinue use of your personal data.\n\n- 請求刪除。\n\n  Request deletion.\n');
+});
+
 test('a page break inside a sentence does not split the paragraph', () => {
   assert.equal(convert('標題\nno Content may be publicly\n\nrecited in any way.\n'), 'no Content may be publicly recited in any way.\n');
 });
