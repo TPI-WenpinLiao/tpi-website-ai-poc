@@ -24,8 +24,8 @@
 | [`offering`](#offering產品解決方案服務) | `offering` | 32 個 `offering` 節點 | 102 | 產品 `SoftwareApplication`；解決方案與服務 `Service` |
 | [`hub`](#hub產品家族產業方案服務總覽) | `hub` | 11 個 `hub` 節點 | 22 | `CollectionPage` |
 | [`case-study`](#case-study成功案例) | `case-study` | `case-study` | 0 | `Article` |
-| [`blog`](#blog部落格文章) | `article` | `blog-post` | 472 | `BlogPosting` |
-| [`news`](#news新聞) | `article` | `news-article` | 150 | `NewsArticle` |
+| [`blog`](#blog部落格文章) | `article` | `blog-post` | 60 | `BlogPosting` |
+| [`news`](#news新聞) | `article` | `news-article` | 28 | `NewsArticle` |
 | [`page`](#page公司頁與法務頁) | `content`、`contact` | `about`、`partners`、`contact`、法務 4 頁 | 17 | `AboutPage`、`ContactPage`、`WebPage` |
 | [`person`](#personesg-顧問) | `person` | `esg-advisor` | 25 | `ProfilePage` + `Person` |
 | [`whitepaper`](#whitepaper白皮書) | `gated-download` | 4 個 `whitepaper-*` 節點 | 9 | `WebPage` + `DigitalDocument` |
