@@ -2,7 +2,7 @@
 // (design-system skill「展示頁」). Their URLs are locale-neutral paths and everything under them.
 import { stripLocale } from '../i18n/paths.ts';
 
-export const INTERNAL_PATHS = ['/design-system', '/wireframes', '/prototypes'] as const;
+export const INTERNAL_PATHS = ['/design-system', '/wireframes', '/prototypes', '/templates'] as const;
 
 export function isInternal(path: string): boolean {
   const neutral = stripLocale(path);

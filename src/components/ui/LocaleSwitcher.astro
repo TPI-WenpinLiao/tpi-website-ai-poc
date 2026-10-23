@@ -4,16 +4,15 @@
 // without a built home are left out, and nothing renders while only the current locale is left.
 // Each name is written in its own language with a matching lang. Placement and the dropdown in the
 // header are M4-04's.
-// Pages built through a dynamic route pass the URL paths of their other locale versions as
-// `translations`. `links` replaces the computed entries (the /design-system page only), and
+// `links` is the page's locale versions (pageLocales() in src/lib/i18n/routes.ts; pages with
+// `translations` pass the list PageLayout computed); the /design-system page passes demo entries, and
 // data-preview-state on a link draws the hover or focus state statically there.
-import { localeLinks, type LocaleLink } from '../../lib/i18n/alternates';
+import type { LocaleLink } from '../../lib/i18n/alternates';
 import { LOCALE_NAMES, type Locale } from '../../lib/i18n/locales';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
-import { staticRoutes } from '../../lib/i18n/routes';
+import { pageLocales } from '../../lib/i18n/routes';
 
 interface Props {
-  translations?: readonly string[];
   // Overrides the localized landmark name; each switcher on a page needs a unique one (html-validate
   // unique-landmark counts inert copies too)
   label?: string;
@@ -24,8 +23,7 @@ interface Props {
 const LABELS: Record<Locale, string> = { 'zh-TW': '語言', en: 'Language', vi: 'Ngôn ngữ' };
 
 const path = normalizePath(Astro.url.pathname);
-const { translations = [], label, links = localeLinks({ path, routes: new Set([...staticRoutes, ...translations.map(normalizePath)]) }) } =
-  Astro.props;
+const { label, links = pageLocales(path) } = Astro.props;
 ---
 
 {

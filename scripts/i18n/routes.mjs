@@ -1,23 +1,37 @@
 // Checks every built page (dist/**/*.html) against the locale rules in ADR 0002: <html lang>
 // matches the URL prefix, so an en or vi URL never serves a zh-TW fallback page, and every locale
-// switcher link points at a page that was built, in the language it claims.
+// switcher link points at a page that was built, in the language it claims, and every other
+// site-internal link stays in the page's locale (navigation, breadcrumbs: no /about on an /en page).
+// Language links (the switcher's, and others carrying hreflang) and the external sub-sites in docs/ia/nodes.csv (kind
+// external, e.g. /tpu) are not locale pages.
 // Run after `astro build`: node scripts/i18n/routes.mjs [dist]
 
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'node-html-parser';
+import { parseCsv } from '../inventory/csv.mjs';
 import { localeFromPath, normalizePath } from '../../src/lib/i18n/paths.ts';
 
 /** URL path of a dist file: index.html → /, en.html → /en. @param {string} file */
 export const urlPath = (file) => normalizePath(`/${file.split('\\').join('/')}`);
 
+/** Paths of the external nodes in docs/ia/nodes.csv, which have no locale versions */
+export function externalPaths(csv = readFileSync(resolve(import.meta.dirname, '../../docs/ia/nodes.csv'), 'utf8')) {
+  return new Set(
+    parseCsv(csv.replace(/^\uFEFF/, ''))
+      .filter((/** @type {Record<string, string>} */ n) => n.kind === 'external')
+      .map((/** @type {Record<string, string>} */ n) => n.path),
+  );
+}
+
 /**
  * Locale problems across built pages, keyed by URL path.
  * @param {Map<string, string>} pages URL path → HTML
+ * @param {ReadonlySet<string>} [external] locale-neutral paths (externalPaths())
  * @returns {string[]}
  */
-export function routeProblems(pages) {
+export function routeProblems(pages, external = new Set()) {
   const problems = [];
   for (const [path, html] of pages) {
     const root = parse(html);
@@ -31,6 +45,11 @@ export function routeProblems(pages) {
       const linkLang = a.getAttribute('lang');
       if (linkLang !== localeFromPath(href)) problems.push(`${path}: locale switcher link ${href} has lang="${linkLang ?? ''}"`);
     }
+    for (const a of root.querySelectorAll('a[href^="/"]:not([hreflang])')) {
+      const href = (a.getAttribute('href') ?? '').split(/[?#]/)[0];
+      if (href.startsWith('//') || external.has(normalizePath(href)) || a.closest('nav.locale-switcher')) continue;
+      if (localeFromPath(href) !== expected) problems.push(`${path}: links to ${href}, outside its locale ${expected}`);
+    }
   }
   return problems;
 }
@@ -43,7 +62,7 @@ function main([dist = resolve(import.meta.dirname, '../../dist')]) {
       .filter((f) => f.endsWith('.html'))
       .map((f) => [urlPath(f), readFileSync(join(dist, f), 'utf8')]),
   );
-  const problems = routeProblems(pages);
+  const problems = routeProblems(pages, externalPaths());
   for (const p of problems) console.log(p);
   console.log(`${pages.size} pages checked, ${problems.length} locale problems`);
   if (problems.length) process.exitCode = 1;

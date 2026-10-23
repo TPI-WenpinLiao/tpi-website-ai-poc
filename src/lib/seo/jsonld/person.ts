@@ -31,5 +31,5 @@ export function personJsonLd({ person, org, site, url, inLanguage, trail, imageU
         : {}),
     },
   };
-  return graph(profile, breadcrumbList(trail, site));
+  return graph(profile, breadcrumbList(trail, site, inLanguage));
 }

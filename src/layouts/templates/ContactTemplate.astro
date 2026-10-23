@@ -1,0 +1,176 @@
+---
+// contact template (M4-04, #23): 聯絡我們, the site's main conversion page. Structure follows
+// /wireframes/contact: title block, then the form beside the offices (form first on narrow
+// screens). Fields are the current site's contact form (docs/research/features.md「聯絡我們」);
+// the 諮詢產品 options are the products in the header, in its order. Offices come from the
+// organization data file. Sending, spam protection and the endpoint are M6-01's: no action yet.
+import { getEntry } from 'astro:content';
+import PageLayout from '../PageLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import Surface from '../../components/ui/Surface.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import Button from '../../components/ui/Button.astro';
+import FormField from '../../components/ui/FormField.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import { localizedNav, node } from '../../lib/ia/navigation';
+import type { Locale } from '../../lib/i18n/locales';
+import { contactCta } from '../../data/home';
+import { pageDescription, strings } from '../../data/strings';
+
+interface Props {
+  locale: Locale;
+  translations?: readonly string[];
+}
+
+const { locale, translations } = Astro.props;
+const t = strings(locale);
+const f = t.form;
+const self = node('contact');
+// The header's 產品 menu (the one holding the products overview): families and their products
+const productMenu = localizedNav('header', locale).find((item) => item.children.some((c) => c.key === 'products'));
+const products = (productMenu?.children ?? []).flatMap((family) => family.children.map((p) => ({ value: p.key, label: p.label })));
+const org = await getEntry('organization', locale);
+if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
+---
+
+<PageLayout title={self.title} description={pageDescription(locale, 'contact')} translations={translations}>
+  <PageHero eyebrow="Contact" title={self.title} description={contactCta.description.text}>
+    <Breadcrumb slot="breadcrumb" node="contact" />
+  </PageHero>
+
+  <Surface tone="light">
+    <div class="split">
+      <form class="form" aria-labelledby="form-title">
+        <h2 id="form-title" class="form-title">{t.contact.request}</h2>
+        <div class="fields">
+          <FormField kind="text" id="name" name="name" label={f.name} autocomplete="name" required />
+          <FormField kind="tel" id="phone" name="phone" label={f.phone} autocomplete="tel" required />
+          <FormField kind="email" id="email" name="email" label={f.email} autocomplete="email" required />
+          <FormField kind="text" id="company" name="company" label={f.company} autocomplete="organization" required />
+        </div>
+        <fieldset class="choices">
+          <legend>{t.contact.offerings}</legend>
+          <div class="options">
+            {products.map((p) => <FormField kind="checkbox" id={`offering-${p.value}`} name="offerings[]" label={p.label} />)}
+          </div>
+        </fieldset>
+        <FormField kind="text" id="subject" name="subject" label={t.contact.subject} required />
+        <FormField kind="textarea" id="message" name="message" label={t.contact.message} rows={5} />
+        <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required />
+        <Button type="submit" size="lg">{t.contact.submit}</Button>
+      </form>
+
+      <section class="offices">
+        <SectionHeading level={2} eyebrow="Offices" title={t.contact.offices} />
+        <ul>
+          {
+            org.data.offices.map((o) => (
+              <li class="office">
+                <h3>{o.name}</h3>
+                <p>{o.address}</p>
+                {o.phone && (
+                  <p>
+                    <a href={`tel:${o.phone.replaceAll(' ', '')}`}>{o.phone.replaceAll(' ', ' ')}</a>
+                  </p>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </Surface>
+</PageLayout>
+
+<style>
+  @import '../../styles/media.css';
+
+  .split {
+    display: grid;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-8);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-subtle);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .form-title {
+    margin: 0;
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-snug);
+  }
+
+  .fields {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .choices {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    margin-block-end: var(--space-3);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .options {
+    display: grid;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  .offices ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin: var(--space-8) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .office {
+    padding: var(--space-6);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .office h3 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--font-size-h4);
+  }
+
+  .office p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .office a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    color: var(--color-link);
+  }
+
+  @media (--bp-sm-up) {
+    .fields,
+    .options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .split {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    }
+  }
+</style>

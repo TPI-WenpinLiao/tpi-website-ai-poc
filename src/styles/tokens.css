@@ -235,6 +235,8 @@
   /* Layout */
   --content-max-width: 72rem;
   --reading-max-width: 46rem;
+  /* Person photo on the person template; 20rem in its sizes attribute */
+  --portrait-max-width: 20rem;
   --touch-target: 2.75rem;
   --progress-height: 3px;
   --header-height: 4rem;

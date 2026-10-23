@@ -1,0 +1,8 @@
+---
+// 404 page (utility template). Astro serves it for every unknown URL, so it is zh-TW, the default
+// locale; it stays out of the sitemap (src/lib/seo/indexing.ts).
+import UtilityTemplate from '../layouts/templates/UtilityTemplate.astro';
+import { DEFAULT_LOCALE } from '../lib/i18n/locales';
+---
+
+<UtilityTemplate kind="not-found" locale={DEFAULT_LOCALE} />

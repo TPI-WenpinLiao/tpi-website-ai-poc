@@ -6,18 +6,21 @@
 // without client JS. A small script closes the open menu on a click outside it, and on Esc (focus
 // goes back to its summary). The rest of the keyboard model is M4-04's; the search box is M6's and
 // links to its page for now.
-// The language menu lists the same entries as LocaleSwitcher (localeLinks, ADR 0002): locales
-// without a built page or home are left out, so it doesn't render while zh-TW is the only one.
+// The language menu lists the page's locale versions (`locales`, from PageLayout; pageLocales()
+// for a static page), the same entries as LocaleSwitcher and hreflang (ADR 0002): locales without
+// a built page or home are left out, so it doesn't render while zh-TW is the only one. Every other
+// link goes to the page in the current locale.
 // Below 64rem the menu collapses behind one 選單 disclosure that lists every group.
 // The first focusable element is the 跳到主要內容 link to `skipTo` (the page's <main id>); pages
 // showing more than one header, like /design-system, pass skipTo={false} on the extra ones.
 // While the 選單 sheet is open the page behind it does not scroll (CSS :has, no client JS).
 // `open` draws one menu open (a first-level label, or 'mobile'), for the /design-system page only.
-import { header, node, type NavItem } from '../../lib/ia/navigation';
-import { localeLinks } from '../../lib/i18n/alternates';
+import { localizedNav, node, nodeHref, type NavItem } from '../../lib/ia/navigation';
+import type { LocaleLink } from '../../lib/i18n/alternates';
 import { LOCALE_NAMES } from '../../lib/i18n/locales';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
-import { staticRoutes } from '../../lib/i18n/routes';
+import { pageLocales } from '../../lib/i18n/routes';
+import { strings } from '../../data/strings';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
 import logo from '../../assets/brand/logo-symbol-white.png';
@@ -28,19 +31,20 @@ interface Props {
   // Fragment of the page's main content, or false for no skip link
   skipTo?: `#${string}` | false;
   open?: string;
+  locales?: readonly LocaleLink[];
 }
 
-const { navLabel = '主選單', skipTo = '#main', open } = Astro.props;
+const path = normalizePath(Astro.url.pathname);
+const currentLocale = localeFromPath(path);
+const t = strings(currentLocale);
+const { navLabel = t.mainNav, skipTo = '#main', open, locales = pageLocales(path) } = Astro.props;
 // Rendered height in px; matches --logo-height (2rem) so the 1x/2x files fit the box
 const LOGO_HEIGHT = 32;
 // One exclusive group per header; /design-system shows several headers, each with its own navLabel
 const menuGroup = `site-menu-${navLabel}`;
-const home = node('home');
+const header = localizedNav('header', currentLocale);
 const contact = node('contact');
 const search = node('search');
-const path = normalizePath(Astro.url.pathname);
-const locales = localeLinks({ path, routes: staticRoutes });
-const currentLocale = localeFromPath(path);
 // The 產品 menu is the mega menu: its overview link on top, then one column per family with its
 // products below the family link
 const groups = (item: NavItem) => item.children.filter((c) => c.children.length > 0);
@@ -48,10 +52,10 @@ const isMega = (item: NavItem) => groups(item).length > 0;
 ---
 
 <header class="site-header" data-surface="dark">
-  {skipTo && <a class="skip" href={skipTo}>跳到主要內容</a>}
+  {skipTo && <a class="skip" href={skipTo}>{t.skipToMain}</a>}
   <div class="bar">
-    <a class="brand" href={home.path}>
-      <Image class="logo" src={logo} alt="TPIsoftware 昕力資訊（回首頁）" height={LOGO_HEIGHT} densities={[1, 2]} loading="eager" />
+    <a class="brand" href={nodeHref('home', currentLocale)}>
+      <Image class="logo" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} densities={[1, 2]} loading="eager" />
     </a>
 
     <nav class="desktop-nav" aria-label={navLabel}>
@@ -103,7 +107,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                         <li>
                           <a class="menu-link" href={c.href}>
                             {c.label}
-                            {c.external && <span class="sr-only">（獨立網站）</span>}
+                            {c.external && <span class="sr-only">{t.externalSite}</span>}
                           </a>
                         </li>
                       ))}
@@ -118,7 +122,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     </nav>
 
     <div class="tools">
-      <a class="icon" href={search.path}>
+      <a class="icon" href={nodeHref('search', currentLocale)}>
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6"></circle><path d="m15 15 5 5"></path></svg>
         <span class="sr-only">{search.title}</span>
       </a>
@@ -130,7 +134,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                 <circle cx="12" cy="12" r="8.5" />
                 <path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17M12 3.5c-2.5 2.6-2.5 14.4 0 17" />
               </svg>
-              <span class="sr-only">語言：</span>
+              <span class="sr-only">{t.languagePrefix}</span>
               {LOCALE_NAMES[currentLocale]}
             </summary>
             <ul class="menu">
@@ -146,14 +150,14 @@ const isMega = (item: NavItem) => groups(item).length > 0;
         )
       }
       <div class="cta">
-        <Button href={contact.path} size="sm">{contact.title}</Button>
+        <Button href={nodeHref('contact', currentLocale)} size="sm">{contact.title}</Button>
       </div>
       <details class="mobile" name={menuGroup} open={open === 'mobile'}>
         <summary class="icon">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
-          <span class="sr-only">選單</span>
+          <span class="sr-only">{t.menu}</span>
         </summary>
-        <nav class="sheet" aria-label={`${navLabel}（行動版）`}>
+        <nav class="sheet" aria-label={`${navLabel}${t.mobileNavSuffix}`}>
           {
             header.map((item) => (
               <div>
@@ -163,7 +167,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                     <li>
                       <a class="menu-link" href={c.href}>
                         {c.label}
-                        {c.external && <span class="sr-only">（獨立網站）</span>}
+                        {c.external && <span class="sr-only">{t.externalSite}</span>}
                       </a>
                     </li>
                   ))}
@@ -174,7 +178,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
           {
             locales.length > 1 && (
               <div>
-                <p class="sheet-title">語言</p>
+                <p class="sheet-title">{t.language}</p>
                 <ul>
                   {locales.map((l) => (
                     <li>
@@ -187,7 +191,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
               </div>
             )
           }
-          <Button href={contact.path}>{contact.title}</Button>
+          <Button href={nodeHref('contact', currentLocale)}>{contact.title}</Button>
         </nav>
       </details>
     </div>

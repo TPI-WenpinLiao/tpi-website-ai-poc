@@ -1,0 +1,117 @@
+---
+// utility template (M4-04, #23): search, newsletter sign-up and result, thank-you, 404 and the
+// download page of an offering, one column on the light surface. Structure follows
+// /wireframes/utility. Copy is in src/data/strings; the behavior is M6's (search with Pagefind,
+// the sign-up form's provider, what a thank-you page offers), so forms have no action yet.
+// The 404 page is the only one not in the sitemap (src/lib/seo/indexing.ts).
+import type { CollectionEntry } from 'astro:content';
+import PageLayout from '../PageLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import Surface from '../../components/ui/Surface.astro';
+import Card from '../../components/ui/Card.astro';
+import CardGrid from '../../components/ui/CardGrid.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import Button from '../../components/ui/Button.astro';
+import FormField from '../../components/ui/FormField.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import { localeHref, node, nodeHref } from '../../lib/ia/navigation';
+import { entryLocale } from '../../lib/content/entries';
+import type { Locale } from '../../lib/i18n/locales';
+import { pageDescription, strings } from '../../data/strings';
+
+type Props = (
+  | { kind: 'search' | 'subscribe' | 'subscribe-result' | 'thanks' | 'not-found'; locale: Locale }
+  | { kind: 'download'; offering: CollectionEntry<'offering'> }
+) & { translations?: readonly string[] };
+
+const props = Astro.props;
+const locale = props.kind === 'download' ? entryLocale(props.offering.id) : props.locale;
+const t = strings(locale);
+const u = t.utility;
+const href = localeHref(locale);
+const id = props.kind;
+const self = node(id);
+const title = props.kind === 'not-found' ? u.notFound : props.kind === 'download' ? `${props.offering.data.title}｜${self.title}` : self.title;
+const description = pageDescription(locale, id);
+// Ways onward from a dead end or a finished task (wireframe: 常用入口, 推薦內容)
+const onward = (props.kind === 'not-found' ? ['products', 'industries', 'services', 'contact'] : ['products', 'success-stories', 'blog']).map(node);
+const searchHref = nodeHref('search', locale);
+---
+
+<PageLayout title={title} description={description} translations={props.translations}>
+  <PageHero tone="light" size="compact" title={title} description={description}>
+    {props.kind !== 'not-found' && <Breadcrumb slot="breadcrumb" node={id} current={props.kind === 'download' ? props.offering.data.title : undefined} />}
+  </PageHero>
+
+  <Surface tone="light" width="reading">
+    {
+      (props.kind === 'search' || props.kind === 'not-found') && (
+        <form class="search" role="search" action={searchHref}>
+          <FormField kind="text" id="q" name="q" label={u.searchLabel} />
+          <Button type="submit">{u.searchSubmit}</Button>
+        </form>
+      )
+    }
+    {props.kind === 'search' && <EmptyState title={u.searchPending} level={2} />}
+    {
+      props.kind === 'subscribe' && (
+        <form class="stack">
+          <FormField kind="email" id="email" name="email" label={t.form.email} autocomplete="email" required />
+          <FormField kind="checkbox" id="consent" name="consent" label={t.form.consent} required />
+          <Button type="submit" size="lg">{u.subscribeSubmit}</Button>
+        </form>
+      )
+    }
+    {
+      props.kind === 'download' && (
+        <section>
+          <SectionHeading eyebrow="Downloads" title={u.downloads} />
+          <CardGrid cols={1}>
+            {(props.offering.data.downloads ?? []).map((d) => (
+              <li>
+                <Card title={d.label} href={d.file} size="sm" />
+              </li>
+            ))}
+          </CardGrid>
+        </section>
+      )
+    }
+    {
+      (props.kind === 'thanks' || props.kind === 'subscribe-result' || props.kind === 'not-found') && (
+        <section>
+          <SectionHeading eyebrow="Next" title={props.kind === 'not-found' ? u.commonLinks : u.recommended} />
+          <CardGrid cols={2}>
+            {onward.map((n) => (
+              <li>
+                <Card title={n.title} href={href(n)} size="sm" />
+              </li>
+            ))}
+          </CardGrid>
+        </section>
+      )
+    }
+  </Surface>
+</PageLayout>
+
+<style>
+  @import '../../styles/media.css';
+
+  .search {
+    display: grid;
+    gap: var(--space-4);
+    align-items: end;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  @media (--bp-sm-up) {
+    .search {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+  }
+</style>

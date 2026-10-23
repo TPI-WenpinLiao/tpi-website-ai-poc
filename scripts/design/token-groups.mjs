@@ -107,7 +107,7 @@ export const GROUPS = [
     title: '版面數值',
     layer: 'scale',
     kind: 'value',
-    patterns: ['--content-max-width', '--reading-max-width', '--hero-', '--backdrop-soft-opacity', '--z-', '--icon-stroke'],
+    patterns: ['--content-max-width', '--reading-max-width', '--portrait-max-width', '--hero-', '--backdrop-soft-opacity', '--z-', '--icon-stroke'],
   },
 ];
 

@@ -4,7 +4,8 @@
 // Breakpoints come from src/styles/media.css, so a literal in @media is caught by the same rule.
 // Also fails when var(--x) names a custom property that neither tokens.css nor the same file
 // declares, so a renamed or removed token can't silently fall back to nothing.
-// Scope: FILES below. Wireframe pages (M3-01) are out of scope; they are removed after M4-04.
+// Scope: every .astro file under DIRS, so new pages and templates are checked without listing them.
+// The M3-01 wireframe files (WIREFRAME) are out of scope; they are removed after M4-04.
 // Run: node scripts/design/token-usage.mjs
 
 import { readFileSync, readdirSync } from 'node:fs';
@@ -12,8 +13,8 @@ import { join, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const ROOT = resolve(import.meta.dirname, '../..');
-const DIRS = ['src/components/ui', 'src/pages/design-system', 'src/pages/products'];
-const FILES = ['src/layouts/BaseLayout.astro', 'src/pages/index.astro'];
+const DIRS = ['src/components/ui', 'src/layouts', 'src/pages'];
+const WIREFRAME = ['src/pages/wireframes/', 'src/layouts/WfLayout.astro'];
 const TOKENS = 'src/styles/tokens.css';
 
 const RULES = [
@@ -52,12 +53,12 @@ export function findViolations(source, tokens = new Set()) {
 }
 
 function astroFiles() {
-  const fromDirs = DIRS.flatMap((dir) =>
+  return DIRS.flatMap((dir) =>
     readdirSync(join(ROOT, dir), { recursive: true })
       .filter((f) => String(f).endsWith('.astro'))
-      .map((f) => join(dir, String(f))),
+      .map((f) => join(dir, String(f)).split('\\').join('/'))
+      .filter((f) => !WIREFRAME.some((w) => f.startsWith(w))),
   );
-  return [...fromDirs, ...FILES];
 }
 
 function main() {

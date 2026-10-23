@@ -1,0 +1,89 @@
+---
+// Index of the template previews (M4-04, #23): every template in templates.csv with its purpose,
+// its preview with sample data, the approved M3-01 wireframe to compare with, and the
+// number of page nodes that use it. Internal page (src/lib/seo/indexing.ts). [template].astro
+// builds a preview for every template, so a new one in templates.csv shows up here.
+import PageLayout from '../../layouts/PageLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import Surface from '../../components/ui/Surface.astro';
+import { templates } from '../../lib/ia/templates';
+import { nodes } from '../../lib/ia/nodes';
+
+// Page nodes (not collection patterns) using each template
+const built = (id: string) => nodes.filter((n) => n.template === id && n.kind === 'page').length;
+---
+
+<PageLayout title="模板索引" description="M4-04 各模板 layout 的預覽索引：每個模板的範例頁、M3-01 wireframe 與節點數。">
+  <PageHero tone="light" size="compact" title="模板索引" description="每個模板用範例資料渲染一頁，對照 M3-01 核准的 wireframe 看。桌機看 1280px，行動版看 375px。" />
+  <Surface tone="light">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">模板</th>
+            <th scope="col">用途</th>
+            <th scope="col">預覽</th>
+            <th scope="col">wireframe</th>
+            <th scope="col">nodes.csv 頁面節點</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            templates.map((t) => (
+              <tr>
+                <th scope="row">
+                  <code>{t.id}</code>
+                </th>
+                <td>{t.purpose}</td>
+                <td>{t.id === 'home' ? <a href="/">首頁</a> : <a href={`/templates/${t.id}`}>範例頁</a>}</td>
+                <td>
+                  <a href={`/wireframes/${t.id}`}>wireframe</a>
+                </td>
+                <td>{built(t.id)}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      其他實際頁面：<a href="/products/digirunner">digiRunner</a>、<a href="/about-us">關於我們</a>、<a
+        href="/blog/customer-complaint-ai-tool-selection-guide">blog 文章</a
+      >、<a href="/media-center/585">新聞</a>、<a href="/blog">部落格</a>、<a href="/media-center">媒體中心</a>、<a href="/events">活動（空狀態）</a>、<a
+        href="/contact-us">聯絡我們</a
+      >、<a href="/search">搜尋</a>、<a href="/subscribe">電子報訂閱</a>、<a href="/thanks">感謝頁</a>、<a href="/404">404</a>。
+    </p>
+  </Surface>
+</PageLayout>
+
+<style>
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  :is(th, td) {
+    padding: var(--space-3) var(--space-4);
+    border-block-end: var(--border-width) solid var(--color-border);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+  }
+
+  a {
+    color: var(--color-link);
+  }
+
+  .note {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+</style>

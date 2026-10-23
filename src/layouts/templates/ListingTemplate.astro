@@ -1,0 +1,117 @@
+---
+// listing template (M4-04, #23): the blog and its categories, 媒體中心, 活動 and 成功案例, one page
+// of a listing node. Structure follows /wireframes/listing: title block, the featured post (blog,
+// first page), filters, the card grid and the page links (ADR 0002「列表分頁」). A light reading
+// surface like the article pages it leads to.
+// Blog categories are pages of their own, so their filter is a row of links; news types and
+// industries are labels until the in-page filter exists (M6). An empty listing shows EmptyState.
+import PageLayout from '../PageLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import Surface from '../../components/ui/Surface.astro';
+import Card from '../../components/ui/Card.astro';
+import CardGrid from '../../components/ui/CardGrid.astro';
+import Reveal from '../../components/ui/Reveal.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import FilterBar from '../../components/ui/FilterBar.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import Button from '../../components/ui/Button.astro';
+import { children, localeHref, node, nodeHref } from '../../lib/ia/navigation';
+import { pagePath } from '../../lib/content/entries';
+import type { EntryCard } from '../../lib/content/cards';
+import type { Locale } from '../../lib/i18n/locales';
+import { pageDescription, strings } from '../../data/strings';
+
+interface Props {
+  id: string;
+  locale: Locale;
+  items: EntryCard[];
+  featured?: EntryCard | undefined;
+  page: number;
+  pages: number;
+  translations?: readonly string[];
+}
+
+const { id, locale, items, featured, page, pages, translations } = Astro.props;
+const t = strings(locale);
+const href = localeHref(locale);
+const self = node(id);
+const listPath = nodeHref(id, locale);
+
+// Filters: the blog's categories link to their pages; other listings show their types as labels
+const blog = node('blog');
+const isBlog = id === 'blog' || self.parent === 'blog';
+const filters = isBlog
+  ? [blog, ...children('blog').filter((c) => c.template === 'listing')].map((c) => ({
+      label: c.id === 'blog' ? t.listing.all : c.title,
+      href: href(c),
+      current: c.id === id,
+    }))
+  : id === 'media-center'
+    ? Object.values(t.newsTypes).map((label) => ({ label }))
+    : id === 'success-stories'
+      ? ['industry-finance', 'industry-government', 'industry-manufacturing'].map((n) => ({ label: node(n).title }))
+      : [];
+const title = page > 1 ? `${self.title}${t.listing.pageSuffix(page)}` : self.title;
+const description = pageDescription(locale, id);
+const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
+---
+
+<PageLayout title={title} description={page > 1 ? `${description}${t.listing.pageSuffix(page)}` : description} translations={translations}>
+  <PageHero tone="light" size="compact" title={self.title} description={description}>
+    <Breadcrumb slot="breadcrumb" node={id} />
+  </PageHero>
+
+  <Surface tone="light">
+    {
+      featured && (
+        <article class="featured" aria-labelledby="featured-title">
+          <h2 id="featured-title" class="sr-only">
+            {t.listing.featured}
+          </h2>
+          <Card level={3} title={featured.title} href={featured.href} eyebrow={featured.eyebrow} description={featured.description} image={featured.image}>
+            {featured.date && (
+              <time slot="meta" datetime={featured.date}>
+                {featured.date.replaceAll('-', '/')}
+              </time>
+            )}
+          </Card>
+        </article>
+      )
+    }
+    {filters.length > 0 && <FilterBar label={t.listing.filter} items={filters} />}
+    {
+      items.length > 0 ? (
+        <CardGrid>
+          {items.map((p, i) => (
+            <li>
+              <Reveal delay={stagger(i)}>
+                <Card level={2} title={p.title} href={p.href} eyebrow={p.eyebrow} description={p.description} image={p.image}>
+                  {p.date && (
+                    <time slot="meta" datetime={p.date}>
+                      {p.date.replaceAll('-', '/')}
+                    </time>
+                  )}
+                </Card>
+              </Reveal>
+            </li>
+          ))}
+        </CardGrid>
+      ) : (
+        <EmptyState title={t.listing.empty} description={t.listing.emptyText}>
+          <Button slot="action" href={nodeHref('resources', locale)} variant="secondary">
+            {node('resources').title}
+          </Button>
+        </EmptyState>
+      )
+    }
+    <Pagination
+      current={page}
+      total={pages}
+      hrefFor={(n) => pagePath(listPath, n)}
+      label={t.listing.pagination}
+      previous={t.listing.previous}
+      next={t.listing.next}
+    />
+  </Surface>
+</PageLayout>

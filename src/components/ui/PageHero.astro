@@ -9,6 +9,8 @@
 // and to the lower half on narrow screens, where the scrim is. On narrow screens the hero runs
 // breadcrumb row → visual area → copy; the visual area is an empty element marked
 // data-hero-visual, which the 3D runtime measures to frame the scene (ADR 0003).
+// size="compact" is the reading pages' title block (article, content): the h1 at --font-size-h2,
+// so long article titles stay a few lines, and little space before the page's first section.
 // Headings break Chinese only at spaces and punctuation (BaseLayout). A title with neither, such as
 // 以頂尖科技為企業賦能, marks where it may break with U+200B (zero-width space): '以頂尖科技\u200b為企業賦能'.
 import Surface from './Surface.astro';
@@ -18,9 +20,10 @@ interface Props {
   eyebrow?: string;
   description?: string;
   tone?: 'light' | 'dark';
+  size?: 'display' | 'compact';
 }
 
-const { title, eyebrow, description, tone = 'dark' } = Astro.props;
+const { title, eyebrow, description, tone = 'dark', size = 'display' } = Astro.props;
 const hasVisual = Astro.slots.has('visual');
 const hasBackdrop = Astro.slots.has('backdrop');
 const hasCrumbs = Astro.slots.has('breadcrumb');
@@ -36,7 +39,7 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
       </Fragment>
     )
   }
-  <div class:list={['hero-body', { 'has-backdrop': hasBackdrop, 'has-crumbs': hasCrumbs }]}>
+  <div class:list={['hero-body', { 'size-compact': size === 'compact', 'has-backdrop': hasBackdrop, 'has-crumbs': hasCrumbs }]}>
     {
       hasCrumbs && (
         <div class="crumbs">
@@ -127,6 +130,23 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
     flex-wrap: wrap;
     gap: var(--space-3);
     margin-block-start: var(--space-2);
+  }
+
+  .size-compact h1 {
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  /* A compact hero's description can be a long summary: it breaks like body text, not as a phrase */
+  .size-compact .description {
+    font-size: var(--font-size-lg);
+    word-break: normal;
+  }
+
+  /* The next section's own top padding is the space below a compact title block */
+  .size-compact {
+    margin-block-end: calc(var(--space-8) - var(--space-section));
   }
 
   /* The breadcrumb row sits --space-6 below the hero's top edge instead of the section padding */

@@ -1,0 +1,44 @@
+---
+// List of cards (Card) under a section heading: one column on phones, two from --bp-sm-up and
+// `cols` from --bp-lg-up. Cards in a row share the tallest one's height, also through a Reveal
+// wrapper. Put each card in its own <li>.
+interface Props {
+  cols?: 1 | 2 | 3;
+}
+
+const { cols = 3 } = Astro.props;
+---
+
+<ul class="card-grid" data-cols={cols}>
+  <slot />
+</ul>
+
+<style>
+  @import '../../styles/media.css';
+
+  .card-grid {
+    display: grid;
+    gap: var(--space-6);
+    margin: var(--space-10) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card-grid > :global(li),
+  .card-grid > :global(li > *),
+  .card-grid :global(.card) {
+    block-size: 100%;
+  }
+
+  @media (--bp-sm-up) {
+    .card-grid:not([data-cols='1']) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .card-grid[data-cols='3'] {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

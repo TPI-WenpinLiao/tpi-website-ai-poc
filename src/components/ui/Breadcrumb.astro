@@ -2,24 +2,31 @@
 // Breadcrumb trail from home to a nodes.csv node, derived from the node's parents (group nodes are
 // skipped; docs/ia/navigation.md「SEO」). The last item is the current page, not a link; below
 // --bp-lg-up it is only read out, since the page's h1 follows. Goes in PageHero's `breadcrumb`
-// slot. The BreadcrumbList JSON-LD comes from the same trail (M4-03).
-import { breadcrumb } from '../../lib/ia/navigation';
+// slot. The BreadcrumbList JSON-LD comes from the same trail (M4-03). Links go to the pages in the
+// current page's locale (ADR 0002).
+import { breadcrumb, localeHref } from '../../lib/ia/navigation';
+import { localeFromPath } from '../../lib/i18n/paths';
+import { strings } from '../../data/strings';
 
 interface Props {
   node: string;
+  // The page's own title in place of the node's, for collection entries (a blog post under blog-post)
+  current?: string;
   // Landmark name; only pages with more than one breadcrumb (/design-system) need another
   label?: string;
 }
 
-const { node, label = '麵包屑' } = Astro.props;
-const trail = breadcrumb(node);
+const locale = localeFromPath(Astro.url.pathname);
+const { node, current, label = strings(locale).breadcrumb } = Astro.props;
+const trail = breadcrumb(node).map((n, i, all) => (current && i === all.length - 1 ? { ...n, title: current } : n));
+const href = localeHref(locale);
 ---
 
 <nav class="breadcrumb" aria-label={label}>
   <ol>
     {
       trail.map((n, i) => (
-        <li class="text-phrase">{i < trail.length - 1 ? <a href={n.path}>{n.title}</a> : <span aria-current="page">{n.title}</span>}</li>
+        <li class="text-phrase">{i < trail.length - 1 ? <a href={href(n)}>{n.title}</a> : <span aria-current="page">{n.title}</span>}</li>
       ))
     }
   </ol>

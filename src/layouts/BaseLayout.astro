@@ -3,11 +3,15 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/tokens.css';
 import Seo, { type Props as SeoProps } from '../components/seo/Seo.astro';
+import type { LocaleLink } from '../lib/i18n/alternates';
 import { localeFromPath, normalizePath } from '../lib/i18n/paths';
+import { pageLocales } from '../lib/i18n/routes';
 
-// Every SEO prop goes to Seo (src/components/seo/Seo.astro)
-type Props = SeoProps;
+// Every SEO prop goes to Seo (src/components/seo/Seo.astro). `locales` defaults to the static
+// page's own; PageLayout passes the list it also hands the header, for pages with `translations`
+type Props = Omit<SeoProps, 'locales'> & { locales?: readonly LocaleLink[] };
 
+const { locales = pageLocales(Astro.url.pathname), ...seo } = Astro.props;
 const lang = localeFromPath(normalizePath(Astro.url.pathname));
 ---
 
@@ -16,7 +20,7 @@ const lang = localeFromPath(normalizePath(Astro.url.pathname));
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <Seo {...Astro.props} />
+    <Seo {...seo} locales={locales} />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   </head>
