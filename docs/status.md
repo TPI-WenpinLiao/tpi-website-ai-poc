@@ -108,7 +108,7 @@
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
 - `SiteHeader`、`SiteFooter` 已移進 `PageLayout`（M4-04 階段一）；其餘的選單鍵盤操作在 M4-04 階段二補上。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
-- 首頁行動版 Lighthouse performance 0.95（`node scripts/design/lighthouse-3d.mjs`，2026-10-22），剛好在門檻上：header＋footer 多一個 render-blocking CSS，約 150 ms；全部 inline CSS 對 LCP 沒有幫助。M4-04 把 header、footer 移進共用 layout 時，連同 preview 真機量測再處理
+- 首頁行動版 Lighthouse performance 中位數 0.94（`node scripts/design/lighthouse-3d.mjs /`，2026-10-23，各跑 3 次），單次在 0.91–0.96 之間浮動。M4-04 比較了三種 CSS 載入方式：現狀（3 個 CSS 檔）、`build.inlineStylesheets: 'always'`、小檔 inline，分數都是 0.94；全部 inline 讓 FCP 快約 450 ms、LCP 快約 150 ms，但每頁 HTML 從 23 KB 變 89 KB、換頁沒有 CSS 快取，所以維持現狀。扣分主要來自 3D chunk 的 TBT。preview 上的真機量測還沒做
 - 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；M5 遷移文章後改讀 content collections 並刪除這個檔案。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - M3-05：現站 digiRunner 頁有 content-model 沒有欄位的段落（AI Gateway、AI Governance、五大應用、四大機制、API Composer／沙盒／即時主控台、資安、金檢合規），產品頁沒有放；M5-01（#26）前請內容負責人決定刪減或擴充 content model。`useCases.industry` 沒有保險、醫療、物聯網，這三個情境沒有產業連結
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
