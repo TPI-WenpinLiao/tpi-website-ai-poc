@@ -42,11 +42,11 @@ function captionOf(node) {
  * resolve image URLs against `base`.
  * @param {string} html
  * @param {string} base URL the HTML came from
- * @param {{ dropHosts?: string[] }} [options] hosts whose images are removed instead of downloaded
- *   (overrides.yaml dropImagesFrom); `dropped` lists them
+ * @param {{ drop?: string[] }} [options] hosts, or whole image URLs, whose images are removed instead of
+ *   downloaded (overrides.yaml dropImagesFrom); `dropped` lists them
  * @returns {{ html: string, images: string[], dropped: string[], notes: string[] }}
  */
-export function prepare(html, base, { dropHosts = [] } = {}) {
+export function prepare(html, base, { drop = [] } = {}) {
   const root = parse(html, { comment: false });
   const notes = [];
   for (const el of root.querySelectorAll('script, style, noscript')) el.remove();
@@ -92,7 +92,7 @@ export function prepare(html, base, { dropHosts = [] } = {}) {
       continue;
     }
     const url = src.startsWith('data:') ? src : new URL(src, base).href;
-    if (!url.startsWith('data:') && dropHosts.includes(new URL(url).hostname)) {
+    if (!url.startsWith('data:') && (drop.includes(url) || drop.includes(new URL(url).hostname))) {
       // WordPress wraps images in a link to the full-size file; that link and the caption go with the image
       const link = img.parentNode?.rawTagName?.toLowerCase() === 'a' && img.parentNode.childNodes.every((n) => n === img || !n.text.trim()) ? img.parentNode : null;
       const caption = captionOf(link ?? img);

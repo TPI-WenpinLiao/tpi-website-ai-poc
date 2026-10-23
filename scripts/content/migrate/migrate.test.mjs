@@ -24,7 +24,7 @@ test('parseOverrides checks entry ids and keys', () => {
   assert.throws(() => parseOverrides('zh-TW/585:\n  alt: {}\n'), /is not <blog\|news>/);
   assert.throws(() => parseOverrides('news/zh-TW/585:\n  title: x\n'), /unknown keys title/);
   assert.deepEqual(parseOverrides('blog/zh-TW/zta:\n  dropImagesFrom: [blog.tpisoftware.com]\n'), { 'blog/zh-TW/zta': { dropImagesFrom: ['blog.tpisoftware.com'] } });
-  assert.throws(() => parseOverrides('blog/zh-TW/zta:\n  dropImagesFrom: blog.tpisoftware.com\n'), /must be a list of hosts/);
+  assert.throws(() => parseOverrides('blog/zh-TW/zta:\n  dropImagesFrom: blog.tpisoftware.com\n'), /must be a list of hosts or image URLs/);
 });
 
 test('entryRows groups merge rows under their keep row, keep first', () => {
@@ -96,7 +96,7 @@ test('convert: overrides, a second run is unchanged, a failed download writes no
   assert.ok(dropped.notes.includes('image dropped (dropImagesFrom): https://www.tpisoftware.com/file/upload/photo.png'));
   assert.doesNotMatch(await readFile('src/content/news/zh-TW/585.md', 'utf8'), /photo\.png/);
   assert.deepEqual(await readdir('src/assets/news/zh-TW/585'), ['cover.webp']);
-  await assert.rejects(convert(args(ok, { dropImagesFrom: ['blog.tpisoftware.com'] })), /dropImagesFrom hosts the entry has no images from: blog\.tpisoftware\.com/);
+  await assert.rejects(convert(args(ok, { dropImagesFrom: ['blog.tpisoftware.com'] })), /dropImagesFrom entries the entry has no images from: blog\.tpisoftware\.com/);
 });
 
 test('convert refuses empty required values unless overrides fill them', async (t) => {

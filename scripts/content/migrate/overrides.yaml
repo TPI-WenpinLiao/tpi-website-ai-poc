@@ -364,8 +364,8 @@ blog/zh-TW/pointeconomies:
 blog/zh-TW/post-covid-fintech:
   frontmatter:
     description: 昕力資訊總經理姚勝富觀察，後疫情時代金融業投入數位化有 3 大熱門趨勢：DeFi（去中心化金融）、BNPL（先買後付）與 Open Banking（開放銀行）。
-  alt:
-    1f061296-8452-621e-8cfc-bf8fc57a6792.webp: 昕力資訊總經理姚勝富坐在會議桌前，雙手比劃說明
+  # 科技報橘 watermark (content-migration「圖片」): listed in the PR to be replaced
+  dropImagesFrom: [https://tpi.dev/tpi-dev/private/article/IMG/1f061296-8452-621e-8cfc-bf8fc57a6792.jpg]
 
 blog/zh-TW/rpahousing:
   frontmatter:
@@ -390,10 +390,11 @@ blog/zh-TW/tech-and-healthcare:
     1f061262-b2a2-6816-8cfc-bf8fc57a6792.webp: TechWorkshop 英文線上研討會宣傳圖「Healthcare in 2023 and Beyond」，講者 Essence Hsu
 
 blog/zh-TW/tpisoftware-online-insurance-ecommerce-trend:
+  # 科技報橘 watermark (content-migration「圖片」): listed in the PR to be replaced
+  dropImagesFrom: [https://tpi.dev/tpi-dev/private/article/IMG/1f061411-9ad4-662f-8cfc-bf8fc57a6792.jpg]
   frontmatter:
     description: 昕力保險科技暨數位應用處處長鄭宇茜解析保險科技未來發展，分享網路投保商品精簡化與全速轉向電商化的趨勢，以及這些變化將為保險產業帶來什麼影響。
   alt:
-    1f061411-9ad4-662f-8cfc-bf8fc57a6792.webp: 戴眼鏡的女性受訪者坐在昕力資訊辦公室的 TPI SOFTWARE 字樣牆前微笑受訪
     1f061412-7cd2-6640-8cfc-bf8fc57a6792.png: InsureBrick 微服務平台架構圖：前端使用者經 API 使用投保、試算、會員等模組，平台再連接保險公司核心系統
 
 blog/zh-TW/tradingplatform:

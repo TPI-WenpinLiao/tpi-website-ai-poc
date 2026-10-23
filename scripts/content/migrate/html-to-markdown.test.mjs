@@ -40,7 +40,7 @@ test('images: srcset-only images resolve against the page, alt comes from the ov
   assert.equal(markdown, '![](./news-1.jpg)\n\n![新的 \\[說明\\]](./b.png)');
 });
 
-test('dropHosts: images from those hosts are removed with their link, caption and empty paragraph, and reported', () => {
+test('drop: images from those hosts (or with those URLs) are removed with their link, caption and empty paragraph, and reported', () => {
   const html = [
     '<p>前文</p>',
     '<p><a href="https://blog.tpisoftware.com/wp-content/uploads/a.png"><img src="https://blog.tpisoftware.com/wp-content/uploads/a.png"></a></p>',
@@ -50,7 +50,7 @@ test('dropHosts: images from those hosts are removed with their link, caption an
     '<figure><img src="https://blog.tpisoftware.com/d.png"><figcaption>圖片來源：昕力資訊</figcaption></figure>',
     '<p><img src="https://tpi.dev/e.png"></p><p><em>保留的圖說</em></p>',
   ].join('');
-  const p = prepare(html, BASE, { dropHosts: ['blog.tpisoftware.com'] });
+  const p = prepare(html, BASE, { drop: ['blog.tpisoftware.com'] });
   assert.deepEqual(p.images, ['https://tpi.dev/e.png']);
   assert.deepEqual(p.dropped, ['a.png', 'b.png', 'c.png', 'd.png'].map((f) => `https://blog.tpisoftware.com/${f === 'a.png' ? 'wp-content/uploads/' : ''}${f}`));
   assert.deepEqual(p.notes, [
@@ -62,6 +62,9 @@ test('dropHosts: images from those hosts are removed with their link, caption an
   const { markdown } = toMarkdown(p.html, { image: (url) => ({ path: `./${url.split('/').pop()}` }), link: (h) => h });
   assert.equal(markdown, '前文\n\n*斜體導言*\n\n![](./e.png)\n\n*保留的圖說*');
   assert.deepEqual(prepare(html, BASE).dropped, []);
+  // A single image by URL; others from the same host stay
+  const one = prepare('<p><img src="https://tpi.dev/a.jpg"></p><p><img src="https://tpi.dev/b.jpg"></p>', BASE, { drop: ['https://tpi.dev/a.jpg'] });
+  assert.deepEqual([one.images, one.dropped], [['https://tpi.dev/b.jpg'], ['https://tpi.dev/a.jpg']]);
 });
 
 test('links go through the resolver; javascript: and empty links are unwrapped', () => {
