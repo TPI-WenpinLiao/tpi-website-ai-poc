@@ -45,7 +45,8 @@ migratedAt: 2026-10-20                       # 擷取日期
 
 ## 圖片
 
-- 下載到 `src/assets/<content-type>/<locale>/<slug>/`（不同語系可能有相同 slug），檔名用小寫 kebab-case 英文；frontmatter 寫相對於內容檔的路徑（`coverImage: ../../../assets/news/zh-TW/585/cover.jpg`）。內文引用外部網域的圖片（`blog.tpisoftware.com`、`tpi.dev`、`s3.amazonaws.com` 等）也一樣下載，不直接引用外部網址（[`features.md`「其他第三方嵌入」](../../../docs/research/features.md#其他第三方嵌入)）
+- 下載到 `src/assets/<content-type>/<locale>/<slug>/`（不同語系可能有相同 slug），檔名用小寫 kebab-case 英文；frontmatter 寫相對於內容檔的路徑（`coverImage: ../../../assets/news/zh-TW/585/cover.webp`）。內文引用外部網域的圖片（`blog.tpisoftware.com`、`tpi.dev`、`s3.amazonaws.com` 等）也一樣下載，不直接引用外部網址（[`features.md`「其他第三方嵌入」](../../../docs/research/features.md#其他第三方嵌入)）
+- 存檔前縮到最大寬 1600 px、轉成 WebP（`migrate.mjs` 的規則見 [`docs/content/migration.md`「圖片」](../../../docs/content/migration.md#圖片)），不 commit 原尺寸大圖
 - 用 `astro:assets` 的 `<Image>` / `<Picture>` 輸出，不放 `public/`
 - 必須補上描述性 alt（依圖片實際內容撰寫，不寫「圖片」「banner」）
 - 低解析度或帶浮水印的圖不直接使用，在 PR 列為待替換

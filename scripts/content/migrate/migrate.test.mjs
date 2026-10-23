@@ -23,6 +23,8 @@ test('parseOverrides checks entry ids and keys', () => {
   assert.deepEqual(parseOverrides('news/zh-TW/585:\n  alt:\n    cover.jpg: 七款專用機\n'), { 'news/zh-TW/585': { alt: { 'cover.jpg': '七款專用機' } } });
   assert.throws(() => parseOverrides('zh-TW/585:\n  alt: {}\n'), /is not <blog\|news>/);
   assert.throws(() => parseOverrides('news/zh-TW/585:\n  title: x\n'), /unknown keys title/);
+  assert.deepEqual(parseOverrides('blog/zh-TW/zta:\n  dropImagesFrom: [blog.tpisoftware.com]\n'), { 'blog/zh-TW/zta': { dropImagesFrom: ['blog.tpisoftware.com'] } });
+  assert.throws(() => parseOverrides('blog/zh-TW/zta:\n  dropImagesFrom: blog.tpisoftware.com\n'), /must be a list of hosts/);
 });
 
 test('entryRows groups merge rows under their keep row, keep first', () => {
@@ -51,7 +53,9 @@ test('convert: overrides, a second run is unchanged, a failed download writes no
   process.chdir(await mkdtemp(join(tmpdir(), 'migrate-')));
   t.after(() => process.chdir(cwd));
 
-  const png = Buffer.from('89504e470d0a1a0a0000', 'hex');
+  const { default: sharp } = await import('sharp');
+  // A real image: images are decoded to be downscaled and stored as WebP
+  const png = await sharp({ create: { width: 2, height: 2, channels: 3, background: '#336699' } }).png().toBuffer();
   const ok = async () => ({ ok: true, status: 200, contentType: 'application/octet-stream', body: png });
   const failing = async (url) => (url.endsWith('photo.png') ? { ok: false, status: 404, contentType: '', body: Buffer.alloc(0) } : ok());
   const item = { id: '585', title: '標題', summary: '摘要', newsTypeId: '1', showDate: '2026-10-15', langTW: '585' };
@@ -73,18 +77,26 @@ test('convert: overrides, a second run is unchanged, a failed download writes no
   assert.equal(existsSync('src/content/news/zh-TW/585.md'), false);
   assert.equal(existsSync('src/assets/news/zh-TW/585'), false);
 
-  const override = { frontmatter: { description: '改寫後' }, alt: { 'photo.png': '產品照' } };
+  const override = { frontmatter: { description: '改寫後' }, alt: { 'photo.webp': '產品照' } };
   const first = await convert(args(ok, override));
   assert.equal(first.status, 'written');
   assert.deepEqual(first.notes, ['unmapped https://www.tpisoftware.com/nope']);
   const text = await readFile('src/content/news/zh-TW/585.md', 'utf8');
   assert.match(text, /^description: 改寫後$/m);
-  assert.match(text, /^coverImage: \.\.\/\.\.\/\.\.\/assets\/news\/zh-TW\/585\/cover\.png$/m);
-  assert.match(text, /!\[產品照\]\(\.\.\/\.\.\/\.\.\/assets\/news\/zh-TW\/585\/photo\.png\)/);
-  assert.deepEqual((await readdir('src/assets/news/zh-TW/585')).sort(), ['cover.png', 'photo.png']);
+  assert.match(text, /^coverImage: \.\.\/\.\.\/\.\.\/assets\/news\/zh-TW\/585\/cover\.webp$/m);
+  assert.match(text, /!\[產品照\]\(\.\.\/\.\.\/\.\.\/assets\/news\/zh-TW\/585\/photo\.webp\)/);
+  assert.deepEqual((await readdir('src/assets/news/zh-TW/585')).sort(), ['cover.webp', 'photo.webp']);
 
   assert.equal((await convert({ ...args(ok, override), date: '2026-11-03' })).status, 'unchanged');
   await assert.rejects(convert(args(ok, { alt: { 'missing.png': 'x' } })), /alt for images the entry does not have: missing\.png/);
+
+  // dropImagesFrom: the image is never fetched, so a host that fails is no longer a failure
+  const dropped = await convert(args(failing, { dropImagesFrom: ['www.tpisoftware.com'] }));
+  assert.equal(dropped.status, 'written');
+  assert.ok(dropped.notes.includes('image dropped (dropImagesFrom): https://www.tpisoftware.com/file/upload/photo.png'));
+  assert.doesNotMatch(await readFile('src/content/news/zh-TW/585.md', 'utf8'), /photo\.png/);
+  assert.deepEqual(await readdir('src/assets/news/zh-TW/585'), ['cover.webp']);
+  await assert.rejects(convert(args(ok, { dropImagesFrom: ['blog.tpisoftware.com'] })), /dropImagesFrom hosts the entry has no images from: blog\.tpisoftware\.com/);
 });
 
 test('convert refuses empty required values unless overrides fill them', async (t) => {
@@ -95,7 +107,9 @@ test('convert refuses empty required values unless overrides fill them', async (
   const cwd = process.cwd();
   process.chdir(await mkdtemp(join(tmpdir(), 'migrate-')));
   t.after(() => process.chdir(cwd));
-  const png = Buffer.from('89504e470d0a1a0a0000', 'hex');
+  const { default: sharp } = await import('sharp');
+  // A real image: images are decoded to be downscaled and stored as WebP
+  const png = await sharp({ create: { width: 2, height: 2, channels: 3, background: '#336699' } }).png().toBuffer();
   const args = (override) => ({
     get: async () => ({ ok: true, status: 200, contentType: '', body: png }),
     type: 'blog',

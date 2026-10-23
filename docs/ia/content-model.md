@@ -215,7 +215,7 @@ tags: [ai-application]
 publishedAt: 2026-09-11
 author: TPIsoftware
 authorType: Organization
-coverImage: ../../../assets/blog/zh-TW/customer-complaint-ai-tool-selection-guide/cover.png   # 原圖 https://tpi.dev/tpi-dev/private/article/IMG/1f1aaad1-2937-612a-81f6-0b7fa23ee3a6.png
+coverImage: ../../../assets/blog/zh-TW/customer-complaint-ai-tool-selection-guide/cover.webp   # 原圖 https://tpi.dev/tpi-dev/private/article/IMG/1f1aaad1-2937-612a-81f6-0b7fa23ee3a6.png
 sourceUrl: https://www.tpisoftware.com/blog/ai/customer-complaint-ai-tool-selection-guide
 migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-09-11
@@ -305,7 +305,7 @@ description: 昕力資訊（7781）發表七款 AI 專用機並同步於 AISO �
 translationKey: "585"   # en 版 586、vi 版 587 填同一個值
 newsType: press
 publishedAt: 2026-10-15
-coverImage: ../../../assets/news/zh-TW/585/cover.jpg   # 原圖 /images/news/585/news-2026-10-15-1792036052577.jpg
+coverImage: ../../../assets/news/zh-TW/585/cover.webp   # 原圖 /images/news/585/news-2026-10-15-1792036052577.jpg
 sourceUrl: https://www.tpisoftware.com/media-center/585
 migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-10-16

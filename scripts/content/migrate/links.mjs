@@ -13,11 +13,23 @@ export function siteKey(url) {
   return `https://${host}${path}`;
 }
 
+// New-site locale prefixes (ADR 0002): zh-TW has none
+const PREFIX = { 'zh-TW': '', en: '/en', vi: '/vi' };
+
+/** The same new-site path in another locale: /en/products/x → /vi/products/x, / → /vi. */
+export function inLocale(path, locale) {
+  const bare = path.replace(/^\/(?:en|vi)(?=\/|$|#)/, '') || '/';
+  const prefixed = `${PREFIX[locale]}${bare === '/' || bare.startsWith('/#') ? bare.slice(1) : bare}`;
+  return prefixed.startsWith('/') ? prefixed : `/${prefixed}`;
+}
+
 /**
  * @param {{ from: string, to: string }[]} redirects rows of redirects.csv
  * @param {{ url: string }[]} broken rows of broken-links.csv
  * @param {{ url: string, final_url: string }[]} inventory rows of inventory.csv
- * @returns {(href: string, base: string) => { href: string, note?: string }}
+ * @returns {(href: string, base: string, locale?: string) => { href: string, note?: string }}
+ *   With `locale`, a link that maps into another locale points at the same page in `locale`: the current
+ *   sites link across locales only where a page was missing, and the new site keeps links in-locale
  */
 export function linkResolver(redirects, broken, inventory = []) {
   const to = new Map(Object.entries(HOMES));
@@ -34,7 +46,7 @@ export function linkResolver(redirects, broken, inventory = []) {
     if (from && final && to.has(from) && !to.has(final)) to.set(final, to.get(from));
   }
   const brokenKeys = new Set(broken.map((b) => siteKey(new URL(b.url)) ?? new URL(b.url).href));
-  return (href, base) => {
+  return (href, base, locale) => {
     let url;
     try {
       url = new URL(href, base);
@@ -47,6 +59,9 @@ export function linkResolver(redirects, broken, inventory = []) {
     if (!key) return { href: url.href };
     const mapped = to.get(key);
     if (!mapped) return { href: url.href, note: `current-site link not in redirects.csv: ${url.href}` };
-    return { href: `${mapped}${url.hash}` };
+    const target = `${mapped}${url.hash}`;
+    if (!locale) return { href: target };
+    const local = inLocale(target, locale);
+    return local === target ? { href: target } : { href: local, note: `link moved into ${locale}: ${target} → ${local}` };
   };
 }

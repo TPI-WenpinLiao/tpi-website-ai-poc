@@ -15,7 +15,7 @@ import { parseTagTable } from '../tags.mjs';
 import { cachedFetcher, writeAtomic } from './cache.mjs';
 import { applyOverrides, blogFrontmatter, Commented, Day, frontmatterNotes, newsFrontmatter, serializeFrontmatter, tagLookup } from './frontmatter.mjs';
 import { prepare, toMarkdown } from './html-to-markdown.mjs';
-import { dataUrlBytes, fileNames, imageExt } from './images.mjs';
+import { dataUrlBytes, fileNames, imageExt, optimizeImage } from './images.mjs';
 import { linkResolver } from './links.mjs';
 import { blogArticles, blogBody, newsBody, newsImageUrl, newsItems } from './sources.mjs';
 
@@ -51,20 +51,22 @@ export function entryText(data, body, existing, date) {
 }
 
 /**
- * Overrides file: entry id → { frontmatter?: {...}, alt?: { <image file>: <alt> } }.
- * @returns {Record<string, { frontmatter?: Record<string, unknown>, alt?: Record<string, string> }>}
+ * Overrides file: entry id → { frontmatter?: {...}, alt?: { <image file>: <alt> }, dropImagesFrom?: [<host>] }.
+ * @returns {Record<string, { frontmatter?: Record<string, unknown>, alt?: Record<string, string>, dropImagesFrom?: string[] }>}
  */
 export function parseOverrides(text) {
   const all = parseYaml(text) ?? {};
   for (const [id, o] of Object.entries(all)) {
     if (!/^(?:blog|news)\/(?:zh-TW|en|vi)\/[a-z0-9-]+$/.test(id)) throw new Error(`${OVERRIDES}: "${id}" is not <blog|news>/<locale>/<slug>`);
-    const extra = Object.keys(o ?? {}).filter((k) => k !== 'frontmatter' && k !== 'alt');
-    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (frontmatter, alt)`);
+    const extra = Object.keys(o ?? {}).filter((k) => !['frontmatter', 'alt', 'dropImagesFrom'].includes(k));
+    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (frontmatter, alt, dropImagesFrom)`);
+    const drop = o?.dropImagesFrom;
+    if (drop !== undefined && !(Array.isArray(drop) && drop.length && drop.every((h) => typeof h === 'string'))) throw new Error(`${OVERRIDES}: ${id} dropImagesFrom must be a list of hosts`);
   }
   return all;
 }
 
-/** Download every image (cover first); throws on the first one that fails. */
+/** Download every image (cover first), downscaled and re-encoded; throws on the first one that fails. */
 async function fetchImages(get, urls) {
   const images = [];
   for (const url of urls) {
@@ -79,7 +81,7 @@ async function fetchImages(get, urls) {
     }
     const ext = imageExt(bytes);
     if (!ext) throw new Error(`image ${url.slice(0, 120)}: not a format astro:assets reads`);
-    images.push({ url, ext, bytes });
+    images.push({ url, ...(await optimizeImage(bytes, ext)) });
   }
   return images;
 }
@@ -103,7 +105,10 @@ async function syncImages(dir, images, names) {
  */
 export async function convert({ get, type, id, slug, coverUrl, html, base, frontmatter, override, resolveLink, date }) {
   const notes = [];
-  const prepared = prepare(html, base);
+  const dropHosts = override?.dropImagesFrom ?? [];
+  const prepared = prepare(html, base, { dropHosts });
+  const unusedDrop = dropHosts.filter((h) => !prepared.dropped.some((url) => new URL(url).hostname === h));
+  if (unusedDrop.length) throw new Error(`${OVERRIDES}: dropImagesFrom hosts the entry has no images from: ${unusedDrop.join(', ')}`);
   notes.push(...prepared.notes);
   const images = await fetchImages(get, [coverUrl, ...prepared.images]);
   const names = fileNames(images);
@@ -120,7 +125,7 @@ export async function convert({ get, type, id, slug, coverUrl, html, base, front
       return { path: assetRef(type, id, file), alt, file };
     },
     link: (href) => {
-      const r = resolveLink(href, base);
+      const r = resolveLink(href, base, id.split('/')[0]);
       if (r.note) notes.push(r.note);
       return r.href;
     },

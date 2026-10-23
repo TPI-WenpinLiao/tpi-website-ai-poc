@@ -2,7 +2,8 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { baseName, dataUrlBytes, fileNames, imageExt } from './images.mjs';
+import sharp from 'sharp';
+import { baseName, dataUrlBytes, fileNames, imageExt, MAX_WIDTH, optimizeImage } from './images.mjs';
 
 test('imageExt reads the format from the bytes', () => {
   assert.equal(imageExt(Buffer.from([0xff, 0xd8, 0xff, 0xe0])), 'jpg');
@@ -32,4 +33,14 @@ test('fileNames: cover first, repeated names numbered, repeated URLs share a fil
 test('dataUrlBytes decodes base64 and plain data URLs', () => {
   assert.equal(dataUrlBytes('data:image/png;base64,aGk=').toString(), 'hi');
   assert.equal(dataUrlBytes('data:image/svg+xml,%3Csvg%3E').toString(), '<svg>');
+});
+
+test('optimizeImage downscales to MAX_WIDTH as WebP, is repeatable, and leaves SVG alone', async () => {
+  const big = await sharp({ create: { width: 2400, height: 1200, channels: 3, background: '#336699' } }).png().toBuffer();
+  const out = await optimizeImage(big, 'png');
+  assert.equal(out.ext, 'webp');
+  assert.deepEqual(await sharp(out.bytes).metadata().then((m) => [m.format, m.width, m.height]), ['webp', MAX_WIDTH, MAX_WIDTH / 2]);
+  assert.ok((await optimizeImage(big, 'png')).bytes.equals(out.bytes));
+  const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>');
+  assert.deepEqual(await optimizeImage(svg, 'svg'), { bytes: svg, ext: 'svg' });
 });

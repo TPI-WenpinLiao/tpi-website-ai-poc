@@ -1,5 +1,12 @@
 // Image file names and formats for migrated entries (content-migration skill「圖片」):
 // src/assets/<type>/<locale>/<slug>/<lowercase-kebab-name>.<ext>, the cover is cover.<ext>.
+// sharp comes with Astro (its image service), so it is not a separate dependency.
+import sharp from 'sharp';
+
+// Widest the templates use is the article cover at 1440 px (ArticleTemplate widths), so a stored image
+// never needs more; WebP q85 keeps the repo small, and astro:assets encodes the served copies anyway
+export const MAX_WIDTH = 1600;
+const WEBP = { quality: 85, smartSubsample: true };
 
 // Formats astro:assets can process
 const SIGNATURES = [
@@ -14,6 +21,22 @@ const SIGNATURES = [
 /** File extension from the bytes, not the URL or content-type (the sites serve images as octet-stream). */
 export function imageExt(bytes) {
   return SIGNATURES.find(([, test]) => test(bytes))?.[0] ?? null;
+}
+
+/**
+ * Downscale to MAX_WIDTH and store as WebP. Kept as is: SVG, GIF, animations, and images already within
+ * MAX_WIDTH that WebP would not make smaller. Same input, same output, so a re-run stays unchanged.
+ * @param {Buffer} bytes
+ * @param {string} ext from imageExt()
+ * @returns {Promise<{ bytes: Buffer, ext: string }>}
+ */
+export async function optimizeImage(bytes, ext) {
+  if (!['jpg', 'png', 'webp'].includes(ext)) return { bytes, ext };
+  const { width = 0, pages = 1 } = await sharp(bytes).metadata();
+  if (pages > 1) return { bytes, ext };
+  const webp = await sharp(bytes).rotate().resize({ width: MAX_WIDTH, withoutEnlargement: true }).webp(WEBP).toBuffer();
+  if (width <= MAX_WIDTH && webp.length >= bytes.length) return { bytes, ext };
+  return { bytes: webp, ext: 'webp' };
 }
 
 /** Decode a data: URL image. */
