@@ -141,10 +141,11 @@ export async function convert({ get, type, id, slug, coverUrl, html, base, front
   const existing = existsSync(path) ? await readFile(path, 'utf8') : null;
   const text = entryText(data, markdown, existing, date);
   await syncImages(assetDir(type, id), images, names);
-  if (text === existing) return { status: 'unchanged', notes };
+  const unique = [...new Set(notes)];
+  if (text === existing) return { status: 'unchanged', notes: unique };
   await mkdir(dirname(path), { recursive: true });
   await writeAtomic(path, text);
-  return { status: 'written', notes };
+  return { status: 'written', notes: unique };
 }
 
 async function loadInputs() {

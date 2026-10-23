@@ -173,6 +173,8 @@ export function toMarkdown(html, { image, link }) {
         if (all('img').length) throw new Error('image inside a table that cannot be a Markdown table');
         notes.push('table kept as HTML (merged cells, lists or uneven rows)');
         for (const c of all('colgroup')) c.remove();
+        // Links here skip the link rule below, so map them the same way before writing the HTML out
+        for (const a of all('a')) a.setAttribute('href', link(a.getAttribute('href').trim()));
         return `\n\n${node.outerHTML}\n\n`;
       }
       const md = (cell) =>

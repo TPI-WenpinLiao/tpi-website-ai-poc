@@ -61,6 +61,9 @@ test('a table with merged cells stays HTML without styles', () => {
   const html = '<table style="width: 100%"><tbody><tr><td colspan="2" style="color: red">A</td></tr><tr><td colspan="1">B</td><td>C</td></tr></tbody></table>';
   const r = toMarkdown(prepare(html, BASE).html, { image: () => ({ path: '' }), link: (h) => h });
   assert.equal(r.markdown, '<table><tbody><tr><td colspan="2">A</td></tr><tr><td>B</td><td>C</td></tr></tbody></table>');
+  const linked = '<table><tbody><tr><td colspan="2"><a href="/about-us">關於</a></td></tr></tbody></table>';
+  const mapped = toMarkdown(prepare(linked, BASE).html, { image: () => ({ path: '' }), link: (h) => (h === '/about-us' ? '/about' : h) });
+  assert.equal(mapped.markdown, '<table><tbody><tr><td colspan="2"><a href="/about">關於</a></td></tr></tbody></table>');
   assert.deepEqual(r.notes, ['table kept as HTML (merged cells, lists or uneven rows)']);
 });
 
