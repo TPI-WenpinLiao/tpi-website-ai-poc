@@ -15,7 +15,7 @@ import { cachedFetcher, writeAtomic } from './cache.mjs';
 import { applyOverrides, frontmatterNotes } from './frontmatter.mjs';
 import sharp from 'sharp';
 import { imageExt, optimizeImage } from './images.mjs';
-import { entryText, today } from './migrate.mjs';
+import { entryText, syncImages, today } from './migrate.mjs';
 import { COM, VN } from './sources.mjs';
 
 export const OVERRIDES = 'scripts/content/migrate/case-studies.yaml';
@@ -116,11 +116,15 @@ export function caseSlug(clientSlug, enTitle) {
   return slug;
 }
 
-/** Slugs for the zh-TW cards; a repeated slug (same client, same title) gets -2, -3…. */
+/**
+ * Slugs for the zh-TW cards from their en titles; a repeated slug (same client, same title) gets -2, -3….
+ * Throws when a zh-TW card has no en card: a Chinese title leaves nothing for the slug.
+ */
 export function slugs(base, en, clientOf) {
   const taken = new Set();
   return base.map((card, i) => {
-    const slug = caseSlug(clientOf(card).slug, en[i]?.title ?? card.title);
+    if (!en[i]) throw new Error(`no en card for zh-TW「${card.title}」(logo ${card.logo}), so it has no slug`);
+    const slug = caseSlug(clientOf(card).slug, en[i].title);
     let out = slug;
     for (let n = 2; taken.has(out); n++) out = `${slug}-${n}`;
     taken.add(out);
@@ -265,10 +269,7 @@ async function main() {
         const text = entryText(data, body, existing, date);
         row.status = text === existing ? 'unchanged' : 'written';
         if (args['dry-run']) continue;
-        await mkdir(assetDir(id), { recursive: true });
-        const logoPath = join(assetDir(id), logoFile);
-        if (!existsSync(logoPath) || !logo.bytes.equals(await readFile(logoPath))) await writeAtomic(logoPath, logo.bytes);
-        for (const f of await readdir(assetDir(id))) if (f !== logoFile) await rm(join(assetDir(id), f));
+        await syncImages(assetDir(id), [{ url: card.logo, bytes: logo.bytes }], new Map([[card.logo, logoFile]]));
         if (text !== existing) {
           await mkdir(dirname(path), { recursive: true });
           await writeAtomic(path, text);

@@ -47,6 +47,7 @@ test('caseSlug starts with the client, skips title words the client slug has, an
   const clientOf = () => ({ slug: 'taishin' });
   const base = [{ title: 'a' }, { title: 'b' }];
   assert.deepEqual(slugs(base, [{ title: 'Same' }, { title: 'Same' }], clientOf), ['taishin-same', 'taishin-same-2']);
+  assert.throws(() => slugs(base, [{ title: 'Same' }], clientOf), /no en card for zh-TW「b」/);
 });
 
 test('every card type has an industry from the #28 decision', () => {
