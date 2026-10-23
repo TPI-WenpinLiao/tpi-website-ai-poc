@@ -20,7 +20,7 @@ const OUT = new URL('../../src/content/page/zh-TW/', import.meta.url);
 
 // One per legal node. The en and vi PDFs are not converted: the en ones date from 2020 and differ
 // from the 2026 zh-TW text (which already carries an English translation), and the vi one is a
-// candidate privacy notice, not the website's (PR #31「待確認」).
+// candidate privacy notice, not the website's (PR #105「待確認」).
 // effectiveDate is the date the PDF states; `dateNote` explains one that comes from elsewhere.
 // `dropFrom` ends the body at that line (what follows is not text).
 const DOCS = [

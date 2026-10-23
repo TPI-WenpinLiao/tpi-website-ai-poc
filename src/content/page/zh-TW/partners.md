@@ -1,6 +1,6 @@
 ---
 # The zh-TW page on the current site has an empty content area (inventory.csv to_confirm); this is a
-# translation of the en page, the second sourceUrl. To be confirmed by the content owner (PR #31).
+# translation of the en page, the second sourceUrl. To be confirmed by the content owner (PR #105).
 title: 合作夥伴
 description: 昕力資訊的策略夥伴計畫以開放、透明的合作模式與夥伴共享成功，提供營收分潤、技術、銷售與行銷支援及完整培訓，攜手開創商機。
 translationKey: partners
