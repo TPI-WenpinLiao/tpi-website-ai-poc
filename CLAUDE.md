@@ -18,7 +18,7 @@ Astro（`output: 'static'`，預設零 client JS，互動才用 island）、Type
 ```
 src/pages/        路由頁面；zh-TW 放根目錄，en、vi 放 en/、vi/
 src/layouts/      版型
-src/styles/       tokens.css（design tokens）、media.css（斷點）
+src/styles/       tokens.css（design tokens）、media.css（斷點）、base.css（reset 與全域工具類）
 public/           靜態檔（_headers、robots.txt）
 scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、design/（對比、token 使用、輸出 CSS 檢查、預設 OG 圖、圖片匯入、瀏覽器無障礙實測）、seo/（heading 檢查、每頁 head 與 sitemap 檢查）、i18n/（語系路由檢查）、lib/（共用的靜態伺服器）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應）、checkpoint/（進度推算）、bootstrap/（`issues.yml` 與 GitHub issue 的比對）、status/（`status.md` 檢查）
 docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）
@@ -45,7 +45,7 @@ M2 定案的規則，細節以連結的文件為準：
 | `npm run dev` | 本機開發 |
 | `npm run build` | 產生 `dist/` |
 | `npm run check` | IA 資料檢查 → `status.md` 檢查 → design 檢查 → scripts 測試 → astro check → build → 輸出 CSS、heading、語系路由、head 與 sitemap 檢查 → html-validate → Lighthouse CI（推送前必跑） |
-| `npm run check:design` | tokens 的 WCAG 對比、元件樣式沒有寫死的數值、每個元件都在 `/design-system` 展示頁上 |
+| `npm run check:design` | tokens 的 WCAG 對比、元件樣式沒有寫死的數值、CSS 分層（全域樣式、`:global`、重複宣告）、每個元件都在 `/design-system` 展示頁上 |
 | `npm run check:ia` | 驗證 `docs/ia/` 的 IA 資料，並確認 `sitemap.mjs`、`navigation.mjs`、`redirects.mjs` 的產出是最新的（不寫檔） |
 
 Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）執行；HTML 內不可放 `noindex` meta。
@@ -92,6 +92,7 @@ M2、M3 的關卡 issue 改用對應的 label（`ia-approved`、`wireframe-appro
 ## 設計規則
 
 - 樣式只能使用 `src/styles/tokens.css` 定義的 design tokens，不得寫死色碼、字級、間距
+- CSS 分層：tokens 與斷點在 `tokens.css`、`media.css`，reset 與跨元件工具類只在 `src/styles/base.css`，跨頁共用的樣式做成 `src/components/ui/` 的元件，模板與頁面只寫自己的版面。不複製樣式、不寫 `<style is:global>`、不用 `:global()` 改別的元件；`npm run check:design` 擋下違規
 - 新元件必須同步加到 design-system 展示頁（M3 後生效）
 - 細節見 `.claude/skills/design-system/SKILL.md`
 

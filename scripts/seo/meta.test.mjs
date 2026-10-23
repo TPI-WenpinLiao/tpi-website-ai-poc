@@ -17,6 +17,7 @@ function page(path, { title = `T ${path}`, description = `D ${path}`, alternates
     og: ['type', 'title', 'description', 'image', 'locale', 'site_name'].map((p) => `<meta property="og:${p}" content="x">`).join(''),
     twitter: ['card', 'title', 'description'].map((n) => `<meta name="twitter:${n}" content="x">`).join(''),
     hreflang: alternates.map(([lang, p]) => `<link rel="alternate" hreflang="${lang}" href="${url(p)}">`).join(''),
+    jsonld: '<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList"}]}</script>',
   };
   const head = Object.entries(tags).filter(([k]) => !omit.includes(k)).map(([, v]) => v).join('');
   return `<!doctype html><html><head>${head}${extra}</head><body></body></html>`;
@@ -36,8 +37,8 @@ test('pages written as Seo.astro writes them, with the sitemap built from them, 
   assert.deepEqual(metaProblems(pages, site([...pages.keys()])), []);
 });
 
-test('the sitemap leaves out internal pages and 404, and carries each page\'s hreflang', () => {
-  const entries = readSitemap(site(['/', '/about', '/en/about', '/design-system', '/wireframes/home', '/en/design-system', '/404']));
+test('the sitemap leaves out internal and flow pages, and carries each page\'s hreflang', () => {
+  const entries = readSitemap(site(['/', '/about', '/en/about', '/design-system', '/templates/hub', '/en/design-system', '/404']));
   assert.deepEqual(entries.map((e) => e.loc), [url('/'), url('/about'), url('/en/about')]);
   assert.deepEqual(entries[1].alternates, [
     { hreflang: 'zh-TW', href: url('/about') },
@@ -83,7 +84,7 @@ test('a page without a zh-TW version must not have x-default', () => {
 });
 
 test('JSON-LD that does not parse is reported', () => {
-  const pages = new Map([['/', page('/', { alternates: self('/'), extra: '<script type="application/ld+json">{"@context":</script>' })]]);
+  const pages = new Map([['/', page('/', { alternates: self('/'), omit: ['jsonld'], extra: '<script type="application/ld+json">{"@context":</script>' })]]);
   assert.ok(metaProblems(pages, site(['/']))[0].includes('JSON-LD block 1 does not parse'));
 });
 
@@ -92,4 +93,15 @@ test('a missing sitemap, or one that lists an internal page, is reported', () =>
   assert.deepEqual(metaProblems(pages, null), ['sitemap.xml was not built']);
   const listed = site(['/']).replace('</urlset>', `<url><loc>${url('/design-system')}</loc></url></urlset>`);
   assert.ok(metaProblems(pages, listed).includes(`sitemap.xml: ${url('/design-system')} is not a built, listable page`));
+});
+
+test('a page without a BreadcrumbList is reported; home, 404 and internal pages need none', () => {
+  const bare = (path) => page(path, { alternates: self(path), omit: ['jsonld'] });
+  const pages = new Map([
+    ['/', bare('/')],
+    ['/404', bare('/404')],
+    ['/design-system', bare('/design-system')],
+    ['/about', bare('/about')],
+  ]);
+  assert.deepEqual(metaProblems(pages, site([...pages.keys()])), ['/about: no BreadcrumbList JSON-LD']);
 });

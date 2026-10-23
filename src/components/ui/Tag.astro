@@ -13,7 +13,7 @@ const { href, tone = 'neutral', 'data-preview-state': previewState } = Astro.pro
 const Element = href ? 'a' : 'span';
 ---
 
-<Element class:list={['tag', 'text-phrase', tone]} href={href} data-preview-state={previewState}><slot /></Element>
+<Element class:list={['tag', 'text-phrase', tone, { 'signal-dot': tone === 'node' }]} href={href} data-preview-state={previewState}><slot /></Element>
 
 <style>
   .tag {
@@ -46,15 +46,6 @@ const Element = href ? 'a' : 'span';
     font-size: var(--font-size-xs);
     letter-spacing: var(--letter-spacing-mono);
     text-transform: uppercase;
-  }
-
-  .node::before {
-    content: '';
-    inline-size: var(--space-2);
-    block-size: var(--space-2);
-    border-radius: var(--radius-pill);
-    background: var(--color-accent);
-    box-shadow: var(--glow-accent);
   }
 
   a.tag:is(:hover, [data-preview-state='hover']) {

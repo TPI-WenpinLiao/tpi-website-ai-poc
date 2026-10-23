@@ -1,0 +1,266 @@
+---
+// offering template (M4-04, #23): products, solutions and services, from an offering entry. Built
+// from the approved digiRunner page (M3-05, #18), whose structure follows the M3-01 offering wireframe (#14).
+// Copy comes from the entry; names, paths and parents from docs/ia (src/lib/ia/navigation.ts).
+// Blocks without data are left out, so is their anchor.
+// The hero and the feature chapters form the scene track (Scene3D, ADR 0003). Only products of a
+// family the 3D scene builds get the scene; other offerings keep the static hero image, and their
+// feature chapters are plain dark sections.
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
+import PageLayout from '../PageLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import Backdrop from '../../components/ui/Backdrop.astro';
+import Scene3D from '../../components/ui/Scene3D.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Surface from '../../components/ui/Surface.astro';
+import Card from '../../components/ui/Card.astro';
+import CardGrid from '../../components/ui/CardGrid.astro';
+import Tag from '../../components/ui/Tag.astro';
+import Reveal from '../../components/ui/Reveal.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import InPageNav from '../../components/ui/InPageNav.astro';
+import Faq from '../../components/ui/Faq.astro';
+import SceneChapter from '../../components/ui/SceneChapter.astro';
+import ContactCta from '../../components/ui/ContactCta.astro';
+import { breadcrumb, children, localeHref, node, nodeHref } from '../../lib/ia/navigation';
+import { entryLocale, isPublished } from '../../lib/content/entries';
+import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
+import { canonicalUrl } from '../../lib/seo/meta';
+import { DEFAULT_OG_IMAGE } from '../../lib/seo/og';
+import { about } from '../../lib/latest-posts';
+import { SCENE_FAMILIES, sceneFamily } from '../../lib/scene/families';
+import { strings } from '../../data/strings';
+import image from '../../assets/design/hero-modular-stack.webp';
+import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
+import coverData from '../../assets/design/cover-data.webp';
+import coverIntegration from '../../assets/design/cover-integration.webp';
+import coverPlatform from '../../assets/design/cover-platform.webp';
+
+interface Props {
+  entry: CollectionEntry<'offering'>;
+  translations?: readonly string[];
+}
+
+const { entry, translations } = Astro.props;
+const { data } = entry;
+const locale = entryLocale(entry.id);
+const t = strings(locale);
+const href = localeHref(locale);
+const self = node(data.node);
+const parent = node(self.parent);
+const family = SCENE_FAMILIES.some((f) => f === parent.id) ? sceneFamily(parent.id) : undefined;
+
+const title = data.seoTitle ?? data.title;
+// Parent brand in brackets, as on the home page: 「數位轉型（DigiLism）」 → DigiLism
+const brand = /（([^）]*)）$/.exec(parent.title)?.[1] ?? parent.title;
+const contact = node('contact');
+// Main call to action by the entry's cta (content-model.md); 預約演示 is the current site's wording
+const ctaLabel = data.cta === 'demo' ? t.offering.demo : contact.title;
+
+const features = data.features ?? [];
+const INDUSTRY_NODES = { finance: 'industry-finance', government: 'industry-government', manufacturing: 'industry-manufacturing' } as const;
+const useCases = (data.useCases ?? []).map((u) => ({ ...u, hub: u.industry ? node(INDUSTRY_NODES[u.industry]) : undefined }));
+// Fourth-level pages under this offering (navigation.md: linked from here, not from the header)
+const related = children(self.id).filter((n) => n.kind === 'page');
+// Whitepapers point at their offering (whitepaper.offeringNode); drafts have no page
+const whitepapers = (
+  await getCollection('whitepaper', (w) => entryLocale(w.id) === locale && isPublished(w) && w.data.offeringNode === self.id)
+).map((w) => ({ title: w.data.title, cover: w.data.coverImage, href: href(node(w.data.node)) }));
+const downloads = data.downloads ?? [];
+// Until M5 fills relatedPosts: current-site posts that name the offering (the first word of its
+// title, e.g. digiRunner)
+const COVERS = [coverData, coverIntegration, coverPlatform];
+const posts = about('blog', self.title.split(' ')[0] ?? self.title, 3).map((p, i) => ({ ...p, cover: COVERS[i % COVERS.length] }));
+const faq = data.faq ?? [];
+const hasDownloads = whitepapers.length + downloads.length > 0;
+// Related offerings and downloads share a row on wide screens when both are there; alone, related
+// offerings take the three-column card grid
+const split = related.length > 0 && hasDownloads;
+
+const anchors = [
+  { href: '#features', label: t.offering.features, show: features.length > 0 },
+  { href: '#use-cases', label: t.offering.useCases, show: useCases.length > 0 },
+  { href: '#related', label: t.offering.related, show: related.length > 0 },
+  { href: '#downloads', label: t.offering.downloads, show: hasDownloads },
+  { href: '#faq', label: t.offering.faq, show: faq.length > 0 },
+  { href: '#posts', label: t.relatedPosts, show: posts.length > 0 },
+].filter((a) => a.show);
+
+// Structured data (content-model.md「offering」): the entry, its nodes.csv trail and the
+// organization data file of this page's locale
+const org = await getEntry('organization', locale);
+if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
+if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
+// Page image: heroImage, else ogImage, else the site default (content-model.md「共用欄位」)
+const pageImage = data.heroImage ?? data.ogImage;
+const ogImage = pageImage && { src: pageImage.src, width: pageImage.width, height: pageImage.height, alt: data.title };
+const jsonLd = offeringJsonLd({
+  offering: data,
+  org: org.data,
+  site: Astro.site,
+  url: canonicalUrl(Astro.url.pathname, Astro.site),
+  imageUrl: new URL((ogImage ?? DEFAULT_OG_IMAGE).src, Astro.site).href,
+  trail: breadcrumb(self.id),
+  inLanguage: locale,
+});
+
+const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
+const blog = node('blog');
+---
+
+<PageLayout title={title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
+  <InPageNav slot="nav" label={t.toc} items={anchors} />
+  <div class="track" data-scene-track>
+    <PageHero eyebrow={brand} title={data.title} description={data.tagline}>
+      <Breadcrumb slot="breadcrumb" node={self.id} />
+      <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
+      {family !== undefined && <Scene3D slot="backdrop" direction="modular-stack" family={family} />}
+      <Fragment slot="actions">
+        <Button href={nodeHref('contact', locale)} size="lg">{ctaLabel}</Button>
+        {features.length > 0 && <Button href="#features" size="lg" variant="secondary">{t.offering.seeFeatures}</Button>}
+      </Fragment>
+    </PageHero>
+
+    {
+      features.length > 0 && (
+        <section id="features" class="anchor-target" aria-labelledby="features-title">
+          <h2 id="features-title" class="sr-only">{t.offering.features}</h2>
+          {features.map((f, i) => (
+            <SceneChapter>
+              <SectionHeading level={3} index={String(i + 1).padStart(2, '0')} eyebrow={self.title} title={f.title} />
+              <p class="feature-body">{f.body}</p>
+            </SceneChapter>
+          ))}
+        </section>
+      )
+    }
+  </div>
+
+  {
+    useCases.length > 0 && (
+      <Surface tone="dark" pattern="grid" id="use-cases" class="anchor-target">
+        <SectionHeading eyebrow="Use cases" title={t.offering.useCases} />
+        <CardGrid>
+          {useCases.map((u, i) => (
+            <li>
+              <Reveal delay={stagger(i)}>
+                <Card title={u.title} index={String(i + 1).padStart(2, '0')} description={u.body}>
+                  {u.hub && (
+                    <Tag slot="meta" href={href(u.hub)} tone="brand">
+                      {u.hub.title}
+                    </Tag>
+                  )}
+                </Card>
+              </Reveal>
+            </li>
+          ))}
+        </CardGrid>
+      </Surface>
+    )
+  }
+
+  {
+    (related.length > 0 || hasDownloads) && (
+      <Surface tone="dark">
+        <div class:list={['pair', { split }]}>
+          {related.length > 0 && (
+            <div id="related" class="anchor-target">
+              <SectionHeading eyebrow="Related" title={t.offering.related} />
+              <CardGrid cols={split ? 1 : 3}>
+                {related.map((n) => (
+                  <li>
+                    <Card title={n.title} href={href(n)} eyebrow={self.title} size="sm" />
+                  </li>
+                ))}
+              </CardGrid>
+            </div>
+          )}
+          {hasDownloads && (
+            <div id="downloads" class="anchor-target">
+              <SectionHeading eyebrow="Downloads" title={t.offering.downloads} />
+              <CardGrid cols={1}>
+                {whitepapers.map((w) => (
+                  <li>
+                    <Card title={w.title} href={w.href} eyebrow={node('resources').title} image={{ src: w.cover, alt: '' }} />
+                  </li>
+                ))}
+                {downloads.map((d) => (
+                  <li>
+                    <Card title={d.label} href={d.file} size="sm" />
+                  </li>
+                ))}
+              </CardGrid>
+            </div>
+          )}
+        </div>
+      </Surface>
+    )
+  }
+
+  {
+    faq.length > 0 && (
+      <Surface tone="dark" width="reading" id="faq" class="anchor-target">
+        <SectionHeading eyebrow="FAQ" title={t.offering.faq} />
+        <div class="faq">
+          <Faq items={faq} />
+        </div>
+      </Surface>
+    )
+  }
+
+  {
+    posts.length > 0 && (
+      <Surface tone="light" id="posts" class="anchor-target">
+        <SectionHeading eyebrow="Insights" title={t.relatedPosts}>
+          <Button slot="action" href={nodeHref('blog', locale)} variant="text">
+            {blog.title}
+          </Button>
+        </SectionHeading>
+        <CardGrid>
+          {posts.map((p, i) => (
+            <li>
+              <Reveal delay={stagger(i)}>
+                <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }} date={p.published} />
+              </Reveal>
+            </li>
+          ))}
+        </CardGrid>
+      </Surface>
+    )
+  }
+
+  <ContactCta label={ctaLabel} />
+</PageLayout>
+
+<style>
+  @import '../../styles/media.css';
+
+
+  /* A paragraph, not the heading's lead: .text-phrase would break these long lines only at
+     punctuation and start lines with a comma */
+  .feature-body {
+    max-inline-size: var(--reading-max-width);
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Related offerings and downloads side by side on wide screens, when both are there */
+  .pair {
+    display: grid;
+    gap: var(--space-section);
+  }
+
+  .faq {
+    margin-block-start: var(--space-10);
+  }
+
+  @media (--bp-lg-up) {
+    .pair.split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

@@ -1,0 +1,56 @@
+---
+// Preview of each template with sample data (M4-04, #23): the first zh-TW entry the template
+// serves, drafts included, which no real route builds (content-model.md: drafts have no page).
+// The listing preview is the blog's real first page (published posts only, PAGE_SIZE of them);
+// the contact preview uses the contact page entry when there is one.
+// Internal page (src/lib/seo/indexing.ts); PageLayout marks it as a preview. The home template
+// is the home page itself, so it has no preview here.
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import { node } from '../../lib/ia/navigation';
+import { templates } from '../../lib/ia/templates';
+import { entryLocale, paginate } from '../../lib/content/entries';
+import { listing } from '../../lib/content/listings';
+import { DEFAULT_LOCALE } from '../../lib/i18n/locales';
+import OfferingTemplate from '../../layouts/templates/OfferingTemplate.astro';
+import HubTemplate from '../../layouts/templates/HubTemplate.astro';
+import ContentTemplate from '../../layouts/templates/ContentTemplate.astro';
+import GatedDownloadTemplate from '../../layouts/templates/GatedDownloadTemplate.astro';
+import ArticleTemplate from '../../layouts/templates/ArticleTemplate.astro';
+import CaseStudyTemplate from '../../layouts/templates/CaseStudyTemplate.astro';
+import PersonTemplate from '../../layouts/templates/PersonTemplate.astro';
+import ListingTemplate from '../../layouts/templates/ListingTemplate.astro';
+import ContactTemplate from '../../layouts/templates/ContactTemplate.astro';
+import UtilityTemplate from '../../layouts/templates/UtilityTemplate.astro';
+
+export const getStaticPaths = (() => templates.filter((t) => t.id !== 'home').map((t) => ({ params: { template: t.id } }))) satisfies GetStaticPaths;
+
+const { template } = Astro.params;
+const locale = DEFAULT_LOCALE;
+const inLocale = (e: { id: string }) => entryLocale(e.id) === locale;
+// The first sample entry of a collection, drafts included; a template without one fails the build
+async function sample<T>(entries: Promise<T[]>): Promise<T> {
+  const [first] = await entries;
+  if (!first) throw new Error(`no zh-TW sample entry for the ${template} template`);
+  return first;
+}
+const ofTemplate = (e: { id: string; data: { node: string } }) => inLocale(e) && node(e.data.node).template === template;
+const blogListing = template === 'listing' ? await listing('blog', locale) : undefined;
+const blogPages = blogListing && paginate(blogListing.items);
+const contactEntry = template === 'contact' ? (await getCollection('page', (e) => inLocale(e) && e.data.node === 'contact'))[0] : undefined;
+---
+
+{template === 'offering' && <OfferingTemplate entry={await sample(getCollection('offering', ofTemplate))} />}
+{template === 'hub' && <HubTemplate entry={await sample(getCollection('hub', ofTemplate))} />}
+{template === 'content' && <ContentTemplate entry={await sample(getCollection('page', ofTemplate))} />}
+{template === 'gated-download' && <GatedDownloadTemplate entry={await sample(getCollection('whitepaper', ofTemplate))} />}
+{template === 'article' && <ArticleTemplate kind="blog" entry={await sample(getCollection('blog', inLocale))} />}
+{template === 'case-study' && <CaseStudyTemplate entry={await sample(getCollection('case-study', inLocale))} />}
+{template === 'person' && <PersonTemplate entry={await sample(getCollection('person', inLocale))} />}
+{
+  blogListing && blogPages && (
+    <ListingTemplate id="blog" locale={locale} items={blogPages[0] ?? []} featured={blogListing.featured} page={1} pages={blogPages.length} />
+  )
+}
+{template === 'contact' && <ContactTemplate locale={locale} entry={contactEntry} />}
+{template === 'utility' && <UtilityTemplate kind="not-found" locale={locale} />}

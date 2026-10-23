@@ -7,7 +7,8 @@ import { breadcrumbList, graph, isoDate, organizationNode, type PageContext } fr
 type Page = CollectionEntry<'page'>['data'];
 
 interface PageJsonLdInput extends PageContext {
-  page: Page;
+  // Only the fields the JSON-LD uses, so the contact page, which has no entry, passes its node's
+  page: Pick<Page, 'title' | 'description' | 'node' | 'effectiveDate'>;
   /** Absolute URL of the organization logo file */
   logoUrl: string;
 }
@@ -26,5 +27,5 @@ export function pageJsonLd({ page, org, site, url, inLanguage, trail, logoUrl }:
     ...(type === 'WebPage' ? {} : { mainEntity: organizationNode(org, site, logoUrl) }),
     ...(page.effectiveDate ? { datePublished: isoDate(page.effectiveDate) } : {}),
   };
-  return graph(main, breadcrumbList(trail, site));
+  return graph(main, breadcrumbList(trail, site, inLanguage));
 }

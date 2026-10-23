@@ -1,0 +1,37 @@
+---
+// A page's one form (contact, document request, newsletter) on a raised panel, so it reads as the
+// page's task: the form's heading, then its fields with even spacing. The form is labelled by its
+// heading. Fields are FormField; the page lays out anything more (a two-column row, a fieldset).
+// Sending is M6-01's, so there is no action yet.
+interface Props {
+  // id of the heading, unique on the page
+  id: string;
+  title: string;
+}
+
+const { id, title } = Astro.props;
+---
+
+<form class="form-panel" aria-labelledby={id}>
+  <h2 id={id} class="title">{title}</h2>
+  <slot />
+</form>
+
+<style>
+  .form-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-8);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-subtle);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-snug);
+  }
+</style>

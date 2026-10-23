@@ -32,7 +32,7 @@ test('groups tokens by prefix and by name with its "-" extensions, first match w
     { id: 'a', title: 'A', layer: 'scale', kind: 'length', patterns: ['--space-'] },
     { id: 'b', title: 'B', layer: 'semantic', kind: 'color', patterns: ['--color-text'], kinds: { '--color-text-muted': 'value' } },
   ];
-  const r = groupTokens(['--space-1', '--color-text', '--color-text-muted', '--color-textual', '--wf-space-1'], groups);
+  const r = groupTokens(['--space-1', '--color-text', '--color-text-muted', '--color-textual'], groups);
   assert.deepEqual(r.groups.map((g) => g.tokens), [
     [{ name: '--space-1', kind: 'length' }],
     [
@@ -70,10 +70,10 @@ test('flags IA nodes at or below an internal page, not paths that only share the
   const nodes = [
     { id: 'home', path: '/' },
     { id: 'ds', path: '/design-system' },
-    { id: 'wf', path: '/wireframes/home' },
+    { id: 'tpl', path: '/templates/hub' },
     { id: 'other', path: '/design-systems-guide' },
   ];
-  assert.deepEqual(internalNodes(nodes).map((n) => n.id), ['ds', 'wf']);
+  assert.deepEqual(internalNodes(nodes).map((n) => n.id), ['ds', 'tpl']);
 });
 
 test('token names include ones declared only on the dark surface', () => {

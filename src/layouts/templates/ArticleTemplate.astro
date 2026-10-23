@@ -1,0 +1,190 @@
+---
+// article template (M4-04, #23): blog posts and news, from a blog or news entry. A light reading
+// page (design-system「設計方向」). Structure follows the M3-01 article wireframe (#14): title block with the
+// category (news: its type), author and dates; cover; the Markdown body at reading width; tags;
+// then related offerings and more posts of the same category (news: the latest other news).
+// Tags are plain labels until the listing's tag filter exists (M6).
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import PageLayout from '../PageLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Surface from '../../components/ui/Surface.astro';
+import Card from '../../components/ui/Card.astro';
+import CardGrid from '../../components/ui/CardGrid.astro';
+import TagList from '../../components/ui/TagList.astro';
+import Reveal from '../../components/ui/Reveal.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import Prose from '../../components/ui/Prose.astro';
+import { entryTrail } from '../../lib/ia/navigation';
+import { entryLocale, isPublished } from '../../lib/content/entries';
+import { categoryTitle, newsCard, postCard, type EntryCard } from '../../lib/content/cards';
+import { COLLECTION_NODES, entryPath, nodeEntryPath } from '../../lib/content/urls';
+import { newest } from '../../lib/content/listings';
+import { blogPostingJsonLd, newsArticleJsonLd } from '../../lib/seo/jsonld/article';
+import { isoDate } from '../../lib/seo/jsonld/shared';
+import { canonicalUrl } from '../../lib/seo/meta';
+import { strings } from '../../data/strings';
+
+type Props = ({ kind: 'blog'; entry: CollectionEntry<'blog'> } | { kind: 'news'; entry: CollectionEntry<'news'> }) & {
+  translations?: readonly string[];
+};
+
+const props = Astro.props;
+const { entry, translations } = props;
+const { data } = entry;
+const locale = entryLocale(entry.id);
+const t = strings(locale);
+const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
+const nodeId = COLLECTION_NODES[props.kind];
+const path = entryPath(props.kind, entry);
+const trail = entryTrail(nodeId, { title: data.title, path });
+const { Content } = await render(entry);
+
+const section = props.kind === 'blog' ? categoryTitle(props.entry.data.category) : t.newsTypes[props.entry.data.newsType];
+const author = props.kind === 'blog' ? props.entry.data.author : undefined;
+const published = isoDate(data.publishedAt);
+const updated = data.updatedAt && isoDate(data.updatedAt);
+const tagIds = props.kind === 'blog' ? (props.entry.data.tags ?? []).map((r) => r.id) : [];
+const tagNames = (await Promise.all(tagIds.map((id) => getEntry('tag', id)))).flatMap((tag) => tag?.data.name[locale] ?? []);
+
+const relatedIds = new Set(data.relatedOfferings?.map((r) => r.id));
+const offerings = (await getCollection('offering', (o) => inLocale(o) && relatedIds.has(o.id))).map((o) => ({
+  title: o.data.title,
+  description: o.data.description,
+  href: nodeEntryPath(o),
+}));
+const more: EntryCard[] =
+  props.kind === 'blog'
+    ? (await getCollection('blog', (b) => inLocale(b) && b.id !== entry.id && b.data.category === props.entry.data.category))
+        .toSorted(newest)
+        .slice(0, 3)
+        .map(postCard)
+    : (await getCollection('news', (n) => inLocale(n) && n.id !== entry.id)).toSorted(newest).slice(0, 3).map(newsCard);
+
+const org = await getEntry('organization', locale);
+if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
+if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
+const site = Astro.site;
+const image = data.ogImage ?? data.coverImage;
+const context = {
+  org: org.data,
+  site,
+  url: canonicalUrl(Astro.url.pathname, site),
+  inLanguage: locale,
+  trail,
+  imageUrl: new URL(image.src, site).href,
+  section,
+};
+const jsonLd = props.kind === 'blog' ? blogPostingJsonLd({ ...context, post: props.entry.data, tagNames }) : newsArticleJsonLd({ ...context, post: props.entry.data });
+const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
+---
+
+<PageLayout
+  title={data.seoTitle ?? data.title}
+  description={data.description}
+  type="article"
+  image={{ src: image.src, width: image.width, height: image.height, alt: data.title }}
+  jsonLd={jsonLd}
+  translations={translations}
+>
+  <PageHero tone="light" size="compact" eyebrow={section} title={data.title}>
+    <Breadcrumb slot="breadcrumb" node={nodeId} current={data.title} />
+    <dl slot="actions" class="meta">
+      {
+        author && (
+          <div>
+            <dt>{t.article.author}</dt>
+            <dd>{author}</dd>
+          </div>
+        )
+      }
+      <div>
+        <dt>{t.article.published}</dt>
+        <dd><time datetime={published}>{published.replaceAll('-', '/')}</time></dd>
+      </div>
+      {
+        updated && (
+          <div>
+            <dt>{t.article.updated}</dt>
+            <dd><time datetime={updated}>{updated.replaceAll('-', '/')}</time></dd>
+          </div>
+        )
+      }
+    </dl>
+  </PageHero>
+
+  <Surface tone="light" width="reading">
+    {/* sizes: --reading-max-width (46rem) plus the gutters */}
+    <Image class="cover" src={data.coverImage} alt="" widths={[720, 1440]} sizes="(width >= 50rem) 46rem, 100vw" loading="eager" fetchpriority="high" />
+    {
+      entry.body?.trim() && (
+        <Prose>
+          <Content />
+        </Prose>
+      )
+    }
+    {tagNames.length > 0 && <TagList items={tagNames} label={t.article.tags} />}
+  </Surface>
+
+  {
+    offerings.length > 0 && (
+      <Surface tone="dark">
+        <SectionHeading eyebrow="Related" title={t.offering.related} />
+        <CardGrid>
+          {offerings.map((o) => (
+            <li>
+              <Card title={o.title} href={o.href} description={o.description} />
+            </li>
+          ))}
+        </CardGrid>
+      </Surface>
+    )
+  }
+
+  {
+    more.length > 0 && (
+      <Surface tone="light">
+        <SectionHeading eyebrow="More" title={props.kind === 'blog' ? t.relatedPosts : t.article.moreNews} />
+        <CardGrid>
+          {more.map((p, i) => (
+            <li>
+              <Reveal delay={stagger(i)}>
+                <Card title={p.title} href={p.href} eyebrow={p.eyebrow} image={p.image} date={p.date} />
+              </Reveal>
+            </li>
+          ))}
+        </CardGrid>
+      </Surface>
+    )
+  }
+</PageLayout>
+
+<style>
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-8);
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .meta div {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .meta dd {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .cover {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--radius-lg);
+  }
+</style>

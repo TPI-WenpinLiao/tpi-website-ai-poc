@@ -19,6 +19,8 @@ interface Props {
   description?: string;
   image?: { src: ImageMetadata; alt: string };
   size?: 'md' | 'sm';
+  // YYYY-MM-DD publish date (posts, news), shown as 2026/09/11 in the meta row before the slot
+  date?: string | undefined;
   'data-preview-state'?: 'hover' | 'focus';
 }
 
@@ -31,6 +33,7 @@ const {
   description,
   image,
   size = 'md',
+  date,
   'data-preview-state': previewState,
 } = Astro.props;
 const Heading = `h${level}` as const;
@@ -50,8 +53,9 @@ const Heading = `h${level}` as const;
     <Heading class="title">{href ? <a href={href}>{title}</a> : title}</Heading>
     {description && <p class="description text-phrase">{description}</p>}
     {
-      Astro.slots.has('meta') && (
+      (date || Astro.slots.has('meta')) && (
         <div class="meta">
+          {date && <time datetime={date}>{date.replaceAll('-', '/')}</time>}
           <slot name="meta" />
         </div>
       )

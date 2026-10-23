@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-10-22
+最後更新：2026-10-23
 
 ## 目前 milestone
 
@@ -58,7 +58,7 @@
 
 ### M3 設計系統
 
-- M3-01 各模板低保真 wireframe 完成（#14，`wireframe-approved`）：11 個模板與導覽的 wireframe 在 `/wireframes`；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 vi 與 en 長譯名放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
+- M3-01 各模板低保真 wireframe 完成（#14，`wireframe-approved`）：11 個模板與導覽的 wireframe（M4-04 完成後刪除）；en、vi 選單寬度實測見 `docs/design/nav-fit.md`；第一層 6 項時 vi 與 en 長譯名放不下，「成功案例」改放「資源」底下（三語統一，`navigation.csv` 已改）
 - M3-02 design tokens 與元件庫完成（#15，`design-approved`）：深色場景與亮色閱讀頁的雙 surface、光與景深、捲動動態、12 個元件與 `/design-system` 審核頁；影像素材與提示詞見 `docs/design/image-prompts.md`
 - M3-03 design-system 展示頁完成（#16，`design-approved`）：`/design-system` 列出全部 152 個 token（三層分組）與 5 個互動元件的狀態矩陣；全域改為 `box-sizing: border-box`
 - M3-04 首頁高保真完成（#17，`design-approved`）：方向 B 的場景做成首頁 `/`（原型頁已刪除），結構照 `/wireframes/home`；文案取自現站（`src/data/home.ts`、`src/data/site.ts`，`node scripts/design/home-content.mjs` 逐筆比對現站）；新元件 `SiteHeader`（原生 `<details>` 選單，零 client JS，含「跳到主要內容」）、`SiteFooter`，`Card` 加上 `size="sm"`；公司 logo 由 `node scripts/design/import-brand.mjs` 匯入；首頁 JSON-LD（`Organization`、`WebSite`）讀 `organization` collection；方塊材質 tokens `--scene-block-*`、`--scene-rim-*`
@@ -73,14 +73,18 @@
 - M4-01 content collections 與 Zod schema 完成（#20）：`src/content.config.ts` 定義 9 個內容類型與 `tag`，每個 collection 一筆 zh-TW 範例；不合法的 frontmatter（含不存在的 `ref`）讓 `astro check` 與 build 失敗；tag 清單由 `node scripts/content/tags.mjs` 產生。寫法見 `docs/ia/content-model.md`「Astro 實作」
 - M4-02 i18n 路由完成（#21）：語系設定與路徑工具在 `src/lib/i18n/`（`astro.config.mjs` 的 `locales` 從這裡 import），語系切換元件 `LocaleSwitcher`；未翻譯的頁面不產生，切換時連到該語系首頁，連首頁都沒有的語系不列（ADR 0002）；`node scripts/i18n/routes.mjs` 在 build 後檢查 `<html lang>` 與切換連結
 - M4-03 共用 SEO 層完成（#22）：head 的 title、description、canonical、hreflang、OG/Twitter、JSON-LD 只由 `src/components/seo/Seo.astro` 輸出，頁面把資料傳給 `BaseLayout`（寫法見 `seo-checklist`「頁面怎麼寫」）；JSON-LD 產生函式依 `content-model.md` 涵蓋全部內容類型（`src/lib/seo/jsonld/`）；hreflang 列出實際存在的語系版本與 `x-default`；`src/integrations/sitemap.ts` 在 build 時寫 `dist/sitemap.xml`，排除內部頁（`src/lib/seo/indexing.ts`），沒有新增套件；`node scripts/seo/meta.mjs` 在 `npm run check` 檢查每頁 head 與 sitemap
+- M4-04 各模板 layout 完成（#23，`design-approved`）：共用 `PageLayout`（header、footer、捲動進度），11 個模板在 `src/layouts/templates/`，collection 頁、listing（每頁 12 筆，`/page/n`）、contact、utility 都由 `src/pages/[...path].astro` 產生（draft 不產生）；`/templates` 用範例資料預覽每個模板。語系版本只由 `pageLocales()` 決定，header、footer、麵包屑與 JSON-LD 的連結都加上語系前綴（`scripts/i18n/routes.mjs` 擋下跨語系連結）；非首頁都有 `BreadcrumbList`（`scripts/seo/meta.mjs` 檢查）；sitemap 排除流程頁（`src/lib/seo/indexing.ts` 的 `FLOW_PATHS`）。header 選單補上焦點移出收合、行動版選單的 `inert` 與焦點、`aria-current`。CSS 分層（`src/styles/base.css`）由 `scripts/design/css-structure.mjs` 檢查。M3-01 wireframe 已刪除
 
 ## 下一步
 
 - M3-06 M3 收尾（#19）可以開始
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
-- M4-04 各模板 layout（#23）可以開始（`needs-design`）；模板的 JSON-LD 用 `src/lib/seo/jsonld/` 的產生函式，dynamic route 建出的頁面要傳 `translations` 給 `BaseLayout`
 - M5-04 部落格與新聞批次轉換 script（#29）可以開始
+- M4-05 品質關卡擴充（#24）可以開始
+- M5-01 產品內容遷移（#26）、M5-02 解決方案內容遷移（#27）、M5-03 客戶案例遷移（#28）、M5-06 公司頁內容遷移（#31）可以開始；遷移時頁面直接由 `src/pages/[...path].astro` 產生，不用另建頁面檔
+- M6-01 表單（#33）、M6-02 Pagefind 站內搜尋（#34）、M6-03 影片延遲載入（#35）、M6-04 GTM 與 consent 管理（#36）可以開始；表單與搜尋框的版面已在 contact、gated-download、utility 模板，沒有 `action`
+- 回覆 PR #98「待確認問題」：listing、utility、contact 頁的暫定描述（`src/data/strings/zh-TW.ts` 的 `pages`）、聯絡表單的諮詢產品選項、個資同意與 AI Playbook 欄位文案、`industry: other` 的顯示名稱
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
 - M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
@@ -103,17 +107,14 @@
 - M1-05：主要轉換為聯絡業務；新站只用 GTM、需要 cookie 同意機制、Facebook Pixel 與 Ahrefs 不沿用；成功指標包含自然搜尋流量，但沒有 GA4／Search Console 權限，量測方式待定（見 `docs/research/audience-and-goals.md`）
 - M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（`seo-checklist` 的 JSON-LD 對照改為連到 `content-model.md`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）
 - M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定。`og:locale` 的 en、vi 值要改成「語言_地區」格式，M7 處理
-- 首頁、listing、utility 模板的 i18n 字串檔（`docs/ia/content-model.md`「不建 collection 的模板」）位置未定：M4-02 只做了語系路由與切換元件，由 M4-04（#23）建模板時決定
+- i18n 字串檔在 `src/data/strings/<locale>.ts`（M4-04 決定）：介面字串與 listing、utility、contact 頁的描述。這些頁沒有內容檔，只為有字串檔的語系產生；描述是暫定文案，上線前由內容負責人替換。首頁文案仍在 `src/data/home.ts`
 - `LocaleSwitcher` 的 landmark 名稱（語言／Language／Ngôn ngữ）是暫定譯文，M7-01 詞彙表（#38）定案後替換
+- M7 加 en、vi 字串檔前要處理（PR #98 審查第 1 輪）：listing、contact、utility 頁的 `translations` 現在把每個有字串檔的語系都算進去，en 的列表頁數比 zh-TW 少時，hreflang 與語言選單會指向不存在的 `/page/n`；`localeHref` 一律加語系前綴，不確認該語系有那一頁，部分翻譯時選單連結會 404；`scripts/i18n/routes.mjs` 的跨語系檢查會把 en、vi 頁上指向檔案的連結（下載頁）當成頁面連結誤報；聯絡頁只在有字串檔的語系找 contact entry，且只取第一筆，多的會被忽略；聯絡頁 hero 的說明（`src/data/home.ts` 的 `contactCta`）與 eyebrow「Contact」只有 zh-TW
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
-- M3-01 的 wireframe 頁（`src/pages/wireframes/`、`src/components/wireframe/`、`src/layouts/WfLayout.astro`、`src/lib/wireframe/`）在 M4-04 各模板 layout 完成後刪除，`tokens.css` 的 `--wf-*` 也一起刪。M3-02 起斷點寫在 `src/styles/media.css` 的 `@custom-media`，wireframe 的 media query 已改用
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
-- M3-04 的 `SiteHeader`、`SiteFooter` 目前由首頁與產品頁自己放；M4-04 移進共用 layout，補上其餘的選單鍵盤操作並量測 en、vi 的正式 header 寬度。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
-- 首頁行動版 Lighthouse performance 0.95（`node scripts/design/lighthouse-3d.mjs`，2026-10-22），剛好在門檻上：header＋footer 多一個 render-blocking CSS，約 150 ms；全部 inline CSS 對 LCP 沒有幫助。M4-04 把 header、footer 移進共用 layout 時，連同 preview 真機量測再處理
+- `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
+- 首頁行動版 Lighthouse performance 中位數 0.94（`node scripts/design/lighthouse-3d.mjs /`，2026-10-23，各跑 3 次），單次在 0.91–0.96 之間浮動。M4-04 比較了三種 CSS 載入方式：現狀（3 個 CSS 檔）、`build.inlineStylesheets: 'always'`、小檔 inline，分數都是 0.94；全部 inline 讓 FCP 快約 450 ms、LCP 快約 150 ms，但每頁 HTML 從 23 KB 變 89 KB、換頁沒有 CSS 快取，所以維持現狀。扣分主要來自 3D chunk 的 TBT。preview 上的真機量測還沒做
 - 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；M5 遷移文章後改讀 content collections 並刪除這個檔案。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - M3-05：現站 digiRunner 頁有 content-model 沒有欄位的段落（AI Gateway、AI Governance、五大應用、四大機制、API Composer／沙盒／即時主控台、資安、金檢合規），產品頁沒有放；M5-01（#26）前請內容負責人決定刪減或擴充 content model。`useCases.industry` 沒有保險、醫療、物聯網，這三個情境沒有產業連結
-- header 的語言選單（`SiteHeader.astro`）只用 `staticRoutes` 算 `localeLinks`，沒有 `translations`；M4-04（#23）建 dynamic route 的模板時，讓每頁的語系版本清單只在一處決定（例如由 `BaseLayout` 傳給 `Seo`、`SiteHeader`、`LocaleSwitcher`），否則 hreflang 指到 `/en/blog/x` 時 header 選單仍退回 `/en`
-- 麵包屑的連結（`Breadcrumb.astro` 與 JSON-LD 的 `breadcrumbList`）用 `nodes.csv` 沒有語系前綴的 `path`，en、vi 頁面會連到 zh-TW 版；M4-04（#23）建模板時兩處一起改用 `localizePath`
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
 - `npm run check` 的 LHCI 用 `staticDistDir` 自動探索，只測前 5 個 URL（M3-07 時 build 出 16 頁只測 5 頁），其餘頁面沒有 Lighthouse 關卡，由 #87 處理
-- `docs/design/nav-fit.md` 的量測用容器字型與 wireframe 的間距（`--wf-space-3` 仍是 12px），M3-02 後 `node scripts/wireframe/nav-fit.mjs --check` 仍通過；正式 header（M4-04）的選單間距與 Inter 字型要另外實測

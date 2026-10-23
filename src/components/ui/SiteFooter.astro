@@ -3,9 +3,10 @@
 // from docs/ia/navigation.csv (src/lib/ia/navigation.ts); the phone is the headquarters office of
 // the organization data file (src/content/organization), Email and copyright come from the current
 // site (src/data/site.ts). Dark surface, so it closes every page the same way.
-import { footer, footerBottom, node } from '../../lib/ia/navigation';
+import { localizedNav, node, nodeHref } from '../../lib/ia/navigation';
 import { getEntry } from 'astro:content';
 import { company } from '../../data/site';
+import { strings } from '../../data/strings';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
@@ -14,9 +15,14 @@ import logo from '../../assets/brand/logo-horizontal-white.png';
 // Rendered height in px; matches --logo-height-lg (3rem)
 const LOGO_HEIGHT = 48;
 
-const home = node('home');
 const contact = node('contact');
 const locale = localeFromPath(normalizePath(Astro.url.pathname));
+const t = strings(locale);
+const path = normalizePath(Astro.url.pathname);
+// The link to the page being shown (docs/ia/navigation.md「無障礙」)
+const current = (href: string | undefined) => (href === path ? 'page' : undefined);
+const footer = localizedNav('footer', locale);
+const footerBottom = localizedNav('footer-bottom', locale);
 const org = await getEntry('organization', locale);
 const phone = org?.data.offices.find((o) => o.headquarters)?.phone;
 if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a headquarters phone for the footer`);
@@ -26,23 +32,23 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
   <div class="inner">
     <div class="top">
       <div class="company">
-        <a class="brand" href={home.path}>
-          <Image class="logo" src={logo} alt="TPIsoftware 昕力資訊（回首頁）" height={LOGO_HEIGHT} densities={[1, 2]} />
+        <a class="brand" href={nodeHref('home', locale)}>
+          <Image class="logo" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} densities={[1, 2]} />
         </a>
         <dl class="contact">
           <div>
-            <dt>電話</dt>
+            <dt>{t.phone}</dt>
             <dd><a href={`tel:${phone.replaceAll(' ', '')}`}>{phone.replaceAll(' ', '\u00a0')}</a></dd>
           </div>
           <div>
-            <dt>Email</dt>
+            <dt>{t.email}</dt>
             <dd><a href={`mailto:${company.email.text}`}>{company.email.text}</a></dd>
           </div>
         </dl>
-        <Button href={contact.path} variant="secondary" size="sm">{contact.title}</Button>
+        <Button href={nodeHref('contact', locale)} variant="secondary" size="sm">{contact.title}</Button>
       </div>
 
-      <nav class="columns" aria-label="頁尾選單">
+      <nav class="columns" aria-label={t.footerNav}>
         {
           footer.map((group) => (
             <div>
@@ -50,9 +56,9 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
               <ul>
                 {group.children.map((c) => (
                   <li>
-                    <a href={c.href}>
+                    <a href={c.href} aria-current={current(c.href)}>
                       {c.label}
-                      {c.external && <span class="sr-only">（獨立網站）</span>}
+                      {c.external && <span class="sr-only">{t.externalSite}</span>}
                     </a>
                   </li>
                 ))}
@@ -65,11 +71,13 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
 
     <div class="bottom">
       <p class="copyright">{company.copyright.text}</p>
-      <ul class="legal" aria-label="法務資訊">
+      <ul class="legal" aria-label={t.legal}>
         {
           footerBottom.map((l) => (
             <li>
-              <a href={l.href}>{l.label}</a>
+              <a href={l.href} aria-current={current(l.href)}>
+                {l.label}
+              </a>
             </li>
           ))
         }
@@ -108,6 +116,10 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
   a:hover {
     color: var(--color-text);
     text-decoration: underline;
+  }
+
+  a[aria-current='page'] {
+    color: var(--color-text);
   }
 
   .top {

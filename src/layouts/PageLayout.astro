@@ -1,0 +1,56 @@
+---
+// Layout of every site page (M4-04, #23): header, scroll progress, <main id="main"> and footer
+// around the page content. The page's locale versions are decided here once (pageLocales) and go
+// to both the <head> (hreflang) and the header's language menu. Pages built through a dynamic route
+// pass their other locale versions as `translations`.
+// The `nav` slot sits between the header and <main>, for an in-page table of contents (InPageNav).
+// On internal pages (the /templates previews) a bar says the page shows sample data, and the
+// title and description say so too, so they don't repeat those of the real page.
+import BaseLayout from './BaseLayout.astro';
+import SiteHeader from '../components/ui/SiteHeader.astro';
+import SiteFooter from '../components/ui/SiteFooter.astro';
+import ScrollProgress from '../components/ui/ScrollProgress.astro';
+import type { Props as SeoProps } from '../components/seo/Seo.astro';
+import { pageLocales } from '../lib/i18n/routes';
+import { isInternal } from '../lib/seo/indexing';
+
+type Props = Omit<SeoProps, 'locales'> & {
+  // URL paths of this page's other locale versions (dynamic routes only; static pages are found
+  // in staticRoutes)
+  translations?: readonly string[];
+};
+
+const { translations, title, description, ...seo } = Astro.props;
+const locales = pageLocales(Astro.url.pathname, translations);
+const preview = isInternal(Astro.url.pathname);
+const PREVIEW = '模板預覽';
+---
+
+<BaseLayout
+  {...seo}
+  title={preview ? `${PREVIEW}：${title}` : title}
+  description={preview ? `${PREVIEW}（範例資料）：${title}。${description}` : description}
+  locales={locales}
+>
+  <SiteHeader locales={locales} />
+  <!-- After the header: same z-index, so the later one paints the bar on top of the header -->
+  <ScrollProgress />
+  <!-- Below the header: above it, the notice would uncover the skip link hidden above the header -->
+  {preview && <p class="preview-notice">{PREVIEW}：範例資料，包含不會發布的 draft 內容；不在導覽與 sitemap 裡。</p>}
+  <slot name="nav" />
+  <main id="main">
+    <slot />
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .preview-notice {
+    margin: 0;
+    padding: var(--space-2) var(--space-gutter);
+    background: var(--color-bg-accent-subtle);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    text-align: center;
+  }
+</style>

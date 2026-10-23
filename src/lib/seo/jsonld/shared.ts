@@ -3,6 +3,8 @@
 // wrapper. Pure functions; src/components/seo/Seo.astro serializes the result.
 import type { CollectionEntry } from 'astro:content';
 import type { IaNode } from '../../ia/nodes';
+import type { Locale } from '../../i18n/locales.ts';
+import { localizePath } from '../../i18n/paths.ts';
 
 export type Organization = CollectionEntry<'organization'>['data'];
 export type JsonLdNode = Record<string, unknown>;
@@ -45,10 +47,16 @@ export const organizationRef = (org: Organization, site: URL): JsonLdNode => ({
   url: site.href,
 });
 
-// Every page except home (content-model.md「內容類型總覽」); trail is home → this page, group nodes left out
-export const breadcrumbList = (trail: readonly IaNode[], site: URL): JsonLdNode => ({
+// Every page except home (content-model.md「內容類型總覽」); trail is home → this page, group nodes
+// left out. Items are the pages in the page's own locale, as the visible breadcrumb links
+export const breadcrumbList = (trail: readonly IaNode[], site: URL, locale: Locale): JsonLdNode => ({
   '@type': 'BreadcrumbList',
-  itemListElement: trail.map((n, i) => ({ '@type': 'ListItem', position: i + 1, name: n.title, item: new URL(n.path, site).href })),
+  itemListElement: trail.map((n, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: n.title,
+    item: new URL(localizePath(n.path, locale), site).href,
+  })),
 });
 
 export const faqPage = (faq: readonly { question: string; answer: string }[]): JsonLdNode => ({
@@ -66,7 +74,7 @@ export interface PageContext {
   /** The page's canonical URL (canonicalUrl() in ../meta.ts) */
   url: string;
   /** Page language (BCP 47), e.g. zh-TW */
-  inLanguage: string;
+  inLanguage: Locale;
   org: Organization;
   /** Breadcrumb trail from home to this page (src/lib/ia/navigation.ts breadcrumb()) */
   trail: readonly IaNode[];

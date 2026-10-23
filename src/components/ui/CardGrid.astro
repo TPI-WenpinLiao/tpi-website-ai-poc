@@ -1,0 +1,55 @@
+---
+// List of cards (Card) under a section heading: one column on phones, two from --bp-sm-up and
+// `cols` from --bp-lg-up. Cards in a row share the tallest one's height, also through a Reveal
+// wrapper. Put each card in its own <li>. `compact` keeps two short cards (Card size="sm") per row
+// on phones too, with a smaller gap there (home page services).
+interface Props {
+  cols?: 1 | 2 | 3;
+  compact?: boolean;
+}
+
+const { cols = 3, compact = false } = Astro.props;
+---
+
+<ul class:list={['card-grid', { compact }]} data-cols={cols}>
+  <slot />
+</ul>
+
+<style>
+  @import '../../styles/media.css';
+
+  .card-grid {
+    display: grid;
+    gap: var(--space-6);
+    margin: var(--space-10) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The card fills its item (Card is block-size: 100%) */
+  .card-grid > :global(li),
+  .card-grid > :global(li > *) {
+    block-size: 100%;
+  }
+
+  .compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  @media (--bp-sm-up) {
+    .card-grid:not([data-cols='1']) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .compact {
+      gap: var(--space-6);
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .card-grid[data-cols='3'] {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

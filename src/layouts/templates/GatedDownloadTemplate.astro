@@ -1,0 +1,163 @@
+---
+// gated-download template (M4-04, #23): whitepapers and other documents behind a form, from a
+// whitepaper entry. Structure follows the M3-01 gated-download wireframe (#14): cover, summary and key points
+// beside the request form (below it on narrow screens), then the offering the document is about.
+// The form shows the fields of the current site's whitepaper forms (docs/research/features.md);
+// sending it, the endpoint and the file are M6-01's, so it has no action yet.
+import type { CollectionEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import PageLayout from '../PageLayout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Surface from '../../components/ui/Surface.astro';
+import Card from '../../components/ui/Card.astro';
+import CardGrid from '../../components/ui/CardGrid.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import Button from '../../components/ui/Button.astro';
+import FormField from '../../components/ui/FormField.astro';
+import FormPanel from '../../components/ui/FormPanel.astro';
+import { breadcrumb, localeHref, node } from '../../lib/ia/navigation';
+import { entryLocale } from '../../lib/content/entries';
+import { whitepaperJsonLd } from '../../lib/seo/jsonld/whitepaper';
+import { canonicalUrl } from '../../lib/seo/meta';
+import { strings } from '../../data/strings';
+
+interface Props {
+  entry: CollectionEntry<'whitepaper'>;
+  translations?: readonly string[];
+}
+
+const { entry, translations } = Astro.props;
+const { data } = entry;
+const locale = entryLocale(entry.id);
+const t = strings(locale);
+const href = localeHref(locale);
+const self = node(data.node);
+const offering = node(data.offeringNode);
+const offeringHref = href(offering);
+const f = t.form;
+
+const org = await getEntry('organization', locale);
+if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
+if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
+const site = Astro.site;
+const cover = data.ogImage ?? data.coverImage;
+const jsonLd = whitepaperJsonLd({
+  whitepaper: data,
+  org: org.data,
+  site,
+  url: canonicalUrl(Astro.url.pathname, site),
+  inLanguage: locale,
+  trail: breadcrumb(self.id),
+  imageUrl: new URL(cover.src, site).href,
+  about: { name: offering.title, url: new URL(offeringHref ?? '/', site).href },
+});
+---
+
+<PageLayout
+  title={data.seoTitle ?? data.title}
+  description={data.description}
+  image={{ src: cover.src, width: cover.width, height: cover.height, alt: data.title }}
+  jsonLd={jsonLd}
+  translations={translations}
+>
+  <PageHero eyebrow={node(self.parent).title} title={data.title}>
+    <Breadcrumb slot="breadcrumb" node={self.id} />
+  </PageHero>
+
+  <Surface tone="light">
+    <div class="split">
+      <div class="about">
+        <Image class="cover" src={data.coverImage} alt="" widths={[480, 960]} sizes="(width >= 64rem) 36rem, 100vw" loading="eager" />
+        <p class="lead text-phrase">{data.description}</p>
+        {
+          data.summary && (
+            <div class="summary">
+              <SectionHeading level={2} eyebrow="Inside" title={t.download.summary} />
+              <ul>
+                {data.summary.map((s) => (
+                  <li>{s}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="request">
+        <FormPanel id="request-title" title={t.download.request}>
+        <FormField kind="text" id="name" name="name" label={f.name} autocomplete="name" required />
+        <FormField kind="tel" id="phone" name="phone" label={f.phone} autocomplete="tel" required />
+        <FormField kind="email" id="email" name="email" label={f.email} autocomplete="email" required />
+        <FormField kind="text" id="company" name="company" label={f.company} autocomplete="organization" required />
+        <FormField kind="text" id="job" name="job" label={f.jobTitle} autocomplete="organization-title" required />
+        <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required />
+        <Button type="submit" size="lg">{t.download.submit}</Button>
+        </FormPanel>
+      </div>
+    </div>
+  </Surface>
+
+  <Surface tone="dark">
+    <SectionHeading eyebrow="Related" title={t.offering.related} />
+    <CardGrid cols={1}>
+      <li>
+        <Card title={offering.title} href={offeringHref} eyebrow={node(offering.parent).title} size="sm" />
+      </li>
+    </CardGrid>
+  </Surface>
+</PageLayout>
+
+<style>
+  @import '../../styles/media.css';
+
+  .split {
+    display: grid;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  .about {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .cover {
+    max-inline-size: 100%;
+    block-size: auto;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .lead {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  .summary ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: var(--space-6) 0 0;
+    padding-inline-start: var(--space-6);
+  }
+
+  .summary li::marker {
+    color: var(--color-text-accent);
+  }
+
+  @media (--bp-lg-up) {
+    .split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .request {
+      position: sticky;
+      inset-block-start: calc(var(--header-height) + var(--space-6));
+    }
+  }
+</style>

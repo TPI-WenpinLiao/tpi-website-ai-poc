@@ -2,12 +2,17 @@
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/tokens.css';
+import '../styles/base.css';
 import Seo, { type Props as SeoProps } from '../components/seo/Seo.astro';
+import type { LocaleLink } from '../lib/i18n/alternates';
 import { localeFromPath, normalizePath } from '../lib/i18n/paths';
+import { pageLocales } from '../lib/i18n/routes';
 
-// Every SEO prop goes to Seo (src/components/seo/Seo.astro)
-type Props = SeoProps;
+// Every SEO prop goes to Seo (src/components/seo/Seo.astro). `locales` defaults to the static
+// page's own; PageLayout passes the list it also hands the header, for pages with `translations`
+type Props = Omit<SeoProps, 'locales'> & { locales?: readonly LocaleLink[] };
 
+const { locales = pageLocales(Astro.url.pathname), ...seo } = Astro.props;
 const lang = localeFromPath(normalizePath(Astro.url.pathname));
 ---
 
@@ -16,7 +21,7 @@ const lang = localeFromPath(normalizePath(Astro.url.pathname));
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <Seo {...Astro.props} />
+    <Seo {...seo} locales={locales} />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   </head>
@@ -25,57 +30,3 @@ const lang = localeFromPath(normalizePath(Astro.url.pathname));
   </body>
 </html>
 
-<style is:global>
-  /* Sizes include padding and border. Without this, <a> buttons and text inputs (content-box)
-     outgrow <button> and <select> (border-box in the UA stylesheet) with the same min-height. */
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    font-family: var(--font-sans);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    color: var(--color-text);
-    background: var(--color-bg);
-  }
-
-  /* Short display text breaks Chinese only at spaces and punctuation, never inside a word
-     (數位轉／型, 與能／源): headings, and lead text or labels marked .text-phrase. A run too long for
-     the line still breaks anywhere instead of overflowing; a line-start full-width opening bracket
-     drops its blank half where the font supports it (PingFang TC, Noto Sans TC). Not for body
-     paragraphs, where breaks only at punctuation would leave ragged lines. */
-  :is(h1, h2, h3, h4, h5, h6),
-  .text-phrase {
-    word-break: keep-all;
-    overflow-wrap: anywhere;
-    text-spacing-trim: trim-start;
-  }
-
-  /* Semantic tokens switch on any data-surface="dark" element; give it the matching paint */
-  [data-surface='dark'] {
-    background: var(--color-bg);
-    color: var(--color-text);
-  }
-
-  /* One focus style for every interactive element; the offset keeps the ring on the surrounding
-     surface, which is what scripts/design/contrast.mjs checks it against. data-preview-state="focus"
-     draws it statically on the /design-system page. */
-  :focus-visible,
-  [data-preview-state='focus'] {
-    outline: var(--focus-ring-width) solid var(--color-focus);
-    outline-offset: var(--focus-ring-offset);
-  }
-
-  .sr-only {
-    position: absolute;
-    width: var(--border-width);
-    height: var(--border-width);
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-</style>

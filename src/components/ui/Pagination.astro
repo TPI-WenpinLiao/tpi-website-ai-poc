@@ -1,0 +1,104 @@
+---
+// Page links of a listing (ADR 0002「列表分頁」: /blog, /blog/page/2, …): previous, every page
+// number, next. Plain links, no client JS; the current page is marked with aria-current and is not
+// a link. Renders nothing for a single page. `hrefFor` builds the URL of page n (pagePath()).
+// data-preview-state on the first linked number draws its hover or focus state, for /design-system only.
+interface Props {
+  current: number;
+  total: number;
+  hrefFor: (n: number) => string;
+  label: string;
+  previous: string;
+  next: string;
+  'data-preview-state'?: 'hover' | 'focus';
+}
+
+const { current, total, hrefFor, label, previous, next, 'data-preview-state': previewState } = Astro.props;
+const pages = Array.from({ length: total }, (_, i) => i + 1);
+const previewed = pages.find((n) => n !== current);
+---
+
+{
+  total > 1 && (
+    <nav class="pagination" aria-label={label}>
+      <ul>
+        {current > 1 && (
+          <li>
+            <a class="step" href={hrefFor(current - 1)} rel="prev">
+              {previous}
+            </a>
+          </li>
+        )}
+        {pages.map((n) => (
+          <li>
+            {n === current ? (
+              <span class="page" aria-current="page">
+                {n}
+              </span>
+            ) : (
+              <a class="page" href={hrefFor(n)} data-preview-state={n === previewed ? previewState : undefined}>
+                {n}
+              </a>
+            )}
+          </li>
+        ))}
+        {current < total && (
+          <li>
+            <a class="step" href={hrefFor(current + 1)} rel="next">
+              {next}
+            </a>
+          </li>
+        )}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+    margin: var(--space-12) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .page,
+  .step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--touch-target);
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      background var(--duration-fast) var(--ease-standard);
+  }
+
+  .step {
+    font-family: var(--font-sans);
+  }
+
+  a:is(:hover, [data-preview-state='hover']) {
+    border-color: var(--color-border-brand);
+    background: var(--color-bg-muted);
+  }
+
+  /* shared-ok: the selected state of FilterBar and Pagination; a base.css class would lose to
+     each control's scoped colors and border */
+  [aria-current='page'] {
+    border-color: transparent;
+    background: var(--color-action);
+    color: var(--color-action-text);
+    font-weight: var(--font-weight-semibold);
+  }
+</style>

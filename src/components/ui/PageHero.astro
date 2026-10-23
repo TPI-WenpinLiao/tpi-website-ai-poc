@@ -9,6 +9,9 @@
 // and to the lower half on narrow screens, where the scrim is. On narrow screens the hero runs
 // breadcrumb row → visual area → copy; the visual area is an empty element marked
 // data-hero-visual, which the 3D runtime measures to frame the scene (ADR 0003).
+// size="compact" is the reading pages' title block (article, content, listing, utility): the h1 at
+// --font-size-h2, so long article titles stay a few lines, and --space-16 below it (Surface
+// trim="end"; the next section on the same tone drops its top padding).
 // Headings break Chinese only at spaces and punctuation (BaseLayout). A title with neither, such as
 // 以頂尖科技為企業賦能, marks where it may break with U+200B (zero-width space): '以頂尖科技\u200b為企業賦能'.
 import Surface from './Surface.astro';
@@ -18,9 +21,10 @@ interface Props {
   eyebrow?: string;
   description?: string;
   tone?: 'light' | 'dark';
+  size?: 'display' | 'compact';
 }
 
-const { title, eyebrow, description, tone = 'dark' } = Astro.props;
+const { title, eyebrow, description, tone = 'dark', size = 'display' } = Astro.props;
 const hasVisual = Astro.slots.has('visual');
 const hasBackdrop = Astro.slots.has('backdrop');
 const hasCrumbs = Astro.slots.has('breadcrumb');
@@ -28,7 +32,7 @@ const hasCrumbs = Astro.slots.has('breadcrumb');
 const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : undefined;
 ---
 
-<Surface tone={tone} pattern="grid" class="page-hero" style={imageDrop}>
+<Surface tone={tone} pattern="grid" class="page-hero" style={imageDrop} trim={size === 'compact' ? 'end' : undefined}>
   {
     hasBackdrop && (
       <Fragment slot="backdrop">
@@ -36,7 +40,7 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
       </Fragment>
     )
   }
-  <div class:list={['hero-body', { 'has-backdrop': hasBackdrop, 'has-crumbs': hasCrumbs }]}>
+  <div class:list={['hero-body', { 'size-compact': size === 'compact', 'has-backdrop': hasBackdrop, 'has-crumbs': hasCrumbs }]}>
     {
       hasCrumbs && (
         <div class="crumbs">
@@ -47,7 +51,7 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
     {hasBackdrop && <div class="hero-visual" data-hero-visual aria-hidden="true" />}
     <div class:list={['layout', { split: hasVisual, 'has-backdrop': hasBackdrop }]}>
       <div class="copy">
-        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        {eyebrow && <p class="eyebrow signal-dot">{eyebrow}</p>}
         <h1>{title}</h1>
         {description && <p class="description text-phrase">{description}</p>}
         {
@@ -96,15 +100,6 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
     text-transform: uppercase;
   }
 
-  .eyebrow::before {
-    content: '';
-    inline-size: var(--space-2);
-    block-size: var(--space-2);
-    border-radius: var(--radius-pill);
-    background: var(--color-accent);
-    box-shadow: var(--glow-accent);
-  }
-
   h1 {
     margin: 0;
     color: var(--color-text);
@@ -127,6 +122,18 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
     flex-wrap: wrap;
     gap: var(--space-3);
     margin-block-start: var(--space-2);
+  }
+
+  .size-compact h1 {
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  /* A compact hero's description can be a long summary: it breaks like body text, not as a phrase */
+  .size-compact .description {
+    font-size: var(--font-size-lg);
+    word-break: normal;
   }
 
   /* The breadcrumb row sits --space-6 below the hero's top edge instead of the section padding */

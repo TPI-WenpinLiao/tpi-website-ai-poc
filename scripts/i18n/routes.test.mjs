@@ -1,7 +1,7 @@
 // routeProblems in scripts/i18n/routes.mjs: the dist-level check of the ADR 0002 locale rules.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { routeProblems, urlPath } from './routes.mjs';
+import { externalPaths, routeProblems, urlPath } from './routes.mjs';
 
 const page = (lang, switcher = '') => `<!doctype html><html lang="${lang}"><body>${switcher}</body></html>`;
 const switcher = (...links) =>
@@ -36,4 +36,15 @@ test('switcher links to unbuilt pages or with the wrong lang fail', () => {
     '/about: locale switcher links to /en/about, which was not built',
     '/about: locale switcher link / has lang="vi"',
   ]);
+});
+
+test('site links on an en page must stay under /en, except language links and external sub-sites', () => {
+  const body = '<a href="/en/about">ok</a><a href="/about">bad</a><a href="/" hreflang="zh-TW">lang</a><a href="/tpu">tpu</a><a href="/en#x">ok</a>';
+  const pages = new Map([['/en', page('en', body)]]);
+  assert.deepEqual(routeProblems(pages, new Set(['/tpu'])), ['/en: links to /about, outside its locale en']);
+});
+
+test('external sub-sites come from nodes.csv kind external', () => {
+  const csv = 'id,parent,title,template,kind,path,note\nhome,,首頁,home,page,/,\ntpu,home,昕力大學,,external,/tpu,\n';
+  assert.deepEqual([...externalPaths(csv)], ['/tpu']);
 });

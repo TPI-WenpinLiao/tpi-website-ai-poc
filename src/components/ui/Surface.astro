@@ -4,15 +4,20 @@
 // switches with data-surface, so components inside need no variants.
 // pattern="grid" draws the coordinate grid that fades out from the top. The `backdrop` slot takes a
 // Backdrop image, drawn under the grid.
+// Two sections in a row on the same tone read as one band, so the second drops its top padding:
+// the gap between them is one --space-section, not two. A change of tone keeps both paddings.
+// trim="end" cuts the bottom padding to --space-16, for a compact title block (PageHero
+// size="compact") that leads straight into its page's text.
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = HTMLAttributes<'section'> & {
   tone?: 'light' | 'dark';
   pattern?: 'none' | 'grid';
   width?: 'content' | 'reading';
+  trim?: 'end';
 };
 
-const { tone = 'light', pattern = 'none', width = 'content', class: className, ...rest } = Astro.props;
+const { tone = 'light', pattern = 'none', width = 'content', trim, class: className, ...rest } = Astro.props;
 ---
 
 <section class:list={['surface', pattern, className]} data-surface={tone} {...rest}>
@@ -23,7 +28,7 @@ const { tone = 'light', pattern = 'none', width = 'content', class: className, .
       </div>
     )
   }
-  <div class:list={['inner', width]}>
+  <div class:list={['inner', width, { 'trim-end': trim === 'end' }]}>
     <slot />
   </div>
 </section>
@@ -74,5 +79,14 @@ const { tone = 'light', pattern = 'none', width = 'content', class: className, .
 
   .reading {
     max-width: var(--reading-max-width);
+  }
+
+  .surface[data-surface='light'] + .surface[data-surface='light'] > .inner,
+  .surface[data-surface='dark'] + .surface[data-surface='dark'] > .inner {
+    padding-block-start: 0;
+  }
+
+  .trim-end {
+    padding-block-end: var(--space-16);
   }
 </style>

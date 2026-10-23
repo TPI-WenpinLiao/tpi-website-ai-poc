@@ -1,0 +1,42 @@
+---
+// Closing call to action of a page: a dark section with the coordinate grid and a centered panel
+// framed by the energy gradient, with the contact copy from the current site (src/data/home.ts)
+// and one button to 聯絡我們 in the page's locale. `label` replaces the button text (an offering
+// whose cta is demo says 預約演示).
+import Surface from './Surface.astro';
+import SectionHeading from './SectionHeading.astro';
+import Button from './Button.astro';
+import { contactCta } from '../../data/home';
+import { node, nodeHref } from '../../lib/ia/navigation';
+import { localeFromPath } from '../../lib/i18n/paths';
+
+interface Props {
+  label?: string;
+}
+
+const { label = node('contact').title } = Astro.props;
+const href = nodeHref('contact', localeFromPath(Astro.url.pathname));
+---
+
+<Surface tone="dark" pattern="grid">
+  <div class="contact-cta">
+    <SectionHeading eyebrow="Contact" title={contactCta.title.text} description={contactCta.description.text} align="center" />
+    <Button href={href} size="lg">{label}</Button>
+  </div>
+</Surface>
+
+<style>
+  .contact-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-12) var(--space-6);
+    border: var(--border-width) solid transparent;
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+      var(--gradient-energy) border-box;
+    box-shadow: var(--glow-brand);
+  }
+</style>

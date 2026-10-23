@@ -1,0 +1,117 @@
+---
+// Long-form text from Markdown (article bodies, content pages, case-study write-ups): headings,
+// paragraphs, lists, links, images, tables, quotes and code at reading width. Pages put the
+// rendered entry (<Content />) or plain paragraphs inside. Reading pages use it on the light
+// surface; colors follow the surrounding data-surface. Headings in the Markdown start at h2, under
+// the page's h1.
+---
+
+<div class="prose">
+  <slot />
+</div>
+
+<style>
+  .prose {
+    max-inline-size: var(--reading-max-width);
+    color: var(--color-text);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-base);
+  }
+
+  .prose > :global(:first-child) {
+    margin-block-start: 0;
+  }
+
+  .prose > :global(:last-child) {
+    margin-block-end: 0;
+  }
+
+  .prose :global(:is(p, ul, ol, blockquote, figure, table, pre)) {
+    margin-block: 0 var(--space-6);
+  }
+
+  .prose :global(h2) {
+    margin-block: var(--space-12) var(--space-4);
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-snug);
+  }
+
+  .prose :global(h3) {
+    margin-block: var(--space-8) var(--space-3);
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-snug);
+  }
+
+  .prose :global(:is(ul, ol)) {
+    padding-inline-start: var(--space-6);
+  }
+
+  .prose :global(li + li) {
+    margin-block-start: var(--space-2);
+  }
+
+  .prose :global(li::marker) {
+    color: var(--color-text-accent);
+  }
+
+  /* Links in running text are always underlined, as Link variant="inline" */
+  .prose :global(a) {
+    color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: var(--underline-offset);
+  }
+
+  .prose :global(a:hover) {
+    color: var(--color-link-hover);
+  }
+
+  .prose :global(img) {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--radius-md);
+  }
+
+  .prose :global(blockquote) {
+    padding-inline-start: var(--space-6);
+    border-inline-start: var(--border-width-strong) solid var(--color-border-brand);
+    color: var(--color-text-muted);
+  }
+
+  /* Wide tables scroll inside their own box instead of widening the page */
+  .prose :global(table) {
+    display: block;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: var(--font-size-base);
+  }
+
+  .prose :global(:is(th, td)) {
+    padding: var(--space-2) var(--space-3);
+    border-block-end: var(--border-width) solid var(--color-border);
+    text-align: start;
+  }
+
+  .prose :global(:not(pre) > code) {
+    padding-inline: var(--space-1);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+  }
+
+  .prose :global(pre) {
+    padding: var(--space-4);
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    background: var(--color-bg-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .prose :global(hr) {
+    margin-block: var(--space-12);
+    border: 0;
+    border-block-start: var(--border-width) solid var(--color-border);
+  }
+</style>

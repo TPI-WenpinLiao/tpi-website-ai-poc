@@ -4,7 +4,8 @@
 // Breakpoints come from src/styles/media.css, so a literal in @media is caught by the same rule.
 // Also fails when var(--x) names a custom property that neither tokens.css nor the same file
 // declares, so a renamed or removed token can't silently fall back to nothing.
-// Scope: FILES below. Wireframe pages (M3-01) are out of scope; they are removed after M4-04.
+// Scope: every .astro file under DIRS, so new pages and templates are checked without listing them,
+// and src/styles/base.css (BASE).
 // Run: node scripts/design/token-usage.mjs
 
 import { readFileSync, readdirSync } from 'node:fs';
@@ -12,9 +13,9 @@ import { join, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const ROOT = resolve(import.meta.dirname, '../..');
-const DIRS = ['src/components/ui', 'src/pages/design-system', 'src/pages/products'];
-const FILES = ['src/layouts/BaseLayout.astro', 'src/pages/index.astro'];
+const DIRS = ['src/components/ui', 'src/layouts', 'src/pages'];
 const TOKENS = 'src/styles/tokens.css';
+const BASE = 'src/styles/base.css';
 
 const RULES = [
   { name: 'hex color', re: /#[0-9a-f]{3,8}\b/gi },
@@ -33,10 +34,10 @@ export function declaredProperties(source) {
 export function findViolations(source, tokens = new Set()) {
   const declared = new Set([...tokens, ...declaredProperties(source)]);
   const found = [];
-  for (const block of source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {
+  for (const block of source.matchAll(/<style([^>]*)>([\s\S]*?)<\/style>/g)) {
     const offset = source.slice(0, block.index + block[0].indexOf('>') + 1).split('\n').length - 1;
     // Blank out comments and @import lines but keep line breaks so line numbers stay right
-    const css = block[1]
+    const css = block[2]
       .replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '))
       .replace(/@import[^;]*;/g, (c) => c.replace(/[^\n]/g, ' '));
     css.split('\n').forEach((text, i) => {
@@ -51,21 +52,24 @@ export function findViolations(source, tokens = new Set()) {
   return found;
 }
 
-function astroFiles() {
-  const fromDirs = DIRS.flatMap((dir) =>
+function sourceFiles() {
+  const astro = DIRS.flatMap((dir) =>
     readdirSync(join(ROOT, dir), { recursive: true })
       .filter((f) => String(f).endsWith('.astro'))
-      .map((f) => join(dir, String(f))),
+      .map((f) => join(dir, String(f)).split('\\').join('/')),
   );
-  return [...fromDirs, ...FILES];
+  return [...astro, BASE];
 }
 
+// A plain CSS file is checked as one <style> block, on the same lines
+const asSource = (file, text) => (file.endsWith('.css') ? `<style>${text}</style>` : text);
+
 function main() {
-  const files = astroFiles();
+  const files = sourceFiles();
   const tokens = declaredProperties(readFileSync(join(ROOT, TOKENS), 'utf8'));
   let count = 0;
   for (const file of files) {
-    for (const v of findViolations(readFileSync(join(ROOT, file), 'utf8'), tokens)) {
+    for (const v of findViolations(asSource(file, readFileSync(join(ROOT, file), 'utf8')), tokens)) {
       console.log(`${relative(ROOT, join(ROOT, file))}:${v.line}  ${v.rule}: ${v.text}`);
       count += 1;
     }

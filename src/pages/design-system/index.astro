@@ -15,6 +15,14 @@ import Button from '../../components/ui/Button.astro';
 import Link from '../../components/ui/Link.astro';
 import Tag from '../../components/ui/Tag.astro';
 import LocaleSwitcher from '../../components/ui/LocaleSwitcher.astro';
+import CardGrid from '../../components/ui/CardGrid.astro';
+import ContactCta from '../../components/ui/ContactCta.astro';
+import Prose from '../../components/ui/Prose.astro';
+import FilterBar from '../../components/ui/FilterBar.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import FormPanel from '../../components/ui/FormPanel.astro';
+import TagList from '../../components/ui/TagList.astro';
 import Card from '../../components/ui/Card.astro';
 import SiteHeader from '../../components/ui/SiteHeader.astro';
 import SiteFooter from '../../components/ui/SiteFooter.astro';
@@ -425,6 +433,83 @@ const description =
             </li>
           </ul>
 
+          <h3>CardGrid</h3>
+          <CardGrid>
+            {['第一張', '第二張', '第三張'].map((title) => (
+              <li>
+                <Card level={4} title={`${title}卡片`} description="手機一欄、40rem 以上兩欄、64rem 以上三欄；同一列的卡片等高。" />
+              </li>
+            ))}
+          </CardGrid>
+
+          <h3>SectionHeading：action slot</h3>
+          <SectionHeading level={3} eyebrow="Insights" title="區塊標題與整區連結">
+            <Button slot="action" href={`#components-${tone}`} variant="text">看全部</Button>
+          </SectionHeading>
+
+          <h3>CardGrid compact</h3>
+          <CardGrid compact>
+            {['短卡一', '短卡二', '短卡三'].map((title) => (
+              <li>
+                <Card level={4} title={title} size="sm" href={`#components-${tone}`} />
+              </li>
+            ))}
+          </CardGrid>
+
+          <h3>TagList</h3>
+          <TagList items={['AI 應用', '數位轉型', '永續發展']} label={`標籤（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
+          <TagList items={['碳盤查', '能源轉型']} tone="node" label={`專長（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
+
+          <h3>FormPanel</h3>
+          <FormPanel id={`form-panel-${tone}`} title={`表單標題（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`}>
+            <FormField kind="text" id={`form-panel-name-${tone}`} name="name" label="姓名" required />
+            <FormField kind="checkbox" id={`form-panel-consent-${tone}`} name="consent" label="個資同意" required />
+            <Button type="submit">送出</Button>
+          </FormPanel>
+          <p class="note">頁面唯一的表單（聯絡、索取文件）放在這個面板裡；送出由 M6-01 處理。</p>
+
+          <h3>FilterBar</h3>
+          <ul class="states">
+            {linkStates.map((st) => (
+              <li class="state" inert={st.preview !== undefined}>
+                <span class="state-label">{st.label}</span>
+                <FilterBar
+                  label={`篩選（${tone === 'dark' ? '深色' : '亮色'} surface 範例，${st.label}）`}
+                  items={[
+                    { label: '全部', href: `#components-${tone}`, current: true },
+                    { label: '分類連結', href: `#components-${tone}`, 'data-preview-state': st.preview },
+                    { label: '頁內標籤' },
+                  ]}
+                />
+              </li>
+            ))}
+          </ul>
+          <p class="note">blog 分類各有網址，是連結；新聞類型、產業在 M6 的頁內篩選完成前是不能點的標籤。窄螢幕在列內橫向捲動。</p>
+
+          <h3>Pagination</h3>
+          <ul class="states">
+            {linkStates.map((st) => (
+              <li class="state" inert={st.preview !== undefined}>
+                <span class="state-label">{st.label}</span>
+                <Pagination
+                  current={2}
+                  total={4}
+                  hrefFor={() => `#components-${tone}`}
+                  label={`分頁（${tone === 'dark' ? '深色' : '亮色'} surface 範例，${st.label}）`}
+                  previous="上一頁"
+                  next="下一頁"
+                  data-preview-state={st.preview}
+                />
+              </li>
+            ))}
+          </ul>
+          <p class="note">第一頁是列表本身的網址，第 2 頁起是 /page/n（ADR 0002）；只有一頁時不輸出。</p>
+
+          <h3>EmptyState</h3>
+          <EmptyState level={4} title="目前還沒有內容" description="列表或搜尋沒有項目時顯示，虛線框表示這裡是暫時的狀態。">
+            <Button slot="action" href={`#components-${tone}`} variant="secondary">往其他地方看看</Button>
+          </EmptyState>
+
           <h3>Breadcrumb</h3>
           <div class="demo">
             <Breadcrumb node="digirunner" label={`麵包屑（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
@@ -520,6 +605,11 @@ const description =
       <div class="chrome-demo">
         <SiteFooter />
       </div>
+      <h3>ContactCta</h3>
+      <div class="chrome-demo">
+        <ContactCta />
+      </div>
+      <p class="note">每頁最後的聯絡區塊；文案取自現站聯絡我們頁，按鈕連到目前語系的聯絡我們。offering 的 cta 為 demo 時以 label 換成「預約演示」。</p>
     </Surface>
 
     <Surface tone="dark" pattern="grid" id="imagery">
@@ -589,12 +679,28 @@ const description =
     <Surface tone="light" width="reading" id="reading">
       <Backdrop slot="backdrop" image={readingHeader} fade="bottom" focus="top" />
       <SectionHeading eyebrow="Reading" title="長文閱讀" />
-      <div class="prose">
-        <p>
-          這是一段內文範例，用來檢視亮色 surface 的閱讀節奏：<code>--line-height-base</code> 下中英混排的行距、
-          <code>--reading-max-width</code> 的行長，以及內文中的<Link href="#components-light">連結樣式</Link>。
-        </p>
-        <p>blog、法務與其他長文頁面使用這個 surface，不放 3D 場景，讓注意力留在文字上。</p>
+      <div class="reading-demo">
+        <Prose>
+          <p>
+            這是一段內文範例，用來檢視亮色 surface 的閱讀節奏：<code>--line-height-base</code> 下中英混排的行距、
+            <code>--reading-max-width</code> 的行長，以及內文中的<a href="#components-light">連結樣式</a>。
+          </p>
+          <p>blog、法務與其他長文頁面使用這個 surface，不放 3D 場景，讓注意力留在文字上。Markdown 內文放在 Prose 裡。</p>
+          <h3>內文的小標題</h3>
+          <ul>
+            <li>清單項目一，標記是強調色</li>
+            <li>清單項目二</li>
+          </ul>
+          <blockquote>引言區塊：左側品牌色線，文字降一階。</blockquote>
+          <table>
+            <thead>
+              <tr><th scope="col">欄位</th><th scope="col">說明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>寬表格</td><td>超出閱讀寬度時在自己的框內橫向捲動</td></tr>
+            </tbody>
+          </table>
+        </Prose>
       </div>
     </Surface>
   </main>
@@ -793,6 +899,12 @@ const description =
     color: var(--color-text-muted);
   }
 
+  .states {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
   .state {
     display: flex;
     flex-direction: column;
@@ -813,9 +925,8 @@ const description =
     align-items: start;
   }
 
-  .prose p {
-    margin: 0 0 var(--space-4);
-    font-size: var(--font-size-lg);
+  .reading-demo {
+    margin-block-start: var(--space-8);
   }
 
   @media (--bp-sm-up) {

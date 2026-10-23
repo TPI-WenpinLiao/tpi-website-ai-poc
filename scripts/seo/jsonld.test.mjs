@@ -36,6 +36,20 @@ test('every non-home page ends with a BreadcrumbList of absolute URLs from home'
   });
 });
 
+test('BreadcrumbList items of an en page are the en pages', () => {
+  const doc = pageJsonLd({
+    ...ctx('/en/about'),
+    inLanguage: 'en',
+    trail: [node('home', '/'), node('leaf', '/about')],
+    page: { title: 'About', description: 'd', node: 'about' },
+    logoUrl: 'https://example.com/logo.png',
+  });
+  assert.deepEqual(
+    doc['@graph'].at(-1).itemListElement.map((i) => i.item),
+    ['https://example.com/en', 'https://example.com/en/about'],
+  );
+});
+
 test('home: Organization with headquarters address and office phones, WebSite pointing at it', () => {
   const doc = homeJsonLd({ org, site, logoUrl: 'https://example.com/logo.png', inLanguage: 'zh-TW' });
   const [organization, website] = doc['@graph'];

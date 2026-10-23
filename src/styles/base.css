@@ -1,0 +1,92 @@
+/* Site-wide base styles (M4-04, #23): the only global CSS besides the tokens (tokens.css) and the
+   breakpoints (media.css). Imported once, by BaseLayout. In order: reset, typography rules,
+   surface paint, focus, utility classes. Everything else is scoped to its component, template or
+   page; scripts/design/token-usage.mjs fails on a <style is:global> in an .astro file. */
+@import './media.css';
+
+/* ---- Reset ---- */
+
+/* Sizes include padding and border. Without this, <a> buttons and text inputs (content-box)
+   outgrow <button> and <select> (border-box in the UA stylesheet) with the same min-height. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+/* ---- Typography ---- */
+
+/* Short display text breaks Chinese only at spaces and punctuation, never inside a word
+   (數位轉／型, 與能／源): headings, and lead text or labels marked .text-phrase. A run too long for
+   the line still breaks anywhere instead of overflowing; a line-start full-width opening bracket
+   drops its blank half where the font supports it (PingFang TC, Noto Sans TC). Not for body
+   paragraphs, where breaks only at punctuation would leave ragged lines. */
+:is(h1, h2, h3, h4, h5, h6),
+.text-phrase {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  text-spacing-trim: trim-start;
+}
+
+/* ---- Surfaces ---- */
+
+/* Semantic tokens switch on any data-surface="dark" element; give it the matching paint */
+[data-surface='dark'] {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* ---- Focus ---- */
+
+/* One focus style for every interactive element; the offset keeps the ring on the surrounding
+   surface, which is what scripts/design/contrast.mjs checks it against. data-preview-state="focus"
+   draws it statically on the /design-system page. */
+:focus-visible,
+[data-preview-state='focus'] {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ---- Utilities ---- */
+
+/* Hidden on screen, still read out */
+.sr-only {
+  position: absolute;
+  width: var(--border-width);
+  height: var(--border-width);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The glowing signal dot before a label (PageHero eyebrow, Tag tone="node"): the accent marker of
+   direction B. The element lays the dot out with its own display and gap. */
+.signal-dot::before {
+  content: '';
+  inline-size: var(--space-2);
+  block-size: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  box-shadow: var(--glow-accent);
+}
+
+/* An in-page anchor target (a section InPageNav links to): it lands below the sticky header, and
+   from --bp-lg-up also below the in-page bar that sticks under it */
+.anchor-target {
+  scroll-margin-block-start: var(--header-height);
+}
+
+@media (--bp-lg-up) {
+  .anchor-target {
+    scroll-margin-block-start: calc(var(--header-height) + var(--touch-target) + var(--space-2));
+  }
+}

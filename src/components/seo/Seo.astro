@@ -2,9 +2,8 @@
 // The <head> items seo-checklist requires on every page: title, description, canonical, hreflang,
 // Open Graph, Twitter and JSON-LD. Pages hand BaseLayout the data; nothing else writes these tags.
 // No robots meta: the site is kept out of search engines by public/_headers and robots.txt only.
-import { localeLinks } from '../../lib/i18n/alternates';
+import type { LocaleLink } from '../../lib/i18n/alternates';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
-import { staticRoutes } from '../../lib/i18n/routes';
 import { hreflangAlternates } from '../../lib/seo/hreflang';
 import { serializeJsonLd, type JsonLdGraph } from '../../lib/seo/jsonld/shared';
 import { canonicalUrl, pageTitle, SITE_NAME } from '../../lib/seo/meta';
@@ -19,12 +18,11 @@ export interface Props {
   image?: OgImage;
   type?: 'website' | 'article';
   jsonLd?: JsonLdGraph;
-  // URL paths of this page's other locale versions, for pages built through a dynamic route
-  // (static pages are found in staticRoutes), as LocaleSwitcher takes them
-  translations?: readonly string[];
+  // This page's locale versions (pageLocales() in src/lib/i18n/routes.ts, computed by BaseLayout)
+  locales: readonly LocaleLink[];
 }
 
-const { title, titleSuffix = true, description, image = DEFAULT_OG_IMAGE, type = 'website', jsonLd, translations = [] } = Astro.props;
+const { title, titleSuffix = true, description, image = DEFAULT_OG_IMAGE, type = 'website', jsonLd, locales } = Astro.props;
 if (!Astro.site) throw new Error('astro.config.mjs must set site for canonical and og:url');
 const site = Astro.site;
 const fullTitle = titleSuffix ? pageTitle(title) : title;
@@ -33,10 +31,7 @@ const pathname = normalizePath(Astro.url.pathname);
 const canonical = canonicalUrl(pathname, site);
 const ogLocale = localeFromPath(pathname).replace('-', '_');
 const imageUrl = new URL(image.src, site).href;
-const alternates = hreflangAlternates(
-  localeLinks({ path: pathname, routes: new Set([...staticRoutes, ...translations.map(normalizePath)]) }),
-  site,
-);
+const alternates = hreflangAlternates(locales, site);
 ---
 
 <title>{fullTitle}</title>

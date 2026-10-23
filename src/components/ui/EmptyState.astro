@@ -1,0 +1,54 @@
+---
+// What a listing or search shows when it has nothing to list: a short heading, one line of text and
+// an optional way onward (the `action` slot, e.g. a Button). Dashed frame, so it reads as a
+// placeholder and not as content.
+interface Props {
+  title: string;
+  description?: string;
+  level?: 2 | 3 | 4;
+}
+
+const { title, description, level = 2 } = Astro.props;
+const Heading = `h${level}` as const;
+---
+
+<div class="empty-state">
+  <Heading class="title">{title}</Heading>
+  {description && <p class="text-phrase">{description}</p>}
+  {
+    Astro.slots.has('action') && (
+      <div class="action">
+        <slot name="action" />
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-12) var(--space-6);
+    border: var(--border-width) dashed var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-snug);
+  }
+
+  p {
+    max-inline-size: var(--reading-max-width);
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .action {
+    margin-block-start: var(--space-2);
+  }
+</style>

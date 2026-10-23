@@ -3,8 +3,10 @@
 // canonical is the page's own absolute URL; the Open Graph and Twitter tags are there; no robots
 // meta with noindex (the site is kept out of search engines by _headers and robots.txt only);
 // hreflang lists the page itself, every target was built and lists the same set back, x-default
-// points at the zh-TW version exactly when there is one; every JSON-LD block parses; the sitemap
-// lists exactly the non-internal pages, by canonical, with the same hreflang as their <head>.
+// points at the zh-TW version exactly when there is one; every JSON-LD block parses, and every page
+// but the home, 404 and internal pages has a BreadcrumbList (content-model.md「內容類型總覽」); the sitemap
+// lists exactly the pages inSitemap() keeps (no internal or flow pages, src/lib/seo/indexing.ts), by
+// canonical, with the same hreflang as their <head>.
 // Lighthouse only samples a few pages, so this covers all of them.
 // Run after `astro build`: node scripts/seo/meta.mjs [dist]
 
@@ -13,8 +15,8 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'node-html-parser';
 import { DEFAULT_LOCALE } from '../../src/lib/i18n/locales.ts';
-import { localeFromPath } from '../../src/lib/i18n/paths.ts';
-import { inSitemap } from '../../src/lib/seo/indexing.ts';
+import { localeFromPath, stripLocale } from '../../src/lib/i18n/paths.ts';
+import { inSitemap, isInternal } from '../../src/lib/seo/indexing.ts';
 import { urlPath } from '../i18n/routes.mjs';
 
 const REQUIRED_META = [
@@ -96,13 +98,18 @@ export function metaProblems(pages, sitemap) {
     }
     for (const [attr, values] of Object.entries(h.meta)) if (values.length !== 1 || !values[0]) p(`expected 1 non-empty meta[${attr}], found ${values.length}`);
     for (const r of h.robots) if (/noindex/i.test(r)) p(`robots meta "${r}": the site is kept out of search engines by _headers and robots.txt, not by noindex`);
+    const types = [];
     for (const [i, json] of h.jsonLd.entries()) {
       try {
-        if (JSON.parse(json)['@context'] !== 'https://schema.org') p(`JSON-LD block ${i + 1} has no schema.org @context`);
+        const doc = JSON.parse(json);
+        if (doc['@context'] !== 'https://schema.org') p(`JSON-LD block ${i + 1} has no schema.org @context`);
+        types.push(...[doc, ...(doc['@graph'] ?? [])].map((n) => n['@type']));
       } catch (e) {
         p(`JSON-LD block ${i + 1} does not parse: ${e.message}`);
       }
     }
+    const neutral = stripLocale(path);
+    if (neutral !== '/' && neutral !== '/404' && !isInternal(path) && !types.includes('BreadcrumbList')) p('no BreadcrumbList JSON-LD');
   }
   if (origins.size > 1) problems.push(`canonical URLs use more than one origin: ${[...origins].join(', ')}`);
 

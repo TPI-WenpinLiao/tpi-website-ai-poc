@@ -2,6 +2,8 @@
 // Heading block that opens a page section: optional index ("01") and mono eyebrow on an energy
 // line, the heading, optional lead text. The level is set by the caller so headings never skip a
 // level (seo-checklist); `size="display"` is for the one statement section per page.
+// The `action` slot puts links for the whole section (所有成功案例, 部落格) on the heading's row,
+// at its end on wide screens and below it when the row is too narrow.
 interface Props {
   title: string;
   level?: 2 | 3;
@@ -14,33 +16,57 @@ interface Props {
 
 const { title, level = 2, index, eyebrow, description, size = 'default', align = 'start' } = Astro.props;
 const Heading = `h${level}` as const;
+const hasAction = Astro.slots.has('action');
 ---
 
-<header class:list={['section-heading', align]}>
+<header class:list={['section-heading', align, { 'has-action': hasAction }]}>
+  <div class="copy">
+    {
+      (index || eyebrow) && (
+        <p class="eyebrow">
+          {index && <span class="index">{index}</span>}
+          {eyebrow && <span>{eyebrow}</span>}
+        </p>
+      )
+    }
+    <Heading class:list={['title', `level-${level}`, size]}>{title}</Heading>
+    {description && <p class="description text-phrase">{description}</p>}
+  </div>
   {
-    (index || eyebrow) && (
-      <p class="eyebrow">
-        {index && <span class="index">{index}</span>}
-        {eyebrow && <span>{eyebrow}</span>}
-      </p>
+    hasAction && (
+      <div class="action">
+        <slot name="action" />
+      </div>
     )
   }
-  <Heading class:list={['title', `level-${level}`, size]}>{title}</Heading>
-  {description && <p class="description text-phrase">{description}</p>}
 </header>
 
 <style>
-  .section-heading {
+  .copy {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
     max-width: var(--reading-max-width);
   }
 
-  .center {
+  .center .copy {
     align-items: center;
     margin-inline: auto;
     text-align: center;
+  }
+
+  .has-action {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  .action {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
   }
 
   .eyebrow {
