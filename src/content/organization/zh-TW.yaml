@@ -1,5 +1,6 @@
-# Source: https://www.tpisoftware.com/about-us「昕力據點」 (offices: first two only); logo from the brand
-# team's PNG exports (scripts/design/import-brand.mjs)
+# Source: https://www.tpisoftware.com/about-us「昕力據點」 (every office listed there, in its order; the
+# Bangkok subsidiary has no address on the site); logo from the brand team's PNG exports
+# (scripts/design/import-brand.mjs)
 name: 昕力資訊
 alternateName: [TPIsoftware]
 logo: ../../assets/brand/logo-vertical-color.png
@@ -15,3 +16,32 @@ offices:
     address: "7 Straits View, Marina One East Tower, #05-01, Singapore 018936"
     phone: +65 8737 4703
     country: SG
+  - id: vietnam
+    name: 越南
+    address: Lầu 7, phòng 706-707-708, Tòa nhà Văn phòng Safomec, số 7/1 Thành Thái, Phường 14, Quận 10, TpHCM
+    phone: +84 28 2250 8332
+    country: VN
+  - id: japan
+    name: 日本
+    address: 〒107-0052 東京都港区赤坂二丁目8番14-504号
+    country: JP
+  - id: hsinchu
+    name: 新竹專案管理中心
+    address: 新竹市公道五路二段158號2樓之3、之5（C、D戶）（中壽大樓）
+    phone: +886 3 516 6290
+    country: TW
+  - id: taichung
+    name: 台中專案管理中心
+    address: 台中市南屯區五權西路二段131號7樓
+    phone: +886 4 2472 0050
+    country: TW
+  - id: tainan
+    name: 台南開發中心
+    address: 台南市中西區公園路56號5樓A室（窩空間）
+    phone: +886 6 221 0525
+    country: TW
+  - id: kaohsiung
+    name: 高雄開發中心
+    address: 高雄市苓雅區輔仁路155號15樓之1
+    phone: +886 7 722 0462
+    country: TW
