@@ -1,4 +1,6 @@
-# blog 與新聞的批次轉換
+# 現站內容的批次轉換
+
+blog 文章、新聞與解決方案頁都用 script 從現站轉換，不手寫內容檔。解決方案頁見文末「解決方案頁」。
 
 `scripts/content/migrate/migrate.mjs` 把現站的 blog 文章與新聞轉成 `src/content/blog/`、`src/content/news/` 的內容檔，圖片下載到 `src/assets/`。要搬哪些文章、slug 與分類，都照 [`page-map.csv`](../ia/page-map.csv)，script 不自行判斷。搬移規則見 [`content-migration` skill](../../.claude/skills/content-migration/SKILL.md)，欄位見 [`content-model.md`](../ia/content-model.md)。
 
@@ -128,3 +130,47 @@ node scripts/content/migrate/spot-check.mjs --report <file.csv> --out <spot-chec
 - **需要看的文章**：轉換後的純文字比現站內文少 10% 以上，或圖片張數對不上（現站張數扣掉 `dropImagesFrom` 移除的圖與追蹤像素）。逐篇對照現站，找出漏掉的內容
 - **抽樣**：每個 type × locale 固定抽 5 篇（以 entry id 的雜湊排序，重跑結果相同），人工對照現站的標題、日期、作者、內文、圖片、表格與連結。zh-TW 看截圖，en、vi 的頁面還不會 build，看內容檔
 - **連不到頁面的站內連結**：`dist/` 有 build 產出時，列出指向不存在頁面的 `<a href>`，例如連到沒有轉換的文章
+
+## 解決方案頁
+
+`scripts/content/migrate/offerings.mjs` 把 `page-map.csv` 中 `page_type` 為 `solution` 的頁面（7 個節點 × 3 語系）轉成 `src/content/offering/<locale>/<node>.md`（M5-02，#27）。`/solutions/greenswift`、`/solutions/insurebrick` 的 `page_type` 是 product，不在這裡。
+
+```bash
+node scripts/content/migrate/offerings.mjs
+node scripts/content/migrate/offerings.mjs --locale zh-TW --only smartclaim
+```
+
+參數 `--locale`、`--refresh` 同上，`--only` 寫節點 id。快取與 `migratedAt` 的規則同「重跑」。
+
+### 欄位對應
+
+7 頁共用現站同一個版型，SSR HTML 就有全部文字，script 依 class 讀取：
+
+| 欄位 | 現站來源 |
+|---|---|
+| `title` | `h1` |
+| `tagline` | hero 的 `.slogan` |
+| `description` | `<meta name="description">` |
+| `features` | `.solution__feature01-item` 的 `h3` 與 `.contents`（4 項） |
+| `useCases` | 「應用情境」或「應用案例」的 `.list-item` 標題與內文 |
+| `heroImage` | hero 背景圖（`--bg-image`），存成 `src/assets/offering/<locale>/<node>/hero.webp`；模板只拿來當 OG 圖 |
+| `kind`、`cta` | 固定 `solution`、`contact` |
+
+offering schema 沒有欄位的段落不搬：介紹段、「流程架構」圖、三項優勢、適用產業、服務客戶 logo、影片（smartclaim）。要搬時先擴充 [`content-model.md`](../ia/content-model.md) 的 offering 欄位與模板。
+
+找不到上表任何一項時，script 判定現站版型改了，該頁失敗且不寫檔。
+
+### 人工修正
+
+寫在 `scripts/content/migrate/offering-overrides.yaml`，key 是 `<locale>/<node>`：
+
+- `frontmatter`：同 blog 的 `overrides.yaml`，取代產生的值，`null` 拿掉欄位。zh-TW 的 `description` 超過 80 字時在這裡改寫，只刪減，不加現站沒有的事實
+- `useCaseIndustry`：`{ <useCases 的索引>: finance|government|manufacturing }`，把應用情境連到產業頁，不用複製整段文字
+
+### 比對現站
+
+```bash
+node scripts/design/offering-content.mjs
+```
+
+逐筆確認每個非 draft 的 offering（三個語系）的 `tagline`、`features`、`useCases` 文字仍在第一個 `sourceUrl` 的頁面上，找不到的列 `MISS` 並以 exit 1 結束。`description` 有改寫，不在比對範圍，在 PR 列出原文對照。

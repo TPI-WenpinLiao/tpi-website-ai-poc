@@ -155,7 +155,12 @@ const scalar = (v) => {
   return out;
 };
 
-/** Frontmatter block; undefined values are left out. Arrays of URLs are written as block lists. */
+const isRecord = (v) => typeof v === 'object' && v !== null && Object.getPrototypeOf(v) === Object.prototype;
+
+/**
+ * Frontmatter block; undefined values are left out. Arrays of URLs are written as block lists, arrays
+ * of objects (offering features) as block lists of single-line fields.
+ */
 export function serializeFrontmatter(data) {
   const lines = ['---'];
   for (const [key, raw] of Object.entries(data)) {
@@ -164,6 +169,13 @@ export function serializeFrontmatter(data) {
     if (raw instanceof Commented && raw.comment) lines.push(`# ${raw.comment}`);
     if (Array.isArray(value) && key === 'sourceUrl') {
       lines.push(`${key}:`, ...value.map((v) => `  - ${scalar(v)}`));
+    } else if (Array.isArray(value) && value.length && value.every(isRecord)) {
+      lines.push(`${key}:`);
+      for (const item of value) {
+        Object.entries(item)
+          .filter(([, v]) => v !== undefined)
+          .forEach(([k, v], i) => lines.push(`${i ? '    ' : '  - '}${k}: ${scalar(v)}`));
+      }
     } else {
       lines.push(`${key}: ${scalar(value)}`);
     }

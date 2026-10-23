@@ -1,0 +1,29 @@
+---
+title: GIS 空間數據解決方案
+description: 藉由 GIS 空間數據分析技術及智能定位工具，整合各種圖資與內外部數據，產出可視覺化、利於分析與決策的圖表資訊，提升商業決策與預測的可靠性。
+translationKey: gis
+node: gis
+kind: solution
+tagline: 數據為核心 因應智慧商業決策
+# https://www.tpisoftware.com/images/solution/gis/banner.png
+heroImage: ../../../assets/offering/zh-TW/gis/hero.webp
+features:
+  - title: 圖形引擎
+    body: 2D、3D與虛實整合平台建立可視化圖形介面，連結虛擬與實際空間，滿足各式場景使用。
+  - title: 智慧自動化控制
+    body: 以自動化方式提供智能控制連結與判斷，減少企業組織部署 GIS 解決方案所需的時間。
+  - title: 安全交付及預警通知
+    body: 預先警報與主動通知，以Email、Line等通知將訊息交付給對的人，也可與保全或警消單位串連。
+  - title: 高度可擴充設計
+    body: 從欄位到模組都能彈性設定與擴充，並彙整來源不一之資料，完善 GIS 服務能力。
+useCases:
+  - title: 車隊智能監控
+    body: 透過 GIS 技術及電子圍籬設定，進行駕駛行為數據蒐集，提供完整監控後台及軌跡資料，當出現超速、怠速、急加速等事件發生，後台將主動發出警示，並客製化報表及整合商業智能。
+  - title: 保險標的圖資系統
+    body: 核保前，提供保險標的物週遭的地理環境資訊，協助行員判斷。以登入機制進行權限卡控，利用公式將經緯度轉換為麥卡托投影，並透過 ArcGIS 的客製化圖層，提供行員保險標的物週遭的地理環境資訊，亦可橫向與 Google 雙地圖、街景進行整合。
+  - title: 資產管理系統
+    body: 依據金融業資產管理需求導入GIS技術與物聯網，協助企業樓層管理、智慧監測，不僅可彈性分割、整合空間或物件設備管控，為企業資產帶來更可靠且安全的管理方式，進一步完成智慧樓宇之目標。
+cta: contact
+sourceUrl: https://www.tpisoftware.com/solutions/gis
+migratedAt: 2026-10-23
+---
