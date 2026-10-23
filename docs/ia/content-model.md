@@ -281,9 +281,9 @@ zh-TW 60 列、en 48 列、vi 42 列（`page-map.csv` 的 `news-article` 節點�
 
 | `newsType` | 現站 `newsTypeId` | 現站名稱 | 保留的 zh-TW 篇數 |
 |---|---|---|--:|
-| `press` | 1 | 新聞快報 | 48 |
-| `product` | 3 | 產品消息 | 1 |
-| `newsletter` | 7 | 電子報 | 11 |
+| `press` | 1 | 新聞快報 | 10 |
+| `product` | 3 | 產品消息 | 0 |
+| `newsletter` | 7 | 電子報 | 0 |
 | （不建） | 2 | 未知 | 0 |
 
 en、vi 的 `newsTypeId` 是另外編號的，依現站名稱對到同一個 `newsType`（M5-04 加入，待內容負責人確認）：
@@ -295,7 +295,7 @@ en、vi 的 `newsTypeId` 是另外編號的，依現站名稱對到同一個 `ne
 | `newsletter` | 8（Newsletter） | — |
 | （不建） | 5（不出現在媒體中心頁面） | 10（不出現在媒體中心頁面） |
 
-現站名稱取自 <https://www.tpisoftware.com/media-center>、<https://www.tpisoftware.com/en/media-center>、<https://www.tpisoftware.vn/media-center> 頁面資料的 `newsType`。`page-map.csv` 保留的 en、vi 新聞沒有 5 與 10。`newsTypeId: 2` 有 55 篇已發布，但不出現在媒體中心頁面，日期在 2018–2022 年，多為活動與技術小聚，M1-02 稽核後沒有任何一篇保留，因此不建這個值。篇數取自新聞 API 與 `page-map.csv` 的交集。
+現站名稱取自 <https://www.tpisoftware.com/media-center>、<https://www.tpisoftware.com/en/media-center>、<https://www.tpisoftware.vn/media-center> 頁面資料的 `newsType`。`page-map.csv` 保留的 en、vi 新聞沒有 5 與 10。`newsTypeId: 2` 有 55 篇已發布，但不出現在媒體中心頁面，日期在 2018–2022 年，多為活動與技術小聚，M1-02 稽核後沒有任何一篇保留，因此不建這個值。篇數取自新聞 API 與 `page-map.csv` 的交集；M5-05 改為只保留 2026 年的新聞後，三個語系保留的都是 `press`，`product`、`newsletter` 留在 schema 給之後的新聞。
 
 範例（取自新聞 API `/tpi/api/News?languages=tw` 的 id 585，文章 <https://www.tpisoftware.com/media-center/585>）：
 
@@ -498,8 +498,8 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 
 | 項目 | 誰確認 | 影響 |
 |---|---|---|
-| blog `author` 的現站資料品質：zh-TW 有 `TPIsowftware` 拼錯、`商業週刊`／`科技報橘` 等轉載來源；vi 272 篇作者（API 的 `authorName`）為 `kay`，其中 90 篇的後台帳號（`uidName`）是 `Kay Tăng Tấn Khôi`，`kay` 是否就是此人、要不要顯示全名；另有 15 篇作者為空值 | 內容負責人 | M5 的 `author` 與 `authorType` 怎麼填 |
-| `商業週刊`、`科技報橘` 為作者的 6 篇是否有轉載授權 | 內容負責人 | M5 是否遷移 |
+| blog `author` 的現站資料品質。M5-05 只遷移 2026 年的文章後剩下：zh-TW 1 篇 `TPIsowftware`（拼錯）；vi 34 篇作者（API 的 `authorName`）為 `kay`，部分文章的後台帳號（`uidName`）是 `Kay Tăng Tấn Khôi`，`kay` 是否就是此人、要不要顯示全名 | 內容負責人 | `author` 與 `authorType` 怎麼填 |
+| `商業週刊`、`科技報橘` 為作者的 6 篇是否有轉載授權：M5-05 的保留門檻後 6 篇都在 2026 年以前、不遷移，不再需要確認 | — | — |
 | blog 三語版本的對應：API 沒有跨語系欄位 | 內容負責人 | M7 的 `translationKey` |
 | 白皮書檔案的實際位置（現站在表單送出後提供） | 後端負責人 | `whitepaper.file` |
 | tag 清單（上表）的合併方式與顯示名稱。`src/content/tags.yaml` 目前的名稱取自現站，例如 `ai-solutions` 的 zh-TW 名稱是「人工智慧」 | 專案負責人 | 改上表後重跑 `node scripts/content/tags.mjs` |

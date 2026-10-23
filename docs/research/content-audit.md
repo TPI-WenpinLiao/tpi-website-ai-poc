@@ -34,22 +34,22 @@ node scripts/inventory/audit.mjs
 
 | | zh-TW | en | vi | ja | 合計 |
 |---|--:|--:|--:|--:|--:|
-| keep | 178 | 123 | 348 | 0 | 649 |
+| keep | 36 | 27 | 54 | 0 | 117 |
 | rewrite | 64 | 51 | 49 | 0 | 164 |
-| merge | 36 | 24 | 20 | 0 | 80 |
-| drop | 257 | 126 | 28 | 2 | 413 |
+| merge | 36 | 23 | 19 | 0 | 78 |
+| drop | 399 | 223 | 323 | 2 | 947 |
 | **合計** | **535** | **324** | **445** | **2** | **1,306** |
 
-遷移量（keep + rewrite）：zh-TW 242、en 174、vi 397。zh-TW 實際需要重寫的是 64 頁；en／vi 的翻譯在 M7。
+遷移量（keep + rewrite）：zh-TW 100、en 78、vi 103。zh-TW 實際需要重寫的是 64 頁；en／vi 的翻譯在 M7。
 
-本節數字已反映 M2-01（#8）的決策：landing page、`/carbon`、開放銀行、開放政府、`/genai-solution` 改為 merge（見 [`docs/ia/sitemap.md`](../ia/sitemap.md)「決策紀錄」）。
+本節數字已反映 M2-01（#8）的決策：landing page、`/carbon`、開放銀行、開放政府、`/genai-solution` 改為 merge（見 [`docs/ia/sitemap.md`](../ia/sitemap.md)「決策紀錄」）；以及 M5-05（#30）的保留門檻：blog 與新聞只保留 2026-01-01 起的文章。數字來源是 `audit-summary.json`。
 
 ### 處置 × 頁面類型
 
 | page_type | keep | rewrite | merge | drop |
 |---|--:|--:|--:|--:|
-| news | 150 | 0 | 0 | 381 |
-| blog-post | 467 | 0 | 2 | 0 |
+| news | 28 | 0 | 0 | 503 |
+| blog-post | 57 | 0 | 0 | 412 |
 | product | 0 | 56 | 19 | 0 |
 | blog-category | 3 | 0 | 52 | 0 |
 | service | 25 | 16 | 5 | 3 |
@@ -64,7 +64,7 @@ node scripts/inventory/audit.mjs
 | blog-index、contact、events、news-index、product-index、resource、search、case-study | 0 | 各 3 | 0 | 0 |
 | subsite | 2 | 0 | 0 | 0 |
 
-`to_confirm` 非空：204 列。
+`to_confirm` 非空：108 列。
 
 ## 規則
 
@@ -94,7 +94,7 @@ node scripts/inventory/audit.mjs
 
 跨規則的自動標記（只加 `to_confirm`，不影響處置）：
 
-- 要遷移的頁面（非 drop）內文含失效連結：48 列，遷移時修正或移除
+- 要遷移的頁面（非 drop）內文含失效連結：7 列，遷移時修正或移除
 - en／vi 頁面的 title 或 h1 含中文：9 列，疑似未翻譯
 - 首頁 notes 有轉址來源（舊 `/solutions/*` 已轉到首頁）：3 列
 
@@ -124,14 +124,14 @@ node scripts/inventory/audit.mjs
 6. **title 錯誤**：`/products/open-government` 的 title 寫「開放銀行 Open Government」；`/products/open-banking` 拼成「Open Bankning」；en／vi 兩頁共用通用 title「TPIsoftware | API Management Platform」
 7. **疑似未翻譯**（9 列）：`/en/aiso`、`/en/products/gadoscout`、`/en/resource`、`/en/thanks`、vi `/aiso`、`/products/digilogs/log-detection`、`/products/gadoscout`、`/products/systalk-viki`、`/thanks`
 8. **疑似未發布的 blog 文章**（3 列）：`/blog/ai/what-is-ai-agent-management-platform`、`/en/blog/artifintell/why-ai-needs-knowledge-boundary`、vi `/blog/enterprise-management/gemini-api`（vi 另有 `gemini-api-key` 一篇已發布）
-9. **重複內容**：en blog `financial-examination`（2021）與 `financial-examination-en`（2023）同標題；en 新聞 `/en/media-center/455`、`456`（2024-05）與 `441`、`432`（2023）同標題，疑似重複發布
+9. **重複內容**：M5-05 的保留門檻後已不適用，提到的 en blog 與 en 新聞 455、456 都不遷移
 10. **2022 年前的 blog 文章**：M5-05 起 2026 年前的 blog 不遷移，不再需要確認
 11. **新聞日期**：保留門檻依 API 的 `updateDate` 判斷，不是發布日（見「已知限制」）。M5-05 用發布日比對，`updateDate` 在 2026 年但發布日在 2025 年的 14 篇已在 `audit-overrides.csv` 改為 drop
-12. **vi blog 數量**：vi 有 298 篇，其中 258 篇集中在 2025 年，遠多於 zh-TW（105）與 en（66）。全部列為 keep；是否有內容品質或 SEO 策略上的考量，需 vi 團隊確認
+12. **vi blog 數量**：M5-05 起只遷移 2026 年的文章，vi 保留 37 篇，此項不再需要確認
 
 ## 失效連結
 
-`broken-links.csv` 的 59 個失效 URL 分布在多個頁面，其中 48 個要遷移的頁面受影響（主要是 2024 年後的新聞與 vi blog）。依類型處理建議：
+`broken-links.csv` 的 59 個失效 URL 分布在多個頁面，其中 7 個要遷移的頁面受影響（產品、產品列表、服務頁與 2 篇 blog；M5-05 改保留門檻前是 48 個）。依類型處理建議：
 
 | 類型 | 例子 | 建議 |
 |---|---|---|
