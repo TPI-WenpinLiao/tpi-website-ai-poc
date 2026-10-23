@@ -77,7 +77,7 @@
 
 ### M5 內容遷移
 
-- M5-02 解決方案內容遷移完成（#27）：`node scripts/content/migrate/offerings.mjs` 把 7 個解決方案頁（三語共 21 篇）轉成 offering 內容檔，hero 背景圖存成 `heroImage`，人工修正在 `scripts/content/migrate/offering-overrides.yaml`（zh-TW 的 description 縮到 80 字內）；zh-TW 7 頁在 `/solutions/*` 產生，en、vi 進版控不產生頁面。介紹段、流程架構圖、三項優勢、適用產業、服務客戶 logo、影片在 offering schema 沒有欄位，使用者決定先不搬（與 digiRunner 相同）。不在導覽的方案照樣發布，是否仍銷售列在 PR。`node scripts/design/offering-content.mjs` 改為比對三個語系，`scripts/lib/page-text.mjs` 補解碼 `&quot;` 等 entity。用法見 `docs/content/migration.md`「解決方案頁」
+- M5-02 解決方案內容遷移完成（#27）：`node scripts/content/migrate/offerings.mjs` 把 7 個解決方案頁（三語共 21 篇）轉成 offering 內容檔，人工修正在 `scripts/content/migrate/offering-overrides.yaml`（zh-TW 的 description 縮到 80 字內）；zh-TW 7 頁在 `/solutions/*` 產生，en、vi 進版控不產生頁面。介紹段、流程架構圖、三項優勢、適用產業、服務客戶 logo、影片在 offering schema 沒有欄位，使用者決定先不搬（與 digiRunner 相同）。hero 背景圖沒有寫進 `heroImage`：模板只拿它當 `og:image`，banner 的寬高比約 3:1，不是 1200×630。不在導覽的方案照樣發布，是否仍銷售列在 PR。`node scripts/design/offering-content.mjs` 改為比對三個語系，`scripts/lib/page-text.mjs` 補解碼 `&quot;` 等 entity。用法見 `docs/content/migration.md`「解決方案頁」
 - M5-04 部落格與新聞批次轉換 script 完成（#29）：`node scripts/content/migrate/migrate.mjs` 依 `page-map.csv` 把現站 blog 與新聞轉成內容檔，圖片下載到 `src/assets/<type>/<locale>/<slug>/`（內容圖的目錄規則改為含語系，whitepaper 範例一起搬）；人工修正寫在 `scripts/content/migrate/overrides.yaml`，重跑結果不變。用法與報告欄位見 `docs/content/migration.md`。全量試跑 622 列（併入 merge 列後 620 篇）：轉出 533 篇、`astro check` 通過；失敗 87 篇，其中 69 篇的圖片網域被雲端環境的 network policy 擋下、15 篇 vi 現站沒有作者、3 篇不在 blog API。試跑產出不 commit，只重新產生兩筆範例。en、vi 的 `newsTypeId` 依現站名稱對應（`content-model.md`「news」，待確認）。html-validate 的 `valid-id` 改為 `relaxed`（數字開頭的標題產生的 id）
 - M5-05 部落格與新聞遷移完成（#30）：使用者決定 blog 與新聞只遷移 2026-01-01 起的文章，`scripts/inventory/audit.mjs` 的保留門檻改為 2026-01-01（新聞原為 2024-01-01），重跑後 `inventory.csv`、`page-map.csv`、`redirects.csv` 跟著更新，舊文章 301 到列表頁。`migrate.mjs` 轉出 83 篇（blog zh-TW 13、en 8、vi 34，新聞 zh-TW 10、en 9、vi 9）與 128 張圖，失敗 5 篇列在 PR；全量執行會刪掉不在 `page-map.csv` 的內容檔。圖片下載後縮到最大寬 1600 px、存成 WebP。`overrides.yaml` 新增 `dropImagesFrom`（依主機或圖片網址拿掉圖與圖說）。zh-TW 的 `description`、內文圖 alt 寫進 `overrides.yaml`；en、vi 延到 M7。collection 頁只對有字串檔的語系產生（en、vi 的內容先進版控，M7 補字串檔後產生頁面），內文跨語系連結改成本篇語系的同一頁。抽查用 `node scripts/content/migrate/spot-check.mjs`（`docs/content/migration.md`「抽查」）
 
@@ -88,7 +88,7 @@
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
 - M5-01 產品內容遷移（#26）、M5-03 客戶案例遷移（#28）、M5-06 公司頁內容遷移（#31）可以開始；遷移時頁面直接由 `src/pages/[...path].astro` 產生，不用另建頁面檔
-- 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、banner 圖庫照片與案例中客戶名稱的授權
+- 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權
 - 回覆 M5-05（#30）PR 的「待確認」：圖片授權與人物、失敗的 5 篇、作者 `authorType`
 - 首頁的最新文章與新聞改讀 content collections，刪除 `src/lib/latest-posts.ts`（M5-05 不做，會改到已核准的首頁視覺，需要另開 issue）
 - M6-01 表單（#33）、M6-02 Pagefind 站內搜尋（#34）、M6-03 影片延遲載入（#35）、M6-04 GTM 與 consent 管理（#36）可以開始；表單與搜尋框的版面已在 contact、gated-download、utility 模板，沒有 `action`
@@ -123,7 +123,7 @@
 - `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
 - 首頁行動版 Lighthouse performance 中位數 0.94（`node scripts/design/lighthouse-3d.mjs /`，2026-10-23，各跑 3 次），單次在 0.91–0.96 之間浮動。M4-04 比較了三種 CSS 載入方式：現狀（3 個 CSS 檔）、`build.inlineStylesheets: 'always'`、小檔 inline，分數都是 0.94；全部 inline 讓 FCP 快約 450 ms、LCP 快約 150 ms，但每頁 HTML 從 23 KB 變 89 KB、換頁沒有 CSS 快取，所以維持現狀。扣分主要來自 3D chunk 的 TBT。preview 上的真機量測還沒做
 - 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；文章已在 M5-05 遷移，改讀 content collections 並刪除這個檔案的工作在「下一步」。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
-- offering 模板直接拿 `heroImage` 當 OG 圖，M5-02 的解決方案頁因此輸出 1600×542 的 `og:image`，不是 seo-checklist 要的 1200×630；ContentTemplate、HubTemplate 也是同樣寫法，要在模板層裁切或另給 `ogImage`
+- OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
 - M3-05：現站 digiRunner 頁有 content-model 沒有欄位的段落（AI Gateway、AI Governance、五大應用、四大機制、API Composer／沙盒／即時主控台、資安、金檢合規），產品頁沒有放；M5-01（#26）前請內容負責人決定刪減或擴充 content model。`useCases.industry` 沒有保險、醫療、物聯網，這三個情境沒有產業連結
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
 - `npm run check` 的 LHCI 用 `staticDistDir` 自動探索，只測前 5 個 URL（M3-07 時 build 出 16 頁只測 5 頁），其餘頁面沒有 Lighthouse 關卡，由 #87 處理

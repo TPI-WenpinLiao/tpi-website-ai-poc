@@ -5,8 +5,6 @@ translationKey: gis
 node: gis
 kind: solution
 tagline: Hình dung thành công trong kinh doanh với việc ra quyết định dựa trên dữ liệu
-# https://www.tpisoftware.vn/images/solution/gis/banner.png
-heroImage: ../../../assets/offering/vi/gis/hero.webp
 features:
   - title: Công cụ đồ họa
     body: Một nền tảng tích hợp thực tế ảo kết hợp đồ thị 2D và 3D để tạo giao diện đồ họa trực quan cho các phân tích không gian địa lý khác nhau

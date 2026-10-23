@@ -5,8 +5,6 @@ translationKey: textualanalysis
 node: textualanalysis
 kind: solution
 tagline: 運用 AI 窺探資料潛藏價值
-# https://www.tpisoftware.com/images/solution/textualanalysis/banner.png
-heroImage: ../../../assets/offering/zh-TW/textualanalysis/hero.webp
 features:
   - title: 獨家 AI 進化系統
     body: 以簡易直覺化的操作介面，進行 AI 再訓練機制可提升模型信心值，獲得最佳化之模型訓練成果。

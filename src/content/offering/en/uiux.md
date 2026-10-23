@@ -5,8 +5,6 @@ translationKey: uiux
 node: uiux
 kind: solution
 tagline: Put Users First to Create Extraordinary Design
-# https://www.tpisoftware.com/images/solution/uiux/banner.png
-heroImage: ../../../assets/offering/en/uiux/hero.webp
 features:
   - title: User Research
     body: Organize and optimize the representation of product information through interview and analysis

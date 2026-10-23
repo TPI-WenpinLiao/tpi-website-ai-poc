@@ -5,8 +5,6 @@ translationKey: smartfilling
 node: smartfilling
 kind: solution
 tagline: Chuyển từ Dữ liệu sang Thông tin chi tiết bằng OCR được AI hỗ trợ
-# https://www.tpisoftware.vn/images/solution/smartfilling/banner.png
-heroImage: ../../../assets/offering/vi/smartfilling/hero.webp
 features:
   - title: Module tiền xử lý
     body: Tự động sửa lỗi và sửa màu để nâng cao độ nhận dạng chính xác

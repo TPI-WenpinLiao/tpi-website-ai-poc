@@ -5,8 +5,6 @@ translationKey: gis
 node: gis
 kind: solution
 tagline: Envision Business Success with Data-Driven Decision Making
-# https://www.tpisoftware.com/images/solution/gis/banner.png
-heroImage: ../../../assets/offering/en/gis/hero.webp
 features:
   - title: Graphics Engine
     body: A virtual-real integration platform combining 2D and 3D graphs to create a visual graphic interface for various geospatial analyses

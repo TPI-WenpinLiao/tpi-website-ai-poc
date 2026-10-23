@@ -5,8 +5,6 @@ translationKey: smartclaim
 node: smartclaim
 kind: solution
 tagline: Tăng tốc giải quyết bồi thường bằng AI
-# https://www.tpisoftware.vn/images/solution/smartclaim/banner.png
-heroImage: ../../../assets/offering/vi/smartclaim/hero.webp
 features:
   - title: AI OCR để nhập dữ liệu
     body: Tích hợp chứng chỉ y tế và định dạng tài liệu để nhập dữ liệu nhanh vào các trường tương ứng để giảm bớt thời gian

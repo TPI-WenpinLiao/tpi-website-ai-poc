@@ -5,8 +5,6 @@ translationKey: textualanalysis
 node: textualanalysis
 kind: solution
 tagline: Đi từ Dữ liệu đến Thông tin chi tiết với AI
-# https://www.tpisoftware.vn/images/solution/textualanalysis/banner.png
-heroImage: ../../../assets/offering/vi/textualanalysis/hero.webp
 features:
   - title: Hệ thống tiến hóa AI độc quyền
     body: Giao diện trực quan và cơ chế AI đào tạo lại để nâng cao kết quả đào tạo bằng mô hình tối ưu

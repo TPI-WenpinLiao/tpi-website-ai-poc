@@ -5,8 +5,6 @@ translationKey: smartclaim
 node: smartclaim
 kind: solution
 tagline: 整合 AI 加速理賠流程 持續進化
-# https://www.tpisoftware.com/images/solution/smartclaim/banner.png
-heroImage: ../../../assets/offering/zh-TW/smartclaim/hero.webp
 features:
   - title: AI OCR 助快速登打
     body: 可自動統整保戶診斷書及單據格式，即使各醫院格式大不相同也能迅速輸入對應欄位，大幅降低資料登打、判讀的時間成本。

@@ -5,8 +5,6 @@ translationKey: uiux
 node: uiux
 kind: solution
 tagline: Đặt người dùng lên hàng đầu để tạo ra thiết kế đặc biệt
-# https://www.tpisoftware.vn/images/solution/uiux/banner.png
-heroImage: ../../../assets/offering/vi/uiux/hero.webp
 features:
   - title: Nghiên cứu người dùng
     body: Tổ chức và tối ưu hóa việc trình bày thông tin sản phẩm thông qua phỏng vấn và phân tích

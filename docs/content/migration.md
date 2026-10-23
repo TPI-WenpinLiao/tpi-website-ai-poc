@@ -153,10 +153,11 @@ node scripts/content/migrate/offerings.mjs --locale zh-TW --only smartclaim
 | `description` | `<meta name="description">` |
 | `features` | `.solution__feature01-item` 的 `h3` 與 `.contents`（4 項） |
 | `useCases` | 「應用情境」或「應用案例」的 `.list-item` 標題與內文 |
-| `heroImage` | hero 背景圖（`--bg-image`），存成 `src/assets/offering/<locale>/<node>/hero.webp`；模板只拿來當 OG 圖 |
 | `kind`、`cta` | 固定 `solution`、`contact` |
 
 offering schema 沒有欄位的段落不搬：介紹段、「流程架構」圖、三項優勢、適用產業、服務客戶 logo、影片（smartclaim）。要搬時先擴充 [`content-model.md`](../ia/content-model.md) 的 offering 欄位與模板。
+
+hero 背景圖（現站 `/images/solution/<node>/banner.png`）也不搬。offering 模板的 hero 用固定的場景圖，`heroImage` 只拿來當 `og:image`，而 banner 的寬高比約 3:1（1920×650 等），不符合 seo-checklist 的 1200×630；模板裁切前不寫 `heroImage`，頁面用預設 OG 圖。
 
 找不到上表任何一項時，script 判定現站版型改了，該頁失敗且不寫檔。
 

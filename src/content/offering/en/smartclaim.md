@@ -5,8 +5,6 @@ translationKey: smartclaim
 node: smartclaim
 kind: solution
 tagline: Accelerate Claims Processing with AI
-# https://www.tpisoftware.com/images/solution/smartclaim/banner.png
-heroImage: ../../../assets/offering/en/smartclaim/hero.webp
 features:
   - title: AI OCR for Data Entry
     body: Integrate medical certificates and document formats for fast data entry in the corresponding fields to reduce time

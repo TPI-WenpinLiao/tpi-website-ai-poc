@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Commented, serializeFrontmatter } from './frontmatter.mjs';
+import { serializeFrontmatter } from './frontmatter.mjs';
 import { extractSolution, parseOverrides, solutionFrontmatter } from './offerings.mjs';
 
 // https://www.tpisoftware.com/solutions/smartclaim, trimmed to one item per list (data-v-* attributes dropped)
@@ -33,7 +33,6 @@ test('extractSolution reads the shared solution template', () => {
     title: 'SysTalk.ai AI 智能理賠解決方案',
     tagline: '整合 AI 加速理賠流程 持續進化',
     description: '過去在受理理賠案件時， 保險業者需投注大量人力成本。',
-    banner: '/images/solution/smartclaim/banner.png',
     features: [{ title: 'AI OCR 助快速登打', body: '可自動統整保戶診斷書及單據格式。' }],
     useCases: [{ title: '保險業 - 醫療文件解析', body: '藉由自然語言技術，分析診斷證明書。' }],
   });
@@ -41,17 +40,16 @@ test('extractSolution reads the shared solution template', () => {
 
 test('extractSolution fails when the template changed instead of writing empty fields', () => {
   assert.throws(() => extractSolution(PAGE.replace('class="slogan"', 'class="motto"')), /not found on the page.*tagline/);
-  assert.throws(() => extractSolution(PAGE.replace('class="contents">可自動', 'class="text">可自動')), /item 0/);
+  assert.throws(() => extractSolution(PAGE.replace('class="contents">可自動', 'class="text">可自動')), /features\.0/);
+  assert.throws(() => extractSolution(PAGE.replace('class="list-item__content"', 'class="text"')), /useCases\.0/);
 });
 
 test('solutionFrontmatter applies overrides and links use cases to industries', () => {
   const page = extractSolution(PAGE);
-  const hero = new Commented('../../../assets/offering/zh-TW/smartclaim/hero.webp', 'https://www.tpisoftware.com/images/solution/smartclaim/banner.png');
   const data = solutionFrontmatter({
     node: 'smartclaim',
     sourceUrl: 'https://www.tpisoftware.com/solutions/smartclaim',
     page,
-    hero,
     override: { frontmatter: { description: '改寫' }, useCaseIndustry: { 0: 'finance' } },
   });
   assert.equal(
@@ -64,8 +62,6 @@ test('solutionFrontmatter applies overrides and links use cases to industries', 
       'node: smartclaim',
       'kind: solution',
       'tagline: 整合 AI 加速理賠流程 持續進化',
-      '# https://www.tpisoftware.com/images/solution/smartclaim/banner.png',
-      'heroImage: ../../../assets/offering/zh-TW/smartclaim/hero.webp',
       'features:',
       '  - title: AI OCR 助快速登打',
       '    body: 可自動統整保戶診斷書及單據格式。',
@@ -79,7 +75,7 @@ test('solutionFrontmatter applies overrides and links use cases to industries', 
       '',
     ].join('\n'),
   );
-  const base = { node: 'smartclaim', sourceUrl: 'https://x', page, hero };
+  const base = { node: 'smartclaim', sourceUrl: 'https://x', page };
   assert.throws(() => solutionFrontmatter({ ...base, override: { useCaseIndustry: { 3: 'finance' } } }), /use cases the page does not have: 3/);
   assert.throws(() => solutionFrontmatter({ ...base, override: { frontmatter: { summary: 'x' } } }), /unknown frontmatter keys summary/);
 });

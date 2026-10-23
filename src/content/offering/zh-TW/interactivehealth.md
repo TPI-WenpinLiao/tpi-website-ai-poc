@@ -5,8 +5,6 @@ translationKey: interactivehealth
 node: interactivehealth
 kind: solution
 tagline: 科技使力 健康管理的智慧化
-# https://www.tpisoftware.com/images/solution/interactivehealth/banner.png
-heroImage: ../../../assets/offering/zh-TW/interactivehealth/hero.webp
 features:
   - title: 健康指數管理
     body: 以最便捷的方式蒐集及運用用戶身體生理數值、每日運動等健康數據，追蹤更方便。

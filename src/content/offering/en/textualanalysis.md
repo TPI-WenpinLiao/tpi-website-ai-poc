@@ -5,8 +5,6 @@ translationKey: textualanalysis
 node: textualanalysis
 kind: solution
 tagline: Go from Data to Insights with AI
-# https://www.tpisoftware.com/images/solution/textualanalysis/banner.png
-heroImage: ../../../assets/offering/en/textualanalysis/hero.webp
 features:
   - title: Exclusive AI Evolution System
     body: Intuitive interface and AI retraining mechanism to improve confidence score for optimal model training results

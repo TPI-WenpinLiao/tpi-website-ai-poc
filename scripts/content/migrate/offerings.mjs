@@ -2,8 +2,8 @@
 // Converts the current site's solution pages into src/content/offering (M5-02, #27).
 // Which pages: page-map.csv rows with page_type solution. The seven pages share one Nuxt template whose
 // SSR HTML has all the copy, so fields are read by class name. Sections the offering schema has no field
-// for (intro, process diagram, benefits, industries, client logos, video) are left out; the list is in
-// docs/content/migration.md「解決方案頁」.
+// for (intro, process diagram, benefits, industries, client logos, video) are left out, and so is the hero
+// banner: heroImage only feeds og:image, which needs 1200×630 (docs/content/migration.md「解決方案頁」).
 // Usage: node scripts/content/migrate/offerings.mjs [--locale zh-TW|en|vi] [--only <node>] [--refresh]
 import { existsSync } from 'node:fs';
 import { mkdir, readFile } from 'node:fs/promises';
@@ -14,16 +14,14 @@ import { parse } from 'node-html-parser';
 import { parse as parseYaml } from 'yaml';
 import { readCsv } from '../../inventory/csv.mjs';
 import { cachedFetcher, writeAtomic } from './cache.mjs';
-import { applyOverrides, Commented, frontmatterNotes } from './frontmatter.mjs';
-import { entryText, fetchImages, syncImages, today } from './migrate.mjs';
+import { applyOverrides, frontmatterNotes } from './frontmatter.mjs';
+import { entryText, today } from './migrate.mjs';
 
 const LOCALES = ['zh-TW', 'en', 'vi'];
 export const OVERRIDES = 'scripts/content/migrate/offering-overrides.yaml';
 const INDUSTRIES = ['finance', 'government', 'manufacturing'];
 
 const contentFile = (id) => `src/content/offering/${id}.md`;
-const assetDir = (id) => `src/assets/offering/${id}`;
-const assetRef = (id, file) => `../../../assets/offering/${id}/${file}`;
 
 /** Text of an element on one line; the site breaks headings over spans and lines. */
 const text = (el) => el?.text.replace(/\s+/g, ' ').trim() ?? '';
@@ -31,11 +29,10 @@ const text = (el) => el?.text.replace(/\s+/g, ' ').trim() ?? '';
 /**
  * Copy of one solution page.
  * @param {string} html
- * @returns {{ title: string, tagline: string, description: string, banner: string, features: { title: string, body: string }[], useCases: { title: string, body: string }[] }}
+ * @returns {{ title: string, tagline: string, description: string, features: { title: string, body: string }[], useCases: { title: string, body: string }[] }}
  */
 export function extractSolution(html) {
   const root = parse(html);
-  const banner = root.querySelector('.solution__banner-wrapper')?.getAttribute('style')?.match(/--bg-image:url\(([^)]+)\)/)?.[1] ?? '';
   const features = root.querySelectorAll('.solution__feature01-item').map((li) => ({
     title: text(li.querySelector('.feature01-item-content h3')),
     body: text(li.querySelector('.feature01-item-content .contents')),
@@ -48,14 +45,13 @@ export function extractSolution(html) {
     title: text(root.querySelector('h1')),
     tagline: text(root.querySelector('.solution__banner-info .slogan')),
     description: root.querySelector('meta[name="description"]')?.getAttribute('content')?.replace(/\s+/g, ' ').trim() ?? '',
-    banner,
     features,
     useCases,
   };
   const empty = [
-    ...['title', 'tagline', 'description', 'banner'].filter((k) => !data[k]),
+    ...['title', 'tagline', 'description'].filter((k) => !data[k]),
     ...(features.length ? [] : ['features']),
-    ...[...features.entries(), ...useCases.entries()].flatMap(([i, f]) => (f.title && f.body ? [] : [`item ${i}`])),
+    ...Object.entries({ features, useCases }).flatMap(([list, items]) => items.flatMap((f, i) => (f.title && f.body ? [] : [`${list}.${i}`]))),
   ];
   if (empty.length) throw new Error(`not found on the page (template changed?): ${empty.join(', ')}`);
   return data;
@@ -80,9 +76,9 @@ export function parseOverrides(source) {
 
 /**
  * Frontmatter of one entry, key order as in src/content/offering/zh-TW/digirunner.md.
- * @param {{ node: string, sourceUrl: string, page: ReturnType<typeof extractSolution>, hero: string, override?: { frontmatter?: Record<string, unknown>, useCaseIndustry?: Record<string, string> } }} p
+ * @param {{ node: string, sourceUrl: string, page: ReturnType<typeof extractSolution>, override?: { frontmatter?: Record<string, unknown>, useCaseIndustry?: Record<string, string> } }} p
  */
-export function solutionFrontmatter({ node, sourceUrl, page, hero, override = {} }) {
+export function solutionFrontmatter({ node, sourceUrl, page, override = {} }) {
   const industryOf = override.useCaseIndustry ?? {};
   const unknown = Object.keys(industryOf).filter((i) => !page.useCases[Number(i)]);
   if (unknown.length) throw new Error(`${OVERRIDES}: useCaseIndustry for use cases the page does not have: ${unknown.join(', ')}`);
@@ -93,7 +89,6 @@ export function solutionFrontmatter({ node, sourceUrl, page, hero, override = {}
     node,
     kind: 'solution',
     tagline: page.tagline,
-    heroImage: hero,
     features: page.features,
     useCases: page.useCases.length ? page.useCases.map((u, i) => ({ ...u, industry: industryOf[i] })) : undefined,
     cta: 'contact',
@@ -113,17 +108,12 @@ async function migrateEntry({ get, row, inventory, overrides, date }) {
     const res = await get(sourceUrl);
     if (!res.ok) throw new Error(`${sourceUrl}: HTTP ${res.status}`);
     const page = extractSolution(res.body.toString('utf8'));
-    const bannerUrl = new URL(page.banner, sourceUrl).href;
-    const images = await fetchImages(get, [bannerUrl]);
-    const names = new Map([[bannerUrl, `hero.${images[0].ext}`]]);
-    const hero = new Commented(assetRef(id, names.get(bannerUrl)), bannerUrl);
-    const data = solutionFrontmatter({ node: row.node, sourceUrl, page, hero, override: overrides[id] });
+    const data = solutionFrontmatter({ node: row.node, sourceUrl, page, override: overrides[id] });
     notes.push(...frontmatterNotes(row.locale, data));
 
     const path = contentFile(id);
     const existing = existsSync(path) ? await readFile(path, 'utf8') : null;
     const out = entryText(data, '', existing, date);
-    await syncImages(assetDir(id), images, names);
     if (out === existing) return { id, status: 'unchanged', notes };
     await mkdir(dirname(path), { recursive: true });
     await writeAtomic(path, out);

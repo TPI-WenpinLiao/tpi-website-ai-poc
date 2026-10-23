@@ -5,8 +5,6 @@ translationKey: interactivehealth
 node: interactivehealth
 kind: solution
 tagline: Manage Health and Wellness Smartly
-# https://www.tpisoftware.com/images/solution/interactivehealth/banner.png
-heroImage: ../../../assets/offering/en/interactivehealth/hero.webp
 features:
   - title: Health Metrics Management
     body: Collect and leverage health-related and daily physical activity data for effective tracking

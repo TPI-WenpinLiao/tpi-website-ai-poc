@@ -5,8 +5,6 @@ translationKey: insurering
 node: insurering
 kind: solution
 tagline: A Management Transformation to Address Future Challenges
-# https://www.tpisoftware.com/images/solution/insurering/banner.png
-heroImage: ../../../assets/offering/en/insurering/hero.webp
 features:
   - title: Compatible with Microservices
     body: Small, independent system architecture design

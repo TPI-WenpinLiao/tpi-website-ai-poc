@@ -5,8 +5,6 @@ translationKey: insurering
 node: insurering
 kind: solution
 tagline: 新型態管理 解決保險產業當前潛在挑戰
-# https://www.tpisoftware.com/images/solution/insurering/banner.png
-heroImage: ../../../assets/offering/zh-TW/insurering/hero.webp
 features:
   - title: 與微服務機制特性相容
     body: 由小型、獨立的系統架構設計開啟系統管理

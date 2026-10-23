@@ -5,8 +5,6 @@ translationKey: interactivehealth
 node: interactivehealth
 kind: solution
 tagline: Quản lý Sức khỏe và Lối sống Thông minh
-# https://www.tpisoftware.vn/images/solution/interactivehealth/banner.png
-heroImage: ../../../assets/offering/vi/interactivehealth/hero.webp
 features:
   - title: Quản lý số liệu sức khỏe
     body: Thu thập và tận dụng dữ liệu liên quan đến hoạt động thể chất hàng ngày để theo dõi sức khỏe hiệu quả

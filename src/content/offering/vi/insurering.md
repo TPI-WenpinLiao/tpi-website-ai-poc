@@ -5,8 +5,6 @@ translationKey: insurering
 node: insurering
 kind: solution
 tagline: Chuyển đổi quản lý để giải quyết các thử thách trong tương lai
-# https://www.tpisoftware.vn/images/solution/insurering/banner.png
-heroImage: ../../../assets/offering/vi/insurering/hero.webp
 features:
   - title: Tương thích với Microservice
     body: Thiết kế với hệ thống kiến trúc không phụ thuộc nhỏ gọn

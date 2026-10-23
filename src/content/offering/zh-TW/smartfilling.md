@@ -5,8 +5,6 @@ translationKey: smartfilling
 node: smartfilling
 kind: solution
 tagline: AI＋OCR 前所未有的資料建檔體驗
-# https://www.tpisoftware.com/images/solution/smartfilling/banner.png
-heroImage: ../../../assets/offering/zh-TW/smartfilling/hero.webp
 features:
   - title: 前處理模組
     body: 透過自研發前處理技術，自動校正文件影像瑕疵與色彩處理，強化可辨識性同時提升辨識準確度

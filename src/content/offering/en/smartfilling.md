@@ -5,8 +5,6 @@ translationKey: smartfilling
 node: smartfilling
 kind: solution
 tagline: Go from Data to Insights with AI-powered OCR
-# https://www.tpisoftware.com/images/solution/smartfilling/banner.png
-heroImage: ../../../assets/offering/en/smartfilling/hero.webp
 features:
   - title: Pre-Processing Module
     body: Automatic defect and color correction to enhance recognition accuracy

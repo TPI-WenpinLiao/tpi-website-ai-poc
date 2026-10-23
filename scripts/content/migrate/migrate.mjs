@@ -67,7 +67,7 @@ export function parseOverrides(text) {
 }
 
 /** Download every image (cover first), downscaled and re-encoded; throws on the first one that fails. */
-export async function fetchImages(get, urls) {
+async function fetchImages(get, urls) {
   const images = [];
   for (const url of urls) {
     let bytes;
@@ -87,7 +87,7 @@ export async function fetchImages(get, urls) {
 }
 
 /** Write the images that changed and remove files the entry no longer uses. */
-export async function syncImages(dir, images, names) {
+async function syncImages(dir, images, names) {
   await mkdir(dir, { recursive: true });
   const keep = new Set();
   for (const { url, bytes } of images) {

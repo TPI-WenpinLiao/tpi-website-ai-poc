@@ -5,8 +5,6 @@ translationKey: gis
 node: gis
 kind: solution
 tagline: 數據為核心 因應智慧商業決策
-# https://www.tpisoftware.com/images/solution/gis/banner.png
-heroImage: ../../../assets/offering/zh-TW/gis/hero.webp
 features:
   - title: 圖形引擎
     body: 2D、3D與虛實整合平台建立可視化圖形介面，連結虛擬與實際空間，滿足各式場景使用。

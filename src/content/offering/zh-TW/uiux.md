@@ -5,8 +5,6 @@ translationKey: uiux
 node: uiux
 kind: solution
 tagline: 以人為本打造脫穎而出的互動式設計
-# https://www.tpisoftware.com/images/solution/uiux/banner.png
-heroImage: ../../../assets/offering/zh-TW/uiux/hero.webp
 features:
   - title: 專注使用者調查與研究
     body: 透過需求訪談、精確洞察用戶需求，協助企業梳理與優化產品的功能資訊。
