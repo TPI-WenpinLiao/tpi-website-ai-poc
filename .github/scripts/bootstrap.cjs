@@ -15,7 +15,7 @@ const issueTitle = (issue) => `[${issue.id}] ${issue.title}`;
 
 // A dependency is a bootstrap id, or { issue, note } for an issue outside this file (e.g. a [chore])
 const renderDependency = (dep, idToNumber) =>
-  typeof dep === 'object' ? `- #${dep.issue}（${dep.note}）` : idToNumber.has(dep) ? `- #${idToNumber.get(dep)}（${dep}）` : `- ${dep}`;
+  dep !== null && typeof dep === 'object' ? `- #${dep.issue}（${dep.note}）` : idToNumber.has(dep) ? `- #${idToNumber.get(dep)}（${dep}）` : `- ${dep}`;
 
 function renderBody(issue, idToNumber) {
   const list = (items) => items.map((i) => `- ${i}`).join('\n');
@@ -47,7 +47,7 @@ function validate(labels, milestones, issues) {
     }
     if (issue.gateNote && !issue.gate) errors.push(`${issue.id}: gateNote without gate`);
     for (const d of issue.dependsOn ?? []) {
-      if (typeof d === 'object') {
+      if (d !== null && typeof d === 'object') {
         if (!Number.isInteger(d.issue) || d.issue < 1) errors.push(`${issue.id}: dependency issue must be a positive integer`);
         if (typeof d.note !== 'string' || !d.note.trim()) errors.push(`${issue.id}: dependency #${d.issue} needs a note`);
       } else if (!seen.has(d)) errors.push(`${issue.id}: dependency ${d} must be defined earlier`);

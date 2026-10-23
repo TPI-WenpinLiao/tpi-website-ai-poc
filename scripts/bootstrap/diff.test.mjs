@@ -85,4 +85,5 @@ test('validate accepts { issue, note } dependencies and rejects malformed ones',
   assert.throws(() => validate(labels, milestones, withDeps({ issue: '106', note: 'x' })), /positive integer/);
   assert.throws(() => validate(labels, milestones, withDeps({ issue: 106 })), /needs a note/);
   assert.throws(() => validate(labels, milestones, withDeps({ issue: 106, note: ' ' })), /needs a note/);
+  assert.throws(() => validate(labels, milestones, withDeps(null)), /dependency null must be defined earlier/);
 });

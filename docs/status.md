@@ -91,9 +91,9 @@
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
-- `orient-ai`、`aiso`（現站 `page_type` 為 `service`，都在 header 導覽）沒有 issue 承接遷移，M5-01、M5-02 都不含；需要另開 issue，family-ai hub 併入的 `systalk-ai-phison`（AISO AI 一體機）內容可能要一起搬過去，見 `docs/content/products.md`
-- `esg-advisory`（ESG 永續發展與顧問服務，offering）與 ESG 顧問頁（`person`，`page-map.csv` 的 zh-TW 8、en 9、vi 8 列）沒有 issue 承接遷移，M5-02、M5-06 都不含；需要另開 issue。現在只有 M4-01 的範例 `person/zh-TW/chen-zhengrui.md`
-- M5-07 M5 收尾（#32）可以開始
+- `orient-ai`、`aiso` 服務頁內容遷移（#106）可以開始；family-ai hub 併入的 `systalk-ai-phison`（AISO AI 一體機）內容可能要一起搬過去，見 `docs/content/products.md`
+- `esg-advisory` 服務頁與 ESG 顧問頁內容遷移（#107）可以開始；顧問頁是 `page-map.csv` 的 zh-TW 8、en 9、vi 8 列，現在只有 M4-01 的範例 `person/zh-TW/chen-zhengrui.md`
+- M5-07 M5 收尾（#32）在 #106、#107 完成後可以開始
 - 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權
 - 回覆 M5-05（#30）PR 的「待確認」：圖片授權與人物、失敗的 5 篇、作者 `authorType`
 - 首頁與產品頁的最新文章改讀 content collections（#101）可以開始
