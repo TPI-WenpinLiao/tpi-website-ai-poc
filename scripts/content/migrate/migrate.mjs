@@ -87,7 +87,7 @@ async function fetchImages(get, urls) {
 }
 
 /** Write the images that changed and remove files the entry no longer uses. */
-async function syncImages(dir, images, names) {
+export async function syncImages(dir, images, names) {
   await mkdir(dir, { recursive: true });
   const keep = new Set();
   for (const { url, bytes } of images) {

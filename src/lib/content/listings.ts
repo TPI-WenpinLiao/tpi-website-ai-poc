@@ -16,6 +16,12 @@ export interface Listing {
 // Sort order of dated entries everywhere they are listed: newest first
 export const newest = (a: { data: { publishedAt: Date } }, b: { data: { publishedAt: Date } }) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf();
 
+// Case studies: dated ones newest first, then the undated ones in the current site's order (M5-03, #28)
+type CaseData = { data: { publishedAt?: Date | undefined; order?: number | undefined } };
+const caseOrder = (a: CaseData, b: CaseData) =>
+  (b.data.publishedAt?.valueOf() ?? -Infinity) - (a.data.publishedAt?.valueOf() ?? -Infinity) ||
+  (a.data.order ?? Infinity) - (b.data.order ?? Infinity);
+
 export async function listing(id: string, locale: Locale): Promise<Listing> {
   const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
   const n = node(id);
@@ -26,7 +32,7 @@ export async function listing(id: string, locale: Locale): Promise<Listing> {
     return { items: posts.filter((p) => p !== featured).map(postCard), ...(featured ? { featured: postCard(featured) } : {}) };
   }
   if (id === 'media-center') return { items: (await getCollection('news', inLocale)).toSorted(newest).map(newsCard) };
-  if (id === 'success-stories') return { items: (await getCollection('case-study', inLocale)).toSorted(newest).map(caseCard) };
+  if (id === 'success-stories') return { items: (await getCollection('case-study', inLocale)).toSorted(caseOrder).map(caseCard) };
   if (id === 'events') return { items: [] };
   throw new Error(`listing node ${id} has no content source; add it to src/lib/content/listings.ts`);
 }

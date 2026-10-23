@@ -22,9 +22,11 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 - 內文裡連到現站的連結，用 `redirects.csv` 的 `from` → `to` 改成新站路徑；對照不到的列為待確認，不要留現站網址
 - 內文裡的失效連結列在 [`broken-links.csv`](../../../docs/research/broken-links.csv)（`found_on` 是所在頁面），依 [`content-audit.md`「失效連結」](../../../docs/research/content-audit.md#失效連結)的類型修正或移除
 
-## blog、新聞與解決方案頁用 script 轉換
+## blog、新聞、成功案例與解決方案頁用 script 轉換
 
 blog 文章與新聞不手寫內容檔，用 `node scripts/content/migrate/migrate.mjs` 從現站轉換。要修正的內容（alt、description、`authorType`）寫進 `scripts/content/migrate/overrides.yaml`，不直接改產出檔。用法、轉換規則與報告欄位見 [`docs/content/migration.md`](../../../docs/content/migration.md)。
+
+成功案例同樣用 script：`node scripts/content/migrate/case-studies.mjs`，客戶名稱與 zh-TW description 寫在 `scripts/content/migrate/case-studies.yaml`，見 [`migration.md`「成功案例」](../../../docs/content/migration.md#成功案例)。
 
 解決方案頁（`page_type` 為 `solution`）用 `node scripts/content/migrate/offerings.mjs` 轉換，人工修正寫進 `scripts/content/migrate/offering-overrides.yaml`，見 [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁)。
 
