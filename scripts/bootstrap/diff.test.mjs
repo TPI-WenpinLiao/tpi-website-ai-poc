@@ -6,7 +6,7 @@ import { createRequire } from 'node:module';
 import { diffIssues, splitSections } from './diff.mjs';
 
 const require = createRequire(import.meta.url);
-const { renderBody } = require('../../.github/scripts/bootstrap.cjs');
+const { renderBody, validate } = require('../../.github/scripts/bootstrap.cjs');
 
 const milestones = [{ id: 'M1', title: 'M1 盤點' }];
 const base = { milestone: 'M1', labels: ['type:docs'], goal: 'g', deliverables: ['d'], acceptance: ['a'], dependsOn: [] };
@@ -70,4 +70,20 @@ test('a bootstrap-id mentioned in prose does not count as one', () => {
 test('renderBody replaces the default gate sentence with gateNote', () => {
   const body = renderBody({ ...issues[1], gateNote: '選定後加上 `ia-approved`。' }, numbers);
   assert.equal(splitSections(body).get('關卡'), '本 issue 為關卡 issue：選定後加上 `ia-approved`。');
+});
+
+test('renderBody writes { issue, note } dependencies as the issue number and note', () => {
+  const body = renderBody({ ...issues[1], dependsOn: ['M1-01', { issue: 106, note: '服務頁遷移' }] }, numbers);
+  assert.equal(splitSections(body).get('依賴'), '- #2（M1-01）\n- #106（服務頁遷移）');
+});
+
+test('validate accepts { issue, note } dependencies and rejects malformed ones', () => {
+  const labels = [{ name: 'type:docs' }, { name: 'ia-approved' }];
+  const withDeps = (...deps) => [issues[0], { ...issues[1], dependsOn: deps }];
+  assert.doesNotThrow(() => validate(labels, milestones, withDeps('M1-01', { issue: 106, note: '服務頁遷移' })));
+  assert.throws(() => validate(labels, milestones, withDeps({ issue: 0, note: 'x' })), /positive integer/);
+  assert.throws(() => validate(labels, milestones, withDeps({ issue: '106', note: 'x' })), /positive integer/);
+  assert.throws(() => validate(labels, milestones, withDeps({ issue: 106 })), /needs a note/);
+  assert.throws(() => validate(labels, milestones, withDeps({ issue: 106, note: ' ' })), /needs a note/);
+  assert.throws(() => validate(labels, milestones, withDeps(null)), /dependency null must be defined earlier/);
 });

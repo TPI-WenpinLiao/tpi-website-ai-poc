@@ -1,7 +1,8 @@
 # Issue title is rendered as "[<id>] <title>" and used for idempotent matching.
 # `gate`: the label a human adds after review; the issue is not done until it is present.
 # `gateNote`: replaces the default sentence of the gate section (optional).
-# `dependsOn`: ids resolved to issue numbers at bootstrap time (must appear earlier in this file).
+# `dependsOn`: ids resolved to issue numbers at bootstrap time (must appear earlier in this file);
+#   an issue not in this file (e.g. a [chore]) is written as `{ issue: <number>, note: <what it is> }`.
 # Issues edited on GitHub must be mirrored here; `node scripts/bootstrap/diff.mjs` lists the differences.
 
 # ---------------------------------------------------------------- M1
@@ -457,7 +458,14 @@
     - 更新 `content-migration`、`CLAUDE.md`、`docs/status.md`
   acceptance:
     - "`docs/status.md` 指向 M6"
-  dependsOn: [M5-01, M5-02, M5-03, M5-05, M5-06]
+  dependsOn:
+    - M5-01
+    - M5-02
+    - M5-03
+    - M5-05
+    - M5-06
+    - { issue: 106, note: orient-ai、aiso 服務頁內容遷移 }
+    - { issue: 107, note: esg-advisory 服務頁與 ESG 顧問頁內容遷移 }
 
 # ---------------------------------------------------------------- M6
 - id: M6-01
