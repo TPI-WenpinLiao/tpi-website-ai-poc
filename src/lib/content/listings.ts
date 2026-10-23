@@ -13,7 +13,8 @@ export interface Listing {
   featured?: EntryCard;
 }
 
-const newest = (a: { data: { publishedAt: Date } }, b: { data: { publishedAt: Date } }) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf();
+// Sort order of dated entries everywhere they are listed: newest first
+export const newest = (a: { data: { publishedAt: Date } }, b: { data: { publishedAt: Date } }) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf();
 
 export async function listing(id: string, locale: Locale): Promise<Listing> {
   const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);

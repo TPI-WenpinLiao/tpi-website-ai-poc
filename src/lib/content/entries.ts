@@ -36,3 +36,9 @@ export function paginate<T>(items: readonly T[], size = PAGE_SIZE): T[][] {
   for (let i = 0; i < items.length; i += size) pages.push(items.slice(i, i + size));
   return pages.length ? pages : [[]];
 }
+
+// Values that occur more than once, each listed once
+export function duplicates(values: readonly string[]): string[] {
+  const seen = new Set<string>();
+  return [...new Set(values.filter((v) => seen.has(v) || !seen.add(v)))];
+}

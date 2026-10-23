@@ -3,14 +3,15 @@
 // - one per published collection entry, in the entry's locale. Node-based entries (offering, hub,
 //   page, whitepaper) live at their nodes.csv path and the node's template picks the layout; blog,
 //   news, case-study and person entries fill their collection node's path (src/lib/content/urls.ts)
-// - listing, contact and utility nodes, which have no entry, in every locale with interface copy
-//   (src/data/strings); listings are split into pages at {path}/page/{n}
+// - listing, contact and utility nodes in every locale with interface copy (src/data/strings);
+//   listings are split into pages at {path}/page/{n}. The contact page takes the locale's `page`
+//   entry for its node when there is one
 // - a download page per offering with downloads (/download/{product})
 // Static pages in src/pages win over this route.
 import type { GetStaticPaths } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { node } from '../lib/ia/navigation';
-import { entryLocale, isPublished, translationPaths } from '../lib/content/entries';
+import { duplicates, entryLocale, isPublished, translationPaths } from '../lib/content/entries';
 import OfferingTemplate from '../layouts/templates/OfferingTemplate.astro';
 import HubTemplate from '../layouts/templates/HubTemplate.astro';
 import ContentTemplate from '../layouts/templates/ContentTemplate.astro';
@@ -40,7 +41,7 @@ type Page =
   | { kind: 'case-study'; entry: CollectionEntry<'case-study'> }
   | { kind: 'person'; entry: CollectionEntry<'person'> }
   | { kind: 'listing'; id: string; locale: Locale; items: EntryCard[]; featured: EntryCard | undefined; page: number; pages: number }
-  | { kind: 'contact'; locale: Locale }
+  | { kind: 'contact'; locale: Locale; entry: CollectionEntry<'page'> | undefined }
   | { kind: 'utility'; id: 'search' | 'subscribe' | 'subscribe-result' | 'thanks'; locale: Locale }
   | { kind: 'download'; entry: CollectionEntry<'offering'> };
 type Props = Page & { translations: string[] };
@@ -77,7 +78,8 @@ export const getStaticPaths = (async () => {
         );
       }
       const contact = localizePath(node('contact').path, locale);
-      out.push({ params: { path: contact.slice(1) }, props: { kind: 'contact', locale, translations: versions(contact, locale) } satisfies Props });
+      const entry = (await getCollection('page', (e) => e.data.node === 'contact' && entryLocale(e.id) === locale && isPublished(e)))[0];
+      out.push({ params: { path: contact.slice(1) }, props: { kind: 'contact', locale, entry, translations: versions(contact, locale) } satisfies Props });
       for (const id of UTILITIES) {
         const path = localizePath(node(id).path, locale);
         out.push({ params: { path: path.slice(1) }, props: { kind: 'utility', id, locale, translations: versions(path, locale) } satisfies Props });
@@ -95,10 +97,10 @@ export const getStaticPaths = (async () => {
       params: { path: pathOf(e).slice(1) },
       props: { ...page(e), translations: translationPaths(e, all, pathOf) } satisfies Props,
     }));
-  return [
+  const paths = [
     ...route(await getCollection('offering'), nodeEntryPath, (entry) => ({ kind: 'offering', entry })),
     ...route(await getCollection('hub'), nodeEntryPath, (entry) => ({ kind: 'hub', entry })),
-    // The contact page has its own template and page (src/pages/contact-us.astro)
+    // The contact page is built with the other node pages below (nodePages), entry or not
     ...route(await getCollection('page', (e) => node(e.data.node).template === 'content'), nodeEntryPath, (entry) => ({ kind: 'page', entry })),
     ...route(await getCollection('whitepaper'), nodeEntryPath, (entry) => ({ kind: 'whitepaper', entry })),
     ...route(await getCollection('blog'), (e) => entryPath('blog', e), (entry) => ({ kind: 'blog', entry })),
@@ -112,6 +114,10 @@ export const getStaticPaths = (async () => {
       (entry) => ({ kind: 'download', entry }),
     ),
   ];
+  // Two pages on one URL would leave only one built (a blog slug named like a category, say)
+  const clashes = duplicates(paths.map((p) => p.params.path));
+  if (clashes.length) throw new Error(`more than one page builds to: /${clashes.join(', /')}`);
+  return paths;
 }) satisfies GetStaticPaths;
 
 const page = Astro.props;
@@ -130,6 +136,6 @@ const page = Astro.props;
     <ListingTemplate id={page.id} locale={page.locale} items={page.items} featured={page.featured} page={page.page} pages={page.pages} translations={page.translations} />
   )
 }
-{page.kind === 'contact' && <ContactTemplate locale={page.locale} translations={page.translations} />}
+{page.kind === 'contact' && <ContactTemplate locale={page.locale} entry={page.entry} translations={page.translations} />}
 {page.kind === 'utility' && <UtilityTemplate kind={page.id} locale={page.locale} translations={page.translations} />}
 {page.kind === 'download' && <UtilityTemplate kind="download" offering={page.entry} translations={page.translations} />}

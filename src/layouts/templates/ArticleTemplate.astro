@@ -21,6 +21,7 @@ import { entryTrail } from '../../lib/ia/navigation';
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { categoryTitle, newsCard, postCard, type EntryCard } from '../../lib/content/cards';
 import { COLLECTION_NODES, entryPath, nodeEntryPath } from '../../lib/content/urls';
+import { newest } from '../../lib/content/listings';
 import { blogPostingJsonLd, newsArticleJsonLd } from '../../lib/seo/jsonld/article';
 import { isoDate } from '../../lib/seo/jsonld/shared';
 import { canonicalUrl } from '../../lib/seo/meta';
@@ -54,14 +55,13 @@ const offerings = (await getCollection('offering', (o) => inLocale(o) && related
   description: o.data.description,
   href: nodeEntryPath(o),
 }));
-const byDate = (a: { data: { publishedAt: Date } }, b: { data: { publishedAt: Date } }) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf();
 const more: EntryCard[] =
   props.kind === 'blog'
     ? (await getCollection('blog', (b) => inLocale(b) && b.id !== entry.id && b.data.category === props.entry.data.category))
-        .toSorted(byDate)
+        .toSorted(newest)
         .slice(0, 3)
         .map(postCard)
-    : (await getCollection('news', (n) => inLocale(n) && n.id !== entry.id)).toSorted(byDate).slice(0, 3).map(newsCard);
+    : (await getCollection('news', (n) => inLocale(n) && n.id !== entry.id)).toSorted(newest).slice(0, 3).map(newsCard);
 
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);

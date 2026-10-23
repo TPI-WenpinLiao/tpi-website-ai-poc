@@ -4,7 +4,9 @@
 // screens). Fields are the current site's contact form (docs/research/features.md「聯絡我們」);
 // the 諮詢產品 options are the products in the header, in its order. Offices come from the
 // organization data file. Sending, spam protection and the endpoint are M6-01's: no action yet.
-import { getEntry } from 'astro:content';
+// The page's title and description come from the locale's `page` entry for the contact node
+// (content-model.md「page」) once M5-06 writes it; until then from the node and src/data/strings.
+import { getEntry, type CollectionEntry } from 'astro:content';
 import PageLayout from '../PageLayout.astro';
 import PageHero from '../../components/ui/PageHero.astro';
 import Surface from '../../components/ui/Surface.astro';
@@ -22,10 +24,11 @@ import { pageDescription, strings } from '../../data/strings';
 
 interface Props {
   locale: Locale;
+  entry?: CollectionEntry<'page'> | undefined;
   translations?: readonly string[];
 }
 
-const { locale, translations } = Astro.props;
+const { locale, entry, translations } = Astro.props;
 const t = strings(locale);
 const f = t.form;
 const self = node('contact');
@@ -35,10 +38,11 @@ const products = (productMenu?.children ?? []).flatMap((family) => family.childr
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
-const description = pageDescription(locale, 'contact');
+const page = entry?.data ?? { title: self.title, description: pageDescription(locale, 'contact'), node: 'contact' as const };
+const { title, description } = page;
 // ContactPage with the organization as mainEntity (content-model.md「page」)
 const jsonLd = pageJsonLd({
-  page: { title: self.title, description, node: 'contact' },
+  page,
   org: org.data,
   site: Astro.site,
   url: canonicalUrl(Astro.url.pathname, Astro.site),
@@ -48,8 +52,8 @@ const jsonLd = pageJsonLd({
 });
 ---
 
-<PageLayout title={self.title} description={description} jsonLd={jsonLd} translations={translations}>
-  <PageHero eyebrow="Contact" title={self.title} description={contactCta.description.text}>
+<PageLayout title={entry?.data.seoTitle ?? title} description={description} jsonLd={jsonLd} translations={translations}>
+  <PageHero eyebrow="Contact" title={title} description={contactCta.description.text}>
     <Breadcrumb slot="breadcrumb" node="contact" />
   </PageHero>
 

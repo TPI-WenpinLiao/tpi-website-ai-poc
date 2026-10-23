@@ -51,7 +51,7 @@ const filters = isBlog
   : id === 'media-center'
     ? Object.values(t.newsTypes).map((label) => ({ label }))
     : id === 'success-stories'
-      ? ['industry-finance', 'industry-government', 'industry-manufacturing'].map((n) => ({ label: node(n).title }))
+      ? children('industries').map((n) => ({ label: n.title }))
       : [];
 const title = page > 1 ? `${self.title}${t.listing.pageSuffix(page)}` : self.title;
 const description = pageDescription(locale, id);

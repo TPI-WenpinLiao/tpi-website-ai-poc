@@ -1,7 +1,7 @@
 // Entry helpers in src/lib/content/entries.ts used by the dynamic routes.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { entryLocale, entrySlug, isPublished, pagePath, paginate, translationPaths } from '../../src/lib/content/entries.ts';
+import { duplicates, entryLocale, entrySlug, isPublished, pagePath, paginate, translationPaths } from '../../src/lib/content/entries.ts';
 
 const entry = (id, translationKey, draft = false) => ({ id, data: { translationKey, draft } });
 
@@ -34,4 +34,9 @@ test('page 1 is the listing path, later pages are under /page/n', () => {
   assert.equal(pagePath('/blog', 1), '/blog');
   assert.equal(pagePath('/blog/ai', 2), '/blog/ai/page/2');
   assert.equal(pagePath('/en/blog', 3), '/en/blog/page/3');
+});
+
+test('duplicates lists each repeated value once', () => {
+  assert.deepEqual(duplicates(['blog/ai', 'blog/x', 'blog/ai', 'blog/ai']), ['blog/ai']);
+  assert.deepEqual(duplicates(['a', 'b']), []);
 });
