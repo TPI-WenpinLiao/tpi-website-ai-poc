@@ -11,7 +11,7 @@ M5-01（#26）把現站的產品頁搬進 `offering` 與 `hub` collection，只�
 | `offering` | digirunner、digirunner-cloud、digilogs、digilogs-iso27001、digilogs-detection、digimars、digiflexis、digicare、systalk-chat、systalk-viki、systalk-coach、systalk-audit、systalk-icr、systalk-rpa、gadodido、gadoscout、greenswift、electriswift、insurebrick | digirunner 沿用 M3-05 的版本 |
 | `hub` | products、family-ai、family-dx、family-esg、family-security、industry-finance、industry-government | family-security 是 `draft: true` 的新頁 |
 
-不在範圍：`/solutions/*` 的頁面（M5-02），en、vi（M7-02、M7-03），以及 `orient-ai`、`aiso`。後兩頁的 `page_type` 是 `service`，M5-02 也沒有搬，目前沒有 issue 承接（`docs/status.md`「下一步」）。
+不在範圍：`/solutions/*` 的頁面（M5-02），en、vi（M7-02、M7-03），以及 `orient-ai`、`aiso`。後兩頁的 `page_type` 是 `service`，由 #106 用 `offerings.mjs` 轉換（[`migration.md`「服務頁」](migration.md#服務頁)）。
 
 ## 寫法
 
@@ -37,7 +37,7 @@ node scripts/content/offering-files.mjs
 
 下載檔保留現站網址（[`redirects.md`](../ia/redirects.md)「對照規則」），所以檔案放在 `public/` 底下與現站相同的路徑，內容檔的 `downloads[].file` 寫該路徑（百分比編碼）。
 
-`offering-content.mjs` 的一行文字只要出現在該內容檔任一個 `sourceUrl` 頁面上就算找到。內容檔修正了現站錯字時，把〔現站寫法, 內容檔寫法〕加進 script 的 `CORRECTIONS`。2026-10-23 合併 M5-02 後，三語 offering 與 hub 的結果是 756/756（55 個來源頁）。
+`offering-content.mjs` 的一行文字只要出現在該內容檔任一個 `sourceUrl` 頁面上就算找到。內容檔修正了現站錯字時，把〔現站寫法, 內容檔寫法〕加進 script 的 `CORRECTIONS`。2026-10-23 合併 M5-02 後，三語 offering 與 hub 的結果是 756/756（55 個來源頁）；#106 加上 orient-ai、aiso 後是 866/866（63 個來源頁）。
 
 ## 待確認
 
@@ -48,7 +48,7 @@ node scripts/content/offering-files.mjs
 | 現站產品頁的 banner 圖庫照能否沿用、是否要另外製作產品主視覺（`heroImage`） | 內容負責人 |
 | 各頁的「成功案例」段落都有客戶名稱，留給 M5-03（#28）處理；客戶 logo 牆未搬 | 內容負責人 |
 | `features` 每一項在產品頁是一個捲動章節，數量 4–11 項（gadoscout 11、systalk-audit 10）。M3-05 核准時 digirunner 是 4 項，項目多的頁面捲動很長，是否刪減 | 設計、內容負責人 |
-| 還沒有頁面的節點，在那些頁產生前是失效連結：header 導覽（`main` 上已經如此）；`/products` 的子頁卡片與 gadodido、gadoscout 的麵包屑與 `BreadcrumbList` 連到 draft 的 `/products/gadosecurity`；金融、政府產業頁與 insurebrick 的麵包屑連到 `/industries`；electriswift 的製造業情境連到 draft 的 `/industries/manufacturing`；family-ai 的子頁卡片連到還沒有內容檔的 `/orient-ai` | 專案負責人 |
+| 還沒有頁面的節點，在那些頁產生前是失效連結：header 導覽（`main` 上已經如此）；`/products` 的子頁卡片與 gadodido、gadoscout 的麵包屑與 `BreadcrumbList` 連到 draft 的 `/products/gadosecurity`；金融、政府產業頁與 insurebrick 的麵包屑連到 `/industries`；electriswift 的製造業情境連到 draft 的 `/industries/manufacturing`（family-ai 的子頁卡片連到 `/orient-ai` 的失效連結已由 #106 補上內容檔） | 專案負責人 |
 | 金融（13 字）、政府與公部門、產品總覽、ISO27001 日誌存錄、digiLogs 日誌分析的 `<title>` 短於 `seo-checklist` 的 20–32 字；產業頁是新頁，現站沒有可沿用的標題，要不要加 `seoTitle`、寫什麼 | 內容負責人 |
 
 ### 各頁
@@ -76,7 +76,7 @@ node scripts/content/offering-files.mjs
 | insurebrick | `to_confirm`：不在導覽，是否仍銷售；現站 description 講市場不講產品，改從頁面介紹取句；「業界唯一微服務設計的基礎架構」「28 個模組」、6 種導入領域未搬 |
 | greenswift | 「通過國際查證機構核發 AUP 認證」的機構與效期（ESGswift 頁寫 ARES）；FAQ 有未來式的說法，可能已過時：「未來我們也會推出係數管理中心」「多場所報告書功能正在開發中」「未來還將整合 ISO 14067 和 ISO 14068」；方案表、六大盤查步驟、儀表板說明未搬；`/carbon` 的 `<title>` 與 description 是 vikibundle 頁的（現站錯誤），經濟型方案價格（每支產品 15 萬）、第三方查證機構名稱（愛法諾、亞瑞士）、5 題 FAQ、短網址申請連結未搬；修正半形句點 |
 | electriswift | MODEL、CONVERGE 等五步驟、平均節電與電費節省的數字、能源管理法說明未搬；工業廠房情境 `industry` 填 manufacturing（製造業 hub 目前是 draft） |
-| family-ai | 主頁的「已為全球超過 1.4億用戶」、一日應用情境、SysTalk.Service 導入前中後未搬；`highlights` 取自併入的 `systalk-ai-phison`，但該頁以 AISO 為名、介紹與群聯電子 aiDAPTIV+ 合作的 AI 一體機（2025 AI AWARD、回應快 25 倍、70B–200B 模型），可能更適合放在 `aiso` 節點（目前沒有 issue 承接）；該頁 FAQ 4 題、方案表、影片 2 支未搬 |
+| family-ai | 主頁的「已為全球超過 1.4億用戶」、一日應用情境、SysTalk.Service 導入前中後未搬；`highlights` 取自併入的 `systalk-ai-phison`，但該頁以 AISO 為名、介紹與群聯電子 aiDAPTIV+ 合作的 AI 一體機（2025 AI AWARD、回應快 25 倍、70B–200B 模型），曾考慮移到 `aiso` 節點，使用者在 #106（PR #110）決定維持在 family-ai；該頁 FAQ 4 題、方案表、影片 2 支未搬 |
 | family-dx | IDC 報告下載（表單，M6）、整合綜效 4 項、服務能力 5 項未搬；`highlights` 只放「DigiLism 為何與眾不同？」6 項 |
 | family-esg | ESG 國際認證標準清單、「降低 30% 人力成本」「平均節能 15%」等數字、ESG 顧問段落（`esg-advisory` 節點）未搬 |
 | family-security | 新頁，介紹文字需人工提供；提供前是 draft |

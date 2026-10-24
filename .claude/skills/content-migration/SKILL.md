@@ -28,7 +28,7 @@ blog 文章與新聞不手寫內容檔，用 `node scripts/content/migrate/migra
 
 成功案例同樣用 script：`node scripts/content/migrate/case-studies.mjs`，客戶名稱與 zh-TW description 寫在 `scripts/content/migrate/case-studies.yaml`，見 [`migration.md`「成功案例」](../../../docs/content/migration.md#成功案例)。
 
-解決方案頁（`page_type` 為 `solution`）用 `node scripts/content/migrate/offerings.mjs` 轉換，人工修正寫進 `scripts/content/migrate/offering-overrides.yaml`，見 [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁)。
+解決方案頁（`page_type` 為 `solution`）與 `orient-ai`、`aiso` 服務頁用 `node scripts/content/migrate/offerings.mjs` 轉換，人工修正寫進 `scripts/content/migrate/offering-overrides.yaml`，見 [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁)。
 
 ESG 顧問服務頁與顧問頁用 `node scripts/content/migrate/esg-advisory.mjs`，人工修正寫進 `scripts/content/migrate/esg-advisory-overrides.yaml`，見 [`migration.md`「ESG 顧問服務」](../../../docs/content/migration.md#esg-顧問服務)。
 

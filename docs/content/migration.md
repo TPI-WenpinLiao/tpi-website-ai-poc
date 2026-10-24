@@ -163,7 +163,9 @@ node scripts/content/migrate/case-studies.mjs --dry-run   # 不寫檔，只看�
 
 ## 解決方案頁
 
-`scripts/content/migrate/offerings.mjs` 把 `page-map.csv` 中 `page_type` 為 `solution` 的頁面（7 個節點 × 3 語系）轉成 `src/content/offering/<locale>/<node>.md`（M5-02，#27）。`/solutions/greenswift`、`/solutions/insurebrick` 的 `page_type` 是 product，不在這裡。
+`scripts/content/migrate/offerings.mjs` 把 `page-map.csv` 中 `page_type` 為 `solution` 的頁面（7 個節點 × 3 語系）轉成 `src/content/offering/<locale>/<node>.md`（M5-02，#27），另外轉 `orient-ai`、`aiso` 兩個服務頁（#106，見「服務頁」）。`/solutions/greenswift`、`/solutions/insurebrick` 的 `page_type` 是 product，不在這裡。
+
+`page-map.csv` 的 merge 列（例如大小寫不同的 `/orient-aI`）不另外抓，網址接在合併目標的 `sourceUrl` 後面。
 
 ```bash
 node scripts/content/migrate/offerings.mjs
@@ -191,6 +193,26 @@ hero 背景圖（現站 `/images/solution/<node>/banner.png`）也不搬。offer
 
 找不到上表任何一項時，script 判定現站版型改了，該頁失敗且不寫檔。
 
+### 服務頁
+
+`orient-ai`、`aiso` 各有自己的版型，script 依節點選 extractor（`offerings.mjs` 的 `TEMPLATES`）：
+
+| 欄位 | `orient-ai` | `aiso` |
+|---|---|---|
+| `title` | `<title>` 去掉「 - 昕力資訊TPIsoftware」等站名 | `h1` 的 wordmark alt（AISO）加上文字 |
+| `tagline` | `h1` 下方的副標（`.sp-text-wrapper.desktop`） | hero 的 `.hero-content-description` |
+| `description` | `<meta name="description">` | 現站沒有，用 `tagline` |
+| `features` | 第一段的 5 張卡片（`.section01 .card`） | 方案卡片的標題與說明（`.solutions-card`） |
+| `faq` | FAQ 5 題。答案有條列時，條列接在段落後面，寫成「標題：說明。」 | 無 |
+| `kind`、`cta` | `product`、`demo`（現站 hero 是「預約DEMO」） | `product`、`contact` |
+
+`inventory.csv` 的 `page_type` 是 `service`，`kind` 依使用者決定（PR #110）兩頁都填 `product`，JSON-LD 是 `SoftwareApplication`。
+
+沒有欄位的段落不搬：
+
+- `orient-ai`：作業效率 40-60% 等三個數字、執行層與治理層兩張卡片（含應用場景）、「實現人與 AI Agent 的協作」三組條列與截圖、「OrientAI + AI 硬體」（群聯 aiDAPTIV、AI PC／Workstation／AI Server）、白皮書與 blog 的連結
+- `aiso`：方案卡片的領域標籤（法務、人力資源等）與連到 `aisoportal.com` 的「了解更多」
+
 ### 人工修正
 
 寫在 `scripts/content/migrate/offering-overrides.yaml`，key 是 `<locale>/<node>`：
@@ -204,7 +226,7 @@ hero 背景圖（現站 `/images/solution/<node>/banner.png`）也不搬。offer
 node scripts/design/offering-content.mjs
 ```
 
-逐筆確認每個非 draft 的 offering（三個語系）的 `tagline`、`features`、`useCases` 文字仍在第一個 `sourceUrl` 的頁面上，找不到的列 `MISS` 並以 exit 1 結束。`description` 有改寫，不在比對範圍，在 PR 列出原文對照。
+逐筆確認每個非 draft 的 offering 與 hub（三個語系）的 `tagline`、`features`、`useCases`、`faq`、`highlights` 文字仍在任一個 `sourceUrl` 的頁面上，找不到的列 `MISS` 並以 exit 1 結束。FAQ 答案整段找不到時，改以句子與「標題：說明」為單位比對，因為服務頁的答案是段落與條列接成的。`description` 有改寫，不在比對範圍，在 PR 列出原文對照。
 
 ## ESG 顧問服務
 

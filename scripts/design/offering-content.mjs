@@ -3,7 +3,9 @@
 // since #107): tagline, features, useCases, faq and highlights of every entry that isn't a draft, and
 // the name, job title, affiliation and lists of every person entry. A line counts as found
 // when it is on any of the entry's sourceUrl pages (merged pages list several), after correcting the
-// typos in CORRECTIONS. Same matching as scripts/design/home-content.mjs.
+// typos in CORRECTIONS. Same matching as scripts/design/home-content.mjs, except that a FAQ answer
+// that isn't on the page as a whole is checked sentence by sentence: offerings.mjs joins an answer's
+// paragraph and list items (#106).
 // Needs network access to www.tpisoftware.com, so it is not part of `npm run check`.
 //
 //   node scripts/design/offering-content.mjs
@@ -25,6 +27,8 @@ const COLLECTIONS = ['offering', 'hub', 'person'];
 
 const frontmatter = (md) => parse(/^---\n([\s\S]*?)\n---/.exec(md)?.[1] ?? '');
 const pairs = (items, key, fields) => (items ?? []).flatMap((item, i) => fields.map((f) => [`${key}.${i}.${f}`, item[f]]));
+// Sentences and 「title：description」 parts, without the punctuation that joined them
+const pieces = (text) => text.split(/[。.!?！？：:]\s+|[。！？：]/).map((p) => p.replace(/[。.]$/, '')).filter((p) => squash(p));
 const lines = (items, key) => (items ?? []).map((item, i) => [`${key}.${i}`, item]);
 // person entries: the title is the advisor's name; string fields and lists as on the page
 const PERSON_FIELDS = ['title', 'jobTitle', 'affiliation'];
@@ -60,7 +64,8 @@ for (const url of new Set(checks.flatMap((c) => c.urls))) {
 }
 let failed = 0;
 for (const c of checks) {
-  const ok = c.urls.some((url) => pages.get(url).includes(squash(c.text)));
+  const found = (parts) => c.urls.some((url) => parts.every((p) => pages.get(url).includes(squash(p))));
+  const ok = found([c.text]) || (/^faq\.\d+\.answer$/.test(c.path) && found(pieces(c.text)));
   if (!ok) failed += 1;
   console.log(`${ok ? 'ok  ' : 'MISS'} ${c.file} ${c.path}: ${c.text}`);
 }

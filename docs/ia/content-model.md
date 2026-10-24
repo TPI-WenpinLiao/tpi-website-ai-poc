@@ -507,4 +507,4 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 | 白皮書檔案的實際位置（現站在表單送出後提供） | 後端負責人 | `whitepaper.file` |
 | tag 清單（上表）的合併方式與顯示名稱。`src/content/tags.yaml` 目前的名稱取自現站，例如 `ai-solutions` 的 zh-TW 名稱是「人工智慧」 | 專案負責人 | 改上表後重跑 `node scripts/content/tags.mjs` |
 | 現站案例分類對應到 `case-study.industry` 的方式：M5-03 依使用者決定先照上表對應；群創光電（現站「科技」）、卓新工業（「其他」）是否改為 `manufacturing` | 內容負責人 | 產業頁列出的案例 |
-| `offering.kind` 的歸類：`inventory.csv` 的 `page_type` 是依 URL 推定，例如 `/solutions/smartclaim` 與 `/solutions/insurering` 實際是否為產品；`systalk-chat` 的現站頁面同時判為 product 與 service（各 3 列）、`greenswift` 有 1 列 campaign、`orient-ai` 與 `aiso` 判為 service 但新聞稱「自研 OrientAI 系列軟體」、`uiux` 判為 solution 但內容是設計服務 | 內容負責人 | M5 |
+| `offering.kind` 的歸類：`inventory.csv` 的 `page_type` 是依 URL 推定，例如 `/solutions/smartclaim` 與 `/solutions/insurering` 實際是否為產品；`systalk-chat` 的現站頁面同時判為 product 與 service（各 3 列）、`greenswift` 有 1 列 campaign、`uiux` 判為 solution 但內容是設計服務 | 內容負責人 | M5 |
