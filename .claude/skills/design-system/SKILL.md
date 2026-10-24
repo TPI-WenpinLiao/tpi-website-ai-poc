@@ -73,20 +73,20 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 ## Token 命名
 
-名稱由左到右是「類別－用途－變體－狀態」，每段用小寫英文與 `-`。現有名稱見 `tokens.css`，新 token 照同樣的順序取名：
+名稱用小寫英文與 `-`，前面是類別，後面依序接用途、變體、狀態，用不到的段省略。現有名稱見 `tokens.css`，新 token 先找同類的既有名稱照著取：
 
 | 段 | 寫法 | 例 |
 |---|---|---|
 | 類別 | primitive 用色名；semantic 用 `color`、`glass`、`glow`、`shadow`、`gradient`；scale 用屬性名 | `--purple-700`、`--color-*`、`--font-size-*`、`--radius-*` |
-| 用途 | 色彩的角色：`text`、`bg`、`border`、`action`、`link`、`brand`、`accent`、`focus`、`success`、`error`、`disabled`、`grid` | `--color-text`、`--color-bg` |
-| 變體 | 強弱用 `subtle`、`muted`、`soft`、`strong`；指定色系用 `brand`、`accent` | `--color-bg-brand-subtle`、`--color-border-strong` |
+| 用途 | 色彩的角色：`text`、`bg`、`border`、`action`、`link`、`brand`、`accent`、`focus`、`success`、`error`、`disabled`、`grid` | `--color-text`、`--color-bg`、`--color-error` |
+| 變體 | 強弱用 `subtle`、`muted`、`soft`、`strong`；指定色系用 `brand`、`accent`；配對的前景或背景用 `text`、`bg` | `--color-bg-brand-subtle`、`--color-border-strong`、`--color-error-bg` |
 | 狀態 | `hover`、`active`，放在最後 | `--color-action-hover`、`--color-action-subtle-hover`、`--scene-rim-glow-active` |
 
+- 頁面底色的層次用 `--color-bg-<變體>`（`--color-bg-subtle`）。狀態色與互動色的配對用 `--color-<用途>-<text 或 bg>`：`--color-action-text` 是 `--color-action` 上的文字，`--color-error-bg` 是 `--color-error` 的底色。新增 warning 時照狀態色寫成 `--color-warning`、`--color-warning-bg`
 - primitive 色階用數字，`0`（白）到 `950`，數字越大越深；級數之間需要中間值時取中間的數字（`--ink-850`）。只加實際用到的級數，不預先補滿
 - 尺寸級距：字級用 `xs`、`sm`、`base`、`lg`、`xl` 與 `h1`–`h4`、`display`；間距用 4px 的倍數（`--space-4` 是 `1rem`）；圓角、陰影用 `sm`／`md`／`lg`（圓角另有 `xl`、`pill`），時間用 `fast`／`base`／`slow`。版面專用的間距用名稱說明用途（`--space-gutter`、`--space-section`）
-- 前景配背景的色彩用 `<用途>-text`（`--color-action-text` 是 `--color-action` 上的文字），不另取名
-- 只給一個元件或一塊版面用的值，以那個區塊命名：`--hero-*`（`PageHero`）、`--scene-*`（3D 場景與 `LayerStack`）、`--logo-height*`、`--header-height`、`--progress-height`。先找能不能用既有的 scale 表達，不行才加；加了也要在 `tokens.css` 的註解寫出誰讀它
-- `--scene-block-*`、`--scene-rim-*` 等由 TS 讀的 token 是無單位數字，由 `SceneContext.readNumber` 讀；在 `tokens.css` 的註解寫出讀它的檔案
+- 只屬於一塊版面的值，以那塊版面命名：`--hero-*`（hero 的版面，`PageHero`、`Backdrop`、`Breadcrumb`、`SceneChapter` 共用）、`--scene-*`（3D 視角、方塊材質，以及玻璃面板對比用的背景 `--scene-worst`）、`--logo-height*`、`--header-height`、`--progress-height`。`LayerStack` 的 `--layer-gap`、`--node-size` 是早期沒有前綴的例外，新 token 不要照這樣取。先找能不能用既有的 scale 表達，不行才加；加了也要在 `tokens.css` 的註解寫出誰讀它
+- 3D 場景的 TS 也讀 token：`src/lib/scene/runtime.ts` 讀 `--scene-angle-*` 的角度，`SceneContext.readNumber` 讀 `--scene-block-*`、`--scene-rim-*` 的無單位數字。新增給 TS 讀的 token 時，在 `tokens.css` 的註解寫出讀它的檔案
 - 新 token 要能歸進 `scripts/design/token-groups.mjs` 的某一組（見「展示頁」），否則 `showcase.mjs` 會失敗
 
 ## 斷點
@@ -120,7 +120,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 ## 基礎元件
 
-`src/components/ui/` 的每個元件都要在下表有一列，`node scripts/design/showcase.mjs` 會擋下漏列的元件。
+`src/components/ui/` 的每個元件都要在下表有一列，表裡也不能留已經刪除的元件，`node scripts/design/showcase.mjs` 兩種都會擋。
 
 | 元件 | 用途 | 重點 |
 |---|---|---|
@@ -161,10 +161,10 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 2. 在 `src/components/ui/<Name>.astro` 建立元件，名稱用 PascalCase。檔頭用英文註解寫出用途、props 的意義與使用限制（例：`LocaleSwitcher`）
 3. 樣式寫在 scoped `<style>`，只用 tokens（「規則」「Token 命名」）；用到斷點時 `@import` media.css（「斷點」）
 4. 有互動狀態的選擇器同時接受 `data-preview-state`（「展示頁」）
-5. 在 `src/pages/design-system/index.astro` import 元件，加進元件區的狀態矩陣：每個 variant × 該元件有的狀態，深淺兩個 surface 各一份，預覽的複本加 `inert`
+5. 在 `src/pages/design-system/index.astro` import 元件並放上範例。有 variant 或互動狀態（hover、focus、disabled、error）的元件，做成狀態矩陣：variant × 狀態，深淺兩個 surface 各一份，預覽的複本加 `inert`（「展示頁」）；沒有的放一個範例即可
 6. 在本檔的「基礎元件」表加一列：用途、重點（props、限制、跟哪個元件搭配）
-7. 執行 `npm run check:design`（`showcase.mjs` 檢查第 5、6 步）。元件放在圖上、3D 場景上，或有 focus 樣式時，另外跑 `node scripts/design/a11y-smoke.mjs`
-8. PR 寫出新元件、新 token 與用途；`/pr-review` 會人工判斷第 1 步
+7. 執行 `npm run check:design`。`showcase.mjs` 只檢查第 5 步的 import 與第 6 步的那一列，也會報出元件表裡已經沒有檔案的列。元件放在圖上、3D 場景上，或有 focus 樣式時，另外跑 `node scripts/design/a11y-smoke.mjs`
+8. PR 寫出新元件、新 token 與用途；第 1 步與第 5 步的狀態矩陣、`inert` 沒有 script 檢查，由 `/pr-review` 人工判斷
 
 ## 3D 場景
 
@@ -217,7 +217,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
   - `scripts/design/contrast.mjs`：兩個 surface 各自檢查 `PAIRS` 每一組
   - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/layouts/`、`src/pages/` 所有 `.astro` 與 `src/styles/base.css` 的樣式不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
   - `scripts/design/css-structure.mjs`：「CSS 分層」的規則
-  - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import，也要在本檔的「基礎元件」表有一列；`tokens.css` 每個 token 都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；內部頁（`INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`
+  - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import，也要在本檔的「基礎元件」表有一列，表裡的元件都要有檔案；`tokens.css` 每個 token 都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；內部頁（`INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
 

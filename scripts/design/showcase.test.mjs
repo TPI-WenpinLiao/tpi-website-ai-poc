@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
-import { missingComponents, undocumentedComponents, internalNodes } from './showcase.mjs';
+import { missingComponents, tableComponents, tableProblems, internalNodes } from './showcase.mjs';
 import { groupTokens, tokenNames } from './token-groups.mjs';
 
 const PAGE = `---
@@ -40,18 +40,23 @@ const SKILL = `# Design system
 | \`Tag\` | listed under another heading | |
 `;
 
-test('reports components without a row in the skill component table', () => {
-  assert.deepEqual(undocumentedComponents(['Button.astro', 'Card.astro', 'Tag.astro'], SKILL), ['Card.astro', 'Tag.astro']);
+test('reads component rows only from the skill component table', () => {
+  assert.deepEqual(tableComponents(SKILL), ['Button']);
 });
 
 test('fails when the skill has no component table', () => {
-  assert.throws(() => undocumentedComponents(['Button.astro'], '# Design system\n'), /no "## 基礎元件" section/);
+  assert.throws(() => tableComponents('# Design system\n'), /no "## 基礎元件" section/);
 });
 
-test('every component is in the design-system skill table', () => {
+test('reports components without a row and rows without a component', () => {
+  assert.deepEqual(tableProblems(['Button.astro', 'Card.astro'], ['Button', 'Badge']), { undocumented: ['Card.astro'], stale: ['Badge'] });
+});
+
+test('the design-system skill table matches src/components/ui', () => {
   const skill = readFileSync(new URL('../../.claude/skills/design-system/SKILL.md', import.meta.url), 'utf8');
   const dir = new URL('../../src/components/ui/', import.meta.url);
-  assert.deepEqual(undocumentedComponents(readdirSync(dir).filter((f) => f.endsWith('.astro')), skill), []);
+  const components = readdirSync(dir).filter((f) => f.endsWith('.astro'));
+  assert.deepEqual(tableProblems(components, tableComponents(skill)), { undocumented: [], stale: [] });
 });
 
 test('groups tokens by prefix and by name with its "-" extensions, first match wins', () => {
