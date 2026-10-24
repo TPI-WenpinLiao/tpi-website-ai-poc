@@ -30,6 +30,8 @@ blog 文章與新聞不手寫內容檔，用 `node scripts/content/migrate/migra
 
 解決方案頁（`page_type` 為 `solution`）用 `node scripts/content/migrate/offerings.mjs` 轉換，人工修正寫進 `scripts/content/migrate/offering-overrides.yaml`，見 [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁)。
 
+ESG 顧問服務頁與顧問頁用 `node scripts/content/migrate/esg-advisory.mjs`，人工修正寫進 `scripts/content/migrate/esg-advisory-overrides.yaml`，見 [`migration.md`「ESG 顧問服務」](../../../docs/content/migration.md#esg-顧問服務)。
+
 ## 搬移前先看稽核結果
 
 - 該頁在 `inventory.csv` 的 `to_confirm` 有值時（未翻譯、title 錯誤、授權未確認等），照抄進 PR 的待確認，處理方式見 [`content-audit.md`「內容負責人要確認」](../../../docs/research/content-audit.md#內容負責人要確認)

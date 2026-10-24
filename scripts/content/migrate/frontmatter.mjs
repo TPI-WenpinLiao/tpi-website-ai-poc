@@ -1,6 +1,6 @@
 // Current-site API fields → blog and news frontmatter, per the field tables in docs/ia/content-model.md
 // ("blog（部落格文章）", "news（新聞）"). Key order follows the sample entries in src/content/.
-import { stringify } from 'yaml';
+import { parse as parseYaml, stringify } from 'yaml';
 import { YAML_OPTIONS } from '../dates.mjs';
 
 // authorName values that are the company itself → authorType Organization (content-model.md: 依 authorName 判斷)
@@ -159,9 +159,18 @@ const scalar = (v) => {
 
 const isRecord = (v) => typeof v === 'object' && v !== null && Object.getPrototypeOf(v) === Object.prototype;
 
+// A flow list ([a, b]) only when it reads back as the same items and stays short: an item with a
+// comma ("TUV-NORD, ISO27001:2013 Lead Auditor Training course", an en certification) would split in two
+const FLOW_MAX = 100;
+const flowSafe = (key, value) => {
+  const line = `${key}: ${scalar(value)}`;
+  return line.length <= FLOW_MAX && JSON.stringify(parseYaml(line, YAML_OPTIONS)?.[key]) === JSON.stringify(value);
+};
+
 /**
- * Frontmatter block; undefined values are left out. Arrays of URLs are written as block lists, arrays
- * of objects (offering features) as block lists of single-line fields.
+ * Frontmatter block; undefined values are left out. Arrays of URLs, and string arrays that don't fit a
+ * flow list (flowSafe), are written as block lists, arrays of objects (offering features) as block
+ * lists of single-line fields.
  */
 export function serializeFrontmatter(data) {
   const lines = ['---'];
@@ -169,7 +178,7 @@ export function serializeFrontmatter(data) {
     if (raw === undefined) continue;
     const value = raw instanceof Commented ? raw.value : raw;
     if (raw instanceof Commented && raw.comment) lines.push(`# ${raw.comment}`);
-    if (Array.isArray(value) && key === 'sourceUrl') {
+    if (Array.isArray(value) && (key === 'sourceUrl' || (value.every((v) => typeof v === 'string') && !flowSafe(key, value)))) {
       lines.push(`${key}:`, ...value.map((v) => `  - ${scalar(v)}`));
     } else if (Array.isArray(value) && value.length && value.every(isRecord)) {
       lines.push(`${key}:`);
