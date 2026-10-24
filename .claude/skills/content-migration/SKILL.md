@@ -72,7 +72,7 @@ migratedAt: 2026-10-20                       # 擷取日期
 
 ## en、vi 的內容檔
 
-現站有 en、vi 版本時，內容檔一起搬進版控（產品頁除外，M5-01 只做 zh-TW），但頁面只對有字串檔（`src/data/strings/<locale>.ts`）的語系產生，M7 補字串檔與翻譯後才上線。en、vi 的 description、alt、`seoTitle` 等修正延到 M7，M7 前要處理的事項記在 [`docs/status.md`「待辦備忘」](../../../docs/status.md#待辦備忘)。現站只有其他語系有內容時（zh-TW 合作夥伴頁是空的），從該語系翻譯，並在 PR 列為待確認。
+現站有 en、vi 版本時，內容檔一起搬進版控（例外：產品頁，M5-01 只做 zh-TW；內容過時或不對應的法務 PDF，見 [`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)），但頁面只對有字串檔（`src/data/strings/<locale>.ts`）的語系產生，M7 補字串檔與翻譯後才上線。en、vi 的 description、alt、`seoTitle` 等修正延到 M7，M7 前要處理的事項記在 [`docs/status.md`「待辦備忘」](../../../docs/status.md#待辦備忘)。現站只有其他語系有內容時（zh-TW 合作夥伴頁是空的），從該語系翻譯，並在 PR 列為待確認。
 
 ## 不搬移的內容
 
