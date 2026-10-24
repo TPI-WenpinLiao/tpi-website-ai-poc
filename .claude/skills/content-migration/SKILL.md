@@ -40,7 +40,7 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 
 ## schema 沒有欄位的段落不搬
 
-只填 [`content.config.ts`](../../../src/content.config.ts) 既有的欄位，不為了放下某一段而改 schema 或模板（M5-01、M5-02、#106、#107 都由使用者這樣決定）。沒搬的段落逐頁寫進該類型的說明文件（例如 [`products.md`「待確認」](../../../docs/content/products.md#待確認)），並列進 PR 的待確認，由內容負責人決定刪減或另開 issue 擴充 content model。
+預設只填 [`content.config.ts`](../../../src/content.config.ts) 既有的欄位，不為了放下某一段而改 schema 或模板（M5-01、M5-02、#106）。要改由使用者決定，例如 M5-03 把 case-study 的 `challenge` 等欄位改成選填並加上 `order`、#107 為顧問列表加上 `person.order` 與 `OfferingTemplate` 的段落。沒搬的段落逐頁寫進該類型的說明文件（例如 [`products.md`「待確認」](../../../docs/content/products.md#待確認)），並列進 PR 的待確認，由內容負責人決定刪減或另開 issue 擴充 content model。
 
 ## 搬移前先看稽核結果
 
@@ -66,7 +66,7 @@ migratedAt: 2026-10-20                       # 擷取日期
 - 用 `astro:assets` 的 `<Image>` / `<Picture>` 輸出，不放 `public/`
 - 必須補上描述性 alt（依圖片實際內容撰寫，不寫「圖片」「banner」）
 - 低解析度或帶浮水印的圖不直接使用，在 PR 列為待替換
-- 客戶 logo、人物照片需確認授權，未確認者列為待確認。人物照片與含人物的圖庫照在授權確認前不放（M5-01 的產品 banner、#107 的顧問照片）；客戶名稱與 logo 依使用者決定照現站顯示（M5-03）
+- 客戶 logo、人物照片需確認授權，未確認者列為待確認。產品 banner 的圖庫照（M5-01）與顧問個人照（#107）在授權確認前不放；blog 與新聞內文裡的人物照保留，列為待確認（M5-05）；客戶名稱與 logo 依使用者決定照現站顯示（M5-03）
 - offering 與 hub 的 `heroImage` 只拿來當 `og:image`，不裁切，寬高比不符的 banner 不填，見 [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁)
 - 雲端 session 的 network policy 可能擋下部分圖片網域。下載失敗的文章不寫入，列進 PR，不改成引用外部網址
 
