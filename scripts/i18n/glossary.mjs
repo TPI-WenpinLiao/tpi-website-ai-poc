@@ -29,6 +29,11 @@ const NODE_COLLECTIONS = ['offering', 'hub', 'page', 'whitepaper'];
 const SKIP_STRINGS = new Set(['pages']);
 // navigation.csv labels that are not visible text
 const HIDDEN_LABEL = /^（.*）$/;
+// Menu entries that end in an arrow are call-to-action links, not names
+const LINK_TEXT = /[→›»]$/;
+// page-map.csv rows whose page becomes the node's own page come before rows merged into it, so a
+// merged page's wording (genai-solution for systalk-chat) is never the first candidate
+const DISPOSITION_ORDER = ['keep', 'rewrite', 'merge'];
 
 // Leaf strings of the zh-TW interface copy keyed by dotted path; functions are rendered with their
 // parameter names as placeholders, e.g. pageSuffix(n) → （第 {n} 頁）
@@ -49,7 +54,8 @@ export function flattenStrings(obj, prefix = '') {
 // Labels in an inventory nav_location such as "footer: API Management | header: A > B > digiRunner":
 // the last segment of each header path and each footer label. Header items nested under another item
 // for the same URL are filters or anchors on that page (success-story's industry tabs), so only the
-// shallowest header paths count.
+// shallowest header paths count. A trailing link-text segment such as "AWS Marketplace →" is a button
+// under the item, so the item above it names the page.
 export function navLabels(navLocation) {
   const paths = [];
   const footer = [];
@@ -57,7 +63,11 @@ export function navLabels(navLocation) {
     const m = part.match(/^(header|footer): (.+)$/);
     if (!m) continue;
     if (m[1] === 'footer') footer.push(m[2].trim());
-    else paths.push(m[2].split(' > ').map((s) => s.trim()));
+    else {
+      const path = m[2].split(' > ').map((s) => s.trim());
+      while (path.length > 1 && LINK_TEXT.test(path.at(-1))) path.pop();
+      paths.push(path);
+    }
   }
   const shallowest = Math.min(...paths.map((p) => p.length));
   const header = paths.filter((p) => p.length === shallowest).map((p) => p.at(-1));
@@ -65,13 +75,14 @@ export function navLabels(navLocation) {
 }
 
 // Current-site wording for one node in one locale: content file titles first, then header labels,
-// then footer labels, each list in order of first appearance. Returns the candidates and their sources.
+// then footer labels, each list in order of first appearance. Returns the candidates and their
+// sources; menu labels are marked `nav`.
 export function currentWording({ titles, urls, inventoryByUrl }) {
   const found = [];
-  const add = (text, source) => {
-    if (text && !found.some((f) => f.text === text)) found.push({ text, source });
+  const add = (text, source, nav) => {
+    if (text && !found.some((f) => f.text === text)) found.push({ text, source, nav });
   };
-  for (const t of titles) add(t.title, t.file);
+  for (const t of titles) add(t.title, t.file, false);
   const header = [];
   const footer = [];
   for (const url of urls) {
@@ -79,23 +90,24 @@ export function currentWording({ titles, urls, inventoryByUrl }) {
     header.push(...labels.header.map((text) => ({ text, source: url })));
     footer.push(...labels.footer.map((text) => ({ text, source: url })));
   }
-  for (const h of [...header, ...footer]) add(h.text, h.source);
+  for (const h of [...header, ...footer]) add(h.text, h.source, true);
   return found;
 }
 
 // Rows the script derives, in output order: navigation labels, then nodes in nodes.csv order, then
 // interface strings
 export function buildRows({ nodes, nav, strings, pageMap, inventory, titles }) {
-  const byId = new Map(nodes.map((n) => [n.id, n]));
   const inventoryByUrl = new Map(inventory.map((r) => [r.url, r]));
   const rows = [];
 
+  // A menu label that is also some node's title is that node's row, not a separate label
+  const titlesInUse = new Set(nodes.map((n) => n.title));
   const navNodes = new Set();
   const navLabelRows = new Map();
   for (const r of nav) {
     if (r.node) navNodes.add(r.node);
     if (!r.label || HIDDEN_LABEL.test(r.label) || (!r.node && r.area === 'utility')) continue;
-    if (r.node && byId.get(r.node)?.title === r.label) continue;
+    if (titlesInUse.has(r.label)) continue;
     if (!navLabelRows.has(r.label)) navLabelRows.set(r.label, { id: `nav:${r.label}`, category: 'nav', 'zh-TW': r.label, source: NAV });
   }
   rows.push(...navLabelRows.values());
@@ -106,24 +118,35 @@ export function buildRows({ nodes, nav, strings, pageMap, inventory, titles }) {
     if (!isProduct && n.template !== 'hub' && !navNodes.has(n.id)) continue;
     if (n.id === 'home') continue;
     const row = { id: `node:${n.id}`, category: isProduct ? 'product' : 'page', 'zh-TW': n.title, source: 'docs/ia/nodes.csv' };
-    const sources = [];
     for (const locale of LOCALES) {
-      const urls = pageMap.filter((p) => p.node === n.id && p.locale === locale).map((p) => p.url);
-      const found = currentWording({ titles: titles.filter((t) => t.node === n.id && t.locale === locale), urls, inventoryByUrl });
-      row[`candidates:${locale}`] = found;
-      for (const f of found) if (!sources.includes(f.source)) sources.push(f.source);
+      const rank = (p) => DISPOSITION_ORDER.indexOf(p.disposition);
+      const urls = pageMap.filter((p) => p.node === n.id && p.locale === locale).sort((a, b) => rank(a) - rank(b)).map((p) => p.url);
+      row[`candidates:${locale}`] = currentWording({ titles: titles.filter((t) => t.node === n.id && t.locale === locale), urls, inventoryByUrl });
     }
-    if (sources.length) row.source = sources.join(' ');
     rows.push(row);
+  }
+
+  // A menu label that several nodes share in one locale is generic ("White Paper" under each
+  // product's documentation menu), not a name
+  for (const locale of LOCALES) {
+    const owners = new Map();
+    for (const r of rows) for (const c of r[`candidates:${locale}`] ?? []) if (c.nav) owners.set(c.text, (owners.get(c.text) ?? 0) + 1);
+    for (const r of rows) if (r[`candidates:${locale}`]) r[`candidates:${locale}`] = r[`candidates:${locale}`].filter((c) => !c.nav || owners.get(c.text) === 1);
+  }
+  for (const r of rows) {
+    const sources = [...new Set(LOCALES.flatMap((l) => (r[`candidates:${l}`] ?? []).map((c) => c.source)))];
+    if (sources.length) r.source = sources.join(' ');
   }
 
   for (const [key, text] of strings) rows.push({ id: `ui:${key}`, category: 'ui', 'zh-TW': text, source: STRINGS });
   return rows;
 }
 
-// Merge derived rows into the existing glossary. People's columns (en, vi, status, note) are kept;
-// a row whose zh-TW changed goes back to to-confirm. A new row takes the first current-site wording
-// for en and vi and lists the other wordings in note. Hand-added categories stay in place, on top.
+// Merge derived rows into the existing glossary. People's columns (en, vi, status, note) and the
+// source a row was created with are kept, so translations added in M7 never count as current-site
+// wording. A row whose zh-TW changed goes back to to-confirm with the old zh-TW in note. A new row
+// takes the first current-site wording for en and vi and lists the other wordings in note.
+// Hand-added categories stay in place, on top.
 export function mergeRows(existing, derived) {
   const old = new Map(existing.map((r) => [r.id, r]));
   const out = existing.filter((r) => !GENERATED.includes(r.category)).map((r) => ({ ...r }));
@@ -131,8 +154,11 @@ export function mergeRows(existing, derived) {
     const prev = old.get(d.id);
     const row = { id: d.id, category: d.category, 'zh-TW': d['zh-TW'], source: d.source };
     if (prev) {
-      for (const c of ['en', 'vi', 'status', 'note']) row[c] = prev[c];
-      if (prev['zh-TW'] !== d['zh-TW'] && prev.status === 'confirmed') row.status = 'to-confirm';
+      for (const c of ['en', 'vi', 'status', 'note', 'source']) row[c] = prev[c];
+      if (prev['zh-TW'] !== d['zh-TW']) {
+        row.status = 'to-confirm';
+        row.note = [`zh-TW 原為「${prev['zh-TW']}」`, prev.note].filter(Boolean).join('；');
+      }
     } else {
       const notes = [];
       for (const locale of LOCALES) {
@@ -166,7 +192,10 @@ export function validate(rows) {
   return errors;
 }
 
-export const toCsv = (rows) => [COLUMNS.join(','), ...rows.map((r) => COLUMNS.map((c) => csvCell(r[c])).join(','))].join('\n') + '\n';
+// Values with leading or trailing spaces are quoted too, so spreadsheet editors keep the spaces that
+// join a string to the text around it (ui:listing.pageSuffix)
+const cell = (v) => (/^\s|\s$/.test(String(v ?? '')) && !/[",\n\r]/.test(String(v)) ? `"${v}"` : csvCell(v));
+export const toCsv = (rows) => [COLUMNS.join(','), ...rows.map((r) => COLUMNS.map((c) => cell(r[c])).join(','))].join('\n') + '\n';
 
 async function contentTitles() {
   const out = [];

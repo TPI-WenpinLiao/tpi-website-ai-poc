@@ -11,10 +11,10 @@
 | `zh-TW` | script | 節點取 `docs/ia/nodes.csv` 的 `title`，選單標籤取 `docs/ia/navigation.csv` 的 `label`，介面字串取 `src/data/strings/zh-TW.ts` |
 | `en`、`vi` | 人工 | 譯名。新列由 script 帶入現站寫法，見「現站寫法怎麼來」 |
 | `status` | 人工 | 見下方「狀態」 |
-| `source` | script | zh-TW 的出處；帶入現站寫法時改為 en、vi 寫法的出處（內容檔路徑或現站網址） |
+| `source` | script | 建立這一列時的出處：zh-TW 的出處，帶入現站寫法時改為 en、vi 寫法的出處（內容檔路徑或現站網址）。之後重跑不變，M7 加的 en、vi 內容檔不會被當成現站寫法 |
 | `note` | 人工 | 新列由 script 寫入現站的其他寫法，之後人工自由補充 |
 
-字串前後的半形空格是譯文的一部分（例如 `ui:listing.pageSuffix` 的 ` (page {n})` 直接接在標題後面），編輯時不要刪掉。`{n}` 這類大括號是程式帶入的參數。
+字串前後的半形空格是譯文的一部分（例如 `ui:listing.pageSuffix` 的 ` (page {n})` 直接接在標題後面），script 會替這些值加上引號，編輯時不要刪掉。`{n}` 這類大括號是程式帶入的參數。
 
 ### 分類
 
@@ -24,7 +24,7 @@
 | `term` | 跨頁共用、但不是節點也不是介面字串的名詞（手動加，目前沒有） |
 | `product` | `nodes.csv` 的 offering 節點，以及 `產品總覽` 底下的產品家族 hub |
 | `page` | 其他 hub 節點，以及 `navigation.csv` 用到的節點 |
-| `nav` | `navigation.csv` 中沒有節點、或與節點 `title` 不同的選單標籤 |
+| `nav` | `navigation.csv` 中不是任何節點 `title` 的選單標籤。和某個節點 `title` 相同的標籤（例如「資源」）算在那個節點的列 |
 | `ui` | `src/data/strings/zh-TW.ts` 的介面字串。`pages`（列表頁等的 description）是頁面內容，不列 |
 
 ### 狀態
@@ -39,11 +39,13 @@
 
 ## 現站寫法怎麼來
 
-script 依 `docs/ia/page-map.csv` 找出對到同一個節點的 en、vi 現站網址，依序取：
+script 依 `docs/ia/page-map.csv` 找出對到同一個節點的 en、vi 現站網址，`disposition` 為 `keep`、`rewrite` 的排在 `merge` 前面（併入的頁面，例如 systalk-chat 的 `/vn/genai-solution`，不當第一個寫法）。再依序取：
 
 1. 該節點的 en、vi 內容檔 `title`（`src/content/{offering,hub,page,whitepaper}/<locale>/`）
-2. `docs/research/inventory.csv` 的 `nav_location` 中，header 最淺一層的選單標籤。同一網址底下更深的項目是頁內篩選或錨點（例如成功案例的產業篩選），不取
+2. `docs/research/inventory.csv` 的 `nav_location` 中，header 最淺一層的選單標籤。同一網址底下更深的項目是頁內篩選或錨點（例如成功案例的產業篩選），不取；結尾是 `→` 的是按鈕文字，改取上一層
 3. 同一欄的 footer 標籤
+
+同一語系有兩個以上節點共用的選單標籤是通用標籤（例如每個產品的文件選單底下都叫 White Paper），不當名稱。
 
 第一個寫法填進 `en` 或 `vi`，其他寫在 `note` 的「現站 en 其他寫法」。現站同一個產品常有好幾種寫法（選單用功能名、頁面用產品名），確認時選一個，其他刪掉或留在 `note` 說明。
 
@@ -64,5 +66,5 @@ node scripts/i18n/glossary.mjs
 ```
 
 - 新的節點、標籤或字串會加一列，`status` 是 `to-confirm`
-- 已有的列保留 `en`、`vi`、`status`、`note`；`zh-TW` 改了而原本是 `confirmed` 的列退回 `to-confirm`
+- 已有的列保留 `en`、`vi`、`status`、`note`、`source`；`zh-TW` 改了的列退回 `to-confirm`，`note` 開頭記下原本的 zh-TW
 - 來源刪掉的列會從 `glossary.csv` 移除；手動加的 `brand`、`term` 列不動，排在最上方
