@@ -1,0 +1,12 @@
+# Manual fixes applied on top of scripts/content/migrate/esg-advisory.mjs output, so a re-run keeps them.
+# Key: <offering|person>/<locale>/<slug>. Usage: docs/content/migration.md「ESG 顧問服務」
+#
+# person/zh-TW/chen-zhengrui:
+#   frontmatter:
+#     description: 改寫後的 description（null 拿掉欄位）
+
+# zh-TW description over 80 characters (seo-checklist), shortened from the current site's meta
+# description without adding facts. en and vi wait for M7 like the solution pages.
+offering/zh-TW/esg-advisory:
+  frontmatter:
+    description: 昕力資訊 ESG 顧問服務提供轉型策略三階段，輔導企業依照 ISO 14064-1 標準進行碳盤查，開發團隊全面通過永續人才培訓，量身打造可持續的解決方案。

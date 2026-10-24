@@ -125,6 +125,7 @@ export const zhTW = {
     features: '功能',
     useCases: '應用情境',
     related: '相關產品',
+    team: 'ESG 顧問團隊',
     downloads: '下載',
     faq: '常見問題',
   },

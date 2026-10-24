@@ -226,6 +226,8 @@ const person = defineCollection({
         ...common(image),
         jobTitle: text,
         affiliation: text.optional(),
+        // Position in the current site's team list, which the offering page follows
+        order: z.number().int().nonnegative().optional(),
         photo: image().optional(),
         experience: z.array(text).optional(),
         education: z.array(text).optional(),

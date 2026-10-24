@@ -227,3 +227,48 @@ node scripts/design/offering-content.mjs
 ```
 
 逐筆確認每個非 draft 的 offering 與 hub（三個語系）的 `tagline`、`features`、`useCases`、`faq`、`highlights` 文字仍在任一個 `sourceUrl` 的頁面上，找不到的列 `MISS` 並以 exit 1 結束。FAQ 答案整段找不到時，改以句子與「標題：說明」為單位比對，因為服務頁的答案是段落與條列接成的。`description` 有改寫，不在比對範圍，在 PR 列出原文對照。
+
+## ESG 顧問服務
+
+`scripts/content/migrate/esg-advisory.mjs` 把 `page-map.csv` 中節點為 `esg-advisory` 的服務頁（3 語系）轉成 `src/content/offering/<locale>/esg-advisory.md`，節點為 `esg-advisor` 的顧問頁（zh-TW 8、en 9、vi 8）轉成 `src/content/person/<locale>/<slug>.md`（#107）。
+
+```bash
+node scripts/content/migrate/esg-advisory.mjs
+node scripts/content/migrate/esg-advisory.mjs --locale zh-TW
+```
+
+參數 `--locale`、`--refresh` 同上。快取與 `migratedAt` 的規則同「重跑」。
+
+### 服務頁的欄位對應
+
+| 欄位 | 現站來源 |
+|---|---|
+| `title` | `h1 .subtitle` |
+| `tagline` | 第一段的標題 `.section01__title`（三個語系的 hero `.slogan` 都是空的） |
+| `description` | `<meta name="description">` |
+| `features` | 「轉型策略三階段」的 `.section04-card` 標題與內文 |
+| `faq` | `.faq-item`，去掉「Q1：」「A：」「Câu 1:」等前綴 |
+| `kind`、`cta` | 固定 `service`、`contact` |
+
+offering schema 沒有欄位的段落不搬：ESG 說明段、法規時程（2023～2050）、GreenSwift 推廣區塊、hero 背景圖。顧問團隊段落由 person 內容檔產生（下一節）。
+
+### 顧問頁的欄位對應
+
+| 欄位 | 現站來源 |
+|---|---|
+| `title` | `.banner__name` |
+| `jobTitle`、`affiliation` | `.banner__job`、`.banner__detail` |
+| `experience`、`education`、`expertise`、`certifications` | 依段落標題（經歷／學歷／專長／證照，en、vi 各自的標題見 script 的 `SECTIONS`）讀出每一行；專長是一行，依「、」與括號外的逗號拆開 |
+| `order` | 服務頁團隊列表中這張卡片的位置，`OfferingTemplate` 的「ESG 顧問團隊」依它排序 |
+| `description` | 現站沒有個人化的 description，script 用頁面上的姓名、職稱、單位與專長組成一句，超過 seo-checklist 的字數時先少列專長，再拿掉單位 |
+| `translationKey` | slug（三語共用；`huang-zhijun` 沒有 zh-TW 版，也用自己的 slug） |
+
+照片（`photo`）不搬：授權未確認。服務頁上沒有連結的團隊卡片（沒有個人頁）不建內容檔，報告會列出；服務頁的團隊連結與 `page-map.csv` 對不上時也會列出。
+
+### 人工修正
+
+寫在 `scripts/content/migrate/esg-advisory-overrides.yaml`，key 是 `<offering|person>/<locale>/<slug>`，只有 `frontmatter`，規則同「解決方案頁」。
+
+### 比對現站
+
+`node scripts/design/offering-content.mjs` 同時比對服務頁的 `tagline`、`features`、`faq`，以及每個 person 內容檔的姓名、職稱、單位與四個清單。

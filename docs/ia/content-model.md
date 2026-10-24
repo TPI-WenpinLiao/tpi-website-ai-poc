@@ -362,22 +362,24 @@ JSON-LD：
 |---|---|---|---|---|
 | `jobTitle` | `string` | 是 | 在昕力的職稱 | 頁面標題區 |
 | `affiliation` | `string` | 否 | 其他任職單位 | 頁面標題區 |
+| `order` | `number` | 否 | 在服務頁「ESG 顧問團隊」的順序 | 卡片在現站服務頁團隊列表的位置 |
 | `photo` | `image` | 否 | 照片，需確認授權 | 頁面照片 |
 | `experience` | `string[]` | 否 | 經歷 | 「經歷」 |
 | `education` | `string[]` | 否 | 學歷 | 「學歷」 |
 | `expertise` | `string[]` | 否 | 專長 | 「專長」 |
 | `certifications` | `string[]` | 否 | 證照 | 「證照」 |
 
-現站顧問頁的 `<title>` 與 description 都是 ESG 服務頁的值，沒有個人化。`description` 需 M5 撰寫，只能用頁面上的事實。
+現站顧問頁的 `<title>` 與 description 都是 ESG 服務頁的值，沒有個人化。`description` 由轉換 script 用頁面上的姓名、職稱、單位與專長組成（#107，[`migration.md`「ESG 顧問服務」](../content/migration.md#esg-顧問服務)）。
 
 範例（取自 <https://www.tpisoftware.com/esg-advisory/chen-zhengrui>，陣列只列前兩項）：
 
 ```yaml
 title: 陳政叡
-description: 待 M5 撰寫
+description: 陳政叡（顧問｜國立高雄科技大學生態工程科技中心），昕力資訊 ESG 顧問團隊成員。專長：永續發展、碳輔導(減碳策略培育)、能源轉型、數據轉型、工業工程。
 translationKey: chen-zhengrui
 jobTitle: 顧問
 affiliation: 國立高雄科技大學生態工程科技中心
+order: 0
 experience:
   - 叡至資訊科技有限公司 執行長
   - TAISE台灣企業永續獎見習評審
@@ -389,7 +391,7 @@ certifications:
   - CQI/IRCA ISO 14001 環境管理主任稽核員
   - CQI&IRCA ISO 50001能源管理系統主任稽核員
 sourceUrl: https://www.tpisoftware.com/esg-advisory/chen-zhengrui
-migratedAt: 2026-11-03
+migratedAt: 2026-10-24
 ```
 
 JSON-LD：`ProfilePage`，`mainEntity` 為 `Person`：`name` ← `title`、`jobTitle`、`image` ← `photo`、`worksFor` ← `organization`、`knowsAbout` ← `expertise`、`hasCredential` ← `certifications`（`EducationalOccupationalCredential` 的 `name`）。
