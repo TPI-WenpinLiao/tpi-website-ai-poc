@@ -16,6 +16,8 @@
     color: var(--color-text);
     font-size: var(--font-size-lg);
     line-height: var(--line-height-base);
+    /* A bare URL or long word breaks instead of widening the page */
+    overflow-wrap: break-word;
   }
 
   .prose > :global(:first-child) {

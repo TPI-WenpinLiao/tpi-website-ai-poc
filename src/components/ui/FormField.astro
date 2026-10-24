@@ -117,6 +117,10 @@ const aria = {
     background: var(--color-bg);
     color: var(--color-text);
     font: inherit;
+    /* An input is 20 characters wide and a select as wide as its longest option; a percentage
+       width drops that from the parents' min-content width, so a grid parent without explicit
+       columns no longer grows past a phone screen */
+    inline-size: 100%;
   }
 
   textarea.control {
