@@ -156,11 +156,11 @@ test('groupEntries puts merge rows into the target entry sourceUrl', () => {
   assert.throws(() => groupEntries([rows[1]], inventory), /vi\/orient-ai: needs exactly one keep or rewrite row, has 0/);
 });
 
-test('offeringFrontmatter writes kind, faq and cta for the service pages', () => {
-  const data = offeringFrontmatter({ node: 'orient-ai', sourceUrl: ['https://a', 'https://b'], page: extractOrientAi(ORIENT_AI), kind: 'service', cta: 'demo' });
+test('offeringFrontmatter writes kind, faq and cta for the orient-ai and aiso pages', () => {
+  const data = offeringFrontmatter({ node: 'orient-ai', sourceUrl: ['https://a', 'https://b'], page: extractOrientAi(ORIENT_AI), kind: 'product', cta: 'demo' });
   assert.deepEqual(Object.keys(data), ['title', 'description', 'translationKey', 'node', 'kind', 'tagline', 'features', 'useCases', 'faq', 'cta', 'sourceUrl']);
   assert.equal(data.useCases, undefined);
-  assert.equal(data.kind, 'service');
+  assert.equal(data.kind, 'product');
   assert.equal(data.faq.length, 2);
   assert.equal(data.cta, 'demo');
 });

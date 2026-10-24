@@ -127,13 +127,12 @@ export function extractAiso(html) {
   return data;
 }
 
-// Which extractor a row uses, by node; rows with page_type solution use SOLUTION. kind follows the
-// page_type in inventory.csv like M5-01 and M5-02; whether these two are products is unconfirmed
-// (content-model.md「待確認」)
+// Which extractor a row uses, by node; rows with page_type solution use SOLUTION. inventory.csv has
+// page_type service for these two, but they are products by the user's decision on PR #110
 const SOLUTION = { extract: extractSolution, kind: 'solution', cta: 'contact' };
 export const TEMPLATES = {
-  'orient-ai': { extract: extractOrientAi, kind: 'service', cta: 'demo' },
-  aiso: { extract: extractAiso, kind: 'service', cta: 'contact' },
+  'orient-ai': { extract: extractOrientAi, kind: 'product', cta: 'demo' },
+  aiso: { extract: extractAiso, kind: 'product', cta: 'contact' },
 };
 
 /**

@@ -204,9 +204,9 @@ hero 背景圖（現站 `/images/solution/<node>/banner.png`）也不搬。offer
 | `description` | `<meta name="description">` | 現站沒有，用 `tagline` |
 | `features` | 第一段的 5 張卡片（`.section01 .card`） | 方案卡片的標題與說明（`.solutions-card`） |
 | `faq` | FAQ 5 題。答案有條列時，條列接在段落後面，寫成「標題：說明。」 | 無 |
-| `kind`、`cta` | `service`、`demo`（現站 hero 是「預約DEMO」） | `service`、`contact` |
+| `kind`、`cta` | `product`、`demo`（現站 hero 是「預約DEMO」） | `product`、`contact` |
 
-`kind` 照 `inventory.csv` 的 `page_type`，兩頁是否改為 `product` 見 [`content-model.md`「待確認」](../ia/content-model.md)。
+`inventory.csv` 的 `page_type` 是 `service`，`kind` 依使用者決定（PR #110）兩頁都填 `product`，JSON-LD 是 `SoftwareApplication`。
 
 沒有欄位的段落不搬：
 

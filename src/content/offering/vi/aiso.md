@@ -3,7 +3,7 @@ title: AISO Giải pháp AI Tự chủ
 description: Hệ sinh thái phần cứng và phần mềm trọn gói dành cho AI tại chỗ. Dễ dàng mở rộng. Đảm bảo tuân thủ. Kiểm soát toàn hệ thống.
 translationKey: aiso
 node: aiso
-kind: service
+kind: product
 tagline: Hệ sinh thái phần cứng và phần mềm trọn gói dành cho AI tại chỗ. Dễ dàng mở rộng. Đảm bảo tuân thủ. Kiểm soát toàn hệ thống.
 features:
   - title: Rà soát Hợp đồng

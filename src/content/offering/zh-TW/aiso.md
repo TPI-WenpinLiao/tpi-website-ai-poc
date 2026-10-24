@@ -3,7 +3,7 @@ title: AISO 主權 AI 解決方案
 description: 集結 AI 軟體與硬體廠商打造的 AI 整合生態系，協助企業快速建置可落地、可擴充、可合規的地端 AI 平台。
 translationKey: aiso
 node: aiso
-kind: service
+kind: product
 tagline: 集結 AI 軟體與硬體廠商打造的 AI 整合生態系 協助企業快速建置可落地、可擴充、可合規的地端 AI 平台
 features:
   - title: 法務 AI 合約審閱

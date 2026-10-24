@@ -3,7 +3,7 @@ title: OrientAI 企業級 Agentic AI 平台
 description: OrientAI 集中管理 LLM 與 AI Agent，將 Token 成本透明化，自動拆解任務、調度 Agent 跨系統協作，降低治理風險。
 translationKey: orient-ai
 node: orient-ai
-kind: service
+kind: product
 tagline: 從任務執行到全局治理，OrientAI 讓企業 AI 真正可管、可控、可擴展
 features:
   - title: 多代理協作

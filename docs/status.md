@@ -84,7 +84,7 @@
 - M5-05 部落格與新聞遷移完成（#30）：使用者決定 blog 與新聞只遷移 2026-01-01 起的文章，`scripts/inventory/audit.mjs` 的保留門檻改為 2026-01-01（新聞原為 2024-01-01），重跑後 `inventory.csv`、`page-map.csv`、`redirects.csv` 跟著更新，舊文章 301 到列表頁。`migrate.mjs` 轉出 83 篇（blog zh-TW 13、en 8、vi 34，新聞 zh-TW 10、en 9、vi 9）與 128 張圖，失敗 5 篇列在 PR；全量執行會刪掉不在 `page-map.csv` 的內容檔。圖片下載後縮到最大寬 1600 px、存成 WebP。`overrides.yaml` 新增 `dropImagesFrom`（依主機或圖片網址拿掉圖與圖說）。zh-TW 的 `description`、內文圖 alt 寫進 `overrides.yaml`；en、vi 延到 M7。collection 頁只對有字串檔的語系產生（en、vi 的內容先進版控，M7 補字串檔後產生頁面），內文跨語系連結改成本篇語系的同一頁。抽查用 `node scripts/content/migrate/spot-check.mjs`（`docs/content/migration.md`「抽查」）
 - M5-06 公司頁內容遷移完成（#31）：zh-TW 的關於我們、聯絡我們、合作夥伴與 4 個法務頁上線（`/about-us`、`/contact-us`、`/partners`、`/privacy`、`/terms`、`/disclaimer`、`/security-policy`）。公司頁手寫，`node scripts/content/page-content.mjs` 逐行對照現站；法務頁由 `node scripts/content/legal-pdf.mjs` 從現站 PDF 轉換，寫檔前逐字比對 PDF 文字（`docs/content/company-pages.md`）。`organization/zh-TW.yaml` 補齊現站 8 個據點。現站 zh-TW 合作夥伴頁是空的，改用 en 版翻譯。en、vi 的 about、partners、contact 進版控，不產生頁面。en 法務 PDF（2020 年版）、vi 隱私權 PDF（內容是應徵者個資告知）沒有搬
 - `issues.yml` 的 `dependsOn` 能寫沒有 bootstrap id 的 issue 完成（#108）：`{ issue: <編號>, note: <說明> }` 輸出成 `- #<編號>（<說明>）`，`validate` 檢查編號與說明。M5-07（#32）的依賴補上 #106、#107，`node scripts/bootstrap/diff.mjs` 差異回到 0
-- `orient-ai`、`aiso` 服務頁內容遷移完成（#106）：`node scripts/content/migrate/offerings.mjs` 另外轉這兩個服務頁（三語 6 篇，版型各自的 extractor 在 `TEMPLATES`），`page-map.csv` 的 merge 列（`/orient-aI`）接在 `sourceUrl` 後面；zh-TW 的 `/orient-ai`、`/aiso` 上線，`/products/systalk-ai` 子頁卡片的失效連結補上。`kind` 照 `page_type` 暫填 `service`，是否改 `product` 列在 `content-model.md`「待確認」；family-ai hub 的 `highlights` 沒有移到 aiso（要改 `page-map.csv` 的合併目標），列在 `docs/content/products.md`。沒有欄位的段落見 `docs/content/migration.md`「服務頁」。`offering-content.mjs` 三語 866/866
+- `orient-ai`、`aiso` 服務頁內容遷移完成（#106）：`node scripts/content/migrate/offerings.mjs` 另外轉這兩個服務頁（三語 6 篇，版型各自的 extractor 在 `TEMPLATES`），`page-map.csv` 的 merge 列（`/orient-aI`）接在 `sourceUrl` 後面；zh-TW 的 `/orient-ai`、`/aiso` 上線，`/products/systalk-ai` 子頁卡片的失效連結補上。`page_type` 是 service，`kind` 依使用者決定填 `product`；family-ai hub 的 `highlights` 沒有移到 aiso（要改 `page-map.csv` 的合併目標），列在 `docs/content/products.md`。沒有欄位的段落見 `docs/content/migration.md`「服務頁」。`offering-content.mjs` 三語 866/866
 
 ## 下一步
 
@@ -94,7 +94,7 @@
 - M4-05 品質關卡擴充（#24）可以開始
 - `esg-advisory` 服務頁與 ESG 顧問頁內容遷移（#107）可以開始；顧問頁是 `page-map.csv` 的 zh-TW 8、en 9、vi 8 列，現在只有 M4-01 的範例 `person/zh-TW/chen-zhengrui.md`
 - M5-07 M5 收尾（#32）在 #107 完成後可以開始
-- 回覆 #106 PR 的「待確認」：orient-ai、aiso 的 `kind`、family-ai hub 的 `highlights` 是否移到 aiso、未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
+- 回覆 #106 PR 的「待確認」：family-ai hub 的 `highlights` 是否移到 aiso、未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權
 - 回覆 M5-05（#30）PR 的「待確認」：圖片授權與人物、失敗的 5 篇、作者 `authorType`
 - 首頁與產品頁的最新文章改讀 content collections（#101）可以開始

@@ -3,7 +3,7 @@ title: OrientAI Nền tảng AI tự chủ cho doanh nghiệp
 description: OrientAI là nền tảng Agentic AI tiêu chuẩn doanh nghiệp dành cho việc quản lý, quản trị và điều phối các tác nhân AI (AI agent). Nền tảng giúp tập trung hóa quyền kiểm soát LLM và agent, giám sát mức sử dụng token, giảm thiểu rủi ro bảo mật và mở rộng quy mô hoạt động AI xuyên suốt các quy trình làm việc của doanh nghiệp
 translationKey: orient-ai
 node: orient-ai
-kind: service
+kind: product
 tagline: Quản trị, Bảo mật và Mở rộng các AI Agent trên cùng một nền tảng
 features:
   - title: Điều phối Agent

@@ -3,7 +3,7 @@ title: AISO Sovereign AI Solutions
 description: End-to-end Software and Hardware Ecosystem for On-premises AI Scalability. Compliance. Full-stack Control.
 translationKey: aiso
 node: aiso
-kind: service
+kind: product
 tagline: End-to-end Software and Hardware Ecosystem for On-premises AI Scalability. Compliance. Full-stack Control.
 features:
   - title: Contract Review
