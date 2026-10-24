@@ -40,7 +40,7 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 
 ## schema 沒有欄位的段落不搬
 
-預設只填 [`content.config.ts`](../../../src/content.config.ts) 既有的欄位，不為了放下某一段而改 schema 或模板（M5-01、M5-02、#106）。要改由使用者決定，例如 M5-03 把 case-study 的 `challenge` 等欄位改成選填並加上 `order`、#107 為顧問列表加上 `person.order` 與 `OfferingTemplate` 的段落。沒搬的段落逐頁寫進該類型的說明文件（例如 [`products.md`「待確認」](../../../docs/content/products.md#待確認)），並列進 PR 的待確認，由內容負責人決定刪減或另開 issue 擴充 content model。
+預設只填 [`content.config.ts`](../../../src/content.config.ts) 既有的欄位，不為了放下某一段而改 schema 或模板（M5-01、M5-02、#106）。要改時寫進計畫或 PR，由使用者確認，例如 M5-03 依使用者決定把 case-study 的 `challenge` 等欄位改成選填並加上 `order`，#107 在 PR 裡為顧問列表加上 `person.order` 與 `OfferingTemplate` 的段落。沒搬的段落逐頁寫進該類型的說明文件（例如 [`products.md`「待確認」](../../../docs/content/products.md#待確認)），並列進 PR 的待確認，由內容負責人決定刪減或另開 issue 擴充 content model。
 
 ## 搬移前先看稽核結果
 
@@ -72,7 +72,7 @@ migratedAt: 2026-10-20                       # 擷取日期
 
 ## en、vi 的內容檔
 
-現站有 en、vi 版本時，內容檔一起搬進版控（例外：產品頁，M5-01 只做 zh-TW；內容過時或不對應的法務 PDF，見 [`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)），但頁面只對有字串檔（`src/data/strings/<locale>.ts`）的語系產生，M7 補字串檔與翻譯後才上線。en、vi 的 description、alt、`seoTitle` 等修正延到 M7，M7 前要處理的事項記在 [`docs/status.md`「待辦備忘」](../../../docs/status.md#待辦備忘)。現站只有其他語系有內容時（zh-TW 合作夥伴頁是空的），從該語系翻譯，並在 PR 列為待確認。
+現站有 en、vi 版本時，內容檔一起搬進版控（例外：產品頁與 hub，M5-01 只做 zh-TW；內容過時或不對應的法務 PDF，見 [`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)），但頁面只對有字串檔（`src/data/strings/<locale>.ts`）的語系產生，M7 補字串檔與翻譯後才上線。en、vi 的 description、alt、`seoTitle` 等修正延到 M7，M7 前要處理的事項記在 [`docs/status.md`「待辦備忘」](../../../docs/status.md#待辦備忘)。現站只有其他語系有內容時（zh-TW 合作夥伴頁是空的），從該語系翻譯，並在 PR 列為待確認。
 
 ## 不搬移的內容
 
