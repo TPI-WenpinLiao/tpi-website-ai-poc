@@ -226,4 +226,4 @@ hero 背景圖（現站 `/images/solution/<node>/banner.png`）也不搬。offer
 node scripts/design/offering-content.mjs
 ```
 
-逐筆確認每個非 draft 的 offering 與 hub（三個語系）的 `tagline`、`features`、`useCases`、`faq`、`highlights` 文字仍在任一個 `sourceUrl` 的頁面上，找不到的列 `MISS` 並以 exit 1 結束。FAQ 答案以句子與「標題：說明」為單位比對，因為服務頁的答案是段落與條列接成的。`description` 有改寫，不在比對範圍，在 PR 列出原文對照。
+逐筆確認每個非 draft 的 offering 與 hub（三個語系）的 `tagline`、`features`、`useCases`、`faq`、`highlights` 文字仍在任一個 `sourceUrl` 的頁面上，找不到的列 `MISS` 並以 exit 1 結束。FAQ 答案整段找不到時，改以句子與「標題：說明」為單位比對，因為服務頁的答案是段落與條列接成的。`description` 有改寫，不在比對範圍，在 PR 列出原文對照。

@@ -3,7 +3,8 @@
 // features, useCases, faq and highlights of every entry that isn't a draft. A line counts as found
 // when it is on any of the entry's sourceUrl pages (merged pages list several), after correcting the
 // typos in CORRECTIONS. Same matching as scripts/design/home-content.mjs, except that a FAQ answer
-// is checked sentence by sentence: offerings.mjs joins an answer's paragraph and list items (#106).
+// that isn't on the page as a whole is checked sentence by sentence: offerings.mjs joins an answer's
+// paragraph and list items (#106).
 // Needs network access to www.tpisoftware.com, so it is not part of `npm run check`.
 //
 //   node scripts/design/offering-content.mjs
@@ -55,8 +56,8 @@ for (const url of new Set(checks.flatMap((c) => c.urls))) {
 }
 let failed = 0;
 for (const c of checks) {
-  const parts = /^faq\.\d+\.answer$/.test(c.path) ? pieces(c.text) : [c.text];
-  const ok = c.urls.some((url) => parts.every((p) => pages.get(url).includes(squash(p))));
+  const found = (parts) => c.urls.some((url) => parts.every((p) => pages.get(url).includes(squash(p))));
+  const ok = found([c.text]) || (/^faq\.\d+\.answer$/.test(c.path) && found(pieces(c.text)));
   if (!ok) failed += 1;
   console.log(`${ok ? 'ok  ' : 'MISS'} ${c.file} ${c.path}: ${c.text}`);
 }
