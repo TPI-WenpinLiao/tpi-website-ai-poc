@@ -63,6 +63,13 @@ script 依 `docs/ia/page-map.csv` 找出對到同一個節點的 en、vi 現站�
 
 `--check` 會擋下：`confirmed` 但 en 或 vi 是空的列、重複的 `id`、不在上表的 `category` 或 `status`、`id` 前綴與 `category` 不符，以及 script 重跑後會改變的檔案。`npm run check` 包含這一步。
 
+不加 `--check` 時也會檢查譯文是否照詞彙表：
+
+- `src/data/strings/en.ts`、`vi.ts` 的每個介面字串都要等於對應 `ui:` 列的 en、vi，兩邊的 key 也要一致。字串檔改了就先改這份，再照抄過去
+- `confirmed` 的產品，en、vi 內容檔的 `title` 要包含該語系的產品名
+
+頁面上漏翻的中文由 `node scripts/i18n/routes.mjs` 擋下：en、vi 頁面的文字與 `alt`、`title`、`aria-label`、`placeholder`、meta 不得有漢字或全形標點（`lang="zh-TW"`、`lang="ja"` 的元素除外）。
+
 ## 來源改了之後重跑
 
 改了 `nodes.csv`、`navigation.csv` 或 `src/data/strings/zh-TW.ts` 後，執行：

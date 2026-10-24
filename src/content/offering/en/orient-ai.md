@@ -1,6 +1,6 @@
 ---
 title: OrientAI Enterprise Agentic AI Platform
-description: OrientAI is an enterprise-grade Agentic AI platform for AI agent management, governance, and orchestration. Centralize LLM and agent control, monitor token usage, reduce security risks, and scale AI operations across enterprise workflows.
+description: OrientAI is an enterprise-grade Agentic AI platform for AI agent management, governance and orchestration, with central LLM and agent control.
 translationKey: orient-ai
 node: orient-ai
 kind: product

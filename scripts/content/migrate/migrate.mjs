@@ -43,11 +43,28 @@ export const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ta
  * @param {string | null} existing current file content
  * @param {string} date today
  */
-export function entryText(data, body, existing, date) {
+export function entryText(data, body, existing, date, locale = 'zh-TW') {
+  if (locale !== 'zh-TW') {
+    data = latinPunctuation(data);
+    body = latinPunctuation(body);
+  }
   const text = (migratedAt) => `${serializeFrontmatter({ ...data, migratedAt: data.migratedAt ?? new Day(migratedAt) })}${body ? `\n${body}\n` : ''}`;
   const previous = existing?.match(/^migratedAt: (\d{4}-\d{2}-\d{2})$/m)?.[1];
   if (previous && text(previous) === existing) return existing;
   return text(date);
+}
+
+// The current site's en and vi text mixes in full-width punctuation (「Assessment：」, 「Pharmacy ＆
+// Science」); en and vi pages use the ASCII forms (scripts/i18n/routes.mjs fails on full-width ones).
+// A colon, comma or semicolon gets the space the full-width form left out. Strings anywhere in
+// `value` are converted; Day, Commented and other objects keep their class.
+const FULL_WIDTH = /[\uFF01-\uFF5E]/g;
+export function latinPunctuation(value) {
+  if (typeof value === 'string')
+    return value.replace(/([：，；])(?=\S)/g, '$1 ').replace(FULL_WIDTH, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0)).replaceAll('\u3000', ' ');
+  if (Array.isArray(value)) return value.map(latinPunctuation);
+  if (value && Object.getPrototypeOf(value) === Object.prototype) return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, latinPunctuation(v)]));
+  return value;
 }
 
 /**
@@ -144,7 +161,7 @@ export async function convert({ get, type, id, slug, coverUrl, html, base, front
 
   const path = contentFile(type, id);
   const existing = existsSync(path) ? await readFile(path, 'utf8') : null;
-  const text = entryText(data, markdown, existing, date);
+  const text = entryText(data, markdown, existing, date, locale);
   await syncImages(assetDir(type, id), images, names);
   const unique = [...new Set(notes)];
   if (text === existing) return { status: 'unchanged', notes: unique };

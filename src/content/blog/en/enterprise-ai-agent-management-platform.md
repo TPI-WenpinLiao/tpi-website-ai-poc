@@ -1,6 +1,6 @@
 ---
 title: AI Agent Management Platform for Enterprise Agentic AI
-description: Discover how an AI Agent Management Platform helps enterprises deploy, orchestrate, and govern AI agents at scale. Learn the differences between a standalone AI agent and an Agentic AI Platform, and explore system integration, governance, deployment strategies, and best practices for building secure, scalable AI automation.
+description: How an AI Agent Management Platform helps enterprises deploy, orchestrate and govern AI agents at scale, from system integration to deployment.
 translationKey: enterprise-ai-agent-management-platform
 category: ai
 tags: [ai-application]
@@ -10,7 +10,7 @@ authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f18ef2a-1b5f-6690-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/en/enterprise-ai-agent-management-platform/cover.webp
 sourceUrl: https://www.tpisoftware.com/en/blog/artifintell/enterprise-ai-agent-management-platform
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-08-10
 ---
 
