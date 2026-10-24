@@ -28,7 +28,7 @@ import { breadcrumb, children, localeHref, localNode, node, nodeHref } from '../
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { COLLECTION_NODES, entryPath } from '../../lib/content/urls';
 import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
-import { canonicalUrl } from '../../lib/seo/meta';
+import { canonicalUrl, titleSeparator } from '../../lib/seo/meta';
 import { DEFAULT_OG_IMAGE } from '../../lib/seo/og';
 import { about } from '../../lib/latest-posts';
 import { SCENE_FAMILIES, sceneFamily } from '../../lib/scene/families';
@@ -76,7 +76,7 @@ const team =
   node(COLLECTION_NODES.person).parent === self.id
     ? (await getCollection('person', (p) => entryLocale(p.id) === locale && isPublished(p)))
         .sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity) || a.data.title.localeCompare(b.data.title))
-        .map((p) => ({ title: p.data.title, role: [p.data.jobTitle, p.data.affiliation].filter(Boolean).join('｜'), href: entryPath('person', p) }))
+        .map((p) => ({ title: p.data.title, role: [p.data.jobTitle, p.data.affiliation].filter(Boolean).join(titleSeparator(locale)), href: entryPath('person', p) }))
     : [];
 // Until M5 fills relatedPosts: current-site posts that name the offering (the first word of its
 // title, e.g. digiRunner)

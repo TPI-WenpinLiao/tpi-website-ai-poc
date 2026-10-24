@@ -18,7 +18,7 @@ import { entryTrail, localNode, node, nodeHref } from '../../lib/ia/navigation';
 import { entryLocale } from '../../lib/content/entries';
 import { entryPath } from '../../lib/content/urls';
 import { personJsonLd } from '../../lib/seo/jsonld/person';
-import { canonicalUrl } from '../../lib/seo/meta';
+import { canonicalUrl, titleSeparator } from '../../lib/seo/meta';
 import { strings } from '../../data/strings';
 
 interface Props {
@@ -37,7 +37,7 @@ const lists = [
   { title: t.person.education, items: data.education ?? [] },
   { title: t.person.certifications, items: data.certifications ?? [] },
 ].filter((l) => l.items.length > 0);
-const role = [data.jobTitle, data.affiliation].filter(Boolean).join('｜');
+const role = [data.jobTitle, data.affiliation].filter(Boolean).join(titleSeparator(locale));
 
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);

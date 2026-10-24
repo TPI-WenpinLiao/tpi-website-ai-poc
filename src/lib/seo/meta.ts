@@ -5,7 +5,8 @@ import { normalizePath } from '../i18n/paths.ts';
 // alone (docs/i18n/glossary.csv brand:tpisoftware)
 export const siteName = (locale: Locale) => (locale === DEFAULT_LOCALE ? 'TPIsoftware 昕力資訊' : 'TPIsoftware');
 
-// Between the parts of a <title>: full-width in zh-TW, spaced ASCII in en and vi
+// Between the parts of a <title> or of a one-line label (job title｜affiliation): full-width in
+// zh-TW, spaced ASCII in en and vi
 export const titleSeparator = (locale: Locale) => (locale === DEFAULT_LOCALE ? '｜' : ' | ');
 
 // 頁面主題｜TPIsoftware 昕力資訊 in zh-TW, "Subject | TPIsoftware" in en and vi; the home page writes
