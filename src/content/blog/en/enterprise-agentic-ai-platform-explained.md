@@ -1,6 +1,6 @@
 ---
 title: Agentic AI and Enterprise Agentic AI platform Explained
-description: Explore how Agentic AI enables enterprises to move from standalone AI agents to autonomous, multi-agent workflows. Learn how an AI agent management platform supports orchestration, cross-system integration, AI agent governance and observability, while helping enterprises manage permissions, costs and execution risks. Discover how OrientAI provides an enterprise-grade Agentic AI platform for building scalable, governed AI operations across business processes.
+description: How Agentic AI moves enterprises from standalone AI agents to multi-agent workflows, and how an AI agent management platform governs them.
 translationKey: enterprise-agentic-ai-platform-explained
 category: ai
 tags: [ai-application]
@@ -10,7 +10,7 @@ authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1acf49-b591-6ee3-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/en/enterprise-agentic-ai-platform-explained/cover.webp
 sourceUrl: https://www.tpisoftware.com/en/blog/artifintell/enterprise-agentic-ai-platform-explained
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-25
 ---
 
@@ -169,7 +169,7 @@ The core value of agentic AI platforms lies in integrating distributed agents, t
 
 2.  **Integration: Provide APIs and system connectivity, centralize tool registration, version updates, and external system integration to avoid agents operating independently.**
 
-3.  **AI Agent Governance：Control identity permissions, data access, and execution policies, and support a manual review mechanism to ensure high-risk operations are completed within a controlled process.**
+3.  **AI Agent Governance: Control identity permissions, data access, and execution policies, and support a manual review mechanism to ensure high-risk operations are completed within a controlled process.**
 
 4.  **Observability: Provides log, trace, success rate, cost, and usage analysis, allowing enterprises to clearly understand the operational status and return on investment of each Agent.**
 

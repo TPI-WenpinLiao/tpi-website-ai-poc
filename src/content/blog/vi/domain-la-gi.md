@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f10271e-471b-6313-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/domain-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/domain-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-02-05
+seoTitle: Domain Là Gì? Địa Chỉ Kỹ Thuật Số Của Doanh Nghiệp
 ---
 
 Hãy nhớ lại bài viết trước về **IP**. Chúng ta biết rằng mỗi máy chủ (Server) đều có một địa chỉ IP duy nhất, ví dụ: 142.250.191.46 . Nếu muốn truy cập Google, bạn có thể gõ dãy số đó vào trình duyệt. Nhưng hãy thành thật: **Không ai có thể nhớ nổi những dãy số vô hồn đó.**

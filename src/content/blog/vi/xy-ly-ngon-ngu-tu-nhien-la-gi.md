@@ -1,6 +1,6 @@
 ---
 title: Xử Lý Ngôn Ngữ Tự Nhiên Là Gì? Cầu Nối Giữa Người & Máy
-description: Xử lý ngôn ngữ tự nhiên (NLP) là gì? Khám phá cách AI hiểu tiếng Việt, ứng dụng trong Chatbot, OCR và phân tích cảm xúc cùng giải pháp Systalk.Ai của TPIsoftware.
+description: Xử lý ngôn ngữ tự nhiên (NLP) là gì? Cách AI hiểu tiếng Việt, ứng dụng trong Chatbot, OCR và phân tích cảm xúc cùng giải pháp SysTalk.ai của TPIsoftware.
 translationKey: xy-ly-ngon-ngu-tu-nhien-la-gi
 category: enterprise-management
 tags: [open-banking]
@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f6948-e58f-6520-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/xy-ly-ngon-ngu-tu-nhien-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/enterprise-management/xy-ly-ngon-ngu-tu-nhien-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-06
+seoTitle: Xử Lý Ngôn Ngữ Tự Nhiên (NLP) Là Gì?
 ---
 
 Hãy tưởng tượng bạn đang gọi điện lên tổng đài ngân hàng và nói: *"Em ơi, khóa giùm chị cái thẻ, chị lỡ làm rơi rồi!"*. Ngay lập tức, hệ thống trả lời: *"Dạ, em đã nhận lệnh khóa thẻ. Chị vui lòng xác nhận số cuối điện thoại..."*

@@ -163,6 +163,9 @@ export function offeringFrontmatter({ node, sourceUrl, page, kind = 'solution', 
   if (unknown.length) throw new Error(`${OVERRIDES}: useCaseIndustry for use cases the page does not have: ${unknown.join(', ')}`);
   const data = {
     title: page.title,
+    // Only from overrides, when the page's title is too long for <title> (#40); listed here so it
+    // comes right after title
+    ...(override.frontmatter?.seoTitle ? { seoTitle: undefined } : {}),
     description: page.description,
     translationKey: node,
     node,
@@ -211,7 +214,7 @@ async function migrateEntry({ get, entry, overrides, date }) {
 
     const path = contentFile(id);
     const existing = existsSync(path) ? await readFile(path, 'utf8') : null;
-    const out = entryText(data, '', existing, date);
+    const out = entryText(data, '', existing, date, row.locale);
     if (out === existing) return { id, status: 'unchanged', notes };
     await mkdir(dirname(path), { recursive: true });
     await writeAtomic(path, out);

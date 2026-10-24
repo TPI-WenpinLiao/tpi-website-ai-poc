@@ -8,6 +8,10 @@
 // Language links (the switcher's, and others carrying hreflang) and the external sub-sites in docs/ia/nodes.csv (kind
 // external, e.g. /tpu) are not locale pages. Unbuilt zh-TW targets are nodes without content yet
 // and are not reported here.
+// en and vi pages show no Chinese text: no Han characters or full-width punctuation in text or in
+// alt, title, aria-label, placeholder and meta content, except inside an element whose lang is zh-TW
+// (the switcher's 中文, a link to a zh-TW fallback page) or Japanese (a company name in the legal
+// text). A zh-TW name or string left untranslated fails here.
 // Run after `astro build`: node scripts/i18n/routes.mjs [dist]
 
 import { readFileSync, readdirSync } from 'node:fs';
@@ -32,6 +36,41 @@ export function externalPaths(csv = readFileSync(resolve(import.meta.dirname, '.
 
 /** A path to a file rather than a page: page paths never contain a dot (ADR 0002) @param {string} path */
 const isFile = (path) => /\.[^/]*$/.test(path);
+
+// Han characters, and CJK and full-width punctuation (｜, 「」, （）)
+const CHINESE = /[\p{Script=Han}\u3000-\u303F\uFF00-\uFFEF]/u;
+const TEXT_ATTRIBUTES = ['alt', 'title', 'aria-label', 'placeholder'];
+/** @param {import('node-html-parser').HTMLElement} el */
+const inChinese = (el) => {
+  for (let cur = el; cur; cur = cur.parentNode) if (/^(?:zh|ja)\b/.test(cur.getAttribute?.('lang') ?? '')) return true;
+  return false;
+};
+
+/**
+ * Chinese text on a page that isn't zh-TW: each offending text, with where it is.
+ * @param {import('node-html-parser').HTMLElement} root
+ * @returns {string[]}
+ */
+export function chineseText(root) {
+  const found = [];
+  const walk = (/** @type {import('node-html-parser').Node} */ node) => {
+    if (node.nodeType === 3) {
+      const text = node.text.trim();
+      if (CHINESE.test(text) && !inChinese(/** @type {any} */ (node.parentNode))) found.push(`text "${text.slice(0, 60)}"`);
+      return;
+    }
+    const el = /** @type {import('node-html-parser').HTMLElement} */ (node);
+    if (['script', 'style'].includes(el.rawTagName?.toLowerCase())) return;
+    for (const name of TEXT_ATTRIBUTES) {
+      const value = el.getAttribute?.(name);
+      if (value && CHINESE.test(value) && !inChinese(el)) found.push(`${el.rawTagName} ${name}="${value.slice(0, 60)}"`);
+    }
+    if (el.rawTagName === 'meta' && CHINESE.test(el.getAttribute('content') ?? '')) found.push(`meta ${el.getAttribute('name') ?? el.getAttribute('property')}="${el.getAttribute('content')?.slice(0, 60)}"`);
+    for (const child of el.childNodes ?? []) walk(child);
+  };
+  walk(root);
+  return found;
+}
 
 /**
  * Locale problems across built pages, keyed by URL path.
@@ -65,6 +104,7 @@ export function routeProblems(pages, external = new Set(), files = new Set()) {
       if (target !== DEFAULT_LOCALE && !pages.has(normalizePath(href))) problems.push(`${path}: links to ${href}, which was not built`);
       else if (target !== expected && pages.has(localizePath(href, expected))) problems.push(`${path}: links to ${href}, outside its locale ${expected}, which has the page`);
     }
+    if (expected !== DEFAULT_LOCALE) for (const t of chineseText(root)) problems.push(`${path}: Chinese ${t}`);
   }
   return problems;
 }

@@ -1,6 +1,6 @@
 ---
 title: Tài Chính Nhúng (Embedded Finance) Là Gì? Lời Giải Hạ Tầng API Từ TPIsoftware
-description: Khám phá tài chính nhúng (embedded finance) là gì, tiềm năng tại Việt Nam và cách TPIsoftware - công ty phần mềm số 1 Đài Loan giúp doanh nghiệp tối ưu qua digiRunner và digiLogs
+description: Tài chính nhúng (embedded finance) là gì, tiềm năng tại Việt Nam và cách TPIsoftware giúp doanh nghiệp tối ưu qua digiRunner và digiLogs.
 translationKey: tai-chinh-nhung-embedded-finance-la-gi
 category: digital-transformation
 tags: [fintech]
@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1accf8-1606-6860-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/tai-chinh-nhung-embedded-finance-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/tai-chinh-nhung-embedded-finance-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-10
+seoTitle: Tài Chính Nhúng (Embedded Finance) Là Gì?
 ---
 
 Bạn đã bao giờ vừa lướt app mua sắm săn sale vừa chốt ngay một gói "mua trước, trả sau" chỉ với một cú chạm chưa? Hay đặt vé máy bay và tiện tay "bỏ giỏ" luôn gói bảo hiểm trễ chuyến? Đó không phải là phép thuật đọc thấu tâm can, đó chính là **tài chính nhúng** (hay còn gọi là **embed finance** hoặc **embeded finance**).

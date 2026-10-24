@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0fdc47-41c1-6edb-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/hosting-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/hosting-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-19
+seoTitle: Web Hosting Là Gì? Shared, VPS Và Cloud Hosting
 ---
 
 Để xây dựng một sự hiện diện trực tuyến (Online Presence), bạn cần 3 thứ:

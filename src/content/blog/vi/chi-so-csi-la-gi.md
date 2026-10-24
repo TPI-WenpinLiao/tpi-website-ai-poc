@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f128282-e738-69a7-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/chi-so-csi-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/green-transformation/chi-so-csi-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-24
+seoTitle: Chỉ Số CSI Là Gì? Tối Ưu Báo Cáo Cùng GreenSwift
 ---
 
 Nếu bạn muốn biết một doanh nghiệp có lãi hay không, bạn nhìn vào Báo cáo tài chính.

@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f693b-2253-613d-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/backend-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/backend-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-15
+seoTitle: Backend Là Gì? Vì Sao Hạ Tầng Này Quyết Định Thành Bại
 ---
 
 Khi bạn lướt Facebook, đặt một cuốc xe Grab, hay chuyển tiền qua App ngân hàng, bạn đang tương tác với một giao diện đẹp mắt, mượt mà. Nhưng bạn có bao giờ tự hỏi: Dữ liệu tiền trong tài khoản của mình nằm ở đâu? Làm sao Grab tìm được tài xế gần nhất trong 1 giây?

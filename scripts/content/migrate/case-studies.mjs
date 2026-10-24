@@ -146,8 +146,8 @@ export function parseOverrides(text) {
   }
   for (const [id, o] of Object.entries(entries)) {
     if (!/^(?:zh-TW|en|vi)\/[a-z0-9-]+$/.test(id)) throw new Error(`${OVERRIDES}: "${id}" is not <locale>/<slug>`);
-    const extra = Object.keys(o ?? {}).filter((k) => !['title', 'seoTitle', 'description'].includes(k));
-    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (title, seoTitle, description)`);
+    const extra = Object.keys(o ?? {}).filter((k) => !['title', 'seoTitle', 'description', 'cardDescription'].includes(k));
+    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (title, seoTitle, description, cardDescription)`);
   }
   return { clients, entries };
 }
@@ -159,11 +159,15 @@ export function mentionedOfferings(description, locale, exists) {
 }
 
 /**
- * Frontmatter, body and reviewer notes for one card. The body is the description as the site writes it.
+ * Frontmatter, body and reviewer notes for one card. The body is the description as the site writes it,
+ * or the override's `cardDescription` where the site's card text is wrong (it describes another case,
+ * #40): that text then stands in for the card's everywhere, body, offerings and description alike.
  * @returns {{ data: Record<string, unknown>, body: string, notes: string[] }}
  */
-export function caseEntry({ locale, slug, card, order, client, logoFile, override, offeringExists }) {
-  const notes = [];
+export function caseEntry({ locale, slug, card: siteCard, order, client, logoFile, override, offeringExists }) {
+  const { cardDescription, ...frontmatter } = override ?? {};
+  const card = cardDescription ? { ...siteCard, description: cardDescription } : siteCard;
+  const notes = cardDescription ? ['card description replaced (cardDescription)'] : [];
   const name = client.name[locale];
   if (!name) throw new Error(`${OVERRIDES}: client ${client.slug} has no ${locale} name`);
   if (!card.description.toLowerCase().includes(name.toLowerCase())) notes.push(`client name "${name}" is not in the description`);
@@ -186,7 +190,7 @@ export function caseEntry({ locale, slug, card, order, client, logoFile, overrid
       sourceUrl: SOURCES[locale],
       migratedAt: undefined,
     },
-    override,
+    frontmatter,
   );
   if (!data.industry) throw new Error(`card type "${card.type}" has no industry in INDUSTRY`);
   notes.push(...frontmatterNotes(locale, data));
@@ -266,7 +270,7 @@ async function main() {
         row.notes.push(`logo ${logo.width}×${logo.height}`, ...notes);
         const path = contentFile(id);
         const existing = existsSync(path) ? await readFile(path, 'utf8') : null;
-        const text = entryText(data, body, existing, date);
+        const text = entryText(data, body, existing, date, locale);
         row.status = text === existing ? 'unchanged' : 'written';
         if (args['dry-run']) continue;
         await syncImages(assetDir(id), [{ url: card.logo, bytes: logo.bytes }], new Map([[card.logo, logoFile]]));

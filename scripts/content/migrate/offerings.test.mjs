@@ -78,6 +78,7 @@ test('offeringFrontmatter applies overrides and links use cases to industries', 
   const base = { node: 'smartclaim', sourceUrl: 'https://x', page };
   assert.throws(() => offeringFrontmatter({ ...base, override: { useCaseIndustry: { 3: 'finance' } } }), /use cases the page does not have: 3/);
   assert.throws(() => offeringFrontmatter({ ...base, override: { frontmatter: { summary: 'x' } } }), /unknown frontmatter keys summary/);
+  assert.equal(offeringFrontmatter({ ...base, override: { frontmatter: { seoTitle: 'Short' } } }).seoTitle, 'Short');
 });
 
 test('parseOverrides checks entry ids, keys and industries', () => {

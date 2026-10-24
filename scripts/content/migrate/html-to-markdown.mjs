@@ -173,6 +173,10 @@ const escapeAlt = (s) => s.replace(/[\[\]\\]/g, '\\$&').replace(/\s+/g, ' ').tri
 export function toMarkdown(html, { image, link }) {
   const notes = [];
   const td = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-', codeBlockStyle: 'fenced', emDelimiter: '*', strongDelimiter: '**', br: '\\' });
+  // Turndown leaves < in text as it is, so text the current site escaped (a code sample written as
+  // &lt;tag&gt; in a paragraph) would turn into an HTML tag; a backslash keeps it text (#40)
+  const escape = td.escape.bind(td);
+  td.escape = (text) => escape(text).replace(/</g, '\\<');
   td.addRule('strong', emphasis('strong', '**'));
   td.addRule('em', emphasis('em', '*'));
   td.addRule('image', {

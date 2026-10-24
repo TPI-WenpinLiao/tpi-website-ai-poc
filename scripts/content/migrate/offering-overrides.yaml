@@ -8,7 +8,7 @@
 #     0: finance   # useCases[0] 連到 /industries/finance
 
 # zh-TW descriptions over 80 characters (seo-checklist), shortened from the current site's meta
-# description without adding facts. en and vi wait for M7 like the blog (status.md 待辦備忘).
+# description without adding facts. vi waits for M7-03; en is below.
 zh-TW/gis:
   frontmatter:
     description: 藉由 GIS 空間數據分析技術及智能定位工具，整合各種圖資與內外部數據，產出可視覺化、利於分析與決策的圖表資訊，提升商業決策與預測的可靠性。
@@ -40,11 +40,15 @@ zh-TW/uiux:
 
 # 「Financial Industry - A Stepping Stone to Document Digitization」
 en/smartfilling:
+  frontmatter:
+    description: "A smart document processing solution with intelligent character recognition (ICR) and the exclusive Puzzle adaptive AI module to analyze documents fast."
   useCaseIndustry:
     0: finance
 
 # 「Ngành Tài Chính - Bước đệm cho Số hóa tài liệu」
 vi/smartfilling:
+  frontmatter:
+    description: Giải pháp xử lý tài liệu thông minh kết hợp nhận dạng ký tự thông minh (ICR) và module AI thích ứng Puzzle độc quyền để phân tích nhanh nhiều loại tài liệu.
   useCaseIndustry:
     0: finance
 
@@ -57,3 +61,66 @@ zh-TW/orient-ai:
 zh-TW/aiso:
   frontmatter:
     description: 集結 AI 軟體與硬體廠商打造的 AI 整合生態系，協助企業快速建置可落地、可擴充、可合規的地端 AI 平台。
+
+# en descriptions over 160 characters (seo-checklist), shortened from the current site's meta
+# description without adding facts (M7-02, #39)
+en/gis:
+  frontmatter:
+    description: "TPIsoftware's GIS spatial data analysis and location intelligence tools visualize geographic information to enhance business decision-making and forecasting."
+
+en/insurering:
+  frontmatter:
+    description: "Automatic validation for flexible insurance product launch, underwriting rules adjustment and regulatory compliance across insurance platforms."
+
+en/interactivehealth:
+  frontmatter:
+    description: "Smart Health applications with digitalization and gamification give healthcare providers and insurers interactive experiences for health management."
+
+en/orient-ai:
+  frontmatter:
+    description: "OrientAI is an enterprise-grade Agentic AI platform for AI agent management, governance and orchestration, with central LLM and agent control."
+
+en/smartclaim:
+  frontmatter:
+    description: "Claims processing involves extensive manual work across systems. Adopting AI to improve operational efficiency is a priority for the insurance industry."
+
+
+en/textualanalysis:
+  frontmatter:
+    description: "Turning unstructured dialogue texts into usable information takes textual analysis: context analysis of massive data gives enterprises insights."
+
+en/uiux:
+  frontmatter:
+    description: "Eye-catching interface design and good user experience are the keys to attracting visitors and shape a website's visual representation and experience."
+
+# vi descriptions over 160 characters (seo-checklist, vi follows en), shortened from the current
+# site's meta description without adding facts (M7-03, #40).
+vi/gis:
+  frontmatter:
+    description: Doanh nghiệp tận dụng công cụ phân tích dữ liệu không gian GIS và thông tin vị trí để trực quan hóa thông tin địa lý, hỗ trợ ra quyết định và dự báo kinh doanh.
+
+vi/insurering:
+  frontmatter:
+    description: Xác thực tự động giúp ra mắt sản phẩm bảo hiểm linh hoạt, điều chỉnh quy tắc bảo lãnh và tuân thủ quy định, đáp ứng những thay đổi nhanh chóng của thị trường.
+
+vi/interactivehealth:
+  frontmatter:
+    description: Ngành bảo hiểm và y tế áp dụng ứng dụng Smart Health có tính năng số hóa và game hóa, mang lại trải nghiệm tương tác để quản lý và theo dõi sức khỏe.
+
+vi/orient-ai:
+  frontmatter:
+    description: OrientAI là nền tảng Agentic AI tiêu chuẩn doanh nghiệp để quản lý, quản trị và điều phối tác nhân AI, tập trung kiểm soát LLM và giám sát mức sử dụng token.
+
+vi/smartclaim:
+  frontmatter:
+    # The current h1 is a sentence (「… là giải pháp …」) and too long for <title>
+    seoTitle: "SysTalk.ai: Giải pháp AI bồi thường bảo hiểm"
+    description: Giải quyết bồi thường truyền thống đòi hỏi nhiều công việc thủ công. Công nghệ AI giúp cải thiện hiệu quả và là ưu tiên trong chuyển đổi số ngành bảo hiểm.
+
+vi/textualanalysis:
+  frontmatter:
+    description: Chuyển văn bản đối thoại phi cấu trúc thành thông tin có thể phân tích; phân tích dữ liệu khổng lồ trong ngữ cảnh giúp doanh nghiệp có thông tin chi tiết.
+
+vi/uiux:
+  frontmatter:
+    description: Thiết kế giao diện bắt mắt và trải nghiệm người dùng tốt là chìa khóa để thu hút khách truy cập, tạo hình ảnh trực quan và trải nghiệm tổng thể trên trang web.

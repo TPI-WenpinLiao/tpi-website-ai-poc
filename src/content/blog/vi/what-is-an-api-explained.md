@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1bcb0a-798d-63f6-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/what-is-an-api-explained/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/enterprise-management/what-is-an-api-explained
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-30
+seoTitle: What is an API? The Internet's Digital Waiter
 ---
 
 Have you ever wondered how your favorite travel app manages to pull flight data from 50 different airlines in less time than it takes you to sneeze? Or how you can pay for your morning coffee using a smartwatch without the café’s system panicking? It’s not magic, and there isn't a tiny wizard living inside your phone.

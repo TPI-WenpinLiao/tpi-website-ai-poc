@@ -58,6 +58,7 @@ node scripts/content/migrate/migrate.mjs --type blog --locale zh-TW --only custo
 - 粗體、斜體在中文標點旁邊時，CommonMark 不會把 `**` 當成標記，這時改寫成 `<strong>`、`<em>`
 - 表格沒有合併儲存格、清單或巢狀表格時，轉成 Markdown 表格；否則保留成移除樣式的 HTML 表格。HTML 表格裡有圖片時，整篇記為 `failed`，因為 `astro:assets` 不處理 HTML 裡的圖
 - `iframe`、`video` 等嵌入內容會移除並寫進報告。影片由 M6-03（#35）的 facade 處理
+- en、vi 的全形標點（「：」「＆」「（）」等）換成半形，冒號、逗號、分號後面補空格。現站英文、越南文內文混用全形標點，`scripts/i18n/routes.mjs` 擋下 en、vi 頁面上的全形標點。換法寫在 `migrate.mjs` 的 `latinPunctuation`，成功案例、解決方案與服務頁、ESG 顧問頁的 script 寫檔時也套用，`offering-content.mjs` 比對現站時同樣換過再比
 - 連到現站的連結依 `redirects.csv` 換成新站路徑。換完落在其他語系時（例如越南文文章連到英文產品頁），改成本篇語系的同一頁，並寫進報告：現站跨語系連結是因為缺頁，新站三語在同一個網域，`scripts/i18n/routes.mjs` 不允許跨語系連結。對不到的連結保留原網址，並寫進報告。列在 `broken-links.csv` 的連結也寫進報告
 
 ### 圖片
@@ -146,9 +147,9 @@ node scripts/content/migrate/case-studies.mjs --dry-run   # 不寫檔，只看�
 
 - **配對**：en、vi 的卡片以 zh-TW 為準，依 logo（去掉 `02`、`_en`、`-zh` 等語系版本的差異）與分類對齊。vi 少的卡片記為 `missing`
 - **slug**：`case-studies.yaml` 的客戶 slug 加上 en 標題，三語相同，也是 `translationKey`
-- **欄位**：內文是卡片描述原文；`client.name` 取 `case-studies.yaml` 的 `clients`，`disclosed: true`；`industry` 依 `content-model.md`「case-study」的對應表；`order` 是卡片在現站的順序；`offerings` 只在描述寫出產品名稱、且該語系有 offering 內容檔時填（`MENTIONS`），產品頁遷移後重跑就會補上
+- **欄位**：內文是卡片描述原文。現站卡片文字有誤時（例如 vi 國泰人壽集中日誌案例照抄了新光銀行那筆，#40），在 `case-studies.yaml` 的 `entries` 寫 `cardDescription` 取代整段卡片文字，內文、`offerings`、description 都改用它，報告記 `card description replaced`；`client.name` 取 `case-studies.yaml` 的 `clients`，`disclosed: true`；`industry` 依 `content-model.md`「case-study」的對應表；`order` 是卡片在現站的順序；`offerings` 只在描述寫出產品名稱、且該語系有 offering 內容檔時填（`MENTIONS`），產品頁遷移後重跑就會補上
 - **`seoTitle`**：不同客戶有同名案例（例如兩筆「網路投保系統」），所以寫成「客戶：標題」；標題已有客戶名稱時不寫
-- **zh-TW `description`**：卡片描述大多超過 80 字，濃縮版寫在 `case-studies.yaml` 的 `entries`，只刪減不加內容。en、vi 等 M7
+- **`description` 與 `seoTitle`**：卡片描述大多超過 seo-checklist 的長度（zh-TW 80 字、en 與 vi 160 字元），濃縮版寫在 `case-studies.yaml` 的 `entries`，只刪減不加內容。`<client>: <title>` 加上後綴超過 70 字元的，同一處另寫 `seoTitle`。zh-TW 在 M5-03，en 在 M7-02（#39），vi 在 M7-03（#40）
 
 ### 報告
 
@@ -159,7 +160,8 @@ node scripts/content/migrate/case-studies.mjs --dry-run   # 不寫檔，只看�
 | `names … (no <locale> offering entry yet)` | 描述寫了產品，但該產品還沒有內容檔 |
 | `dated: …` | 提到獎項或年份的句子，要確認是否過時 |
 | `description is N characters` | 超過 seo-checklist 的長度 |
-| `<title> is N characters` | 加上網站名稱後超過 70 字 |
+| `<title> is N characters` | 加上網站名稱後超過 70 字（以 HTML 跳脫後的長度計算） |
+| `card description replaced (cardDescription)` | 卡片文字已由 `cardDescription` 取代 |
 
 ## 解決方案頁
 

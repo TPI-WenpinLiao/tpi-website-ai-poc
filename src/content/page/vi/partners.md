@@ -1,6 +1,6 @@
 ---
 title: Đối tác
-description: TPIsoftware cung cấp chương trình đối tác chiến lược toàn diện với mô hình hợp tác kinh doanh cởi mở và minh bạch để cùng nhau chia sẻ thành công. Hãy liên hệ chúng tôi để tìm hiểu về chương trình đối tác chiến lược.
+description: TPIsoftware cung cấp chương trình đối tác chiến lược toàn diện với mô hình hợp tác kinh doanh cởi mở và minh bạch để cùng nhau chia sẻ thành công.
 translationKey: partners
 node: partners
 sections:

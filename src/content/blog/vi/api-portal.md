@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f12828e-57b2-68b8-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/api-portal/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/enterprise-management/api-portal
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-24
+seoTitle: API Portal Là Gì? Cửa Hàng API Cho Kỷ Nguyên AIO
 ---
 
 Chào bạn, tôi hoàn toàn đồng ý với góc nhìn chiến lược của bạn. Trong năm 2026, khi các công cụ tìm kiếm trí tuệ nhân tạo (như AI Overviews, ChatGPT Search) lên ngôi, SEO truyền thống nhồi nhét từ khóa đã nhường chỗ cho **AIO (AI-Search Optimization)**.

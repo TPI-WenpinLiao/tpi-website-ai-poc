@@ -58,7 +58,7 @@ node scripts/content/offering-files.mjs
 | 內容檔 | 待確認 |
 |---|---|
 | digirunner | 現站的 AI Gateway、AI Governance、五大應用、四大機制、API Composer／沙盒／即時主控台、資安、金檢合規段落沒有欄位（M3-05 已記）；`useCases.industry` 沒有保險、醫療、物聯網；`to_confirm`：內文含失效連結 2 筆，因內文未搬而不涉及 |
-| digirunner-cloud | 方案價格表兩頁數字不一致：cloud 頁的 Enterprise（High Availability）寫 < 50 million、500GB、pod 1，AWS 頁寫 > 50 million、> 500GB、2~5；兩頁的 High Availability 每 pod 價格都低於 Standalone；cloud 頁有 AWS、GCP、Azure 頁籤，AWS 頁只有 AWS。價格表、部署教學影片、AWS Marketplace 外部連結未搬；FAQ「digiRunner 在哪些區域或網站？」去掉指向 Marketplace 的「現在點擊安裝，免費試用 30 天」；en 版買家指南 PDF 待 M7 |
+| digirunner-cloud | 方案價格表兩頁數字不一致：cloud 頁的 Enterprise（High Availability）寫 < 50 million、500GB、pod 1，AWS 頁寫 > 50 million、> 500GB、2~5；兩頁的 High Availability 每 pod 價格都低於 Standalone；cloud 頁有 AWS、GCP、Azure 頁籤，AWS 頁只有 AWS。價格表、部署教學影片、AWS Marketplace 外部連結未搬；FAQ「digiRunner 在哪些區域或網站？」去掉指向 Marketplace 的「現在點擊安裝，免費試用 30 天」；en 版買家指南 PDF 已由 M7-03 下載（vi 頁連到它），en 內容檔照 #39 的決定沒有放 `downloads` |
 | digilogs | 「業界唯一主動識別科技」照抄現站；治理困境、鏈路追蹤、多樣態偵測機制（Agent-based 等）、視覺化報表、ISO 27001 段落、導入顧問流程未搬 |
 | digilogs-iso27001 | 影片 1 支未搬；現站 description 錯字「修福」已改「修復」 |
 | digilogs-detection | 現站只有日誌管理問卷的入口（問卷的處理見 `audience-and-goals.md` 問題 4，M6），內容很少；`to_confirm`：不在導覽，是否仍銷售 |
@@ -83,3 +83,34 @@ node scripts/content/offering-files.mjs
 | industry-finance | 承接 `/products/open-banking`，台灣開放銀行三階段的時程（2019–2021）可能過時；「專利的服務不中斷熱部署」「對接效率提升高達 50%」照抄；`to_confirm`：現站 title 拼錯「Bankning」；開放銀行說明、傳統與開放銀行比較、授權流程圖未搬；產業頁其餘介紹需人工提供 |
 | industry-government | 承接 `/products/open-government`；「臺北市政府 API 平臺（昕力資訊建置）」等專案與客戶名稱、智慧政府 2.0 說明、API 規格清單未搬；`to_confirm`：現站 title 寫「開放銀行 Open Government」；產業頁其餘介紹需人工提供 |
 | products | 現站 meta description 是舊的產品分組，改從四個家族頁籤寫；各產品的一句介紹沒有欄位，總覽卡片用各 `offering` 的 `description` |
+
+## vi（M7-03）
+
+M7-03（#40）補上產品頁與 hub 的 vi 內容檔，寫法同上，差別如下：
+
+- 現站 vi（`www.tpisoftware.vn`）有對應頁的照抄 vi 頁的文字，`sourceUrl` 寫 vi 頁網址，`offering-content.mjs` 一起對照。vi 頁沒有 zh-TW 的項目時不補譯；vi 頁的事實和 zh-TW 不同時照 vi 頁寫，列在下方待確認
+- 現站沒有 vi 頁的從 zh-TW 內容檔翻譯，`sourceUrl` 沿用 zh-TW 的值，登記在 `offering-content.mjs` 的 `TRANSLATED`（不對照現站），檔頭註解寫明是翻譯：offering 的 digicare、digilogs-detection、systalk-viki、systalk-coach、systalk-audit、systalk-icr，hub 的 family-ai、family-esg。翻譯用到、詞彙表沒有的專有名詞列在 [`glossary.md`「vi 待確認」](../i18n/glossary.md#vi-待確認)
+- `title`：照抄現站 vi 的頁面取 vi 頁的標題，翻譯的頁面照 zh-TW 的結構寫「產品名＋vi 描述」；兩種都要含詞彙表 `confirmed` 的產品名寫法。選單與麵包屑的名稱另外讀詞彙表。`<title>` 超過 70 字時加 `seoTitle`
+- family-security、industry-manufacturing 在 zh-TW 是 draft，不做 vi
+- digirunner-cloud 的下載檔照 vi 頁連到英文版買家指南（`offering-files.yaml`）
+
+### vi 待確認
+
+| 內容檔 | 待確認 |
+|---|---|
+| 翻譯的 8 頁 | 越南文審稿；systalk-audit、systalk-viki、family-ai 的 description 為了字數刪了 zh-TW 的部分說法 |
+| systalk-chat | vi 寫 Google BERT＋SysTalk 演算法（zh：大語言模型、地端部署）；vi 的 VIKI 項目是 FAQ 腦；「節省 60% 訓練成本」（zh：減少 60% 訓練團隊人力） |
+| systalk-rpa | vi 才有「giảm gần 60% công việc、tiết kiệm 80% thời gian」；架構三項沒有 Center、Studio、Agent 的名稱 |
+| insurebrick | vi 沒有 zh 的 7 項功能，改放 vi 自己的 8 項，含 vi 才有的「28 mô-đun」「新產品上市時間減少 90%」；title 的「môdun」改成「mô-đun」 |
+| greenswift | FAQ：vi 寫「計畫取得 ISO 14067、14068 認證」，zh 寫「未來將整合」；Q6 是不同的問題；CBAM 沒提申報清冊 |
+| digirunner-cloud | Q8「trên 99.9%」（zh 99.9%）、Q10 多了「30 ngày đầu tiên」、Q3 的快取說法不同；vi 沒有 zh 的 5 項功能與 tagline，改用 vi 頁的 4 項與「Tích Hợp Liền Mạch Trong 20 Phút」 |
+| digirunner | 產業頁籤的 vi 標題拆成兩行，body 是第二行（讀起來接續標題）；vi 頁 hero 寫的是 DigiLism 的 7 項專利與 ISO 27001，疑似現站誤植，未搬 |
+| digilogs | vi「ĐỘC QUYỀN」（zh「業界唯一」）、「hơn 10.000 EPS」（zh 10,000） |
+| digilogs-iso27001 | tagline「Tuân thủ nguyên tắc Solid」與 zh「合規優先 決策必備」意思不同 |
+| digimars | vi 沒有 LDAP 那一項；段落標題寫 5 項，底下列 6 項 |
+| electriswift | zh「定期自動更新台電電價表」，vi「依各國定期更新的電價」 |
+| gadoscout | vi 把「異常流量偵測」「智能告警」放在同一標題下，合成一項（10 項，zh 11 項）；vi 頁的 `<title>` 與 meta 是中文 |
+| family-dx | 「100% SLA」的標題不同；API 管理模組內文較短 |
+| industry-finance | vi 把顧問團隊寫成 digiRunner 的（zh：昕力資訊）；現站原文有「digiRunner;」「lớp truyền tải ngày」等誤植，照抄 |
+| industry-government | 第 4 階段 vi 寫 ngoại tuyến（離線），zh 是線上自助申請；標題沒有「100% 合規」 |
+| products | vi 頁沒有 tagline；meta 是 zh-TW 的舊文案，description 改用四個產品家族的分頁名稱 |

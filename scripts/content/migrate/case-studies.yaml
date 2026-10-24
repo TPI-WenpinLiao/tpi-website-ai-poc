@@ -5,7 +5,10 @@
 #   way that locale's descriptions write it. A name the descriptions do not contain is read off the
 #   logo and marked「logo」. Names, logos and the right to show them are to be confirmed (PR #28).
 # entries: entry id → frontmatter that replaces the generated value (title, seoTitle, description).
-#   zh-TW descriptions are rewritten to the seo-checklist length; en and vi wait for M7.
+#   cardDescription replaces the card text itself where the site's is wrong; the body, offerings
+#   and description follow it, and it is not written to the frontmatter (#40).
+#   zh-TW, en (M7-02) and vi (M7-03) descriptions are rewritten to the seo-checklist length; en and vi
+#   seoTitle shortens the generated「client: title」where <title> would pass 70 characters.
 
 clients:
   logo-cathay-fh:
@@ -233,3 +236,282 @@ entries:
     description: 昕力為敦謙國際導入SysTalk.RPA流程自動化方案，自動登入多間網銀抓取近30家飯店營業資訊並串接ERP與訂單系統，節省77%人力與85％作業時間。
   zh-TW/taipei-city-e-services-online:
     description: 昕力資訊協助臺北市政府服務平臺升級，串聯MyData平台透過單次授權取用個人化資料簡化申辦，並推出行動版網路申辦、整合台北通App。
+  # en (M7-02, #39): descriptions shortened from the current site's card text to 160 characters,
+  # seoTitle where "<client>: <title> | TPIsoftware" is over 70 characters
+  en/anz-interactive-credit-card-digital-platform:
+    description: "With machine learning and big data, TPIsoftware built ANZ's smart credit card customer service system for instant staff interaction with customers."
+  en/anz-new-generation-of-online-banking:
+    description: "TPIsoftware supported ANZ's new generation of digital online banking, which won the Global Finance 2013 World's Best Internet Bank Awards."
+  en/bank-of-taiwan-robotic-process-automation-rpa:
+    description: "Assisted Bank of Taiwan in creating 50 RPA processes with exclusive verification modules to automate repetitive tasks and data collection."
+  en/bnp-paribas-cardif-online-policy-service-system:
+    description: "TPIsoftware developed the Online Policy Service system with BNP Paribas Cardif, letting policyholders change policy content through the web."
+  en/bnp-paribas-cardif-taiwan-online-insurance-platform:
+    seoTitle: "Cardif Assurance Vie: Online Insurance Platform"
+    description: "An online insurance system for Cardif Assurance Vie & Risques Divers of Taiwan, integrated with banks and built with InsureBrick modules."
+  en/cathay-century-ai-customer-service-chatbot:
+    description: "An AI chatbot for Cathay Century Insurance with voice recognition and human text chat, giving access to claim applications and roadside assistance."
+  en/cathay-century-automobile-insurance-platform:
+    description: "Assisted Cathay Century Insurance in building an interactive online auto insurance platform with data analytics and personalized recommendations."
+  en/cathay-century-automobile-insurance-system:
+    description: "Assisted Cathay Century Insurance in building an auto insurance system for agents, with real-time services on the go and optimized UI/UX."
+  en/cathay-financial-caas-cathay-pacific-ecosystem-service:
+    seoTitle: "Cathay Financial Holdings: CaaS Ecosystem Platform"
+    description: "Assisted Cathay Financial Holdings in building the \"CaaS Cathay Pacific Ecosystem Service Platform\", integrating business via APIs."
+  en/cathay-financial-insurance-vietnam-website:
+    seoTitle: "Cathay Financial Holdings: Cathay Insurance Vietnam"
+    description: "The Cathay Insurance Vietnam website for Cathay Financial Holdings, with localized e-insurance services and a multinational architecture."
+  en/cathay-financial-property-insurance-vietnam-system:
+    seoTitle: "Cathay Financial Holdings: Property Insurance Vietnam"
+    description: "An online property insurance app for Cathay Insurance Vietnam, with OCR autofill from ID cards and driver's licenses for fast applications."
+  en/cathay-life-centralized-log-management-platform:
+    seoTitle: "Cathay Life Insurance: Centralized Log Management"
+    description: "A centralized log management platform for Cathay Life Insurance with cross-system log integration, access control, monitoring and real-time alerts."
+  en/cathay-life-crm-2-0:
+    description: "Assisted Cathay Life Insurance in building CRM 2.0 with K8S microservices and automatic version updates for uninterrupted services."
+  en/cathay-life-image-process-management-system:
+    description: "An image process management system for Cathay Life Insurance, storing massive policy image files with Big Data solutions."
+  en/cathay-life-sky-tree-km-platform:
+    description: "Assisted Cathay Life Insurance in building an online community where sales share knowledge, with a personalized recommendation system."
+  en/cathay-united-bank-ai-intelligent-customer-service-system:
+    seoTitle: "Cathay United Bank: AI Customer Service System"
+    description: "TPIsoftware assisted Cathay United Bank / Cathay Life Insurance in creating the AI customer service chatbot \"Alpha\" for human-machine collaboration."
+  en/cathay-united-bank-cross-organizational-point-management:
+    seoTitle: "Cathay United Bank: Cross-Organizational Points"
+    description: "A blockchain-based point management system for Cathay United Bank, integrating reward points from subsidiaries and third-party partners."
+  en/chang-hwa-bank-transaction-time-monitoring-track-path:
+    seoTitle: "Chang Hwa Bank: Transaction Monitoring and Track Path"
+    description: "digiLogs gives Chang Hwa Bank data collection, integration and analysis on one platform, with transaction routes and real-time alerts."
+  en/china-life-i-touch-online-insurance-calculator:
+    seoTitle: "China Life Insurance: i-TOUCH Insurance Calculator"
+    description: "Assisted China Life Insurance in optimizing its online insurance calculator with personalized proposals for insurance brokers and agents."
+  en/chung-kuo-insurance-online-insurance-system:
+    description: "An online insurance system for Chung Kuo Insurance with hierarchical flows, InsureBrick modules for fast product verification and microservices."
+  en/chunghwa-telecom-cdr-management-system:
+    description: "TPIsoftware's Enterprise NoSQL database solution processes more than 40 million CDR call records a day for Chunghwa Telecom."
+  en/dbs-card-credit-card-mobile-service-system:
+    description: "Assisted DBS in creating the Card+ credit card app and website, where customers log in with fingerprint identification to access card services."
+  en/dunqian-robotic-process-automation-rpa:
+    description: "Assisted the Dunqian International hotel group in simplifying multi-channel payment collection with SysTalk.RPA, integrating ERP and order management."
+  en/entie-bank-api-management-platform:
+    description: "Implemented digiRunner to build a flexible APIM system for EnTai Bank, integrated with internal services and communication channels with TSPs."
+  en/excellence-wire-robotic-process-automation-rpa:
+    seoTitle: "EXCELLENCE WIRE INDUSTRIAL: RPA"
+    description: "Assisted EXCELLENCE WIRE INDUSTRIAL in automating order management and import/export operations with eight tailored processes."
+  en/far-eastern-bank-bulletin-system:
+    description: "Helped Far East Commercial Bank develop its No. 34 bulletin system, credit card reward platform, data warehouse and other systems."
+  en/far-eastern-bank-mobile-electronic-bill-service:
+    description: "Assisted Far East Commercial Bank in importing an EAP application platform and JON management system to build a mobile electronic billing service."
+  en/fu-jen-hospital-healthcare-service-app:
+    seoTitle: "Fu Jen Catholic University Hospital: Healthcare App"
+    description: "A healthcare service app for Fu Jen Catholic University Hospital with appointments, real-time queue status and health information updates."
+  en/fubon-life-mobile-insurance-web-app:
+    description: "Assisted Fubon Life Insurance in building mobile insurance web and app with 4 exclusive system modules, a verification mechanism and 3rd-party payments."
+  en/good-health-healthcare-management-app:
+    seoTitle: "Good Health Solutions: Healthcare Management App"
+    description: "A healthcare management app for Good Health Solutions International Co. with an infographic health tracker and appointment notifications."
+  en/hotai-new-vehicle-sales-system:
+    description: "Organized the overhaul of the Hotai Auto Vehicle Management System, moving it to the .NET platform with a fast and stable development framework."
+  en/hua-nan-bank-digital-banking-platform:
+    description: "A mobile-first digital banking platform for Hua Nan Bank that brings account opening, credit card and loan applications into one experience."
+  en/hua-nan-bank-sales-force-automation-system:
+    description: "Assisted Hua Nan Bank in developing a Sales Force Automation System that covers finance and wealth management units and over 2,500 users."
+  en/innolux-strategic-insights-app-system:
+    description: "TPIsoftware built a strategic insights app system, supply chain management, RMA and internal order systems for Innolux, with consulting and support."
+  en/ipass-line-pay-ipass-account-system:
+    description: "Developed the LINE Pay card account system with iPASS Corporation, providing virtual account application, deposit, payment and passenger code."
+  en/johnson-maintenance-record-app:
+    description: "A Xamarin cross-platform maintenance record app for JOHNSON with electronic signature and barcode scanning to distribute and track work orders."
+  en/ministry-of-finance-taiwan-receipt-lottery-app:
+    description: "TPIsoftware worked with Financial Information Co., Ltd. on the Ministry of Finance receipt lottery app, with receipt consolidation and automatic prize claim."
+  en/prudential-taiwan-agent-certification-management-system:
+    seoTitle: "Prudential Life Insurance: Agent Certification System"
+    description: "Assisted Prudential Life Insurance in upgrading its centralized insurance certification management system to better track agents' qualifications."
+  en/prudential-taiwan-companyweb-system:
+    description: "Assisted Prudential Life Insurance in establishing its online TCWS policyholder eService, TFRS, TSRS sales reports and ETL for customer service."
+  en/prudential-taiwan-life-insurance-marketing-management:
+    seoTitle: "Prudential Life Insurance: Marketing Management"
+    description: "A Prudential Life Insurance platform with coverage calculation, retirement planning, policyholder family information and sales competitions."
+  en/prudential-uk-chinese-medicine-physique-testing-app:
+    seoTitle: "Prudential Life Insurance: Chinese Medicine Testing App"
+    description: "A multilingual Chinese Medicine Physique Testing app for Prudential Life Insurance, with Observation, Auscultation and Interrogation and tailored tips."
+  en/shin-kong-bank-centralized-log-management-platform:
+    description: "Shin Kong Bank's systems generate GBs of transaction, payment and channel data; digiLogs and its log management features improved things drastically."
+  en/shin-kong-life-group-insurance-plan-system:
+    description: "A centralized rules engine and premium calculation e-process for Shin Kong Life, reducing costs by 50% and product launch time by 60%."
+  en/sinopac-fun-sport-app:
+    description: "Assisted Bank SinoPac in building the Fun Sport App, which manages fitness data and rewards calories burned with credit card reward points."
+  en/standard-chartered-digital-bank-online-banking-mobile:
+    seoTitle: "Standard Chartered: Digital Bank"
+    description: "A new visual interface for Standard Chartered's digital bank, with quick preview before login and real-time transaction push notifications."
+  en/standard-chartered-sc-keyboard-banking:
+    description: "Assisted Standard Chartered in building SC Keyboard Banking to make transfers and view balances on LINE, Messenger and more with device binding."
+  en/taipei-city-api-management-platform:
+    description: "An API management platform for Taipei City Government that improves the data interfaces of application systems and promotes open data."
+  en/taipei-city-e-receipt-cloud-platform:
+    description: "Assisted Taipei City Government in adopting an e-receipt platform integrated across agencies, with batch import of e-receipts via APIs."
+  en/taipei-city-e-services-online:
+    description: "Assisted in upgrading the Taipei City Government Service Platform, integrating MyData for one-time authorization and the TaipeiPASS App."
+  en/taishin-cash-management-banking-system:
+    description: "A stable and secure online cash management banking system for Taishin Bank, giving SMEs payroll transfer, collection and payment functions."
+  en/taishin-cash-sales-api-management-platform:
+    description: "An API management platform for Taishin Bank built with digiRunner, which received the Global Finance \"The Innovators 2020 Cash Management\" award."
+  en/taishin-datamart-system:
+    description: "Assisted Taishin Bank in designing and developing a payroll and deposit DataMart system integrated with the Informatica report system."
+  en/taishin-mobile-wallet-app:
+    description: "Assisted Taishin Bank in building the LetsPay Mobile Wallet app, integrating mobile payments with Taishin Bank's deposit and payment accounts."
+  en/taishin-richart-digital-banking-system:
+    description: "TPIsoftware assisted Taishin Bank in building the Richart digital banking system, a new generation of Bank 3.0 services."
+  en/taishin-sales-force-automation-system:
+    description: "A high-performance SFA system for Taishin Bank with cross-selling, audience list dispatching and CTI, supporting up to 200 marketing activities a year."
+  en/taiwan-life-e-insurance-system:
+    description: "An e-insurance system for Taiwan Life that integrates brokers and agents, with 12 application statuses for sales to track anytime, anywhere."
+  en/taiwan-mobile-sms-notification-system:
+    description: "TPIsoftware assisted Taiwan Mobile Co., Ltd. in building an SMS notification system integrated with the back end to control SMS transmission."
+  en/taiwan-mobile-value-added-service-and-mobile-customer:
+    seoTitle: "Taiwan Mobile: Value-Added and Customer Service System"
+    description: "TPIsoftware built the VTXM value-added service system for Taiwan Mobile Co., Ltd., a platform that lists more than 50,000 products per year."
+  en/tokio-marine-newa-online-insurance-policy-app:
+    description: "Assisted Tokio Marine Newa in building an Online Insurance Policy App with Xamarin for case status syncing and tracking with offline login."
+  en/union-insurance-online-insurance-system:
+    description: "Assisted Union Insurance in implementing an online insurance system with OTP verification and an e-commerce model to reduce purchase breakpoints."
+  en/youbike-ai-customer-service:
+    description: "YouBike's AI Customer Service uses SysTalk.Chat for a complete question-and-answer system, with 24-hour online service on sites and rental status."
+  # vi (M7-03, #40): descriptions shortened from the current site's card text to 160 characters,
+  # seoTitle where the generated one is over 70 characters
+  vi/anz-interactive-credit-card-digital-platform:
+    description: Áp dụng machine learning và big data vào hệ thống chăm sóc khách hàng thẻ tín dụng của Ngân hàng ANZ, hỗ trợ nhân viên tư vấn tương tác tức thì với khách hàng.
+  vi/anz-new-generation-of-online-banking:
+    description: TPIsoftware hỗ trợ Ngân hàng ANZ phát triển hệ thống ngân hàng số trực tuyến, đạt giải World's Best Internet Bank 2013 từ tổ chức Global Finance.
+  vi/bnp-paribas-cardif-online-policy-service-system:
+    description: TPIsoftware cùng BNP Paribas Cardif xây dựng hệ thống Dịch vụ Hợp đồng trực tuyến, cho phép chủ hợp đồng tự thay đổi nội dung hợp đồng qua giao diện web.
+  vi/bnp-paribas-cardif-taiwan-online-insurance-platform:
+    seoTitle: "Cardif: Nền tảng Bảo hiểm trực tuyến"
+    description: Triển khai hệ thống bảo hiểm trực tuyến cho Cardif Assurance Vie & Risques Divers, tích hợp các ngân hàng và mô-đun InsureBrick độc quyền để mua bán nhanh hơn.
+  vi/cathay-century-ai-customer-service-chatbot:
+    description: Tạo chatbot AI cho Bảo hiểm Cathay Century với nhận dạng giọng nói và trò chuyện văn bản, giúp yêu cầu bồi thường và hỗ trợ khi gặp sự cố trên đường.
+  vi/cathay-century-automobile-insurance-platform:
+    description: Xây dựng cho Bảo hiểm Cathay Century nền tảng bảo hiểm ô tô trực tuyến, phân tích dữ liệu cá nhân để đề xuất đúng dịch vụ và tăng khách hàng thân thiết.
+  vi/cathay-century-automobile-insurance-system:
+    description: Xây dựng cho Bảo hiểm Cathay Century hệ thống bảo hiểm tự động để đại lý phục vụ theo thời gian thực, tối ưu UI/UX để thu hút khách hàng, thúc đẩy doanh số.
+  vi/cathay-financial-caas-cathay-pacific-ecosystem-service:
+    seoTitle: "Cathay: Nền Tảng Hệ Sinh Thái CaaS Cathay Pacific"
+    description: TPIsoftware hỗ trợ Cathay Financial Holdings xây dựng nền tảng "CaaS Cathay Pacific Ecosystem", tích hợp kinh doanh qua API và mở rộng dịch vụ tài chính.
+  vi/cathay-financial-insurance-vietnam-website:
+    seoTitle: Website Bảo hiểm Phi Nhân Thọ Cathay Việt Nam
+    description: Tạo trang web cho Bảo Hiểm Phi Nhân Thọ Cathay Việt Nam với dịch vụ bảo hiểm điện tử, kiến trúc đa quốc gia và kiến trúc K8 cho nhiều người dùng đồng thời.
+  vi/cathay-financial-property-insurance-vietnam-system:
+    seoTitle: "Cathay: Hệ thống bảo hiểm tài sản Việt Nam"
+    description: Tạo ứng dụng bảo hiểm tài sản trực tuyến cho Bảo Hiểm Cathay Việt Nam, dùng OCR cho thẻ ID/bằng lái xe để tự động điền và đăng ký nhanh trong 10 phút.
+  # The current site's vi card repeats the Shin Kong Bank case's text, so the card text itself is
+  # replaced with a translation of the zh-TW and en cards (body and offerings follow it), to be
+  # confirmed (#40)
+  vi/cathay-life-centralized-log-management-platform:
+    cardDescription: Hỗ trợ Cathay Life xây dựng nền tảng quản lý log tập trung, tích hợp dữ liệu log đa hệ thống, phân quyền truy cập, giám sát 24/7 và cảnh báo tức thời, tăng cường bảo mật dữ liệu, quản trị IT và hiệu quả vận hành.
+    description: Hỗ trợ Cathay Life xây dựng nền tảng quản lý log tập trung, tích hợp dữ liệu log đa hệ thống, phân quyền truy cập, giám sát 24/7 và cảnh báo tức thời.
+  vi/cathay-life-crm-2-0:
+    description: Hỗ trợ Bảo hiểm Nhân thọ Cathay xây dựng CRM 2.0 với vi dịch vụ K8S và tự động cập nhật phiên bản, giữ dịch vụ không gián đoạn, hỗ trợ quản lý bán hàng.
+  vi/cathay-life-image-process-management-system:
+    description: Cùng Bảo hiểm Cathay Life xây dựng hệ thống Quản lý hình ảnh, dùng giải pháp Big data lưu trữ file hình ảnh hợp đồng dung lượng lớn và tối ưu dòng công việc.
+  vi/cathay-life-sky-tree-km-platform:
+    description: Giúp Bảo Hiểm Nhân Thọ Cathay xây dựng cộng đồng bán hàng trực tuyến chia sẻ kiến thức và kinh nghiệm, với đề xuất cá nhân hóa cho các chủ đề thịnh hành.
+  vi/cathay-united-bank-ai-intelligent-customer-service-system:
+    seoTitle: "Cathay United Bank: Chatbot AI Dịch Vụ Khách Hàng"
+    description: TPIsoftware hỗ trợ Cathay United Bank / Cathay Life Insurance phát triển Chatbot thông minh "Alpha" bằng AI, giúp người và máy hợp tác hiệu quả.
+  vi/cathay-united-bank-cross-organizational-point-management:
+    description: Ứng dụng blockchain xây dựng cho Cathay United Bank hệ thống điểm thưởng đa nền tảng, tích hợp điểm của công ty con và đối tác, đổi trực tuyến và tại cửa hàng.
+  vi/chang-hwa-bank-transaction-time-monitoring-track-path:
+    seoTitle: "Chang Hwa Bank: Giám sát thời gian giao dịch"
+    description: digiLogs giúp Chang Hwa Bank thu thập và phân tích dữ liệu tập trung, hỗ trợ khắc phục sự cố giao dịch, kiểm soát truy cập phân cấp và cảnh báo thời gian thực.
+  vi/china-life-i-touch-online-insurance-calculator:
+    seoTitle: "China Life: i-TOUCH Máy tính Bảo hiểm Trực tuyến"
+    description: Hỗ trợ Bảo hiểm Nhân thọ Trung Quốc tối ưu công cụ tính bảo hiểm trực tuyến cá nhân hóa, thúc đẩy bán hàng của môi giới, đại lý và xây dựng bán hàng đa kênh.
+  vi/chung-kuo-insurance-online-insurance-system:
+    description: Cùng Công ty bảo hiểm Chung Kuo điều chỉnh hệ thống online với mô hình InsureBrick độc quyền để xác nhận nhanh, áp dụng kiến trúc vi dịch vụ để quản lý rủi ro.
+  vi/chunghwa-telecom-cdr-management-system:
+    description: Giải pháp NoSQL Enterprise của TPIsoftware cho Chunghwa Telecom xử lý hơn 40 triệu bản ghi CDR mỗi ngày, nhanh gấp 5 lần hệ thống RDB truyền thống.
+  vi/dbs-card-credit-card-mobile-service-system:
+    description: TPIsoftware hỗ trợ DBS phát triển ứng dụng và website thẻ tín dụng cho khách hàng, đăng nhập bằng vân tay để nhanh chóng dùng các dịch vụ thẻ trên Card+.
+  vi/entie-bank-api-management-platform:
+    description: Triển khai digiRunner, xây dựng hệ thống APIM linh hoạt tích hợp dịch vụ nội bộ và kênh giao tiếp với TSP, giúp EnTai Bank cung cấp dịch vụ tài chính số.
+  vi/far-eastern-bank-bulletin-system:
+    description: Hỗ trợ Ngân hàng Far East Commercial phát triển hệ thống bản tin số 34, nền tảng điểm thưởng thẻ tín dụng, kho dữ liệu và nhiều hệ thống khác.
+  vi/far-eastern-bank-mobile-electronic-bill-service:
+    seoTitle: "Far East Commercial: Hóa đơn điện tử di động"
+    description: Hỗ trợ Ngân hàng Far East Commercial triển khai nền tảng EAP và hệ thống quản lý JON, xây dựng dịch vụ hóa đơn điện tử di động, nâng cao hiệu quả và bảo mật.
+  vi/fu-jen-hospital-healthcare-service-app:
+    description: Hỗ trợ Bệnh viện Fu Jen xây dựng ứng dụng chăm sóc sức khỏe có đặt lịch hẹn, cập nhật hàng chờ và thông tin sức khỏe, giúp bệnh nhân giảm thời gian chờ đợi.
+  vi/fubon-life-mobile-insurance-web-app:
+    seoTitle: "Fubon Life: Bảo hiểm di động trên Web và App"
+    description: Xây dựng hệ thống bảo hiểm trên Web và App cho Bảo hiểm Fubon Life với 4 mô-đun độc quyền, tích hợp xác minh và thanh toán bên thứ 3 để mua bảo hiểm nhanh.
+  vi/good-health-healthcare-management-app:
+    description: Hỗ trợ Good Health xây dựng ứng dụng quản lý sức khỏe với theo dõi qua hình ảnh, thông báo cuộc hẹn, quay số nhanh, giúp quản lý sức khỏe linh hoạt mọi lúc.
+  vi/hua-nan-bank-digital-banking-platform:
+    description: Nền tảng ngân hàng số của Hua Nan Bank xây trên microservices, thiết kế mobile-first, tích hợp OCR và lưu dữ liệu tạm, giúp mở tài khoản, đăng ký thẻ, vay vốn.
+  vi/hua-nan-bank-sales-force-automation-system:
+    description: Hỗ trợ Hua Nan Bank phát triển hệ thống tự động hóa lực lượng bán hàng cho các đơn vị tài chính cá nhân và doanh nghiệp, phục vụ trên 2,500 người dùng.
+  vi/innolux-strategic-insights-app-system:
+    description: TPIsoftware cùng Innolux xây dựng hệ thống ứng dụng Warfare, quản lý chuỗi cung ứng, hoàn trả và bảo hành sản phẩm RMA, đặt hàng nội bộ và nhiều hệ thống khác.
+  vi/ipass-line-pay-ipass-account-system:
+    description: TPIsoftware cùng iPASS Corporation phát triển hệ thống tài khoản thẻ LINE Pay, cung cấp tài khoản ảo, nạp tiền, thanh toán và mã hành khách cho người dùng.
+  vi/johnson-maintenance-record-app:
+    description: Ứng dụng của JOHNSON phát triển trên Xamarin đa nền tảng, tích hợp chữ ký điện tử và quét mã vạch, giúp phân công kỹ sư bảo hành và theo dõi tiến độ sửa chữa.
+  vi/ministry-of-finance-taiwan-receipt-lottery-app:
+    seoTitle: "Bộ Tài Chính Đài Loan: Ứng Dụng Biên Lai Xổ Số"
+    description: TPIsoftware cùng Financial Information Co., Ltd. phát triển ứng dụng biên lai xổ số cho Bộ Tài Chính Đài Loan, có sổ biên lai và đổi thưởng tự động 24/7.
+  vi/prudential-taiwan-agent-certification-management-system:
+    description: Nâng cấp hệ thống quản lý tập trung cấp chứng nhận bảo hiểm cho Bảo Hiểm Prudential, giúp theo dõi hiệu suất đại lý tốt hơn và nâng cao hiệu quả đào tạo.
+  vi/prudential-taiwan-companyweb-system:
+    description: Hỗ trợ Prudential Life thiết lập hệ thống dịch vụ trực tuyến cho chủ hợp đồng TCWS, hệ thống thông báo TFRS, báo cáo bán hàng TSRS và chuyển đổi dữ liệu ETL.
+  vi/prudential-taiwan-life-insurance-marketing-management:
+    seoTitle: "Prudential: Quản lý thị trường bảo hiểm nhân thọ"
+    description: Xây dựng nền tảng mới cho Prudential với tính tiền bảo hiểm, lập kế hoạch nghỉ hưu, quản lý thông tin gia đình chủ hợp đồng và thi đua bán hàng tăng doanh số.
+  vi/prudential-uk-chinese-medicine-physique-testing-app:
+    description: Cùng Bảo hiểm Prudential xây dựng Ứng dụng Kiểm tra Vật lý Y học đa ngôn ngữ, với chức năng Giám sát, Đo tim mạch và Thẩm vấn đưa ra kết quả, chỉ dẫn riêng.
+  vi/shin-kong-bank-centralized-log-management-platform:
+    description: Ngân hàng Shin Kong tạo ra hàng GB dữ liệu giao dịch, thanh toán và kênh. Sau khi áp dụng digiLogs, hiệu suất hệ thống được cải thiện rõ rệt.
+  vi/shin-kong-life-group-insurance-plan-system:
+    description: Xây dựng hệ thống và hình thức thanh toán điện tử cho Công ty bảo hiểm Shin Kong, giúp giảm 50% chi phí và đơn giản hóa 60% thời gian xử lý.
+  vi/sinopac-fun-sport-app:
+    description: Hỗ trợ Ngân hàng SinoPac xây dựng ứng dụng Fun Sport tích hợp dữ liệu đa kênh và dữ liệu vận động, tặng điểm thẻ tín dụng khi người dùng đốt calo.
+  vi/standard-chartered-digital-bank-online-banking-mobile:
+    seoTitle: "Standard Chartered: Internet Banking/Mobile Banking"
+    description: TPIsoftware cùng Standard Chartered tạo giao diện mới cho ngân hàng số, với xem nhanh trước khi đăng nhập và thông báo giao dịch theo thời gian thực.
+  vi/standard-chartered-sc-keyboard-banking:
+    description: TPIsoftware hỗ trợ Standard Chartered xây dựng SC Keyboard Banking, cho phép chuyển khoản, kiểm tra số dư trên LINE, Messenger sau khi ràng buộc thiết bị.
+  vi/taipei-city-api-management-platform:
+    description: TPIsoftware xây dựng nền tảng quản lý API cho Chính phủ Thành phố Đài Bắc, cải thiện giao diện dữ liệu giữa các hệ thống ứng dụng và thúc đẩy dữ liệu mở.
+  vi/taipei-city-e-receipt-cloud-platform:
+    description: Hỗ trợ Chính phủ Thành phố Đài Bắc áp dụng hóa đơn điện tử liên ngành, nhập nhiều hóa đơn qua API và truy vấn đa chiều, mang lại dịch vụ thân thiện, hiệu quả.
+  vi/taipei-city-e-services-online:
+    seoTitle: "Đài Bắc: Dịch vụ điện tử trực tuyến"
+    description: Hỗ trợ nâng cấp Nền tảng dịch vụ của Chính phủ Thành phố Đài Bắc, tích hợp MyData để đơn giản hóa thủ tục bằng ủy quyền một lần và kết hợp ứng dụng TaipeiPASS.
+  vi/taishin-cash-management-banking-system:
+    seoTitle: "Ngân hàng Taishin: Hệ thống quản lý tiền mặt"
+    description: TPIsoftware hỗ trợ Ngân hàng Taishin xây dựng hệ thống quản lý tiền mặt trực tuyến ổn định, an toàn, giúp doanh nghiệp vừa và nhỏ chuyển lương, thu, chi.
+  vi/taishin-cash-sales-api-management-platform:
+    seoTitle: "Ngân hàng Taishin: Quản Lý API Bán Hàng Tiền Mặt"
+    description: Nền tảng quản lý API với digiRunner cho Ngân hàng Taishin tích hợp thu và thanh toán đa kênh, đạt giải Global Finance "The Innovators 2020 Cash Management".
+  vi/taishin-datamart-system:
+    description: Hỗ trợ Ngân hàng Taishin phát triển hệ thống DataMart chuyển lương và nộp tiền, tích hợp hệ thống báo cáo Informatica cho hệ thống tài chính số chất lượng cao.
+  vi/taishin-mobile-wallet-app:
+    description: TPIsoftware hỗ trợ Ngân hàng Taishin phát triển ứng dụng Ví Di Động LetsPay, kết hợp tài khoản của ngân hàng để chuyển tiền, thanh toán dễ dàng qua điện thoại.
+  vi/taishin-richart-digital-banking-system:
+    description: TPIsoftware hỗ trợ Ngân hàng Taishin xây dựng hệ thống ngân hàng số Richart, tạo thế hệ Ngân hàng 3.0 mới với nền tảng tài chính số thông minh, nhiều ưu đãi.
+  vi/taishin-sales-force-automation-system:
+    seoTitle: "Ngân hàng Taishin: Tự động hóa lực lượng bán hàng"
+    description: Hỗ trợ Ngân hàng Taishin xây dựng hệ thống tự động hóa lực lượng bán hàng (SFA) gồm hệ thống bán chéo, điều phối danh sách khách hàng và tích hợp CTI.
+  vi/taiwan-life-e-insurance-system:
+    description: Xây dựng cho Bảo Hiểm Đài Loan hệ thống bảo hiểm điện tử với danh sách bán hàng được chứng nhận từ cộng tác viên, đại lý, cùng 12 trạng thái để theo dõi hồ sơ.
+  vi/taiwan-mobile-sms-notification-system:
+    description: TPIsoftware hỗ trợ Taiwan Mobile xây dựng hệ thống thông báo SMS tích hợp vào back-end, dễ dàng kiểm soát việc gửi SMS; kết quả dự án được khách hàng công nhận.
+  vi/taiwan-mobile-value-added-service-and-mobile-customer:
+    seoTitle: "Taiwan Mobile: Dịch vụ giá trị gia tăng và di động"
+    description: TPIsoftware giúp Taiwan Mobile xây dựng hệ thống dịch vụ giá trị gia tăng VTXM, liệt kê hơn 50.000 sản phẩm mỗi năm với giao diện quản lý dữ liệu dễ dùng.
+  vi/tokio-marine-newa-online-insurance-policy-app:
+    seoTitle: "Tokio Marine Newa: Ứng dụng bảo hiểm trực tuyến"
+    description: Xây dựng ứng dụng bảo hiểm trực tuyến bằng Xamarin cho Bảo hiểm Toki Marine Newa, đồng bộ và theo dõi hồ sơ cả khi ngoại tuyến, số hóa quy trình bảo hiểm.
+  vi/union-insurance-online-insurance-system:
+    description: Cùng Công ty bảo hiểm Union triển khai hệ thống bảo hiểm online với mã OTP, áp dụng mô hình thương mại điện tử, nâng cấp giao diện và hình ảnh thương hiệu.
+  vi/youbike-ai-customer-service:
+    description: Dịch vụ khách hàng AI của YouBike dùng SysTalk.Chat xây dựng hệ thống hỏi đáp hoàn chỉnh, hỗ trợ trực tuyến 24h về địa điểm, tình trạng cho thuê và nhiều hơn.

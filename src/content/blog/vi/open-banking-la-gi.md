@@ -1,6 +1,6 @@
 ---
 title: Open Banking Là Gì? Kỷ Nguyên Ngân Hàng Mở & Giải Pháp API
-description: Open banking là gì? Khám phá xu hướng ngân hàng mở 2026, chia sẻ dữ liệu tài chính qua API. Tìm hiểu giải pháp bảo mật digiRunner từ TPIsoftware Việt Nam. (159 ký tự)
+description: Open banking là gì? Khám phá xu hướng ngân hàng mở 2026, chia sẻ dữ liệu tài chính qua API và giải pháp bảo mật digiRunner từ TPIsoftware Việt Nam.
 translationKey: open-banking-la-gi
 category: enterprise-management
 tags: [open-banking]
@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f19f6a5-0e3c-6f2a-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/open-banking-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/enterprise-management/open-banking-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-08-24
+seoTitle: Open Banking Là Gì? Ngân Hàng Mở & Giải Pháp API
 ---
 
 Trong suốt hàng trăm năm qua, dữ liệu tài chính của khách hàng (lịch sử giao dịch, số dư, thói quen chi tiêu) được các ngân hàng truyền thống "khóa chặt" trong những cỗ máy chủ khổng lồ. Tuy nhiên, bước vào năm 2026, cùng với sự dịch chuyển hành vi của người tiêu dùng và các đạo luật chia sẻ dữ liệu mới, những "pháo đài" này đang buộc phải hạ cầu kéo xuống. Một kỷ nguyên mới đã chính thức bắt đầu mang tên **Open Banking**.

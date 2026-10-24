@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f121ca6-3d46-6e67-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/co-che-cbam-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/green-transformation/co-che-cbam-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-17
+seoTitle: Cơ Chế CBAM 2026 Và Giải Pháp GreenSwift
 ---
 
 Các doanh nghiệp xuất khẩu sắt thép, nhôm và xi măng của Việt Nam đang phải đối mặt với những email thúc ép từ đối tác Châu Âu: *"Hãy cung cấp ngay dữ liệu phát thải carbon trên từng đơn vị sản phẩm của lô hàng này, nếu không chúng tôi sẽ phải ngừng nhập khẩu"*.

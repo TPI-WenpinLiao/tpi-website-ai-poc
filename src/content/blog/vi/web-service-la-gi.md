@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f6943-5f2c-6ccf-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/web-service-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/web-service-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-15
+seoTitle: Web Service Là Gì? Cẩm Nang Kết Nối Hệ Thống
 ---
 
 Trong một doanh nghiệp hiện đại năm 2026, hiếm có phần mềm nào hoạt động đơn độc. Ứng dụng Mobile Banking cần lấy số dư từ Core Banking. Website thương mại điện tử cần gửi đơn hàng sang phần mềm Kho vận. Hệ thống CRM cần đồng bộ thông tin khách hàng với Email Marketing.

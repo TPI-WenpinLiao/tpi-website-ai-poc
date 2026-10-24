@@ -1,9 +1,9 @@
 ---
 title: Chia-Mao Yeh
-description: "Chia-Mao Yeh (Part-time Lecturer, Chia Nan University of Pharmacy ＆ Science) is a member of TPIsoftware's ESG consulting team. Expertise: AI, deep learning."
+description: "Chia-Mao Yeh (Part-time Lecturer, Chia Nan University of Pharmacy & Science) is a member of TPIsoftware's ESG consulting team. Expertise: AI, deep learning."
 translationKey: ye-jiamao
 jobTitle: Part-time Lecturer
-affiliation: Chia Nan University of Pharmacy ＆ Science
+affiliation: Chia Nan University of Pharmacy & Science
 order: 6
 experience:
   - GHG inventory consultant at Sustainability IUR Collaboration Platform

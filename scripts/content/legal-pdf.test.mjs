@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { blocks, markdown, plain, textLines } from './legal-pdf.mjs';
+import { blocks, english, englishMarkdown, markdown, plain, textLines } from './legal-pdf.mjs';
 
 const convert = (text, options) => markdown(blocks(textLines(text).lines, options));
 
@@ -57,4 +57,34 @@ test('without numbered headings, "1. …" lines form an ordered list', () => {
 test('plain() strips only the Markdown added by the conversion', () => {
   const md = convert('標題\n## 不是標題 a_b\n l 項目\n');
   assert.equal(plain(md), '##不是標題a_b項目');
+});
+
+test('english() keeps the English half: paragraphs, translations, bilingual titles and coded items', () => {
+  const text = [
+    '標題',
+    '1. 個人資料蒐集之目的',
+    'Purposes of Personal Data Collection',
+    '昕力資訊重視您的隱私。',
+    '',
+    'TPIsoftware values your privacy.',
+    ' l ○一三 公共關係 Public Relations',
+    ' l Ｃ○一一 個人描述 Personal description',
+    ' l 查詢您的個人資料。',
+    '   Inquire about your personal data.',
+    ' l 利用對象：昕力資訊及其關係企業（包含 TPIsoftware 株式會社）。',
+    '   Target Entities of Use: TPIsoftware and its affiliates (including TPIsoftware 株式會社).',
+    '',
+  ].join('\n');
+  const en = english(blocks(textLines(text).lines));
+  assert.deepEqual(en.map((b) => [b.kind, b.text]), [
+    ['h2', '1. Purposes of Personal Data Collection'],
+    ['p', 'TPIsoftware values your privacy.'],
+    ['item', '013 Public Relations'],
+    ['item', 'C011 Personal description'],
+    ['item', 'Inquire about your personal data.'],
+    ['item', 'Target Entities of Use: TPIsoftware and its affiliates (including TPIsoftware 株式會社).'],
+  ]);
+  // The number and code are not part of what is checked against the PDF
+  assert.deepEqual(en.slice(0, 3).map((b) => b.source), ['Purposes of Personal Data Collection', 'TPIsoftware values your privacy.', 'Public Relations']);
+  assert.match(englishMarkdown(en), /TPIsoftware <span lang="ja">株式會社<\/span>\)\.$/m);
 });

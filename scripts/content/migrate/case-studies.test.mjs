@@ -97,3 +97,15 @@ test('case-studies.yaml parses', () => {
   const { clients } = parseOverrides(readFileSync(OVERRIDES, 'utf8'));
   assert.ok(Object.keys(clients).length > 0);
 });
+
+test('cardDescription replaces the card text for the body, offerings and description', () => {
+  // The parsed card's description names digiRunner, which would add an offering
+  const [card] = parseCards(CHUNK);
+  const client = { slug: 'cathay-life', name: { 'zh-TW': '國泰人壽' } };
+  const { data, body, notes } = caseEntry({ locale: 'zh-TW', slug: 'x', card, order: 1, client, logoFile: 'logo.png', override: { cardDescription: '協助國泰人壽建置日誌平台。' }, offeringExists: () => true });
+  assert.equal(body, '協助國泰人壽建置日誌平台。');
+  assert.equal(data.description, '協助國泰人壽建置日誌平台。');
+  assert.equal(data.offerings, undefined);
+  assert.equal('cardDescription' in data, false);
+  assert.ok(notes.includes('card description replaced (cardDescription)'));
+});

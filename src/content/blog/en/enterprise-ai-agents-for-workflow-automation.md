@@ -1,6 +1,6 @@
 ---
 title: Enterprise AI Agents for Digital Workforce and Business Automation
-description: Learn how enterprise AI agents support digital workforce operations, AI-powered workflow automation, and knowledge management. Explore how AI agents assist with document processing, customer service and enterprise knowledge while employees retain oversight, with practical examples from SysTalk.ai.
+description: How enterprise AI agents support digital workforce operations, AI-powered workflow automation and knowledge management, with examples from SysTalk.ai.
 translationKey: enterprise-ai-agents-for-workflow-automation
 category: ai
 tags: [ai-application]
@@ -10,8 +10,9 @@ authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1a1c72-78b0-67c9-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/en/enterprise-ai-agents-for-workflow-automation/cover.webp
 sourceUrl: https://www.tpisoftware.com/en/blog/artifintell/enterprise-ai-agents-for-workflow-automation
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-02
+seoTitle: Enterprise AI Agents for Business Automation
 ---
 
 Enterprise AI agents are AI-powered systems that can understand information, access enterprise knowledge and perform defined tasks across business workflows. Unlike standalone generative AI tools that mainly respond to prompts, enterprise AI agents can support ongoing operations such as document processing, customer service, knowledge retrieval and workflow execution.

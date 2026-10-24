@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f695f-11e2-6f82-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/ip-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/ip-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-19
+seoTitle: Địa Chỉ IP Là Gì? IPv4, IPv6, IP Tĩnh & IP Động
 ---
 
 Chào bạn, đây là mảnh ghép cuối cùng nhưng quan trọng nhất trong chuỗi kiến thức về mạng máy tính (sau HTTP, DNS, Server...).

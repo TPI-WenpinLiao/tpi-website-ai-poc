@@ -1,6 +1,6 @@
 ---
 title: InsureRing Quy tắc bảo hiểm xác thực tự động
-description: Một hình thức xác thực tự động mới để ra mắt sản phẩm bảo hiểm linh hoạt, điều chỉnh quy tắc bảo lãnh và tuân thủ quy định với khả năng mở rộng nâng cao cho các nền tảng bảo hiểm khác nhau, giúp các công ty bảo hiểm đáp ứng với những thay đổi nhanh chóng của thị trường và tối ưu hóa hiệu quả quản lý sản phẩm bảo hiểm.
+description: Xác thực tự động giúp ra mắt sản phẩm bảo hiểm linh hoạt, điều chỉnh quy tắc bảo lãnh và tuân thủ quy định, đáp ứng những thay đổi nhanh chóng của thị trường.
 translationKey: insurering
 node: insurering
 kind: solution
@@ -21,5 +21,5 @@ useCases:
     body: Xây dựng hệ thống chính thức và hình thức thanh toán điện tử của bảo hiểm Shin Kong, giúp giảm 50% chi phí và đơn giản hóa 60% thời gian, sản phẩm được ra mắt với tích hợp tối ưu hóa nhóm dữ liệu trong bảo hiểm.
 cta: contact
 sourceUrl: https://www.tpisoftware.vn/solutions/insurering
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---

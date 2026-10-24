@@ -1,6 +1,6 @@
 ---
 title: Giải pháp không gian địa lý GIS
-description: Các doanh nghiệp có thể tận dụng các công cụ phân tích dữ liệu không gian GIS và thông tin vị trí để trực quan hóa thông tin địa lý nhằm phân tích tốt hơn. TPIsoftware có công nghệ và công cụ dữ liệu đặc biệt để nâng cao khả năng ra quyết định và dự báo kinh doanh cho các dịch vụ tài chính một cách chính xác, lập kế hoạch môi trường, thiết bị và phân bổ nguồn tài nguyên.
+description: Doanh nghiệp tận dụng công cụ phân tích dữ liệu không gian GIS và thông tin vị trí để trực quan hóa thông tin địa lý, hỗ trợ ra quyết định và dự báo kinh doanh.
 translationKey: gis
 node: gis
 kind: solution
@@ -23,5 +23,5 @@ useCases:
     body: Quản lý tòa nhà và giám sát thông minh áp dụng công nghệ GIS và IoT để tuân thủ các yêu cầu của ngành tài chính. Quản lý không gian hoặc đối tượng thiết bị có thể được phân chia, tích hợp linh hoạt để cho phép quản lý tài sản một cách đáng tin cậy và an toàn hơn và đạt được mục tiêu của tòa nhà thông minh.
 cta: contact
 sourceUrl: https://www.tpisoftware.vn/solutions/gis
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---
