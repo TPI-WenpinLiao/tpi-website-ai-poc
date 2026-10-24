@@ -5,6 +5,7 @@ description: An API management platform for Taishin Bank built with digiRunner, 
 translationKey: taishin-cash-sales-api-management-platform
 client: { name: Taishin Bank, disclosed: true, logo: ../../../assets/case-study/en/taishin-cash-sales-api-management-platform/logo.webp }
 industry: finance
+offerings: [en/digirunner]
 order: 1
 sourceUrl: https://www.tpisoftware.com/en/success-story
 migratedAt: 2026-10-24

@@ -25,7 +25,7 @@ const pages: Record<string, string> = {
   download: 'Product document downloads from TPIsoftware.',
 };
 
-export const en: Strings = {
+export const strings: Strings = {
   skipToMain: 'Skip to main content',
   mainNav: 'Main navigation',
   mobileNavSuffix: ' (mobile)',
@@ -33,6 +33,7 @@ export const en: Strings = {
   language: 'Language',
   languagePrefix: 'Language: ',
   externalSite: ' (external site)',
+  externalLink: ' (external website)',
   homeLogoAlt: 'TPIsoftware (home)',
   footerNav: 'Footer navigation',
   legal: 'Legal',
@@ -42,7 +43,6 @@ export const en: Strings = {
   toc: 'On this page',
   relatedPosts: 'Related articles',
   otherIndustry: 'Other industries',
-  separator: ' | ',
   newsTypes: { press: 'News', product: 'Products', newsletter: 'Newsletter' },
   hub: {
     highlights: 'Highlights',
@@ -119,13 +119,6 @@ export const en: Strings = {
     unsubscribeSubmit: 'Unsubscribe',
   },
   pages,
-  home: {
-    families: 'Product families',
-    familyLink: (family: string) => `See the ${family} product family`,
-    orientFeatures: 'OrientAI features',
-    allCases: (name: string) => `All ${name}`,
-    latest: 'Latest articles and news',
-  },
   offering: {
     demo: 'Book a demo',
     seeFeatures: 'See features',

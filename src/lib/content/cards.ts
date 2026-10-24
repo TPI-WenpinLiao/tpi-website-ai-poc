@@ -1,7 +1,7 @@
 // Card data for entries listed on other pages (hub, article, case-study, listing templates), so
 // every page shows a blog post, a news item or a case study the same way.
 import type { CollectionEntry } from 'astro:content';
-import { node } from '../ia/navigation';
+import { localNode } from '../ia/navigation';
 import type { Locale } from '../i18n/locales';
 import { strings } from '../../data/strings';
 import { entryLocale } from './entries';
@@ -19,11 +19,11 @@ export interface EntryCard {
 }
 
 // Blog category display name: the title of its blog-<category> listing node
-export const categoryTitle = (category: string, locale: Locale) => node(`blog-${category}`, locale).title;
+export const categoryTitle = (category: string, locale: Locale) => localNode(`blog-${category}`, locale).title;
 
 // Industry display name: the industry hub's title; `other` has none
 export function industryTitle(industry: CollectionEntry<'case-study'>['data']['industry'], locale: Locale) {
-  return industry === 'other' ? strings(locale).otherIndustry : node(`industry-${industry}`, locale).title;
+  return industry === 'other' ? strings(locale).otherIndustry : localNode(`industry-${industry}`, locale).title;
 }
 
 // Covers are decorative next to the title link, so alt is empty

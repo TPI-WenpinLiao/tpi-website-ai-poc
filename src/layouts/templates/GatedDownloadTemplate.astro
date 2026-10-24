@@ -17,7 +17,7 @@ import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import Button from '../../components/ui/Button.astro';
 import FormField from '../../components/ui/FormField.astro';
 import FormPanel from '../../components/ui/FormPanel.astro';
-import { breadcrumb, localeHref, node } from '../../lib/ia/navigation';
+import { breadcrumb, localeHref, localNode } from '../../lib/ia/navigation';
 import { entryLocale } from '../../lib/content/entries';
 import { whitepaperJsonLd } from '../../lib/seo/jsonld/whitepaper';
 import { canonicalUrl } from '../../lib/seo/meta';
@@ -33,8 +33,8 @@ const { data } = entry;
 const locale = entryLocale(entry.id);
 const t = strings(locale);
 const href = localeHref(locale);
-const self = node(data.node, locale);
-const offering = node(data.offeringNode, locale);
+const self = localNode(data.node, locale);
+const offering = localNode(data.offeringNode, locale);
 const offeringHref = href(offering);
 const f = t.form;
 
@@ -62,7 +62,7 @@ const jsonLd = whitepaperJsonLd({
   jsonLd={jsonLd}
   translations={translations}
 >
-  <PageHero eyebrow={node(self.parent, locale).title} title={data.title}>
+  <PageHero eyebrow={localNode(self.parent, locale).title} title={data.title}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
   </PageHero>
 
@@ -103,7 +103,7 @@ const jsonLd = whitepaperJsonLd({
     <SectionHeading eyebrow="Related" title={t.offering.related} />
     <CardGrid cols={1}>
       <li>
-        <Card title={offering.title} href={offeringHref} eyebrow={node(offering.parent, locale).title} size="sm" />
+        <Card title={offering.title} href={offeringHref} eyebrow={localNode(offering.parent, locale).title} size="sm" />
       </li>
     </CardGrid>
   </Surface>

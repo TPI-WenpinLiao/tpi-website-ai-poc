@@ -31,7 +31,7 @@ const NODE_COLLECTIONS = ['offering', 'hub', 'page', 'whitepaper'];
 // Interface strings that are page content, not interface copy; M7-02 and M7-03 translate them
 const SKIP_STRINGS = new Set(['pages']);
 // Menu labels that are not visible text: （logo） in navigation.csv, (logo) in inventory.csv
-const HIDDEN_LABEL = /^[（(].*[)）]$/;
+const HIDDEN_LABEL = /^[（(].*[）)]$/;
 // Menu entries that end in an arrow are call-to-action links, not names
 const LINK_TEXT = /[→›»]$/;
 // page-map.csv rows whose page becomes the node's own page come before rows merged into it, so a
@@ -114,9 +114,9 @@ export function buildRows({ nodes, nav, strings, pageMap, inventory, titles }) {
   rows.push(...navLabelRows.values());
 
   for (const n of nodes) {
-    // Every node whose title shows on a page (menus, breadcrumbs, headings); group nodes have no page
-    // and asset nodes are files. Offerings and the product families under 產品總覽 carry product
-    // names; other nodes are pages
+    // Every node that shows a name: breadcrumbs, cards and page titles (src/lib/ia/navigation.ts
+    // named()). Groups and assets show none. Offerings and the product families under 產品總覽
+    // carry product names; other nodes are pages
     if (n.kind === 'group' || n.kind === 'asset') continue;
     const isProduct = n.template === 'offering' || (n.template === 'hub' && n.parent === 'products');
     const row = { id: `node:${n.id}`, category: isProduct ? 'product' : 'page', 'zh-TW': n.title, source: 'docs/ia/nodes.csv' };
@@ -243,7 +243,7 @@ async function contentTitles() {
 
 async function main() {
   const check = process.argv.includes('--check');
-  const { zhTW } = await import(pathToFileURL(STRINGS).href);
+  const { strings: zhTW } = await import(pathToFileURL(STRINGS).href);
   const titles = await contentTitles();
   const derived = buildRows({
     nodes: await readCsv('docs/ia/nodes.csv'),
@@ -259,7 +259,7 @@ async function main() {
   for (const locale of LOCALES) {
     const file = `src/data/strings/${locale}.ts`;
     const mod = await import(pathToFileURL(file).href).catch((e) => (e.code === 'ERR_MODULE_NOT_FOUND' ? undefined : Promise.reject(e)));
-    if (mod) errors.push(...stringProblems(rows, locale, flattenStrings(mod[locale])));
+    if (mod) errors.push(...stringProblems(rows, locale, flattenStrings(mod.strings)));
   }
   for (const e of errors) console.error(e);
   const stale = await emit([[GLOSSARY, toCsv(rows)]], { check, rerun: 'node scripts/i18n/glossary.mjs' });

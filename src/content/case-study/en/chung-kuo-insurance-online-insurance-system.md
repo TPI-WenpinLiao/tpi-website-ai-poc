@@ -5,6 +5,7 @@ description: An online insurance system for Chung Kuo Insurance with hierarchica
 translationKey: chung-kuo-insurance-online-insurance-system
 client: { name: Chung Kuo Insurance, disclosed: true, logo: ../../../assets/case-study/en/chung-kuo-insurance-online-insurance-system/logo.webp }
 industry: finance
+offerings: [en/insurebrick]
 order: 43
 sourceUrl: https://www.tpisoftware.com/en/success-story
 migratedAt: 2026-10-24

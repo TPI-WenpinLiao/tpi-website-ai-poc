@@ -1,6 +1,8 @@
 // metaProblems in scripts/seo/meta.mjs and sitemapXml in src/lib/seo/sitemap.ts.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { OG_LOCALES } from '../../src/lib/i18n/locales.ts';
+import { localeFromPath } from '../../src/lib/i18n/paths.ts';
 import { sitemapXml } from '../../src/lib/seo/sitemap.ts';
 import { metaProblems, readSitemap } from './meta.mjs';
 
@@ -14,7 +16,8 @@ function page(path, { title = `T ${path}`, description = `D ${path}`, alternates
     description: `<meta name="description" content="${description}">`,
     canonical: `<link rel="canonical" href="${url(path)}">`,
     'og:url': `<meta property="og:url" content="${url(path)}">`,
-    og: ['type', 'title', 'description', 'image', 'locale', 'site_name'].map((p) => `<meta property="og:${p}" content="x">`).join(''),
+    og: ['type', 'title', 'description', 'image', 'site_name'].map((p) => `<meta property="og:${p}" content="x">`).join(''),
+    'og:locale': `<meta property="og:locale" content="${OG_LOCALES[localeFromPath(path)]}">`,
     twitter: ['card', 'title', 'description'].map((n) => `<meta name="twitter:${n}" content="x">`).join(''),
     hreflang: alternates.map(([lang, p]) => `<link rel="alternate" hreflang="${lang}" href="${url(p)}">`).join(''),
     jsonld: '<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList"}]}</script>',
@@ -52,6 +55,11 @@ test('a missing canonical, title or OG tag is reported', () => {
   assert.ok(problems.includes('/: expected 1 canonical, found 0'));
   assert.ok(problems.includes('/: expected 1 non-empty title, found 0'));
   assert.ok(problems.some((p) => p.includes('og:image')));
+});
+
+test('an og:locale that does not match the URL locale is reported', () => {
+  const wrong = page('/en', { alternates: self('/en', 'en') }).replace('content="en_US"', 'content="en"');
+  assert.deepEqual(metaProblems(new Map([['/en', wrong]]), site(['/en'])), ['/en: og:locale en, expected en_US']);
 });
 
 test('a canonical pointing elsewhere and duplicate titles are reported', () => {

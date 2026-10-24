@@ -4,10 +4,6 @@
 
 // Listing, utility and contact page descriptions, keyed by nodes.csv id (content-model.md「不建 collection
 // 的模板」). Interim wording that states no facts; the content owner replaces it before launch.
-// A space between Chinese and an adjoining Latin letter, on that side only (「看 AI 產品家族」,
-// 「看 ESG 與能源產品家族」)
-const spaced = (word: string) => `${/^[A-Za-z]/.test(word) ? ' ' : ''}${word}${/[A-Za-z]$/.test(word) ? ' ' : ''}`;
-
 const pages: Record<string, string> = {
   blog: '昕力資訊部落格：AI、數位轉型、企業管理、ESG 與應用情境的文章。',
   'blog-ai': '昕力資訊部落格的 AI 文章。',
@@ -29,7 +25,7 @@ const pages: Record<string, string> = {
   download: '昕力資訊產品文件下載。',
 };
 
-export const zhTW = {
+export const strings = {
   skipToMain: '跳到主要內容',
   mainNav: '主選單',
   mobileNavSuffix: '（行動版）',
@@ -37,6 +33,8 @@ export const zhTW = {
   language: '語言',
   languagePrefix: '語言：',
   externalSite: '（獨立網站）',
+  // Screen-reader text after a Link that leaves the site
+  externalLink: '（外部網站）',
   homeLogoAlt: 'TPIsoftware 昕力資訊（回首頁）',
   footerNav: '頁尾選單',
   legal: '法務資訊',
@@ -46,8 +44,6 @@ export const zhTW = {
   toc: '本頁目錄',
   relatedPosts: '相關文章',
   otherIndustry: '其他產業',
-  // Joins two names in one line: a person's job title and affiliation, an offering and its download page
-  separator: '｜',
   // content-model.md「news」: the current site's names
   newsTypes: { press: '新聞快報', product: '產品消息', newsletter: '電子報' },
   hub: {
@@ -88,6 +84,7 @@ export const zhTW = {
     company: '公司',
     jobTitle: '職稱',
     consent: '個資同意',
+    // Mark after the label of a required field
     required: '必填',
   },
   download: {
@@ -126,13 +123,6 @@ export const zhTW = {
     unsubscribeSubmit: '取消訂閱',
   },
   pages,
-  home: {
-    families: '產品家族',
-    familyLink: (family: string) => `看${spaced(family)}產品家族`,
-    orientFeatures: 'OrientAI 特色',
-    allCases: (name: string) => `所有${name}`,
-    latest: '最新文章與新聞',
-  },
   offering: {
     demo: '預約演示',
     seeFeatures: '看功能',
@@ -145,4 +135,4 @@ export const zhTW = {
   },
 };
 
-export type Strings = typeof zhTW;
+export type Strings = typeof strings;

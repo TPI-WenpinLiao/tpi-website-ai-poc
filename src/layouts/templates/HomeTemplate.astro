@@ -1,12 +1,11 @@
 ---
-// Home page, direction B Modular Stack (M3-04, #17; built from the M3-07 prototype), for every
-// locale with home copy (src/pages/index.astro, src/pages/en/index.astro; M7-02). Structure
+// Home page, direction B Modular Stack (M3-04, #17; built from the M3-07 prototype). Structure
 // follows the approved M3-01 home wireframe (#14).
 // The hero and the product-family chapters form the scene track: the static hero image is the LCP
 // and the complete fallback, and the 3D scene (Scene3D, ADR 0003) plays behind the chapters as
 // they scroll. Names, paths and order come from docs/ia (src/lib/ia/navigation.ts); copy comes
-// from the current site through src/data/home.ts. en and vi pages only list and link the pages
-// built in their locale (linkable()).
+// from the current site through src/data/home/<locale>.ts. src/pages/index.astro draws the zh-TW
+// home, src/pages/[locale]/index.astro the others.
 import PageLayout from '../PageLayout.astro';
 import PageHero from '../../components/ui/PageHero.astro';
 import Backdrop from '../../components/ui/Backdrop.astro';
@@ -22,75 +21,62 @@ import Reveal from '../../components/ui/Reveal.astro';
 import SceneChapter from '../../components/ui/SceneChapter.astro';
 import CardGrid from '../../components/ui/CardGrid.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
-import { children, header, linkable, node, nodeHref, type NavItem } from '../../lib/ia/navigation';
+import { children, localeHref, localizedNav, localNode, node, nodeHref, type NavItem } from '../../lib/ia/navigation';
 import { latest } from '../../lib/latest-posts';
 import { SCENE_FAMILIES } from '../../lib/scene/families';
 import { homeJsonLd } from '../../lib/seo/jsonld/home';
-import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
-import { getCollection, getEntry } from 'astro:content';
-import { builtPaths } from '../../lib/content/pages';
-import { entryLocale, isPublished } from '../../lib/content/entries';
-import { newsCard, postCard } from '../../lib/content/cards';
-import { newest } from '../../lib/content/listings';
-import { DEFAULT_LOCALE } from '../../lib/i18n/locales';
 import { siteName } from '../../lib/seo/meta';
-import { strings } from '../../data/strings';
-import { homeCopy } from '../../data/home';
+import type { Locale } from '../../lib/i18n/locales';
+import { getEntry } from 'astro:content';
+import { home } from '../../data/home';
 import image from '../../assets/design/hero-modular-stack.webp';
 import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
 import coverData from '../../assets/design/cover-data.webp';
 import coverIntegration from '../../assets/design/cover-integration.webp';
 import coverPlatform from '../../assets/design/cover-platform.webp';
 
-const locale = localeFromPath(normalizePath(Astro.url.pathname));
-const t = strings(locale);
-const { title, description, hero, familyLines, orientAi, industryLines, cases } = homeCopy(locale);
-const canLink = linkable(locale, await builtPaths());
-const href = (id: string) => nodeHref(id, locale);
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { meta, hero, familyLines, orientAi, industryLines, cases, labels } = home(locale);
+const href = localeHref(locale);
 
 // Products are the ones the header lists, in its order (navigation.csv, e.g. OrientAI first).
 // Products left out of the navigation are 待確認 whether they are still sold (nodes.csv note,
 // sitemap.md decision 2), so the home page doesn't show them either.
 const flatten = (items: NavItem[]): string[] => items.flatMap((i) => [i.key, ...flatten(i.children)]);
-const navOrder = flatten(header);
-// Card headings drop the brand in brackets: nodes.csv titles such as 「AI（SysTalk.ai）」 show as 「AI」;
-// en and vi family names are the brand alone
+const navOrder = flatten(localizedNav('header', locale));
+// Card headings drop the brand in brackets: nodes.csv titles such as 「AI（SysTalk.ai）」 show as 「AI」
 // One chapter per family, in the scene's module order
 const families = SCENE_FAMILIES.map((id) => {
-  const family = node(id, locale);
+  const family = localNode(id, locale);
   return {
     id,
     heading: family.title.replace(/（[^）]*）$/, ''),
     brand: /（([^）]*)）$/.exec(family.title)?.[1],
-    href: href(id),
+    href: nodeHref(id, locale),
     line: familyLines[id]?.text,
-    products: children(id, locale, (p) => navOrder.includes(p.id) && canLink(p))
-      .toSorted((a, b) => navOrder.indexOf(a.id) - navOrder.indexOf(b.id))
-      .map((p) => ({ ...p, href: href(p.id) })),
+    products: children(id, locale)
+      .filter((p) => navOrder.includes(p.id))
+      .toSorted((a, b) => navOrder.indexOf(a.id) - navOrder.indexOf(b.id)),
   };
 });
-const contact = node('contact', locale);
-const products = node('products', locale);
+const contact = localNode('contact', locale);
+const products = localNode('products', locale);
 
 const orient = node(orientAi.node);
-const industries = children('industries', locale, canLink).map((n) => ({ ...n, href: href(n.id), line: industryLines[n.id]?.text }));
-const services = children('services', locale, canLink).map((n) => ({ ...n, href: href(n.id) }));
-const successStories = node('success-stories', locale);
-const caseCards = cases.filter((c) => canLink(node(c.node))).map((c) => ({ ...c, href: href(c.node) }));
-// Wireframe: two blog posts and one news item. zh-TW reads them from the inventory with abstract
-// placeholder covers (src/lib/latest-posts.ts, until #101); en and vi from their collections, with
-// each entry's cover. Covers are decorative, so alt is empty.
+const industries = children('industries', locale).map((n) => ({ ...n, line: industryLines[n.id]?.text }));
+const services = children('services', locale);
+const successStories = localNode('success-stories', locale);
+const caseCards = cases.map((c) => ({ ...c, href: href(node(c.node)) }));
+// Wireframe: two blog posts and one news item. Covers are the abstract placeholders until M5
+// migrates the posts with their own images; decorative, so alt is empty.
 const COVERS = [coverData, coverIntegration, coverPlatform];
-const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
-const posts =
-  locale === DEFAULT_LOCALE
-    ? [...latest('blog', 2), ...latest('news', 1)].map((p, i) => ({ title: p.title, href: p.href, label: p.label, cover: COVERS[i % COVERS.length], date: p.published }))
-    : [
-        ...(await getCollection('blog', inLocale)).toSorted(newest).slice(0, 2).map(postCard),
-        ...(await getCollection('news', inLocale)).toSorted(newest).slice(0, 1).map(newsCard),
-      ].flatMap((c) => (c.image ? [{ title: c.title, href: c.href, label: c.eyebrow, cover: c.image.src, date: c.date }] : []));
-const blog = node('blog', locale);
-const news = node('media-center', locale);
+const posts = [...latest('blog', 2, locale), ...latest('news', 1, locale)].map((p, i) => ({ ...p, cover: COVERS[i % COVERS.length] }));
+const blog = localNode('blog', locale);
+const news = localNode('media-center', locale);
 // Structured data from the organization data file of this page's locale
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
@@ -106,19 +92,19 @@ const jsonLd = homeJsonLd({
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 ---
 
-<PageLayout title={title} titleSuffix={false} description={description} jsonLd={jsonLd}>
+<PageLayout title={meta.title} titleSuffix={false} description={meta.description} jsonLd={jsonLd}>
   <div class="track" data-scene-track>
     <PageHero eyebrow={siteName(locale)} title={hero.title.text} description={hero.description.text}>
       <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
       <Scene3D slot="backdrop" direction="modular-stack" />
       <Fragment slot="actions">
-        <Button href={href('contact')} size="lg">{contact.title}</Button>
-        <Button href={href('products')} size="lg" variant="secondary">{products.title}</Button>
+        <Button href={href(contact)} size="lg">{contact.title}</Button>
+        <Button href={href(products)} size="lg" variant="secondary">{products.title}</Button>
       </Fragment>
     </PageHero>
 
     <section aria-labelledby="families-title">
-      <h2 id="families-title" class="sr-only">{t.home.families}</h2>
+      <h2 id="families-title" class="sr-only">{labels.families}</h2>
       {
         families.map((f, i) => (
           <SceneChapter>
@@ -132,11 +118,11 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
             <ul class="items">
               {f.products.map((p) => (
                 <li class="text-phrase">
-                  <a href={p.href}>{p.title}</a>
+                  <a href={href(p)}>{p.title}</a>
                 </li>
               ))}
             </ul>
-            <Link href={f.href}>{t.home.familyLink(f.heading)}</Link>
+            <Link href={f.href}>{labels.familyLink(f.heading)}</Link>
           </SceneChapter>
         ))
       }
@@ -147,7 +133,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
     <div class="spotlight">
       <div class="spotlight-copy">
         <SectionHeading eyebrow={orientAi.eyebrow.text} title={orientAi.title.text} />
-        <ul class="features" aria-label={t.home.orientFeatures}>
+        <ul class="features" aria-label={labels.orientFeatures}>
           {
             orientAi.features.map((f) => (
               <li>
@@ -156,7 +142,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
             ))
           }
         </ul>
-        <Button href={href(orient.id)} size="lg">{orientAi.action.text}</Button>
+        <Button href={href(orient)} size="lg">{orientAi.action.text}</Button>
       </div>
       <LayerStack layers={5} />
     </div>
@@ -166,13 +152,13 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   <Surface tone="dark">
     <div class="blocks">
       <div>
-        <SectionHeading eyebrow="Industries" title={node('industries', locale).title} />
+        <SectionHeading eyebrow="Industries" title={localNode('industries', locale).title} />
         <CardGrid>
           {
             industries.map((n, i) => (
               <li>
                 <Reveal delay={stagger(i)}>
-                  <Card title={n.title} href={n.href} description={n.line} />
+                  <Card title={n.title} href={href(n)} description={n.line} />
                 </Reveal>
               </li>
             ))
@@ -181,13 +167,13 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
       </div>
 
       <div>
-        <SectionHeading eyebrow="Services" title={node('services', locale).title} />
+        <SectionHeading eyebrow="Services" title={localNode('services', locale).title} />
         <CardGrid compact>
           {
             services.map((n, i) => (
               <li>
                 <Reveal delay={stagger(i)}>
-                  <Card title={n.title} href={n.href} size="sm" />
+                  <Card title={n.title} href={href(n)} size="sm" />
                 </Reveal>
               </li>
             ))
@@ -197,7 +183,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
       <div>
         <SectionHeading eyebrow="Success stories" title={successStories.title}>
-          <Button slot="action" href={href('success-stories')} variant="secondary">{t.home.allCases(successStories.title)}</Button>
+          <Button slot="action" href={href(successStories)} variant="secondary">{labels.all(successStories.title)}</Button>
         </SectionHeading>
         <CardGrid>
           {
@@ -215,10 +201,10 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   </Surface>
 
   <Surface tone="light">
-    <SectionHeading eyebrow="Insights" title={t.home.latest}>
+    <SectionHeading eyebrow="Insights" title={labels.latest}>
       <Fragment slot="action">
-        <Button href={href('blog')} variant="text">{blog.title}</Button>
-        <Button href={href('media-center')} variant="text">{news.title}</Button>
+        <Button href={href(blog)} variant="text">{blog.title}</Button>
+        <Button href={href(news)} variant="text">{news.title}</Button>
       </Fragment>
     </SectionHeading>
     <CardGrid>
@@ -226,7 +212,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
         posts.map((p, i) => (
           <li>
             <Reveal delay={stagger(i)}>
-              <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }} date={p.date} />
+              <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }} date={p.published} />
             </Reveal>
           </li>
         ))

@@ -5,6 +5,7 @@ description: Assisted the Dunqian International hotel group in simplifying multi
 translationKey: dunqian-robotic-process-automation-rpa
 client: { name: Dunqian International, disclosed: true, logo: ../../../assets/case-study/en/dunqian-robotic-process-automation-rpa/logo.webp }
 industry: other
+offerings: [en/systalk-rpa]
 order: 59
 sourceUrl: https://www.tpisoftware.com/en/success-story
 migratedAt: 2026-10-24

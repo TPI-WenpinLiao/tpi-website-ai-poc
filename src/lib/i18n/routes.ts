@@ -2,11 +2,18 @@
 // Pages built from content through a dynamic route aren't in staticRoutes; they pass their other
 // locale versions as `translations`. Keys only: the glob's lazy imports never run.
 import { localeLinks, routeFromPageFile, type LocaleLink } from './alternates';
-import { normalizePath } from './paths';
+import { LOCALES } from './locales';
+import { localizePath, normalizePath } from './paths';
+import { hasStrings } from '../../data/strings';
 
-export const staticRoutes: ReadonlySet<string> = new Set(
-  Object.keys(import.meta.glob('/src/pages/**/*.{astro,md,mdx}')).flatMap((file) => routeFromPageFile(file) ?? []),
-);
+// Locales with a home page: every locale with interface copy (src/pages/index.astro and
+// src/pages/[locale]/index.astro)
+export const homeLocales = LOCALES.filter(hasStrings);
+
+export const staticRoutes: ReadonlySet<string> = new Set([
+  ...Object.keys(import.meta.glob('/src/pages/**/*.{astro,md,mdx}')).flatMap((file) => routeFromPageFile(file) ?? []),
+  ...homeLocales.map((locale) => localizePath('/', locale)),
+]);
 
 // The one place a page's locale versions are decided: hreflang (Seo), the header language menu
 // and LocaleSwitcher all take this list, so they cannot disagree

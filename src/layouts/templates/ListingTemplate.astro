@@ -16,7 +16,7 @@ import FilterBar from '../../components/ui/FilterBar.astro';
 import Pagination from '../../components/ui/Pagination.astro';
 import EmptyState from '../../components/ui/EmptyState.astro';
 import Button from '../../components/ui/Button.astro';
-import { breadcrumb, children, localeHref, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumb, children, localeHref, localNode, nodeHref } from '../../lib/ia/navigation';
 import { breadcrumbList, graph } from '../../lib/seo/jsonld/shared';
 import { pagePath } from '../../lib/content/entries';
 import type { EntryCard } from '../../lib/content/cards';
@@ -36,11 +36,11 @@ interface Props {
 const { id, locale, items, featured, page, pages, translations } = Astro.props;
 const t = strings(locale);
 const href = localeHref(locale);
-const self = node(id, locale);
+const self = localNode(id, locale);
 const listPath = nodeHref(id, locale);
 
 // Filters: the blog's categories link to their pages; other listings show their types as labels
-const blog = node('blog', locale);
+const blog = localNode('blog', locale);
 const isBlog = id === 'blog' || self.parent === 'blog';
 const filters = isBlog
   ? [blog, ...children('blog', locale).filter((c) => c.template === 'listing')].map((c) => ({
@@ -58,7 +58,7 @@ const description = pageDescription(locale, id);
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
 // content-model.md gives listings no schema of their own; every non-home page has a BreadcrumbList
-const jsonLd = graph(breadcrumbList(breadcrumb(id, locale), Astro.site, locale));
+const jsonLd = graph(breadcrumbList(breadcrumb(id, locale), Astro.site));
 ---
 
 <PageLayout title={title} description={page > 1 ? `${description}${t.listing.pageSuffix(page)}` : description} jsonLd={jsonLd} translations={translations}>
@@ -92,7 +92,7 @@ const jsonLd = graph(breadcrumbList(breadcrumb(id, locale), Astro.site, locale))
       ) : (
         <EmptyState title={t.listing.empty} description={t.listing.emptyText}>
           <Button slot="action" href={nodeHref('resources', locale)} variant="secondary">
-            {node('resources', locale).title}
+            {localNode('resources', locale).title}
           </Button>
         </EmptyState>
       )

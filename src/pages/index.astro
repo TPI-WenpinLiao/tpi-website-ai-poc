@@ -1,6 +1,8 @@
 ---
-// zh-TW home page; the layout and copy are HomeTemplate's
+// The zh-TW home page (src/layouts/templates/HomeTemplate.astro); src/pages/[locale]/index.astro
+// builds the other locales' home pages
 import HomeTemplate from '../layouts/templates/HomeTemplate.astro';
+import { DEFAULT_LOCALE } from '../lib/i18n/locales';
 ---
 
-<HomeTemplate />
+<HomeTemplate locale={DEFAULT_LOCALE} />

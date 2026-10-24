@@ -5,6 +5,7 @@ description: digiLogs gives Chang Hwa Bank data collection, integration and anal
 translationKey: chang-hwa-bank-transaction-time-monitoring-track-path
 client: { name: Chang Hwa Bank, disclosed: true, logo: ../../../assets/case-study/en/chang-hwa-bank-transaction-time-monitoring-track-path/logo.webp }
 industry: finance
+offerings: [en/digilogs]
 order: 36
 sourceUrl: https://www.tpisoftware.com/en/success-story
 migratedAt: 2026-10-24

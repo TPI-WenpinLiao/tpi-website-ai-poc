@@ -38,15 +38,27 @@ test('switcher links to unbuilt pages or with the wrong lang fail', () => {
   ]);
 });
 
-test('site links on an en page must stay under /en, except language links and external sub-sites', () => {
+test('site links on an en page must stay under /en where /en has the page, except language links and external sub-sites', () => {
   const body = '<a href="/en/about">ok</a><a href="/about">bad</a><a href="/" hreflang="zh-TW">lang</a><a href="/tpu">tpu</a><a href="/en#x">ok</a>';
-  const pages = new Map([['/en', page('en', body)]]);
-  assert.deepEqual(routeProblems(pages, new Set(['/tpu'])), ['/en: links to /about, outside its locale en']);
+  const pages = new Map([['/en', page('en', body)], ['/en/about', page('en')], ['/about', page('zh-TW')]]);
+  assert.deepEqual(routeProblems(pages, new Set(['/tpu'])), ['/en: links to /about, outside its locale en, which has the page']);
 });
 
-test('links to downloadable files are not locale pages', () => {
-  const body = '<a href="/upload/guide.pdf">pdf</a><a href="/products/x.html">page</a>';
-  assert.deepEqual(routeProblems(new Map([['/en', page('en', body)]])), ['/en: links to /products/x.html, outside its locale en']);
+test('an untranslated page is linked in zh-TW; an en or vi link to a page that was not built fails', () => {
+  const body = '<a href="/privacy">fallback</a><a href="/vi/privacy">missing</a><a href="/industries">zh-TW page not built yet</a>';
+  const pages = new Map([['/vi', page('vi', body)], ['/privacy', page('zh-TW')]]);
+  assert.deepEqual(routeProblems(pages), ['/vi: links to /vi/privacy, which was not built']);
+});
+
+test('file links are not locale pages but must exist in dist', () => {
+  const body = '<a href="/pdf/guide%20v1.pdf">ok</a><a href="/pdf/gone.pdf">missing</a>';
+  const pages = new Map([['/en/download/x', page('en', body)]]);
+  assert.deepEqual(routeProblems(pages, new Set(), new Set(['/pdf/guide v1.pdf'])), ['/en/download/x: links to the file /pdf/gone.pdf, which is not in dist']);
+});
+
+test('external sub-sites come from nodes.csv kind external', () => {
+  const csv = 'id,parent,title,template,kind,path,note\nhome,,首頁,home,page,/,\ntpu,home,昕力大學,,external,/tpu,\n';
+  assert.deepEqual([...externalPaths(csv)], ['/tpu']);
 });
 
 test('Chinese text on an en or vi page fails, except inside a zh-TW lang element', () => {
@@ -61,9 +73,4 @@ test('Chinese text on an en or vi page fails, except inside a zh-TW lang element
     '/vi: Chinese span title="a｜b"',
   ]);
   assert.deepEqual(routeProblems(new Map([['/', html.replace('lang="vi"', 'lang="zh-TW"')]])), []);
-});
-
-test('external sub-sites come from nodes.csv kind external', () => {
-  const csv = 'id,parent,title,template,kind,path,note\nhome,,首頁,home,page,/,\ntpu,home,昕力大學,,external,/tpu,\n';
-  assert.deepEqual([...externalPaths(csv)], ['/tpu']);
 });

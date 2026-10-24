@@ -20,7 +20,7 @@ const org = {
     { id: 'singapore', name: '新加坡', address: 'Singapore', country: 'SG' },
   ],
 };
-const node = (id, path) => ({ id, parent: '', title: id, template: '', kind: '', path, note: '' });
+const node = (id, path) => ({ id, parent: '', title: id, template: '', kind: '', path, note: '', href: path });
 const ctx = (path) => ({ site, url: new URL(path, site).href, inLanguage: 'zh-TW', org, trail: [node('home', '/'), node('leaf', path)] });
 const types = (doc) => doc['@graph'].map((n) => n['@type']);
 const publisher = { '@type': 'Organization', '@id': 'https://example.com/#organization', name: '昕力資訊', url: 'https://example.com/' };
@@ -36,17 +36,17 @@ test('every non-home page ends with a BreadcrumbList of absolute URLs from home'
   });
 });
 
-test('BreadcrumbList items of an en page are the en pages', () => {
+test('BreadcrumbList items link where the trail links: the en pages, or zh-TW for an untranslated one', () => {
   const doc = pageJsonLd({
     ...ctx('/en/about'),
     inLanguage: 'en',
-    trail: [node('home', '/'), node('leaf', '/about')],
+    trail: [{ ...node('home', '/'), href: '/en' }, { ...node('legal', '/legal'), href: '/legal' }, { ...node('leaf', '/about'), href: '/en/about' }],
     page: { title: 'About', description: 'd', node: 'about' },
     logoUrl: 'https://example.com/logo.png',
   });
   assert.deepEqual(
     doc['@graph'].at(-1).itemListElement.map((i) => i.item),
-    ['https://example.com/en', 'https://example.com/en/about'],
+    ['https://example.com/en', 'https://example.com/legal', 'https://example.com/en/about'],
   );
 });
 

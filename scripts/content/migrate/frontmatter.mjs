@@ -15,8 +15,8 @@ export const NEWS_TYPES = { 1: 'press', 3: 'product', 7: 'newsletter', 4: 'press
 // Same date as NEWS_CUTOFF in scripts/inventory/audit.mjs; change both together
 export const NEWS_REVIEW_BEFORE = '2026-01-01';
 
-// <title> is pageTitle(seoTitle ?? title) (src/lib/seo/meta.ts) and html-validate's long-title rule
-// allows 70 characters
+// <title> is pageTitle(seoTitle ?? title, locale) from src/lib/seo/meta.ts, and html-validate's
+// long-title rule allows 70 characters
 export const TITLE_MAX = 70;
 
 // seo-checklist: zh-TW about 60–80 full-width characters, en 120–160 characters (vi follows en)

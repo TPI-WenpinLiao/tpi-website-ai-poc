@@ -25,7 +25,7 @@ node:digirunner,product,digiRunner API 管理平台,digiRunner,digiRunner,confir
 node:digirunner-cloud,product,digiRunner on Cloud,digiRunner on Cloud,digiRunner on Cloud,confirmed,https://www.tpisoftware.vn/products/digirunner-cloud,現站 vi 寫法：Nền tảng digiRunner trên Cloud
 node:digilogs,product,digiLogs 集中化日誌管理平台,digiLogs,digiLogs,confirmed,https://www.tpisoftware.com/en/digilogs-logs-management https://www.tpisoftware.com/vn/digilogs-logs-management,現站 en 寫法：Centralized Log Management、Log Management；現站 vi 寫法：Quản lý Log
 node:digilogs-iso27001,product,ISO27001 日誌存錄,ISO 27001 Log Retention,Tuân thủ ISO 27001,to-confirm,https://www.tpisoftware.com/vn/products/digilogs/iso27001logging,現站 en 頁面 title「ISO 27001 Log Retention - digiLogs」（M7-02）
-node:digilogs-detection,product,digiLogs 日誌分析,,,to-confirm,docs/ia/nodes.csv,
+node:digilogs-detection,product,digiLogs 日誌分析,digiLogs Log Analysis,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）；現站 en 沒有這一頁，與 node:digilogs 同名時選單分不出來，所以加描述
 node:digimars,product,digiMars 大數據管理平台,digiMars,digiMars,confirmed,https://www.tpisoftware.com/en/products/digimars https://www.tpisoftware.com/vn/products/digimars,現站 en 寫法：Big Data Management；現站 vi 寫法：Quản lý Big Data
 node:digiflexis,product,digiFlexis 企業流程管理平台,digiFlexis,digiFlexis,confirmed,https://www.tpisoftware.com/en/products/digiflexis https://www.tpisoftware.com/vn/products/digiflexis,現站 en 寫法：Business Process Management Platform
 node:digicare,product,digiCare 智慧醫療服務,digiCare,digiCare,confirmed,docs/ia/nodes.csv,
@@ -45,9 +45,9 @@ node:gis,product,GIS 空間數據解決方案,GIS Geospatial Solution,Giải ph�
 node:industry-manufacturing,page,製造業,Manufacturing,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）
 node:services,page,服務總覽,Services,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）；現站 en 的服務在 Product & Services 底下的 Services
 node:aiso,product,AISO 主權 AI,AISO,AISO,confirmed,src/content/offering/en/aiso.md https://www.tpisoftware.com/en/aiso src/content/offering/vi/aiso.md https://www.tpisoftware.vn/aiso,現站 en 寫法：AISO Sovereign AI Solutions；現站 vi 寫法：AISO Giải pháp AI Tự chủ
-node:outsourcing,product,委外服務,,Dịch vụ gia công phần mềm ngành IT,to-confirm,https://www.tpisoftware.com/vn/outsourcing,
+node:outsourcing,product,委外服務,IT Outsourcing,Dịch vụ gia công phần mềm ngành IT,to-confirm,https://www.tpisoftware.com/vn/outsourcing,現站 en /en/outsourcing 的 title（M7-02）
 node:cloudservice,product,雲端整合服務,Cloud Integration Services,Dịch Vụ Cloud Tích Hợp,to-confirm,https://www.tpisoftware.com/en/cloudservice https://www.tpisoftware.com/vn/cloudservice,
-node:chatgpt-enterprise,product,ChatGPT 企業服務,,,to-confirm,docs/ia/nodes.csv,
+node:chatgpt-enterprise,product,ChatGPT 企業服務,ChatGPT Enterprise Services,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）；現站 en 沒有這一頁；ChatGPT 是 OpenAI 的商標
 node:uiux,product,UI/UX 數位產品設計,UX/UI Design Solution,Giải pháp thiết kế UX/UI,to-confirm,src/content/offering/en/uiux.md src/content/offering/vi/uiux.md https://www.tpisoftware.com/vn/solutions/uiux,現站 vi 其他寫法：Dịch vụ UI/UX chuyên nghiệp
 node:esg-advisory,product,ESG 永續發展與顧問服務,Sustainability and ESG Strategic Advisory,Tư vấn Phát triển Bền vững và Chiến lược ESG,to-confirm,src/content/offering/en/esg-advisory.md https://www.tpisoftware.com/en/esg-advisory src/content/offering/vi/esg-advisory.md https://www.tpisoftware.com/vn/esg-advisory,"現站 en 其他寫法：ESG Consulting Services；現站 vi 其他寫法：Dịch vụ tư vấn Môi trường, Xã hội và Quản trị"
 node:esg-advisor,page,ESG 顧問個人頁,ESG Advisor,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）
@@ -61,22 +61,22 @@ node:blog-enterprise-management,page,企業管理,Enterprise Management,,draft,d
 node:blog-esg,page,ESG 與綠色轉型,ESG & Green Transformation,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）
 node:blog-use-cases,page,應用情境,Use Cases,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）
 node:blog-post,page,blog 文章,Blog Post,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）
-node:whitepaper-digirunner,page,digiRunner 白皮書,,Sách Trắng,to-confirm,https://www.tpisoftware.com/vn/whitepaper/api-strategies,
-node:whitepaper-digilogs,page,digiLogs 白皮書,,,to-confirm,docs/ia/nodes.csv,
-node:whitepaper-greenswift,page,GreenSwift 碳盤指南,,,to-confirm,docs/ia/nodes.csv,
-node:whitepaper-systalk-ai,page,SysTalk.ai AI Playbook,,,to-confirm,docs/ia/nodes.csv,
+node:whitepaper-digirunner,page,digiRunner 白皮書,digiRunner White Paper,Sách Trắng,to-confirm,https://www.tpisoftware.com/vn/whitepaper/api-strategies,現站 en /en/whitepaper/api-strategies 的 h1（M7-02）
+node:whitepaper-digilogs,page,digiLogs 白皮書,digiLogs White Paper,,draft,docs/ia/nodes.csv,現站 en /en/whitepaper/digiLogs 的 h1（M7-02）
+node:whitepaper-greenswift,page,GreenSwift 碳盤指南,GreenSwift Carbon Inventory Guide,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）；現站 en 沒有這份文件
+node:whitepaper-systalk-ai,page,SysTalk.ai AI Playbook,SysTalk.ai AI Playbook,,draft,docs/ia/nodes.csv,與 zh-TW 名稱相同（M7-02）
 node:events,page,活動,Events,Sự Kiện,to-confirm,https://www.tpisoftware.com/en/events https://www.tpisoftware.com/vn/events,
-node:tpu,page,昕力大學,,,to-confirm,docs/ia/nodes.csv,
+node:tpu,page,昕力大學,TPIsoftware University,,draft,docs/ia/nodes.csv,子站 /tpu 自己的 title；現站 en 沒有連到這個子站（M7-02）
 node:about,page,關於我們,About Us,Về chúng tôi,to-confirm,src/content/page/en/about.md https://www.tpisoftware.com/en/about-us src/content/page/vi/about.md https://www.tpisoftware.com/vn/about-us,現站 en 其他寫法：About TPI、Locations；現站 vi 其他寫法：Về Chúng Tôi、Vị trí
 node:partners,page,合作夥伴,Partners,Đối tác,to-confirm,src/content/page/en/partners.md src/content/page/vi/partners.md https://www.tpisoftware.com/vn/partners,現站 vi 其他寫法：Đối Tác
 node:media-center,page,媒體中心,Media Center,Trung tâm truyền thông,to-confirm,https://www.tpisoftware.com/en/media-center https://www.tpisoftware.com/vn/media-center,現站 en 其他寫法：News；現站 vi 其他寫法：Tin tức
 node:news-article,page,新聞,News,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）
-node:hr,page,人才招募,,,to-confirm,docs/ia/nodes.csv,
+node:hr,page,人才招募,Careers,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）；現站 en 沒有連到人才招募子站
 node:contact,page,聯絡我們,Contact Us,Liên hệ với chúng tôi,to-confirm,src/content/page/en/contact.md src/content/page/vi/contact.md https://www.tpisoftware.com/vn/contact-us,現站 vi 其他寫法：LIÊN HỆ
 node:privacy,page,隱私權政策,Privacy Policy,Chính sách bảo mật,to-confirm,https://www.tpisoftware.vn/pdf/1-2PrivacyPolicy(vn).pdf,現站 en footer 的寫法；en 頁取自 zh-TW PDF 的英譯，標題 Privacy Statement（M7-02）
 node:terms,page,使用條款,Terms of Use,,draft,docs/ia/nodes.csv,現站 en footer 的寫法（M7-02）
-node:disclaimer,page,免責聲明,,,to-confirm,docs/ia/nodes.csv,
-node:security-policy,page,資訊安全政策,,,to-confirm,docs/ia/nodes.csv,
+node:disclaimer,page,免責聲明,Disclaimer,,draft,docs/ia/nodes.csv,現站 en footer 的寫法（M7-02）
+node:security-policy,page,資訊安全政策,Information Security Policy,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）；現站沒有英文版
 node:search,page,站內搜尋,Site Search,,draft,docs/ia/nodes.csv,現站 en /en/search 的 title（M7-02）
 node:subscribe,page,電子報訂閱,Subscribe to Newsletter,Đăng ký Nhận Bản Tin,to-confirm,https://www.tpisoftware.com/en/subscribe https://www.tpisoftware.com/vn/subscribe,
 node:subscribe-result,page,訂閱結果,Subscription Result,,draft,docs/ia/nodes.csv,en 由 AI 草擬（M7-02）；現站 en /en/subscribe/result 的 title 是 Subscribe News
@@ -89,9 +89,10 @@ ui:skipToMain,ui,跳到主要內容,Skip to main content,Chuyển đến nội d
 ui:mainNav,ui,主選單,Main navigation,Menu chính,draft,src/data/strings/zh-TW.ts,
 ui:mobileNavSuffix,ui,（行動版）," (mobile)"," (di động)",draft,src/data/strings/zh-TW.ts,接在選單名稱後面，en、vi 開頭有半形空格
 ui:menu,ui,選單,Menu,Menu,draft,src/data/strings/zh-TW.ts,
-ui:language,ui,語言,Language,Ngôn ngữ,draft,src/data/strings/zh-TW.ts,LocaleSwitcher 與 header 語言選單的 landmark 名稱
+ui:language,ui,語言,Language,Ngôn ngữ,draft,src/data/strings/zh-TW.ts,LocaleSwitcher 的 landmark 名稱與 header 語言選單的標題（strings(locale).language）
 ui:languagePrefix,ui,語言：,"Language: ","Ngôn ngữ: ",draft,src/data/strings/zh-TW.ts,螢幕閱讀器文字，接在語系名稱前面，結尾有半形空格
 ui:externalSite,ui,（獨立網站）," (external site)"," (trang web riêng)",draft,src/data/strings/zh-TW.ts,螢幕閱讀器文字，接在連結文字後面，開頭有半形空格
+ui:externalLink,ui,（外部網站）," (external website)"," (trang web bên ngoài)",draft,src/data/strings/zh-TW.ts,螢幕閱讀器文字，接在離站連結（Link external）後面，開頭有半形空格
 ui:homeLogoAlt,ui,TPIsoftware 昕力資訊（回首頁）,TPIsoftware (home),TPIsoftware (trang chủ),draft,src/data/strings/zh-TW.ts,公司名見 brand:tpisoftware
 ui:footerNav,ui,頁尾選單,Footer navigation,Menu chân trang,draft,src/data/strings/zh-TW.ts,
 ui:legal,ui,法務資訊,Legal,Thông tin pháp lý,draft,src/data/strings/zh-TW.ts,
@@ -101,7 +102,6 @@ ui:breadcrumb,ui,麵包屑,Breadcrumb,Đường dẫn,draft,src/data/strings/zh-
 ui:toc,ui,本頁目錄,On this page,Trong trang này,draft,src/data/strings/zh-TW.ts,
 ui:relatedPosts,ui,相關文章,Related articles,Bài viết liên quan,draft,src/data/strings/zh-TW.ts,
 ui:otherIndustry,ui,其他產業,Other industries,Ngành khác,draft,src/data/strings/zh-TW.ts,現站 vi 成功案例篩選有 Ngành Khác，en 是 Others
-ui:separator,ui,｜," | ",,draft,src/data/strings/zh-TW.ts,en 由 AI 草擬（M7-02）；前後各一個半形空格
 ui:newsTypes.press,ui,新聞快報,News,Tin tức,to-confirm,src/data/strings/zh-TW.ts,現站媒體中心的新聞類型名稱（docs/ia/content-model.md「news」）
 ui:newsTypes.product,ui,產品消息,Products,Sản phẩm,to-confirm,src/data/strings/zh-TW.ts,現站媒體中心的新聞類型名稱（docs/ia/content-model.md「news」）
 ui:newsTypes.newsletter,ui,電子報,Newsletter,,to-confirm,src/data/strings/zh-TW.ts,現站媒體中心的新聞類型名稱；vi 沒有這個類型（docs/ia/content-model.md「news」）
@@ -131,7 +131,7 @@ ui:form.email,ui,Email,Email,Email,draft,src/data/strings/zh-TW.ts,
 ui:form.company,ui,公司,Company,Công ty,draft,src/data/strings/zh-TW.ts,
 ui:form.jobTitle,ui,職稱,Job title,Chức danh,draft,src/data/strings/zh-TW.ts,
 ui:form.consent,ui,個資同意,Privacy consent,Đồng ý về dữ liệu cá nhân,draft,src/data/strings/zh-TW.ts,
-ui:form.required,ui,必填,Required,,draft,src/data/strings/zh-TW.ts,en 由 AI 草擬（M7-02）
+ui:form.required,ui,必填,Required,Bắt buộc,draft,src/data/strings/zh-TW.ts,必填欄位標籤後的標記
 ui:download.summary,ui,內容重點,Highlights,Nội dung chính,draft,src/data/strings/zh-TW.ts,
 ui:download.request,ui,索取文件,Request the document,Yêu cầu tài liệu,draft,src/data/strings/zh-TW.ts,
 ui:download.submit,ui,送出並下載,Submit and download,Gửi và tải xuống,draft,src/data/strings/zh-TW.ts,
@@ -159,11 +159,6 @@ ui:utility.recommended,ui,推薦內容,Recommended,Đề xuất,draft,src/data/s
 ui:utility.downloads,ui,下載檔案,Downloads,Tệp tải xuống,draft,src/data/strings/zh-TW.ts,
 ui:utility.subscribeSubmit,ui,訂閱,Subscribe,Đăng ký,draft,src/data/strings/zh-TW.ts,
 ui:utility.unsubscribeSubmit,ui,取消訂閱,Unsubscribe,Hủy đăng ký,draft,src/data/strings/zh-TW.ts,
-ui:home.families,ui,產品家族,Product families,,draft,src/data/strings/zh-TW.ts,en 由 AI 草擬（M7-02）
-ui:home.familyLink,ui,看{family}產品家族,See the {family} product family,,draft,src/data/strings/zh-TW.ts,en 由 AI 草擬（M7-02）
-ui:home.orientFeatures,ui,OrientAI 特色,OrientAI features,,draft,src/data/strings/zh-TW.ts,en 由 AI 草擬（M7-02）
-ui:home.allCases,ui,所有{name},All {name},,draft,src/data/strings/zh-TW.ts,en 由 AI 草擬（M7-02）
-ui:home.latest,ui,最新文章與新聞,Latest articles and news,,draft,src/data/strings/zh-TW.ts,en 由 AI 草擬（M7-02）
 ui:offering.demo,ui,預約演示,Book a demo,Đặt lịch demo,draft,src/data/strings/zh-TW.ts,
 ui:offering.seeFeatures,ui,看功能,See features,Xem tính năng,draft,src/data/strings/zh-TW.ts,
 ui:offering.features,ui,功能,Features,Tính năng,draft,src/data/strings/zh-TW.ts,

@@ -3,11 +3,10 @@
 // from docs/ia/navigation.csv (src/lib/ia/navigation.ts); the phone is the headquarters office of
 // the organization data file (src/content/organization), Email and copyright come from the current
 // site (src/data/site.ts). Dark surface, so it closes every page the same way.
-import { localizedNav, node, nodeHref } from '../../lib/ia/navigation';
+import { localizedNav, localNode, nodeHref } from '../../lib/ia/navigation';
 import { getEntry } from 'astro:content';
 import { company } from '../../data/site';
 import { strings } from '../../data/strings';
-import { builtPaths } from '../../lib/content/pages';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
@@ -17,14 +16,13 @@ import logo from '../../assets/brand/logo-horizontal-white.png';
 const LOGO_HEIGHT = 48;
 
 const locale = localeFromPath(normalizePath(Astro.url.pathname));
-const contact = node('contact', locale);
+const contact = localNode('contact', locale);
 const t = strings(locale);
 const path = normalizePath(Astro.url.pathname);
 // The link to the page being shown (docs/ia/navigation.md「無障礙」)
 const current = (href: string | undefined) => (href === path ? 'page' : undefined);
-const built = await builtPaths();
-const footer = localizedNav('footer', locale, built);
-const footerBottom = localizedNav('footer-bottom', locale, built);
+const footer = localizedNav('footer', locale);
+const footerBottom = localizedNav('footer-bottom', locale);
 const org = await getEntry('organization', locale);
 const phone = org?.data.offices.find((o) => o.headquarters)?.phone;
 if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a headquarters phone for the footer`);

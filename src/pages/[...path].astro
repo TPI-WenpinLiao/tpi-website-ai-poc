@@ -1,7 +1,19 @@
 ---
-// Every page built from content or from nodes.csv, other than the home and 404 pages: the list and
-// each page's props come from src/lib/content/pages.ts. Static pages in src/pages win over this route.
+// Every page built from content or from nodes.csv, other than the home and 404 pages (ADR 0002):
+// - one per published collection entry, in the entry's locale once that locale has interface copy
+//   (src/data/strings). Node-based entries (offering, hub, page, whitepaper) live at their nodes.csv
+//   path and the node's template picks the layout; blog, news, case-study and person entries fill
+//   their collection node's path (src/lib/content/urls.ts)
+// - listing, contact and utility nodes in every locale with interface copy (src/data/strings);
+//   listings are split into pages at {path}/page/{n}. The contact page takes the locale's `page`
+//   entry for its node when there is one (more than one fails the build)
+// - a download page per offering with downloads (/download/{product})
+// Static pages in src/pages win over this route. src/lib/ia/built.ts lists the nodes this builds a
+// page for in each locale (for links); keep the two in step.
 import type { GetStaticPaths } from 'astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { node } from '../lib/ia/navigation';
+import { duplicates, entryLocale, isPublished, translationPaths } from '../lib/content/entries';
 import OfferingTemplate from '../layouts/templates/OfferingTemplate.astro';
 import HubTemplate from '../layouts/templates/HubTemplate.astro';
 import ContentTemplate from '../layouts/templates/ContentTemplate.astro';
@@ -12,11 +24,117 @@ import PersonTemplate from '../layouts/templates/PersonTemplate.astro';
 import ListingTemplate from '../layouts/templates/ListingTemplate.astro';
 import ContactTemplate from '../layouts/templates/ContactTemplate.astro';
 import UtilityTemplate from '../layouts/templates/UtilityTemplate.astro';
-import { pages, type PageProps } from '../lib/content/pages';
+import { nodes } from '../lib/ia/nodes';
+import { isUtilityPage, UTILITY_ELSEWHERE, type UtilityPage } from '../lib/ia/utility';
+import { LOCALES, type Locale } from '../lib/i18n/locales';
+import { localizePath } from '../lib/i18n/paths';
+import { listing } from '../lib/content/listings';
+import { pagePath, paginate } from '../lib/content/entries';
+import type { EntryCard } from '../lib/content/cards';
+import { hasStrings } from '../data/strings';
+import { entryPath, nodeEntryPath } from '../lib/content/urls';
 
-type Props = PageProps;
+type Page =
+  | { kind: 'offering'; entry: CollectionEntry<'offering'> }
+  | { kind: 'hub'; entry: CollectionEntry<'hub'> }
+  | { kind: 'page'; entry: CollectionEntry<'page'> }
+  | { kind: 'whitepaper'; entry: CollectionEntry<'whitepaper'> }
+  | { kind: 'blog'; entry: CollectionEntry<'blog'> }
+  | { kind: 'news'; entry: CollectionEntry<'news'> }
+  | { kind: 'case-study'; entry: CollectionEntry<'case-study'> }
+  | { kind: 'person'; entry: CollectionEntry<'person'> }
+  | { kind: 'listing'; id: string; locale: Locale; items: EntryCard[]; featured: EntryCard | undefined; page: number; pages: number }
+  | { kind: 'contact'; locale: Locale; entry: CollectionEntry<'page'> | undefined }
+  | { kind: 'utility'; id: UtilityPage; locale: Locale }
+  | { kind: 'download'; entry: CollectionEntry<'offering'> };
+type Props = Page & { translations: string[] };
 
-export const getStaticPaths = (() => pages()) satisfies GetStaticPaths;
+export const getStaticPaths = (async () => {
+  // Listing, contact and utility pages: no entry, so a locale has them once its interface copy exists
+  async function nodePages() {
+    const locales = LOCALES.filter(hasStrings);
+    const versions = (path: string, locale: Locale) => locales.filter((l) => l !== locale).map((l) => localizePath(path, l));
+    const utilities = nodes.filter((n) => n.template === 'utility' && !(UTILITY_ELSEWHERE as readonly string[]).includes(n.id));
+    const unknown = utilities.filter((n) => !isUtilityPage(n.id)).map((n) => n.id);
+    if (unknown.length) throw new Error(`utility nodes without a UtilityTemplate page: ${unknown.join(', ')} (src/lib/ia/utility.ts)`);
+    // Each listing is split into pages per locale first: a locale with fewer items has fewer pages, so
+    // page n's versions are only the locales that have a page n
+    const listings = await Promise.all(
+      locales.flatMap((locale) =>
+        nodes
+          .filter((n) => n.template === 'listing')
+          .map(async (n) => {
+            const { items, featured } = await listing(n.id, locale);
+            return { id: n.id, locale, featured, pages: paginate(items).map((pageItems, i) => ({ items: pageItems, path: pagePath(localizePath(n.path, locale), i + 1) })) };
+          }),
+      ),
+    );
+    const out = [];
+    for (const locale of locales) {
+      for (const l of listings.filter((x) => x.locale === locale)) {
+        out.push(
+          ...l.pages.map((p, i) => ({
+            params: { path: p.path.slice(1) },
+            props: {
+              kind: 'listing',
+              id: l.id,
+              locale,
+              items: p.items,
+              featured: i === 0 ? l.featured : undefined,
+              page: i + 1,
+              pages: l.pages.length,
+              translations: listings.filter((x) => x.id === l.id && x.locale !== locale && x.pages[i]).map((x) => x.pages[i]!.path),
+            } satisfies Props,
+          })),
+        );
+      }
+      const contact = localizePath(node('contact').path, locale);
+      const entries = await getCollection('page', (e) => e.data.node === 'contact' && entryLocale(e.id) === locale && isPublished(e));
+      if (entries.length > 1) throw new Error(`more than one published ${locale} page entry for the contact node: ${entries.map((e) => e.id).join(', ')}`);
+      out.push({ params: { path: contact.slice(1) }, props: { kind: 'contact', locale, entry: entries[0], translations: versions(contact, locale) } satisfies Props });
+      for (const id of utilities.map((n) => n.id).filter(isUtilityPage)) {
+        const path = localizePath(node(id).path, locale);
+        out.push({ params: { path: path.slice(1) }, props: { kind: 'utility', id, locale, translations: versions(path, locale) } satisfies Props });
+      }
+    }
+    return out;
+  }
+
+  const route = <E extends { id: string; data: { translationKey: string; draft: boolean } }>(
+    all: E[],
+    pathOf: (e: E) => string,
+    page: (e: E) => Page,
+  ) => {
+    // Templates need the locale's interface copy, so entries of a locale without it (en and vi until
+    // M7) are content only: no page, and no hreflang pointing at one
+    const built = all.filter((e) => hasStrings(entryLocale(e.id)));
+    return built.filter(isPublished).map((e) => ({
+      params: { path: pathOf(e).slice(1) },
+      props: { ...page(e), translations: translationPaths(e, built, pathOf) } satisfies Props,
+    }));
+  };
+  const paths = [
+    ...route(await getCollection('offering'), nodeEntryPath, (entry) => ({ kind: 'offering', entry })),
+    ...route(await getCollection('hub'), nodeEntryPath, (entry) => ({ kind: 'hub', entry })),
+    // The contact page is built with the other node pages below (nodePages), entry or not
+    ...route(await getCollection('page', (e) => node(e.data.node).template === 'content'), nodeEntryPath, (entry) => ({ kind: 'page', entry })),
+    ...route(await getCollection('whitepaper'), nodeEntryPath, (entry) => ({ kind: 'whitepaper', entry })),
+    ...route(await getCollection('blog'), (e) => entryPath('blog', e), (entry) => ({ kind: 'blog', entry })),
+    ...route(await getCollection('news'), (e) => entryPath('news', e), (entry) => ({ kind: 'news', entry })),
+    ...route(await getCollection('case-study'), (e) => entryPath('case-study', e), (entry) => ({ kind: 'case-study', entry })),
+    ...route(await getCollection('person'), (e) => entryPath('person', e), (entry) => ({ kind: 'person', entry })),
+    ...(await nodePages()),
+    ...route(
+      await getCollection('offering', (o) => (o.data.downloads ?? []).length > 0),
+      (e) => localizePath(node('download').path.replace('{product}', e.data.node), entryLocale(e.id)),
+      (entry) => ({ kind: 'download', entry }),
+    ),
+  ];
+  // Two pages on one URL would leave only one built (a blog slug named like a category, say)
+  const clashes = duplicates(paths.map((p) => p.params.path));
+  if (clashes.length) throw new Error(`more than one page builds to: /${clashes.join(', /')}`);
+  return paths;
+}) satisfies GetStaticPaths;
 
 const page = Astro.props;
 ---

@@ -5,6 +5,7 @@ description: An online insurance system for Cardif Assurance Vie & Risques Diver
 translationKey: bnp-paribas-cardif-taiwan-online-insurance-platform
 client: { name: Cardif Assurance Vie & Risques Divers, disclosed: true, logo: ../../../assets/case-study/en/bnp-paribas-cardif-taiwan-online-insurance-platform/logo.webp }
 industry: finance
+offerings: [en/insurebrick]
 order: 44
 sourceUrl: https://www.tpisoftware.com/en/success-story
 migratedAt: 2026-10-24

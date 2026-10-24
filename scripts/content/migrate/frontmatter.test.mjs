@@ -157,9 +157,11 @@ test('line breaks in API titles and descriptions become spaces; multi-line value
   assert.throws(() => serializeFrontmatter({ description: 'a\nb' }), /spans lines/);
 });
 
-test('long <title> is flagged unless seoTitle is short enough, with the site name of the locale', () => {
+test('long <title> is flagged unless seoTitle is short enough, with the site-name suffix of the locale', () => {
   const long = 'a'.repeat(60);
-  assert.deepEqual(frontmatterNotes('en', { title: long }), [`<title> is ${60 + ' | TPIsoftware'.length} characters (max 70): set seoTitle`]);
-  assert.deepEqual(frontmatterNotes('zh-TW', { title: 'a'.repeat(55) }), [`<title> is ${55 + '｜TPIsoftware 昕力資訊'.length} characters (max 70): set seoTitle`]);
+  // " | TPIsoftware" is 14 characters, ｜TPIsoftware 昕力資訊 is 17
+  assert.deepEqual(frontmatterNotes('en', { title: long }), ['<title> is 74 characters (max 70): set seoTitle']);
+  assert.deepEqual(frontmatterNotes('zh-TW', { title: 'a'.repeat(54) }), ['<title> is 71 characters (max 70): set seoTitle']);
+  assert.deepEqual(frontmatterNotes('en', { title: 'a'.repeat(56) }), []);
   assert.deepEqual(frontmatterNotes('en', { title: long, seoTitle: 'short' }), []);
 });

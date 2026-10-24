@@ -1,5 +1,7 @@
-// Enforces the CLAUDE.md rule "新元件必須同步加到 design-system 展示頁": every component in
-// src/components/ui must be imported by the showcase page, src/pages/design-system/index.astro.
+// Enforces the CLAUDE.md rule that new components go on the /design-system showcase page and in the
+// design-system skill's component table: every component in src/components/ui must be imported by
+// src/pages/design-system/index.astro and have a row in the table, and every row must name an
+// existing component.
 // Also checks that every token in src/styles/tokens.css belongs to a group in token-groups.mjs,
 // which is what the page renders, that no group pattern is stale, and that no group mixes `value`
 // tokens with ones that have a specimen.
@@ -20,6 +22,8 @@ const COMPONENTS = 'src/components/ui';
 const PAGE = 'src/pages/design-system/index.astro';
 const TOKENS = 'src/styles/tokens.css';
 const NODES = 'docs/ia/nodes.csv';
+const SKILL = '.claude/skills/design-system/SKILL.md';
+const SKILL_TABLE = '## 基礎元件';
 
 /**
  * Components the page source does not import from components/ui.
@@ -29,6 +33,35 @@ const NODES = 'docs/ia/nodes.csv';
 export function missingComponents(components, page) {
   const imported = new Set([...page.matchAll(/from\s+['"][^'"]*components\/ui\/([\w-]+\.astro)['"]/g)].map((m) => m[1]));
   return components.filter((c) => !imported.has(c));
+}
+
+/**
+ * Component names listed in the skill's component table, the section under `heading` up to the next
+ * "## " heading. A row starts with the component name in backticks: | `Button` | ... |
+ * @param {string} skill source of the design-system skill
+ * @param {string} [heading]
+ * @returns {string[]}
+ */
+export function tableComponents(skill, heading = SKILL_TABLE) {
+  const start = skill.indexOf(`\n${heading}\n`);
+  if (start === -1) throw new Error(`${SKILL}: no "${heading}" section`);
+  const rest = skill.slice(start + heading.length + 2);
+  const end = rest.search(/^## /m);
+  const section = end === -1 ? rest : rest.slice(0, end);
+  return [...section.matchAll(/^\|\s*`([\w-]+)`\s*\|/gm)].map((m) => m[1]);
+}
+
+/**
+ * Components without a row in the table, and rows naming no component.
+ * @param {string[]} components file names such as "Button.astro"
+ * @param {string[]} rows names from tableComponents()
+ */
+export function tableProblems(components, rows) {
+  const names = components.map((c) => c.replace(/\.astro$/, ''));
+  return {
+    undocumented: components.filter((c, i) => !rows.includes(names[i])),
+    stale: rows.filter((r) => !names.includes(r)),
+  };
 }
 
 /**
@@ -45,6 +78,10 @@ function main() {
   const missing = missingComponents(components, readFileSync(join(ROOT, PAGE), 'utf8'));
   for (const m of missing) console.log(`${COMPONENTS}/${m} is not shown on ${PAGE}`);
   console.log(`${components.length - missing.length}/${components.length} components on the showcase page`);
+  const { undocumented, stale } = tableProblems(components, tableComponents(readFileSync(join(ROOT, SKILL), 'utf8')));
+  for (const m of undocumented) console.log(`${COMPONENTS}/${m} has no row in the "${SKILL_TABLE}" table of ${SKILL}`);
+  for (const r of stale) console.log(`${SKILL}: the "${SKILL_TABLE}" table lists ${r}, which is not in ${COMPONENTS}`);
+  console.log(`${components.length - undocumented.length}/${components.length} components in the ${SKILL} table`);
 
   const names = tokenNames(readFileSync(join(ROOT, TOKENS), 'utf8'));
   const { groups, ungrouped, unused, mixed } = groupTokens(names);
@@ -57,7 +94,7 @@ function main() {
   const listed = internalNodes(parseCsv(readFileSync(join(ROOT, NODES), 'utf8').replace(/^\uFEFF/, '')));
   for (const n of listed) console.log(`${NODES}: ${n.id} (${n.path}) is an internal page; keep it out of the IA`);
   console.log(`${INTERNAL.join(', ')}: ${listed.length ? 'listed' : 'not listed'} in ${NODES}`);
-  if (missing.length || ungrouped.length || unused.length || mixed.length || listed.length) process.exitCode = 1;
+  if (missing.length || undocumented.length || stale.length || ungrouped.length || unused.length || mixed.length || listed.length) process.exitCode = 1;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) main();

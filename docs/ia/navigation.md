@@ -68,6 +68,15 @@ M4-04 實作、M4-05 axe 檢查時對照下列項目。
 - 麵包屑用 `nodes.csv` 的 `parent` 產生，與導覽是同一棵樹；`BreadcrumbList` JSON-LD 由 M4-03 實作
 - 不進 header 的頁面要有其他內部連結，見下一節「從哪裡連到」
 
+### 語系
+
+選單、footer、麵包屑、子頁卡片與 `BreadcrumbList` 的名稱都由 `src/lib/ia/navigation.ts` 依頁面語系決定（#114）：
+
+- zh-TW 取 `nodes.csv` 的 `title` 與 `navigation.csv` 的 `label`
+- en、vi 取 `docs/i18n/glossary.csv`：節點用 `node:<id>` 列，選單標籤用 `nav:<標籤>` 列；標籤和某個節點的 `title` 相同時用該節點的列（`glossary.md`「分類」）
+- 沒有譯名（沒有這一列，或該語系的欄位是空的）時，產生那一頁的 build 失敗，不 fallback 到 zh-TW。只有 zh-TW 字串檔時不會查 glossary，所以 en、vi 欄位的空白不影響現在的 build
+- 連結指向該語系的頁面；該語系沒有這一頁（例如 vi 不產生法務頁）時連到 zh-TW 版，見 [ADR 0002「缺翻譯的頁面」](../decisions/0002-url-and-locale.md#缺翻譯的頁面)
+
 ## 不進導覽的節點
 
 | 節點 | 原因 | 從哪裡連到 |

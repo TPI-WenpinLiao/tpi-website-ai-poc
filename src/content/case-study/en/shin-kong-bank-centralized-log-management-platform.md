@@ -5,6 +5,7 @@ description: Shin Kong Bank's systems generate GBs of transaction, payment and c
 translationKey: shin-kong-bank-centralized-log-management-platform
 client: { name: Shin Kong Bank, disclosed: true, logo: ../../../assets/case-study/en/shin-kong-bank-centralized-log-management-platform/logo.webp }
 industry: finance
+offerings: [en/digilogs]
 order: 4
 sourceUrl: https://www.tpisoftware.com/en/success-story
 migratedAt: 2026-10-24

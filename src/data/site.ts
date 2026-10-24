@@ -1,5 +1,5 @@
 // Site-wide copy from the current site (M3-04, #17), with the page each line was taken from.
-// `node scripts/design/home-content.mjs` checks it with the home page copy (src/data/home.ts),
+// `node scripts/design/home-content.mjs` checks it with the home page copy (src/data/home/<locale>.ts),
 // which also explains `source.quote`.
 
 export interface Sourced {

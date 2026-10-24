@@ -1,0 +1,19 @@
+---
+// The home page of every locale but zh-TW (src/pages/index.astro) that has interface copy
+// (src/data/strings); src/lib/i18n/routes.ts lists the same paths
+import type { GetStaticPaths } from 'astro';
+import HomeTemplate from '../../layouts/templates/HomeTemplate.astro';
+import { homeLocales } from '../../lib/i18n/routes';
+import { DEFAULT_LOCALE, type Locale } from '../../lib/i18n/locales';
+
+export const getStaticPaths = (() =>
+  homeLocales.filter((locale) => locale !== DEFAULT_LOCALE).map((locale) => ({ params: { locale }, props: { locale } }))) satisfies GetStaticPaths;
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<HomeTemplate locale={locale} />

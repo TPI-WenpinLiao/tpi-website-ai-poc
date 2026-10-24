@@ -5,6 +5,7 @@ description: Implemented digiRunner to build a flexible APIM system for EnTai Ba
 translationKey: entie-bank-api-management-platform
 client: { name: EnTai Bank, disclosed: true, logo: ../../../assets/case-study/en/entie-bank-api-management-platform/logo.webp }
 industry: finance
+offerings: [en/digirunner]
 order: 39
 sourceUrl: https://www.tpisoftware.com/en/success-story
 migratedAt: 2026-10-24

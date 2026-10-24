@@ -5,7 +5,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 # Design system
 
-> 狀態：M3-02（#15）定案 tokens 與基礎元件，M3-03（#16）補齊 `/design-system` 展示頁，M3-07（#54）選定 3D 方向 B Modular Stack 並加上 `Scene3D`。M3-04（#17）把場景做成首頁，方塊材質寫成 `--scene-block-*`、`--scene-rim-*`；M3-05（#18）做產品頁，加上 `Breadcrumb`、`InPageNav`、`Faq`、`SceneChapter` 與 `Scene3D` 的 `family`；M3 收尾 issue 再更新本檔。
+> 狀態：M3 收尾（#19）整理完成。tokens 與基礎元件在 M3-02（#15）定案，展示頁 `/design-system` 在 M3-03（#16）完成，3D 方向 B Modular Stack 在 M3-07（#54）選定，首頁與產品頁在 M3-04、M3-05（#17、#18）完成。M4-04（#23）之後新增的元件也列在「基礎元件」。動態規範（M3-08，#55）完成後會改寫「捲動動態」。
 
 ## 設計方向
 
@@ -71,6 +71,24 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 字型：`--font-sans` 是 Inter＋系統中文字；`--font-mono`（JetBrains Mono）只用在編號、eyebrow、資料標籤。兩者都在 `BaseLayout` import，不載中文 webfont
 - 3D：`--scene-angle-x`、`--scene-angle-z` 是共用的等角視角，`--perspective` 是共用透視距離。`Scene3D` 的 three.js 相機從這些值換算（`src/lib/scene/runtime.ts`），靜態版與 3D 版才會重疊；顏色從 `--gradient-energy`、`--color-bg`、`--color-border-brand` 讀，方塊材質從 `--scene-block-*`、`--scene-rim-*` 讀（`SceneContext.readNumber`），TS 不寫色碼
 
+## Token 命名
+
+名稱用小寫英文與 `-`，前面是類別，後面依序接用途、變體、狀態，用不到的段省略。現有名稱見 `tokens.css`，新 token 先找同類的既有名稱照著取：
+
+| 段 | 寫法 | 例 |
+|---|---|---|
+| 類別 | primitive 用色名；semantic 用 `color`、`glass`、`glow`、`shadow`、`gradient`；scale 用屬性名 | `--purple-700`、`--color-*`、`--font-size-*`、`--radius-*` |
+| 用途 | 色彩的角色：`text`、`bg`、`border`、`action`、`link`、`brand`、`accent`、`focus`、`success`、`error`、`disabled`、`grid` | `--color-text`、`--color-bg`、`--color-error` |
+| 變體 | 強弱用 `subtle`、`muted`、`soft`、`strong`；指定色系用 `brand`、`accent`；配對的前景或背景用 `text`、`bg` | `--color-bg-brand-subtle`、`--color-border-strong`、`--color-error-bg` |
+| 狀態 | `hover`、`active`，放在最後 | `--color-action-hover`、`--color-action-subtle-hover`、`--scene-rim-glow-active` |
+
+- 頁面底色的層次用 `--color-bg-<變體>`（`--color-bg-subtle`）。狀態色與互動色的配對用 `--color-<用途>-<text 或 bg>`：`--color-action-text` 是 `--color-action` 上的文字，`--color-error-bg` 是 `--color-error` 的底色。新增 warning 時照狀態色寫成 `--color-warning`、`--color-warning-bg`
+- primitive 色階用數字，`0`（白）到 `950`，數字越大越深；級數之間需要中間值時取中間的數字（`--ink-850`）。只加實際用到的級數，不預先補滿
+- 尺寸級距：字級用 `xs`、`sm`、`base`、`lg`、`xl` 與 `h1`–`h4`、`display`；間距用 4px 的倍數（`--space-4` 是 `1rem`）；圓角、陰影用 `sm`／`md`／`lg`（圓角另有 `xl`、`pill`），時間用 `fast`／`base`／`slow`。版面專用的間距用名稱說明用途（`--space-gutter`、`--space-section`）
+- 只屬於一塊版面的值，以那塊版面命名：`--hero-*`（hero 的版面，`PageHero`、`Backdrop`、`Breadcrumb`、`SceneChapter` 共用）、`--scene-*`（3D 視角、方塊材質，以及玻璃面板對比用的背景 `--scene-worst`）、`--logo-height*`、`--header-height`、`--progress-height`。`LayerStack` 的 `--layer-gap`、`--node-size` 是早期沒有前綴的例外，新 token 不要照這樣取。先找能不能用既有的 scale 表達，不行才加；加了也要在 `tokens.css` 的註解寫出誰讀它
+- 3D 場景的 TS 也讀 token：`src/lib/scene/runtime.ts` 讀 `--scene-angle-*` 的角度，`SceneContext.readNumber` 讀 `--scene-block-*`、`--scene-rim-*` 的無單位數字。新增給 TS 讀的 token 時，在 `tokens.css` 的註解寫出讀它的檔案
+- 新 token 要能歸進 `scripts/design/token-groups.mjs` 的某一組（見「展示頁」），否則 `showcase.mjs` 會失敗
+
 ## 斷點
 
 `@media` 不能讀 custom property，斷點寫在 `src/styles/media.css` 的 `@custom-media`，build 時由 Lightning CSS 展開（`astro.config.mjs` 的 `drafts.customMedia`）：
@@ -102,6 +120,8 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 ## 基礎元件
 
+`src/components/ui/` 的每個元件都要在下表有一列，表裡也不能留已經刪除的元件，`node scripts/design/showcase.mjs` 兩種都會擋。
+
 | 元件 | 用途 | 重點 |
 |---|---|---|
 | `Surface` | 頁面區塊 | `tone` 切換亮暗；`pattern="grid"` 畫由上往下淡出的座標格線；`width="reading"` 收窄到閱讀寬度；同 tone 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
@@ -131,6 +151,20 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `FormPanel` | 頁面唯一的表單 | 有標題的面板，表單以標題命名；送出由 M6-01 處理 |
 | `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
 | `SceneChapter` | 3D 場景上的章節 | 見「3D 場景」 |
+| `LocaleSwitcher` | 語系切換 | 純連結，零 JS；連到同一頁的其他語系版本，沒有翻譯時連到該語系首頁，連首頁都沒有的語系不列，只剩目前語系時不輸出（ADR 0002）；語系名稱用各自的語言並加上 `lang`；同一頁有多個時用 `label` 給不同的 landmark 名稱 |
+
+## 新增元件
+
+依序做完每一步：
+
+1. 先找既有的元件：上表能用的就用，差一點的就給它加 prop（「CSS 分層」），不要另寫一個相似的元件
+2. 在 `src/components/ui/<Name>.astro` 建立元件，名稱用 PascalCase。檔頭用英文註解寫出用途、props 的意義與使用限制（例：`LocaleSwitcher`）
+3. 樣式寫在 scoped `<style>`，只用 tokens（「規則」「Token 命名」）；用到斷點時 `@import` media.css（「斷點」）
+4. 要放進狀態矩陣的元件（第 5 步），互動狀態的選擇器同時接受 `data-preview-state`（「展示頁」）
+5. 在 `src/pages/design-system/index.astro` import 元件並放上範例。有 variant 或互動狀態（hover、focus、disabled、error）的元件，做成狀態矩陣：variant × 狀態，深淺兩個 surface 各一份，預覽的複本加 `inert`（「展示頁」）。沒有 variant 與互動狀態的元件，或狀態寫在元件內部、無法從外部設定的導覽元件（`Breadcrumb`、`InPageNav`、`SiteHeader`、`SiteFooter`），放一個範例即可
+6. 在本檔的「基礎元件」表加一列：用途、重點（props、限制、跟哪個元件搭配）
+7. 執行 `npm run check:design`。`showcase.mjs` 只檢查第 5 步的 import 與第 6 步的那一列，也會報出元件表裡已經沒有檔案的列。元件放在圖上、3D 場景上，或有 focus 樣式時，另外跑 `node scripts/design/a11y-smoke.mjs`
+8. PR 寫出新元件、新 token 與用途；第 1 步與第 5 步的狀態矩陣、`inert` 沒有 script 檢查，由 `/pr-review` 人工判斷
 
 ## 3D 場景
 
@@ -183,7 +217,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
   - `scripts/design/contrast.mjs`：兩個 surface 各自檢查 `PAIRS` 每一組
   - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/layouts/`、`src/pages/` 所有 `.astro` 與 `src/styles/base.css` 的樣式不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
   - `scripts/design/css-structure.mjs`：「CSS 分層」的規則
-  - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import；`tokens.css` 每個 token 都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；內部頁（`INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`
+  - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import，也要在本檔的「基礎元件」表有一列，表裡的元件都要有檔案；`tokens.css` 每個 token 都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；內部頁（`INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
 

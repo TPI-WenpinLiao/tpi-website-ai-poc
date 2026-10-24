@@ -5,6 +5,7 @@ description: YouBike's AI Customer Service uses SysTalk.Chat for a complete ques
 translationKey: youbike-ai-customer-service
 client: { name: YouBike, disclosed: true, logo: ../../../assets/case-study/en/youbike-ai-customer-service/logo.webp }
 industry: other
+offerings: [en/systalk-chat]
 order: 30
 sourceUrl: https://www.tpisoftware.com/en/success-story
 migratedAt: 2026-10-24

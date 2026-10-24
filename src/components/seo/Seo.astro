@@ -3,12 +3,12 @@
 // Open Graph, Twitter and JSON-LD. Pages hand BaseLayout the data; nothing else writes these tags.
 // No robots meta: the site is kept out of search engines by public/_headers and robots.txt only.
 import type { LocaleLink } from '../../lib/i18n/alternates';
-import type { Locale } from '../../lib/i18n/locales';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import { hreflangAlternates } from '../../lib/seo/hreflang';
 import { serializeJsonLd, type JsonLdGraph } from '../../lib/seo/jsonld/shared';
+import { OG_LOCALES } from '../../lib/i18n/locales';
 import { canonicalUrl, pageTitle, siteName } from '../../lib/seo/meta';
-import { DEFAULT_OG_IMAGE, type OgImage } from '../../lib/seo/og';
+import { defaultOgImage, type OgImage } from '../../lib/seo/og';
 
 export interface Props {
   // The page topic; the site name is appended unless titleSuffix is false (the home page)
@@ -30,12 +30,8 @@ const site = Astro.site;
 const pathname = normalizePath(Astro.url.pathname);
 const locale = localeFromPath(pathname);
 const fullTitle = titleSuffix ? pageTitle(title, locale) : title;
+const image = pageImage ?? defaultOgImage(locale);
 const canonical = canonicalUrl(pathname, site);
-// og:locale is language_TERRITORY (ADR 0002); the current site writes none to follow
-const OG_LOCALES: Record<Locale, string> = { 'zh-TW': 'zh_TW', en: 'en_US', vi: 'vi_VN' };
-const ogLocale = OG_LOCALES[locale];
-// The default image is the company logo, named in the page's language
-const image = pageImage ?? { ...DEFAULT_OG_IMAGE, alt: siteName(locale) };
 const imageUrl = new URL(image.src, site).href;
 const alternates = hreflangAlternates(locales, site);
 ---
@@ -48,7 +44,7 @@ const alternates = hreflangAlternates(locales, site);
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
-<meta property="og:locale" content={ogLocale} />
+<meta property="og:locale" content={OG_LOCALES[locale]} />
 <meta property="og:site_name" content={siteName(locale)} />
 <meta property="og:image" content={imageUrl} />
 <meta property="og:image:width" content={String(image.width)} />

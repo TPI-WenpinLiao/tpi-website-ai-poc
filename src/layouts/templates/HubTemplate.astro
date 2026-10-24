@@ -3,8 +3,7 @@
 // resources, from a hub entry. Structure follows the M3-01 hub wireframe (#14): intro, highlights (industry hubs),
 // child page cards from nodes.csv, whitepapers, case studies, related posts, contact.
 // A dark narrative page like the offering template, with the static hero image and no 3D scene.
-// Child cards take their description from the child's own entry when it has one, and only list
-// pages this locale can link to (linkable).
+// Child cards take their description from the child's own entry when it has one.
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, getEntry } from 'astro:content';
 import PageLayout from '../PageLayout.astro';
@@ -17,13 +16,12 @@ import CardGrid from '../../components/ui/CardGrid.astro';
 import Reveal from '../../components/ui/Reveal.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
-import { breadcrumb, children, linkable, localeHref, node } from '../../lib/ia/navigation';
+import { breadcrumb, children, localeHref, localNode, node } from '../../lib/ia/navigation';
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { caseCard, postCard } from '../../lib/content/cards';
 import { hubJsonLd } from '../../lib/seo/jsonld/hub';
 import { canonicalUrl } from '../../lib/seo/meta';
 import { strings } from '../../data/strings';
-import { builtPaths } from '../../lib/content/pages';
 import image from '../../assets/design/hero-modular-stack.webp';
 import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
 
@@ -37,15 +35,15 @@ const { data } = entry;
 const locale = entryLocale(entry.id);
 const t = strings(locale);
 const href = localeHref(locale);
-const self = node(data.node, locale);
-const canLink = linkable(locale, await builtPaths());
+const self = localNode(data.node, locale);
 const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
 
 // Child cards: pages and external entries (the resources hub lists 昕力大學), not groups or assets
 const described = new Map(
   [...(await getCollection('offering', inLocale)), ...(await getCollection('hub', inLocale))].map((e) => [e.data.node, e.data.description]),
 );
-const parts = children(self.id, locale, (n) => (n.kind === 'page' || n.kind === 'external') && canLink(n))
+const parts = children(self.id, locale)
+  .filter((n) => n.kind === 'page' || n.kind === 'external')
   .map((n) => ({ ...n, href: href(n), description: described.get(n.id) }));
 const highlights = data.highlights ?? [];
 const whitepapers = (await getCollection('whitepaper', (w) => inLocale(w) && w.data.offeringNode === self.id)).map((w) => ({
@@ -81,7 +79,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 ---
 
 <PageLayout title={data.seoTitle ?? data.title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
-  <PageHero eyebrow={node(self.parent, locale).title} title={data.title} description={data.tagline ?? data.description}>
+  <PageHero eyebrow={localNode(self.parent, locale).title} title={data.title} description={data.tagline ?? data.description}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
     <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
   </PageHero>
@@ -127,7 +125,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
         <CardGrid>
           {whitepapers.map((w) => (
             <li>
-              <Card title={w.title} href={w.href} eyebrow={node('resources', locale).title} image={{ src: w.cover, alt: '' }} />
+              <Card title={w.title} href={w.href} eyebrow={localNode('resources', locale).title} image={{ src: w.cover, alt: '' }} />
             </li>
           ))}
         </CardGrid>
@@ -138,7 +136,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   {
     cases.length > 0 && (
       <Surface tone="dark" pattern="grid">
-        <SectionHeading eyebrow="Success stories" title={node('success-stories', locale).title} />
+        <SectionHeading eyebrow="Success stories" title={localNode('success-stories', locale).title} />
         <CardGrid>
           {cases.map((c, i) => (
             <li>
