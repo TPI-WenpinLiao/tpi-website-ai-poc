@@ -26,6 +26,7 @@ import SceneChapter from '../../components/ui/SceneChapter.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
 import { breadcrumb, children, localeHref, node, nodeHref } from '../../lib/ia/navigation';
 import { entryLocale, isPublished } from '../../lib/content/entries';
+import { COLLECTION_NODES, entryPath } from '../../lib/content/urls';
 import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
 import { canonicalUrl } from '../../lib/seo/meta';
 import { DEFAULT_OG_IMAGE } from '../../lib/seo/og';
@@ -69,6 +70,14 @@ const whitepapers = (
   await getCollection('whitepaper', (w) => entryLocale(w.id) === locale && isPublished(w) && w.data.offeringNode === self.id)
 ).map((w) => ({ title: w.data.title, cover: w.data.coverImage, href: href(node(w.data.node)) }));
 const downloads = data.downloads ?? [];
+// People whose collection node sits under this offering (the ESG advisors under esg-advisory), in
+// the current site's team order
+const team =
+  node(COLLECTION_NODES.person).parent === self.id
+    ? (await getCollection('person', (p) => entryLocale(p.id) === locale && isPublished(p)))
+        .sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity) || a.data.title.localeCompare(b.data.title))
+        .map((p) => ({ title: p.data.title, role: [p.data.jobTitle, p.data.affiliation].filter(Boolean).join('｜'), href: entryPath('person', p) }))
+    : [];
 // Until M5 fills relatedPosts: current-site posts that name the offering (the first word of its
 // title, e.g. digiRunner)
 const COVERS = [coverData, coverIntegration, coverPlatform];
@@ -82,6 +91,7 @@ const split = related.length > 0 && hasDownloads;
 const anchors = [
   { href: '#features', label: t.offering.features, show: features.length > 0 },
   { href: '#use-cases', label: t.offering.useCases, show: useCases.length > 0 },
+  { href: '#team', label: t.offering.team, show: team.length > 0 },
   { href: '#related', label: t.offering.related, show: related.length > 0 },
   { href: '#downloads', label: t.offering.downloads, show: hasDownloads },
   { href: '#faq', label: t.offering.faq, show: faq.length > 0 },
@@ -153,6 +163,23 @@ const blog = node('blog');
                     </Tag>
                   )}
                 </Card>
+              </Reveal>
+            </li>
+          ))}
+        </CardGrid>
+      </Surface>
+    )
+  }
+
+  {
+    team.length > 0 && (
+      <Surface tone="dark" id="team" class="anchor-target">
+        <SectionHeading eyebrow="Team" title={t.offering.team} />
+        <CardGrid>
+          {team.map((p, i) => (
+            <li>
+              <Reveal delay={stagger(i)}>
+                <Card title={p.title} href={p.href} description={p.role} size="sm" />
               </Reveal>
             </li>
           ))}

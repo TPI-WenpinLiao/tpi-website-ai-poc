@@ -131,6 +131,17 @@ test('serializeFrontmatter writes arrays of objects as block lists, leaving out 
   assert.deepEqual(parse(text.replace(/^---\n|---\n$/g, ''), YAML_OPTIONS).features, [{ title: '零停機服務', body: 'a: b' }, { title: 'x', body: 'y' }]);
 });
 
+test('serializeFrontmatter writes string arrays as block lists when a flow list would not read back or is long', async () => {
+  const { parse } = await import('yaml');
+  const { YAML_OPTIONS } = await import('../dates.mjs');
+  assert.equal(serializeFrontmatter({ tags: ['ai', 'esg'] }), '---\ntags: [ai, esg]\n---\n');
+  const expertise = ['ESG auditing, ESG consulting', 'a: b'];
+  const text = serializeFrontmatter({ expertise });
+  assert.equal(text, ['---', 'expertise:', '  - ESG auditing, ESG consulting', '  - "a: b"', '---', ''].join('\n'));
+  assert.deepEqual(parse(text.replace(/^---\n|---\n$/g, ''), YAML_OPTIONS).expertise, expertise);
+  assert.match(serializeFrontmatter({ experience: ['x'.repeat(60), 'y'.repeat(60)] }), /^experience:\n {2}- x+\n {2}- y+$/m);
+});
+
 test('tricky strings read back unchanged with the options Astro parses frontmatter with', async () => {
   const { parse } = await import('yaml');
   const { YAML_OPTIONS } = await import('../dates.mjs');
