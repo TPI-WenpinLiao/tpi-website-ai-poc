@@ -1,7 +1,7 @@
 ---
 title: Nền tảng CLM (Tập trung quản lý nhật ký)
 seoTitle: "Cathay Life: Nền tảng CLM (Tập trung quản lý nhật ký)"
-description: Hỗ trợ Cathay Life xây dựng nền tảng quản lý log tập trung, tích hợp máy chủ đa nền tảng, phân quyền, giám sát 24/7, cảnh báo tức thời, tăng cường quản trị IT.
+description: Hỗ trợ Cathay Life xây dựng nền tảng quản lý log tập trung, tích hợp dữ liệu log đa hệ thống, phân quyền truy cập, giám sát 24/7 và cảnh báo tức thời.
 translationKey: cathay-life-centralized-log-management-platform
 client: { name: Cathay Life, disclosed: true, logo: ../../../assets/case-study/vi/cathay-life-centralized-log-management-platform/logo.webp }
 industry: finance

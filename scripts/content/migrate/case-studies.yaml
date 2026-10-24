@@ -5,6 +5,8 @@
 #   way that locale's descriptions write it. A name the descriptions do not contain is read off the
 #   logo and marked「logo」. Names, logos and the right to show them are to be confirmed (PR #28).
 # entries: entry id → frontmatter that replaces the generated value (title, seoTitle, description).
+#   cardDescription replaces the card text itself where the site's is wrong; the body, offerings
+#   and description follow it, and it is not written to the frontmatter (#40).
 #   zh-TW descriptions are rewritten to the seo-checklist length, vi in M7-03 (#40); en waits for M7-02.
 #   vi seoTitle shortens the generated「client: title」where <title> would pass 70 characters (#40).
 
@@ -263,7 +265,7 @@ entries:
   # confirmed (#40)
   vi/cathay-life-centralized-log-management-platform:
     cardDescription: Hỗ trợ Cathay Life xây dựng nền tảng quản lý log tập trung, tích hợp dữ liệu log đa hệ thống, phân quyền truy cập, giám sát 24/7 và cảnh báo tức thời, tăng cường bảo mật dữ liệu, quản trị IT và hiệu quả vận hành.
-    description: Hỗ trợ Cathay Life xây dựng nền tảng quản lý log tập trung, tích hợp máy chủ đa nền tảng, phân quyền, giám sát 24/7, cảnh báo tức thời, tăng cường quản trị IT.
+    description: Hỗ trợ Cathay Life xây dựng nền tảng quản lý log tập trung, tích hợp dữ liệu log đa hệ thống, phân quyền truy cập, giám sát 24/7 và cảnh báo tức thời.
   vi/cathay-life-crm-2-0:
     description: Hỗ trợ Bảo hiểm Nhân thọ Cathay xây dựng CRM 2.0 với vi dịch vụ K8S và tự động cập nhật phiên bản, giữ dịch vụ không gián đoạn, hỗ trợ quản lý bán hàng.
   vi/cathay-life-image-process-management-system:
