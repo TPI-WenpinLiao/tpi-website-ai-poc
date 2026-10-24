@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildRows, flattenStrings, mergeRows, navLabels, stringsMismatches, toCsv, validate } from './glossary.mjs';
+import { buildRows, flattenStrings, mergeRows, navLabels, stringProblems, titleProblems, toCsv, validate } from './glossary.mjs';
 
 const nodes = [
   { id: 'home', parent: '', title: '首頁', template: 'home' },
@@ -136,15 +136,32 @@ test('validate rejects bad rows', () => {
   assert.deepEqual(validate([{ ...ok, id: 'x:y', category: 'other' }]), ['x:y: category must be one of brand, term, nav, product, page, ui']);
 });
 
-test('stringsMismatches names interface strings that differ from the glossary', () => {
+test('stringProblems holds an en or vi strings file to the glossary', () => {
   const rows = [
-    { id: 'ui:menu', vi: 'Menu' },
-    { id: 'ui:listing.pageSuffix', vi: ' (trang {n})' },
+    { id: 'ui:menu', category: 'ui', en: 'Menu' },
+    { id: 'ui:toc', category: 'ui', en: '' },
+    { id: 'ui:skip', category: 'ui', en: 'Skip' },
+    { id: 'node:x', category: 'page', en: 'X' },
   ];
-  const flat = flattenStrings({ menu: 'Menu', listing: { pageSuffix: (n) => ` (trang ${n})` }, pages: { blog: 'x' } });
-  assert.deepEqual(stringsMismatches(rows, 'vi', flat), []);
-  assert.deepEqual(stringsMismatches(rows, 'vi', flattenStrings({ menu: 'Danh mục', toc: 'Mục lục' })), [
-    'src/data/strings/vi.ts menu: "Danh mục" is not the glossary\'s vi value "Menu"',
-    'src/data/strings/vi.ts toc: "Mục lục" is not the glossary\'s vi value ""',
+  assert.deepEqual(stringProblems(rows, 'en', [['menu', 'Menu'], ['toc', 'On this page'], ['extra', 'E']]), [
+    'docs/i18n/glossary.csv: ui:toc has no en, which src/data/strings/en.ts needs',
+    'src/data/strings/en.ts: skip is missing',
+    'src/data/strings/en.ts: extra is not in docs/i18n/glossary.csv (re-run after adding it to zh-TW.ts)',
   ]);
+  assert.deepEqual(stringProblems(rows, 'en', [['menu', 'Main menu'], ['toc', 'x'], ['skip', 'Skip']]).slice(0, 1), [
+    'src/data/strings/en.ts: menu is "Main menu", the glossary has "Menu"',
+  ]);
+});
+
+test('titleProblems wants a confirmed product named in its en and vi titles', () => {
+  const rows = [
+    { id: 'node:digirunner', category: 'product', status: 'confirmed', en: 'digiRunner', vi: 'digiRunner' },
+    { id: 'node:gis', category: 'product', status: 'draft', en: 'GIS', vi: '' },
+  ];
+  const titles = [
+    { node: 'digirunner', locale: 'en', title: 'digiRunner API Management', file: 'a.md' },
+    { node: 'digirunner', locale: 'vi', title: 'Quản lý API', file: 'b.md' },
+    { node: 'gis', locale: 'en', title: 'Maps', file: 'c.md' },
+  ];
+  assert.deepEqual(titleProblems(rows, titles), ['b.md: title "Quản lý API" does not name digiRunner (docs/i18n/glossary.csv node:digirunner)']);
 });

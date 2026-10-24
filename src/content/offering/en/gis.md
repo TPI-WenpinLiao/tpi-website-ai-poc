@@ -1,6 +1,6 @@
 ---
 title: GIS Geospatial Solution
-description: Businesses can leverage GIS spatial data analysis and location intelligence tools to visualize geographic information for better analysis. TPIsoftware has exceptional data technology and tools to enhance business decision-making and forecasting for financial precision services, environmental planning, equipment and resource allocation.
+description: TPIsoftware's GIS spatial data analysis and location intelligence tools visualize geographic information to enhance business decision-making and forecasting.
 translationKey: gis
 node: gis
 kind: solution
@@ -23,5 +23,5 @@ useCases:
     body: Building management and smart monitoring adopting GIS technology and IoT to comply with the financial industry requirements. Space or object equipment management can be flexibly divided and integrated to enable a more reliable and secure asset management and achieve the goal of smart building.
 cta: contact
 sourceUrl: https://www.tpisoftware.com/en/solutions/gis
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---

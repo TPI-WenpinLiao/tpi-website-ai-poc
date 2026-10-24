@@ -10,8 +10,9 @@ authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1a1c73-566d-69fa-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/en/ai-business-coaching-tool-for-sales-training/cover.webp
 sourceUrl: https://www.tpisoftware.com/en/blog/artifintell/ai-business-coaching-tool-for-sales-training
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-02
+seoTitle: AI Business Coaching Tool for Sales Training
 ---
 
 AI business coaching tools use artificial intelligence as virtual advisors, coaching assistants or practice environments for business-related development. Depending on the application, they may support strategic reflection, goal setting, leadership development, communication training, sales coaching or scenario-based employee practice.

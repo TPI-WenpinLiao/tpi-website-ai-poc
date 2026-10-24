@@ -1,6 +1,6 @@
 ---
 title: Sustainability and ESG Strategic Advisory
-description: Climate change and its socio-economic impacts are now globally recognized, which has prompted us to move from slogans to real action. Guidelines and metrics were established to govern enterprises’ ESG initiatives, which calls for enterprises’ urgent actions. TPIsoftware offers comprehensive consulting services with a tailored three-phase transformation strategy, developed and delivered by a team of ESG experts, to help enterprises ace carbon inventory in accordance with ISO 14064-1 and enhance enterprises’ commitment to sustainability.
+description: TPIsoftware's ESG experts offer consulting with a tailored three-phase transformation strategy to help enterprises ace carbon inventory under ISO 14064-1.
 translationKey: esg-advisory
 node: esg-advisory
 kind: service

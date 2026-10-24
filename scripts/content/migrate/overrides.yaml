@@ -124,6 +124,114 @@ news/zh-TW/582:
   frontmatter:
     description: 昕力資訊連續兩年獲臺北市友善育兒事業獎績優事業組，今年推出「昕守爸媽」親職支持平台，並以 AISO AI 一體機解決方案獲 2026 臺灣 AI 卓越獎優品。
 
+# en (M7-02, #39): seoTitle keeps <title> within 70 characters with " | TPIsoftware"; descriptions
+# shortened from the current site's to 160 characters; alt from what each image shows, or from the
+# caption below it
+blog/en/ai-business-coaching-tool-for-sales-training:
+  frontmatter:
+    seoTitle: AI Business Coaching Tool for Sales Training
+
+blog/en/ai-powered-speech-analytics:
+  frontmatter:
+    seoTitle: "SysTalk.Audit: AI Call Center Quality Assurance"
+    description: How SysTalk.Audit uses AI-powered speech analytics to improve customer service quality, sentiment analysis and call compliance monitoring.
+
+blog/en/apim-integration:
+  frontmatter:
+    seoTitle: Enterprise APIM Integration with Quantum Computing
+    description: How API Management (APIM) serves as the governance layer for integrating Quantum-as-a-Service (QCaaS) into enterprise workflows.
+  alt:
+    1f116d1e-05f6-6f08-81f6-0b7fa23ee3a6.webp: "Request lifecycle: the client application calls the API management platform, which passes the request through authentication and cost control and an asynchronous job queue to the quantum provider (QCaaS); results go to a cache or storage and back through the platform to the client"
+
+blog/en/enterprise-agentic-ai-platform-explained:
+  frontmatter:
+    description: How Agentic AI moves enterprises from standalone AI agents to multi-agent workflows, and how an AI agent management platform governs them.
+
+blog/en/enterprise-ai-agent-management-platform:
+  frontmatter:
+    description: How an AI Agent Management Platform helps enterprises deploy, orchestrate and govern AI agents at scale, from system integration to deployment.
+
+blog/en/enterprise-ai-agents-for-workflow-automation:
+  frontmatter:
+    seoTitle: Enterprise AI Agents for Business Automation
+    description: How enterprise AI agents support digital workforce operations, AI-powered workflow automation and knowledge management, with examples from SysTalk.ai.
+
+blog/en/sme-carbon-management-software:
+  frontmatter:
+    seoTitle: SME Carbon Management Software for GHG Inventory
+
+blog/en/why-enterprise-needs-all-in-one-ai-solutions:
+  frontmatter:
+    seoTitle: "Sovereign AI for Enterprise: All-in-One AI Solutions"
+    description: How sovereign AI for enterprise keeps data, models and knowledge under your control with a private generative AI platform and on-premises deployment.
+
+news/en/560:
+  frontmatter:
+    seoTitle: TPIsoftware and Phison Electronics Establish AISO
+    description: "TPIsoftware (TPEx: 7781) announced a strategic collaboration with Phison Electronics to establish AISO, an alliance that empowers nations to build their own AI."
+  alt:
+    news-2026-03-25-1774407820762.webp: Alliance members on stage at the AISO launch, touching a glowing sphere in front of the AISO backdrop
+    news-2026-03-25-1774408137142.webp: Four representatives holding up the signed AISO memorandums of understanding
+
+news/en/563:
+  frontmatter:
+    seoTitle: TPIsoftware Wins Taiwan SMART 50 Award
+    description: "TPIsoftware (TPEx: 7781) won the first Taiwan SMART 50 Award, organized by the Ministry of Health and Welfare, for its FHIR-based Medical AI Application."
+  alt:
+    news-2026-04-27-1777282975252.webp: "Group photo of the Taiwan SMART 50 Award winners with the headline: TPIsoftware Wins “Taiwan SMART 50 Award” for Its FHIR-Based Medical AI Application"
+    news-2026-04-21-1776739585186.webp: A TPIsoftware representative receiving the award on stage at the Taiwan SMART 50 awards ceremony
+
+news/en/566:
+  frontmatter:
+    seoTitle: "TPIsoftware at COMPUTEX 2026: All-in-one Enterprise AI"
+    description: "TPIsoftware (TPEx: 7781) joins Phison Electronics and ECS, co-founding members of AISO, to showcase integrated AI solutions at COMPUTEX 2026."
+  alt:
+    news-2026-05-28-1779935250340.webp: "TPIsoftware and AISO logos with the headline: TPIsoftware at COMPUTEX 2026: Showcases All-in-one Solutions for Enterprise AI Adoption"
+
+news/en/569:
+  frontmatter:
+    seoTitle: TPIsoftware Adopts Intel Xeon 6 for Sovereign AI
+    description: "TPIsoftware (TPEx: 7781) adopts Intel Xeon 6 processors with P-Cores and Intel Arc Pro B60 GPUs as the computing foundation of its enterprise AI solutions."
+  alt:
+    news-2026-06-22-1782125303975.webp: "A processor chip with the TPIsoftware and AISO logos and the headline: TPIsoftware Adopts Intel Xeon 6 Processors, Defining a New Standard for Sovereign AI Computing"
+
+news/en/573:
+  frontmatter:
+    seoTitle: TPIsoftware Partners with Juxta on Defense Positioning
+    description: TPIsoftware signed a global reseller agreement with Juxta, a US-based Universal Positioning System (UPS) innovator, to deliver geospatial tracking applications.
+  alt:
+    news-2026-07-28-1785211745047.webp: TPIsoftware and Juxta logos under the headline of the partnership announcement
+
+news/en/576:
+  frontmatter:
+    seoTitle: TPIsoftware Leads AISO in Integrated On-premises AI
+    description: "TPIsoftware (TPEx: 7781) launched integrated AI solutions, including the AISO AI Notebook pre-configured with OrientAI, an enterprise agentic AI platform."
+  alt:
+    news-2026-08-14-1786697335177.webp: TPIsoftware and AISO logos under the headline of the integrated AI solutions announcement
+
+news/en/578:
+  frontmatter:
+    seoTitle: GreenSwift for Ho-Team Construction’s Carbon Inventory
+    description: "TPIsoftware (TPEx: 7781) supported Ho-Team Construction in its carbon inventory and reporting with GreenSwift, an AI-powered carbon management platform."
+  alt:
+    image.webp: GreenSwift and Ho-Team Construction logos under the headline of the announcement, over a green globe with sustainability icons
+
+news/en/583:
+  frontmatter:
+    seoTitle: TPIsoftware Garners Family-inclusive and AI Awards
+    description: "TPIsoftware (TPEx: 7781) received the Parenting Friendly Enterprise Award and the 2026 Taiwan AI Excellence Award for its integrated AI solution."
+  alt:
+    image.webp: Photos from the Parenting Friendly Enterprise Award and the 2026 Taiwan AI Excellence Award ceremonies, with the headline of the announcement
+    image-2.webp: Mayor of Taipei City Wan-An Chiang presenting the award to TPIsoftware Executive Vice President Mina Yieh
+    image-3.webp: Minister of the Ministry of Digital Affairs Yi-Jing Lin presenting the award to TPIsoftware General Manager Yilan Yeh
+
+news/en/586:
+  frontmatter:
+    seoTitle: TPIsoftware Launches New Sovereign AI Solutions
+    description: "TPIsoftware (TPEx: 7781) launched sovereign AI solutions pre-configured with OrientAI for legal, HR, talent development, teacher preparation and AI governance."
+  alt:
+    news-2026-10-15-1792045491872.webp: TPIsoftware and AISO logos beside an AISO AI machine
+
 # vi descriptions cut to seo-checklist length, seoTitle where <title> would pass 70 characters and alt
 # for body images (M7-03, #40). The current site's descriptions of some vi posts end in a character
 # count such as "(159 ký tự)", dropped here.

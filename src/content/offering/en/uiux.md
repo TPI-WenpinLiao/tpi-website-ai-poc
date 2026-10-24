@@ -1,6 +1,6 @@
 ---
 title: UX/UI Design Solution
-description: The eye-catching interface design and good user experience are the keys to attracting visitors, which determine a website’s visual representation and overall experience.
+description: Eye-catching interface design and good user experience are the keys to attracting visitors and shape a website's visual representation and experience.
 translationKey: uiux
 node: uiux
 kind: solution
@@ -23,5 +23,5 @@ useCases:
     body: Built a system combining the social messaging app with e-payment to provide P2P transfer, payment split, bill payment cycle services and more. In compliance with the LINE app design specification, the interface delivers information through the arrangement of font-size and font-weight and enables account balance and payment records at a glance.
 cta: contact
 sourceUrl: https://www.tpisoftware.com/en/solutions/uiux
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---

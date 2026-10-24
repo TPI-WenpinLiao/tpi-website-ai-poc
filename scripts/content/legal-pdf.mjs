@@ -1,5 +1,7 @@
 // Converts the current site's legal PDFs into the page entries of the legal nodes (M5-06, #31):
-// src/content/page/zh-TW/{privacy,terms,disclaimer,security-policy}.md. The PDF text (pdftotext
+// src/content/page/zh-TW/{privacy,terms,disclaimer,security-policy}.md, and the en entries of the
+// two whose PDF carries an English translation (M7-02, #39): src/content/page/en/{privacy,terms}.md
+// hold the English half of the same text (english()), each block checked to be in the PDF. The PDF text (pdftotext
 // -layout, from poppler-utils) becomes the Markdown body; title, description and effectiveDate
 // come from DOCS below. Before writing, the body is checked against the PDF: with whitespace and
 // the Markdown added here removed, it must equal the PDF text character for character, so the
@@ -16,7 +18,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const OUT = new URL('../../src/content/page/zh-TW/', import.meta.url);
+const OUT = (locale) => new URL(`../../src/content/page/${locale}/`, import.meta.url);
 
 // One per legal node. The en and vi PDFs are not converted: the en ones date from 2020 and differ
 // from the 2026 zh-TW text (which already carries an English translation), and the vi one is a
@@ -29,12 +31,24 @@ const DOCS = [
     url: 'https://www.tpisoftware.com/pdf/1-1PrivacyPolicy(tw).pdf',
     title: '隱私權政策',
     description: '昕力資訊網站的隱私權聲明：蒐集個人資料的目的與類別、利用期間、地區、對象及方式，當事人權利與行使方式，以及 Cookie 與第三方網站的說明。',
+    // title as in the current en footer; description from the section titles of the English text,
+    // written without ": " (the frontmatter is written unquoted)
+    en: {
+      title: 'Privacy Policy',
+      description:
+        'The TPIsoftware website Privacy Statement, on the purposes and categories of personal data collected, its period, region and manner of use, and your rights.',
+    },
   },
   {
     node: 'terms',
     url: 'https://www.tpisoftware.com/pdf/2-1Use(tw).pdf',
     title: '使用條款',
     description: '昕力資訊網站使用條款：網站內容的所有權與使用規範、帳號安全、免責聲明、責任限制、違反條款的處理，以及準據法與管轄法院。',
+    en: {
+      title: 'Terms of Use',
+      description:
+        'Terms of Use of the TPIsoftware website, on ownership of site content, your use of the site, accounts and security, disclaimers, liability and governing law.',
+    },
   },
   {
     node: 'disclaimer',
@@ -221,6 +235,39 @@ export function markdown(bs) {
   return `${out.join('\n')}\n`;
 }
 
+// The personal data codes of the privacy statement (○一三, Ｃ○○一) in ASCII: 013, C001
+const CODE = /^(Ｃ?[○〇一二三四五六七八九]+)\s+/;
+const DIGITS = { '○': '0', '〇': '0', 一: '1', 二: '2', 三: '3', 四: '4', 五: '5', 六: '6', 七: '7', 八: '8', 九: '9', Ｃ: 'C' };
+const asciiCode = (code) => [...code].map((c) => DIGITS[c]).join('');
+// What follows the last Chinese character or full-width mark: the English half of
+// "1. 個人資料蒐集之目的 Purposes of Personal Data Collection"
+const englishTail = (s) => s.replace(/^.*[㐀-鿿　-〿＀-￯]\s*/, '');
+// The Japanese subsidiary's name inside the English text
+const JAPANESE = /株式會社/g;
+
+/**
+ * The English half of a bilingual document's blocks: English paragraphs and translations as they
+ * are, the English part of a bilingual title or list item (with its section number or data code).
+ * Chinese-only blocks are left out. `source` is what the result is checked against: the English
+ * text without the number or code, which must be in the PDF.
+ */
+export function english(bs) {
+  // By its characters, not by `zh`: a title or item that is mostly Latin is not marked zh
+  const chinese = (t) => /[㐀-鿿]/.test(t.replace(JAPANESE, ''));
+  return bs.flatMap((b) => {
+    if (b.kind === 'item' && b.extra?.length && !b.extra.some(chinese)) return [{ kind: 'item', text: b.extra.join(' '), source: b.extra.join(' ') }];
+    if (!chinese(b.text)) return [{ kind: b.kind, text: b.text, source: b.text }];
+    const tail = englishTail(b.text);
+    if (tail === b.text || !/[A-Za-z]/.test(tail) || (b.kind !== 'h2' && b.kind !== 'h3' && b.kind !== 'item')) return [];
+    const prefix = b.kind === 'item' ? CODE.exec(b.text)?.[1] : /^\d+(?:\.\d+)*\.?(?=\s)/.exec(b.text)?.[0];
+    const lead = prefix ? `${b.kind === 'item' ? asciiCode(prefix) : prefix} ` : '';
+    return [{ kind: b.kind, text: `${lead}${tail}`, source: tail }];
+  });
+}
+
+/** Markdown of english() blocks, with the Japanese company name marked as Japanese */
+export const englishMarkdown = (bs) => markdown(bs).replace(JAPANESE, (m) => `<span lang="ja">${m}</span>`);
+
 /** The body's text without Markdown syntax, for comparing with the PDF */
 export const plain = (md) =>
   squash(
@@ -238,20 +285,30 @@ function effectiveDate(text, doc) {
   return `${m[1]}-${m[2]}-${m[3]}`;
 }
 
-function entry(doc, text, migratedAt) {
+function entry(doc, text, migratedAt, locale) {
   const { lines } = textLines(text, doc.dropFrom);
-  const body = markdown(blocks(lines, { numberedHeadings: doc.numberedHeadings ?? true }));
+  const bs = blocks(lines, { numberedHeadings: doc.numberedHeadings ?? true });
   // The PDF's bullet glyphs become Markdown list markers
   const expected = squash(lines.map((l) => l.trim().replace(BULLET, '')).join(''));
-  if (plain(body) !== expected) {
-    const a = plain(body);
-    const at = [...a].findIndex((c, i) => c !== expected[i]);
-    throw new Error(`${doc.node}: body differs from the PDF text at ${at}: "${a.slice(at, at + 20)}" vs "${expected.slice(at, at + 20)}"`);
+  let body;
+  if (locale === 'zh-TW') {
+    body = markdown(bs);
+    if (plain(body) !== expected) {
+      const a = plain(body);
+      const at = [...a].findIndex((c, i) => c !== expected[i]);
+      throw new Error(`${doc.node}: body differs from the PDF text at ${at}: "${a.slice(at, at + 20)}" vs "${expected.slice(at, at + 20)}"`);
+    }
+  } else {
+    const en = english(bs);
+    const missing = en.filter((b) => !expected.includes(squash(b.source)));
+    if (missing.length) throw new Error(`${doc.node} (${locale}): not in the PDF text: "${missing[0].source.slice(0, 60)}"`);
+    body = englishMarkdown(en);
   }
+  const meta = locale === 'zh-TW' ? doc : doc[locale];
   const front = [
     '---',
-    `title: ${doc.title}`,
-    `description: ${doc.description}`,
+    `title: ${meta.title}`,
+    `description: ${meta.description}`,
     `translationKey: ${doc.node}`,
     `node: ${doc.node}`,
     ...(doc.dateNote ? [`# ${doc.dateNote}`] : []),
@@ -280,19 +337,22 @@ async function main(check) {
       const pdf = join(dir, `${doc.node}.pdf`);
       writeFileSync(pdf, Buffer.from(await res.arrayBuffer()));
       const text = execFileSync('pdftotext', ['-layout', '-enc', 'UTF-8', pdf, '-'], { encoding: 'utf8' });
-      const file = new URL(`${doc.node}.md`, OUT);
-      const current = existsSync(file) ? readFileSync(file, 'utf8') : '';
-      const kept = /^migratedAt: (\S+)$/m.exec(current)?.[1];
-      let next = entry(doc, text, kept ?? today);
-      if (next !== current) next = entry(doc, text, today);
-      if (current === next) {
-        console.log(`ok    ${doc.node}`);
-      } else if (check) {
-        stale += 1;
-        console.log(`STALE ${doc.node}`);
-      } else {
-        writeFileSync(file, next);
-        console.log(`wrote ${doc.node}`);
+      for (const locale of ['zh-TW', ...(doc.en ? ['en'] : [])]) {
+        const file = new URL(`${doc.node}.md`, OUT(locale));
+        const current = existsSync(file) ? readFileSync(file, 'utf8') : '';
+        const kept = /^migratedAt: (\S+)$/m.exec(current)?.[1];
+        let next = entry(doc, text, kept ?? today, locale);
+        if (next !== current) next = entry(doc, text, today, locale);
+        const name = `${locale}/${doc.node}`;
+        if (current === next) {
+          console.log(`ok    ${name}`);
+        } else if (check) {
+          stale += 1;
+          console.log(`STALE ${name}`);
+        } else {
+          writeFileSync(file, next);
+          console.log(`wrote ${name}`);
+        }
       }
     }
   } finally {

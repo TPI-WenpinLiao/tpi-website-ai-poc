@@ -1,6 +1,6 @@
 ---
 title: SysTalk.ai AI Document Processing Solution
-description: A smart document processing solution powered by an exclusive AI model featuring intelligent character recognition (ICR) and exclusive Puzzle adaptive AI module to quickly analyze various documents.
+description: A smart document processing solution with intelligent character recognition (ICR) and the exclusive Puzzle adaptive AI module to analyze documents fast.
 translationKey: smartfilling
 node: smartfilling
 kind: solution
@@ -20,5 +20,5 @@ useCases:
     industry: finance
 cta: contact
 sourceUrl: https://www.tpisoftware.com/en/solutions/smartfilling
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---

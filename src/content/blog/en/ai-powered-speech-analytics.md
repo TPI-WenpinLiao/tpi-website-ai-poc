@@ -1,6 +1,6 @@
 ---
 title: "SysTalk.Audit: AI-Powered Call Center Quality Assurance and Speech Analytics"
-description: Explore how AI-powered speech analytics helps enterprises improve customer service quality, sentiment analysis and call compliance monitoring. Learn how SysTalk.Audit combines speech transcription, contextual analysis and generative AI quality assurance to identify service issues, prioritize high-risk conversations and support more efficient contact center quality management.
+description: How SysTalk.Audit uses AI-powered speech analytics to improve customer service quality, sentiment analysis and call compliance monitoring.
 translationKey: ai-powered-speech-analytics
 category: ai
 tags: [ai-application]
@@ -10,8 +10,9 @@ authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1c5eaa-d7ea-631c-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/en/ai-powered-speech-analytics/cover.webp
 sourceUrl: https://www.tpisoftware.com/en/blog/artifintell/ai-powered-speech-analytics
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-10-13
+seoTitle: "SysTalk.Audit: AI Call Center Quality Assurance"
 ---
 
 ## Enterprise AI Customer Service Quality Assurance

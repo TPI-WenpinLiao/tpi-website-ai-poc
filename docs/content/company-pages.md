@@ -46,6 +46,18 @@ node scripts/content/legal-pdf.mjs --check   # 不寫檔；內容檔與 PDF 不�
 
 現站換了 PDF 後重跑一次，用 `git diff` 看條文改了什麼。轉換規則不符時改 script（測試在 `scripts/content/legal-pdf.test.mjs`），不改產出的內容檔。
 
+### en 法務頁
+
+隱私權政策與使用條款的 zh-TW PDF 附有英譯，同一個 script 另外寫 `src/content/page/en/{privacy,terms}.md`（M7-02，#39）：
+
+- 英文段落、清單項目的英譯照抄；中英並列的章節標題與清單項目只留英文，保留章節號碼。個資的特定目的與類別代號（`○一三`、`Ｃ○一一`）改成半形數字（`013`、`C011`）
+- 只有中文的段落拿掉，包括「最近修訂日期」那一行（日期在 `effectiveDate`）
+- 英文裡的日本子公司名稱「株式會社」包成 `<span lang="ja">`
+- 寫檔前，每個段落（不含號碼與代號）都必須出現在 PDF 文字裡
+- en 的 `title`、`description` 寫在 `DOCS` 的 `en`
+
+免責聲明與資訊安全政策沒有英文版，不產生 en 頁。
+
 ### 沒有轉換的 PDF
 
 | PDF | 原因 |

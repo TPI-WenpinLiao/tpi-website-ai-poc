@@ -3,7 +3,8 @@
 // since #107): tagline, features, useCases, faq and highlights of every entry that isn't a draft, and
 // the name, job title, affiliation and lists of every person entry. A line counts as found
 // when it is on any of the entry's sourceUrl pages (merged pages list several), after correcting the
-// typos in CORRECTIONS. Same matching as scripts/design/home-content.mjs, except that a FAQ answer
+// typos in CORRECTIONS; en and vi pages are read with ASCII punctuation, as the converters write
+// it (latinPunctuation). Same matching as scripts/design/home-content.mjs, except that a FAQ answer
 // that isn't on the page as a whole is checked sentence by sentence: offerings.mjs joins an answer's
 // paragraph and list items (#106). Entries in TRANSLATED are skipped (#40).
 // Needs network access to www.tpisoftware.com, so it is not part of `npm run check`.
@@ -14,6 +15,7 @@ import { join } from 'node:path';
 import { parse } from 'yaml';
 import { request } from '../inventory/http.mjs';
 import { pageText, squash } from '../lib/page-text.mjs';
+import { latinPunctuation } from '../content/migrate/migrate.mjs';
 
 // Typos on the current site that the entries correct, as [current site, entry]; matched after squash
 const CORRECTIONS = [
@@ -21,6 +23,8 @@ const CORRECTIONS = [
   ['HRM等,', 'HRM等，'],
   ['簡化驗證流程,無需記憶複雜密碼,實現', '簡化驗證流程，無需記憶複雜密碼，實現'],
   ['提升盤查效率.', '提升盤查效率。'],
+  // en digiLogs: a full stop doubled with a Chinese one
+  ['(MTTR).。', '(MTTR).'],
 ];
 
 const COLLECTIONS = ['offering', 'hub', 'person'];
@@ -75,7 +79,9 @@ const pages = new Map();
 for (const url of new Set(checks.flatMap((c) => c.urls))) {
   const res = await request(url);
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-  pages.set(url, CORRECTIONS.reduce((text, [from, to]) => text.replaceAll(from, to), squash(pageText(await res.text()))));
+  const text = pageText(await res.text());
+  const zh = !/\/(?:en|vn)(?:\/|$)|tpisoftware\.vn/.test(url);
+  pages.set(url, CORRECTIONS.reduce((t, [from, to]) => t.replaceAll(from, to), squash(zh ? text : latinPunctuation(text))));
 }
 let failed = 0;
 for (const c of checks) {

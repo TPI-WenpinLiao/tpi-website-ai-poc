@@ -110,6 +110,15 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
     text-wrap: balance;
   }
 
+  /* Wide screens: an English or Vietnamese word wider than the copy column (a display title beside
+     the visual) runs into the gutter instead of breaking inside it (Reinventin／g). Narrow screens
+     have no gutter, so the base rule (break anywhere rather than overflow) stays */
+  @media (--bp-lg-up) {
+    h1:is(:lang(en), :lang(vi)) {
+      overflow-wrap: normal;
+    }
+  }
+
   .description {
     max-width: var(--reading-max-width);
     margin: 0;

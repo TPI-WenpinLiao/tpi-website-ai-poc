@@ -1,6 +1,6 @@
 ---
 title: SysTalk.Detect AI Textual Analysis Solution
-description: In addition to word comparison and semantic analysis of structural data, transforming unstructured dialogue texts into usable information requires textual analysis. The context analysis from massive data enables enterprises to gain insights.
+description: "Turning unstructured dialogue texts into usable information takes textual analysis: context analysis of massive data gives enterprises insights."
 translationKey: textualanalysis
 node: textualanalysis
 kind: solution
@@ -23,5 +23,5 @@ useCases:
     body: Leveraged NLU to analyze diagnosis certificates and documents to strengthen insurance claims settlement system and reduce human labor for better efficiency; model accuracy is constantly optimized through the evolution system to deliver the best claims payment calculation results.
 cta: contact
 sourceUrl: https://www.tpisoftware.com/en/solutions/textualanalysis
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---
