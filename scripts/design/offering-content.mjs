@@ -6,7 +6,7 @@
 // typos in CORRECTIONS; en and vi pages are read with ASCII punctuation, as the converters write
 // it (latinPunctuation). Same matching as scripts/design/home-content.mjs, except that a FAQ answer
 // that isn't on the page as a whole is checked sentence by sentence: offerings.mjs joins an answer's
-// paragraph and list items (#106).
+// paragraph and list items (#106). Entries in TRANSLATED are skipped (#40).
 // Needs network access to www.tpisoftware.com, so it is not part of `npm run check`.
 //
 //   node scripts/design/offering-content.mjs
@@ -29,6 +29,19 @@ const CORRECTIONS = [
 
 const COLLECTIONS = ['offering', 'hub', 'person'];
 
+// Entries translated from another locale because the current site has no page in theirs (#40);
+// their sourceUrl is the page the source entry came from, so their copy isn't on it
+const TRANSLATED = {
+  'offering/vi/digicare.md': 'zh-TW',
+  'offering/vi/digilogs-detection.md': 'zh-TW',
+  'offering/vi/systalk-viki.md': 'zh-TW',
+  'offering/vi/systalk-coach.md': 'zh-TW',
+  'offering/vi/systalk-audit.md': 'zh-TW',
+  'offering/vi/systalk-icr.md': 'zh-TW',
+  'hub/vi/family-ai.md': 'zh-TW',
+  'hub/vi/family-esg.md': 'zh-TW',
+};
+
 const frontmatter = (md) => parse(/^---\n([\s\S]*?)\n---/.exec(md)?.[1] ?? '');
 const pairs = (items, key, fields) => (items ?? []).flatMap((item, i) => fields.map((f) => [`${key}.${i}.${f}`, item[f]]));
 // Sentences and 「title：description」 parts, without the punctuation that joined them
@@ -45,7 +58,9 @@ for (const collection of COLLECTIONS) {
   for (const file of files) {
     const data = frontmatter(await readFile(join(dir, file), 'utf8'));
     const urls = [data.sourceUrl].flat().filter(Boolean);
-    if (data.draft || urls.length === 0) continue;
+    const translated = TRANSLATED[`${collection}/${file}`];
+    if (translated) console.log(`skip ${collection}/${file}: translated from ${translated}`);
+    if (data.draft || urls.length === 0 || translated) continue;
     const texts = [
       ...(data.tagline ? [['tagline', data.tagline]] : []),
       ...pairs(data.features, 'features', ['title', 'body']),

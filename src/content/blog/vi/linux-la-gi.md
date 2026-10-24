@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f100cd3-d412-6ace-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/linux-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/linux-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-15
+seoTitle: Linux Là Gì? Hệ Điều Hành Cho Máy Chủ & Đám Mây
 ---
 
 Bạn có biết rằng:

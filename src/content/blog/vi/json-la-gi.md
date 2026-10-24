@@ -10,7 +10,7 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f693f-e99f-623e-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/json-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/json-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-15
 ---
 
@@ -84,7 +84,7 @@ Hãy so sánh cùng một dữ liệu:
 
 XML
 
-<nhanvien> <hoten>Nguyen Van A</hoten> <tuoi>30</tuoi> </nhanvien>
+\<nhanvien> \<hoten>Nguyen Van A\</hoten> \<tuoi>30\</tuoi> \</nhanvien>
 
 **JSON (Mới & Gọn nhẹ):**
 

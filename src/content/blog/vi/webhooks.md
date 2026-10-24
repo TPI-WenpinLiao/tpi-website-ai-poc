@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f128217-166a-6f05-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/webhooks/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/enterprise-management/webhooks
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-24
+seoTitle: Webhook Là Gì? Khác Biệt Với API Truyền Thống
 ---
 
 Hãy tưởng tượng bạn đang tích hợp cổng thanh toán MoMo vào website bán hàng của mình. Khi khách hàng quét mã QR trả tiền xong, làm sao website của bạn biết để tự động chuyển trạng thái đơn hàng thành "Đã thanh toán"?

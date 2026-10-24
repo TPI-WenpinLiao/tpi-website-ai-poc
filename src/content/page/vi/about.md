@@ -1,6 +1,6 @@
 ---
 title: Về chúng tôi
-description: Thành lập năm 2005, TPIsoftware cung cấp các sản phẩm và giải pháp phần mềm tích hợp AI với thiết kế module, phục vụ tài chính, chính phủ, bán lẻ, sản xuất, y tế và nhiều ngành khác.
+description: TPIsoftware thành lập năm 2005, cung cấp giải pháp phần mềm tích hợp AI, thiết kế module cho tài chính, chính phủ, bán lẻ, sản xuất, y tế và nhiều ngành khác.
 translationKey: about
 node: about
 sections:

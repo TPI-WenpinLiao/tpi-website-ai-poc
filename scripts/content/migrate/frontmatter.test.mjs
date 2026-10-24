@@ -164,4 +164,6 @@ test('long <title> is flagged unless seoTitle is short enough, with the site-nam
   assert.deepEqual(frontmatterNotes('zh-TW', { title: 'a'.repeat(54) }), ['<title> is 71 characters (max 70): set seoTitle']);
   assert.deepEqual(frontmatterNotes('en', { title: 'a'.repeat(56) }), []);
   assert.deepEqual(frontmatterNotes('en', { title: long, seoTitle: 'short' }), []);
+  // Counted as the HTML writes it: each & becomes &amp; (56 + 4 + 14 = 74)
+  assert.deepEqual(frontmatterNotes('en', { title: `${'a'.repeat(55)}&` }), ['<title> is 74 characters (max 70): set seoTitle']);
 });

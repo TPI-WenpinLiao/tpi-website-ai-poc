@@ -1,6 +1,6 @@
 ---
 title: Giải pháp thiết kế UX/UI
-description: Thiết kế giao diện bắt mắt và trải nghiệm người dùng tốt là chìa khóa để thu hút khách truy cập, sáng tạo hình ảnh trực quan và trải nghiệm tổng thể trên trang web.
+description: Thiết kế giao diện bắt mắt và trải nghiệm người dùng tốt là chìa khóa để thu hút khách truy cập, tạo hình ảnh trực quan và trải nghiệm tổng thể trên trang web.
 translationKey: uiux
 node: uiux
 kind: solution
@@ -23,5 +23,5 @@ useCases:
     body: Xây dựng một hệ thống kết hợp ứng dụng tin nhắn trên mạng xã hội với thanh toán điện tử để cung cấp dịch vụ chuyển khoản P2P, phân chia thanh toán, chu kỳ thanh toán hóa đơn và hơn thế nữa. Tuân thủ thiết kế đặc trưng của ứng dụng LINE, giao diện cung cấp thông tin thông qua việc sắp xếp kích thước phông chữ và trọng lượng phông chữ, đồng thời báo số dư tài khoản và hồ sơ thanh toán một cách nhanh chóng.
 cta: contact
 sourceUrl: https://www.tpisoftware.vn/solutions/uiux
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---

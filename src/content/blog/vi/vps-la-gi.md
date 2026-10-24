@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f6968-6993-6eb4-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/vps-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/vps-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-19
+seoTitle: VPS Hay Shared Hosting? So Sánh Hiệu Năng & Chi Phí
 ---
 
 Khi website hoặc ứng dụng của doanh nghiệp bắt đầu lớn mạnh, bạn sẽ gặp phải vấn đề: Gói Hosting giá rẻ (Shared Hosting) quá chậm và hay bị lỗi, nhưng thuê một Máy chủ vật lý (Dedicated Server) thì quá đắt và lãng phí tài nguyên.

@@ -1,6 +1,6 @@
 ---
 title: Nền tảng quản lý sức khỏe tương tác
-description: Các nhà cung cấp dịch vụ chăm sóc sức khỏe truyền thống và ngành bảo hiểm đã phát triển và áp dụng các ứng dụng Smart Health có tính năng số hóa và game hóa để cung cấp trải nghiệm tương tác và hấp dẫn để quản lý và theo dõi sức khỏe người dùng.
+description: Ngành bảo hiểm và y tế áp dụng ứng dụng Smart Health có tính năng số hóa và game hóa, mang lại trải nghiệm tương tác để quản lý và theo dõi sức khỏe.
 translationKey: interactivehealth
 node: interactivehealth
 kind: solution
@@ -23,5 +23,5 @@ useCases:
     body: Hỗ trợ Bệnh viện Fu Jen xây dựng Ứng dụng chăm sóc sức khỏe với chức năng đặt lịch hẹn, cập nhật trạng thái hàng chờ, cập nhật thông tin sức khỏe, v.v.. giúp giảm thời gian chờ đợi và cải thiện trải nghiệm của bệnh nhân.
 cta: contact
 sourceUrl: https://www.tpisoftware.vn/solutions/interactivehealth
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---

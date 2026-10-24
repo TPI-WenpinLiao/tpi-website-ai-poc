@@ -1,6 +1,6 @@
 ---
 title: "Giải Pháp API Cho Fintech: Kiến Tạo Hạ Tầng Zero-Downtime"
-description: Giải pháp API cho Fintech là gì? Khám phá 3 case study toàn cầu và cách TPIsoftware Việt Nam giúp doanh nghiệp quản trị API (digiRunner) chuẩn Zero-Downtime. (159 ký tự)
+description: Giải pháp API cho Fintech là gì? Khám phá 3 case study toàn cầu và cách TPIsoftware Việt Nam giúp doanh nghiệp quản trị API (digiRunner) chuẩn Zero-Downtime.
 translationKey: giai-phap-api-cho-fintech
 category: digital-transformation
 tags: [fintech]
@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1acc67-023a-66fe-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/giai-phap-api-cho-fintech/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/giai-phap-api-cho-fintech
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-10
+seoTitle: "Giải Pháp API Cho Fintech: Hạ Tầng Zero-Downtime"
 ---
 
 Bước vào năm 2026, ranh giới giữa một ngân hàng truyền thống và một công ty công nghệ đã hoàn toàn bị xóa nhòa. Các ứng dụng Fintech không còn chỉ là những ví điện tử đơn thuần; chúng đã tiến hóa thành những "siêu ứng dụng tài chính" (Super Financial Apps) cung cấp từ dịch vụ thanh toán, cho vay vi mô, đến đầu tư chứng khoán và quản lý gia sản. Đứng sau sức mạnh kết nối vĩ đại đó chính là một công nghệ cốt lõi: **Giao diện lập trình ứng dụng (API)**.

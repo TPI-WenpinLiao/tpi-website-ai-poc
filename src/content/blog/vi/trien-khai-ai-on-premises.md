@@ -1,6 +1,6 @@
 ---
 title: Triển Khai AI On-premises Là Gì? Lời Giải Từ TPIsoftware
-description: Triển khai AI on-premises là gì? Khám phá 3 case study toàn cầu, điểm mù năng lượng (ESG) và giải pháp quản trị API digiRunner từ TPIsoftware Việt Nam. (159 ký tự)
+description: Triển khai AI on-premises là gì? Khám phá 3 case study toàn cầu, điểm mù năng lượng (ESG) và giải pháp quản trị API digiRunner từ TPIsoftware Việt Nam.
 translationKey: trien-khai-ai-on-premises
 category: digital-transformation
 tags: [enterprise-innovation]
@@ -10,7 +10,7 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1802a2-219a-610e-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/trien-khai-ai-on-premises/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/trien-khai-ai-on-premises
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-07-15
 ---
 

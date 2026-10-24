@@ -1,5 +1,6 @@
 // Checks the <head> of every built page (dist/**/*.html) and dist/sitemap.xml against
-// seo-checklist「每頁必備」: one non-empty title and description, both unique across the site;
+// seo-checklist「每頁必備」: one non-empty title and description, both unique across the site except
+// between versions of one page in other locales (they share names such as a person's, #40);
 // canonical is the page's own absolute URL; the Open Graph and Twitter tags are there and og:locale
 // is the URL locale's (OG_LOCALES); no robots meta with noindex (the site is kept out of search
 // engines by _headers and robots.txt only);
@@ -78,13 +79,20 @@ export function metaProblems(pages, sitemap) {
   const origins = new Set();
   const byPath = new Map();
   const seen = { title: new Map(), description: new Map() };
+  // hreflang: versions are compared by URL path, so the check does not depend on the origin
+  const pathOf = (href) => URL.parse(href)?.pathname ?? href;
 
   for (const [path, h] of heads) {
     const p = (msg) => problems.push(`${path}: ${msg}`);
+    const versions = new Set(h.alternates.map((a) => pathOf(a.href)));
     for (const [kind, values] of [['title', h.titles], ['description', h.descriptions]]) {
       if (values.length !== 1 || !values[0]) p(`expected 1 non-empty ${kind}, found ${values.length}`);
-      else if (seen[kind].has(values[0])) p(`${kind} "${values[0]}" is also used by ${seen[kind].get(values[0])}`);
-      else seen[kind].set(values[0], path);
+      else {
+        const others = seen[kind].get(values[0]) ?? [];
+        const clash = others.find((o) => !versions.has(o));
+        if (clash) p(`${kind} "${values[0]}" is also used by ${clash}`);
+        seen[kind].set(values[0], [...others, path]);
+      }
     }
     if (h.canonicals.length !== 1) p(`expected 1 canonical, found ${h.canonicals.length}`);
     const canonical = h.canonicals[0];
@@ -116,8 +124,6 @@ export function metaProblems(pages, sitemap) {
   }
   if (origins.size > 1) problems.push(`canonical URLs use more than one origin: ${[...origins].join(', ')}`);
 
-  // hreflang: versions are compared by URL path, so the check does not depend on the origin
-  const pathOf = (href) => URL.parse(href)?.pathname ?? href;
   for (const [path, h] of heads) {
     const p = (msg) => problems.push(`${path}: ${msg}`);
     const versions = h.alternates.filter((a) => a.hreflang !== 'x-default');

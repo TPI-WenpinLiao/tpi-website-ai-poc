@@ -1,6 +1,6 @@
 ---
 title: "Lập Trình Viên Full Stack: Làm Tất Cả Hay Chỉ Cần Biết Kết Nối?"
-description: Full Stack là gì? Khám phá vai trò bao quát cả Frontend, Backend và Database. Tìm hiểu cách công cụ hỗ trợ như digiRunner giúp Dev trở thành Full Stack dễ dàng hơn.
+description: Full Stack là gì? Khám phá vai trò bao quát cả Frontend, Backend và Database, và cách công cụ như digiRunner giúp Dev trở thành Full Stack dễ dàng hơn.
 translationKey: fullstack-la-gi
 category: digital-transformation
 tags: [enterprise-innovation]
@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f694c-71ec-6d31-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/fullstack-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/fullstack-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-15
+seoTitle: Lập Trình Viên Full Stack Là Gì?
 ---
 
 Trong thế giới tuyển dụng IT tại Việt Nam năm 2026, "Full Stack Developer" vẫn là từ khóa hot nhất. Các startup muốn tuyển họ để tiết kiệm chi phí. Các tập đoàn lớn muốn tuyển họ để dẫn dắt các dự án linh hoạt (Agile).

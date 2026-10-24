@@ -11,8 +11,8 @@ description: 新增或修改任何頁面、版型、內容時使用。列出每�
 
 | 項目 | 規則 |
 |---|---|
-| `<title>` | 全站唯一；zh-TW 約 20–32 個全形字（en 50–60 字元）；格式 zh-TW 是 `頁面主題｜TPIsoftware 昕力資訊`，en、vi 是 `Subject \| TPIsoftware`（`src/lib/seo/meta.ts` 的 `pageTitle`），首頁可例外。頁面主題取內容的 `title`，要和 h1 不同時才用 `seoTitle`（`content-model.md`「共用欄位」） |
-| meta description | 全站唯一；zh-TW 約 60–80 個全形字（en 120–160 字元）；描述頁面內容，不堆砌關鍵字 |
+| `<title>` | 全站唯一，同一頁的不同語系版本（hreflang 互指）之間可以相同，例如人名、產品名；zh-TW 約 20–32 個全形字（en 50–60 字元）；格式 zh-TW 是 `頁面主題｜TPIsoftware 昕力資訊`，en、vi 是 `Subject \| TPIsoftware`（`src/lib/seo/meta.ts` 的 `pageTitle`），首頁可例外。頁面主題取內容的 `title`，要和 h1 不同時才用 `seoTitle`（`content-model.md`「共用欄位」） |
+| meta description | 全站唯一（同一頁的不同語系版本之間可以相同）；zh-TW 約 60–80 個全形字（en 120–160 字元）；描述頁面內容，不堆砌關鍵字 |
 | canonical | 指向自己的絕對 URL，以 `Astro.site` 組出；沒有尾斜線（`/` 除外）、`.html` 或 query string（ADR 0002，由 `Seo.astro` 產生） |
 | `lang` | `<html lang>` 對應頁面語系（`zh-TW` / `en` / `vi`） |
 | Open Graph | `og:type`、`og:title`、`og:description`、`og:url`、`og:image`（1200×630，M3 後必填）、`og:locale`（「語言_地區」格式：`zh_TW`、`en_US`、`vi_VN`，`src/lib/i18n/locales.ts` 的 `OG_LOCALES`，`scripts/seo/meta.mjs` 檢查）、`og:site_name` |

@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f11eaee-93e7-6295-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/thue-carbon-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/green-transformation/thue-carbon-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-13
+seoTitle: Thuế Carbon Là Gì? Quản Lý Khí Thải Với GreenSwift
 ---
 
 Ngay lúc này, tháng 03/2026, hàng loạt doanh nghiệp xuất khẩu Việt Nam trong các ngành sắt thép, xi măng, nhôm, và phân bón đang đối mặt với một cú sốc lớn về chi phí. Nguyên nhân đến từ một rào cản thương mại mới mang tên: **Thuế Carbon**.

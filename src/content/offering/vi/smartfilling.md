@@ -1,6 +1,6 @@
 ---
 title: SysTalk.ai Giải pháp AI xử lý tài liệu
-description: Giải pháp xử lý tài liệu thông minh được hỗ trợ bởi mô hình AI độc quyền có tính năng nhận dạng ký tự thông minh (ICR) và Puzzle độc quyền thích ứng với module AI để phân tích nhanh nhiều tài liệu khác nhau.
+description: Giải pháp xử lý tài liệu thông minh kết hợp nhận dạng ký tự thông minh (ICR) và module AI thích ứng Puzzle độc quyền để phân tích nhanh nhiều loại tài liệu.
 translationKey: smartfilling
 node: smartfilling
 kind: solution
@@ -20,5 +20,5 @@ useCases:
     industry: finance
 cta: contact
 sourceUrl: https://www.tpisoftware.vn/solutions/smartfilling
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---

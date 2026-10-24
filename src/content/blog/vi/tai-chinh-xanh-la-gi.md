@@ -1,6 +1,6 @@
 ---
 title: Tài Chính Xanh Là Gì? Chìa Khóa Vốn Rẻ Cho Doanh Nghiệp 2026
-description: Bạn cần vốn để nâng cấp công nghệ giảm phát thải? Bài viết giải mã tài chính xanh và cách TPIsoftware giúp bạn chuẩn bị dữ liệu minh bạch để duyệt vay nhanh chóng.
+description: Bạn cần vốn để nâng cấp công nghệ giảm phát thải? Bài viết giải mã tài chính xanh và cách TPIsoftware giúp chuẩn bị dữ liệu minh bạch để duyệt vay nhanh.
 translationKey: tai-chinh-xanh-la-gi
 category: esg
 tags: [green-growth]
@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f12750b-e74d-6ccb-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/tai-chinh-xanh-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/green-transformation/tai-chinh-xanh-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-24
+seoTitle: Tài Chính Xanh Là Gì? Chìa Khóa Vốn Rẻ Năm 2026
 ---
 
 Để đáp ứng các tiêu chuẩn khắt khe của cơ chế CBAM hay đạt được mục tiêu Net Zero, doanh nghiệp Việt Nam không thể chỉ dùng khẩu hiệu. Họ cần lắp đặt hệ thống điện mặt trời, thay mới dây chuyền sản xuất cũ kỹ, và áp dụng phần mềm quản trị tự động. Tất cả đều cần một nguồn vốn khổng lồ.

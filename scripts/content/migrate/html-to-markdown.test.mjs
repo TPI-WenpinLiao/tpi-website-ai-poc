@@ -108,3 +108,9 @@ test('tracking pixels are removed, WordPress emoji become text, data: URLs in sr
   assert.deepEqual(r.notes, ['tracking pixels removed: 1']);
   assert.equal(r.markdown.split('\n\n').slice(0, 2).join('\n\n'), '電子報\n\nOpen Finance ✨');
 });
+
+test('escaped markup in text stays text instead of becoming an HTML tag', () => {
+  // Trimmed from blog vi/json-la-gi, which shows an XML sample in a paragraph
+  const { markdown } = convert('<p>&lt;nhanvien&gt; &lt;tuoi&gt;30&lt;/tuoi&gt; &lt;/nhanvien&gt;</p>');
+  assert.equal(markdown, '\\<nhanvien> \\<tuoi>30\\</tuoi> \\</nhanvien>');
+});

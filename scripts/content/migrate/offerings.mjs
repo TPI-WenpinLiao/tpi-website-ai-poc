@@ -163,6 +163,9 @@ export function offeringFrontmatter({ node, sourceUrl, page, kind = 'solution', 
   if (unknown.length) throw new Error(`${OVERRIDES}: useCaseIndustry for use cases the page does not have: ${unknown.join(', ')}`);
   const data = {
     title: page.title,
+    // Only from overrides, when the page's title is too long for <title> (#40); listed here so it
+    // comes right after title
+    ...(override.frontmatter?.seoTitle ? { seoTitle: undefined } : {}),
     description: page.description,
     translationKey: node,
     node,

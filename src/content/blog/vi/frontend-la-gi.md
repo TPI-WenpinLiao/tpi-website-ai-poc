@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f6937-7a96-6bcc-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/frontend-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/frontend-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-15
+seoTitle: "Frontend vs. Backend: Mối Quan Hệ Cộng Sinh"
 ---
 
 Có một quy luật bất thành văn trong thế giới số năm 2026: **Quy luật 3 giây**. Nếu trang web hoặc ứng dụng của bạn mất quá 3 giây để hiển thị nội dung, 53% người dùng sẽ rời bỏ ngay lập tức.
