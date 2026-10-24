@@ -1,9 +1,8 @@
 # Source: https://www.tpisoftware.vn/about-us「Vị trí」 (every office listed there, in its order, with the
 # names, addresses and phone numbers as written there), M7-03 (#40). The current site writes
 # 「Văn phòng Japan」; written in Vietnamese here. The vi footer's phone (+886 2 8751 1610) differs from
-# the headquarters phone on this page and on zh-TW; to be confirmed (status.md 待辦備忘).
+# the headquarters phone on this page and on zh-TW; to be confirmed (status.md 下一步).
 name: TPIsoftware
-alternateName: [昕力資訊]
 logo: ../../assets/brand/logo-vertical-color.png
 offices:
   - id: taipei

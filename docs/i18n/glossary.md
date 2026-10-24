@@ -105,5 +105,6 @@ M7-03（#40）補上 `page` 列與部分 `product` 列的 vi 譯名。取自現�
 | AI 智慧光學字元辨識、自適應 AI | Nhận dạng ký tự quang học thông minh bằng AI、AI tự thích ứng | `offering/vi/systalk-icr.md` | |
 | SysTalk.PUZZLE | SysTalk.PUZZLE | `offering/vi/systalk-icr.md` | 產品名，詞彙表沒有這一列 |
 | AI Agent 應用平台 | Nền tảng ứng dụng AI Agent | `hub/vi/family-ai.md` | |
+| 產品名的現站拼法 | Greenswift、Systalk.Ai、Systalk.chat、Systalk Viki／ICR／Chat／RPA | `blog/vi/` 7 篇（sovereign-ai-la-gi、ai-chu-quyen-la-gi 等） | blog 內文由 `migrate.mjs` 照抄現站，與詞彙表 `confirmed` 的寫法（GreenSwift、SysTalk.ai 等）不同；要統一時在現站改或另做內文覆寫 |
 | 碳管理、能源管理、碳盤查、能源監控 | quản lý carbon、quản lý năng lượng、kiểm kê carbon、giám sát năng lượng | `hub/vi/family-esg.md` | 碳盤查照 `node:whitepaper-greenswift` 的暫譯 |
 | ESG 數據鏈、雙平台 | Chuỗi dữ liệu ESG、Nền tảng kép | `hub/vi/family-esg.md` | |

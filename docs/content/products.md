@@ -58,7 +58,7 @@ node scripts/content/offering-files.mjs
 | 內容檔 | 待確認 |
 |---|---|
 | digirunner | 現站的 AI Gateway、AI Governance、五大應用、四大機制、API Composer／沙盒／即時主控台、資安、金檢合規段落沒有欄位（M3-05 已記）；`useCases.industry` 沒有保險、醫療、物聯網；`to_confirm`：內文含失效連結 2 筆，因內文未搬而不涉及 |
-| digirunner-cloud | 方案價格表兩頁數字不一致：cloud 頁的 Enterprise（High Availability）寫 < 50 million、500GB、pod 1，AWS 頁寫 > 50 million、> 500GB、2~5；兩頁的 High Availability 每 pod 價格都低於 Standalone；cloud 頁有 AWS、GCP、Azure 頁籤，AWS 頁只有 AWS。價格表、部署教學影片、AWS Marketplace 外部連結未搬；FAQ「digiRunner 在哪些區域或網站？」去掉指向 Marketplace 的「現在點擊安裝，免費試用 30 天」；en 版買家指南 PDF 待 M7 |
+| digirunner-cloud | 方案價格表兩頁數字不一致：cloud 頁的 Enterprise（High Availability）寫 < 50 million、500GB、pod 1，AWS 頁寫 > 50 million、> 500GB、2~5；兩頁的 High Availability 每 pod 價格都低於 Standalone；cloud 頁有 AWS、GCP、Azure 頁籤，AWS 頁只有 AWS。價格表、部署教學影片、AWS Marketplace 外部連結未搬；FAQ「digiRunner 在哪些區域或網站？」去掉指向 Marketplace 的「現在點擊安裝，免費試用 30 天」；en 版買家指南 PDF 已由 M7-03 下載（vi 頁連到它），en 內容檔照 #39 的決定沒有放 `downloads` |
 | digilogs | 「業界唯一主動識別科技」照抄現站；治理困境、鏈路追蹤、多樣態偵測機制（Agent-based 等）、視覺化報表、ISO 27001 段落、導入顧問流程未搬 |
 | digilogs-iso27001 | 影片 1 支未搬；現站 description 錯字「修福」已改「修復」 |
 | digilogs-detection | 現站只有日誌管理問卷的入口（問卷的處理見 `audience-and-goals.md` 問題 4，M6），內容很少；`to_confirm`：不在導覽，是否仍銷售 |
