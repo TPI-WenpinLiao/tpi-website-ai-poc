@@ -6,6 +6,8 @@
 // Re-run after changing nodes.csv, navigation.csv or src/data/strings/zh-TW.ts:
 //   node scripts/i18n/glossary.mjs
 // With --check it validates the file and only compares it to what a re-run would write (npm run check).
+// Either way it checks that the interface strings of src/data/strings/<en|vi>.ts are the glossary's
+// values for that locale (#40).
 
 import { readFile, readdir } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
@@ -191,6 +193,26 @@ export function validate(rows) {
   return errors;
 }
 
+// Interface strings of a locale's src/data/strings file that differ from the glossary's value for
+// that locale. `flat` comes from flattenStrings, so page descriptions (`pages`) are not compared
+export function stringsMismatches(rows, locale, flat) {
+  const byId = new Map(rows.map((r) => [r.id, r]));
+  return flat.flatMap(([path, text]) => {
+    const value = byId.get(`ui:${path}`)?.[locale];
+    return value === text ? [] : [`src/data/strings/${locale}.ts ${path}: "${text}" is not the glossary's ${locale} value "${value ?? ''}"`];
+  });
+}
+
+async function localeStrings() {
+  const out = [];
+  for (const locale of LOCALES) {
+    const file = `src/data/strings/${locale}.ts`;
+    const mod = await import(pathToFileURL(file).href).catch((e) => (e.code === 'ERR_MODULE_NOT_FOUND' ? undefined : Promise.reject(e)));
+    if (mod) out.push([locale, flattenStrings(mod.strings)]);
+  }
+  return out;
+}
+
 // Values with leading or trailing spaces are quoted too, so spreadsheet editors keep the spaces that
 // join a string to the text around it (ui:listing.pageSuffix)
 const cell = (v) => (/^\s|\s$/.test(String(v ?? '')) && !/[",\n\r]/.test(String(v)) ? `"${v}"` : csvCell(v));
@@ -226,6 +248,7 @@ async function main() {
   const existing = await readCsv(GLOSSARY).catch((e) => (e.code === 'ENOENT' ? [] : Promise.reject(e)));
   const rows = mergeRows(existing, derived);
   const errors = validate(rows);
+  for (const [locale, flat] of await localeStrings()) errors.push(...stringsMismatches(rows, locale, flat));
   for (const e of errors) console.error(`${GLOSSARY}: ${e}`);
   const stale = await emit([[GLOSSARY, toCsv(rows)]], { check, rerun: 'node scripts/i18n/glossary.mjs' });
   if (errors.length || stale.length) process.exit(1);

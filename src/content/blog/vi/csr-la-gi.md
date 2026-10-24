@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f11eac3-25c4-67c3-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/csr-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/green-transformation/csr-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-13
+seoTitle: CSR Là Gì? Trách Nhiệm Xã Hội Doanh Nghiệp 2026
 ---
 
 Nhiều năm trước, khi nhắc đến Trách nhiệm xã hội (CSR), các công ty thường nghĩ ngay đến việc trích một phần lợi nhuận cuối năm để xây cầu, tặng quà Tết cho người nghèo, hoặc trồng vài cây xanh, sau đó chụp ảnh lên báo.

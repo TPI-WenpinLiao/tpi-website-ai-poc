@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f6933-ed2c-6adb-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/ma-nguon-mo-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/ma-nguon-mo-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-15
+seoTitle: "Open Source vs. Closed Source: Doanh Nghiệp Chọn Gì?"
 ---
 
 Bạn có biết rằng hệ điều hành Android trên điện thoại của bạn, trình duyệt Chrome bạn đang dùng, và cả những máy chủ vận hành Internet toàn cầu đều được xây dựng dựa trên **Mã nguồn mở**?

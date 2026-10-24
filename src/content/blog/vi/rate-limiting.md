@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f129b88-3a62-6b93-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/rate-limiting/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/rate-limiting
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-27
+seoTitle: Rate Limiting Là Gì? Vì Sao Cần Giới Hạn API?
 ---
 
 Hãy tưởng tượng bạn đang điều hành một cửa hàng bán vé xem concert cực kỳ hot. Cửa hàng của bạn chỉ có 5 nhân viên phục vụ (tương đương sức mạnh của Máy chủ).

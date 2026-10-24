@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f129b15-9174-6231-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/kien-truc-soa/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/kien-truc-SOA
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-27
+seoTitle: Kiến Trúc SOA Là Gì? Hệ Thống Lõi Của Doanh Nghiệp
 ---
 
 Quay ngược thời gian về những năm 2010, khi một ngân hàng muốn kết nối phần mềm Kế toán, phần mềm Quản lý thẻ và phần mềm Chăm sóc khách hàng lại với nhau, họ tạo ra một "mớ bòng bong" các đường truyền nối chéo nhau chằng chịt (Spaghetti Integration). Mỗi khi sửa một phần mềm, toàn bộ hệ thống sụp đổ.

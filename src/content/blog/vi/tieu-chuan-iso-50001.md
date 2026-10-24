@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f128229-033d-6b56-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/tieu-chuan-iso-50001/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/green-transformation/tieu-chuan-iso-50001
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-24
+seoTitle: ISO 50001 Là Gì? Hệ Thống Quản Lý Năng Lượng
 ---
 
 Bạn có biết rò rỉ khí nén, máy bơm chạy không tải, hay hệ thống điều hòa Chiller hoạt động sai công suất đang âm thầm "đốt" đi 15% - 30% hóa đơn tiền điện của nhà máy mỗi tháng?

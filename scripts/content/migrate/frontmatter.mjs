@@ -16,8 +16,11 @@ export const NEWS_TYPES = { 1: 'press', 3: 'product', 7: 'newsletter', 4: 'press
 export const NEWS_REVIEW_BEFORE = '2026-01-01';
 
 // <title> is pageTitle(seoTitle ?? title, locale) from src/lib/seo/meta.ts, and html-validate's
-// long-title rule allows 70 characters
+// long-title rule allows 70 characters. It counts the title as written in the HTML, where Astro
+// escapes & " ' < > (&amp; is 5 characters), so the length is taken after the same escaping (#40)
 export const TITLE_MAX = 70;
+const ESCAPED = { '&': '&amp;', '"': '&quot;', "'": '&#39;', '<': '&lt;', '>': '&gt;' };
+const htmlLength = (text) => text.replace(/[&"'<>]/g, (c) => ESCAPED[c]).length;
 
 // seo-checklist: zh-TW about 60–80 full-width characters, en 120–160 characters (vi follows en)
 export const DESCRIPTION_MAX = { 'zh-TW': 80, en: 160, vi: 160 };
@@ -123,8 +126,8 @@ export function frontmatterNotes(locale, data) {
   const notes = [];
   const max = DESCRIPTION_MAX[locale];
   if (data.description && [...data.description].length > max) notes.push(`description is ${[...data.description].length} characters (max ${max})`);
-  const title = pageTitle(data.seoTitle ?? data.title, locale);
-  if (title.length > TITLE_MAX) notes.push(`<title> is ${title.length} characters (max ${TITLE_MAX}): set seoTitle`);
+  const length = htmlLength(pageTitle(data.seoTitle ?? data.title, locale));
+  if (length > TITLE_MAX) notes.push(`<title> is ${length} characters (max ${TITLE_MAX}): set seoTitle`);
   if (data.authorType === 'Person') notes.push(`authorType Person for author "${data.author}"`);
   return notes;
 }

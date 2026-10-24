@@ -45,6 +45,8 @@ en/smartfilling:
 
 # 「Ngành Tài Chính - Bước đệm cho Số hóa tài liệu」
 vi/smartfilling:
+  frontmatter:
+    description: Giải pháp xử lý tài liệu thông minh kết hợp nhận dạng ký tự thông minh (ICR) và module AI thích ứng Puzzle độc quyền để phân tích nhanh nhiều loại tài liệu.
   useCaseIndustry:
     0: finance
 
@@ -57,3 +59,35 @@ zh-TW/orient-ai:
 zh-TW/aiso:
   frontmatter:
     description: 集結 AI 軟體與硬體廠商打造的 AI 整合生態系，協助企業快速建置可落地、可擴充、可合規的地端 AI 平台。
+
+# vi descriptions over 160 characters (seo-checklist, vi follows en), shortened from the current
+# site's meta description without adding facts (M7-03, #40).
+vi/gis:
+  frontmatter:
+    description: Doanh nghiệp tận dụng công cụ phân tích dữ liệu không gian GIS và thông tin vị trí để trực quan hóa thông tin địa lý, hỗ trợ ra quyết định và dự báo kinh doanh.
+
+vi/insurering:
+  frontmatter:
+    description: Xác thực tự động giúp ra mắt sản phẩm bảo hiểm linh hoạt, điều chỉnh quy tắc bảo lãnh và tuân thủ quy định, đáp ứng những thay đổi nhanh chóng của thị trường.
+
+vi/interactivehealth:
+  frontmatter:
+    description: Ngành bảo hiểm và y tế áp dụng ứng dụng Smart Health có tính năng số hóa và game hóa, mang lại trải nghiệm tương tác để quản lý và theo dõi sức khỏe.
+
+vi/orient-ai:
+  frontmatter:
+    description: OrientAI là nền tảng Agentic AI tiêu chuẩn doanh nghiệp để quản lý, quản trị và điều phối tác nhân AI, tập trung kiểm soát LLM và giám sát mức sử dụng token.
+
+vi/smartclaim:
+  frontmatter:
+    # The current h1 is a sentence (「… là giải pháp …」) and too long for <title>
+    seoTitle: "SysTalk.ai: Giải pháp AI bồi thường bảo hiểm"
+    description: Giải quyết bồi thường truyền thống đòi hỏi nhiều công việc thủ công. Công nghệ AI giúp cải thiện hiệu quả và là ưu tiên trong chuyển đổi số ngành bảo hiểm.
+
+vi/textualanalysis:
+  frontmatter:
+    description: Chuyển văn bản đối thoại phi cấu trúc thành thông tin có thể phân tích; phân tích dữ liệu khổng lồ trong ngữ cảnh giúp doanh nghiệp có thông tin chi tiết.
+
+vi/uiux:
+  frontmatter:
+    description: Thiết kế giao diện bắt mắt và trải nghiệm người dùng tốt là chìa khóa để thu hút khách truy cập, tạo hình ảnh trực quan và trải nghiệm tổng thể trên trang web.

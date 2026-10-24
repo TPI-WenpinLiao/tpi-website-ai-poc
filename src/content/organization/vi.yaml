@@ -1,0 +1,48 @@
+# Source: https://www.tpisoftware.vn/about-us「Vị trí」 (every office listed there, in its order, with the
+# names, addresses and phone numbers as written there), M7-03 (#40). The current site writes
+# 「Văn phòng Japan」; written in Vietnamese here. The vi footer's phone (+886 2 8751 1610) differs from
+# the headquarters phone on this page and on zh-TW; to be confirmed (status.md 待辦備忘).
+name: TPIsoftware
+alternateName: [昕力資訊]
+logo: ../../assets/brand/logo-vertical-color.png
+offices:
+  - id: taipei
+    name: Trụ sở chính (Đài Bắc, Đài Loan)
+    address: 12F, No. 335, Ruiguang Road, Neihu District, Taipei City, 114
+    phone: +886 2 2658 0508
+    country: TW
+    headquarters: true
+  - id: singapore
+    name: Văn phòng Singapore
+    address: "7 Straits View, Marina One East Tower, #05-01, Singapore 018936"
+    phone: +65 8737 4703
+    country: SG
+  - id: vietnam
+    name: Văn phòng Việt Nam
+    address: Lầu 7, phòng 706-707-708, Tòa nhà Văn phòng Safomec, số 7/1 Thành Thái, Phường 14, Quận 10, TpHCM
+    phone: +84 28 2250 8332
+    country: VN
+  - id: japan
+    name: Văn phòng Nhật Bản
+    address: 2-chōme-8-14 Akasaka, Minato City, Tokyo 107-0052 Japan
+    country: JP
+  - id: hsinchu
+    name: Trung tâm quản lý dự án - Hsinchu
+    address: 2F.-3(or 2F.-5), No. 158, Sec. 2, Gongdao 5th Rd., East Dist., Hsinchu City 300, Taiwan (R.O.C.) (China Life Insurance Building)
+    phone: +886 3 516 6290
+    country: TW
+  - id: taichung
+    name: Trung tâm quản lý dự án - Taichung
+    address: No. 131, Section 2, Wuquan W Rd, Nantun District, Taichung City, 408
+    phone: +886 4 2472 0050
+    country: TW
+  - id: tainan
+    name: Trung tâm phát triển - Tainan
+    address: Rm. A, 5F., No. 56, Gongyuan Rd., West Central Dist., Tainan City 700, Taiwan (R.O.C.)
+    phone: +886 6 221 0525
+    country: TW
+  - id: kaohsiung
+    name: Trung tâm phát triển - Kaohsiung
+    address: 15F.-1, No.155, Furen Rd., Lingya Dist., Kaohsiung City 80288, Taiwan (R.O.C.)
+    phone: +886 7 722 0462
+    country: TW

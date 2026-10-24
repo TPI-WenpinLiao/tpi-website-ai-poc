@@ -123,3 +123,207 @@ news/zh-TW/580:
 news/zh-TW/582:
   frontmatter:
     description: 昕力資訊連續兩年獲臺北市友善育兒事業獎績優事業組，今年推出「昕守爸媽」親職支持平台，並以 AISO AI 一體機解決方案獲 2026 臺灣 AI 卓越獎優品。
+
+# vi descriptions cut to seo-checklist length, seoTitle where <title> would pass 70 characters and alt
+# for body images (M7-03, #40). The current site's descriptions of some vi posts end in a character
+# count such as "(159 ký tự)", dropped here.
+
+blog/vi/ai-chu-quyen-la-gi:
+  frontmatter:
+    seoTitle: AI Chủ Quyền Là Gì? Xu Hướng Kỷ Nguyên Dữ Liệu 2026
+    description: Tìm hiểu AI chủ quyền, tầm quan trọng của an ninh dữ liệu quốc gia năm 2026 và cách TPIsoftware hỗ trợ doanh nghiệp quản lý API, năng lượng (ESG) hiệu quả.
+
+blog/vi/fullstack-la-gi:
+  frontmatter:
+    seoTitle: Lập Trình Viên Full Stack Là Gì?
+    description: Full Stack là gì? Khám phá vai trò bao quát cả Frontend, Backend và Database, và cách công cụ như digiRunner giúp Dev trở thành Full Stack dễ dàng hơn.
+
+blog/vi/giai-phap-api-cho-fintech:
+  frontmatter:
+    seoTitle: "Giải Pháp API Cho Fintech: Hạ Tầng Zero-Downtime"
+    description: Giải pháp API cho Fintech là gì? Khám phá 3 case study toàn cầu và cách TPIsoftware Việt Nam giúp doanh nghiệp quản trị API (digiRunner) chuẩn Zero-Downtime.
+
+blog/vi/he-dieu-hanh-la-gi:
+  frontmatter:
+    seoTitle: Hệ Điều Hành (OS) Là Gì? Từ Windows Đến Linux Server
+    description: Hệ điều hành là gì? Khám phá cầu nối giữa phần cứng và người dùng, các loại OS (Windows, Linux, Mobile) và khái niệm "Hệ điều hành doanh nghiệp".
+
+blog/vi/open-banking-la-gi:
+  frontmatter:
+    seoTitle: Open Banking Là Gì? Ngân Hàng Mở & Giải Pháp API
+    description: Open banking là gì? Khám phá xu hướng ngân hàng mở 2026, chia sẻ dữ liệu tài chính qua API và giải pháp bảo mật digiRunner từ TPIsoftware Việt Nam.
+
+blog/vi/tai-chinh-nhung-embedded-finance-la-gi:
+  frontmatter:
+    seoTitle: Tài Chính Nhúng (Embedded Finance) Là Gì?
+    description: Tài chính nhúng (embedded finance) là gì, tiềm năng tại Việt Nam và cách TPIsoftware giúp doanh nghiệp tối ưu qua digiRunner và digiLogs.
+
+blog/vi/tai-chinh-xanh-la-gi:
+  frontmatter:
+    seoTitle: Tài Chính Xanh Là Gì? Chìa Khóa Vốn Rẻ Năm 2026
+    description: Bạn cần vốn để nâng cấp công nghệ giảm phát thải? Bài viết giải mã tài chính xanh và cách TPIsoftware giúp chuẩn bị dữ liệu minh bạch để duyệt vay nhanh.
+
+blog/vi/trien-khai-ai-on-premises:
+  frontmatter:
+    description: Triển khai AI on-premises là gì? Khám phá 3 case study toàn cầu, điểm mù năng lượng (ESG) và giải pháp quản trị API digiRunner từ TPIsoftware Việt Nam.
+
+blog/vi/xy-ly-ngon-ngu-tu-nhien-la-gi:
+  frontmatter:
+    seoTitle: Xử Lý Ngôn Ngữ Tự Nhiên (NLP) Là Gì?
+    description: Xử lý ngôn ngữ tự nhiên (NLP) là gì? Cách AI hiểu tiếng Việt, ứng dụng trong Chatbot, OCR và phân tích cảm xúc cùng giải pháp SysTalk.ai của TPIsoftware.
+
+news/vi/561:
+  frontmatter:
+    seoTitle: TPIsoftware và Phison thành lập liên minh AISO
+    description: TPIsoftware hợp tác chiến lược với Phison Electronics thành lập AISO (AI for Sovereignty), liên minh hỗ trợ các quốc gia xây dựng AI của riêng mình.
+  alt:
+    news-2026-03-25-1774407820762.webp: Lễ ký kết thành lập liên minh AI chủ quyền AISO, các đại biểu trên sân khấu đặt tay lên quả cầu phát sáng để khởi động liên minh
+    news-2026-03-25-1774408137142.webp: Bốn đại diện đứng trước phông nền liên minh AISO, cầm biên bản ghi nhớ đã ký và giơ ngón tay cái
+
+news/vi/564:
+  frontmatter:
+    seoTitle: TPIsoftware giành giải Taiwan SMART 50 Award
+    description: TPIsoftware lần đầu được vinh danh với giải thưởng Taiwan SMART 50 Award do Bộ Y tế và Phúc lợi Đài Loan tổ chức, nhờ ứng dụng AI y tế dựa trên FHIR.
+  alt:
+    news-2026-04-27-1777283116298.webp: Ảnh tập thể các đơn vị đoạt giải Taiwan SMART 50 Award cầm cúp, kèm logo TPIsoftware và Bộ Y tế và Phúc lợi Đài Loan
+    news-2026-04-21-1776739585186.webp: Lễ trao giải Taiwan SMART 50 Award lần thứ nhất, Cục trưởng Cục Bảo hiểm Y tế Quốc gia trao cúp cho đại diện bộ phận R&D của TPIsoftware
+
+news/vi/567:
+  frontmatter:
+    seoTitle: TPIsoftware giới thiệu giải pháp AI tại COMPUTEX 2026
+    description: TPIsoftware cùng Phison Electronics và ECS, các thành viên đồng sáng lập AISO, giới thiệu giải pháp AI tích hợp tại COMPUTEX 2026 với chủ đề "AI Together".
+  alt:
+    news-2026-05-28-1779935319979.webp: Banner TPIsoftware và AISO tại COMPUTEX 2026, giới thiệu các giải pháp tất cả trong một cho việc triển khai AI trong doanh nghiệp
+
+news/vi/570:
+  frontmatter:
+    seoTitle: TPIsoftware ứng dụng Intel Xeon 6 cho AI chủ quyền
+    description: TPIsoftware công bố ứng dụng bộ xử lý Intel Xeon 6 với lõi hiệu năng cao (P-Cores) và GPU Intel Arc Pro, thiết lập chuẩn mực mới cho điện toán AI chủ quyền.
+  alt:
+    news-2026-06-22-1782125392568.webp: Banner TPIsoftware và AISO với hình vi xử lý, tiêu đề TPIsoftware ứng dụng bộ xử lý Intel Xeon 6
+
+news/vi/574:
+  frontmatter:
+    seoTitle: TPIsoftware hợp tác với Juxta về công nghệ định vị
+    description: TPIsoftware ký thỏa thuận phân phối toàn cầu với Juxta, công ty Hoa Kỳ chuyên về Hệ thống định vị vạn năng (UPS), cung cấp ứng dụng theo dõi không gian địa lý.
+  alt:
+    news-2026-07-30-1785384565961.webp: Banner hợp tác giữa TPIsoftware và Juxta về công nghệ định vị không phụ thuộc vệ tinh, kèm logo hai công ty
+
+news/vi/577:
+  frontmatter:
+    seoTitle: Liên minh AISO triển khai giải pháp AI tích hợp tại chỗ
+    description: TPIsoftware ra mắt danh mục giải pháp AI tích hợp, gồm AISO AI Notebook cấu hình sẵn OrientAI, thực hiện toàn bộ tác vụ AI trực tiếp trên thiết bị cục bộ.
+  alt:
+    news-2026-08-18-1787049645409.webp: Banner TPIsoftware và AISO, tiêu đề TPIsoftware dẫn dắt Liên minh AISO triển khai các giải pháp AI tích hợp
+
+news/vi/581:
+  frontmatter:
+    seoTitle: GreenSwift hỗ trợ Ho-Team Construction kiểm kê carbon
+    description: TPIsoftware đã hỗ trợ Ho-Team Construction trong quá trình kiểm kê và báo cáo carbon bằng GreenSwift, nền tảng quản lý carbon dựa trên AI.
+  # The current site's alt is the file name (新聞1200x472px_Vn)
+  alt:
+    image.webp: Banner TPIsoftware hỗ trợ Ho-Team Construction thúc đẩy sáng kiến bền vững với nền tảng quản lý carbon GreenSwift, kèm logo GreenSwift và Ho-Team
+
+news/vi/584:
+  frontmatter:
+    seoTitle: Giải thưởng thân thiện gia đình và đổi mới AI
+    description: TPIsoftware nhận giải Parenting Friendly Enterprise Award về môi trường làm việc hòa nhập và giải 2026 Taiwan AI Excellence Award cho giải pháp AI tích hợp.
+  alt:
+    news-2026-09-23-1790134889483.webp: Ảnh ghép hai lễ trao giải, giải thưởng doanh nghiệp thân thiện với việc nuôi dạy con của Đài Bắc và 2026 Taiwan AI Excellence Award
+    news-2026-09-23-1790131988995.webp: Đại diện TPIsoftware nhận giải thưởng doanh nghiệp thân thiện với việc nuôi dạy con năm 115 của thành phố Đài Bắc
+    news-2026-09-23-1790132023442.webp: Đại diện TPIsoftware nhận giấy chứng nhận 2026 Taiwan AI Excellence Award do TISSA trao
+
+news/vi/587:
+  frontmatter:
+    seoTitle: TPIsoftware ra mắt loạt giải pháp AI chủ quyền mới
+    description: TPIsoftware ra mắt loạt giải pháp AI chủ quyền cấu hình sẵn OrientAI cho rà soát hợp đồng, nhân sự, phát triển nhân tài, giảng dạy và quản trị AI doanh nghiệp.
+  alt:
+    news-2026-10-16-1792122857982.webp: Logo TPIsoftware và AISO, bên phải là thân máy AI chuyên dụng AISO
+
+blog/vi/api-portal:
+  frontmatter:
+    seoTitle: API Portal Là Gì? Cửa Hàng API Cho Kỷ Nguyên AIO
+
+blog/vi/backend-la-gi:
+  frontmatter:
+    seoTitle: Backend Là Gì? Vì Sao Hạ Tầng Này Quyết Định Thành Bại
+
+blog/vi/chi-so-csi-la-gi:
+  frontmatter:
+    seoTitle: Chỉ Số CSI Là Gì? Tối Ưu Báo Cáo Cùng GreenSwift
+
+blog/vi/co-che-cbam-la-gi:
+  frontmatter:
+    seoTitle: Cơ Chế CBAM 2026 Và Giải Pháp GreenSwift
+
+blog/vi/csr-la-gi:
+  frontmatter:
+    seoTitle: CSR Là Gì? Trách Nhiệm Xã Hội Doanh Nghiệp 2026
+
+blog/vi/domain-la-gi:
+  frontmatter:
+    seoTitle: Domain Là Gì? Địa Chỉ Kỹ Thuật Số Của Doanh Nghiệp
+
+blog/vi/frontend-la-gi:
+  frontmatter:
+    seoTitle: "Frontend vs. Backend: Mối Quan Hệ Cộng Sinh"
+
+blog/vi/http-va-https-la-gi:
+  frontmatter:
+    seoTitle: Vì Sao Website Cần HTTPS? So Sánh HTTP vs HTTPS
+
+blog/vi/ip-la-gi:
+  frontmatter:
+    seoTitle: Địa Chỉ IP Là Gì? IPv4, IPv6, IP Tĩnh & IP Động
+
+blog/vi/kien-truc-soa:
+  frontmatter:
+    seoTitle: Kiến Trúc SOA Là Gì? Hệ Thống Lõi Của Doanh Nghiệp
+
+blog/vi/linux-la-gi:
+  frontmatter:
+    seoTitle: Linux Là Gì? Hệ Điều Hành Cho Máy Chủ & Đám Mây
+
+blog/vi/ma-nguon-mo-la-gi:
+  frontmatter:
+    seoTitle: "Open Source vs. Closed Source: Doanh Nghiệp Chọn Gì?"
+
+blog/vi/rate-limiting:
+  frontmatter:
+    seoTitle: Rate Limiting Là Gì? Vì Sao Cần Giới Hạn API?
+
+blog/vi/sovereign-ai-la-gi:
+  frontmatter:
+    seoTitle: Sovereign AI Là Gì? Kỷ Nguyên Trí Tuệ Nhân Tạo Mới
+
+blog/vi/thue-carbon-la-gi:
+  frontmatter:
+    seoTitle: Thuế Carbon Là Gì? Quản Lý Khí Thải Với GreenSwift
+
+blog/vi/tieu-chuan-iso-50001:
+  frontmatter:
+    seoTitle: ISO 50001 Là Gì? Hệ Thống Quản Lý Năng Lượng
+
+blog/vi/vps-la-gi:
+  frontmatter:
+    seoTitle: VPS Hay Shared Hosting? So Sánh Hiệu Năng & Chi Phí
+
+blog/vi/web-service-la-gi:
+  frontmatter:
+    seoTitle: Web Service Là Gì? Cẩm Nang Kết Nối Hệ Thống
+
+blog/vi/webhooks:
+  frontmatter:
+    seoTitle: Webhook Là Gì? Khác Biệt Với API Truyền Thống
+
+blog/vi/what-is-an-api-explained:
+  frontmatter:
+    seoTitle: What is an API? The Internet's Digital Waiter
+
+blog/vi/what-is-fintech-explained:
+  frontmatter:
+    seoTitle: What is Fintech? How Technology Rewrites Money
+
+blog/vi/hosting-la-gi:
+  frontmatter:
+    seoTitle: Web Hosting Là Gì? Shared, VPS Và Cloud Hosting

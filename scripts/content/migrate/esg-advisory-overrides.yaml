@@ -10,3 +10,8 @@
 offering/zh-TW/esg-advisory:
   frontmatter:
     description: 昕力資訊 ESG 顧問服務提供轉型策略三階段，輔導企業依照 ISO 14064-1 標準進行碳盤查，開發團隊全面通過永續人才培訓，量身打造可持續的解決方案。
+
+# vi description shortened to 160 characters without adding facts (M7-03, #40)
+offering/vi/esg-advisory:
+  frontmatter:
+    description: TPIsoftware cung cấp dịch vụ tư vấn ESG với chiến lược chuyển đổi ba giai đoạn, giúp doanh nghiệp kiểm soát lượng khí thải carbon theo tiêu chuẩn ISO 14064-1.

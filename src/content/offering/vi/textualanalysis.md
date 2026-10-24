@@ -1,6 +1,6 @@
 ---
 title: SysTalk.Detect Giải pháp phân tích văn bản thông minh
-description: Ngoài so sánh từ và phân tích ngữ nghĩa của dữ liệu cấu trúc, việc chuyển đổi các văn bản đối thoại phi cấu trúc thành thông tin có thể phân tích thành văn bản. Phân tích dữ liệu khổng lồ trong ngữ cảnh cho phép doanh nghiệp có được thông tin chi tiết.
+description: Chuyển văn bản đối thoại phi cấu trúc thành thông tin có thể phân tích; phân tích dữ liệu khổng lồ trong ngữ cảnh giúp doanh nghiệp có thông tin chi tiết.
 translationKey: textualanalysis
 node: textualanalysis
 kind: solution
@@ -23,5 +23,5 @@ useCases:
     body: Tận dụng NLU để phân tích kết quả chẩn đoán và hồ sơ bệnh án nhằm tăng cường hệ thống giải quyết bồi thường bảo hiểm và giảm nhân lực để có hiệu quả tốt hơn; Độ chính xác của mô hình liên tục được tối ưu hóa thông qua hệ thống tiến hóa để có số liệu bồi thường tốt nhất cho người được bảo hiểm.
 cta: contact
 sourceUrl: https://www.tpisoftware.vn/solutions/textualanalysis
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---

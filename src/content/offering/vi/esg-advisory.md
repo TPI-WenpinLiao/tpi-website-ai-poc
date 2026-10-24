@@ -1,6 +1,6 @@
 ---
 title: Tư vấn Phát triển Bền vững và Chiến lược ESG
-description: Thế giới hiện nay đã nhận biết hiện trạng biến đổi khí hậu và tác động của nó đến kinh tế xã hội, điều này đã thúc đẩy chúng ta chuyển từ khẩu hiệu sang hành động thực tế. Các hướng dẫn và thước đo được thiết lập để có nhiều sáng kiến ESG cho doanh nghiệp và kêu gọi doanh nghiệp hành động khẩn cấp. TPIsoftware cung cấp các dịch vụ tư vấn toàn diện với chiến lược chuyển đổi ba giai đoạn phù hợp, được phát triển và cung cấp bởi đội ngũ chuyên gia ESG, nhằm giúp các doanh nghiệp kiểm soát lượng khí thải carbon theo tiêu chuẩn ISO 14064-1 và nâng cao cam kết của doanh nghiệp về tính bền vững.
+description: TPIsoftware cung cấp dịch vụ tư vấn ESG với chiến lược chuyển đổi ba giai đoạn, giúp doanh nghiệp kiểm soát lượng khí thải carbon theo tiêu chuẩn ISO 14064-1.
 translationKey: esg-advisory
 node: esg-advisory
 kind: service

@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildRows, flattenStrings, mergeRows, navLabels, toCsv, validate } from './glossary.mjs';
+import { buildRows, flattenStrings, mergeRows, navLabels, stringsMismatches, toCsv, validate } from './glossary.mjs';
 
 const nodes = [
   { id: 'home', parent: '', title: '首頁', template: 'home' },
@@ -134,4 +134,17 @@ test('validate rejects bad rows', () => {
   assert.deepEqual(validate([{ ...ok, status: 'done' }]), ['ui:menu: status must be one of to-confirm, draft, confirmed']);
   assert.deepEqual(validate([{ ...ok, id: 'menu' }]), ['menu: a ui row\'s id starts with ui:']);
   assert.deepEqual(validate([{ ...ok, id: 'x:y', category: 'other' }]), ['x:y: category must be one of brand, term, nav, product, page, ui']);
+});
+
+test('stringsMismatches names interface strings that differ from the glossary', () => {
+  const rows = [
+    { id: 'ui:menu', vi: 'Menu' },
+    { id: 'ui:listing.pageSuffix', vi: ' (trang {n})' },
+  ];
+  const flat = flattenStrings({ menu: 'Menu', listing: { pageSuffix: (n) => ` (trang ${n})` }, pages: { blog: 'x' } });
+  assert.deepEqual(stringsMismatches(rows, 'vi', flat), []);
+  assert.deepEqual(stringsMismatches(rows, 'vi', flattenStrings({ menu: 'Danh mục', toc: 'Mục lục' })), [
+    'src/data/strings/vi.ts menu: "Danh mục" is not the glossary\'s vi value "Menu"',
+    'src/data/strings/vi.ts toc: "Mục lục" is not the glossary\'s vi value ""',
+  ]);
 });

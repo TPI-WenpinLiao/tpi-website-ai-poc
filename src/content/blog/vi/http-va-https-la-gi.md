@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0f6961-7a52-6963-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/vi/http-va-https-la-gi/cover.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/http-va-https-la-gi
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-01-19
+seoTitle: Vì Sao Website Cần HTTPS? So Sánh HTTP vs HTTPS
 ---
 
 Chào bạn, đây là một chủ đề về an ninh mạng căn bản nhưng cực kỳ quan trọng. Trong năm 2026, **HTTPS** không còn là một lựa chọn, nó là tiêu chuẩn bắt buộc. Google và các trình duyệt hiện đại sẽ cảnh báo "Không an toàn" ngay lập tức nếu website hoặc API của bạn vẫn dùng **HTTP**.

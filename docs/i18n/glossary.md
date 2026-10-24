@@ -63,6 +63,8 @@ script 依 `docs/ia/page-map.csv` 找出對到同一個節點的 en、vi 現站�
 
 `--check` 會擋下：`confirmed` 但 en 或 vi 是空的列、重複的 `id`、不在上表的 `category` 或 `status`、`id` 前綴與 `category` 不符，以及 script 重跑後會改變的檔案。`npm run check` 包含這一步。
 
+`src/data/strings/en.ts`、`vi.ts` 存在時，每個介面字串（`pages` 以外）都要等於這份檔案該語系的 `ui:` 列，不同就失敗（M7-03，#40），不加 `--check` 也一樣。改譯名時兩邊一起改。
+
 ## 來源改了之後重跑
 
 改了 `nodes.csv`、`navigation.csv` 或 `src/data/strings/zh-TW.ts` 後，執行：
@@ -75,3 +77,28 @@ node scripts/i18n/glossary.mjs
 - 已有的列保留 `en`、`vi`、`status`、`note`、`source`；`node:`、`ui:` 列的 `zh-TW` 改了時退回 `to-confirm`，`note` 開頭記下原本的 zh-TW
 - `nav:` 列的 `id` 就是選單標籤，`navigation.csv` 改了標籤等於換一列：舊列連同 en、vi 一起移除，新標籤是新的一列。改標籤前先記下舊列的譯名
 - 來源刪掉的列會從 `glossary.csv` 移除；手動加的 `brand`、`term` 列不動，排在最上方
+
+## vi 待確認
+
+M7-03（#40）補上 `page` 列與部分 `product` 列的 vi 譯名。取自現站 vi（`www.tpisoftware.vn` 的資源中心、footer）的，`note` 寫出處；現站 vi 沒有的由 AI 草擬，`note` 寫「vi 為 AI 草擬（#40）」。這些列的 `status` 仍是 `to-confirm`，等越南文審稿確認。
+
+詞彙表以外、翻譯內文時用到的專有名詞也列在這裡，確認後再決定要不要加成 `term:` 列：
+
+| zh-TW | vi 暫譯 | 出處 | 說明 |
+|---|---|---|---|
+| 昕力大學 | Đại học TPI | `node:tpu` | 獨立子站的名稱，現站 vi 沒有寫法 |
+| 地端部署、地端 AI | triển khai on-premises／AI tại chỗ | `offering/vi/systalk-viki.md` 等、`hub/vi/family-ai.md` | 現站 vi 兩種都有（blog「Triển khai AI on-premises」、新聞「triển khai AI tại chỗ」），待統一 |
+| 智慧醫療服務 | Dịch vụ y tế thông minh | `offering/vi/digicare.md` | |
+| 醫囑紀錄、AI 護理紀錄 | hồ sơ y lệnh、hồ sơ điều dưỡng AI | `offering/vi/digicare.md` | |
+| 健保署、衛福部 | Cục Bảo hiểm Y tế Quốc gia、Bộ Y tế và Phúc lợi Đài Loan | `offering/vi/digicare.md` | 機構名；衛福部的寫法與 vi 新聞 564 相同 |
+| 台灣核心實作指引（TW Core IG） | Hướng dẫn triển khai cốt lõi Đài Loan | `offering/vi/digicare.md` | |
+| 企業生成式 AI 應用平台 | Nền tảng ứng dụng AI tạo sinh cho doanh nghiệp | `offering/vi/systalk-viki.md` | |
+| 知識圖譜、企業知識庫 | đồ thị tri thức、kho tri thức doanh nghiệp | `offering/vi/systalk-viki.md`、`systalk-coach.md` | |
+| AI 業務培訓、AI 教練 | Đào tạo kinh doanh bằng AI、AI Coach | `offering/vi/systalk-coach.md` | 六個模組名稱也是暫譯 |
+| AI 語音質檢、話術 | Kiểm soát chất lượng cuộc gọi bằng AI、kịch bản | `offering/vi/systalk-audit.md` | |
+| 國語、台語、客語 | tiếng Quan Thoại、tiếng Đài、tiếng Khách Gia | `offering/vi/systalk-audit.md` | |
+| AI 智慧光學字元辨識、自適應 AI | Nhận dạng ký tự quang học thông minh bằng AI、AI tự thích ứng | `offering/vi/systalk-icr.md` | |
+| SysTalk.PUZZLE | SysTalk.PUZZLE | `offering/vi/systalk-icr.md` | 產品名，詞彙表沒有這一列 |
+| AI Agent 應用平台 | Nền tảng ứng dụng AI Agent | `hub/vi/family-ai.md` | |
+| 碳管理、能源管理、碳盤查、能源監控 | quản lý carbon、quản lý năng lượng、kiểm kê carbon、giám sát năng lượng | `hub/vi/family-esg.md` | 碳盤查照 `node:whitepaper-greenswift` 的暫譯 |
+| ESG 數據鏈、雙平台 | Chuỗi dữ liệu ESG、Nền tảng kép | `hub/vi/family-esg.md` | |
