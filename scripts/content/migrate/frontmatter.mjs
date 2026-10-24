@@ -160,7 +160,7 @@ const scalar = (v) => {
 const isRecord = (v) => typeof v === 'object' && v !== null && Object.getPrototypeOf(v) === Object.prototype;
 
 // A flow list ([a, b]) only when it reads back as the same items and stays short: an item with a
-// comma ("ESG auditing, ESG consulting") would split in two
+// comma ("TUV-NORD, ISO27001:2013 Lead Auditor Training course", an en certification) would split in two
 const FLOW_MAX = 100;
 const flowSafe = (key, value) => {
   const line = `${key}: ${scalar(value)}`;

@@ -135,10 +135,10 @@ test('serializeFrontmatter writes string arrays as block lists when a flow list 
   const { parse } = await import('yaml');
   const { YAML_OPTIONS } = await import('../dates.mjs');
   assert.equal(serializeFrontmatter({ tags: ['ai', 'esg'] }), '---\ntags: [ai, esg]\n---\n');
-  const expertise = ['ESG auditing, ESG consulting', 'a: b'];
-  const text = serializeFrontmatter({ expertise });
-  assert.equal(text, ['---', 'expertise:', '  - ESG auditing, ESG consulting', '  - "a: b"', '---', ''].join('\n'));
-  assert.deepEqual(parse(text.replace(/^---\n|---\n$/g, ''), YAML_OPTIONS).expertise, expertise);
+  const certifications = ['TUV-NORD, ISO27001:2013 Lead Auditor Training course', 'a: b'];
+  const text = serializeFrontmatter({ certifications });
+  assert.equal(text, ['---', 'certifications:', '  - TUV-NORD, ISO27001:2013 Lead Auditor Training course', '  - "a: b"', '---', ''].join('\n'));
+  assert.deepEqual(parse(text.replace(/^---\n|---\n$/g, ''), YAML_OPTIONS).certifications, certifications);
   assert.match(serializeFrontmatter({ experience: ['x'.repeat(60), 'y'.repeat(60)] }), /^experience:\n {2}- x+\n {2}- y+$/m);
 });
 
