@@ -1,7 +1,8 @@
 // Checks the <head> of every built page (dist/**/*.html) and dist/sitemap.xml against
 // seo-checklist「每頁必備」: one non-empty title and description, both unique across the site;
-// canonical is the page's own absolute URL; the Open Graph and Twitter tags are there; no robots
-// meta with noindex (the site is kept out of search engines by _headers and robots.txt only);
+// canonical is the page's own absolute URL; the Open Graph and Twitter tags are there and og:locale
+// is the URL locale's (OG_LOCALES); no robots meta with noindex (the site is kept out of search
+// engines by _headers and robots.txt only);
 // hreflang lists the page itself, every target was built and lists the same set back, x-default
 // points at the zh-TW version exactly when there is one; every JSON-LD block parses, and every page
 // but the home, 404 and internal pages has a BreadcrumbList (content-model.md「內容類型總覽」); the sitemap
@@ -14,7 +15,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'node-html-parser';
-import { DEFAULT_LOCALE } from '../../src/lib/i18n/locales.ts';
+import { DEFAULT_LOCALE, OG_LOCALES } from '../../src/lib/i18n/locales.ts';
 import { localeFromPath, stripLocale } from '../../src/lib/i18n/paths.ts';
 import { inSitemap, isInternal } from '../../src/lib/seo/indexing.ts';
 import { urlPath } from '../i18n/routes.mjs';
@@ -97,6 +98,8 @@ export function metaProblems(pages, sitemap) {
       if (h.ogUrls.length !== 1 || h.ogUrls[0] !== canonical) p(`og:url ${h.ogUrls.join(', ') || '(missing)'} differs from canonical`);
     }
     for (const [attr, values] of Object.entries(h.meta)) if (values.length !== 1 || !values[0]) p(`expected 1 non-empty meta[${attr}], found ${values.length}`);
+    const ogLocale = h.meta['property="og:locale"'][0];
+    if (ogLocale && ogLocale !== OG_LOCALES[localeFromPath(path)]) p(`og:locale ${ogLocale}, expected ${OG_LOCALES[localeFromPath(path)]}`);
     for (const r of h.robots) if (/noindex/i.test(r)) p(`robots meta "${r}": the site is kept out of search engines by _headers and robots.txt, not by noindex`);
     const types = [];
     for (const [i, json] of h.jsonLd.entries()) {

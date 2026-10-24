@@ -15,7 +15,7 @@
 // showing more than one header, like /design-system, pass skipTo={false} on the extra ones.
 // While the 選單 sheet is open the page behind it does not scroll (CSS :has, no client JS).
 // `open` draws one menu open (a first-level label, or 'mobile'), for the /design-system page only.
-import { localizedNav, node, nodeHref, type NavItem } from '../../lib/ia/navigation';
+import { localizedNav, localNode, nodeHref, type NavItem } from '../../lib/ia/navigation';
 import type { LocaleLink } from '../../lib/i18n/alternates';
 import { LOCALE_NAMES } from '../../lib/i18n/locales';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
@@ -45,8 +45,8 @@ const menuGroup = `site-menu-${navLabel}`;
 const header = localizedNav('header', currentLocale);
 // The link to the page being shown (docs/ia/navigation.md「無障礙」)
 const current = (href: string | undefined) => (href === path ? 'page' : undefined);
-const contact = node('contact');
-const search = node('search');
+const contact = localNode('contact', currentLocale);
+const search = localNode('search', currentLocale);
 // The 產品 menu is the mega menu: its overview link on top, then one column per family with its
 // products below the family link
 const groups = (item: NavItem) => item.children.filter((c) => c.children.length > 0);

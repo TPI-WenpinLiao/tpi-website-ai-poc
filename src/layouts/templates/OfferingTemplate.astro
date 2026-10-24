@@ -24,12 +24,12 @@ import InPageNav from '../../components/ui/InPageNav.astro';
 import Faq from '../../components/ui/Faq.astro';
 import SceneChapter from '../../components/ui/SceneChapter.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
-import { breadcrumb, children, localeHref, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumb, children, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { COLLECTION_NODES, entryPath } from '../../lib/content/urls';
 import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
-import { canonicalUrl } from '../../lib/seo/meta';
-import { DEFAULT_OG_IMAGE } from '../../lib/seo/og';
+import { canonicalUrl, titleSeparator } from '../../lib/seo/meta';
+import { defaultOgImage } from '../../lib/seo/og';
 import { about } from '../../lib/latest-posts';
 import { SCENE_FAMILIES, sceneFamily } from '../../lib/scene/families';
 import { strings } from '../../data/strings';
@@ -49,22 +49,22 @@ const { data } = entry;
 const locale = entryLocale(entry.id);
 const t = strings(locale);
 const href = localeHref(locale);
-const self = node(data.node);
-const parent = node(self.parent);
+const self = localNode(data.node, locale);
+const parent = localNode(self.parent, locale);
 const family = SCENE_FAMILIES.some((f) => f === parent.id) ? sceneFamily(parent.id) : undefined;
 
 const title = data.seoTitle ?? data.title;
 // Parent brand in brackets, as on the home page: 「數位轉型（DigiLism）」 → DigiLism
 const brand = /（([^）]*)）$/.exec(parent.title)?.[1] ?? parent.title;
-const contact = node('contact');
+const contact = localNode('contact', locale);
 // Main call to action by the entry's cta (content-model.md); 預約演示 is the current site's wording
 const ctaLabel = data.cta === 'demo' ? t.offering.demo : contact.title;
 
 const features = data.features ?? [];
 const INDUSTRY_NODES = { finance: 'industry-finance', government: 'industry-government', manufacturing: 'industry-manufacturing' } as const;
-const useCases = (data.useCases ?? []).map((u) => ({ ...u, hub: u.industry ? node(INDUSTRY_NODES[u.industry]) : undefined }));
+const useCases = (data.useCases ?? []).map((u) => ({ ...u, hub: u.industry ? localNode(INDUSTRY_NODES[u.industry], locale) : undefined }));
 // Fourth-level pages under this offering (navigation.md: linked from here, not from the header)
-const related = children(self.id).filter((n) => n.kind === 'page');
+const related = children(self.id, locale).filter((n) => n.kind === 'page');
 // Whitepapers point at their offering (whitepaper.offeringNode); drafts have no page
 const whitepapers = (
   await getCollection('whitepaper', (w) => entryLocale(w.id) === locale && isPublished(w) && w.data.offeringNode === self.id)
@@ -76,12 +76,12 @@ const team =
   node(COLLECTION_NODES.person).parent === self.id
     ? (await getCollection('person', (p) => entryLocale(p.id) === locale && isPublished(p)))
         .sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity) || a.data.title.localeCompare(b.data.title))
-        .map((p) => ({ title: p.data.title, role: [p.data.jobTitle, p.data.affiliation].filter(Boolean).join('｜'), href: entryPath('person', p) }))
+        .map((p) => ({ title: p.data.title, role: [p.data.jobTitle, p.data.affiliation].filter(Boolean).join(titleSeparator(locale)), href: entryPath('person', p) }))
     : [];
 // Until M5 fills relatedPosts: current-site posts that name the offering (the first word of its
 // title, e.g. digiRunner)
 const COVERS = [coverData, coverIntegration, coverPlatform];
-const posts = about('blog', self.title.split(' ')[0] ?? self.title, 3).map((p, i) => ({ ...p, cover: COVERS[i % COVERS.length] }));
+const posts = about('blog', self.title.split(' ')[0] ?? self.title, 3, locale).map((p, i) => ({ ...p, cover: COVERS[i % COVERS.length] }));
 const faq = data.faq ?? [];
 const hasDownloads = whitepapers.length + downloads.length > 0;
 // Related offerings and downloads share a row on wide screens when both are there; alone, related
@@ -111,13 +111,13 @@ const jsonLd = offeringJsonLd({
   org: org.data,
   site: Astro.site,
   url: canonicalUrl(Astro.url.pathname, Astro.site),
-  imageUrl: new URL((ogImage ?? DEFAULT_OG_IMAGE).src, Astro.site).href,
-  trail: breadcrumb(self.id),
+  imageUrl: new URL((ogImage ?? defaultOgImage(locale)).src, Astro.site).href,
+  trail: breadcrumb(self.id, locale),
   inLanguage: locale,
 });
 
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
-const blog = node('blog');
+const blog = localNode('blog', locale);
 ---
 
 <PageLayout title={title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
@@ -210,7 +210,7 @@ const blog = node('blog');
               <CardGrid cols={1}>
                 {whitepapers.map((w) => (
                   <li>
-                    <Card title={w.title} href={w.href} eyebrow={node('resources').title} image={{ src: w.cover, alt: '' }} />
+                    <Card title={w.title} href={w.href} eyebrow={localNode('resources', locale).title} image={{ src: w.cover, alt: '' }} />
                   </li>
                 ))}
                 {downloads.map((d) => (

@@ -30,5 +30,5 @@ export function whitepaperJsonLd({ whitepaper, org, site, url, inLanguage, trail
       about: { '@type': 'WebPage', name: about.name, url: about.url },
     },
   };
-  return graph(page, breadcrumbList(trail, site, inLanguage));
+  return graph(page, breadcrumbList(trail, site));
 }

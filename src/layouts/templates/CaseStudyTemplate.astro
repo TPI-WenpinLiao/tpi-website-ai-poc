@@ -35,7 +35,7 @@ const { data } = entry;
 const locale = entryLocale(entry.id);
 const t = strings(locale);
 const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
-const trail = entryTrail('case-study', { title: data.title, path: entryPath('case-study', entry) });
+const trail = entryTrail('case-study', { title: data.title, path: entryPath('case-study', entry) }, locale);
 const { Content } = await render(entry);
 const client = data.client.disclosed ? data.client.name : data.clientDescription;
 const results = data.results ?? [];

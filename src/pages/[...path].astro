@@ -6,9 +6,10 @@
 //   their collection node's path (src/lib/content/urls.ts)
 // - listing, contact and utility nodes in every locale with interface copy (src/data/strings);
 //   listings are split into pages at {path}/page/{n}. The contact page takes the locale's `page`
-//   entry for its node when there is one
+//   entry for its node when there is one (more than one fails the build)
 // - a download page per offering with downloads (/download/{product})
-// Static pages in src/pages win over this route.
+// Static pages in src/pages win over this route. src/lib/ia/built.ts lists the nodes this builds a
+// page for in each locale (for links); keep the two in step.
 import type { GetStaticPaths } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { node } from '../lib/ia/navigation';
@@ -56,34 +57,41 @@ export const getStaticPaths = (async () => {
     const utilities = nodes.filter((n) => n.template === 'utility' && !(UTILITY_ELSEWHERE as readonly string[]).includes(n.id));
     const unknown = utilities.filter((n) => !isUtilityPage(n.id)).map((n) => n.id);
     if (unknown.length) throw new Error(`utility nodes without a UtilityTemplate page: ${unknown.join(', ')} (src/lib/ia/utility.ts)`);
+    // Each listing is split into pages per locale first: a locale with fewer items has fewer pages, so
+    // page n's versions are only the locales that have a page n
+    const listings = await Promise.all(
+      locales.flatMap((locale) =>
+        nodes
+          .filter((n) => n.template === 'listing')
+          .map(async (n) => {
+            const { items, featured } = await listing(n.id, locale);
+            return { id: n.id, locale, featured, pages: paginate(items).map((pageItems, i) => ({ items: pageItems, path: pagePath(localizePath(n.path, locale), i + 1) })) };
+          }),
+      ),
+    );
     const out = [];
     for (const locale of locales) {
-      for (const n of nodes.filter((n) => n.template === 'listing')) {
-        const { items, featured } = await listing(n.id, locale);
-        const pages = paginate(items);
-        const listPath = localizePath(n.path, locale);
+      for (const l of listings.filter((x) => x.locale === locale)) {
         out.push(
-          ...pages.map((pageItems, i) => {
-            const path = pagePath(listPath, i + 1);
-            return {
-              params: { path: path.slice(1) },
-              props: {
-                kind: 'listing',
-                id: n.id,
-                locale,
-                items: pageItems,
-                featured: i === 0 ? featured : undefined,
-                page: i + 1,
-                pages: pages.length,
-                translations: versions(path, locale),
-              } satisfies Props,
-            };
-          }),
+          ...l.pages.map((p, i) => ({
+            params: { path: p.path.slice(1) },
+            props: {
+              kind: 'listing',
+              id: l.id,
+              locale,
+              items: p.items,
+              featured: i === 0 ? l.featured : undefined,
+              page: i + 1,
+              pages: l.pages.length,
+              translations: listings.filter((x) => x.id === l.id && x.locale !== locale && x.pages[i]).map((x) => x.pages[i]!.path),
+            } satisfies Props,
+          })),
         );
       }
       const contact = localizePath(node('contact').path, locale);
-      const entry = (await getCollection('page', (e) => e.data.node === 'contact' && entryLocale(e.id) === locale && isPublished(e)))[0];
-      out.push({ params: { path: contact.slice(1) }, props: { kind: 'contact', locale, entry, translations: versions(contact, locale) } satisfies Props });
+      const entries = await getCollection('page', (e) => e.data.node === 'contact' && entryLocale(e.id) === locale && isPublished(e));
+      if (entries.length > 1) throw new Error(`more than one published ${locale} page entry for the contact node: ${entries.map((e) => e.id).join(', ')}`);
+      out.push({ params: { path: contact.slice(1) }, props: { kind: 'contact', locale, entry: entries[0], translations: versions(contact, locale) } satisfies Props });
       for (const id of utilities.map((n) => n.id).filter(isUtilityPage)) {
         const path = localizePath(node(id).path, locale);
         out.push({ params: { path: path.slice(1) }, props: { kind: 'utility', id, locale, translations: versions(path, locale) } satisfies Props });

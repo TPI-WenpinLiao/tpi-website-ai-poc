@@ -27,5 +27,5 @@ export function pageJsonLd({ page, org, site, url, inLanguage, trail, logoUrl }:
     ...(type === 'WebPage' ? {} : { mainEntity: organizationNode(org, site, logoUrl) }),
     ...(page.effectiveDate ? { datePublished: isoDate(page.effectiveDate) } : {}),
   };
-  return graph(main, breadcrumbList(trail, site, inLanguage));
+  return graph(main, breadcrumbList(trail, site));
 }

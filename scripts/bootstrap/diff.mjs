@@ -2,7 +2,8 @@
 // issue list and re-running the bootstrap workflow never creates duplicates.
 // An issue is matched by its `<!-- bootstrap-id: … -->` comment or its `[Mx-xx]` title prefix, then
 // title, milestone, labels and each body section rendered by bootstrap.cjs are compared.
-// Ignored: the bootstrap-id comment, acceptance checkbox state, and labels used as a `gate` (review state).
+// Ignored: the bootstrap-id comment, acceptance checkbox state, labels used as a `gate` (review state)
+// and needs-decision (a session waiting for its user, .claude/skills/checkpoint/SKILL.md).
 // Also lists `[Mx-xx]` issues missing from the yml and the issues bootstrap would create (dry run).
 // Exits 1 when anything differs.
 // The repo is public, so the GitHub API is called without a token. If it ever becomes private, run
@@ -39,7 +40,7 @@ export function splitSections(body) {
 // gh: GitHub issues (pull requests already excluded), [{ number, title, body, labels: [name], milestone: title|null }]
 export function diffIssues({ issues, milestones, gh }) {
   const milestoneTitle = new Map(milestones.map((m) => [m.id, m.title]));
-  const stateLabels = new Set(issues.filter((i) => i.gate).map((i) => i.gate));
+  const stateLabels = new Set(['needs-decision', ...issues.filter((i) => i.gate).map((i) => i.gate)]);
   const ymlIds = new Set(issues.map((i) => i.id));
   const ghTitles = new Set(gh.map((i) => i.title));
 

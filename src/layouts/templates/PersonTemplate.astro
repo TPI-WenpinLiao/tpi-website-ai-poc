@@ -14,11 +14,11 @@ import TagList from '../../components/ui/TagList.astro';
 import Button from '../../components/ui/Button.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
-import { entryTrail, node, nodeHref } from '../../lib/ia/navigation';
+import { entryTrail, localNode, node, nodeHref } from '../../lib/ia/navigation';
 import { entryLocale } from '../../lib/content/entries';
 import { entryPath } from '../../lib/content/urls';
 import { personJsonLd } from '../../lib/seo/jsonld/person';
-import { canonicalUrl } from '../../lib/seo/meta';
+import { canonicalUrl, titleSeparator } from '../../lib/seo/meta';
 import { strings } from '../../data/strings';
 
 interface Props {
@@ -30,14 +30,14 @@ const { entry, translations } = Astro.props;
 const { data } = entry;
 const locale = entryLocale(entry.id);
 const t = strings(locale);
-const trail = entryTrail('esg-advisor', { title: data.title, path: entryPath('person', entry) });
-const team = node(node('esg-advisor').parent);
+const trail = entryTrail('esg-advisor', { title: data.title, path: entryPath('person', entry) }, locale);
+const team = localNode(node('esg-advisor').parent, locale);
 const lists = [
   { title: t.person.experience, items: data.experience ?? [] },
   { title: t.person.education, items: data.education ?? [] },
   { title: t.person.certifications, items: data.certifications ?? [] },
 ].filter((l) => l.items.length > 0);
-const role = [data.jobTitle, data.affiliation].filter(Boolean).join('｜');
+const role = [data.jobTitle, data.affiliation].filter(Boolean).join(titleSeparator(locale));
 
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);

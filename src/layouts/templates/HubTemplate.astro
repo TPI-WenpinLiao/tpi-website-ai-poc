@@ -16,7 +16,7 @@ import CardGrid from '../../components/ui/CardGrid.astro';
 import Reveal from '../../components/ui/Reveal.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
-import { breadcrumb, children, localeHref, node } from '../../lib/ia/navigation';
+import { breadcrumb, children, localeHref, localNode, node } from '../../lib/ia/navigation';
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { caseCard, postCard } from '../../lib/content/cards';
 import { hubJsonLd } from '../../lib/seo/jsonld/hub';
@@ -35,14 +35,14 @@ const { data } = entry;
 const locale = entryLocale(entry.id);
 const t = strings(locale);
 const href = localeHref(locale);
-const self = node(data.node);
+const self = localNode(data.node, locale);
 const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
 
 // Child cards: pages and external entries (the resources hub lists 昕力大學), not groups or assets
 const described = new Map(
   [...(await getCollection('offering', inLocale)), ...(await getCollection('hub', inLocale))].map((e) => [e.data.node, e.data.description]),
 );
-const parts = children(self.id)
+const parts = children(self.id, locale)
   .filter((n) => n.kind === 'page' || n.kind === 'external')
   .map((n) => ({ ...n, href: href(n), description: described.get(n.id) }));
 const highlights = data.highlights ?? [];
@@ -71,7 +71,7 @@ const jsonLd = hubJsonLd({
   site,
   url: canonicalUrl(Astro.url.pathname, site),
   inLanguage: locale,
-  trail: breadcrumb(self.id),
+  trail: breadcrumb(self.id, locale),
   parts: parts.flatMap((p) => (p.href && p.kind === 'page' ? [{ name: p.title, url: new URL(p.href, site).href }] : [])),
 });
 
@@ -79,7 +79,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 ---
 
 <PageLayout title={data.seoTitle ?? data.title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
-  <PageHero eyebrow={node(self.parent).title} title={data.title} description={data.tagline ?? data.description}>
+  <PageHero eyebrow={localNode(self.parent, locale).title} title={data.title} description={data.tagline ?? data.description}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
     <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
   </PageHero>
@@ -125,7 +125,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
         <CardGrid>
           {whitepapers.map((w) => (
             <li>
-              <Card title={w.title} href={w.href} eyebrow={node('resources').title} image={{ src: w.cover, alt: '' }} />
+              <Card title={w.title} href={w.href} eyebrow={localNode('resources', locale).title} image={{ src: w.cover, alt: '' }} />
             </li>
           ))}
         </CardGrid>
@@ -136,7 +136,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   {
     cases.length > 0 && (
       <Surface tone="dark" pattern="grid">
-        <SectionHeading eyebrow="Success stories" title={node('success-stories').title} />
+        <SectionHeading eyebrow="Success stories" title={localNode('success-stories', locale).title} />
         <CardGrid>
           {cases.map((c, i) => (
             <li>

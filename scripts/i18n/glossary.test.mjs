@@ -13,7 +13,10 @@ const nodes = [
   { id: 'resources', parent: 'home', title: '資源', template: 'hub' },
   { id: 'whitepaper-digirunner', parent: 'resources', title: 'digiRunner 白皮書', template: 'gated-download' },
   { id: 'whitepaper-digilogs', parent: 'resources', title: 'digiLogs 白皮書', template: 'gated-download' },
-  { id: 'blog-post', parent: 'home', title: '文章', template: 'article' },
+  { id: 'blog-post', parent: 'home', title: '文章', template: 'article', kind: 'collection' },
+  // Groups and assets show no name, so they get no row
+  { id: 'legal', parent: 'home', title: '法務與政策', template: '', kind: 'group' },
+  { id: 'aws-guide', parent: 'digirunner', title: '買家指南（PDF）', template: '', kind: 'asset' },
 ];
 const nav = [
   { area: 'utility', parent: '', node: 'home', label: '（logo）' },
@@ -31,12 +34,14 @@ const pageMap = [
   { url: 'https://www.tpisoftware.com/en/open-banking', locale: 'en', node: 'digirunner', disposition: 'merge' },
   { url: 'https://www.tpisoftware.com/en/digirunner-api-management', locale: 'en', node: 'digirunner', disposition: 'rewrite' },
   { url: 'https://www.tpisoftware.com/en/about-us', locale: 'en', node: 'about', disposition: 'rewrite' },
+  { url: 'https://www.tpisoftware.com/en', locale: 'en', node: 'home', disposition: 'rewrite' },
   { url: 'https://www.tpisoftware.com/en/whitepaper/api-strategies', locale: 'en', node: 'whitepaper-digirunner', disposition: 'rewrite' },
   { url: 'https://www.tpisoftware.com/en/whitepaper/digiLogs', locale: 'en', node: 'whitepaper-digilogs', disposition: 'rewrite' },
 ];
 const inventory = [
   { url: 'https://www.tpisoftware.com/en/digirunner-api-management', nav_location: 'footer: API Management | header: Product & Services > Digital Transformation > Enterprise API Management' },
   { url: 'https://www.tpisoftware.com/en/about-us', nav_location: 'header: Company > About Us' },
+  { url: 'https://www.tpisoftware.com/en', nav_location: 'header: (logo)' },
   { url: 'https://www.tpisoftware.com/en/open-banking', nav_location: 'header: Product & Services > Open Banking' },
   { url: 'https://www.tpisoftware.com/en/whitepaper/api-strategies', nav_location: 'header: Resources > digiRunner > White Paper' },
   { url: 'https://www.tpisoftware.com/en/whitepaper/digiLogs', nav_location: 'header: Resources > digiLogs > White Paper' },
@@ -57,11 +62,12 @@ test('navLabels keeps the shallowest header items and every footer label', () =>
   assert.deepEqual(navLabels('header: Sản Phẩm > Nền tảng digiRunner trên Cloud > Thị trường trực tuyến AWS →').header, ['Nền tảng digiRunner trên Cloud']);
 });
 
-test('buildRows lists visible nav labels, products, nav pages and strings', () => {
+test('buildRows lists visible nav labels, every named node and strings', () => {
   const rows = derive();
   assert.deepEqual(rows.map((r) => [r.id, r.category]), [
     ['nav:產品', 'nav'],
     ['nav:公司', 'nav'],
+    ['node:home', 'page'],
     ['node:products', 'page'],
     ['node:family-dx', 'product'],
     ['node:digirunner', 'product'],
@@ -69,11 +75,14 @@ test('buildRows lists visible nav labels, products, nav pages and strings', () =
     ['node:resources', 'page'],
     ['node:whitepaper-digirunner', 'page'],
     ['node:whitepaper-digilogs', 'page'],
+    ['node:blog-post', 'page'],
     ['ui:menu', 'ui'],
   ]);
   // White Paper labels two different nodes, so it is no one's name
   assert.deepEqual(rows.find((r) => r.id === 'node:whitepaper-digirunner')['candidates:en'], []);
   assert.equal(rows.find((r) => r.id === 'node:whitepaper-digirunner').source, 'docs/ia/nodes.csv');
+  // The current site's (logo) menu entry is not a name
+  assert.deepEqual(rows.find((r) => r.id === 'node:home')['candidates:en'], []);
   const about = rows.find((r) => r.id === 'node:about');
   // A content file title comes before the menu label; the same text is listed once
   assert.deepEqual(about['candidates:en'].map((c) => c.text), ['About Us']);

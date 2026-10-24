@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { TITLE_SUFFIX, applyOverrides, blogFrontmatter, Commented, Day, frontmatterNotes, newsFrontmatter, serializeFrontmatter, tagLookup } from './frontmatter.mjs';
+import { applyOverrides, blogFrontmatter, Commented, Day, frontmatterNotes, newsFrontmatter, serializeFrontmatter, tagLookup } from './frontmatter.mjs';
 
 const tagOf = tagLookup([
   { id: 'ai-application', paths: { 'zh-TW': '/blog/ai/AIapplication', en: '/blog/artifintell/aiapplication' } },
@@ -157,13 +157,11 @@ test('line breaks in API titles and descriptions become spaces; multi-line value
   assert.throws(() => serializeFrontmatter({ description: 'a\nb' }), /spans lines/);
 });
 
-test('long <title> is flagged unless seoTitle is short enough; the suffix matches src/lib/seo/meta.ts', async () => {
-  const { readFile } = await import('node:fs/promises');
-  const meta = await readFile(new URL('../../../src/lib/seo/meta.ts', import.meta.url), 'utf8');
-  const name = meta.match(/SITE_NAME = '([^']+)'/)?.[1];
-  assert.equal(TITLE_SUFFIX, `｜${name}`);
-  assert.match(meta, /`\$\{subject\}｜\$\{SITE_NAME\}`/);
+test('long <title> is flagged unless seoTitle is short enough, with the site-name suffix of the locale', () => {
   const long = 'a'.repeat(60);
-  assert.deepEqual(frontmatterNotes('en', { title: long }), [`<title> is ${60 + TITLE_SUFFIX.length} characters (max 70): set seoTitle`]);
+  // " | TPIsoftware" is 14 characters, ｜TPIsoftware 昕力資訊 is 17
+  assert.deepEqual(frontmatterNotes('en', { title: long }), ['<title> is 74 characters (max 70): set seoTitle']);
+  assert.deepEqual(frontmatterNotes('zh-TW', { title: 'a'.repeat(54) }), ['<title> is 71 characters (max 70): set seoTitle']);
+  assert.deepEqual(frontmatterNotes('en', { title: 'a'.repeat(56) }), []);
   assert.deepEqual(frontmatterNotes('en', { title: long, seoTitle: 'short' }), []);
 });

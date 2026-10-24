@@ -32,5 +32,5 @@ export function offeringJsonLd({ offering, org, site, url, imageUrl, trail, inLa
       ? { '@type': offeringType(offering.kind), ...common, applicationCategory: 'BusinessApplication', publisher: provider }
       : { '@type': offeringType(offering.kind), ...common, serviceType: offering.title, provider };
   const faq = offering.faq?.length ? [faqPage(offering.faq)] : [];
-  return graph(main, breadcrumbList(trail, site, inLanguage), ...faq);
+  return graph(main, breadcrumbList(trail, site), ...faq);
 }
