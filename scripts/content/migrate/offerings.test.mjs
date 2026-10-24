@@ -119,6 +119,7 @@ test('extractOrientAi reads the orient-ai template and appends answer lists', ()
   assert.throws(() => extractOrientAi(ORIENT_AI.replace('class="card-content"', 'class="text"')), /features\.0/);
   assert.throws(() => extractOrientAi(ORIENT_AI.replace('sp-text-wrapper desktop', 'sp-text-wrapper')), /not found on the page.*tagline/);
   assert.throws(() => extractOrientAi(ORIENT_AI.replace('class="answer-text">不會', 'class="text">不會')), /faq\.0/);
+  assert.throws(() => extractOrientAi(ORIENT_AI.replace('class="section06"', 'class="section08"')), /not found on the page.*faq$/);
 });
 
 // https://www.tpisoftware.com/aiso, trimmed to one card (data-v-* attributes and the icon dropped)

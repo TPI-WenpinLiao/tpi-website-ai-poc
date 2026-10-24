@@ -98,7 +98,7 @@ export function extractOrientAi(html) {
       return { question, answer: [text(li.querySelector('.answer-text')), ...items].join(cjk ? '' : ' ') };
     }),
   };
-  const empty = missing(data);
+  const empty = [...missing(data), ...(data.faq.length ? [] : ['faq'])];
   if (empty.length) throw new Error(`not found on the page (template changed?): ${empty.join(', ')}`);
   return data;
 }
