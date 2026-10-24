@@ -5,13 +5,16 @@
 // - src/data/strings/<locale>.ts and src/data/home/<locale>.ts with placeholder copy: glossary.csv
 //   values for interface strings, `[<locale>] <path>` for the rest
 // - empty <locale> cells of docs/i18n/glossary.csv filled with `[<locale>] <id>`
-// - src/content/organization/<locale>.yaml copied from zh-TW (#39, #40 write the real ones)
+// - src/content/organization/<locale>.yaml copied from zh-TW with `[<locale>] <path>` for every text
+//   holding Han characters (#39, #40 write the real ones)
 // The locale's content files stay, so its offering, blog and other pages are built as well; with
 // --no-content they are removed from the copy, which checks the shared layer alone (problems left
 // with content are the locale's own content: links in post bodies, descriptions, for #39 and #40).
 // Then it runs `astro build`, scripts/i18n/routes.mjs and scripts/seo/meta.mjs on the copy, and
-// checks that the header, footer and breadcrumbs of the locale's pages show no Han characters (no
-// zh-TW name leaking in) and that the header shows the glossary names. Not part of `npm run check`:
+// checks that the locale's pages show no Han characters (no zh-TW text leaking in from the shared
+// layer) and that the header shows the glossary names. With --no-content the whole page is checked,
+// text and attributes such as alt, aria-label and meta content; with content only the header,
+// footer and breadcrumbs, since content files may quote names in other scripts. Not part of `npm run check`:
 // it builds the site a second time.
 //
 //   node scripts/i18n/locale-fixture.mjs <en|vi> [--no-content] [--keep]
@@ -23,6 +26,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'node-html-parser';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { parseCsv } from '../inventory/csv.mjs';
 import { toCsv } from './glossary.mjs';
 import { urlPath } from './routes.mjs';
@@ -101,22 +105,50 @@ export function homeSource(zhHome, locale) {
 export const fillGlossary = (rows, locale) => rows.map((r) => (r[locale] ? r : { ...r, [locale]: `[${locale}] ${r.id}` }));
 
 /**
- * Names problems on the locale's built pages: Han characters in the header, footer or breadcrumbs
- * (outside elements marked with another lang), and header labels missing from the home page
+ * Organization data with every string holding Han characters replaced by `[<locale>] <path>`
+ * @param {unknown} value
+ * @param {string} locale
+ * @param {string} [path]
+ * @returns {unknown}
+ */
+export function placeholderData(value, locale, path = '') {
+  if (typeof value === 'string') return HAN.test(value) ? `[${locale}] ${path}` : value;
+  if (Array.isArray(value)) return value.map((v, i) => placeholderData(v, locale, `${path}.${i}`));
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, placeholderData(v, locale, path ? `${path}.${k}` : k)]));
+  return value;
+}
+
+// Attributes whose values are read out or shown
+const TEXT_ATTRIBUTES = ['alt', 'aria-label', 'title', 'placeholder', 'content'];
+
+/**
+ * Names problems on the locale's built pages: Han characters (outside elements marked with another
+ * lang) in the header, footer and breadcrumbs, or with `wholePage` anywhere in the page's text and
+ * text attributes; and header labels missing from the home page
  * @param {Map<string, string>} pages URL path → HTML
  * @param {string} locale
  * @param {string[]} expected names the home page header must show
+ * @param {{ wholePage?: boolean }} [options]
  */
-export function nameProblems(pages, locale, expected) {
+export function nameProblems(pages, locale, expected, { wholePage = false } = {}) {
   const problems = [];
+  const hanWords = (text) => [...new Set(text.split(/\s+/).filter((w) => HAN.test(w)))].slice(0, 5).join(' ');
   for (const [path, html] of pages) {
     if (path !== `/${locale}` && !path.startsWith(`/${locale}/`)) continue;
     const root = parse(html);
     // Locale names in the language menu are written in their own language and marked with lang
-    for (const el of root.querySelectorAll('[lang]')) if (el.tagName !== 'HTML') el.remove();
-    for (const el of root.querySelectorAll('header.site-header, footer.site-footer, nav.breadcrumb')) {
-      const han = el.text.split(/\s+/).filter((w) => HAN.test(w));
-      if (han.length) problems.push(`${path}: <${el.tagName.toLowerCase()} class="${el.getAttribute('class')}"> shows ${[...new Set(han)].slice(0, 5).join(' ')}`);
+    for (const el of root.querySelectorAll('[lang], script, style')) if (el.tagName !== 'HTML') el.remove();
+    const scopes = wholePage ? [root.querySelector('html') ?? root] : root.querySelectorAll('header.site-header, footer.site-footer, nav.breadcrumb');
+    for (const el of scopes) {
+      const where = `<${el.tagName.toLowerCase()}${el.getAttribute('class') ? ` class="${el.getAttribute('class')}"` : ''}>`;
+      const text = hanWords(el.text);
+      if (text) problems.push(`${path}: ${where} shows ${text}`);
+      for (const child of el.querySelectorAll('*')) {
+        for (const attr of TEXT_ATTRIBUTES) {
+          const words = hanWords(child.getAttribute(attr) ?? '');
+          if (words) problems.push(`${path}: ${attr} of <${child.tagName.toLowerCase()}> shows ${words}`);
+        }
+      }
     }
   }
   const home = pages.get(`/${locale}`);
@@ -164,7 +196,8 @@ async function main(args) {
     const { home } = await import(pathToFileURL(join(ROOT, 'src/data/home/zh-TW.ts')).href);
     writeFileSync(join(tmp, `src/data/strings/${locale}.ts`), stringsSource(strings, names, locale));
     writeFileSync(join(tmp, `src/data/home/${locale}.ts`), homeSource(home, locale));
-    cpSync(join(tmp, 'src/content/organization/zh-TW.yaml'), join(tmp, `src/content/organization/${locale}.yaml`));
+    const org = parseYaml(readFileSync(join(tmp, 'src/content/organization/zh-TW.yaml'), 'utf8'));
+    writeFileSync(join(tmp, `src/content/organization/${locale}.yaml`), stringifyYaml(placeholderData(org, locale)));
     if (noContent) {
       for (const collection of readdirSync(join(tmp, 'src/content'), { withFileTypes: true }).filter((d) => d.isDirectory())) {
         rmSync(join(tmp, 'src/content', collection.name, locale), { recursive: true, force: true });
@@ -198,7 +231,7 @@ async function main(args) {
     const expected = parseCsv(readFileSync(join(tmp, 'docs/ia/navigation.csv'), 'utf8').replace(/^\uFEFF/, ''))
       .filter((r) => r.area === 'header' && r.label)
       .map((r) => names.get(`nav:${r.label}`) ?? names.get(`node:${nodeTitles.find((n) => n.title === r.label)?.id}`) ?? r.label);
-    const problems = nameProblems(pages, locale, expected);
+    const problems = nameProblems(pages, locale, expected, { wholePage: noContent });
     for (const p of problems) console.log(p);
     const built = [...pages.keys()].filter((p) => p === `/${locale}` || p.startsWith(`/${locale}/`)).length;
     console.log(`${built} ${locale} pages checked for names, ${problems.length} problems`);

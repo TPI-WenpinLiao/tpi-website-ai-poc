@@ -33,6 +33,8 @@ export const strings = {
   language: '語言',
   languagePrefix: '語言：',
   externalSite: '（獨立網站）',
+  // Screen-reader text after a Link that leaves the site
+  externalLink: '（外部網站）',
   homeLogoAlt: 'TPIsoftware 昕力資訊（回首頁）',
   footerNav: '頁尾選單',
   legal: '法務資訊',
@@ -82,6 +84,8 @@ export const strings = {
     company: '公司',
     jobTitle: '職稱',
     consent: '個資同意',
+    // Mark after the label of a required field
+    required: '必填',
   },
   download: {
     summary: '內容重點',

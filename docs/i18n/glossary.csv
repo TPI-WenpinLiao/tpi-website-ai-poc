@@ -92,6 +92,7 @@ ui:menu,ui,選單,Menu,Menu,draft,src/data/strings/zh-TW.ts,
 ui:language,ui,語言,Language,Ngôn ngữ,draft,src/data/strings/zh-TW.ts,LocaleSwitcher 的 landmark 名稱與 header 語言選單的標題（strings(locale).language）
 ui:languagePrefix,ui,語言：,"Language: ","Ngôn ngữ: ",draft,src/data/strings/zh-TW.ts,螢幕閱讀器文字，接在語系名稱前面，結尾有半形空格
 ui:externalSite,ui,（獨立網站）," (external site)"," (trang web riêng)",draft,src/data/strings/zh-TW.ts,螢幕閱讀器文字，接在連結文字後面，開頭有半形空格
+ui:externalLink,ui,（外部網站）," (external website)"," (trang web bên ngoài)",draft,src/data/strings/zh-TW.ts,螢幕閱讀器文字，接在離站連結（Link external）後面，開頭有半形空格
 ui:homeLogoAlt,ui,TPIsoftware 昕力資訊（回首頁）,TPIsoftware (home),TPIsoftware (trang chủ),draft,src/data/strings/zh-TW.ts,公司名見 brand:tpisoftware
 ui:footerNav,ui,頁尾選單,Footer navigation,Menu chân trang,draft,src/data/strings/zh-TW.ts,
 ui:legal,ui,法務資訊,Legal,Thông tin pháp lý,draft,src/data/strings/zh-TW.ts,
@@ -130,6 +131,7 @@ ui:form.email,ui,Email,Email,Email,draft,src/data/strings/zh-TW.ts,
 ui:form.company,ui,公司,Company,Công ty,draft,src/data/strings/zh-TW.ts,
 ui:form.jobTitle,ui,職稱,Job title,Chức danh,draft,src/data/strings/zh-TW.ts,
 ui:form.consent,ui,個資同意,Privacy consent,Đồng ý về dữ liệu cá nhân,draft,src/data/strings/zh-TW.ts,
+ui:form.required,ui,必填,Required,Bắt buộc,draft,src/data/strings/zh-TW.ts,必填欄位標籤後的標記
 ui:download.summary,ui,內容重點,Highlights,Nội dung chính,draft,src/data/strings/zh-TW.ts,
 ui:download.request,ui,索取文件,Request the document,Yêu cầu tài liệu,draft,src/data/strings/zh-TW.ts,
 ui:download.submit,ui,送出並下載,Submit and download,Gửi và tải xuống,draft,src/data/strings/zh-TW.ts,

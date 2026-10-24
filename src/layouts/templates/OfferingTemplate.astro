@@ -29,7 +29,7 @@ import { entryLocale, isPublished } from '../../lib/content/entries';
 import { COLLECTION_NODES, entryPath } from '../../lib/content/urls';
 import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
 import { canonicalUrl, titleSeparator } from '../../lib/seo/meta';
-import { DEFAULT_OG_IMAGE } from '../../lib/seo/og';
+import { defaultOgImage } from '../../lib/seo/og';
 import { about } from '../../lib/latest-posts';
 import { SCENE_FAMILIES, sceneFamily } from '../../lib/scene/families';
 import { strings } from '../../data/strings';
@@ -111,7 +111,7 @@ const jsonLd = offeringJsonLd({
   org: org.data,
   site: Astro.site,
   url: canonicalUrl(Astro.url.pathname, Astro.site),
-  imageUrl: new URL((ogImage ?? DEFAULT_OG_IMAGE).src, Astro.site).href,
+  imageUrl: new URL((ogImage ?? defaultOgImage(locale)).src, Astro.site).href,
   trail: breadcrumb(self.id, locale),
   inLanguage: locale,
 });

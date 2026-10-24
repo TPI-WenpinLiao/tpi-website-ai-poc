@@ -8,7 +8,7 @@ import { hreflangAlternates } from '../../lib/seo/hreflang';
 import { serializeJsonLd, type JsonLdGraph } from '../../lib/seo/jsonld/shared';
 import { OG_LOCALES } from '../../lib/i18n/locales';
 import { canonicalUrl, pageTitle, siteName } from '../../lib/seo/meta';
-import { DEFAULT_OG_IMAGE, type OgImage } from '../../lib/seo/og';
+import { defaultOgImage, type OgImage } from '../../lib/seo/og';
 
 export interface Props {
   // The page topic; the site name is appended unless titleSuffix is false (the home page)
@@ -23,13 +23,14 @@ export interface Props {
   locales: readonly LocaleLink[];
 }
 
-const { title, titleSuffix = true, description, image = DEFAULT_OG_IMAGE, type = 'website', jsonLd, locales } = Astro.props;
+const { title, titleSuffix = true, description, image: pageImage, type = 'website', jsonLd, locales } = Astro.props;
 if (!Astro.site) throw new Error('astro.config.mjs must set site for canonical and og:url');
 const site = Astro.site;
 // canonical URLs have no .html, /index or trailing slash; the locale comes from the URL prefix (ADR 0002)
 const pathname = normalizePath(Astro.url.pathname);
 const locale = localeFromPath(pathname);
 const fullTitle = titleSuffix ? pageTitle(title, locale) : title;
+const image = pageImage ?? defaultOgImage(locale);
 const canonical = canonicalUrl(pathname, site);
 const imageUrl = new URL(image.src, site).href;
 const alternates = hreflangAlternates(locales, site);
