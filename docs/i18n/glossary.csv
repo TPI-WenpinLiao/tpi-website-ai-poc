@@ -89,7 +89,7 @@ ui:skipToMain,ui,跳到主要內容,Skip to main content,Chuyển đến nội d
 ui:mainNav,ui,主選單,Main navigation,Menu chính,draft,src/data/strings/zh-TW.ts,
 ui:mobileNavSuffix,ui,（行動版）," (mobile)"," (di động)",draft,src/data/strings/zh-TW.ts,接在選單名稱後面，en、vi 開頭有半形空格
 ui:menu,ui,選單,Menu,Menu,draft,src/data/strings/zh-TW.ts,
-ui:language,ui,語言,Language,Ngôn ngữ,draft,src/data/strings/zh-TW.ts,LocaleSwitcher 的 landmark 名稱暫用這組譯文（src/components/ui/LocaleSwitcher.astro），確認後替換
+ui:language,ui,語言,Language,Ngôn ngữ,draft,src/data/strings/zh-TW.ts,LocaleSwitcher 的 landmark 名稱與 header 語言選單的標題（strings(locale).language）
 ui:languagePrefix,ui,語言：,"Language: ","Ngôn ngữ: ",draft,src/data/strings/zh-TW.ts,螢幕閱讀器文字，接在語系名稱前面，結尾有半形空格
 ui:externalSite,ui,（獨立網站）," (external site)"," (trang web riêng)",draft,src/data/strings/zh-TW.ts,螢幕閱讀器文字，接在連結文字後面，開頭有半形空格
 ui:homeLogoAlt,ui,TPIsoftware 昕力資訊（回首頁）,TPIsoftware (home),TPIsoftware (trang chủ),draft,src/data/strings/zh-TW.ts,公司名見 brand:tpisoftware

@@ -8,7 +8,8 @@
 //   listings are split into pages at {path}/page/{n}. The contact page takes the locale's `page`
 //   entry for its node when there is one (more than one fails the build)
 // - a download page per offering with downloads (/download/{product})
-// Static pages in src/pages win over this route.
+// Static pages in src/pages win over this route. src/lib/ia/built.ts lists the nodes this builds a
+// page for in each locale (for links); keep the two in step.
 import type { GetStaticPaths } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { node } from '../lib/ia/navigation';

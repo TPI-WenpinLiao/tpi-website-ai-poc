@@ -1,5 +1,5 @@
 // The nodes.csv nodes that have a page in each locale, by the same rules src/pages/[...path].astro
-// and src/pages/index.astro build pages: entries of the node-based collections (offering, hub, page,
+// and src/pages/index.astro build pages (a change to which pages those build belongs here too): entries of the node-based collections (offering, hub, page,
 // whitepaper) for their node once their locale has interface copy, every listing, contact and
 // utility node and the home page in each locale with interface copy. Links read this through
 // localeHref() (src/lib/ia/navigation.ts), so a link never points at an en or vi page that was not
@@ -17,8 +17,14 @@ const NODE_TEMPLATES = new Set(['home', 'listing', 'contact', 'utility']);
 const elsewhere: readonly string[] = UTILITY_ELSEWHERE;
 const SELF_BUILT = nodes.filter((n) => NODE_TEMPLATES.has(n.template) && !elsewhere.includes(n.id)).map((n) => n.id);
 
+// page entries build a page of their own only on content nodes; the contact page is in SELF_BUILT
 const entries = (
-  await Promise.all([getCollection('offering'), getCollection('hub'), getCollection('page'), getCollection('whitepaper')])
+  await Promise.all([
+    getCollection('offering'),
+    getCollection('hub'),
+    getCollection('page', (e) => nodes.find((n) => n.id === e.data.node)?.template === 'content'),
+    getCollection('whitepaper'),
+  ])
 ).flat();
 
 export const builtNodes: ReadonlyMap<Locale, ReadonlySet<string>> = new Map(
