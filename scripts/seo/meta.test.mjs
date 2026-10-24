@@ -70,6 +70,17 @@ test('a canonical pointing elsewhere and duplicate titles are reported', () => {
   assert.ok(problems.includes('/b: title "same" is also used by /a'));
 });
 
+test('versions of one page in other locales may share a title, other pages may not', () => {
+  const versions = [['en', '/en/x'], ['vi', '/vi/x']];
+  const pages = new Map([
+    ['/en/x', page('/en/x', { title: 'Bo-Yuan Zhao', alternates: versions })],
+    ['/vi/x', page('/vi/x', { title: 'Bo-Yuan Zhao', alternates: versions })],
+    ['/vi/y', page('/vi/y', { title: 'Bo-Yuan Zhao', alternates: self('/vi/y', 'vi') })],
+  ]);
+  const titles = metaProblems(pages, site(['/en/x', '/vi/x', '/vi/y'])).filter((p) => p.includes('title "'));
+  assert.deepEqual(titles, ['/vi/y: title "Bo-Yuan Zhao" is also used by /en/x']);
+});
+
 test('a noindex robots meta is reported', () => {
   const pages = new Map([['/', page('/', { alternates: self('/'), extra: '<meta name="robots" content="noindex, nofollow">' })]]);
   assert.ok(metaProblems(pages, site(['/']))[0].includes('robots meta'));
