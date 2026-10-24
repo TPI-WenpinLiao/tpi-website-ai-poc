@@ -160,8 +160,8 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 1. 先找既有的元件：上表能用的就用，差一點的就給它加 prop（「CSS 分層」），不要另寫一個相似的元件
 2. 在 `src/components/ui/<Name>.astro` 建立元件，名稱用 PascalCase。檔頭用英文註解寫出用途、props 的意義與使用限制（例：`LocaleSwitcher`）
 3. 樣式寫在 scoped `<style>`，只用 tokens（「規則」「Token 命名」）；用到斷點時 `@import` media.css（「斷點」）
-4. 有互動狀態的選擇器同時接受 `data-preview-state`（「展示頁」）
-5. 在 `src/pages/design-system/index.astro` import 元件並放上範例。有 variant 或互動狀態（hover、focus、disabled、error）的元件，做成狀態矩陣：variant × 狀態，深淺兩個 surface 各一份，預覽的複本加 `inert`（「展示頁」）；沒有的放一個範例即可
+4. 要放進狀態矩陣的元件（第 5 步），互動狀態的選擇器同時接受 `data-preview-state`（「展示頁」）
+5. 在 `src/pages/design-system/index.astro` import 元件並放上範例。有 variant 或互動狀態（hover、focus、disabled、error）的元件，做成狀態矩陣：variant × 狀態，深淺兩個 surface 各一份，預覽的複本加 `inert`（「展示頁」）。沒有 variant 與互動狀態的元件，或狀態寫在元件內部、無法從外部設定的導覽元件（`Breadcrumb`、`InPageNav`、`SiteHeader`、`SiteFooter`），放一個範例即可
 6. 在本檔的「基礎元件」表加一列：用途、重點（props、限制、跟哪個元件搭配）
 7. 執行 `npm run check:design`。`showcase.mjs` 只檢查第 5 步的 import 與第 6 步的那一列，也會報出元件表裡已經沒有檔案的列。元件放在圖上、3D 場景上，或有 focus 樣式時，另外跑 `node scripts/design/a11y-smoke.mjs`
 8. PR 寫出新元件、新 token 與用途；第 1 步與第 5 步的狀態矩陣、`inert` 沒有 script 檢查，由 `/pr-review` 人工判斷
