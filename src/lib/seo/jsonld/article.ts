@@ -33,7 +33,7 @@ export function caseStudyJsonLd({ caseStudy, org, site, url, inLanguage, trail, 
     inLanguage,
     mainEntityOfPage: url,
   };
-  return graph(article, breadcrumbList(trail, site, inLanguage));
+  return graph(article, breadcrumbList(trail, site));
 }
 
 interface PostInput extends PageContext {
@@ -68,9 +68,9 @@ interface BlogJsonLdInput extends PostInput {
 }
 
 export function blogPostingJsonLd(input: BlogJsonLdInput) {
-  const { post, tagNames = [], site, trail, inLanguage } = input;
+  const { post, tagNames = [], site, trail } = input;
   const main = posting('BlogPosting', post, { '@type': post.authorType, name: post.author }, input);
-  return graph({ ...main, ...(tagNames.length ? { keywords: tagNames } : {}) }, breadcrumbList(trail, site, inLanguage));
+  return graph({ ...main, ...(tagNames.length ? { keywords: tagNames } : {}) }, breadcrumbList(trail, site));
 }
 
 interface NewsJsonLdInput extends PostInput {
@@ -79,6 +79,6 @@ interface NewsJsonLdInput extends PostInput {
 
 // News is always written by the company
 export function newsArticleJsonLd(input: NewsJsonLdInput) {
-  const { post, org, site, trail, inLanguage } = input;
-  return graph(posting('NewsArticle', post, organizationRef(org, site), input), breadcrumbList(trail, site, inLanguage));
+  const { post, org, site, trail } = input;
+  return graph(posting('NewsArticle', post, organizationRef(org, site), input), breadcrumbList(trail, site));
 }

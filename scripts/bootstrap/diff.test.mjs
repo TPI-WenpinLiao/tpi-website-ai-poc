@@ -28,10 +28,10 @@ test('identical data has no differences', () => {
   assert.deepEqual(diffIssues({ issues, milestones, gh: gh() }), { problems: [], wouldCreate: [] });
 });
 
-test('ignores checked boxes, gate labels and a missing bootstrap-id comment', () => {
+test('ignores checked boxes, gate and needs-decision labels and a missing bootstrap-id comment', () => {
   const remote = gh();
   remote[1].body = remote[1].body.replace('- [ ] a', '- [x] a').replace(/<!--.*-->\n/, '');
-  remote[1].labels.push('ia-approved');
+  remote[1].labels.push('ia-approved', 'needs-decision');
   assert.deepEqual(diffIssues({ issues, milestones, gh: remote }).problems, []);
 });
 

@@ -94,13 +94,14 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55）與 M3-09 
 ### M7 多語系
 
 - M7-01 翻譯詞彙表完成（#38）：`docs/i18n/glossary.csv` 列出產品、頁面、選單標籤與介面字串的 zh-TW／en／vi 對照（155 列），由 `node scripts/i18n/glossary.mjs` 依 `nodes.csv`、`navigation.csv`、`src/data/strings/zh-TW.ts` 產生，`--check` 在 `npm run check` 擋下過期與不合格的列。產品與頁面名稱的 en、vi 只取現站寫法（en、vi 內容檔的 `title`、`inventory.csv` 的選單文字），現站沒有就留空；介面字串與選單標籤由 AI 草擬（`draft`）。使用者決定產品名不加描述、en 與 vi 一律用產品名，公司名用 TPIsoftware，這 26 列已是 `confirmed`；沒有產品名的 product 列、page 列與 AI 草擬的介面字串在 M7-02、M7-03 翻譯時確認（`docs/i18n/glossary.md`「已確認的規則」）
+- M7 語系共用基礎完成（#114）：加上 `src/data/strings/<locale>.ts` 與 `src/data/home/<locale>.ts` 就啟用該語系，不用改共用檔案。選單、footer、麵包屑與 `BreadcrumbList` 的名稱在 en、vi 讀 `docs/i18n/glossary.csv`，沒有譯名時 build 失敗（`docs/ia/navigation.md`「語系」）；首頁改為 `HomeTemplate` 加 `src/pages/[locale]/index.astro`；`og:locale` 是 `zh_TW`／`en_US`／`vi_VN`，en、vi 的 title 後綴是 ` | TPIsoftware`；站內連結在該語系沒有頁面時連到 zh-TW 版（`src/lib/ia/built.ts`），listing 的 hreflang 依各語系實際頁數；`routes.mjs` 新增 en、vi 連到未產生頁面與檔案連結的檢查。`node scripts/i18n/locale-fixture.mjs <en|vi> --no-content` 用測試字串檔驗證，兩語都通過
 
 ## 下一步
 
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
-- M7-02 en 翻譯（#39）、M7-03 vi 翻譯（#40）可以開始；翻譯時一併確認 `docs/i18n/glossary.csv` 中還不是 `confirmed` 的列：沒有產品名的 product 列、頁面名稱與 AI 草擬的介面字串（#38 PR 的「待確認」）
+- M7-02 en 翻譯（#39）、M7-03 vi 翻譯（#40）可以開始（共用檔案已在 #114 改好，只加各語系的字串檔、首頁文案與內容檔）；翻譯時一併確認 `docs/i18n/glossary.csv` 中還不是 `confirmed` 的列：沒有產品名的 product 列、頁面名稱與 AI 草擬的介面字串（#38 PR 的「待確認」）
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落
 - 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權
@@ -132,10 +133,9 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55）與 M3-09 
 - M1-04：表單建議沿用現站 `/tpi/api/*` 後端，需後端開放新站網域的 CORS 並確認 reCAPTCHA 設定；GTM 等追蹤碼由新站重新規劃，不沿用現站 4 個容器；.com 站內搜尋 API 目前回 500（見 `docs/research/features.md`）
 - M1-05：主要轉換為聯絡業務；新站只用 GTM、需要 cookie 同意機制、Facebook Pixel 與 Ahrefs 不沿用；成功指標包含自然搜尋流量，但沒有 GA4／Search Console 權限，量測方式待定（見 `docs/research/audience-and-goals.md`）
 - M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（`seo-checklist` 的 JSON-LD 對照改為連到 `content-model.md`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）
-- M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定。`og:locale` 的 en、vi 值要改成「語言_地區」格式，M7 處理
-- i18n 字串檔在 `src/data/strings/<locale>.ts`（M4-04 決定）：介面字串與 listing、utility、contact 頁的描述。這些頁沒有內容檔，只為有字串檔的語系產生；描述是暫定文案，上線前由內容負責人替換。首頁文案仍在 `src/data/home.ts`
-- `LocaleSwitcher` 的 landmark 名稱（語言／Language／Ngôn ngữ）寫死在元件裡，是暫定譯文；`docs/i18n/glossary.csv` 的 `ui:language` 確認後，M7-02、M7-03 加字串檔時改讀 `strings(locale).language`
-- M7 加 en、vi 字串檔前要處理（PR #98 審查第 1 輪）：listing、contact、utility 頁的 `translations` 現在把每個有字串檔的語系都算進去，en 的列表頁數比 zh-TW 少時，hreflang 與語言選單會指向不存在的 `/page/n`；`localeHref` 一律加語系前綴，不確認該語系有那一頁，部分翻譯時選單連結會 404；`scripts/i18n/routes.mjs` 的跨語系檢查會把 en、vi 頁上指向檔案的連結（下載頁）當成頁面連結誤報；聯絡頁只在有字串檔的語系找 contact entry，且只取第一筆，多的會被忽略；聯絡頁 hero 的說明（`src/data/home.ts` 的 `contactCta`）與 eyebrow「Contact」只有 zh-TW
+- M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定
+- i18n 字串檔在 `src/data/strings/<locale>.ts`（M4-04 決定）：介面字串與 listing、utility、contact 頁的描述。這些頁沒有內容檔，只為有字串檔的語系產生；描述是暫定文案，上線前由內容負責人替換。有字串檔就算啟用該語系，同時要有首頁文案 `src/data/home/<locale>.ts`（#114）
+- #114 的 `node scripts/i18n/locale-fixture.mjs <en|vi>` 加上測試用字串檔後，en、vi 的內容檔還有這些問題要在 M7-02、M7-03 處理：內文連到還沒有該語系版本的產品頁（en 1 筆 `/en/media-center/578`、vi 105 筆，都是 `/products/*`；M5-01 的產品頁 en、vi 還沒遷移），vi 兩篇成功案例（shin-kong-bank、cathay-life 的 centralized-log-management-platform）description 相同。加 `--no-content` 只驗證共用層，en、vi 都通過
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
 - `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
@@ -145,5 +145,5 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55）與 M3-09 
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
 - `npm run check` 的 LHCI 用 `staticDistDir` 自動探索，只測前 5 個 URL（M3-07 時 build 出 16 頁只測 5 頁），其餘頁面沒有 Lighthouse 關卡，由 #87 處理
-- M5-04（#29）、M5-05（#30）：en、vi 的 blog 與新聞已進版控，但沒有字串檔所以不產生頁面。M7 補字串檔前要處理：`<title>` 接上 `｜TPIsoftware 昕力資訊` 後大多超過 70 字（要寫 `seoTitle`，或先決定 en、vi 的後綴規則）、description 過長、內文圖缺 alt，數字看 `migrate.mjs --report` 的 notes；vi 內文原本連到英文頁的連結已改成 `/vi/...`（報告記 24 筆），目標頁要在 vi 存在
+- M5-04（#29）、M5-05（#30）：en、vi 的 blog 與新聞已進版控，但沒有字串檔所以不產生頁面。M7 補字串檔前要處理：en、vi 的 `<title>` 後綴是 ` | TPIsoftware`（#114），超過 70 字的要寫 `seoTitle`、description 過長、內文圖缺 alt，數字看 `migrate.mjs --report` 的 notes；vi 內文原本連到英文頁的連結已改成 `/vi/...`（報告記 24 筆），目標頁要在 vi 存在
 - M5-06（#31）：en、vi 的 `page` 內容檔（about、partners、contact）已進版控。M7 產生這些頁面前要補 `organization/en.yaml`、`vi.yaml`（據點的英文地址取自現站 en 版關於我們）；en 法務頁沒有內容檔，zh-TW 隱私權政策與使用條款已附英譯，可從那裡拆出，或等法務提供；vi 現站 footer 電話（+886 2 8751 1610）與 zh-TW（+886 2 2658 0508）不同，要確認

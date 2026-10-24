@@ -38,10 +38,22 @@ test('switcher links to unbuilt pages or with the wrong lang fail', () => {
   ]);
 });
 
-test('site links on an en page must stay under /en, except language links and external sub-sites', () => {
+test('site links on an en page must stay under /en where /en has the page, except language links and external sub-sites', () => {
   const body = '<a href="/en/about">ok</a><a href="/about">bad</a><a href="/" hreflang="zh-TW">lang</a><a href="/tpu">tpu</a><a href="/en#x">ok</a>';
-  const pages = new Map([['/en', page('en', body)]]);
-  assert.deepEqual(routeProblems(pages, new Set(['/tpu'])), ['/en: links to /about, outside its locale en']);
+  const pages = new Map([['/en', page('en', body)], ['/en/about', page('en')], ['/about', page('zh-TW')]]);
+  assert.deepEqual(routeProblems(pages, new Set(['/tpu'])), ['/en: links to /about, outside its locale en, which has the page']);
+});
+
+test('an untranslated page is linked in zh-TW; an en or vi link to a page that was not built fails', () => {
+  const body = '<a href="/privacy">fallback</a><a href="/vi/privacy">missing</a><a href="/industries">zh-TW page not built yet</a>';
+  const pages = new Map([['/vi', page('vi', body)], ['/privacy', page('zh-TW')]]);
+  assert.deepEqual(routeProblems(pages), ['/vi: links to /vi/privacy, which was not built']);
+});
+
+test('file links are not locale pages but must exist in dist', () => {
+  const body = '<a href="/pdf/guide%20v1.pdf">ok</a><a href="/pdf/gone.pdf">missing</a>';
+  const pages = new Map([['/en/download/x', page('en', body)]]);
+  assert.deepEqual(routeProblems(pages, new Set(), new Set(['/pdf/guide v1.pdf'])), ['/en/download/x: links to the file /pdf/gone.pdf, which is not in dist']);
 });
 
 test('external sub-sites come from nodes.csv kind external', () => {

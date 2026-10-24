@@ -7,6 +7,7 @@ nav:服務,nav,服務,Services,Dịch Vụ,draft,docs/ia/navigation.csv,現站 e
 nav:資源總覽,nav,資源總覽,All Resources,Tất cả tài nguyên,draft,docs/ia/navigation.csv,
 nav:公司,nav,公司,Company,Công Ty,to-confirm,docs/ia/navigation.csv,現站 header 第一層
 nav:訂閱電子報,nav,訂閱電子報,Subscribe to Newsletter,Đăng ký Nhận Bản Tin,to-confirm,docs/ia/navigation.csv,現站 footer
+node:home,page,首頁,,,to-confirm,docs/ia/nodes.csv,
 node:products,page,產品總覽,Product & Services,Sản Phẩm,to-confirm,https://www.tpisoftware.com/en/products https://www.tpisoftware.com/vn/products,現站 vi 其他寫法：Sản Phẩm & Dịch Vụ
 node:family-ai,product,AI（SysTalk.ai）,SysTalk.ai,SysTalk.ai,confirmed,https://www.tpisoftware.com/en/products/systalk-ai,現站 en 寫法：AI Solutions
 node:systalk-chat,product,SysTalk.Chat AI 智能客服,SysTalk.Chat,SysTalk.Chat,confirmed,https://www.tpisoftware.com/en/products/systalk-chat https://www.tpisoftware.com/vn/products/systalk-chat https://www.tpisoftware.com/vn/genai-solution,現站 en 寫法：Conversational AI for Customer Service、AI for Customer Service；現站 vi 寫法：SysTalk.ai x ChatGPT、AI cho Dịch vụ Khách hàng
@@ -49,7 +50,9 @@ node:cloudservice,product,雲端整合服務,Cloud Integration Services,Dịch V
 node:chatgpt-enterprise,product,ChatGPT 企業服務,,,to-confirm,docs/ia/nodes.csv,
 node:uiux,product,UI/UX 數位產品設計,UX/UI Design Solution,Giải pháp thiết kế UX/UI,to-confirm,src/content/offering/en/uiux.md src/content/offering/vi/uiux.md https://www.tpisoftware.com/vn/solutions/uiux,現站 vi 其他寫法：Dịch vụ UI/UX chuyên nghiệp
 node:esg-advisory,product,ESG 永續發展與顧問服務,Sustainability and ESG Strategic Advisory,Tư vấn Phát triển Bền vững và Chiến lược ESG,to-confirm,src/content/offering/en/esg-advisory.md https://www.tpisoftware.com/en/esg-advisory src/content/offering/vi/esg-advisory.md https://www.tpisoftware.com/vn/esg-advisory,"現站 en 其他寫法：ESG Consulting Services；現站 vi 其他寫法：Dịch vụ tư vấn Môi trường, Xã hội và Quản trị"
+node:esg-advisor,page,ESG 顧問個人頁,,,to-confirm,docs/ia/nodes.csv,
 node:success-stories,page,成功案例,Success Stories,Câu Chuyện Thành Công,to-confirm,https://www.tpisoftware.com/en/success-story https://www.tpisoftware.com/vn/success-story,
+node:case-study,page,成功案例內頁,,,to-confirm,docs/ia/nodes.csv,
 node:resources,page,資源,Resources,Nguồn,to-confirm,docs/ia/nodes.csv,現站 header 第一層的標籤（inventory.csv 的 nav_location），沒有對應的網址
 node:blog,page,部落格,Blog,,to-confirm,https://www.tpisoftware.com/en/blog,
 node:blog-ai,page,AI,,,to-confirm,docs/ia/nodes.csv,
@@ -57,6 +60,7 @@ node:blog-digital-transformation,page,數位轉型,,,to-confirm,docs/ia/nodes.cs
 node:blog-enterprise-management,page,企業管理,,,to-confirm,docs/ia/nodes.csv,
 node:blog-esg,page,ESG 與綠色轉型,,,to-confirm,docs/ia/nodes.csv,
 node:blog-use-cases,page,應用情境,,,to-confirm,docs/ia/nodes.csv,
+node:blog-post,page,blog 文章,,,to-confirm,docs/ia/nodes.csv,
 node:whitepaper-digirunner,page,digiRunner 白皮書,,Sách Trắng,to-confirm,https://www.tpisoftware.com/vn/whitepaper/api-strategies,
 node:whitepaper-digilogs,page,digiLogs 白皮書,,,to-confirm,docs/ia/nodes.csv,
 node:whitepaper-greenswift,page,GreenSwift 碳盤指南,,,to-confirm,docs/ia/nodes.csv,
@@ -66,6 +70,7 @@ node:tpu,page,昕力大學,,,to-confirm,docs/ia/nodes.csv,
 node:about,page,關於我們,About Us,Về chúng tôi,to-confirm,src/content/page/en/about.md https://www.tpisoftware.com/en/about-us src/content/page/vi/about.md https://www.tpisoftware.com/vn/about-us,現站 en 其他寫法：About TPI、Locations；現站 vi 其他寫法：Về Chúng Tôi、Vị trí
 node:partners,page,合作夥伴,Partners,Đối tác,to-confirm,src/content/page/en/partners.md src/content/page/vi/partners.md https://www.tpisoftware.com/vn/partners,現站 vi 其他寫法：Đối Tác
 node:media-center,page,媒體中心,Media Center,Trung tâm truyền thông,to-confirm,https://www.tpisoftware.com/en/media-center https://www.tpisoftware.com/vn/media-center,現站 en 其他寫法：News；現站 vi 其他寫法：Tin tức
+node:news-article,page,新聞,,,to-confirm,docs/ia/nodes.csv,
 node:hr,page,人才招募,,,to-confirm,docs/ia/nodes.csv,
 node:contact,page,聯絡我們,Contact Us,Liên hệ với chúng tôi,to-confirm,src/content/page/en/contact.md src/content/page/vi/contact.md https://www.tpisoftware.com/vn/contact-us,現站 vi 其他寫法：LIÊN HỆ
 node:privacy,page,隱私權政策,,Chính sách bảo mật,to-confirm,https://www.tpisoftware.vn/pdf/1-2PrivacyPolicy(vn).pdf,
@@ -74,6 +79,12 @@ node:disclaimer,page,免責聲明,,,to-confirm,docs/ia/nodes.csv,
 node:security-policy,page,資訊安全政策,,,to-confirm,docs/ia/nodes.csv,
 node:search,page,站內搜尋,,,to-confirm,docs/ia/nodes.csv,
 node:subscribe,page,電子報訂閱,Subscribe to Newsletter,Đăng ký Nhận Bản Tin,to-confirm,https://www.tpisoftware.com/en/subscribe https://www.tpisoftware.com/vn/subscribe,
+node:subscribe-result,page,訂閱結果,,,to-confirm,docs/ia/nodes.csv,
+node:unsubscribe,page,取消訂閱,,,to-confirm,docs/ia/nodes.csv,
+node:cancelrecord,page,取消訂閱紀錄,,,to-confirm,docs/ia/nodes.csv,
+node:thanks,page,感謝頁,,,to-confirm,docs/ia/nodes.csv,
+node:download,page,檔案下載中繼頁,,,to-confirm,docs/ia/nodes.csv,
+node:not-found,page,404,,,to-confirm,docs/ia/nodes.csv,
 ui:skipToMain,ui,跳到主要內容,Skip to main content,Chuyển đến nội dung chính,draft,src/data/strings/zh-TW.ts,
 ui:mainNav,ui,主選單,Main navigation,Menu chính,draft,src/data/strings/zh-TW.ts,
 ui:mobileNavSuffix,ui,（行動版）," (mobile)"," (di động)",draft,src/data/strings/zh-TW.ts,接在選單名稱後面，en、vi 開頭有半形空格

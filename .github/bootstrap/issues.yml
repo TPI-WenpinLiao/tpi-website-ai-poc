@@ -552,7 +552,9 @@
   acceptance:
     - 用語符合詞彙表
     - 每頁 SEO 項目齊全
-  dependsOn: [M7-01]
+  dependsOn:
+    - M7-01
+    - { issue: 114, note: M7 語系共用基礎 }
 
 - id: M7-03
   title: vi 翻譯
@@ -564,7 +566,9 @@
   acceptance:
     - 用語符合詞彙表
     - 每頁 SEO 項目齊全
-  dependsOn: [M7-01]
+  dependsOn:
+    - M7-01
+    - { issue: 114, note: M7 語系共用基礎 }
 
 - id: M7-04
   title: hreflang 驗證

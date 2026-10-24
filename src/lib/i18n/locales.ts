@@ -11,6 +11,13 @@ export function isLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value);
 }
 
+// og:locale values (language_TERRITORY, Open Graph protocol)
+export const OG_LOCALES: Record<Locale, string> = {
+  'zh-TW': 'zh_TW',
+  en: 'en_US',
+  vi: 'vi_VN',
+};
+
 // Each locale's name written in that language (docs/ia/navigation.md, 無障礙)
 export const LOCALE_NAMES: Record<Locale, string> = {
   'zh-TW': '中文',

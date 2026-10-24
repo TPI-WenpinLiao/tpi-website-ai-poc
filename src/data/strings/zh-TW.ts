@@ -25,7 +25,7 @@ const pages: Record<string, string> = {
   download: '昕力資訊產品文件下載。',
 };
 
-export const zhTW = {
+export const strings = {
   skipToMain: '跳到主要內容',
   mainNav: '主選單',
   mobileNavSuffix: '（行動版）',
@@ -131,4 +131,4 @@ export const zhTW = {
   },
 };
 
-export type Strings = typeof zhTW;
+export type Strings = typeof strings;

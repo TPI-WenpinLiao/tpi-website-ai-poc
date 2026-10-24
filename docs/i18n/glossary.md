@@ -23,7 +23,7 @@
 | `brand` | 公司名（手動加） |
 | `term` | 跨頁共用、但不是節點也不是介面字串的名詞（手動加，目前沒有） |
 | `product` | `nodes.csv` 的 offering 節點，以及 `產品總覽` 底下的產品家族 hub |
-| `page` | 其他 hub 節點，以及 `navigation.csv` 用到的節點 |
+| `page` | 其他節點。`kind` 是 `group`、`asset` 的節點不顯示名稱，不列；其餘節點的名稱會出現在麵包屑、卡片或頁面標題，en、vi 頁面讀這裡的譯名（`docs/ia/navigation.md`「語系」） |
 | `nav` | `navigation.csv` 中不是任何節點 `title` 的選單標籤。和某個節點 `title` 相同的標籤（例如「資源」）算在那個節點的列 |
 | `ui` | `src/data/strings/zh-TW.ts` 的介面字串。`pages`（列表頁等的 description）是頁面內容，不列 |
 

@@ -39,10 +39,10 @@ const t = strings(locale);
 const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
 const nodeId = COLLECTION_NODES[props.kind];
 const path = entryPath(props.kind, entry);
-const trail = entryTrail(nodeId, { title: data.title, path });
+const trail = entryTrail(nodeId, { title: data.title, path }, locale);
 const { Content } = await render(entry);
 
-const section = props.kind === 'blog' ? categoryTitle(props.entry.data.category) : t.newsTypes[props.entry.data.newsType];
+const section = props.kind === 'blog' ? categoryTitle(props.entry.data.category, locale) : t.newsTypes[props.entry.data.newsType];
 const author = props.kind === 'blog' ? props.entry.data.author : undefined;
 const published = isoDate(data.publishedAt);
 const updated = data.updatedAt && isoDate(data.updatedAt);

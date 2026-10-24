@@ -21,5 +21,5 @@ export function hubJsonLd({ hub, site, url, inLanguage, trail, parts }: HubJsonL
     inLanguage,
     hasPart: parts.map((p) => ({ '@type': 'WebPage', name: p.name, url: p.url })),
   };
-  return graph(page, breadcrumbList(trail, site, inLanguage));
+  return graph(page, breadcrumbList(trail, site));
 }

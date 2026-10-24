@@ -1,21 +1,23 @@
 ---
 // Closing call to action of a page: a dark section with the coordinate grid and a centered panel
-// framed by the energy gradient, with the contact copy from the current site (src/data/home.ts)
+// framed by the energy gradient, with the contact copy from the current site (src/data/home/<locale>.ts)
 // and one button to 聯絡我們 in the page's locale. `label` replaces the button text (an offering
 // whose cta is demo says 預約演示).
 import Surface from './Surface.astro';
 import SectionHeading from './SectionHeading.astro';
 import Button from './Button.astro';
-import { contactCta } from '../../data/home';
-import { node, nodeHref } from '../../lib/ia/navigation';
+import { home } from '../../data/home';
+import { localNode, nodeHref } from '../../lib/ia/navigation';
 import { localeFromPath } from '../../lib/i18n/paths';
 
 interface Props {
   label?: string;
 }
 
-const { label = node('contact').title } = Astro.props;
-const href = nodeHref('contact', localeFromPath(Astro.url.pathname));
+const locale = localeFromPath(Astro.url.pathname);
+const { label = localNode('contact', locale).title } = Astro.props;
+const { contactCta } = home(locale);
+const href = nodeHref('contact', locale);
 ---
 
 <Surface tone="dark" pattern="grid">

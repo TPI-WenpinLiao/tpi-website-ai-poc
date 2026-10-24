@@ -71,7 +71,9 @@
   2. 沒有這一頁，但有該語系首頁：連到該語系首頁
   3. 連首頁都沒有（M7 翻譯前的 en、vi）：不列這個語系，不產生指向不存在頁面的連結。只剩目前語系時不輸出切換元件
 - 「有這一頁」的判斷：`src/pages/` 的靜態頁面檔由 build 時列出；動態路由（content collection）的頁面由頁面依 `translationKey` 傳入其他語系版本的路徑
-- 實作在 M4-02（#21）：語系設定與路徑工具在 `src/lib/i18n/`，切換元件是 `src/components/ui/LocaleSwitcher.astro`。`node scripts/i18n/routes.mjs` 在 build 後檢查每頁的 `<html lang>` 與 URL 前綴相符、切換連結都指到 build 出來的頁面
+- 選單、footer、麵包屑等站內連結（#114）：目標語系有這個節點的頁面時連到該語系，沒有時連到 zh-TW 版（例如 vi 不產生法務頁，footer 連 zh-TW 的法務頁）。各語系有哪些節點的頁面由 `src/lib/ia/built.ts` 依產生頁面的同一套條件推出
+- 一個語系有 `src/data/strings/<locale>.ts` 就算啟用：產生該語系的首頁、列表、聯絡與 utility 頁，以及有內容檔的頁面；同時必須有 `src/data/home/<locale>.ts`，缺了 build 失敗。測試方式：`node scripts/i18n/locale-fixture.mjs <en|vi> [--no-content]` 在暫存的 repo 副本加上測試用的字串檔與首頁文案後 build，跑 `routes.mjs`、`meta.mjs` 與名稱檢查
+- 實作在 M4-02（#21）：語系設定與路徑工具在 `src/lib/i18n/`，切換元件是 `src/components/ui/LocaleSwitcher.astro`。`node scripts/i18n/routes.mjs` 在 build 後檢查每頁的 `<html lang>` 與 URL 前綴相符、切換連結都指到 build 出來的頁面；#114 起也檢查 en、vi 的站內連結沒有指到未產生的頁面、該語系有同一頁時不連到其他語系、檔案連結的檔案存在
 
 ### Astro 設定
 
