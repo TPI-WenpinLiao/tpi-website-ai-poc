@@ -8,42 +8,42 @@ nav:資源總覽,nav,資源總覽,All Resources,Tất cả tài nguyên,draft,do
 nav:公司,nav,公司,Company,Công Ty,to-confirm,docs/ia/navigation.csv,現站 header 第一層
 nav:訂閱電子報,nav,訂閱電子報,Subscribe to Newsletter,Đăng ký Nhận Bản Tin,to-confirm,docs/ia/navigation.csv,現站 footer
 node:products,page,產品總覽,Product & Services,Sản Phẩm,to-confirm,https://www.tpisoftware.com/en/products https://www.tpisoftware.com/vn/products,現站 vi 其他寫法：Sản Phẩm & Dịch Vụ
-node:family-ai,product,AI（SysTalk.ai）,AI Solutions,,to-confirm,https://www.tpisoftware.com/en/products/systalk-ai,
-node:systalk-chat,product,SysTalk.Chat AI 智能客服,Conversational AI for Customer Service,SysTalk.Chat,to-confirm,https://www.tpisoftware.com/en/products/systalk-chat https://www.tpisoftware.com/vn/products/systalk-chat https://www.tpisoftware.com/vn/genai-solution,現站 en 其他寫法：AI for Customer Service；現站 vi 其他寫法：SysTalk.ai x ChatGPT、AI cho Dịch vụ Khách hàng
-node:systalk-viki,product,SysTalk.VIKI 企業生成式 AI 應用平台,Generative AI Application Platform,,to-confirm,https://www.tpisoftware.com/en/products/systalk-viki,
-node:systalk-coach,product,SysTalk.Coach AI 業務培訓,AI Coaching Platform,,to-confirm,https://www.tpisoftware.com/en/products/systalk-coach,
-node:systalk-audit,product,SysTalk.Audit AI 語音質檢,,,to-confirm,docs/ia/nodes.csv,
-node:systalk-icr,product,SysTalk.ICR AI 智慧光學字元辨識,,,to-confirm,docs/ia/nodes.csv,
-node:systalk-rpa,product,SysTalk.RPA 流程自動化,Process Automation Platform,,to-confirm,https://www.tpisoftware.com/en/products/systalk-rpa,現站 en 其他寫法：Robotic Process Automation
+node:family-ai,product,AI（SysTalk.ai）,SysTalk.ai,SysTalk.ai,confirmed,https://www.tpisoftware.com/en/products/systalk-ai,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:systalk-chat,product,SysTalk.Chat AI 智能客服,SysTalk.Chat,SysTalk.Chat,confirmed,https://www.tpisoftware.com/en/products/systalk-chat https://www.tpisoftware.com/vn/products/systalk-chat https://www.tpisoftware.com/vn/genai-solution,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）；現站 en 其他寫法：AI for Customer Service；現站 vi 其他寫法：SysTalk.ai x ChatGPT、AI cho Dịch vụ Khách hàng
+node:systalk-viki,product,SysTalk.VIKI 企業生成式 AI 應用平台,SysTalk.VIKI,SysTalk.VIKI,confirmed,https://www.tpisoftware.com/en/products/systalk-viki,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:systalk-coach,product,SysTalk.Coach AI 業務培訓,SysTalk.Coach,SysTalk.Coach,confirmed,https://www.tpisoftware.com/en/products/systalk-coach,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:systalk-audit,product,SysTalk.Audit AI 語音質檢,SysTalk.Audit,SysTalk.Audit,confirmed,docs/ia/nodes.csv,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:systalk-icr,product,SysTalk.ICR AI 智慧光學字元辨識,SysTalk.ICR,SysTalk.ICR,confirmed,docs/ia/nodes.csv,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:systalk-rpa,product,SysTalk.RPA 流程自動化,SysTalk.RPA,SysTalk.RPA,confirmed,https://www.tpisoftware.com/en/products/systalk-rpa,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）；現站 en 其他寫法：Robotic Process Automation
 node:smartclaim,product,AI 智能理賠解決方案,SysTalk.ai AI Insurance Claims Processing Solution,SysTalk.ai là giải pháp AI giải quyết bồi thường bảo hiểm,to-confirm,src/content/offering/en/smartclaim.md src/content/offering/vi/smartclaim.md https://www.tpisoftware.com/vn/solutions/smartclaim,現站 vi 其他寫法：Giải pháp AI xử lý bồi thường bảo hiểm
 node:smartfilling,product,AI 智慧建檔解決方案,SysTalk.ai AI Document Processing Solution,SysTalk.ai Giải pháp AI xử lý tài liệu,to-confirm,src/content/offering/en/smartfilling.md src/content/offering/vi/smartfilling.md https://www.tpisoftware.com/vn/solutions/smartfilling,現站 vi 其他寫法：Giải pháp AI xử lý tài liệu
-node:textualanalysis,product,SysTalk.Detect AI 文本分析,SysTalk.Detect AI Textual Analysis Solution,SysTalk.Detect Giải pháp phân tích văn bản thông minh,to-confirm,src/content/offering/en/textualanalysis.md src/content/offering/vi/textualanalysis.md,
-node:orient-ai,product,OrientAI 企業級 Agentic AI 平台,OrientAI Enterprise Agentic AI Platform,OrientAI Nền tảng AI tự chủ cho doanh nghiệp,to-confirm,src/content/offering/en/orient-ai.md https://www.tpisoftware.com/en/orient-ai src/content/offering/vi/orient-ai.md https://www.tpisoftware.com/vn/orient-ai,現站 en 其他寫法：Agentic AI Platform；現站 vi 其他寫法：Nền tảng AI tự chủ cho doanh nghiệp
-node:family-dx,product,數位轉型（DigiLism）,Digital Transformation,DigiLism,to-confirm,https://www.tpisoftware.com/en/products/digifusion https://www.tpisoftware.com/vn/products/digifusion,
-node:digirunner,product,digiRunner API 管理平台,Enterprise API Management,digiRunner,to-confirm,https://www.tpisoftware.com/en/digirunner-api-management https://www.tpisoftware.com/vn/digirunner-api-management,現站 en 其他寫法：API Management；現站 vi 其他寫法：Quản lý API
-node:digirunner-cloud,product,digiRunner on Cloud,,Nền tảng digiRunner trên Cloud,to-confirm,https://www.tpisoftware.vn/products/digirunner-cloud,
-node:digilogs,product,digiLogs 集中化日誌管理平台,Centralized Log Management,digiLogs,to-confirm,https://www.tpisoftware.com/en/digilogs-logs-management https://www.tpisoftware.com/vn/digilogs-logs-management,現站 en 其他寫法：Log Management；現站 vi 其他寫法：Quản lý Log
+node:textualanalysis,product,SysTalk.Detect AI 文本分析,SysTalk.Detect,SysTalk.Detect,confirmed,src/content/offering/en/textualanalysis.md src/content/offering/vi/textualanalysis.md,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:orient-ai,product,OrientAI 企業級 Agentic AI 平台,OrientAI,OrientAI,confirmed,src/content/offering/en/orient-ai.md https://www.tpisoftware.com/en/orient-ai src/content/offering/vi/orient-ai.md https://www.tpisoftware.com/vn/orient-ai,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）；現站 en 其他寫法：Agentic AI Platform；現站 vi 其他寫法：Nền tảng AI tự chủ cho doanh nghiệp
+node:family-dx,product,數位轉型（DigiLism）,DigiLism,DigiLism,confirmed,https://www.tpisoftware.com/en/products/digifusion https://www.tpisoftware.com/vn/products/digifusion,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:digirunner,product,digiRunner API 管理平台,digiRunner,digiRunner,confirmed,https://www.tpisoftware.com/en/digirunner-api-management https://www.tpisoftware.com/vn/digirunner-api-management,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）；現站 en 其他寫法：API Management；現站 vi 其他寫法：Quản lý API
+node:digirunner-cloud,product,digiRunner on Cloud,digiRunner on Cloud,digiRunner on Cloud,confirmed,https://www.tpisoftware.vn/products/digirunner-cloud,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:digilogs,product,digiLogs 集中化日誌管理平台,digiLogs,digiLogs,confirmed,https://www.tpisoftware.com/en/digilogs-logs-management https://www.tpisoftware.com/vn/digilogs-logs-management,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）；現站 en 其他寫法：Log Management；現站 vi 其他寫法：Quản lý Log
 node:digilogs-iso27001,product,ISO27001 日誌存錄,,Tuân thủ ISO 27001,to-confirm,https://www.tpisoftware.com/vn/products/digilogs/iso27001logging,
 node:digilogs-detection,product,digiLogs 日誌分析,,,to-confirm,docs/ia/nodes.csv,
-node:digimars,product,digiMars 大數據管理平台,Big Data Management,digiMars,to-confirm,https://www.tpisoftware.com/en/products/digimars https://www.tpisoftware.com/vn/products/digimars,現站 vi 其他寫法：Quản lý Big Data
-node:digiflexis,product,digiFlexis 企業流程管理平台,Business Process Management Platform,digiFlexis,to-confirm,https://www.tpisoftware.com/en/products/digiflexis https://www.tpisoftware.com/vn/products/digiflexis,
-node:digicare,product,digiCare 智慧醫療服務,,,to-confirm,docs/ia/nodes.csv,
+node:digimars,product,digiMars 大數據管理平台,digiMars,digiMars,confirmed,https://www.tpisoftware.com/en/products/digimars https://www.tpisoftware.com/vn/products/digimars,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）；現站 vi 其他寫法：Quản lý Big Data
+node:digiflexis,product,digiFlexis 企業流程管理平台,digiFlexis,digiFlexis,confirmed,https://www.tpisoftware.com/en/products/digiflexis https://www.tpisoftware.com/vn/products/digiflexis,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:digicare,product,digiCare 智慧醫療服務,digiCare,digiCare,confirmed,docs/ia/nodes.csv,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
 node:interactivehealth,product,互動式健康管理服務平台,Interactive Health Management Platform,Nền tảng quản lý sức khỏe tương tác,to-confirm,src/content/offering/en/interactivehealth.md src/content/offering/vi/interactivehealth.md,
-node:family-security,product,資安（GadoSecurity）,,,to-confirm,docs/ia/nodes.csv,
-node:gadodido,product,gadoDIDO 無密碼身分驗證,Passwordless Authentication,gadoDIDO,to-confirm,https://www.tpisoftware.com/en/products/gadofido https://www.tpisoftware.com/vn/products/gadodido,
-node:gadoscout,product,gadoScout AI 異常偵測系統,Anomaly Detection System,,to-confirm,https://www.tpisoftware.com/en/products/gadoscout,
-node:family-esg,product,ESG 與能源（ESGswift）,ESG & Energy,,to-confirm,https://www.tpisoftware.com/en/products/esgswift,
-node:greenswift,product,GreenSwift 智慧碳管理平台,Smart Carbon Management Platform,GreenSwift,to-confirm,https://www.tpisoftware.com/en/products/greenswift https://www.tpisoftware.com/vn/products/greenswift,現站 vi 其他寫法：Nền tảng Quản lý Carbon
-node:electriswift,product,ElectriSwift 智慧能源管理系統,Smart Energy Management Platform,ElectriSwift,to-confirm,https://www.tpisoftware.com/en/products/electriswift https://www.tpisoftware.com/vn/products/electriswift,現站 en 其他寫法：Smart Energy Management System；現站 vi 其他寫法：Hệ thống Quản lý Năng lượng Thông minh
+node:family-security,product,資安（GadoSecurity）,GadoSecurity,GadoSecurity,confirmed,docs/ia/nodes.csv,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:gadodido,product,gadoDIDO 無密碼身分驗證,gadoDIDO,gadoDIDO,confirmed,https://www.tpisoftware.com/en/products/gadofido https://www.tpisoftware.com/vn/products/gadodido,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:gadoscout,product,gadoScout AI 異常偵測系統,gadoScout,gadoScout,confirmed,https://www.tpisoftware.com/en/products/gadoscout,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:family-esg,product,ESG 與能源（ESGswift）,ESGswift,ESGswift,confirmed,https://www.tpisoftware.com/en/products/esgswift,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:greenswift,product,GreenSwift 智慧碳管理平台,GreenSwift,GreenSwift,confirmed,https://www.tpisoftware.com/en/products/greenswift https://www.tpisoftware.com/vn/products/greenswift,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）；現站 vi 其他寫法：Nền tảng Quản lý Carbon
+node:electriswift,product,ElectriSwift 智慧能源管理系統,ElectriSwift,ElectriSwift,confirmed,https://www.tpisoftware.com/en/products/electriswift https://www.tpisoftware.com/vn/products/electriswift,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）；現站 en 其他寫法：Smart Energy Management System；現站 vi 其他寫法：Hệ thống Quản lý Năng lượng Thông minh
 node:industries,page,產業方案,,,to-confirm,docs/ia/nodes.csv,
 node:industry-finance,page,金融,,,to-confirm,docs/ia/nodes.csv,
-node:insurebrick,product,InsureBrick 保險科技模組化平台,,,to-confirm,docs/ia/nodes.csv,
-node:insurering,product,InsureRing 保險自動化規則檢核,InsureRing Insurance Rules Automatic Validation,InsureRing Quy tắc bảo hiểm xác thực tự động,to-confirm,src/content/offering/en/insurering.md src/content/offering/vi/insurering.md,
+node:insurebrick,product,InsureBrick 保險科技模組化平台,InsureBrick,InsureBrick,confirmed,docs/ia/nodes.csv,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
+node:insurering,product,InsureRing 保險自動化規則檢核,InsureRing,InsureRing,confirmed,src/content/offering/en/insurering.md src/content/offering/vi/insurering.md,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）
 node:industry-government,page,政府與公部門,,,to-confirm,docs/ia/nodes.csv,
 node:gis,product,GIS 空間數據解決方案,GIS Geospatial Solution,Giải pháp không gian địa lý GIS,to-confirm,src/content/offering/en/gis.md src/content/offering/vi/gis.md,
 node:industry-manufacturing,page,製造業,,,to-confirm,docs/ia/nodes.csv,
 node:services,page,服務總覽,,,to-confirm,docs/ia/nodes.csv,
-node:aiso,product,AISO 主權 AI,AISO Sovereign AI Solutions,AISO Giải pháp AI Tự chủ,to-confirm,src/content/offering/en/aiso.md https://www.tpisoftware.com/en/aiso src/content/offering/vi/aiso.md https://www.tpisoftware.vn/aiso,現站 en 其他寫法：AISO；現站 vi 其他寫法：AISO
+node:aiso,product,AISO 主權 AI,AISO,AISO,confirmed,src/content/offering/en/aiso.md https://www.tpisoftware.com/en/aiso src/content/offering/vi/aiso.md https://www.tpisoftware.vn/aiso,產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）；現站 en 其他寫法：AISO；現站 vi 其他寫法：AISO
 node:outsourcing,product,委外服務,,Dịch vụ gia công phần mềm ngành IT,to-confirm,https://www.tpisoftware.com/vn/outsourcing,
 node:cloudservice,product,雲端整合服務,Cloud Integration Services,Dịch Vụ Cloud Tích Hợp,to-confirm,https://www.tpisoftware.com/en/cloudservice https://www.tpisoftware.com/vn/cloudservice,
 node:chatgpt-enterprise,product,ChatGPT 企業服務,,,to-confirm,docs/ia/nodes.csv,

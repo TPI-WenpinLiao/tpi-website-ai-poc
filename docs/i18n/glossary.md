@@ -37,6 +37,10 @@
 
 產品名、頁面名稱與公司名只放現站用過的寫法，現站沒有就留空，不由 AI 補。`ui`、`nav` 的譯名由 AI 草擬（`draft`），現站有同樣用法的標 `to-confirm` 並在 `note` 註明。
 
+## 已確認的規則
+
+- 產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）。產品名取 zh-TW `title` 裡的名稱，例如 `digiRunner API 管理平台` 的 en、vi 都是 `digiRunner`，產品家族用家族名（`AI（SysTalk.ai）` → `SysTalk.ai`）。`title` 只有描述、沒有產品名的列（smartclaim、gis、服務頁等）不適用，仍待確認
+
 ## 現站寫法怎麼來
 
 script 依 `docs/ia/page-map.csv` 找出對到同一個節點的 en、vi 現站網址，`disposition` 為 `keep`、`rewrite` 的排在 `merge` 前面（併入的頁面，例如 systalk-chat 的 `/vn/genai-solution`，不當第一個寫法）。再依序取：
