@@ -90,7 +90,7 @@
 
 ### M7 多語系
 
-- M7-01 翻譯詞彙表完成（#38）：`docs/i18n/glossary.csv` 列出產品、頁面、選單標籤與介面字串的 zh-TW／en／vi 對照（155 列），由 `node scripts/i18n/glossary.mjs` 依 `nodes.csv`、`navigation.csv`、`src/data/strings/zh-TW.ts` 產生，`--check` 在 `npm run check` 擋下過期與不合格的列。產品與頁面名稱的 en、vi 只取現站寫法（en、vi 內容檔的 `title`、`inventory.csv` 的選單文字），現站沒有就留空；介面字串與選單標籤由 AI 草擬（`draft`）。使用者決定產品名不加描述、en 與 vi 一律用產品名，有產品名的 25 列已是 `confirmed`；其餘列的確認方式見 `docs/i18n/glossary.md`
+- M7-01 翻譯詞彙表完成（#38）：`docs/i18n/glossary.csv` 列出產品、頁面、選單標籤與介面字串的 zh-TW／en／vi 對照（155 列），由 `node scripts/i18n/glossary.mjs` 依 `nodes.csv`、`navigation.csv`、`src/data/strings/zh-TW.ts` 產生，`--check` 在 `npm run check` 擋下過期與不合格的列。產品與頁面名稱的 en、vi 只取現站寫法（en、vi 內容檔的 `title`、`inventory.csv` 的選單文字），現站沒有就留空；介面字串與選單標籤由 AI 草擬（`draft`）。使用者決定產品名不加描述、en 與 vi 一律用產品名，公司名用 TPIsoftware，這 26 列已是 `confirmed`；沒有產品名的 product 列、page 列與 AI 草擬的介面字串在 M7-02、M7-03 翻譯時確認（`docs/i18n/glossary.md`「已確認的規則」）
 
 ## 下一步
 

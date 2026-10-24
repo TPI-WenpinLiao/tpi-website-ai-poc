@@ -39,7 +39,9 @@
 
 ## 已確認的規則
 
-- 產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）。產品名取 zh-TW `title` 裡的名稱，例如 `digiRunner API 管理平台` 的 en、vi 都是 `digiRunner`，產品家族用家族名（`AI（SysTalk.ai）` → `SysTalk.ai`）。`title` 只有描述、沒有產品名的列（smartclaim、gis、服務頁等）不適用，仍待確認
+- 產品名不加描述，en、vi 一律用產品名（使用者 2026-10-24 決定，PR #113）。產品名取 zh-TW `title` 裡的名稱，例如 `digiRunner API 管理平台` 的 en、vi 都是 `digiRunner`，產品家族用家族名（`AI（SysTalk.ai）` → `SysTalk.ai`）。`title` 只有描述、沒有產品名的列（smartclaim、gis、服務頁等）不適用這條規則
+- 公司名 en、vi 都用 `TPIsoftware`（`brand:tpisoftware`，使用者 2026-10-24 決定，PR #113）
+- `title` 只有描述、沒有產品名的 `product` 列與所有 `page` 列不算專有名詞，在 M7-02、M7-03 翻譯內文時一起確認（使用者 2026-10-24 決定，PR #113）
 
 ## 現站寫法怎麼來
 
