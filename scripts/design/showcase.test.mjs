@@ -2,8 +2,8 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { missingComponents, internalNodes } from './showcase.mjs';
+import { readFileSync, readdirSync } from 'node:fs';
+import { missingComponents, tableComponents, tableProblems, internalNodes } from './showcase.mjs';
 import { groupTokens, tokenNames } from './token-groups.mjs';
 
 const PAGE = `---
@@ -25,6 +25,38 @@ test('imports from other folders do not count', () => {
 
 test('passes when every component is imported', () => {
   assert.deepEqual(missingComponents(['Button.astro', 'Card.astro'], PAGE), []);
+});
+
+const SKILL = `# Design system
+
+## 基礎元件
+
+| 元件 | 用途 | 重點 |
+|---|---|---|
+| \`Button\` | 動作 | 見 \`Card\` |
+
+## 新增元件
+
+| \`Tag\` | listed under another heading | |
+`;
+
+test('reads component rows only from the skill component table', () => {
+  assert.deepEqual(tableComponents(SKILL), ['Button']);
+});
+
+test('fails when the skill has no component table', () => {
+  assert.throws(() => tableComponents('# Design system\n'), /no "## 基礎元件" section/);
+});
+
+test('reports components without a row and rows without a component', () => {
+  assert.deepEqual(tableProblems(['Button.astro', 'Card.astro'], ['Button', 'Badge']), { undocumented: ['Card.astro'], stale: ['Badge'] });
+});
+
+test('the design-system skill table matches src/components/ui', () => {
+  const skill = readFileSync(new URL('../../.claude/skills/design-system/SKILL.md', import.meta.url), 'utf8');
+  const dir = new URL('../../src/components/ui/', import.meta.url);
+  const components = readdirSync(dir).filter((f) => f.endsWith('.astro'));
+  assert.deepEqual(tableProblems(components, tableComponents(skill)), { undocumented: [], stale: [] });
 });
 
 test('groups tokens by prefix and by name with its "-" extensions, first match wins', () => {
