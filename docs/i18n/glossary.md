@@ -70,5 +70,6 @@ node scripts/i18n/glossary.mjs
 ```
 
 - 新的節點、標籤或字串會加一列，`status` 是 `to-confirm`
-- 已有的列保留 `en`、`vi`、`status`、`note`、`source`；`zh-TW` 改了的列退回 `to-confirm`，`note` 開頭記下原本的 zh-TW
+- 已有的列保留 `en`、`vi`、`status`、`note`、`source`；`node:`、`ui:` 列的 `zh-TW` 改了時退回 `to-confirm`，`note` 開頭記下原本的 zh-TW
+- `nav:` 列的 `id` 就是選單標籤，`navigation.csv` 改了標籤等於換一列：舊列連同 en、vi 一起移除，新標籤是新的一列。改標籤前先記下舊列的譯名
 - 來源刪掉的列會從 `glossary.csv` 移除；手動加的 `brand`、`term` 列不動，排在最上方
