@@ -100,7 +100,7 @@ M2、M3 的關卡 issue 改用對應的 label（`ia-approved`、`wireframe-appro
 
 - 不得捏造產品功能、數據、客戶名稱、認證或獎項
 - 不確定的內容在 PR 中列為「待確認」，不要自行補上
-- 從現站搬移內容時依 `.claude/skills/content-migration/SKILL.md`
+- 從現站搬移內容時依 `.claude/skills/content-migration/SKILL.md`：各內容類型的轉換或對照 script、schema 沒有欄位的段落不搬、en 與 vi 內容檔先進版控（M7 才產生頁面）
 - 現站每一頁的處置（`disposition`）與待確認（`to_confirm`）看 `docs/research/inventory.csv`，依據見 `docs/research/content-audit.md`
 
 ## 文件維護
