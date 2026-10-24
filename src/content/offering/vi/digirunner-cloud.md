@@ -43,11 +43,9 @@ faq:
   - question: Trong thời gian dùng thử miễn phí có bao gồm những tính năng gì?
     answer: Tất cả các tính năng của từng giải pháp (digiRunner Enterprise High Availability/Standalone và digiRunner Lite High Availability/Standalone) đều được bao gồm. Bạn sẽ KHÔNG phải trả phí giấy phép trong 30 ngày đầu tiên trong thời gian dùng thử miễn phí. Tuy nhiên, sẽ có chi phí theo giờ cho hạ tầng AWS cho mỗi pod. Để biết thêm thông tin về giá cả, vui lòng truy cập Amazon EC2 Pricing và AWS Fargate Pricing.
 cta: demo
-# Same file as the zh-TW entry. The vi page's 「Hướng dẫn mua hàng」 links the EN guide
-# (digiRunner%20on%20AWS%20Marketplace_Buyer%20Guide_v1.4_EN.pdf), which isn't downloaded yet
-# The vi page links the en buyer guide
+# The vi page's 「Hướng dẫn mua hàng」 links the en buyer guide, not the zh-TW one
 downloads:
-  - label: Hướng dẫn cho người mua digiRunner on AWS Marketplace (tiếng Anh)
+  - label: Hướng dẫn mua hàng digiRunner on AWS Marketplace (tiếng Anh)
     file: /pdf/digiRunner%20on%20AWS%20Marketplace_Buyer%20Guide_v1.4_EN.pdf
 sourceUrl: https://www.tpisoftware.vn/products/digirunner/awsmarketplace
 migratedAt: 2026-10-24

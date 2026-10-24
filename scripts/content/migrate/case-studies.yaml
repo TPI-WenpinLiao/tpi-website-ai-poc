@@ -258,9 +258,11 @@ entries:
   vi/cathay-financial-property-insurance-vietnam-system:
     seoTitle: "Cathay: Hệ thống bảo hiểm tài sản Việt Nam"
     description: Tạo ứng dụng bảo hiểm tài sản trực tuyến cho Bảo Hiểm Cathay Việt Nam, dùng OCR cho thẻ ID/bằng lái xe để tự động điền và đăng ký nhanh trong 10 phút.
-  # The current site's vi card repeats the Shin Kong Bank case's text; translated from the zh-TW and
-  # en cards instead, to be confirmed (#40)
+  # The current site's vi card repeats the Shin Kong Bank case's text, so the card text itself is
+  # replaced with a translation of the zh-TW and en cards (body and offerings follow it), to be
+  # confirmed (#40)
   vi/cathay-life-centralized-log-management-platform:
+    cardDescription: Hỗ trợ Cathay Life xây dựng nền tảng quản lý log tập trung, tích hợp dữ liệu log đa hệ thống, phân quyền truy cập, giám sát 24/7 và cảnh báo tức thời, tăng cường bảo mật dữ liệu, quản trị IT và hiệu quả vận hành.
     description: Hỗ trợ Cathay Life xây dựng nền tảng quản lý log tập trung, tích hợp máy chủ đa nền tảng, phân quyền, giám sát 24/7, cảnh báo tức thời, tăng cường quản trị IT.
   vi/cathay-life-crm-2-0:
     description: Hỗ trợ Bảo hiểm Nhân thọ Cathay xây dựng CRM 2.0 với vi dịch vụ K8S và tự động cập nhật phiên bản, giữ dịch vụ không gián đoạn, hỗ trợ quản lý bán hàng.

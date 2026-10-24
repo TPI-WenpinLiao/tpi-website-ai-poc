@@ -90,7 +90,7 @@ M7-03（#40）補上產品頁與 hub 的 vi 內容檔，寫法同上，差別如
 
 - 現站 vi（`www.tpisoftware.vn`）有對應頁的照抄 vi 頁的文字，`sourceUrl` 寫 vi 頁網址，`offering-content.mjs` 一起對照。vi 頁沒有 zh-TW 的項目時不補譯；vi 頁的事實和 zh-TW 不同時照 vi 頁寫，列在下方待確認
 - 現站沒有 vi 頁的從 zh-TW 內容檔翻譯，`sourceUrl` 沿用 zh-TW 的值，登記在 `offering-content.mjs` 的 `TRANSLATED`（不對照現站），檔頭註解寫明是翻譯：offering 的 digicare、digilogs-detection、systalk-viki、systalk-coach、systalk-audit、systalk-icr，hub 的 family-ai、family-esg。翻譯用到、詞彙表沒有的專有名詞列在 [`glossary.md`「vi 待確認」](../i18n/glossary.md#vi-待確認)
-- `title` 照 zh-TW 的結構寫「產品名＋vi 描述」，產品名用詞彙表 `confirmed` 的寫法；選單與麵包屑的名稱另外讀詞彙表。`<title>` 超過 70 字時加 `seoTitle`
+- `title`：照抄現站 vi 的頁面取 vi 頁的標題，翻譯的頁面照 zh-TW 的結構寫「產品名＋vi 描述」；兩種都要含詞彙表 `confirmed` 的產品名寫法。選單與麵包屑的名稱另外讀詞彙表。`<title>` 超過 70 字時加 `seoTitle`
 - family-security、industry-manufacturing 在 zh-TW 是 draft，不做 vi
 - digirunner-cloud 的下載檔照 vi 頁連到英文版買家指南（`offering-files.yaml`）
 
