@@ -96,6 +96,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55）與 M3-09 
 - M7-01 翻譯詞彙表完成（#38）：`docs/i18n/glossary.csv` 列出產品、頁面、選單標籤與介面字串的 zh-TW／en／vi 對照（155 列），由 `node scripts/i18n/glossary.mjs` 依 `nodes.csv`、`navigation.csv`、`src/data/strings/zh-TW.ts` 產生，`--check` 在 `npm run check` 擋下過期與不合格的列。產品與頁面名稱的 en、vi 只取現站寫法（en、vi 內容檔的 `title`、`inventory.csv` 的選單文字），現站沒有就留空；介面字串與選單標籤由 AI 草擬（`draft`）。使用者決定產品名不加描述、en 與 vi 一律用產品名，公司名用 TPIsoftware，這 26 列已是 `confirmed`；沒有產品名的 product 列、page 列與 AI 草擬的介面字串在 M7-02、M7-03 翻譯時確認（`docs/i18n/glossary.md`「已確認的規則」）
 - M7-02 en 翻譯完成（#39）：加上 `src/data/strings/en.ts`、`src/data/home/en.ts`、`organization/en.yaml`，en 共 144 頁（全站 314 頁）。產品頁 17 篇與 hub 6 篇從現站 en 版手寫（`offering-content.mjs` 1731/1731）；隱私權政策與使用條款由 `legal-pdf.mjs` 取 zh-TW PDF 的英譯（每段比對 PDF）；blog、新聞、案例、方案頁補 `seoTitle`、description、alt（寫在各轉換 script 的 overrides），轉換 script 寫 en、vi 時把全形標點換成半形（`latinPunctuation`）。`glossary.mjs` 檢查 en、vi 字串檔與詞彙表一致，`routes.mjs` 擋下 en、vi 頁面上的中文與全形標點。en 名稱多為 AI 草擬（`draft`）。現站 en 沒有的 digicare、systalk-audit、systalk-icr、digilogs-detection、chatgpt-enterprise 與免責聲明、資訊安全政策沒有 en 頁，選單連到 zh-TW 版
 - M7-03 vi 翻譯完成（#40）：vi 頁面上線（`src/data/strings/vi.ts`、`src/data/home/vi.ts`）。產品頁與 hub 的 vi 內容檔：現站 vi 有對應頁的照抄 vi 頁（`offering-content.mjs` 對照），沒有的 8 頁從 zh-TW 翻譯（登記在 `TRANSLATED`）；`glossary.csv` 的 vi 欄補齊（AI 草擬或取自現站，仍是 `to-confirm`／`draft`）（`glossary.mjs` 的字串檔檢查見 M7-02）。既有 vi 內容的 description、`seoTitle`、內文圖 alt 寫進各 migrate script 的 overrides；`organization/vi.yaml` 取自現站 vi 關於我們。`migrate` 的 title 長度改用 HTML 跳脫後的長度，`html-to-markdown` 跳脫文字中的 `<`。法務頁不產生 vi 版。待確認見 `docs/content/products.md`「vi（M7-03）」與 `docs/i18n/glossary.md`「vi 待確認」
+- M7-04 hreflang 驗證完成（#41）：既有的 `node scripts/seo/meta.mjs` 已檢查單向、指向沒有 build 的頁面與 `x-default`。這次補上兩項：同一路徑（去掉語系前綴後相同）的其他語系版本已經 build、hreflang 卻沒列出（例如 dynamic route 忘了傳 `translations`），以及同一個 hreflang 值重複。結尾輸出各語系頁數（目前 485 頁：zh-TW 170、en 144、vi 171）。`package.json` 的 `check` 串接沒改
 - M7 語系共用基礎完成（#114）：加上 `src/data/strings/<locale>.ts` 與 `src/data/home/<locale>.ts` 就啟用該語系，不用改共用檔案。選單、footer、麵包屑與 `BreadcrumbList` 的名稱在 en、vi 讀 `docs/i18n/glossary.csv`，沒有譯名時 build 失敗（`docs/ia/navigation.md`「語系」）；首頁改為 `HomeTemplate` 加 `src/pages/[locale]/index.astro`；`og:locale` 是 `zh_TW`／`en_US`／`vi_VN`，en、vi 的 title 後綴是 ` | TPIsoftware`；站內連結在該語系沒有頁面時連到 zh-TW 版（`src/lib/ia/built.ts`），listing 的 hreflang 依各語系實際頁數；`routes.mjs` 新增 en、vi 連到未產生頁面與檔案連結的檢查。`node scripts/i18n/locale-fixture.mjs <en|vi> --no-content` 用測試字串檔驗證，兩語都通過
 
 ## 下一步
@@ -104,7 +105,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55）與 M3-09 
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
-- M7-04 hreflang 驗證（#41）可以開始
+- M7-05 M7 收尾（#42）可以開始
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落
 - 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權
