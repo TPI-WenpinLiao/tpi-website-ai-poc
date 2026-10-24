@@ -4,7 +4,7 @@
 
 ## 目前 milestone
 
-**M3 設計系統**、**M4 開發骨架**、**M5 內容遷移**
+**M3 設計系統**、**M4 開發骨架**、**M6 功能**
 
 ## 進度
 
@@ -15,8 +15,8 @@
 | M2 資訊架構 | 完成 |
 | M3 設計系統 | 進行中 |
 | M4 開發骨架 | 進行中 |
-| M5 內容遷移 | 進行中 |
-| M6 功能 | 未開始 |
+| M5 內容遷移 | 完成 |
+| M6 功能 | 進行中 |
 | M7 多語系 | 未開始 |
 | M8 驗收 | 未開始 |
 
@@ -83,6 +83,7 @@
 - M5-04 部落格與新聞批次轉換 script 完成（#29）：`node scripts/content/migrate/migrate.mjs` 依 `page-map.csv` 把現站 blog 與新聞轉成內容檔，圖片下載到 `src/assets/<type>/<locale>/<slug>/`（內容圖的目錄規則改為含語系，whitepaper 範例一起搬）；人工修正寫在 `scripts/content/migrate/overrides.yaml`，重跑結果不變。用法與報告欄位見 `docs/content/migration.md`。全量試跑 622 列（併入 merge 列後 620 篇）：轉出 533 篇、`astro check` 通過；失敗 87 篇，其中 69 篇的圖片網域被雲端環境的 network policy 擋下、15 篇 vi 現站沒有作者、3 篇不在 blog API。試跑產出不 commit，只重新產生兩筆範例。en、vi 的 `newsTypeId` 依現站名稱對應（`content-model.md`「news」，待確認）。html-validate 的 `valid-id` 改為 `relaxed`（數字開頭的標題產生的 id）
 - M5-05 部落格與新聞遷移完成（#30）：使用者決定 blog 與新聞只遷移 2026-01-01 起的文章，`scripts/inventory/audit.mjs` 的保留門檻改為 2026-01-01（新聞原為 2024-01-01），重跑後 `inventory.csv`、`page-map.csv`、`redirects.csv` 跟著更新，舊文章 301 到列表頁。`migrate.mjs` 轉出 83 篇（blog zh-TW 13、en 8、vi 34，新聞 zh-TW 10、en 9、vi 9）與 128 張圖，失敗 5 篇列在 PR；全量執行會刪掉不在 `page-map.csv` 的內容檔。圖片下載後縮到最大寬 1600 px、存成 WebP。`overrides.yaml` 新增 `dropImagesFrom`（依主機或圖片網址拿掉圖與圖說）。zh-TW 的 `description`、內文圖 alt 寫進 `overrides.yaml`；en、vi 延到 M7。collection 頁只對有字串檔的語系產生（en、vi 的內容先進版控，M7 補字串檔後產生頁面），內文跨語系連結改成本篇語系的同一頁。抽查用 `node scripts/content/migrate/spot-check.mjs`（`docs/content/migration.md`「抽查」）
 - M5-06 公司頁內容遷移完成（#31）：zh-TW 的關於我們、聯絡我們、合作夥伴與 4 個法務頁上線（`/about-us`、`/contact-us`、`/partners`、`/privacy`、`/terms`、`/disclaimer`、`/security-policy`）。公司頁手寫，`node scripts/content/page-content.mjs` 逐行對照現站；法務頁由 `node scripts/content/legal-pdf.mjs` 從現站 PDF 轉換，寫檔前逐字比對 PDF 文字（`docs/content/company-pages.md`）。`organization/zh-TW.yaml` 補齊現站 8 個據點。現站 zh-TW 合作夥伴頁是空的，改用 en 版翻譯。en、vi 的 about、partners、contact 進版控，不產生頁面。en 法務 PDF（2020 年版）、vi 隱私權 PDF（內容是應徵者個資告知）沒有搬
+- M5-07 M5 收尾完成（#32）：`content-migration` 改為依內容類型列出轉換或對照現站的 script、人工修正的位置與說明文件（產品頁、公司頁、法務頁補上）；新增 schema 沒有欄位的段落不搬、`heroImage` 與 OG 圖、人物照授權、network policy 擋圖、en 與 vi 內容檔先進版控的規則。`CLAUDE.md`「內容規則」指向這些規則
 - `issues.yml` 的 `dependsOn` 能寫沒有 bootstrap id 的 issue 完成（#108）：`{ issue: <編號>, note: <說明> }` 輸出成 `- #<編號>（<說明>）`，`validate` 檢查編號與說明。M5-07（#32）的依賴補上 #106、#107，`node scripts/bootstrap/diff.mjs` 差異回到 0
 - `esg-advisory` 服務頁與 ESG 顧問頁內容遷移完成（#107）：`node scripts/content/migrate/esg-advisory.mjs` 把 `/esg-advisory` 三語轉成 `offering`（`kind: service`，tagline、轉型策略三階段、FAQ），顧問頁轉成 `person`（zh-TW 8、en 9、vi 8，取代 M4-01 的 draft 範例）；照片授權未確認不放，`description` 由頁面上的姓名、職稱、單位與專長組成。`OfferingTemplate` 加上「ESG 顧問團隊」段落（只在 person 節點的上層是這個 offering 時出現，依新的 `person.order` 排序），只用既有 `Card`。zh-TW 服務頁的 4 位顧問沒有個人頁，依使用者決定不建內容檔。`offering-content.mjs` 改為也比對 person（1261/1261）。`serializeFrontmatter` 的字串陣列在 flow 寫法讀不回原值時改寫成 block list。用法見 `docs/content/migration.md`「ESG 顧問服務」
 - `orient-ai`、`aiso` 服務頁內容遷移完成（#106）：`node scripts/content/migrate/offerings.mjs` 另外轉這兩個服務頁（三語 6 篇，版型各自的 extractor 在 `TEMPLATES`），`page-map.csv` 的 merge 列（`/orient-aI`）接在 `sourceUrl` 後面；zh-TW 的 `/orient-ai`、`/aiso` 上線，`/products/systalk-ai` 子頁卡片的失效連結補上。`page_type` 是 service，`kind` 依使用者決定填 `product`；family-ai hub 的 `highlights`（取自 `systalk-ai-phison`）依使用者決定維持在 family-ai，不移到 aiso。沒有欄位的段落見 `docs/content/migration.md`「服務頁」。`offering-content.mjs` 新增 110 行，含 #107 的 person 全部是 1371/1371
@@ -93,7 +94,7 @@
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
-- M5-07 M5 收尾（#32）可以開始
+- M7-01 翻譯詞彙表（#38）可以開始
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落
 - 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權

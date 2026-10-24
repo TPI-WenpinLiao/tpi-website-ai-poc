@@ -22,15 +22,25 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 - 內文裡連到現站的連結，用 `redirects.csv` 的 `from` → `to` 改成新站路徑；對照不到的列為待確認，不要留現站網址
 - 內文裡的失效連結列在 [`broken-links.csv`](../../../docs/research/broken-links.csv)（`found_on` 是所在頁面），依 [`content-audit.md`「失效連結」](../../../docs/research/content-audit.md#失效連結)的類型修正或移除
 
-## blog、新聞、成功案例與解決方案頁用 script 轉換
+## 依內容類型選工具
 
-blog 文章與新聞不手寫內容檔，用 `node scripts/content/migrate/migrate.mjs` 從現站轉換。要修正的內容（alt、description、`authorType`）寫進 `scripts/content/migrate/overrides.yaml`，不直接改產出檔。用法、轉換規則與報告欄位見 [`docs/content/migration.md`](../../../docs/content/migration.md)。
+能用 script 轉換的類型用 script，人工修正寫進對應的 overrides 檔，不直接改產出檔；手寫的類型也要用 script 對照現站。
 
-成功案例同樣用 script：`node scripts/content/migrate/case-studies.mjs`，客戶名稱與 zh-TW description 寫在 `scripts/content/migrate/case-studies.yaml`，見 [`migration.md`「成功案例」](../../../docs/content/migration.md#成功案例)。
+| 內容 | 產生方式 | 人工修正寫在 | 說明 |
+|---|---|---|---|
+| blog、新聞 | `node scripts/content/migrate/migrate.mjs` | `scripts/content/migrate/overrides.yaml`（alt、description、`authorType`、`dropImagesFrom`） | [`migration.md`](../../../docs/content/migration.md) |
+| 成功案例 | `node scripts/content/migrate/case-studies.mjs` | `scripts/content/migrate/case-studies.yaml`（客戶名稱、zh-TW description） | [`migration.md`「成功案例」](../../../docs/content/migration.md#成功案例) |
+| 解決方案頁（`page_type` 為 `solution`）、`orient-ai`、`aiso` | `node scripts/content/migrate/offerings.mjs` | `scripts/content/migrate/offering-overrides.yaml` | [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁) |
+| ESG 顧問服務頁與顧問頁 | `node scripts/content/migrate/esg-advisory.mjs` | `scripts/content/migrate/esg-advisory-overrides.yaml` | [`migration.md`「ESG 顧問服務」](../../../docs/content/migration.md#esg-顧問服務) |
+| 產品頁、產品 hub | 手寫，`node scripts/design/offering-content.mjs` 對照現站；下載檔用 `node scripts/content/offering-files.mjs` | 內容檔本身；有意修正的現站錯字登記在 `offering-content.mjs` 的 `CORRECTIONS` | [`products.md`](../../../docs/content/products.md) |
+| 關於我們、聯絡我們、合作夥伴 | 手寫，`node scripts/content/page-content.mjs` 對照現站 | 內容檔本身；改寫句登記在 `page-content.mjs` 的 `REWRITTEN`，翻譯頁登記在 `TRANSLATED` | [`company-pages.md`](../../../docs/content/company-pages.md) |
+| 法務頁 | `node scripts/content/legal-pdf.mjs` 從現站 PDF 轉換，寫檔前逐字比對 | script 的 `DOCS` | [`company-pages.md`「由 PDF 轉換的法務頁」](../../../docs/content/company-pages.md#由-pdf-轉換的法務頁) |
 
-解決方案頁（`page_type` 為 `solution`）與 `orient-ai`、`aiso` 服務頁用 `node scripts/content/migrate/offerings.mjs` 轉換，人工修正寫進 `scripts/content/migrate/offering-overrides.yaml`，見 [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁)。
+新的內容類型要搬時，同樣先寫成 script（[`CLAUDE.md`「工作原則」](../../../CLAUDE.md#工作原則)）。對照現站的 script 都要連到現站，不在 `npm run check` 裡，改了內容檔就重跑，結果寫進 PR。
 
-ESG 顧問服務頁與顧問頁用 `node scripts/content/migrate/esg-advisory.mjs`，人工修正寫進 `scripts/content/migrate/esg-advisory-overrides.yaml`，見 [`migration.md`「ESG 顧問服務」](../../../docs/content/migration.md#esg-顧問服務)。
+## schema 沒有欄位的段落不搬
+
+預設只填 [`content.config.ts`](../../../src/content.config.ts) 既有的欄位，不為了放下某一段而改 schema 或模板（M5-01、M5-02、#106）。要改時寫進計畫或 PR，由使用者確認，例如 M5-03 依使用者決定把 case-study 的 `challenge` 等欄位改成選填並加上 `order`，#107 在 PR 裡為顧問列表加上 `person.order` 與 `OfferingTemplate` 的段落。沒搬的段落逐頁寫進該類型的說明文件（例如 [`products.md`「待確認」](../../../docs/content/products.md#待確認)），並列進 PR 的待確認，由內容負責人決定刪減或另開 issue 擴充 content model。
 
 ## 搬移前先看稽核結果
 
@@ -56,7 +66,13 @@ migratedAt: 2026-10-20                       # 擷取日期
 - 用 `astro:assets` 的 `<Image>` / `<Picture>` 輸出，不放 `public/`
 - 必須補上描述性 alt（依圖片實際內容撰寫，不寫「圖片」「banner」）
 - 低解析度或帶浮水印的圖不直接使用，在 PR 列為待替換
-- 客戶 logo、人物照片需確認授權，未確認者列為待確認
+- 客戶 logo、人物照片需確認授權，未確認者列為待確認。產品 banner 的圖庫照（M5-01）與顧問個人照（#107）在授權確認前不放；blog 與新聞內文裡的人物照保留，列為待確認（M5-05）；客戶名稱與 logo 依使用者決定照現站顯示（M5-03）
+- offering 與 hub 的 `heroImage` 只拿來當 `og:image`，不裁切，寬高比不符的 banner 不填，見 [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁)
+- 雲端 session 的 network policy 可能擋下部分圖片網域。下載失敗的文章不寫入，列進 PR，不改成引用外部網址
+
+## en、vi 的內容檔
+
+現站有 en、vi 版本時，內容檔一起搬進版控（例外：產品頁與 hub，M5-01 只做 zh-TW；內容過時或不對應的法務 PDF，見 [`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)），但頁面只對有字串檔（`src/data/strings/<locale>.ts`）的語系產生，M7 補字串檔與翻譯後才上線。en、vi 的 description、alt、`seoTitle` 等修正延到 M7，M7 前要處理的事項記在 [`docs/status.md`「待辦備忘」](../../../docs/status.md#待辦備忘)。現站只有其他語系有內容時（zh-TW 合作夥伴頁是空的），從該語系翻譯，並在 PR 列為待確認。
 
 ## 不搬移的內容
 
