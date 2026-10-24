@@ -4,7 +4,7 @@
 
 ## 目前 milestone
 
-**M3 設計系統**、**M4 開發骨架**、**M6 功能**
+**M3 設計系統**、**M4 開發骨架**、**M6 功能**、**M7 多語系**
 
 ## 進度
 
@@ -17,7 +17,7 @@
 | M4 開發骨架 | 進行中 |
 | M5 內容遷移 | 完成 |
 | M6 功能 | 進行中 |
-| M7 多語系 | 未開始 |
+| M7 多語系 | 進行中 |
 | M8 驗收 | 未開始 |
 
 ## Issue
@@ -88,13 +88,17 @@
 - `esg-advisory` 服務頁與 ESG 顧問頁內容遷移完成（#107）：`node scripts/content/migrate/esg-advisory.mjs` 把 `/esg-advisory` 三語轉成 `offering`（`kind: service`，tagline、轉型策略三階段、FAQ），顧問頁轉成 `person`（zh-TW 8、en 9、vi 8，取代 M4-01 的 draft 範例）；照片授權未確認不放，`description` 由頁面上的姓名、職稱、單位與專長組成。`OfferingTemplate` 加上「ESG 顧問團隊」段落（只在 person 節點的上層是這個 offering 時出現，依新的 `person.order` 排序），只用既有 `Card`。zh-TW 服務頁的 4 位顧問沒有個人頁，依使用者決定不建內容檔。`offering-content.mjs` 改為也比對 person（1261/1261）。`serializeFrontmatter` 的字串陣列在 flow 寫法讀不回原值時改寫成 block list。用法見 `docs/content/migration.md`「ESG 顧問服務」
 - `orient-ai`、`aiso` 服務頁內容遷移完成（#106）：`node scripts/content/migrate/offerings.mjs` 另外轉這兩個服務頁（三語 6 篇，版型各自的 extractor 在 `TEMPLATES`），`page-map.csv` 的 merge 列（`/orient-aI`）接在 `sourceUrl` 後面；zh-TW 的 `/orient-ai`、`/aiso` 上線，`/products/systalk-ai` 子頁卡片的失效連結補上。`page_type` 是 service，`kind` 依使用者決定填 `product`；family-ai hub 的 `highlights`（取自 `systalk-ai-phison`）依使用者決定維持在 family-ai，不移到 aiso。沒有欄位的段落見 `docs/content/migration.md`「服務頁」。`offering-content.mjs` 新增 110 行，含 #107 的 person 全部是 1371/1371
 
+### M7 多語系
+
+- M7-01 翻譯詞彙表完成（#38）：`docs/i18n/glossary.csv` 列出產品、頁面、選單標籤與介面字串的 zh-TW／en／vi 對照（157 列），由 `node scripts/i18n/glossary.mjs` 依 `nodes.csv`、`navigation.csv`、`src/data/strings/zh-TW.ts` 產生，`--check` 在 `npm run check` 擋下過期與不合格的列。產品與頁面名稱的 en、vi 只取現站寫法（en、vi 內容檔的 `title`、`inventory.csv` 的選單文字），現站沒有就留空；介面字串與選單標籤由 AI 草擬（`draft`）。全部列都還沒有 `confirmed`，人工確認方式見 `docs/i18n/glossary.md`
+
 ## 下一步
 
 - M3-06 M3 收尾（#19）可以開始
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
-- M7-01 翻譯詞彙表（#38）可以開始
+- M7-02 en 翻譯（#39）、M7-03 vi 翻譯（#40）可以開始；翻譯前先回覆 #38 PR 的「待確認」，確認 `docs/i18n/glossary.csv` 的產品名與頁面名稱
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落
 - 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權
@@ -128,7 +132,7 @@
 - M2-04：產品 JSON-LD 定為 `SoftwareApplication`、解決方案與服務為 `Service`（`seo-checklist` 的 JSON-LD 對照改為連到 `content-model.md`）；新頁的 `sourceUrl` 寫 `[]`。blog 作者資料品質、轉載授權、三語版本對應、白皮書檔案位置待確認（見 `docs/ia/content-model.md`「待確認」）
 - M2-03：三語系同網域，vi 從 `www.tpisoftware.vn` 改為 `/vi`；`.vn` 網域上線後是否保留為轉址來源，與正式網域一起決定。`og:locale` 的 en、vi 值要改成「語言_地區」格式，M7 處理
 - i18n 字串檔在 `src/data/strings/<locale>.ts`（M4-04 決定）：介面字串與 listing、utility、contact 頁的描述。這些頁沒有內容檔，只為有字串檔的語系產生；描述是暫定文案，上線前由內容負責人替換。首頁文案仍在 `src/data/home.ts`
-- `LocaleSwitcher` 的 landmark 名稱（語言／Language／Ngôn ngữ）是暫定譯文，M7-01 詞彙表（#38）定案後替換
+- `LocaleSwitcher` 的 landmark 名稱（語言／Language／Ngôn ngữ）寫死在元件裡，是暫定譯文；`docs/i18n/glossary.csv` 的 `ui:language` 確認後，M7-02、M7-03 加字串檔時改讀 `strings(locale).language`
 - M7 加 en、vi 字串檔前要處理（PR #98 審查第 1 輪）：listing、contact、utility 頁的 `translations` 現在把每個有字串檔的語系都算進去，en 的列表頁數比 zh-TW 少時，hreflang 與語言選單會指向不存在的 `/page/n`；`localeHref` 一律加語系前綴，不確認該語系有那一頁，部分翻譯時選單連結會 404；`scripts/i18n/routes.mjs` 的跨語系檢查會把 en、vi 頁上指向檔案的連結（下載頁）當成頁面連結誤報；聯絡頁只在有字串檔的語系找 contact entry，且只取第一筆，多的會被忽略；聯絡頁 hero 的說明（`src/data/home.ts` 的 `contactCta`）與 eyebrow「Contact」只有 zh-TW
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`

@@ -10,7 +10,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "npm run check:ia && node scripts/status/check.mjs && npm run check:design && npm run test:scripts && astro check && astro build && node scripts/design/dist-css.mjs && node scripts/seo/headings.mjs && node scripts/i18n/routes.mjs && node scripts/seo/meta.mjs && npm run validate:html && npm run lighthouse",
+    "check": "npm run check:ia && node scripts/i18n/glossary.mjs --check && node scripts/status/check.mjs && npm run check:design && npm run test:scripts && astro check && astro build && node scripts/design/dist-css.mjs && node scripts/seo/headings.mjs && node scripts/i18n/routes.mjs && node scripts/seo/meta.mjs && npm run validate:html && npm run lighthouse",
     "check:ia": "node scripts/ia/sitemap.mjs --check && node scripts/ia/navigation.mjs --check && node scripts/ia/redirects.mjs --check",
     "check:design": "node scripts/design/contrast.mjs && node scripts/design/token-usage.mjs && node scripts/design/css-structure.mjs && node scripts/design/showcase.mjs",
     "test:scripts": "node --test \"scripts/**/*.test.mjs\"",
