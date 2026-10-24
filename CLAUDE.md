@@ -44,7 +44,7 @@ M2 定案的規則，細節以連結的文件為準：
 |---|---|
 | `npm run dev` | 本機開發 |
 | `npm run build` | 產生 `dist/` |
-| `npm run check` | IA 資料檢查 → 翻譯詞彙表檢查 → `status.md` 檢查 → design 檢查 → scripts 測試 → astro check → build → 輸出 CSS、heading、語系路由、head 與 sitemap 檢查 → html-validate → Lighthouse CI（推送前必跑） |
+| `npm run check` | IA 資料檢查 → 翻譯詞彙表檢查 → `status.md` 檢查 → design 檢查 → scripts 測試 → astro check → build → 輸出 CSS、heading、語系路由、head 與 sitemap、水平捲動檢查 → html-validate → Lighthouse CI（推送前必跑） |
 | `npm run check:design` | tokens 的 WCAG 對比、元件樣式沒有寫死的數值、CSS 分層（全域樣式、`:global`、重複宣告）、每個元件都在 `/design-system` 展示頁與 `design-system` skill 的元件表上 |
 | `npm run check:ia` | 驗證 `docs/ia/` 的 IA 資料，並確認 `sitemap.mjs`、`navigation.mjs`、`redirects.mjs` 的產出是最新的（不寫檔） |
 
