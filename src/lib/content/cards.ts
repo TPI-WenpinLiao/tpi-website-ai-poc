@@ -19,18 +19,18 @@ export interface EntryCard {
 }
 
 // Blog category display name: the title of its blog-<category> listing node
-export const categoryTitle = (category: string) => node(`blog-${category}`).title;
+export const categoryTitle = (category: string, locale: Locale) => node(`blog-${category}`, locale).title;
 
 // Industry display name: the industry hub's title; `other` has none
 export function industryTitle(industry: CollectionEntry<'case-study'>['data']['industry'], locale: Locale) {
-  return industry === 'other' ? strings(locale).otherIndustry : node(`industry-${industry}`).title;
+  return industry === 'other' ? strings(locale).otherIndustry : node(`industry-${industry}`, locale).title;
 }
 
 // Covers are decorative next to the title link, so alt is empty
 export const postCard = (e: CollectionEntry<'blog'>): EntryCard => ({
   title: e.data.title,
   href: entryPath('blog', e),
-  eyebrow: categoryTitle(e.data.category),
+  eyebrow: categoryTitle(e.data.category, entryLocale(e.id)),
   image: { src: e.data.coverImage, alt: '' },
   date: isoDate(e.data.publishedAt),
 });

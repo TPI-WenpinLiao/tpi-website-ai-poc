@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildRows, flattenStrings, mergeRows, navLabels, toCsv, validate } from './glossary.mjs';
+import { buildRows, flattenStrings, mergeRows, navLabels, stringProblems, titleProblems, toCsv, validate } from './glossary.mjs';
 
 const nodes = [
   { id: 'home', parent: '', title: '首頁', template: 'home' },
@@ -14,6 +14,8 @@ const nodes = [
   { id: 'whitepaper-digirunner', parent: 'resources', title: 'digiRunner 白皮書', template: 'gated-download' },
   { id: 'whitepaper-digilogs', parent: 'resources', title: 'digiLogs 白皮書', template: 'gated-download' },
   { id: 'blog-post', parent: 'home', title: '文章', template: 'article' },
+  { id: 'legal', parent: 'home', title: '法務與政策', template: '', kind: 'group' },
+  { id: 'aws-guide', parent: 'digirunner', title: '買家指南（PDF）', template: '', kind: 'asset' },
 ];
 const nav = [
   { area: 'utility', parent: '', node: 'home', label: '（logo）' },
@@ -62,6 +64,7 @@ test('buildRows lists visible nav labels, products, nav pages and strings', () =
   assert.deepEqual(rows.map((r) => [r.id, r.category]), [
     ['nav:產品', 'nav'],
     ['nav:公司', 'nav'],
+    ['node:home', 'page'],
     ['node:products', 'page'],
     ['node:family-dx', 'product'],
     ['node:digirunner', 'product'],
@@ -69,6 +72,7 @@ test('buildRows lists visible nav labels, products, nav pages and strings', () =
     ['node:resources', 'page'],
     ['node:whitepaper-digirunner', 'page'],
     ['node:whitepaper-digilogs', 'page'],
+    ['node:blog-post', 'page'],
     ['ui:menu', 'ui'],
   ]);
   // White Paper labels two different nodes, so it is no one's name
@@ -125,4 +129,34 @@ test('validate rejects bad rows', () => {
   assert.deepEqual(validate([{ ...ok, status: 'done' }]), ['ui:menu: status must be one of to-confirm, draft, confirmed']);
   assert.deepEqual(validate([{ ...ok, id: 'menu' }]), ['menu: a ui row\'s id starts with ui:']);
   assert.deepEqual(validate([{ ...ok, id: 'x:y', category: 'other' }]), ['x:y: category must be one of brand, term, nav, product, page, ui']);
+});
+
+test('stringProblems holds an en or vi strings file to the glossary', () => {
+  const rows = [
+    { id: 'ui:menu', category: 'ui', en: 'Menu' },
+    { id: 'ui:toc', category: 'ui', en: '' },
+    { id: 'ui:skip', category: 'ui', en: 'Skip' },
+    { id: 'node:x', category: 'page', en: 'X' },
+  ];
+  assert.deepEqual(stringProblems(rows, 'en', [['menu', 'Menu'], ['toc', 'On this page'], ['extra', 'E']]), [
+    'docs/i18n/glossary.csv: ui:toc has no en, which src/data/strings/en.ts needs',
+    'src/data/strings/en.ts: skip is missing',
+    'src/data/strings/en.ts: extra is not in docs/i18n/glossary.csv (re-run after adding it to zh-TW.ts)',
+  ]);
+  assert.deepEqual(stringProblems(rows, 'en', [['menu', 'Main menu'], ['toc', 'x'], ['skip', 'Skip']]).slice(0, 1), [
+    'src/data/strings/en.ts: menu is "Main menu", the glossary has "Menu"',
+  ]);
+});
+
+test('titleProblems wants a confirmed product named in its en and vi titles', () => {
+  const rows = [
+    { id: 'node:digirunner', category: 'product', status: 'confirmed', en: 'digiRunner', vi: 'digiRunner' },
+    { id: 'node:gis', category: 'product', status: 'draft', en: 'GIS', vi: '' },
+  ];
+  const titles = [
+    { node: 'digirunner', locale: 'en', title: 'digiRunner API Management', file: 'a.md' },
+    { node: 'digirunner', locale: 'vi', title: 'Quản lý API', file: 'b.md' },
+    { node: 'gis', locale: 'en', title: 'Maps', file: 'c.md' },
+  ];
+  assert.deepEqual(titleProblems(rows, titles), ['b.md: title "Quản lý API" does not name digiRunner (docs/i18n/glossary.csv node:digirunner)']);
 });

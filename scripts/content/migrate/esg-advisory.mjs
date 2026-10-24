@@ -248,7 +248,7 @@ async function migrateEntry({ get, row, inventory, overrides, date, slugs, order
 
     const path = contentFile(id);
     const existing = existsSync(path) ? await readFile(path, 'utf8') : null;
-    const out = entryText(data, '', existing, date);
+    const out = entryText(data, '', existing, date, row.locale);
     if (out === existing) return { id, status: 'unchanged', notes };
     await mkdir(dirname(path), { recursive: true });
     await writeAtomic(path, out);

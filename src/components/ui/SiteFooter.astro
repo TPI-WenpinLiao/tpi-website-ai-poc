@@ -7,6 +7,7 @@ import { localizedNav, node, nodeHref } from '../../lib/ia/navigation';
 import { getEntry } from 'astro:content';
 import { company } from '../../data/site';
 import { strings } from '../../data/strings';
+import { builtPaths } from '../../lib/content/pages';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
@@ -15,14 +16,15 @@ import logo from '../../assets/brand/logo-horizontal-white.png';
 // Rendered height in px; matches --logo-height-lg (3rem)
 const LOGO_HEIGHT = 48;
 
-const contact = node('contact');
 const locale = localeFromPath(normalizePath(Astro.url.pathname));
+const contact = node('contact', locale);
 const t = strings(locale);
 const path = normalizePath(Astro.url.pathname);
 // The link to the page being shown (docs/ia/navigation.md「無障礙」)
 const current = (href: string | undefined) => (href === path ? 'page' : undefined);
-const footer = localizedNav('footer', locale);
-const footerBottom = localizedNav('footer-bottom', locale);
+const built = await builtPaths();
+const footer = localizedNav('footer', locale, built);
+const footerBottom = localizedNav('footer-bottom', locale, built);
 const org = await getEntry('organization', locale);
 const phone = org?.data.offices.find((o) => o.headquarters)?.phone;
 if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a headquarters phone for the footer`);

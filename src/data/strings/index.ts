@@ -2,8 +2,9 @@
 // fails the build of its first page instead of falling back to zh-TW text.
 import type { Locale } from '../../lib/i18n/locales';
 import { zhTW, type Strings } from './zh-TW';
+import { en } from './en';
 
-const STRINGS: Partial<Record<Locale, Strings>> = { 'zh-TW': zhTW };
+const STRINGS: Partial<Record<Locale, Strings>> = { 'zh-TW': zhTW, en };
 
 export function strings(locale: Locale): Strings {
   const s = STRINGS[locale];

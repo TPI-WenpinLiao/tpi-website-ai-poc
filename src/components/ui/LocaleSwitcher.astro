@@ -8,9 +8,10 @@
 // `translations` pass the list PageLayout computed); the /design-system page passes demo entries, and
 // data-preview-state on a link draws the hover or focus state statically there.
 import type { LocaleLink } from '../../lib/i18n/alternates';
-import { LOCALE_NAMES, type Locale } from '../../lib/i18n/locales';
+import { LOCALE_NAMES } from '../../lib/i18n/locales';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import { pageLocales } from '../../lib/i18n/routes';
+import { strings } from '../../data/strings';
 
 interface Props {
   // Overrides the localized landmark name; each switcher on a page needs a unique one (html-validate
@@ -19,16 +20,13 @@ interface Props {
   links?: readonly (LocaleLink & { preview?: 'hover' | 'focus' })[];
 }
 
-// Interim wording until the M7 glossary (#38)
-const LABELS: Record<Locale, string> = { 'zh-TW': '語言', en: 'Language', vi: 'Ngôn ngữ' };
-
 const path = normalizePath(Astro.url.pathname);
 const { label, links = pageLocales(path) } = Astro.props;
 ---
 
 {
   links.length > 1 && (
-    <nav class="locale-switcher" aria-label={label ?? LABELS[localeFromPath(path)]}>
+    <nav class="locale-switcher" aria-label={label ?? strings(localeFromPath(path)).language}>
       <ul>
         {links.map((link) => (
           <li>

@@ -7,7 +7,7 @@ affiliation: Sustainability IUR Collaboration Platform
 order: 4
 experience:
   - Project Manager at the Innovation Incubation Center, National Kaohsiung First University of Science and Technology
-  - Assistant Professor at Chia Nan University of Pharmacy ＆ Science
+  - Assistant Professor at Chia Nan University of Pharmacy & Science
   - CEO of Sustainability IUR Collaboration Platform
   - GHG inventory personnel at National Environmental Research Academy, Ministry of Environment
   - Instructor for Internal Auditors of TUV NORD ISO 14067 Product Carbon Footprint

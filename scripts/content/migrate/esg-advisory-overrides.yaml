@@ -6,7 +6,12 @@
 #     description: 改寫後的 description（null 拿掉欄位）
 
 # zh-TW description over 80 characters (seo-checklist), shortened from the current site's meta
-# description without adding facts. en and vi wait for M7 like the solution pages.
+# description without adding facts. vi waits for M7-03; en is below.
 offering/zh-TW/esg-advisory:
   frontmatter:
     description: 昕力資訊 ESG 顧問服務提供轉型策略三階段，輔導企業依照 ISO 14064-1 標準進行碳盤查，開發團隊全面通過永續人才培訓，量身打造可持續的解決方案。
+
+# en description over 160 characters, shortened the same way (M7-02, #39)
+offering/en/esg-advisory:
+  frontmatter:
+    description: "TPIsoftware's ESG experts offer consulting with a tailored three-phase transformation strategy to help enterprises ace carbon inventory under ISO 14064-1."

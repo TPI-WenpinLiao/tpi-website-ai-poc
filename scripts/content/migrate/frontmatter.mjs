@@ -2,6 +2,7 @@
 // ("blog（部落格文章）", "news（新聞）"). Key order follows the sample entries in src/content/.
 import { parse as parseYaml, stringify } from 'yaml';
 import { YAML_OPTIONS } from '../dates.mjs';
+import { pageTitle } from '../../../src/lib/seo/meta.ts';
 
 // authorName values that are the company itself → authorType Organization (content-model.md: 依 authorName 判斷)
 export const ORGANIZATION_AUTHORS = new Set(['TPIsoftware', '昕力資訊', '昕力資訊 TPIsoftware', 'TPIsoftware 昕力資訊']);
@@ -14,9 +15,8 @@ export const NEWS_TYPES = { 1: 'press', 3: 'product', 7: 'newsletter', 4: 'press
 // Same date as NEWS_CUTOFF in scripts/inventory/audit.mjs; change both together
 export const NEWS_REVIEW_BEFORE = '2026-01-01';
 
-// <title> is `${seoTitle ?? title}｜TPIsoftware 昕力資訊` (pageTitle in src/lib/seo/meta.ts; frontmatter.test.mjs
-// checks they match) and html-validate's long-title rule allows 70 characters
-export const TITLE_SUFFIX = '｜TPIsoftware 昕力資訊';
+// <title> is pageTitle(seoTitle ?? title) (src/lib/seo/meta.ts) and html-validate's long-title rule
+// allows 70 characters
 export const TITLE_MAX = 70;
 
 // seo-checklist: zh-TW about 60–80 full-width characters, en 120–160 characters (vi follows en)
@@ -123,7 +123,7 @@ export function frontmatterNotes(locale, data) {
   const notes = [];
   const max = DESCRIPTION_MAX[locale];
   if (data.description && [...data.description].length > max) notes.push(`description is ${[...data.description].length} characters (max ${max})`);
-  const title = `${data.seoTitle ?? data.title}${TITLE_SUFFIX}`;
+  const title = pageTitle(data.seoTitle ?? data.title, locale);
   if (title.length > TITLE_MAX) notes.push(`<title> is ${title.length} characters (max ${TITLE_MAX}): set seoTitle`);
   if (data.authorType === 'Person') notes.push(`authorType Person for author "${data.author}"`);
   return notes;

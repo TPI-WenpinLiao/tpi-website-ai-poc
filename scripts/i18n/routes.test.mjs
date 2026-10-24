@@ -44,6 +44,25 @@ test('site links on an en page must stay under /en, except language links and ex
   assert.deepEqual(routeProblems(pages, new Set(['/tpu'])), ['/en: links to /about, outside its locale en']);
 });
 
+test('links to downloadable files are not locale pages', () => {
+  const body = '<a href="/upload/guide.pdf">pdf</a><a href="/products/x.html">page</a>';
+  assert.deepEqual(routeProblems(new Map([['/en', page('en', body)]])), ['/en: links to /products/x.html, outside its locale en']);
+});
+
+test('Chinese text on an en or vi page fails, except inside a zh-TW lang element', () => {
+  const body =
+    '<p>Hello</p><p>TPIsoftware <span lang="ja">株式會社</span></p><p>聯絡我們</p><img src="a.png" alt="圖"><a href="/" hreflang="zh-TW" lang="zh-TW">中文</a><span title="a｜b">x</span><script>"不算"</script>';
+  const head = '<meta name="description" content="說明">';
+  const html = `<!doctype html><html lang="vi"><head>${head}</head><body>${body}</body></html>`;
+  assert.deepEqual(routeProblems(new Map([['/vi', html]])), [
+    '/vi: Chinese meta description="說明"',
+    '/vi: Chinese text "聯絡我們"',
+    '/vi: Chinese img alt="圖"',
+    '/vi: Chinese span title="a｜b"',
+  ]);
+  assert.deepEqual(routeProblems(new Map([['/', html.replace('lang="vi"', 'lang="zh-TW"')]])), []);
+});
+
 test('external sub-sites come from nodes.csv kind external', () => {
   const csv = 'id,parent,title,template,kind,path,note\nhome,,首頁,home,page,/,\ntpu,home,昕力大學,,external,/tpu,\n';
   assert.deepEqual([...externalPaths(csv)], ['/tpu']);

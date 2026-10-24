@@ -6,7 +6,7 @@
 import Surface from './Surface.astro';
 import SectionHeading from './SectionHeading.astro';
 import Button from './Button.astro';
-import { contactCta } from '../../data/home';
+import { contactCopy } from '../../data/home';
 import { node, nodeHref } from '../../lib/ia/navigation';
 import { localeFromPath } from '../../lib/i18n/paths';
 
@@ -14,13 +14,15 @@ interface Props {
   label?: string;
 }
 
-const { label = node('contact').title } = Astro.props;
-const href = nodeHref('contact', localeFromPath(Astro.url.pathname));
+const locale = localeFromPath(Astro.url.pathname);
+const { label = node('contact', locale).title } = Astro.props;
+const href = nodeHref('contact', locale);
+const copy = contactCopy(locale);
 ---
 
 <Surface tone="dark" pattern="grid">
   <div class="contact-cta">
-    <SectionHeading eyebrow="Contact" title={contactCta.title.text} description={contactCta.description.text} align="center" />
+    <SectionHeading eyebrow="Contact" title={copy.title.text} description={copy.description.text} align="center" />
     <Button href={href} size="lg">{label}</Button>
   </div>
 </Surface>

@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Day } from './frontmatter.mjs';
-import { entryRows, entryText, parseOverrides } from './migrate.mjs';
+import { entryRows, entryText, latinPunctuation, parseOverrides } from './migrate.mjs';
 
 test('entryText keeps migratedAt when nothing else changed, and updates it when something did', () => {
   const data = { title: 'A', publishedAt: new Day('2026-09-11'), migratedAt: undefined };
@@ -125,4 +125,14 @@ test('convert refuses empty required values unless overrides fill them', async (
   });
   await assert.rejects(convert(args()), /empty on the current site: author/);
   assert.equal((await convert(args({ frontmatter: { author: 'TPIsoftware', authorType: 'Organization' } }))).status, 'written');
+});
+
+test('latinPunctuation turns full-width punctuation into ASCII, with the space a colon needs', () => {
+  assert.equal(latinPunctuation('1. Assessment：Map the APIs'), '1. Assessment: Map the APIs');
+  assert.equal(latinPunctuation('Pharmacy ＆ Science（Tainan）'), 'Pharmacy & Science(Tainan)');
+  assert.equal(latinPunctuation('Ends：'), 'Ends:');
+  const day = new Day('2026-10-20');
+  assert.deepEqual(latinPunctuation({ list: ['a：b'], migratedAt: day }), { list: ['a: b'], migratedAt: day });
+  assert.match(entryText({ title: 'A：B' }, 'x＆y', null, '2026-10-20', 'en'), /title: "A: B"[\s\S]*x&y/);
+  assert.match(entryText({ title: 'A：B' }, '', null, '2026-10-20'), /title: A：B/);
 });

@@ -1,6 +1,6 @@
 ---
 title: Interactive Health Management Platform
-description: Traditional healthcare services providers and the insurance industry have evolved and adopted Smart Health applications featuring digitalization and gamification to offer engaging and interactive experiences for health management and monitoring.
+description: Smart Health applications with digitalization and gamification give healthcare providers and insurers interactive experiences for health management.
 translationKey: interactivehealth
 node: interactivehealth
 kind: solution
@@ -23,5 +23,5 @@ useCases:
     body: Assisted Fu Jen Catholic University Hospital in building a healthcare service app featuring appointment, real-time queue status, prescription payment, health information updates and more, which reduces wait times and enhances the patient experience.
 cta: contact
 sourceUrl: https://www.tpisoftware.com/en/solutions/interactivehealth
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 ---

@@ -8,7 +8,7 @@
 #     0: finance   # useCases[0] 連到 /industries/finance
 
 # zh-TW descriptions over 80 characters (seo-checklist), shortened from the current site's meta
-# description without adding facts. en and vi wait for M7 like the blog (status.md 待辦備忘).
+# description without adding facts. vi waits for M7-03; en is below.
 zh-TW/gis:
   frontmatter:
     description: 藉由 GIS 空間數據分析技術及智能定位工具，整合各種圖資與內外部數據，產出可視覺化、利於分析與決策的圖表資訊，提升商業決策與預測的可靠性。
@@ -40,6 +40,8 @@ zh-TW/uiux:
 
 # 「Financial Industry - A Stepping Stone to Document Digitization」
 en/smartfilling:
+  frontmatter:
+    description: "A smart document processing solution with intelligent character recognition (ICR) and the exclusive Puzzle adaptive AI module to analyze documents fast."
   useCaseIndustry:
     0: finance
 
@@ -57,3 +59,34 @@ zh-TW/orient-ai:
 zh-TW/aiso:
   frontmatter:
     description: 集結 AI 軟體與硬體廠商打造的 AI 整合生態系，協助企業快速建置可落地、可擴充、可合規的地端 AI 平台。
+
+# en descriptions over 160 characters (seo-checklist), shortened from the current site's meta
+# description without adding facts (M7-02, #39)
+en/gis:
+  frontmatter:
+    description: "TPIsoftware's GIS spatial data analysis and location intelligence tools visualize geographic information to enhance business decision-making and forecasting."
+
+en/insurering:
+  frontmatter:
+    description: "Automatic validation for flexible insurance product launch, underwriting rules adjustment and regulatory compliance across insurance platforms."
+
+en/interactivehealth:
+  frontmatter:
+    description: "Smart Health applications with digitalization and gamification give healthcare providers and insurers interactive experiences for health management."
+
+en/orient-ai:
+  frontmatter:
+    description: "OrientAI is an enterprise-grade Agentic AI platform for AI agent management, governance and orchestration, with central LLM and agent control."
+
+en/smartclaim:
+  frontmatter:
+    description: "Claims processing involves extensive manual work across systems. Adopting AI to improve operational efficiency is a priority for the insurance industry."
+
+
+en/textualanalysis:
+  frontmatter:
+    description: "Turning unstructured dialogue texts into usable information takes textual analysis: context analysis of massive data gives enterprises insights."
+
+en/uiux:
+  frontmatter:
+    description: "Eye-catching interface design and good user experience are the keys to attracting visitors and shape a website's visual representation and experience."

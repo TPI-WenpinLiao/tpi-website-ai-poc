@@ -15,7 +15,7 @@ description: 新增或修改任何頁面、版型、內容時使用。列出每�
 | meta description | 全站唯一；zh-TW 約 60–80 個全形字（en 120–160 字元）；描述頁面內容，不堆砌關鍵字 |
 | canonical | 指向自己的絕對 URL，以 `Astro.site` 組出；沒有尾斜線（`/` 除外）、`.html` 或 query string（ADR 0002，由 `Seo.astro` 產生） |
 | `lang` | `<html lang>` 對應頁面語系（`zh-TW` / `en` / `vi`） |
-| Open Graph | `og:type`、`og:title`、`og:description`、`og:url`、`og:image`（1200×630，M3 後必填）、`og:locale`（「語言_地區」格式，例如 `zh_TW`；en、vi 的值 M7 修正）、`og:site_name` |
+| Open Graph | `og:type`、`og:title`、`og:description`、`og:url`、`og:image`（1200×630，M3 後必填）、`og:locale`（「語言_地區」格式：`zh_TW`、`en_US`、`vi_VN`）、`og:site_name` |
 | Twitter | `twitter:card`（有圖用 `summary_large_image`）、`twitter:title`、`twitter:description` |
 | h1 | 每頁恰好一個，描述頁面主題 |
 | heading 層級 | 依序不跳級（h2 → h3，不可 h2 → h4）；不用 heading 做視覺樣式 |

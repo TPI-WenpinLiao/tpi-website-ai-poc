@@ -34,16 +34,16 @@ const t = strings(locale);
 const u = t.utility;
 const href = localeHref(locale);
 const id = props.kind;
-const self = node(id);
-const title = props.kind === 'not-found' ? u.notFound : props.kind === 'download' ? `${props.offering.data.title}｜${self.title}` : self.title;
+const self = node(id, locale);
+const title = props.kind === 'not-found' ? u.notFound : props.kind === 'download' ? `${props.offering.data.title}${t.separator}${self.title}` : self.title;
 const description = pageDescription(locale, id);
 // Ways onward from a dead end or a finished task (wireframe: 常用入口, 推薦內容)
-const onward = (props.kind === 'not-found' ? ['products', 'industries', 'services', 'contact'] : ['products', 'success-stories', 'blog']).map(node);
+const onward = (props.kind === 'not-found' ? ['products', 'industries', 'services', 'contact'] : ['products', 'success-stories', 'blog']).map((id) => node(id, locale));
 const searchHref = nodeHref('search', locale);
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
 // Every page but 404 has a BreadcrumbList (content-model.md); the download page's last item is the offering
 const trail =
-  props.kind === 'download' ? entryTrail('download', { title: props.offering.data.title, path: Astro.url.pathname }) : breadcrumb(id);
+  props.kind === 'download' ? entryTrail('download', { title: props.offering.data.title, path: Astro.url.pathname }, locale) : breadcrumb(id, locale);
 const jsonLd = props.kind === 'not-found' ? undefined : graph(breadcrumbList(trail, Astro.site, locale));
 ---
 

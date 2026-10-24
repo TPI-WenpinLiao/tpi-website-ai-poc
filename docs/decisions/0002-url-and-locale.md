@@ -120,5 +120,5 @@ export default defineConfig({
 - M2-05 redirect map 的轉址來源：`www.tpisoftware.com/vn/*` 與 `www.tpisoftware.vn/*` → `/vi/*`；大寫路徑 → 小寫；`/blog/{category}/{slug}` → `/blog/{slug}`；`/ja/*` → `/en`
 - `www.tpisoftware.vn` 網域在新站上線後是否保留為轉址來源，與正式網域一起決定
 - M4 路由依本 ADR 建立 `src/pages/` 結構；分頁路徑用 `page/[n]`
-- M4-02 實作語言切換，M4-03 輸出 hreflang（用同一份語系版本清單），M7 補翻譯內容與驗證 hreflang、`x-default`。`og:locale` 需要「語言_地區」格式（例如 `en_US`、`vi_VN`），目前 `Seo.astro` 對 en、vi 輸出的是 `en`、`vi`，M7 一併修正
+- M4-02 實作語言切換，M4-03 輸出 hreflang（用同一份語系版本清單），M7 補翻譯內容與驗證 hreflang、`x-default`。`og:locale` 用「語言_地區」格式：zh-TW 是 `zh_TW`，en 是 `en_US`，vi 是 `vi_VN`（M7-02 修正，現站沒有輸出這個值）
 - 正式網域決定後只改 `astro.config.mjs` 的 `site`（或 `SITE_URL` 環境變數），路徑規則不變

@@ -9,8 +9,9 @@ authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1a1c70-efed-69c8-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/en/sme-carbon-management-software/cover.webp
 sourceUrl: https://www.tpisoftware.com/en/blog/smartmgmt/sme-carbon-management-software
-migratedAt: 2026-10-23
+migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-02
+seoTitle: SME Carbon Management Software for GHG Inventory
 ---
 
 Carbon management can become difficult for SMEs when emissions data is spread across spreadsheets, facilities, departments or suppliers. As reporting needs grow, businesses need a consistent way to collect activity data, calculate greenhouse gas emissions and maintain records that can be reviewed later.

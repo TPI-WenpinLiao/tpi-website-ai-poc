@@ -6,6 +6,9 @@
 // Re-run after changing nodes.csv, navigation.csv or src/data/strings/zh-TW.ts:
 //   node scripts/i18n/glossary.mjs
 // With --check it validates the file and only compares it to what a re-run would write (npm run check).
+// Both modes also hold the translations to the glossary: every interface string in
+// src/data/strings/<en|vi>.ts is the row's en or vi text, and the en or vi content file of a
+// confirmed product names the product in its title.
 
 import { readFile, readdir } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
@@ -27,8 +30,8 @@ const LOCALES = ['en', 'vi'];
 const NODE_COLLECTIONS = ['offering', 'hub', 'page', 'whitepaper'];
 // Interface strings that are page content, not interface copy; M7-02 and M7-03 translate them
 const SKIP_STRINGS = new Set(['pages']);
-// navigation.csv labels that are not visible text
-const HIDDEN_LABEL = /^（.*）$/;
+// Menu labels that are not visible text: （logo） in navigation.csv, (logo) in inventory.csv
+const HIDDEN_LABEL = /^[（(].*[)）]$/;
 // Menu entries that end in an arrow are call-to-action links, not names
 const LINK_TEXT = /[→›»]$/;
 // page-map.csv rows whose page becomes the node's own page come before rows merged into it, so a
@@ -80,7 +83,7 @@ export function navLabels(navLocation) {
 export function currentWording({ titles, urls, inventoryByUrl }) {
   const found = [];
   const add = (text, source, nav) => {
-    if (text && !found.some((f) => f.text === text)) found.push({ text, source, nav });
+    if (text && !(nav && HIDDEN_LABEL.test(text)) && !found.some((f) => f.text === text)) found.push({ text, source, nav });
   };
   for (const t of titles) add(t.title, t.file, false);
   const header = [];
@@ -102,10 +105,8 @@ export function buildRows({ nodes, nav, strings, pageMap, inventory, titles }) {
 
   // A menu label that is also some node's title is that node's row, not a separate label
   const titlesInUse = new Set(nodes.map((n) => n.title));
-  const navNodes = new Set();
   const navLabelRows = new Map();
   for (const r of nav) {
-    if (r.node) navNodes.add(r.node);
     if (!r.label || HIDDEN_LABEL.test(r.label) || (!r.node && r.area === 'utility')) continue;
     if (titlesInUse.has(r.label)) continue;
     if (!navLabelRows.has(r.label)) navLabelRows.set(r.label, { id: `nav:${r.label}`, category: 'nav', 'zh-TW': r.label, source: NAV });
@@ -113,10 +114,11 @@ export function buildRows({ nodes, nav, strings, pageMap, inventory, titles }) {
   rows.push(...navLabelRows.values());
 
   for (const n of nodes) {
-    // Offerings and the product families under 產品總覽 carry product names; other nodes are pages
+    // Every node whose title shows on a page (menus, breadcrumbs, headings); group nodes have no page
+    // and asset nodes are files. Offerings and the product families under 產品總覽 carry product
+    // names; other nodes are pages
+    if (n.kind === 'group' || n.kind === 'asset') continue;
     const isProduct = n.template === 'offering' || (n.template === 'hub' && n.parent === 'products');
-    if (!isProduct && n.template !== 'hub' && !navNodes.has(n.id)) continue;
-    if (n.id === 'home') continue;
     const row = { id: `node:${n.id}`, category: isProduct ? 'product' : 'page', 'zh-TW': n.title, source: 'docs/ia/nodes.csv' };
     for (const locale of LOCALES) {
       const rank = (p) => DISPOSITION_ORDER.indexOf(p.disposition);
@@ -174,6 +176,32 @@ export function mergeRows(existing, derived) {
   return out;
 }
 
+// Interface strings of an en or vi file that differ from the glossary, missing ones included.
+// `flat` is flattenStrings() of the file's export
+export function stringProblems(rows, locale, flat) {
+  const problems = [];
+  const file = `src/data/strings/${locale}.ts`;
+  const translated = new Map(flat);
+  for (const r of rows.filter((r) => r.category === 'ui')) {
+    const key = r.id.slice('ui:'.length);
+    if (!translated.has(key)) problems.push(`${file}: ${key} is missing`);
+    else if (!r[locale]) problems.push(`${GLOSSARY}: ${r.id} has no ${locale}, which ${file} needs`);
+    else if (translated.get(key) !== r[locale]) problems.push(`${file}: ${key} is "${translated.get(key)}", the glossary has "${r[locale]}"`);
+  }
+  const known = new Set(rows.filter((r) => r.category === 'ui').map((r) => r.id.slice('ui:'.length)));
+  for (const key of translated.keys()) if (!known.has(key)) problems.push(`${file}: ${key} is not in ${GLOSSARY} (re-run after adding it to zh-TW.ts)`);
+  return problems;
+}
+
+// en and vi content files whose title leaves out their confirmed product's name
+export function titleProblems(rows, titles) {
+  const confirmed = new Map(rows.filter((r) => r.category === 'product' && r.status === 'confirmed').map((r) => [r.id.slice('node:'.length), r]));
+  return titles.flatMap((t) => {
+    const name = confirmed.get(t.node)?.[t.locale];
+    return name && !t.title.includes(name) ? [`${t.file}: title "${t.title}" does not name ${name} (${GLOSSARY} node:${t.node})`] : [];
+  });
+}
+
 export function validate(rows) {
   const errors = [];
   const seen = new Set();
@@ -216,18 +244,24 @@ async function contentTitles() {
 async function main() {
   const check = process.argv.includes('--check');
   const { zhTW } = await import(pathToFileURL(STRINGS).href);
+  const titles = await contentTitles();
   const derived = buildRows({
     nodes: await readCsv('docs/ia/nodes.csv'),
     nav: await readCsv(NAV),
     strings: flattenStrings(zhTW),
     pageMap: await readCsv('docs/ia/page-map.csv'),
     inventory: await readCsv('docs/research/inventory.csv'),
-    titles: await contentTitles(),
+    titles,
   });
   const existing = await readCsv(GLOSSARY).catch((e) => (e.code === 'ENOENT' ? [] : Promise.reject(e)));
   const rows = mergeRows(existing, derived);
-  const errors = validate(rows);
-  for (const e of errors) console.error(`${GLOSSARY}: ${e}`);
+  const errors = [...validate(rows).map((e) => `${GLOSSARY}: ${e}`), ...titleProblems(rows, titles)];
+  for (const locale of LOCALES) {
+    const file = `src/data/strings/${locale}.ts`;
+    const mod = await import(pathToFileURL(file).href).catch((e) => (e.code === 'ERR_MODULE_NOT_FOUND' ? undefined : Promise.reject(e)));
+    if (mod) errors.push(...stringProblems(rows, locale, flattenStrings(mod[locale])));
+  }
+  for (const e of errors) console.error(e);
   const stale = await emit([[GLOSSARY, toCsv(rows)]], { check, rerun: 'node scripts/i18n/glossary.mjs' });
   if (errors.length || stale.length) process.exit(1);
   const count = (s) => rows.filter((r) => r.status === s).length;

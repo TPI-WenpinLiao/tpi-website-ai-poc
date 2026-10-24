@@ -36,14 +36,14 @@ interface Props {
 const { id, locale, items, featured, page, pages, translations } = Astro.props;
 const t = strings(locale);
 const href = localeHref(locale);
-const self = node(id);
+const self = node(id, locale);
 const listPath = nodeHref(id, locale);
 
 // Filters: the blog's categories link to their pages; other listings show their types as labels
-const blog = node('blog');
+const blog = node('blog', locale);
 const isBlog = id === 'blog' || self.parent === 'blog';
 const filters = isBlog
-  ? [blog, ...children('blog').filter((c) => c.template === 'listing')].map((c) => ({
+  ? [blog, ...children('blog', locale).filter((c) => c.template === 'listing')].map((c) => ({
       label: c.id === 'blog' ? t.listing.all : c.title,
       href: href(c),
       current: c.id === id,
@@ -51,14 +51,14 @@ const filters = isBlog
   : id === 'media-center'
     ? Object.values(t.newsTypes).map((label) => ({ label }))
     : id === 'success-stories'
-      ? children('industries').map((n) => ({ label: n.title }))
+      ? children('industries', locale).map((n) => ({ label: n.title }))
       : [];
 const title = page > 1 ? `${self.title}${t.listing.pageSuffix(page)}` : self.title;
 const description = pageDescription(locale, id);
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
 // content-model.md gives listings no schema of their own; every non-home page has a BreadcrumbList
-const jsonLd = graph(breadcrumbList(breadcrumb(id), Astro.site, locale));
+const jsonLd = graph(breadcrumbList(breadcrumb(id, locale), Astro.site, locale));
 ---
 
 <PageLayout title={title} description={page > 1 ? `${description}${t.listing.pageSuffix(page)}` : description} jsonLd={jsonLd} translations={translations}>
@@ -92,7 +92,7 @@ const jsonLd = graph(breadcrumbList(breadcrumb(id), Astro.site, locale));
       ) : (
         <EmptyState title={t.listing.empty} description={t.listing.emptyText}>
           <Button slot="action" href={nodeHref('resources', locale)} variant="secondary">
-            {node('resources').title}
+            {node('resources', locale).title}
           </Button>
         </EmptyState>
       )

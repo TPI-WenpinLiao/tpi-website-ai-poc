@@ -4,6 +4,8 @@
 // that leave the site. Colors follow the surrounding data-surface.
 // data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
 import type { HTMLAttributes } from 'astro/types';
+import { localeFromPath } from '../../lib/i18n/paths';
+import { strings } from '../../data/strings';
 
 type Props = Omit<HTMLAttributes<'a'>, 'href'> & {
   href: string;
@@ -12,6 +14,7 @@ type Props = Omit<HTMLAttributes<'a'>, 'href'> & {
 };
 
 const { variant = 'inline', external = false, class: className, ...rest } = Astro.props;
+const t = strings(localeFromPath(Astro.url.pathname));
 ---
 
 <a class:list={['link', variant, className]} {...rest}
@@ -19,7 +22,7 @@ const { variant = 'inline', external = false, class: className, ...rest } = Astr
     external && (
       <>
         <span class="icon" aria-hidden="true">↗</span>
-        <span class="sr-only">（外部網站）</span>
+        <span class="sr-only">{t.externalSite}</span>
       </>
     )
   }</a

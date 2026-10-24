@@ -2,6 +2,8 @@
 
 `glossary.csv` 是產品名、導覽、頁面名稱與介面字串的 zh-TW／en／vi 對照（M7-01，#38）。M7-02、M7-03 翻譯 en、vi 內容與 `src/data/strings/` 時，用語以這份為準。
 
+en、vi 頁面上的節點名稱與選單標籤（header、footer、麵包屑、子頁卡片、列表頁標題）在 build 時直接讀這份檔案（`src/lib/i18n/glossary.ts`），不在字串檔另抄一份。頁面用到的名稱沒有該語系的譯名時 build 失敗。
+
 ## 欄位
 
 | 欄位 | 誰寫 | 內容 |
@@ -23,7 +25,7 @@
 | `brand` | 公司名（手動加） |
 | `term` | 跨頁共用、但不是節點也不是介面字串的名詞（手動加，目前沒有） |
 | `product` | `nodes.csv` 的 offering 節點，以及 `產品總覽` 底下的產品家族 hub |
-| `page` | 其他 hub 節點，以及 `navigation.csv` 用到的節點 |
+| `page` | 其他節點：hub、列表頁、utility 頁、內容頁與 collection 節點（群組與檔案節點除外，它們不會顯示在頁面上） |
 | `nav` | `navigation.csv` 中不是任何節點 `title` 的選單標籤。和某個節點 `title` 相同的標籤（例如「資源」）算在那個節點的列 |
 | `ui` | `src/data/strings/zh-TW.ts` 的介面字串。`pages`（列表頁等的 description）是頁面內容，不列 |
 
@@ -62,6 +64,13 @@ script 依 `docs/ia/page-map.csv` 找出對到同一個節點的 en、vi 現站�
 3. 執行 `node scripts/i18n/glossary.mjs --check`
 
 `--check` 會擋下：`confirmed` 但 en 或 vi 是空的列、重複的 `id`、不在上表的 `category` 或 `status`、`id` 前綴與 `category` 不符，以及 script 重跑後會改變的檔案。`npm run check` 包含這一步。
+
+不加 `--check` 時也會檢查譯文是否照詞彙表：
+
+- `src/data/strings/en.ts`、`vi.ts` 的每個介面字串都要等於對應 `ui:` 列的 en、vi，兩邊的 key 也要一致。字串檔改了就先改這份，再照抄過去
+- `confirmed` 的產品，en、vi 內容檔的 `title` 要包含該語系的產品名
+
+頁面上漏翻的中文由 `node scripts/i18n/routes.mjs` 擋下：en、vi 頁面的文字與 `alt`、`title`、`aria-label`、`placeholder`、meta 不得有漢字或全形標點（`lang="zh-TW"` 的元素除外）。
 
 ## 來源改了之後重跑
 

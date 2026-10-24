@@ -19,7 +19,8 @@ import { breadcrumb, localizedNav, node } from '../../lib/ia/navigation';
 import { pageJsonLd } from '../../lib/seo/jsonld/page';
 import { canonicalUrl } from '../../lib/seo/meta';
 import type { Locale } from '../../lib/i18n/locales';
-import { contactCta } from '../../data/home';
+import { contactCopy } from '../../data/home';
+import { builtPaths } from '../../lib/content/pages';
 import { pageDescription, strings } from '../../data/strings';
 
 interface Props {
@@ -31,9 +32,9 @@ interface Props {
 const { locale, entry, translations } = Astro.props;
 const t = strings(locale);
 const f = t.form;
-const self = node('contact');
+const self = node('contact', locale);
 // The header's 產品 menu (the one holding the products overview): families and their products
-const productMenu = localizedNav('header', locale).find((item) => item.children.some((c) => c.key === 'products'));
+const productMenu = localizedNav('header', locale, await builtPaths()).find((item) => item.children.some((c) => c.key === 'products'));
 const products = (productMenu?.children ?? []).flatMap((family) => family.children.map((p) => ({ value: p.key, label: p.label })));
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
@@ -47,13 +48,13 @@ const jsonLd = pageJsonLd({
   site: Astro.site,
   url: canonicalUrl(Astro.url.pathname, Astro.site),
   inLanguage: locale,
-  trail: breadcrumb('contact'),
+  trail: breadcrumb('contact', locale),
   logoUrl: new URL(org.data.logo.src, Astro.site).href,
 });
 ---
 
 <PageLayout title={entry?.data.seoTitle ?? title} description={description} jsonLd={jsonLd} translations={translations}>
-  <PageHero eyebrow="Contact" title={title} description={contactCta.description.text}>
+  <PageHero eyebrow="Contact" title={title} description={contactCopy(locale).description.text}>
     <Breadcrumb slot="breadcrumb" node="contact" />
   </PageHero>
 

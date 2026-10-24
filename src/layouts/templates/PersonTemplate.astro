@@ -30,14 +30,14 @@ const { entry, translations } = Astro.props;
 const { data } = entry;
 const locale = entryLocale(entry.id);
 const t = strings(locale);
-const trail = entryTrail('esg-advisor', { title: data.title, path: entryPath('person', entry) });
-const team = node(node('esg-advisor').parent);
+const trail = entryTrail('esg-advisor', { title: data.title, path: entryPath('person', entry) }, locale);
+const team = node(node('esg-advisor').parent, locale);
 const lists = [
   { title: t.person.experience, items: data.experience ?? [] },
   { title: t.person.education, items: data.education ?? [] },
   { title: t.person.certifications, items: data.certifications ?? [] },
 ].filter((l) => l.items.length > 0);
-const role = [data.jobTitle, data.affiliation].filter(Boolean).join('｜');
+const role = [data.jobTitle, data.affiliation].filter(Boolean).join(t.separator);
 
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);

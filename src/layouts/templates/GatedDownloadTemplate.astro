@@ -33,8 +33,8 @@ const { data } = entry;
 const locale = entryLocale(entry.id);
 const t = strings(locale);
 const href = localeHref(locale);
-const self = node(data.node);
-const offering = node(data.offeringNode);
+const self = node(data.node, locale);
+const offering = node(data.offeringNode, locale);
 const offeringHref = href(offering);
 const f = t.form;
 
@@ -49,7 +49,7 @@ const jsonLd = whitepaperJsonLd({
   site,
   url: canonicalUrl(Astro.url.pathname, site),
   inLanguage: locale,
-  trail: breadcrumb(self.id),
+  trail: breadcrumb(self.id, locale),
   imageUrl: new URL(cover.src, site).href,
   about: { name: offering.title, url: new URL(offeringHref ?? '/', site).href },
 });
@@ -62,7 +62,7 @@ const jsonLd = whitepaperJsonLd({
   jsonLd={jsonLd}
   translations={translations}
 >
-  <PageHero eyebrow={node(self.parent).title} title={data.title}>
+  <PageHero eyebrow={node(self.parent, locale).title} title={data.title}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
   </PageHero>
 
@@ -103,7 +103,7 @@ const jsonLd = whitepaperJsonLd({
     <SectionHeading eyebrow="Related" title={t.offering.related} />
     <CardGrid cols={1}>
       <li>
-        <Card title={offering.title} href={offeringHref} eyebrow={node(offering.parent).title} size="sm" />
+        <Card title={offering.title} href={offeringHref} eyebrow={node(offering.parent, locale).title} size="sm" />
       </li>
     </CardGrid>
   </Surface>

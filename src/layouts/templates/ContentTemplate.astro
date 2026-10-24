@@ -34,7 +34,7 @@ const { entry, translations } = Astro.props;
 const { data } = entry;
 const locale = entryLocale(entry.id);
 const t = strings(locale);
-const self = node(data.node);
+const self = node(data.node, locale);
 const { Content } = await render(entry);
 const sections = (data.sections ?? []).map((s, i) => ({ ...s, id: `section-${i + 1}`, paragraphs: s.body.split(/\n\s*\n/) }));
 const anchors = sections.length > 1 ? sections.map((s) => ({ href: `#${s.id}`, label: s.heading })) : [];
@@ -51,7 +51,7 @@ const jsonLd = pageJsonLd({
   site: Astro.site,
   url: canonicalUrl(Astro.url.pathname, Astro.site),
   inLanguage: locale,
-  trail: breadcrumb(self.id),
+  trail: breadcrumb(self.id, locale),
   logoUrl: new URL(org.data.logo.src, Astro.site).href,
 });
 ---

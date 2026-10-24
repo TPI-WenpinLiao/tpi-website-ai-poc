@@ -266,7 +266,7 @@ async function main() {
         row.notes.push(`logo ${logo.width}×${logo.height}`, ...notes);
         const path = contentFile(id);
         const existing = existsSync(path) ? await readFile(path, 'utf8') : null;
-        const text = entryText(data, body, existing, date);
+        const text = entryText(data, body, existing, date, locale);
         row.status = text === existing ? 'unchanged' : 'written';
         if (args['dry-run']) continue;
         await syncImages(assetDir(id), [{ url: card.logo, bytes: logo.bytes }], new Map([[card.logo, logoFile]]));

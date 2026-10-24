@@ -21,6 +21,7 @@ import { LOCALE_NAMES } from '../../lib/i18n/locales';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import { pageLocales } from '../../lib/i18n/routes';
 import { strings } from '../../data/strings';
+import { builtPaths } from '../../lib/content/pages';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
 import logo from '../../assets/brand/logo-symbol-white.png';
@@ -42,11 +43,11 @@ const { navLabel = t.mainNav, skipTo = '#main', open, locales = pageLocales(path
 const LOGO_HEIGHT = 32;
 // One exclusive group per header; /design-system shows several headers, each with its own navLabel
 const menuGroup = `site-menu-${navLabel}`;
-const header = localizedNav('header', currentLocale);
+const header = localizedNav('header', currentLocale, await builtPaths());
 // The link to the page being shown (docs/ia/navigation.md「無障礙」)
 const current = (href: string | undefined) => (href === path ? 'page' : undefined);
-const contact = node('contact');
-const search = node('search');
+const contact = node('contact', currentLocale);
+const search = node('search', currentLocale);
 // The 產品 menu is the mega menu: its overview link on top, then one column per family with its
 // products below the family link
 const groups = (item: NavItem) => item.children.filter((c) => c.children.length > 0);
