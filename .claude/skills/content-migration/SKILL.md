@@ -67,7 +67,7 @@ migratedAt: 2026-10-20                       # 擷取日期
 - 必須補上描述性 alt（依圖片實際內容撰寫，不寫「圖片」「banner」）
 - 低解析度或帶浮水印的圖不直接使用，在 PR 列為待替換
 - 客戶 logo、人物照片需確認授權，未確認者列為待確認。人物照片與含人物的圖庫照在授權確認前不放（M5-01 的產品 banner、#107 的顧問照片）；客戶名稱與 logo 依使用者決定照現站顯示（M5-03）
-- `heroImage` 會被模板拿來當 `og:image`，不裁切。寬高比不是 1200×630 的 banner（現站解決方案頁約 3:1）不寫進 `heroImage`，頁面用預設 OG 圖
+- offering 與 hub 的 `heroImage` 只拿來當 `og:image`，不裁切，寬高比不符的 banner 不填，見 [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁)
 - 雲端 session 的 network policy 可能擋下部分圖片網域。下載失敗的文章不寫入，列進 PR，不改成引用外部網址
 
 ## en、vi 的內容檔
