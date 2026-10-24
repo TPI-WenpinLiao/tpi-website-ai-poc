@@ -97,6 +97,22 @@ test('one-way hreflang, a target that was not built and a missing x-default are 
   assert.ok(problems.some((p) => p.startsWith('/about: x-default')));
 });
 
+test('a built version of the page that hreflang leaves out is reported, even when both sides agree', () => {
+  const pages = new Map([
+    ['/about', page('/about', { alternates: self('/about') })],
+    ['/en/about', page('/en/about', { alternates: self('/en/about', 'en') })],
+  ]);
+  const problems = metaProblems(pages, site([...pages.keys()]));
+  assert.ok(problems.includes('/about: hreflang leaves out /en/about, the en version that was built'));
+  assert.ok(problems.includes('/en/about: hreflang leaves out /about, the zh-TW version that was built'));
+});
+
+test('a language listed twice is reported', () => {
+  const alternates = [['zh-TW', '/about'], ['zh-TW', '/about'], ['x-default', '/about']];
+  const pages = new Map([['/about', page('/about', { alternates })]]);
+  assert.ok(metaProblems(pages, site(['/about'])).includes('/about: hreflang="zh-TW" is listed more than once'));
+});
+
 test('a page without a zh-TW version must not have x-default', () => {
   const pages = new Map([['/vi/x', page('/vi/x', { alternates: [['vi', '/vi/x'], ['x-default', '/vi/x']] })]]);
   assert.ok(metaProblems(pages, site(['/vi/x'])).some((p) => p.startsWith('/vi/x: x-default')));

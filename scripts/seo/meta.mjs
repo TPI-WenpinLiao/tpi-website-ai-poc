@@ -4,8 +4,9 @@
 // canonical is the page's own absolute URL; the Open Graph and Twitter tags are there and og:locale
 // is the URL locale's (OG_LOCALES); no robots meta with noindex (the site is kept out of search
 // engines by _headers and robots.txt only);
-// hreflang lists the page itself, every target was built and lists the same set back, x-default
-// points at the zh-TW version exactly when there is one; every JSON-LD block parses, and every page
+// hreflang lists the page itself and every other locale version that was built (the same path once
+// the locale prefix is stripped, ADR 0002), each language once, every target was built and lists the
+// same set back, x-default points at the zh-TW version exactly when there is one; every JSON-LD block parses, and every page
 // but the home, 404 and internal pages has a BreadcrumbList (content-model.md「內容類型總覽」); the sitemap
 // lists exactly the pages inSitemap() keeps (no internal or flow pages, src/lib/seo/indexing.ts), by
 // canonical, with the same hreflang as their <head>.
@@ -81,6 +82,7 @@ export function metaProblems(pages, sitemap) {
   const seen = { title: new Map(), description: new Map() };
   // hreflang: versions are compared by URL path, so the check does not depend on the origin
   const pathOf = (href) => URL.parse(href)?.pathname ?? href;
+  const builtVersions = Map.groupBy(heads.keys(), (path) => stripLocale(path));
 
   for (const [path, h] of heads) {
     const p = (msg) => problems.push(`${path}: ${msg}`);
@@ -129,6 +131,10 @@ export function metaProblems(pages, sitemap) {
     const versions = h.alternates.filter((a) => a.hreflang !== 'x-default');
     const self = versions.find((a) => pathOf(a.href) === path);
     if (!self || self.hreflang !== localeFromPath(path)) p(`hreflang does not list the page itself as ${localeFromPath(path)}`);
+    const listed = versions.map((a) => pathOf(a.href));
+    for (const other of builtVersions.get(stripLocale(path))) if (other !== path && !listed.includes(other)) p(`hreflang leaves out ${other}, the ${localeFromPath(other)} version that was built`);
+    const langs = h.alternates.map((a) => a.hreflang);
+    for (const lang of new Set(langs.filter((l, i) => langs.indexOf(l) !== i))) p(`hreflang="${lang}" is listed more than once`);
     for (const a of versions) {
       if (localeFromPath(pathOf(a.href)) !== a.hreflang) p(`hreflang="${a.hreflang}" points at ${a.href}, a page of another locale`);
       const target = heads.get(pathOf(a.href));
@@ -169,7 +175,8 @@ function main([dist = resolve(import.meta.dirname, '../../dist')]) {
   const file = join(dist, 'sitemap.xml');
   const problems = metaProblems(pages, existsSync(file) ? readFileSync(file, 'utf8') : null);
   for (const p of problems) console.log(p);
-  console.log(`${pages.size} pages and sitemap.xml checked, ${problems.length} SEO problems`);
+  const perLocale = Object.entries(Object.groupBy(pages.keys(), (path) => localeFromPath(path))).map(([l, ps]) => `${l} ${ps.length}`);
+  console.log(`${pages.size} pages (${perLocale.join(', ')}) and sitemap.xml checked, ${problems.length} SEO problems`);
   if (problems.length) process.exitCode = 1;
 }
 

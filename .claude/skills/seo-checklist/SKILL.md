@@ -24,7 +24,7 @@ description: 新增或修改任何頁面、版型、內容時使用。列出每�
 | 導覽與麵包屑 | 選單連結以 `<a href>` 輸出在靜態 HTML，不在 client 端產生；麵包屑沿 `nodes.csv` 的 `parent` 產生（`navigation.md`「SEO」） |
 | 列表分頁 | 第一頁不帶頁碼，第 2 頁起 `/{列表路徑}/page/{n}`，canonical 指向自己；篩選用分類頁路徑，不用 query string 產生要被收錄的頁面（ADR 0002） |
 | 結構化資料 | 依下表輸出 JSON-LD |
-| hreflang | 每頁列出實際存在的語系版本（含自己），雙向對應；`x-default` 指向 zh-TW 版，沒有 zh-TW 版的頁面不輸出 `x-default`（ADR 0002，由 `Seo.astro` 產生） |
+| hreflang | 每頁列出實際存在的語系版本（含自己），雙向對應；`x-default` 指向 zh-TW 版，沒有 zh-TW 版的頁面不輸出 `x-default`（ADR 0002，由 `Seo.astro` 產生）。`scripts/seo/meta.mjs` 擋下單向、指向沒有 build 的頁面、漏列已 build 的語系版本（去掉語系前綴後路徑相同）與重複的語系 |
 | sitemap | `dist/sitemap.xml` 列出所有頁面的 canonical 與 hreflang，排除內部頁（`INTERNAL_PATHS`）與流程頁（`FLOW_PATHS`，404、搜尋、表單送出後與退訂的頁面），兩份清單都在 `src/lib/seo/indexing.ts`。由 build 時的 `src/integrations/sitemap.ts` 產生；`robots.txt` 不加 `Sitemap:` |
 
 ## 頁面怎麼寫
