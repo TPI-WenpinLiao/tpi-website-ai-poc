@@ -20,8 +20,8 @@ import { externalPaths, urlPath } from '../i18n/routes.mjs';
 
 const SHOWN = 5;
 
-// Page nodes in docs/ia/nodes.csv that the navigation links to but that have no content yet (their
-// `note` says what is missing), so no page is built for them. Remove a path once its page is built.
+// Page nodes in docs/ia/nodes.csv that the navigation links to but that have no content entry yet
+// (src/content), so no page is built for them. Remove a path once its page is built.
 export const PENDING = [
   '/chatgpt-enterprise',
   '/cloudservice',
