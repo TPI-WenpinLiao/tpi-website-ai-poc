@@ -108,6 +108,35 @@ Claude 會依序：
 
 PR 開了之後 session 會持續監看，CI 失敗、review 留言都會自動喚醒 session 處理。
 
+## 視覺回歸
+
+quality-gate 的 `npm run check` 會用 `npm run test:visual` 把下列頁面的 full-page 截圖，和 `tests/visual/__screenshots__/` 的 baseline 比對。不同的像素超過 300 個就算失敗（理由寫在 `playwright.config.ts`）：
+
+- 首頁 `/`、`/en`、`/vi`
+- `/templates/<id>`：首頁以外每個模板的預覽頁，`dist/templates/` 有幾頁就測幾頁
+- 寬度 375、768、1280px，`prefers-reduced-motion: reduce`（3D 場景顯示靜態版），canvas 遮掉
+
+baseline 只在 CI 產生、只在 CI 比對，兩者都在同版本的 Playwright image（`mcr.microsoft.com/playwright:v<@playwright/test 的版本>-noble`）裡執行。雲端 session 與本機的 `npm run check` 會 skip 視覺回歸：貼近容器寬度的行在不同機器上換行不同，整頁會位移（#24 實測雲端 session 與 CI 39 張全部不同）。升級 `@playwright/test` 時，`quality-gate.yml` 與 `visual-baseline.yml` 的 image 版本要一起改，`npm run test:scripts` 會擋下不一致。
+
+### 失敗時
+
+1. quality-gate 的 log 會列出哪一頁、哪個寬度、差多少像素
+2. 要看圖時，到 workflow run 頁面下載 `playwright-report` artifact，解開後打開 `playwright-report/index.html`，可以並排比較 `Expected`（baseline）、`Received`（這次的截圖）、`Diff`（不同的像素標成紅色）。雲端 session 下載不到 artifact，只能看 log
+3. 判斷差異是不是這次變更想要的結果：
+   - 不是：修正樣式或內容，再 push
+   - 是：更新 baseline（下一節）
+
+### 更新 baseline
+
+以下變更會改到截圖，baseline 要跟著更新：改樣式、token、元件、模板，改首頁或模板預覽頁用到的內容，新增模板。
+
+1. 在 PR 加上 `update-visual-baseline` label。`visual-baseline.yml` 會在 Playwright image 裡 build、執行 `npm run test:visual:update`，把有變的截圖 commit 回 PR branch，再拿掉 label。畫面沒變的檔案內容不變，不會出現在 diff。刪除或改名模板時，舊的截圖不會被刪掉，要自己 `git rm`；留著的話 `tests/visual/pages.spec.ts` 的「every baseline belongs to a page」測試會失敗（這個測試在雲端 session 也會跑）
+2. 確認 commit 改到的截圖只限這次變更影響的頁面（workflow 的 job summary 會列出檔名）。雲端 session 先 `git pull`，再用 Read 看改動的截圖
+3. GitHub token 推的 commit 不會觸發 quality-gate。下一次 push 程式碼時 CI 才會用新的 baseline 比對；沒有其他要改的東西時，在 GitHub 上對 quality-gate 按 Re-run 不會生效（它跑的是舊的 head），要等下一個 commit
+4. PR body 的「preview 檢查重點」列出改動的截圖檔名與原因。reviewer 在 PR 的 Files changed 用 GitHub 的圖片 diff（2-up、Swipe、Onion skin）確認
+
+不要為了讓檢查通過而更新 baseline。差異不是這次變更想要的，就要修程式碼。
+
 ## 自動套用的 skill
 
 下列 skill 不需要手動呼叫，Claude 依工作內容自動讀取：

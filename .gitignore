@@ -11,3 +11,5 @@ dist/
 *.log
 .claude/settings.local.json
 .cache/
+playwright-report/
+test-results/

@@ -53,7 +53,7 @@ npm ci
 npm run dev
 ```
 
-推送前執行 `npm run check`（需要本機有 Chrome）。
+推送前執行 `npm run check`（需要本機有 Chrome）。視覺回歸在本機與雲端 session 都會 skip，只在 CI 比對，見 `docs/workflow.md`「視覺回歸」。
 
 ## 5. 開始工作
 

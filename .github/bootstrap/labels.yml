@@ -36,3 +36,8 @@
 - name: needs-decision
   color: "fbca04"
   description: Claude 停下等人決定，問題在 issue 或 PR 的留言
+
+# Workflow
+- name: update-visual-baseline
+  color: "c5def5"
+  description: 加在 PR 上：CI 重新產生視覺回歸 baseline 並 commit 回 PR branch（docs/workflow.md「視覺回歸」）

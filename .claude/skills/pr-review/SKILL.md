@@ -60,6 +60,7 @@ description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編�
 | 文件與資料來源一致 | 手寫的表格或清單在描述某個資料檔的某一類列時（例如「不進導覽的節點」對應 `navigation.csv` 的 `none` 列），把兩邊的 ID 各列成一份清單再比對：文件有、資料檔那一類沒有的，以及反過來的，都是發現。ID 只在別的資料檔（例如 `nodes.csv`）存在不算對上。手寫數字要從資料檔重新算一次。script 重跑沒有差異不代表手寫段落正確 |
 | `docs/status.md` 寫的是合併後的狀態 | 依 [`issue-ship` 第 3 步](../issue-ship/SKILL.md#3-更新-docsstatusmd)，假設這個 diff 已合併，逐項查：(1) 本 issue 寫成完成（`needs-design` 階段一寫中間狀態） (2)「Issue」段落中本 issue 以外的 issue 都已關閉且寫成完成；寫了其他 open PR 的 issue 是發現 (3) issue 在 head commit 之前就已關閉，PR head 與目前的 `main` 卻都沒有它的一行，是發現。只有 PR head 沒有、`main` 有的不算：合併時會帶進來 (4)「下一步」沒有留著本 issue 的項目；寫「可以開始」的 issue，依賴在合併後確實都已關閉。head commit 之後才開的 PR、才關閉的 issue，不算發現。(2)–(4) 用 `mcp__github__issue_read` 查；「待合併」由 `npm run check` 擋，不用另查 |
 | checkpoint 的產物沒有進 PR | PR：`get_files` 沒有 `.claude/progress/`，`get_commits` 沒有 `wip:` 開頭的 commit。無參數（還沒開 PR 的 branch）：branch 上的 `wip:` commit 會在 `/issue-ship` 合併，不算發現。規則見 [`checkpoint`](../checkpoint/SKILL.md) |
+| 視覺回歸 baseline 的變動有理由 | diff 有 `tests/visual/__screenshots__/` 時：每張改動的 baseline 都要在 PR body 寫出原因，且畫面變化符合這次變更的意圖（`docs/workflow.md`「視覺回歸」）。沒有改樣式或內容卻改了 baseline，或 body 沒有交代的 baseline，都是發現 |
 | 同一個決定只放在一個地方 | 同一份清單、數字、規則不得在兩個檔案各寫一份；第二份改為連結 |
 | devex 沒有被破壞 | 環境變數名稱、npm scripts、`.nvmrc`、SessionStart hook 有變動時，`docs/onboarding.md` 或 `docs/workflow.md` 有同步更新 |
 
