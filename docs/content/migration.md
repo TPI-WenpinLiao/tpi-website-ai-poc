@@ -109,7 +109,7 @@ news/zh-TW/585:
 | `image dropped (dropImagesFrom): …` | 確認拿掉圖後內文仍讀得懂；源站恢復後刪掉 `dropImagesFrom` 重跑 |
 | `authorType Person for author "…"` | 確認作者是人還是公司 |
 | `headings changed: …` | 對照現站，確認層級調整後語意沒有變 |
-| `link moved into <locale>: … → …` | 確認目標頁在該語系存在（M7 翻譯時） |
+| `link moved into <locale>: … → …` | 確認目標頁在該語系存在；不存在時 build 後的連結會改連到 zh-TW 版（`scripts/i18n/routes.mjs` 檢查） |
 | `current-site link not in redirects.csv: …` | 列為待確認：補 `redirects.csv` 的對照，或改連結 |
 | `broken link (broken-links.csv): …` | 依 `content-audit.md`「失效連結」修正或移除 |
 | `embed removed: …` | 確認影片是否要放回（M6-03） |
@@ -129,7 +129,7 @@ node scripts/content/migrate/spot-check.mjs --report <file.csv> --out <spot-chec
 ```
 
 - **需要看的文章**：轉換後的純文字比現站內文少 10% 以上，或圖片張數對不上（現站張數扣掉 `dropImagesFrom` 移除的圖與追蹤像素）。逐篇對照現站，找出漏掉的內容
-- **抽樣**：每個 type × locale 固定抽 5 篇（以 entry id 的雜湊排序，重跑結果相同），人工對照現站的標題、日期、作者、內文、圖片、表格與連結。zh-TW 看截圖，en、vi 的頁面還不會 build，看內容檔
+- **抽樣**：每個 type × locale 固定抽 5 篇（以 entry id 的雜湊排序，重跑結果相同），人工對照現站的標題、日期、作者、內文、圖片、表格與連結。zh-TW 看截圖（`--screenshots` 只拍 zh-TW），en、vi 看 `npm run build` 後的頁面
 - **連不到頁面的站內連結**：`dist/` 有 build 產出時，列出指向不存在頁面的 `<a href>`，例如連到沒有轉換的文章
 
 ## 成功案例

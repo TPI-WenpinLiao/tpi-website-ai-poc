@@ -29,7 +29,7 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 | 內容 | 產生方式 | 人工修正寫在 | 說明 |
 |---|---|---|---|
 | blog、新聞 | `node scripts/content/migrate/migrate.mjs` | `scripts/content/migrate/overrides.yaml`（alt、description、`authorType`、`dropImagesFrom`） | [`migration.md`](../../../docs/content/migration.md) |
-| 成功案例 | `node scripts/content/migrate/case-studies.mjs` | `scripts/content/migrate/case-studies.yaml`（客戶名稱、zh-TW description） | [`migration.md`「成功案例」](../../../docs/content/migration.md#成功案例) |
+| 成功案例 | `node scripts/content/migrate/case-studies.mjs` | `scripts/content/migrate/case-studies.yaml`（客戶名稱、各語系的 description、`seoTitle`） | [`migration.md`「成功案例」](../../../docs/content/migration.md#成功案例) |
 | 解決方案頁（`page_type` 為 `solution`）、`orient-ai`、`aiso` | `node scripts/content/migrate/offerings.mjs` | `scripts/content/migrate/offering-overrides.yaml` | [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁) |
 | ESG 顧問服務頁與顧問頁 | `node scripts/content/migrate/esg-advisory.mjs` | `scripts/content/migrate/esg-advisory-overrides.yaml` | [`migration.md`「ESG 顧問服務」](../../../docs/content/migration.md#esg-顧問服務) |
 | 產品頁、產品 hub | 手寫，`node scripts/design/offering-content.mjs` 對照現站；下載檔用 `node scripts/content/offering-files.mjs` | 內容檔本身；有意修正的現站錯字登記在 `offering-content.mjs` 的 `CORRECTIONS` | [`products.md`](../../../docs/content/products.md) |
@@ -70,9 +70,35 @@ migratedAt: 2026-10-20                       # 擷取日期
 - offering 與 hub 的 `heroImage` 只拿來當 `og:image`，不裁切，寬高比不符的 banner 不填，見 [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁)
 - 雲端 session 的 network policy 可能擋下部分圖片網域。下載失敗的文章不寫入，列進 PR，不改成引用外部網址
 
-## en、vi 的內容檔
+## 多語系內容
 
-現站有 en、vi 版本時，內容檔一起搬進版控（例外：產品頁與 hub，M5-01 只做 zh-TW；內容過時或不對應的法務 PDF，見 [`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)），但頁面只對有字串檔（`src/data/strings/<locale>.ts`）的語系產生，M7 補字串檔與翻譯後才上線。en、vi 的 description、alt、`seoTitle` 等修正延到 M7，M7 前要處理的事項記在 [`docs/status.md`「待辦備忘」](../../../docs/status.md#待辦備忘)。現站只有其他語系有內容時（zh-TW 合作夥伴頁是空的），從該語系翻譯，並在 PR 列為待確認。
+zh-TW、en、vi 都已上線（M7）。頁面只對有字串檔（`src/data/strings/<locale>.ts`）與首頁文案（`src/data/home/<locale>.ts`）的語系產生。啟用一個語系要有這兩個檔加上公司資料 `src/content/organization/<locale>.yaml`（footer 與各模板都讀它，沒有就 build 失敗），不用改共用檔案（#114）。改了 layout、元件或 `src/lib/ia/` 這些共用的部分後，用 `node scripts/i18n/locale-fixture.mjs <en|vi> --no-content` 確認 en、vi 頁面沒有漏翻的 zh-TW 文字（會再 build 一次，不在 `npm run check` 裡）。
+
+### 內容從哪裡來
+
+依序選第一個有的來源：
+
+1. 現站有該語系的頁面：照搬，與 zh-TW 用同一個轉換或對照 script（上方「依內容類型選工具」）。現站 en、vi 的錯字照抄，要改時登記成有意修正（例如 `offering-content.mjs` 的 `CORRECTIONS`）
+2. 現站沒有該語系、但 issue 或使用者決定要有這一頁：從其他語系翻譯，登記在對照 script 的 `TRANSLATED`（`offering-content.mjs`、`page-content.mjs`），對照時跳過，並在 PR 列為待確認。例如 vi 的 6 個產品頁與 2 個 hub 從 zh-TW 翻譯（M7-03）、zh-TW 合作夥伴頁從 en 翻譯（M5-06）
+3. 其他情況不產生該語系的頁面，連結會改連到 zh-TW 版（ADR 0002「缺翻譯的頁面」）。要不要翻譯由使用者決定，寫進計畫的「需使用者決定」，不要自己翻。法務文件只用公司提供的版本（PDF 附的英譯），不由 AI 翻譯。目前沒有產生的：
+   - vi 法務頁：現站 vi 的隱私權 PDF 是應徵者個資告知，不是網站隱私權政策（[`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)）
+   - en 免責聲明：現站的 en PDF 是 2020 年版，與現行的 zh-TW 版不同，不能當成公司提供的英文版；en 資訊安全政策：沒有英文版（[`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)）
+   - 現站 en 沒有的產品頁（digicare 等，`docs/status.md` 的 M7-02）：要不要補是 #39 PR 的待確認
+
+### 用語與標點
+
+- 產品名、頁面名稱、選單標籤與介面字串以 [`docs/i18n/glossary.csv`](../../../docs/i18n/glossary.csv) 為準，規則與確認流程見 [`glossary.md`](../../../docs/i18n/glossary.md)。詞彙表沒有的專有名詞，暫譯列進 `glossary.md` 的待確認表，不要每頁各自翻
+- 轉換 script 寫 en、vi 時用 `latinPunctuation`（`scripts/content/migrate/migrate.mjs`）把全形標點換成半形。`node scripts/i18n/routes.mjs` 擋下 en、vi 頁面上的漢字與全形標點，`lang="zh-TW"` 的元素除外
+- 同一份內容的各語系版本填相同的 `translationKey`，hreflang 與語系切換靠它對應，慣例見 [`content-model.md`「共用欄位」](../../../docs/ia/content-model.md#共用欄位)。blog 的現站 API 沒有跨語系對應，各語系目前各自獨立
+
+### 修正寫在哪裡
+
+en、vi 的 description、`seoTitle`、內文圖 alt 與 zh-TW 一樣寫進上方表格「人工修正寫在」的檔案，重跑 script，不改產出的內容檔。長度上限見 `seo-checklist`，轉換 script 的報告會標出超過的項目（`scripts/content/migrate/frontmatter.mjs` 的 `DESCRIPTION_MAX`、`TITLE_MAX`，title 以 HTML 跳脫後的長度計算）。
+
+### 改了 zh-TW 之後
+
+- 改了內容檔的事實（產品功能、數字、聯絡資訊等）時，同一個 `translationKey` 的 en、vi 檔一起改；不確定譯法時照改事實，譯文列進 PR 的待確認
+- 改了 `docs/ia/nodes.csv`、`navigation.csv` 或 `src/data/strings/zh-TW.ts` 時重跑 `node scripts/i18n/glossary.mjs`，新列與 zh-TW 改過的列是 `to-confirm`，補上 en、vi 後照抄進 `en.ts`、`vi.ts`（`glossary.mjs` 檢查兩邊一致）。節點與選單標籤沒有 en、vi 譯名時 build 失敗
 
 ## 不搬移的內容
 
