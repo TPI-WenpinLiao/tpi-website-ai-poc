@@ -156,4 +156,4 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
-- `npm run check` 的 LHCI 測 `lighthouserc.cjs` 的 `PAGES`：每個模板中全站量測分數最低的一頁，加上三語首頁與 404（ADR 0004）。載入 3D 的 4 頁（`scene: true`）performance 只 warn，#127 修好 TBT 後拿掉。全站量測用 `npm run lighthouse:all`，485 頁約 97 分鐘
+- `lighthouserc.cjs` 中載入 3D 的 4 頁（`scene: true`）performance 只 warn，#127 修好 TBT 後拿掉（ADR 0004）

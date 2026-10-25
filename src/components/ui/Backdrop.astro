@@ -29,7 +29,7 @@ async function sources(src: ImageMetadata, widths: number[]) {
   const sizes = [...new Set(widths.filter((w) => w < src.width).concat(src.width))];
   return Promise.all(
     FORMATS.map(async (format) => {
-      const variants = await Promise.all(sizes.map((width) => getImage({ src, width, format })));
+      const variants = await Promise.all(sizes.map((width) => getImage({ src, width, format, layout: 'none' })));
       return { type: `image/${format}`, srcset: variants.map((v, i) => `${v.src} ${sizes[i]}w`).join(', ') };
     }),
   );
@@ -39,7 +39,7 @@ async function sources(src: ImageMetadata, widths: number[]) {
 const NARROW = '(width < 64rem)';
 const mobileSources = mobile ? await sources(mobile, [480, 800]) : [];
 const imageSources = await sources(image, [960, 1440]);
-const fallback = await getImage({ src: image, width: Math.min(1440, image.width), format: 'webp' });
+const fallback = await getImage({ src: image, width: Math.min(1440, image.width), format: 'webp', layout: 'none' });
 ---
 
 <div class:list={['backdrop', `fade-${fade}`, `strength-${strength}`, `focus-${focus}`, { 'has-mobile': mobile }]} aria-hidden="true">

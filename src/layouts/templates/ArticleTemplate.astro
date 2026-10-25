@@ -69,7 +69,7 @@ if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URL
 const site = Astro.site;
 // A transformed copy, not image.src: a cover byte-identical to a body image shares one emitted file,
 // and with image.layout set Astro deletes that original once the body image is optimized (#87)
-const image = await getImage({ src: data.ogImage ?? data.coverImage, format: 'webp' });
+const image = await getImage({ src: data.ogImage ?? data.coverImage, format: 'webp', layout: 'none' });
 const context = {
   org: org.data,
   site,
