@@ -10,7 +10,7 @@ import { strings } from '../../data/strings';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
-import logo from '../../assets/brand/logo-horizontal-white.png';
+import logo from '../../assets/brand/logo-horizontal-white.svg';
 
 // Rendered height in px; matches --logo-height-lg (3rem)
 const LOGO_HEIGHT = 48;
@@ -33,7 +33,7 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
     <div class="top">
       <div class="company">
         <a class="brand" href={nodeHref('home', locale)}>
-          <Image class="logo" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} densities={[1, 2]} />
+          <Image class="logo" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} />
         </a>
         <dl class="contact">
           <div>

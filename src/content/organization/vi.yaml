@@ -3,7 +3,7 @@
 # 「Văn phòng Japan」; written in Vietnamese here. The vi footer's phone (+886 2 8751 1610) differs from
 # the headquarters phone on this page and on zh-TW; to be confirmed (status.md 下一步).
 name: TPIsoftware
-logo: ../../assets/brand/logo-vertical-color.png
+logo: ../../assets/brand/logo-vertical-color.svg
 offices:
   - id: taipei
     name: Trụ sở chính (Đài Bắc, Đài Loan)

@@ -23,7 +23,7 @@ import { pageLocales } from '../../lib/i18n/routes';
 import { strings } from '../../data/strings';
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
-import logo from '../../assets/brand/logo-symbol-white.png';
+import logo from '../../assets/brand/logo-symbol-white.svg';
 
 interface Props {
   // Accessible name of the <nav>; must be unique when several headers share a page
@@ -38,7 +38,7 @@ const path = normalizePath(Astro.url.pathname);
 const currentLocale = localeFromPath(path);
 const t = strings(currentLocale);
 const { navLabel = t.mainNav, skipTo = '#main', open, locales = pageLocales(path) } = Astro.props;
-// Rendered height in px; matches --logo-height (2rem) so the 1x/2x files fit the box
+// Rendered height in px; matches --logo-height (2rem)
 const LOGO_HEIGHT = 32;
 // One exclusive group per header; /design-system shows several headers, each with its own navLabel
 const menuGroup = `site-menu-${navLabel}`;
@@ -57,7 +57,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
   {skipTo && <a class="skip" href={skipTo}>{t.skipToMain}</a>}
   <div class="bar">
     <a class="brand" href={nodeHref('home', currentLocale)}>
-      <Image class="logo" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} densities={[1, 2]} loading="eager" />
+      <Image class="logo" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} loading="eager" />
     </a>
 
     <nav class="desktop-nav" aria-label={navLabel}>
