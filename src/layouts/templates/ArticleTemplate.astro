@@ -6,7 +6,7 @@
 // Tags are plain labels until the listing's tag filter exists (M6).
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, getEntry, render } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import PageLayout from '../PageLayout.astro';
 import PageHero from '../../components/ui/PageHero.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
@@ -67,7 +67,9 @@ const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
 const site = Astro.site;
-const image = data.ogImage ?? data.coverImage;
+// A transformed copy, not image.src: a cover byte-identical to a body image shares one emitted file,
+// and with image.layout set Astro deletes that original once the body image is optimized (#87)
+const image = await getImage({ src: data.ogImage ?? data.coverImage, format: 'webp' });
 const context = {
   org: org.data,
   site,
@@ -85,7 +87,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   title={data.seoTitle ?? data.title}
   description={data.description}
   type="article"
-  image={{ src: image.src, width: image.width, height: image.height, alt: data.title }}
+  image={{ src: image.src, width: image.attributes.width, height: image.attributes.height, alt: data.title }}
   jsonLd={jsonLd}
   translations={translations}
 >
@@ -116,8 +118,8 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   </PageHero>
 
   <Surface tone="light" width="reading">
-    {/* sizes: --reading-max-width (46rem) plus the gutters */}
-    <Image class="cover" src={data.coverImage} alt="" widths={[720, 1440]} sizes="(width >= 50rem) 46rem, 100vw" loading="eager" fetchpriority="high" />
+    {/* sizes: --reading-max-width (46rem) plus the gutters; below that, the viewport less the 1rem minimum gutters, so a 412px phone at 1.75x picks 720w */}
+    <Image class="cover" src={data.coverImage} alt="" widths={[720, 1440]} sizes="(width >= 50rem) 46rem, calc(100vw - 2rem)" loading="eager" fetchpriority="high" />
     {
       entry.body?.trim() && (
         <Prose>

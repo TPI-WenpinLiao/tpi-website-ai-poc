@@ -14,7 +14,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     # The visual baselines (tests/visual/) are taken in this image by visual-baseline.yml, and only
     # in CI: text near a line-width threshold wraps differently on other machines (#24). Its tag
     # follows @playwright/test in package.json (scripts/lib/playwright-image.test.mjs).

@@ -106,12 +106,13 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 ### M8 驗收
 
 - logo 改用 AI 檔轉出的 SVG 完成（#122）：`node scripts/design/import-brand.mjs <AI 檔資料夾>` 用 `pdftocairo` 把行銷部門的 AI 檔轉成 SVG，刪掉反白版的預覽底色與空字形、裁掉留白，產生 `src/assets/brand/logo-*.svg`、favicon 與 apple-touch-icon；header、footer 與 `public/og/default.png` 改用 SVG，顯示高度不變；JSON-LD 的 organization `logo` 用 script 從 SVG 產生的 PNG。AI 原始檔不進 repo（`docs/design/brand-assets.md`）
+- `npm run check` 的 LHCI 涵蓋所有模板完成（#87）：`lighthouserc.cjs` 的 `PAGES` 是每個模板在全站量測中分數最低的一頁，加上三語首頁與 404，共 15 頁；`scripts/lhci-prepare.mjs` 在路徑不存在或有模板沒有代表頁時失敗（ADR 0004）。`npm run lighthouse:all` 測全部 485 頁，第一次 202 頁沒達標，修掉 vi 字型（多下載 `latin-ext` subset）、新聞內頁圖片（手機下載 1440w 封面與 1600px 內文原檔）與 `/en` 的「Learn More」連結文字後，剩下載入 3D 的 59 頁，交給 #127，這段期間 3D 頁的 performance 只 warn
 
 ## 下一步
 
 - M8-01 全站驗收（#43）可以開始
 - M3-08 動態規範（#55）可以開始
-- [chore] LHCI 涵蓋所有頁面（#87）可以開始
+- 3D 場景頁面的 TBT（#127）可以開始：載入 3D 的頁面是全站唯一沒達到 performance 門檻的頁面，`lighthouserc.cjs` 暫時只 warn
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落
@@ -155,4 +156,4 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
-- `npm run check` 的 LHCI 用 `staticDistDir` 自動探索，只測前 5 個 URL（M3-07 時 build 出 16 頁只測 5 頁），其餘頁面沒有 Lighthouse 關卡，由 #87 處理
+- `npm run check` 的 LHCI 測 `lighthouserc.cjs` 的 `PAGES`：每個模板中全站量測分數最低的一頁，加上三語首頁與 404（ADR 0004）。載入 3D 的 4 頁（`scene: true`）performance 只 warn，#127 修好 TBT 後拿掉。全站量測用 `npm run lighthouse:all`，485 頁約 97 分鐘

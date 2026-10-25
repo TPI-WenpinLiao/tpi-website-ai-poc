@@ -30,7 +30,8 @@ const orientAi = {
   eyebrow: quoted('Enterprise Agentic AI Platform', HOME_EN),
   title: quoted('Operationalizing AI for Value', HOME_EN),
   features: [quoted('Agent Collaboration', HOME_EN), quoted('AI Governance', HOME_EN), quoted('Maximized ROI', HOME_EN)],
-  action: quoted('Learn More', HOME_EN),
+  // The page's "Learn More" fails Lighthouse's link-text audit; worded like the zh-TW「探索 OrientAI」
+  action: quoted('Explore OrientAI', HOME_EN, 'Learn More'),
 };
 
 const industryLines: Record<string, Sourced> = {

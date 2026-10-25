@@ -81,7 +81,7 @@ const approachIndex = data.challenge ? '02' : '01';
     <Breadcrumb slot="breadcrumb" node="case-study" current={data.title} />
     {
       data.client.disclosed && data.client.logo && (
-        <Image slot="actions" class="logo" src={data.client.logo} alt={data.client.name} height={48} />
+        <Image slot="actions" class="logo" src={data.client.logo} alt={data.client.name} height={48} layout="none" />
       )
     }
     {data.coverImage && <Image slot="visual" class="cover" src={data.coverImage} alt="" widths={[560, 1120]} sizes="(width >= 64rem) 34rem, 100vw" loading="eager" />}

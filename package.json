@@ -17,7 +17,8 @@
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
     "validate:html": "html-validate \"dist/**/*.html\"",
-    "lighthouse": "node scripts/lhci-prepare.mjs && lhci autorun"
+    "lighthouse": "node scripts/lhci-prepare.mjs && lhci autorun",
+    "lighthouse:all": "node scripts/lhci-prepare.mjs && LHCI_ALL=1 lhci autorun"
   },
   "dependencies": {
     "astro": "^7.4.1",
