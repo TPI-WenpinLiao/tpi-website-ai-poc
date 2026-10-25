@@ -38,7 +38,7 @@ M3-04（#17）到 #122 之前，網站用的是行銷部門的 PNG 匯出檔，�
 | `logo-symbol-color.svg` | 符號、彩色 | 327.8×191 | 產生 favicon 與 apple-touch-icon | `TPI_Logo_OL_Color Symbol.ai` |
 | `logo-horizontal-color.svg` | 橫式中英、彩色 | 448.5×109 | 目前頁面沒有用到，留給亮色頁面 | `TPI_Logo_OL_Color Horizontal Logo_Ch-En.ai` |
 
-JSON-LD 的 `logo` 用 SVG：Google 要求 Organization logo 是 Google 圖片支援的格式、至少 112×112，Search Central 的文件更新紀錄在 2020-06-10 把 SVG 加進 Logo 結構化資料支援的格式。
+JSON-LD 的 `logo` 用 SVG。Google 要求 Organization logo 是 Google 圖片支援的格式、至少 112×112；依搜尋結果摘要，Search Central 的文件更新紀錄在 2020-06-10 把 SVG 加進 Logo 結構化資料支援的格式。#122 的 session 連不到 `developers.google.com`，沒讀到原文，列在「待確認」。
 
 衍生檔：
 
@@ -97,4 +97,6 @@ M3-07（#54）選定的方向 B Modular Stack 由 three.js 在瀏覽器產生抽
 
 ## 待確認
 
-無。
+| # | 項目 | 現況 | 需要誰確認 |
+|---|---|---|---|
+| 1 | Google 是否接受 SVG 當 Organization logo：讀 Search Central 的 Organization 結構化資料文件與文件更新紀錄 | JSON-LD `logo` 指向 `logo-vertical-color.svg`。不接受的話，改由 `import-brand.mjs` 另產 PNG 給 JSON-LD | 使用者 |
