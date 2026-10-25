@@ -101,11 +101,14 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - M7-05 M7 收尾完成（#42）：`content-migration` 的「en、vi 的內容檔」改寫成「多語系內容」：en、vi 內容的來源順序（現站該語系 → 決定要有這一頁時從其他語系翻譯並登記 `TRANSLATED` → 其他情況不產生頁面、連到 zh-TW 版，法務文件不由 AI 翻譯）、用語照 `glossary.csv`、description 與 `seoTitle` 等修正寫在各類型的 overrides、改了 zh-TW 之後要跟著改的地方；`seo-checklist` 加上「多語系頁面」；`CLAUDE.md` 的語系、IA 與內容規則指向這兩處。blog 三語的 `translationKey` 在 M7 沒有對應，仍列在 `content-model.md`「待確認」
 - M7 語系共用基礎完成（#114）：加上 `src/data/strings/<locale>.ts` 與 `src/data/home/<locale>.ts` 就啟用該語系，不用改共用檔案。選單、footer、麵包屑與 `BreadcrumbList` 的名稱在 en、vi 讀 `docs/i18n/glossary.csv`，沒有譯名時 build 失敗（`docs/ia/navigation.md`「語系」）；首頁改為 `HomeTemplate` 加 `src/pages/[locale]/index.astro`；`og:locale` 是 `zh_TW`／`en_US`／`vi_VN`，en、vi 的 title 後綴是 ` | TPIsoftware`；站內連結在該語系沒有頁面時連到 zh-TW 版（`src/lib/ia/built.ts`），listing 的 hreflang 依各語系實際頁數；`routes.mjs` 新增 en、vi 連到未產生頁面與檔案連結的檢查。`node scripts/i18n/locale-fixture.mjs <en|vi> --no-content` 用測試字串檔驗證，兩語都通過
 
+### M8 驗收
+
+- logo 改用 AI 檔轉出的 SVG 完成（#122）：`node scripts/design/import-brand.mjs <AI 檔資料夾>` 用 `pdftocairo` 把行銷部門的 AI 檔轉成 SVG，刪掉反白版的預覽底色與空字形、裁掉留白，產生 `src/assets/brand/logo-*.svg`、favicon 與 apple-touch-icon；header、footer 與 `public/og/default.png` 改用 SVG，顯示高度不變；JSON-LD 的 organization `logo` 用 script 從 SVG 產生的 PNG。AI 原始檔不進 repo（`docs/design/brand-assets.md`）
+
 ## 下一步
 
 - M8-01 全站驗收（#43）可以開始
 - M3-08 動態規範（#55）可以開始
-- 提供 logo AI 檔，收到後處理 [chore] logo 改用 AI 檔轉出的 SVG（#122）
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
@@ -145,7 +148,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - i18n 字串檔在 `src/data/strings/<locale>.ts`（M4-04 決定）：介面字串與 listing、utility、contact 頁的描述。這些頁沒有內容檔，只為有字串檔的語系產生；描述是暫定文案，上線前由內容負責人替換。有字串檔就算啟用該語系，同時要有首頁文案 `src/data/home/<locale>.ts`（#114）
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
-- `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），沒有使用規範（`docs/design/brand-assets.md`）；AI 檔轉 SVG 在 #122 處理
+- `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 是行銷部門 AI 檔轉出的 SVG（`node scripts/design/import-brand.mjs <AI 檔資料夾>` 匯入 `src/assets/brand/`、favicon，OG 圖由 `og-image.mjs` 產生），沒有使用規範（`docs/design/brand-assets.md`）
 - 首頁行動版 Lighthouse performance 中位數 0.94（`node scripts/design/lighthouse-3d.mjs /`，2026-10-23，各跑 3 次），單次在 0.91–0.96 之間浮動。M4-04 比較了三種 CSS 載入方式：現狀（3 個 CSS 檔）、`build.inlineStylesheets: 'always'`、小檔 inline，分數都是 0.94；全部 inline 讓 FCP 快約 450 ms、LCP 快約 150 ms，但每頁 HTML 從 23 KB 變 89 KB、換頁沒有 CSS 快取，所以維持現狀。扣分主要來自 3D chunk 的 TBT。preview 上的真機量測還沒做
 - 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；文章已在 M5-05 遷移，改讀 content collections 並刪除這個檔案的工作在「下一步」。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」

@@ -1,6 +1,6 @@
 # Source: https://www.tpisoftware.com/about-us「昕力據點」 (every office listed there, in its order; the
-# Bangkok subsidiary has no address on the site); logo from the brand team's PNG exports
-# (scripts/design/import-brand.mjs)
+# Bangkok subsidiary has no address on the site); logo is a PNG that
+# scripts/design/import-brand.mjs renders from the brand team's AI file (docs/design/brand-assets.md)
 name: 昕力資訊
 alternateName: [TPIsoftware]
 logo: ../../assets/brand/logo-vertical-color.png

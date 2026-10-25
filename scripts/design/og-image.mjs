@@ -133,7 +133,7 @@ body {
 async function main([out = join(ROOT, 'public/og/default.png')]) {
   const html = template(
     readFileSync(join(ROOT, 'src/styles/tokens.css'), 'utf8'),
-    `data:image/png;base64,${readFileSync(join(ROOT, 'src/assets/brand/logo-horizontal-white.png')).toString('base64')}`,
+    `data:image/svg+xml;base64,${readFileSync(join(ROOT, 'src/assets/brand/logo-horizontal-white.svg')).toString('base64')}`,
   );
   const dir = mkdtempSync(join(tmpdir(), 'og-'));
   const file = join(dir, 'og.html');
