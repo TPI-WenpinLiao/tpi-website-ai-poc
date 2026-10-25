@@ -43,6 +43,6 @@
 | 環境 | 本 PR 前（5 個 URL） | 本 PR（15 個 URL） |
 |---|---|---|
 | 雲端 session，`time npm run check` | 7 分 0 秒 | 11 分 56 秒 |
-| CI，quality-gate | 6–8 分鐘 | 待 CI |
+| CI，quality-gate | 6–8 分鐘 | PR #128 的 quality-gate run |
 
 quality-gate 的 `timeout-minutes` 從 20 調到 30。
