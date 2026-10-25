@@ -74,7 +74,7 @@
 
 帳號方案：ChatGPT Enterprise（使用者 2026-10-25 確認）。
 
-授權：公司與 OpenAI 的 Enterprise 合約對輸出內容商用的規定沒有查證（這個環境連不到 openai.com），待確認。
+授權：公司的 ChatGPT Enterprise 合約允許使用生成的影像（使用者 2026-10-25 確認）。
 
 | 檔案 | 用在哪裡 |
 |---|---|
@@ -92,4 +92,3 @@ M3-07（#54）選定的方向 B Modular Stack 由 three.js 在瀏覽器產生抽
 | # | 項目 | 現況 | 需要誰提供 |
 |---|---|---|---|
 | 1 | logo AI 檔：符號（彩色、反白）、橫式中英（彩色、反白）、直式中文（彩色）。使用者決定轉成 SVG 取代 PNG（2026-10-25），收到後在 #122 匯入 | 網站用 PNG，header 的 2x 顯示靠 PNG 的解析度 | 使用者 |
-| 2 | 公司與 OpenAI 的 Enterprise 合約是否允許 `src/assets/design/` 影像商用 | 生圖工具與帳號方案已確認是 ChatGPT Enterprise | 使用者或合約負責人 |
