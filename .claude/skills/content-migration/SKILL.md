@@ -29,7 +29,7 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 | 內容 | 產生方式 | 人工修正寫在 | 說明 |
 |---|---|---|---|
 | blog、新聞 | `node scripts/content/migrate/migrate.mjs` | `scripts/content/migrate/overrides.yaml`（alt、description、`authorType`、`dropImagesFrom`） | [`migration.md`](../../../docs/content/migration.md) |
-| 成功案例 | `node scripts/content/migrate/case-studies.mjs` | `scripts/content/migrate/case-studies.yaml`（客戶名稱、zh-TW description） | [`migration.md`「成功案例」](../../../docs/content/migration.md#成功案例) |
+| 成功案例 | `node scripts/content/migrate/case-studies.mjs` | `scripts/content/migrate/case-studies.yaml`（客戶名稱、各語系的 description、`seoTitle`） | [`migration.md`「成功案例」](../../../docs/content/migration.md#成功案例) |
 | 解決方案頁（`page_type` 為 `solution`）、`orient-ai`、`aiso` | `node scripts/content/migrate/offerings.mjs` | `scripts/content/migrate/offering-overrides.yaml` | [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁) |
 | ESG 顧問服務頁與顧問頁 | `node scripts/content/migrate/esg-advisory.mjs` | `scripts/content/migrate/esg-advisory-overrides.yaml` | [`migration.md`「ESG 顧問服務」](../../../docs/content/migration.md#esg-顧問服務) |
 | 產品頁、產品 hub | 手寫，`node scripts/design/offering-content.mjs` 對照現站；下載檔用 `node scripts/content/offering-files.mjs` | 內容檔本身；有意修正的現站錯字登記在 `offering-content.mjs` 的 `CORRECTIONS` | [`products.md`](../../../docs/content/products.md) |
@@ -72,15 +72,18 @@ migratedAt: 2026-10-20                       # 擷取日期
 
 ## 多語系內容
 
-zh-TW、en、vi 都已上線（M7）。頁面只對有字串檔（`src/data/strings/<locale>.ts`）與首頁文案（`src/data/home/<locale>.ts`）的語系產生，加上這兩個檔就啟用該語系，不用改共用檔案（#114）。聯絡頁與產品頁另外要有該語系的公司資料 `src/content/organization/<locale>.yaml`，沒有時 build 失敗。改了 layout、元件或 `src/lib/ia/` 這些共用的部分後，用 `node scripts/i18n/locale-fixture.mjs <en|vi> --no-content` 確認 en、vi 頁面沒有漏翻的 zh-TW 文字（會再 build 一次，不在 `npm run check` 裡）。
+zh-TW、en、vi 都已上線（M7）。頁面只對有字串檔（`src/data/strings/<locale>.ts`）與首頁文案（`src/data/home/<locale>.ts`）的語系產生。啟用一個語系要有這兩個檔加上公司資料 `src/content/organization/<locale>.yaml`（footer 與各模板都讀它，沒有就 build 失敗），不用改共用檔案（#114）。改了 layout、元件或 `src/lib/ia/` 這些共用的部分後，用 `node scripts/i18n/locale-fixture.mjs <en|vi> --no-content` 確認 en、vi 頁面沒有漏翻的 zh-TW 文字（會再 build 一次，不在 `npm run check` 裡）。
 
 ### 內容從哪裡來
 
 依序選第一個有的來源：
 
 1. 現站有該語系的頁面：照搬，與 zh-TW 用同一個轉換或對照 script（上方「依內容類型選工具」）。現站 en、vi 的錯字照抄，要改時登記成有意修正（例如 `offering-content.mjs` 的 `CORRECTIONS`）
-2. 現站只有其他語系：從那個語系翻譯，登記在對照 script 的 `TRANSLATED`（`offering-content.mjs`、`page-content.mjs`），對照時跳過，並在 PR 列為待確認。例如 vi 的 6 個產品頁與 2 個 hub 從 zh-TW 翻譯（M7-03）、zh-TW 合作夥伴頁從 en 翻譯（M5-06）
-3. 都沒有，或內容過時、對不上：不產生該語系的頁面，連結會改連到 zh-TW 版（ADR 0002「缺翻譯的頁面」）。目前 vi 沒有法務頁，en 沒有免責聲明、資訊安全政策與現站 en 沒有的產品頁（[`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)、`docs/status.md` 的 M7-02）
+2. 現站沒有該語系、但 issue 或使用者決定要有這一頁：從其他語系翻譯，登記在對照 script 的 `TRANSLATED`（`offering-content.mjs`、`page-content.mjs`），對照時跳過，並在 PR 列為待確認。例如 vi 的 6 個產品頁與 2 個 hub 從 zh-TW 翻譯（M7-03）、zh-TW 合作夥伴頁從 en 翻譯（M5-06）
+3. 其他情況不產生該語系的頁面，連結會改連到 zh-TW 版（ADR 0002「缺翻譯的頁面」）。要不要翻譯由使用者決定，寫進計畫的「需使用者決定」，不要自己翻。法務文件只用公司提供的版本（PDF 附的英譯），不由 AI 翻譯。目前沒有產生的：
+   - vi 法務頁：現站 vi 的隱私權 PDF 是應徵者個資告知，不是網站隱私權政策（[`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)）
+   - en 免責聲明、資訊安全政策：沒有英文版（[`company-pages.md`「en 法務頁」](../../../docs/content/company-pages.md#en-法務頁)）
+   - 現站 en 沒有的產品頁（digicare 等，`docs/status.md` 的 M7-02）：要不要補是 #39 PR 的待確認
 
 ### 用語與標點
 
@@ -90,7 +93,7 @@ zh-TW、en、vi 都已上線（M7）。頁面只對有字串檔（`src/data/stri
 
 ### 修正寫在哪裡
 
-en、vi 的 description、`seoTitle`、內文圖 alt 與 zh-TW 一樣寫進該類型的 overrides 檔（`overrides.yaml`、`case-studies.yaml`、`offering-overrides.yaml`、`esg-advisory-overrides.yaml`），重跑 script，不改產出的內容檔。長度上限：description zh-TW 80 字、en 與 vi 160 字元；`<title>` 加上後綴後 70 字元，以 HTML 跳脫後的長度計算，超過時寫 `seoTitle`（`scripts/content/migrate/frontmatter.mjs` 的報告會標出）。
+en、vi 的 description、`seoTitle`、內文圖 alt 與 zh-TW 一樣寫進上方表格「人工修正寫在」的檔案，重跑 script，不改產出的內容檔。長度上限見 `seo-checklist`，轉換 script 的報告會標出超過的項目（`scripts/content/migrate/frontmatter.mjs` 的 `DESCRIPTION_MAX`、`TITLE_MAX`，title 以 HTML 跳脫後的長度計算）。
 
 ### 改了 zh-TW 之後
 
