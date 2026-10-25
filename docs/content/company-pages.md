@@ -56,7 +56,7 @@ node scripts/content/legal-pdf.mjs --check   # 不寫檔；內容檔與 PDF 不�
 - 寫檔前，每個段落（不含號碼與代號）都必須出現在 PDF 文字裡
 - en 的 `title`、`description` 寫在 `DOCS` 的 `en`
 
-免責聲明與資訊安全政策沒有英文版，不產生 en 頁。
+免責聲明與資訊安全政策不產生 en 頁：免責聲明只有 2020 年版的英文 PDF（見下方「沒有轉換的 PDF」），資訊安全政策沒有英文版。
 
 ### 沒有轉換的 PDF
 

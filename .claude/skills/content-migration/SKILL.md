@@ -82,7 +82,7 @@ zh-TW、en、vi 都已上線（M7）。頁面只對有字串檔（`src/data/stri
 2. 現站沒有該語系、但 issue 或使用者決定要有這一頁：從其他語系翻譯，登記在對照 script 的 `TRANSLATED`（`offering-content.mjs`、`page-content.mjs`），對照時跳過，並在 PR 列為待確認。例如 vi 的 6 個產品頁與 2 個 hub 從 zh-TW 翻譯（M7-03）、zh-TW 合作夥伴頁從 en 翻譯（M5-06）
 3. 其他情況不產生該語系的頁面，連結會改連到 zh-TW 版（ADR 0002「缺翻譯的頁面」）。要不要翻譯由使用者決定，寫進計畫的「需使用者決定」，不要自己翻。法務文件只用公司提供的版本（PDF 附的英譯），不由 AI 翻譯。目前沒有產生的：
    - vi 法務頁：現站 vi 的隱私權 PDF 是應徵者個資告知，不是網站隱私權政策（[`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)）
-   - en 免責聲明、資訊安全政策：沒有英文版（[`company-pages.md`「en 法務頁」](../../../docs/content/company-pages.md#en-法務頁)）
+   - en 免責聲明：現站的 en PDF 是 2020 年版，與現行的 zh-TW 版不同，不能當成公司提供的英文版；en 資訊安全政策：沒有英文版（[`company-pages.md`「沒有轉換的 PDF」](../../../docs/content/company-pages.md#沒有轉換的-pdf)）
    - 現站 en 沒有的產品頁（digicare 等，`docs/status.md` 的 M7-02）：要不要補是 #39 PR 的待確認
 
 ### 用語與標點
