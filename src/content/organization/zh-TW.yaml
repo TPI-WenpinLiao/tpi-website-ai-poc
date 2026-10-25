@@ -3,7 +3,7 @@
 # (scripts/design/import-brand.mjs)
 name: 昕力資訊
 alternateName: [TPIsoftware]
-logo: ../../assets/brand/logo-vertical-color.svg
+logo: ../../assets/brand/logo-vertical-color.png
 offices:
   - id: taipei
     name: 台北總部

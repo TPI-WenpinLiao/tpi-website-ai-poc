@@ -8,7 +8,7 @@
 
 | 位置 | 放什麼 | 怎麼進來 |
 |---|---|---|
-| `src/assets/brand/` | 網站實際使用的 logo，檔名 `logo-<版本>-<顏色>.svg` | `node scripts/design/import-brand.mjs <AI 檔資料夾>`，不手動放檔 |
+| `src/assets/brand/` | 網站實際使用的 logo，檔名 `logo-<版本>-<顏色>.svg`；JSON-LD 用的 `logo-vertical-color.png` | `node scripts/design/import-brand.mjs <AI 檔資料夾>`，不手動放檔 |
 | `public/favicon.png`、`public/apple-touch-icon.png` | 瀏覽器分頁與 iOS 主畫面圖示 | 同上，由彩色符號產生 |
 | `public/og/default.png` | 沒有自己 OG 圖的頁面使用的預設分享圖 | `node scripts/design/og-image.mjs`，由反白橫式 logo 與 `tokens.css` 產生 |
 | `src/assets/design/` | 設計用的抽象影像 | `node scripts/design/import-image.mjs`（見 `docs/design/image-prompts.md`） |
@@ -34,16 +34,17 @@ M3-04（#17）到 #122 之前，網站用的是行銷部門的 PNG 匯出檔，�
 |---|---|---|---|---|
 | `logo-symbol-white.svg` | 符號、反白 | 327.8×191 | `SiteHeader`（深色 header） | `TPI_Logo_OL_White Symbol.ai` |
 | `logo-horizontal-white.svg` | 橫式中英、反白 | 447.9×108.7 | `SiteFooter`、`public/og/default.png` | `TPI_Logo_OL_White Horizontal Logo_Ch-En.ai` |
-| `logo-vertical-color.svg` | 直式中文、彩色 | 279.9×241.6 | `src/content/organization/*.yaml` 的 `logo`（JSON-LD `Organization`） | `TPI_Logo_OL_Color Vertical Logo_Ch.ai` |
+| `logo-vertical-color.svg` | 直式中文、彩色 | 279.9×241.6 | 產生 JSON-LD 用的 PNG | `TPI_Logo_OL_Color Vertical Logo_Ch.ai` |
 | `logo-symbol-color.svg` | 符號、彩色 | 327.8×191 | 產生 favicon 與 apple-touch-icon | `TPI_Logo_OL_Color Symbol.ai` |
 | `logo-horizontal-color.svg` | 橫式中英、彩色 | 448.5×109 | 目前頁面沒有用到，留給亮色頁面 | `TPI_Logo_OL_Color Horizontal Logo_Ch-En.ai` |
 
-JSON-LD 的 `logo` 用 SVG。Google 要求 Organization logo 是 Google 圖片支援的格式、至少 112×112；依搜尋結果摘要，Search Central 的文件更新紀錄在 2020-06-10 把 SVG 加進 Logo 結構化資料支援的格式。#122 的 session 連不到 `developers.google.com`，沒讀到原文，列在「待確認」。
+JSON-LD 的 `logo` 用 PNG。Google 要求 Organization logo 是 Google 圖片支援的格式、至少 112×112；SVG 是否支援沒有從 Google 原文確認（#122 的 session 連不到 `developers.google.com`），所以使用者決定改用 PNG（2026-10-25）。
 
 衍生檔：
 
 | 檔案 | 尺寸 | 產生方式 |
 |---|---|---|
+| `src/assets/brand/logo-vertical-color.png` | 560×483 | `import-brand.mjs`，彩色直式 SVG 以 2 倍大小點陣化；`src/content/organization/*.yaml` 的 `logo`（JSON-LD `Organization`） |
 | `public/favicon.png` | 48×48 | `import-brand.mjs`，彩色符號 SVG 置中、透明背景 |
 | `public/apple-touch-icon.png` | 180×180 | `import-brand.mjs`，彩色符號 SVG 置中、白色背景（iOS 會把透明填成黑色） |
 | `public/og/default.png` | 1200×630 | `og-image.mjs`，反白橫式 SVG 加上 `tokens.css` 的場景圖樣，不含文字 |
@@ -97,6 +98,4 @@ M3-07（#54）選定的方向 B Modular Stack 由 three.js 在瀏覽器產生抽
 
 ## 待確認
 
-| # | 項目 | 現況 | 需要誰確認 |
-|---|---|---|---|
-| 1 | Google 是否接受 SVG 當 Organization logo：讀 Search Central 的 Organization 結構化資料文件與文件更新紀錄 | JSON-LD `logo` 指向 `logo-vertical-color.svg`。不接受的話，改由 `import-brand.mjs` 另產 PNG 給 JSON-LD | 使用者 |
+無。

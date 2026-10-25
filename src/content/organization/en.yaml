@@ -2,7 +2,7 @@
 # order and wording; the Bangkok subsidiary and the Jakarta sales office have no address on the
 # site); company name per docs/i18n/glossary.csv brand:tpisoftware; logo as in zh-TW.yaml
 name: TPIsoftware
-logo: ../../assets/brand/logo-vertical-color.svg
+logo: ../../assets/brand/logo-vertical-color.png
 offices:
   - id: taipei
     name: Headquarter (Taipei, Taiwan)

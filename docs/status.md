@@ -103,7 +103,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 
 ### M8 驗收
 
-- logo 改用 AI 檔轉出的 SVG 完成（#122）：`node scripts/design/import-brand.mjs <AI 檔資料夾>` 用 `pdftocairo` 把行銷部門的 AI 檔轉成 SVG，刪掉反白版的預覽底色與空字形、裁掉留白，產生 `src/assets/brand/logo-*.svg`、favicon 與 apple-touch-icon；header、footer、organization `logo` 與 `public/og/default.png` 改用 SVG，顯示高度不變。AI 原始檔不進 repo（`docs/design/brand-assets.md`）
+- logo 改用 AI 檔轉出的 SVG 完成（#122）：`node scripts/design/import-brand.mjs <AI 檔資料夾>` 用 `pdftocairo` 把行銷部門的 AI 檔轉成 SVG，刪掉反白版的預覽底色與空字形、裁掉留白，產生 `src/assets/brand/logo-*.svg`、favicon 與 apple-touch-icon；header、footer 與 `public/og/default.png` 改用 SVG，顯示高度不變；JSON-LD 的 organization `logo` 用 script 從 SVG 產生的 PNG。AI 原始檔不進 repo（`docs/design/brand-assets.md`）
 
 ## 下一步
 

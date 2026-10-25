@@ -1,6 +1,6 @@
 // Imports the company logo files (Illustrator files from the brand team, #122) into the site: the
-// logos the pages use go to src/assets/brand/ as SVG cropped to their artwork, and the favicons are
-// rendered from the color symbol into public/.
+// logos the pages use go to src/assets/brand/ as SVG cropped to their artwork, plus a PNG of the
+// organization logo for JSON-LD, and the favicons are rendered from the color symbol into public/.
 // The .ai files are PDF compatible, so pdftocairo (poppler-utils) converts them to SVG. Two things in
 // the exports are not part of the logo and are removed: the white versions carry an artboard-sized
 // dark rectangle (the brand team's preview background), and some files reference an empty glyph.
@@ -40,6 +40,10 @@ export const ICONS = [
   { name: 'apple-touch-icon.png', size: 180, padding: 24, background: { r: 255, g: 255, b: 255, alpha: 1 } },
 ];
 const SYMBOL = 'logo-symbol-color';
+
+// The organization logo for JSON-LD stays a PNG: Google's support for SVG there is unconfirmed
+// (docs/design/brand-assets.md). Rendered at 2× the SVG size, well above Google's 112×112 minimum.
+const ORGANIZATION = { name: 'logo-vertical-color', scale: 2 };
 
 // Pixels per SVG unit when rasterizing to find the artwork's bounds: 0.1 unit precision
 const SCALE = 10;
@@ -171,6 +175,11 @@ async function main([dir]) {
     const [, , width, height] = viewBox(svg);
     console.log(`${source} -> ${out} (${width}×${height})`);
   }
+  const organization = join(ASSETS, `${ORGANIZATION.name}.png`);
+  const info = await sharp(Buffer.from(logos[ORGANIZATION.name]), { density: 72 * ORGANIZATION.scale })
+    .png({ compressionLevel: 9 })
+    .toFile(organization);
+  console.log(`${ORGANIZATION.name}.svg -> ${organization} (${info.width}×${info.height})`);
   const symbol = await sharp(Buffer.from(logos[SYMBOL]), { density: 72 * SCALE }).png().toBuffer();
   for (const { name, size, padding, background } of ICONS) {
     const inner = size - padding * 2;
