@@ -12,7 +12,7 @@
 | `public/favicon.png`、`public/apple-touch-icon.png` | 瀏覽器分頁與 iOS 主畫面圖示 | 同上，由彩色符號產生 |
 | `public/og/default.png` | 沒有自己 OG 圖的頁面使用的預設分享圖 | `node scripts/design/og-image.mjs`，由反白橫式 logo 與 `tokens.css` 產生 |
 | `src/assets/design/` | 設計用的抽象影像 | `node scripts/design/import-image.mjs`（見 `docs/design/image-prompts.md`） |
-| 不進 repo | 行銷部門的原始交付檔（AI 檔、黑色版等沒用到的匯出檔） | 本檔記錄來源，需要時再匯入 |
+| 不進 repo | 行銷部門的原始交付檔（AI 檔、黑色版等沒用到的匯出檔） | 需要時向行銷部門索取，再匯入 |
 
 原始交付檔不進 repo，是為了不讓 repo 帶著網站用不到的大型二進位檔。
 
@@ -48,9 +48,11 @@
 
 | token | 色碼 | 來源 |
 |---|---|---|
-| `--purple-700` | `#662e8d` | 現站的主色 |
-| `--purple-50`～`--purple-900` 其餘色階 | | M3-02（#15）由 `--purple-700` 延伸 |
-| `--magenta-*`、`--orange-*`、`--ink-*` | | M3-02 設計的能量漸層、訊號色與中性色 |
+| `--purple-700` | `#662e8d` | 現站 CSS 的主色 |
+| `--magenta-500` | `#b824d1` | 現站 CSS（現站另有 `#a61ebc`，新站沒有用） |
+| `--orange-500` | `#ff6329` | 現站 CSS |
+| `--purple-*`、`--magenta-*`、`--orange-*` 其餘色階 | | M3-02（#15）由上面三色延伸 |
+| `--ink-*`、`--red-*`、`--green-*` | | M3-02 設計的中性色與狀態色 |
 
 公司沒有 VI 手冊與官方色票，新站以 `tokens.css` 為品牌色基準（使用者 2026-10-25 確認）。對比由 `npm run check:design` 檢查。
 
