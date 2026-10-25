@@ -15,9 +15,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # The visual baselines (tests/visual/) are taken in the cloud session: Ubuntu 24.04 with the
-    # Chromium and fonts of the pinned @playwright/test. GitHub's runner image has more fonts, which
-    # change the CJK fallback, so the check runs in Playwright's image of the same version instead.
+    # The visual baselines (tests/visual/) are taken in this image by visual-baseline.yml, and only
+    # in CI: text near a line-width threshold wraps differently on other machines (#24). Its tag
+    # follows @playwright/test in package.json (scripts/lib/playwright-image.test.mjs).
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --ipc=host
@@ -30,16 +30,10 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      # The fonts the cloud session has beyond Playwright's (system-ui resolves to Inter there), and
-      # git for scripts/checkpoint/status.test.mjs
-      - run: apt-get update && apt-get install -y --no-install-recommends git fonts-inter fonts-jetbrains-mono fonts-dejavu-core fonts-dejavu-mono fonts-crosextra-caladea fonts-crosextra-carlito fonts-opensymbol
       - run: npm ci
       # Puppeteer checks and Lighthouse use the same Chromium as the visual regression tests
       - run: echo "CHROME_PATH=$(node -p "require('playwright-core').chromium.executablePath()")" >> "$GITHUB_ENV"
       - run: npm run check
-      - name: Visual regression diagnostics (temporary)
-        if: failure()
-        run: node .github/scripts/visual-diagnose.mjs
       - name: Visual regression report
         if: failure() && hashFiles('playwright-report/index.html') != ''
         uses: actions/upload-artifact@v7

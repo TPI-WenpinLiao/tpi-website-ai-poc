@@ -1,8 +1,6 @@
-// Visual regression tests (tests/visual/), run on the built site by `npm run check`.
-// Baselines are shared between the cloud session and CI: both run Ubuntu 24.04 with the Chromium
-// of this exact @playwright/test version and the same fonts (cloud: preinstalled in /opt/pw-browsers;
-// CI: Playwright's image plus the cloud's extra fonts, .github/workflows/quality-gate.yml).
-// Updating them: docs/workflow.md「視覺回歸」.
+// Visual regression tests (tests/visual/), run on the built site by `npm run check`. They compare
+// only in CI, in Playwright's image of this @playwright/test version; the baselines are taken there
+// too (.github/workflows/visual-baseline.yml). Updating them: docs/workflow.md「視覺回歸」.
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 4329;

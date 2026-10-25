@@ -30,8 +30,10 @@ async function settle(page: Page) {
   });
 }
 
-// The baselines hold Linux font rendering; elsewhere every page would differ
-test.skip(process.platform !== 'linux', 'visual baselines are taken on Linux: run in a cloud session or CI (docs/workflow.md「視覺回歸」)');
+// The baselines come from CI (Playwright's image, .github/workflows/visual-baseline.yml). Elsewhere,
+// the cloud session included, lines close to the container width wrap differently and whole pages
+// shift (#24), so the comparison only runs in CI
+test.skip(!process.env.CI, 'visual baselines are taken and compared in CI only: see the quality-gate result (docs/workflow.md「視覺回歸」)');
 
 for (const path of PAGES) {
   for (const width of WIDTHS) {
