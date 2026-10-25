@@ -37,6 +37,9 @@ jobs:
       # Puppeteer checks and Lighthouse use the same Chromium as the visual regression tests
       - run: echo "CHROME_PATH=$(node -p "require('playwright-core').chromium.executablePath()")" >> "$GITHUB_ENV"
       - run: npm run check
+      - name: Visual regression diagnostics (temporary)
+        if: failure()
+        run: node .github/scripts/visual-diagnose.mjs
       - name: Visual regression report
         if: failure() && hashFiles('playwright-report/index.html') != ''
         uses: actions/upload-artifact@v7
