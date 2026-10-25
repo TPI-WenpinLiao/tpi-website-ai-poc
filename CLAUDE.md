@@ -49,9 +49,9 @@ M2 定案的規則，細節以連結的文件為準：
 
 M4 定案的寫法：
 
-- 內容檔與 `nodes.csv` 的節點頁面（含 listing、contact、utility、下載頁）都由 `src/pages/[...path].astro` 產生，模板取節點的 `template`；`draft: true` 的內容不產生頁面。新增頁面是加節點與內容檔，不在 `src/pages/` 另寫一頁。`src/pages/` 的靜態頁會蓋過這個 route，只用於首頁、404 與內部頁（`src/lib/seo/indexing.ts` 的 `INTERNAL_PATHS`）
+- 內容檔與 `nodes.csv` 的節點頁面（含 listing、contact、utility、下載頁）都由 `src/pages/[...path].astro` 產生，模板取節點的 `template`；`draft: true` 的內容不產生頁面。新增頁面是加節點與內容檔，不在 `src/pages/` 另寫一頁；新的 utility 節點要登記在 `src/lib/ia/utility.ts`，否則 build 失敗。改了這個 route 產生哪些頁面時，`src/lib/ia/built.ts`（站內連結判斷頁面是否存在）要一起改。`src/pages/` 的靜態頁會蓋過這個 route，只用於首頁、404 與內部頁（`src/lib/seo/indexing.ts` 的 `INTERNAL_PATHS`）
 - 版型三層：`BaseLayout` 輸出 `<html>` 與 head，`PageLayout` 加上 header、footer 並決定這一頁有哪些語系版本，`src/layouts/templates/` 的模板只寫該類頁面的結構。頁面把 title、description、JSON-LD 等傳給 layout，head 只由 `Seo.astro` 輸出（`seo-checklist`「頁面怎麼寫」）
-- 新增或改模板：`/templates/<id>` 用範例資料預覽每個模板（`src/pages/templates/[template].astro`），也是視覺回歸的對象，baseline 照 `docs/workflow.md`「視覺回歸」更新
+- 新增或改模板：`/templates/<id>` 用範例資料預覽首頁以外的每個模板（`src/pages/templates/[template].astro`），`HomeTemplate` 直接看首頁。這些頁面與三語首頁是視覺回歸的對象，baseline 照 `docs/workflow.md`「視覺回歸」更新
 - 元件放 `src/components/ui/`，連結、導覽與語系一律用 `src/lib/ia/`、`src/lib/i18n/` 的函式；樣式規則與新增元件的步驟見 `design-system` skill
 
 ## 指令
