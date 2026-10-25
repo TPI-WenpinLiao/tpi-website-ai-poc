@@ -15,15 +15,27 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # The visual baselines (tests/visual/) are taken in the cloud session: Ubuntu 24.04 with the
+    # Chromium and fonts of the pinned @playwright/test. GitHub's runner image has more fonts, which
+    # change the CJK fallback, so the check runs in Playwright's image of the same version instead.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
+    env:
+      # Chromium refuses to start as root without --no-sandbox
+      LHCI_COLLECT__SETTINGS__CHROME_FLAGS: --no-sandbox --headless=new
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
+      # The fonts the cloud session has beyond Playwright's (system-ui resolves to Inter there), and
+      # git for scripts/checkpoint/status.test.mjs
+      - run: apt-get update && apt-get install -y --no-install-recommends git fonts-inter fonts-jetbrains-mono fonts-dejavu-core fonts-dejavu-mono fonts-crosextra-caladea fonts-crosextra-carlito fonts-opensymbol
       - run: npm ci
-      # The Chromium and fonts of the pinned @playwright/test, which the visual baselines were taken with
-      - run: npx playwright install --with-deps chromium
+      # Puppeteer checks and Lighthouse use the same Chromium as the visual regression tests
+      - run: echo "CHROME_PATH=$(node -p "require('playwright-core').chromium.executablePath()")" >> "$GITHUB_ENV"
       - run: npm run check
       - name: Visual regression report
         if: failure() && hashFiles('playwright-report/index.html') != ''

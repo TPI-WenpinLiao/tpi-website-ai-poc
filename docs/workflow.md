@@ -116,7 +116,7 @@ PR 開了之後 session 會持續監看，CI 失敗、review 留言都會自動�
 - `/templates/<id>`：首頁以外每個模板的預覽頁，`dist/templates/` 有幾頁就測幾頁
 - 寬度 375、768、1280px，`prefers-reduced-motion: reduce`（3D 場景顯示靜態版），canvas 遮掉
 
-baseline 由 `@playwright/test` 固定版本附帶的 Chromium 與字型產生。雲端 session 用容器預裝的版本，CI 由 `npx playwright install --with-deps chromium` 安裝，兩邊都是 Ubuntu 24.04，所以共用同一份 baseline。macOS 與 Windows 的字型渲染不同，視覺回歸在這兩個平台會 skip；baseline 只在雲端 session 或 CI 產生。
+baseline 由 `@playwright/test` 固定版本附帶的 Chromium 產生，字型和雲端 session 相同。雲端 session 用容器預裝的版本。CI 在同版本的 Playwright image（`mcr.microsoft.com/playwright:v1.63.0-noble`）裡執行，再補裝雲端容器多出來的字型（`quality-gate.yml`）。GitHub runner 本身的字型比較多，CJK 的 fallback 字型會不同，所以不直接在 runner 上跑。兩邊都是 Ubuntu 24.04，共用同一份 baseline。升級 `@playwright/test` 時，image 的版本也要一起改。macOS 與 Windows 的字型渲染不同，視覺回歸在這兩個平台會 skip；baseline 只在雲端 session 或 CI 產生。
 
 ### 失敗時
 
