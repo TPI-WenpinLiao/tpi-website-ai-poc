@@ -6,7 +6,7 @@
 
 **M4 開發骨架**、**M6 功能**、**M8 驗收**
 
-M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55）與 M3-09 品牌素材（#56）兩張，進行中直到這兩張關閉。
+M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行中直到這張關閉。
 
 ## 進度
 
@@ -67,6 +67,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55）與 M3-09 
 - M3-05 產品頁高保真完成（#18，`design-approved`）：digiRunner 做成 `/products/digirunner`，結構照 `/wireframes/offering`，內容讀 offering collection（`node scripts/design/offering-content.mjs` 比對現站）；新元件 `Breadcrumb`、`InPageNav`、`Faq`、`SceneChapter`，`Card` 可以不帶 `href`；`Scene3D` 加上 `family`，窄螢幕依 `PageHero` 的視覺區取景、跨斷點時重建 tier（ADR 0003）；JSON-LD `SoftwareApplication`＋`BreadcrumbList`（M4-03 移到 `src/lib/seo/jsonld/offering.ts`）；header 選單一次只開一個，點選單外或按 Esc 收起
 - M3-06 M3 收尾完成（#19）：`design-system` skill 補上「Token 命名」（類別－用途－變體－狀態）與「新增元件」流程，元件表補 `LocaleSwitcher`；`node scripts/design/showcase.mjs` 改為也檢查 skill 的「基礎元件」表與 `src/components/ui/` 一致（漏列的元件、已刪除元件的列）。`CLAUDE.md` 拿掉「新元件必須同步加到 design-system 展示頁」的「（M3 後生效）」
 - M3-07 3D scroll 視覺方向原型完成（#54，`design-approved`）：選定方向 B Modular Stack，原型頁 `/prototypes/modular-stack`（three.js，`Scene3D` island），A Data Flow 已刪除；ADR 0003 載入策略；`node scripts/design/lighthouse-3d.mjs` 行動版 0.99、桌機 1，`a11y-smoke.mjs` 加上 3D 場景上的文字對比
+- M3-09 品牌素材與視覺資產完成（#56）：`docs/design/brand-assets.md` 列出 logo、衍生圖、品牌色、字體、設計影像與 3D 的來源與授權。logo 來自公司行銷部門（只有 AI 檔與 PNG），沒有 logo 使用規範、VI 手冊、色票與指定字體，新站以 `tokens.css` 與 Inter 為基準；不做立體 logo。`src/assets/design/` 的影像由 ChatGPT Enterprise 產生，合約允許使用，沿用不重做
 - `issues.yml` 與 GitHub issue 對齊完成（#88）：補 M3-07～09、M3-04/05 的依賴改為 M3-02、M3-07；`node scripts/bootstrap/diff.mjs` 比對兩邊，目前差異 0、重跑 bootstrap 不會新建 issue
 - `needs-design` 階段一改走 `/issue-ship` 完成（#84）：`CLAUDE.md`、`issue-start`、`checkpoint`、`workflow.md` 都連到 `issue-ship` 的「`needs-design` 的兩個階段」，`wip:` 合併只寫在 `issue-ship` 第 4 步。#16 留在 `main` 的 `wip:` commit（`1b3a5fe`、`a2508f8`）不改寫
 - `status.md` 不再列其他 open PR 完成（#94）：「Issue」段落只列已關閉的 issue，進行中的用 `/next-issue` 查；`node scripts/status/check.mjs` 在 `npm run check` 擋下「待合併」
@@ -104,6 +105,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55）與 M3-09 
 
 - M8-01 全站驗收（#43）可以開始
 - M3-08 動態規範（#55）可以開始
+- 提供 logo AI 檔，收到後處理 [chore] logo 改用 AI 檔轉出的 SVG（#122）
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
 - M4-05 品質關卡擴充（#24）可以開始
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
@@ -143,7 +145,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55）與 M3-09 
 - i18n 字串檔在 `src/data/strings/<locale>.ts`（M4-04 決定）：介面字串與 listing、utility、contact 頁的描述。這些頁沒有內容檔，只為有字串檔的語系產生；描述是暫定文案，上線前由內容負責人替換。有字串檔就算啟用該語系，同時要有首頁文案 `src/data/home/<locale>.ts`（#114）
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
-- `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），SVG 原始檔與使用規範仍待 #56
+- `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 用使用者提供的 PNG（`node scripts/design/import-brand.mjs <dir>` 匯入 `src/assets/brand/`、favicon、OG 圖），沒有使用規範（`docs/design/brand-assets.md`）；AI 檔轉 SVG 在 #122 處理
 - 首頁行動版 Lighthouse performance 中位數 0.94（`node scripts/design/lighthouse-3d.mjs /`，2026-10-23，各跑 3 次），單次在 0.91–0.96 之間浮動。M4-04 比較了三種 CSS 載入方式：現狀（3 個 CSS 檔）、`build.inlineStylesheets: 'always'`、小檔 inline，分數都是 0.94；全部 inline 讓 FCP 快約 450 ms、LCP 快約 150 ms，但每頁 HTML 從 23 KB 變 89 KB、換頁沒有 CSS 快取，所以維持現狀。扣分主要來自 3D chunk 的 TBT。preview 上的真機量測還沒做
 - 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；文章已在 M5-05 遷移，改讀 content collections 並刪除這個檔案的工作在「下一步」。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
