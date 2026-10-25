@@ -108,6 +108,36 @@ Claude 會依序：
 
 PR 開了之後 session 會持續監看，CI 失敗、review 留言都會自動喚醒 session 處理。
 
+## 視覺回歸
+
+`npm run check` 的 `npm run test:visual` 會把下列頁面的 full-page 截圖，和 `tests/visual/__screenshots__/` 的 baseline 比對。不同的像素超過 300 個就算失敗（理由寫在 `playwright.config.ts`）：
+
+- 首頁 `/`、`/en`、`/vi`
+- `/templates/<id>`：首頁以外每個模板的預覽頁，`dist/templates/` 有幾頁就測幾頁
+- 寬度 375、768、1280px，`prefers-reduced-motion: reduce`（3D 場景顯示靜態版），canvas 遮掉
+
+baseline 由 `@playwright/test` 固定版本附帶的 Chromium 與字型產生。雲端 session 用容器預裝的版本，CI 由 `npx playwright install --with-deps chromium` 安裝，兩邊都是 Ubuntu 24.04，所以共用同一份 baseline。macOS 與 Windows 的字型渲染不同，視覺回歸在這兩個平台會 skip；baseline 只在雲端 session 或 CI 產生。
+
+### 失敗時
+
+1. 終端機會列出哪一頁、哪個寬度、差多少像素，以及三張圖的路徑：`Expected`（baseline）、`Received`（這次的截圖）、`Diff`（不同的像素標成紅色）
+2. 本機執行 `npx playwright show-report`，可以在瀏覽器並排比較。CI 失敗時，到 workflow run 頁面下載 `playwright-report` artifact，解開後打開 `playwright-report/index.html`
+3. 判斷差異是不是這次變更想要的結果：
+   - 不是：修正樣式或內容，再跑一次
+   - 是：更新 baseline（下一節）
+
+### 更新 baseline
+
+以下變更會改到截圖，baseline 要跟著更新：改樣式、token、元件、模板，改首頁或模板預覽頁用到的內容，新增模板。
+
+1. `npm run build`
+2. `npm run test:visual:update`：重新產生全部 baseline，畫面沒變的檔案內容不變，不會出現在 diff
+3. `git status tests/visual/__screenshots__/` 確認改動的檔案只限這次變更影響的頁面
+4. 把 baseline 和造成變更的程式碼放在同一個 commit
+5. PR body 的「preview 檢查重點」列出改動的截圖檔名與原因。reviewer 在 PR 的 Files changed 用 GitHub 的圖片 diff（2-up、Swipe、Onion skin）確認
+
+不要為了讓檢查通過而更新 baseline。差異不是這次變更想要的，就要修程式碼。
+
 ## 自動套用的 skill
 
 下列 skill 不需要手動呼叫，Claude 依工作內容自動讀取：

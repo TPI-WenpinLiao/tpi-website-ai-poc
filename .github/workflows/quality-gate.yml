@@ -22,7 +22,18 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      # The Chromium and fonts of the pinned @playwright/test, which the visual baselines were taken with
+      - run: npx playwright install --with-deps chromium
       - run: npm run check
+      - name: Visual regression report
+        if: failure() && hashFiles('playwright-report/index.html') != ''
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
       - name: Lighthouse summary
         if: always()
         run: node .github/scripts/lighthouse-summary.mjs >> "$GITHUB_STEP_SUMMARY"

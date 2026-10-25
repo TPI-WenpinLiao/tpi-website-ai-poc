@@ -78,6 +78,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - M4-02 i18n 路由完成（#21）：語系設定與路徑工具在 `src/lib/i18n/`（`astro.config.mjs` 的 `locales` 從這裡 import），語系切換元件 `LocaleSwitcher`；未翻譯的頁面不產生，切換時連到該語系首頁，連首頁都沒有的語系不列（ADR 0002）；`node scripts/i18n/routes.mjs` 在 build 後檢查 `<html lang>` 與切換連結
 - M4-03 共用 SEO 層完成（#22）：head 的 title、description、canonical、hreflang、OG/Twitter、JSON-LD 只由 `src/components/seo/Seo.astro` 輸出，頁面把資料傳給 `BaseLayout`（寫法見 `seo-checklist`「頁面怎麼寫」）；JSON-LD 產生函式依 `content-model.md` 涵蓋全部內容類型（`src/lib/seo/jsonld/`）；hreflang 列出實際存在的語系版本與 `x-default`；`src/integrations/sitemap.ts` 在 build 時寫 `dist/sitemap.xml`，排除內部頁（`src/lib/seo/indexing.ts`），沒有新增套件；`node scripts/seo/meta.mjs` 在 `npm run check` 檢查每頁 head 與 sitemap
 - M4-04 各模板 layout 完成（#23，`design-approved`）：共用 `PageLayout`（header、footer、捲動進度），11 個模板在 `src/layouts/templates/`，collection 頁、listing（每頁 12 筆，`/page/n`）、contact、utility 都由 `src/pages/[...path].astro` 產生（draft 不產生）；`/templates` 用範例資料預覽每個模板。語系版本只由 `pageLocales()` 決定，header、footer、麵包屑與 JSON-LD 的連結都加上語系前綴（`scripts/i18n/routes.mjs` 擋下跨語系連結）；非首頁都有 `BreadcrumbList`（`scripts/seo/meta.mjs` 檢查）；sitemap 排除流程頁（`src/lib/seo/indexing.ts` 的 `FLOW_PATHS`）。header 選單補上焦點移出收合、行動版選單的 `inert` 與焦點、`aria-current`。CSS 分層（`src/styles/base.css`）由 `scripts/design/css-structure.mjs` 檢查。M3-01 wireframe 已刪除
+- M4-05 品質關卡擴充完成（#24）：`npm run check` 加上站內連結檢查 `scripts/seo/links.mjs`（指向 `nodes.csv` 還沒 build 的節點只列出、不算失敗）、全站 axe `scripts/design/axe.mjs`（WCAG 2.2 A／AA，485 頁 0 violations）、Playwright 視覺回歸 `tests/visual/`（首頁三語與 10 個模板預覽頁 × 375／768／1280，baseline 更新流程見 `docs/workflow.md`「視覺回歸」）；quality-gate 安裝 `@playwright/test` 固定版本的 Chromium 與字型，失敗時上傳 `playwright-report` artifact
 
 ### M5 內容遷移
 
@@ -110,7 +111,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - M8-01 全站驗收（#43）可以開始
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
-- M4-05 品質關卡擴充（#24）可以開始
+- M4-06 M4 收尾（#25）可以開始
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落

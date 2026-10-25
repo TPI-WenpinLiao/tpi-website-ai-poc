@@ -221,5 +221,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
 - build 後的 `scripts/design/overflow.mjs`：每頁在 320、390、1024、1440px 寬都不得比 viewport 寬。常見原因：沒寫 `grid-template-columns` 的 grid，隱含的 `auto` 欄會被子元素的 min-content 撐開（`<input>` 預設 20 字寬、`<select>` 跟最長選項一樣寬，`FormField` 的 `.control` 因此設 `inline-size: 100%`）；內文裡的長網址或長英文字（`Prose` 設 `overflow-wrap: break-word`）
+- build 後的 `scripts/design/axe.mjs`：每頁以 1280px、reduced motion 跑 axe-core（WCAG 2.2 A／AA），有任何 violation 就失敗
+- build 後的 `npm run test:visual`：首頁與各模板預覽頁在 375、768、1280px 的截圖和 baseline 比對。改樣式、token 或元件後預期會失敗，確認差異符合意圖後照 `docs/workflow.md`「視覺回歸」更新 baseline
 
 不在 `npm run check` 裡、依環境字型與 Chromium 的：`node scripts/design/a11y-smoke.mjs [path]`（圖上與 3D 場景上的文字對比、水平捲動、鍵盤 focus、reduced motion），改到 hero、`Backdrop`、`Surface`、`Scene3D` 或 focus 樣式後要跑。
