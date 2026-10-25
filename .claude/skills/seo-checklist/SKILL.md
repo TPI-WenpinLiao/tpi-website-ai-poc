@@ -20,7 +20,7 @@ description: 新增或修改任何頁面、版型、內容時使用。列出每�
 | h1 | 每頁恰好一個，描述頁面主題 |
 | heading 層級 | 依序不跳級（h2 → h3，不可 h2 → h4）；不用 heading 做視覺樣式 |
 | 圖片 | 有意義的圖必有描述性 `alt`；裝飾圖 `alt=""`；必有 `width`/`height`；用 `astro:assets` 輸出 AVIF/WebP；首屏以下 `loading="lazy"` |
-| 連結 | 內部連結用站內絕對路徑，取 `nodes.csv` 的 `path`，blog 文章取 `page-map.csv` 的 `blog_slug` 組成 `/blog/{blog_slug}`（都加語系前綴），不寫現站路徑、尾斜線或 `.html`；錨點文字有意義（不用「點此」）；不得有斷連 |
+| 連結 | 內部連結用站內絕對路徑，取 `nodes.csv` 的 `path`，blog 文章取 `page-map.csv` 的 `blog_slug` 組成 `/blog/{blog_slug}`（都加語系前綴），不寫現站路徑、尾斜線或 `.html`；錨點文字有意義（不用「點此」）；不得有斷連。`scripts/seo/links.mjs` 檢查 build 後每個站內連結、圖片與 `#錨點` 都找得到目標，只豁免 `nodes.csv` 的 external 節點與 `PENDING` 列出、還沒有內容的頁面；頁面做好後從 `PENDING` 拿掉 |
 | 導覽與麵包屑 | 選單連結以 `<a href>` 輸出在靜態 HTML，不在 client 端產生；麵包屑沿 `nodes.csv` 的 `parent` 產生（`navigation.md`「SEO」） |
 | 列表分頁 | 第一頁不帶頁碼，第 2 頁起 `/{列表路徑}/page/{n}`，canonical 指向自己；篩選用分類頁路徑，不用 query string 產生要被收錄的頁面（ADR 0002） |
 | 結構化資料 | 依下表輸出 JSON-LD |
@@ -65,7 +65,7 @@ en、vi 頁面除了上表，還要注意：
 
 ## 驗收方式
 
-1. `npm run check` 通過（`scripts/seo/meta.mjs` 檢查每頁 head 與 sitemap，結尾輸出各語系頁數；`headings.mjs` 檢查 heading；`scripts/i18n/routes.mjs` 檢查語系與連結；Lighthouse SEO = 1；html-validate 無錯誤）。頁數和預期不同時，先查是不是少了某個語系的內容檔或 `translationKey` 對不上
+1. `npm run check` 通過（`scripts/seo/meta.mjs` 檢查每頁 head 與 sitemap，結尾輸出各語系頁數；`headings.mjs` 檢查 heading；`scripts/i18n/routes.mjs` 檢查語系與連結；`scripts/seo/links.mjs` 檢查站內連結；Lighthouse SEO = 1；html-validate 無錯誤）。頁數和預期不同時，先查是不是少了某個語系的內容檔或 `translationKey` 對不上
 2. 用瀏覽器檢視原始碼，確認上表各項存在且值正確
 3. JSON-LD 貼到 [Schema Markup Validator](https://validator.schema.org/) 無錯誤
 4. PR 的 preview 檢查重點列出新增 / 變更頁面的 title 與 description

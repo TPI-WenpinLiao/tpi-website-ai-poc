@@ -4,9 +4,9 @@
 
 ## 目前 milestone
 
-**M4 開發骨架**、**M6 功能**、**M8 驗收**
+**M6 功能**、**M8 驗收**
 
-M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行中直到這張關閉。
+M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行中直到這張關閉。M4 開發骨架已收尾（#25）。
 
 ## 進度
 
@@ -16,7 +16,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 | M1 盤點與研究 | 完成 |
 | M2 資訊架構 | 完成 |
 | M3 設計系統 | 進行中 |
-| M4 開發骨架 | 進行中 |
+| M4 開發骨架 | 完成 |
 | M5 內容遷移 | 完成 |
 | M6 功能 | 進行中 |
 | M7 多語系 | 完成 |
@@ -79,6 +79,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - M4-03 共用 SEO 層完成（#22）：head 的 title、description、canonical、hreflang、OG/Twitter、JSON-LD 只由 `src/components/seo/Seo.astro` 輸出，頁面把資料傳給 `BaseLayout`（寫法見 `seo-checklist`「頁面怎麼寫」）；JSON-LD 產生函式依 `content-model.md` 涵蓋全部內容類型（`src/lib/seo/jsonld/`）；hreflang 列出實際存在的語系版本與 `x-default`；`src/integrations/sitemap.ts` 在 build 時寫 `dist/sitemap.xml`，排除內部頁（`src/lib/seo/indexing.ts`），沒有新增套件；`node scripts/seo/meta.mjs` 在 `npm run check` 檢查每頁 head 與 sitemap
 - M4-04 各模板 layout 完成（#23，`design-approved`）：共用 `PageLayout`（header、footer、捲動進度），11 個模板在 `src/layouts/templates/`，collection 頁、listing（每頁 12 筆，`/page/n`）、contact、utility 都由 `src/pages/[...path].astro` 產生（draft 不產生）；`/templates` 用範例資料預覽每個模板。語系版本只由 `pageLocales()` 決定，header、footer、麵包屑與 JSON-LD 的連結都加上語系前綴（`scripts/i18n/routes.mjs` 擋下跨語系連結）；非首頁都有 `BreadcrumbList`（`scripts/seo/meta.mjs` 檢查）；sitemap 排除流程頁（`src/lib/seo/indexing.ts` 的 `FLOW_PATHS`）。header 選單補上焦點移出收合、行動版選單的 `inert` 與焦點、`aria-current`。CSS 分層（`src/styles/base.css`）由 `scripts/design/css-structure.mjs` 檢查。M3-01 wireframe 已刪除
 - M4-05 品質關卡擴充完成（#24）：`npm run check` 加上站內連結檢查 `scripts/seo/links.mjs`（只豁免 `nodes.csv` 的 external 節點與 `PENDING` 明列的 12 個還沒有內容的頁面，其他連到不存在頁面的連結都失敗）、全站 axe `scripts/design/axe.mjs`（WCAG 2.2 A／AA，485 頁 0 violations）、Playwright 視覺回歸 `tests/visual/`（首頁三語與 10 個模板預覽頁 × 375／768／1280）。視覺回歸只在 CI 的 Playwright image 裡比對，baseline 由 PR 的 `update-visual-baseline` label 觸發 `visual-baseline.yml` 產生（`docs/workflow.md`「視覺回歸」）；雲端 session 與 CI 對貼近換行門檻的行換法不同，所以不共用；quality-gate 改在同一個 image 裡跑，失敗時上傳 `playwright-report` artifact
+- M4-06 M4 收尾完成（#25）：`CLAUDE.md` 的目錄結構補上 M4 新增的 `src/` 目錄，新增「頁面與元件」（頁面由 `[...path].astro` 依節點模板產生、`BaseLayout`／`PageLayout`／模板三層、`/templates` 預覽與視覺回歸）；`seo-checklist` 補上 `scripts/seo/links.mjs` 的檢查範圍與 `PENDING` 豁免
 
 ### M5 內容遷移
 
@@ -111,7 +112,6 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - M8-01 全站驗收（#43）可以開始
 - M3-08 動態規範（#55）可以開始
 - [chore] LHCI 涵蓋所有頁面（#87）可以開始
-- M4-06 M4 收尾（#25）可以開始
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落
@@ -124,7 +124,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - M6-01 表單（#33）、M6-02 Pagefind 站內搜尋（#34）、M6-03 影片延遲載入（#35）、M6-04 GTM 與 consent 管理（#36）可以開始；表單與搜尋框的版面已在 contact、gated-download、utility 模板，沒有 `action`
 - 回覆 PR #98「待確認問題」：listing、utility、contact 頁的暫定描述（`src/data/strings/zh-TW.ts` 的 `pages`）、聯絡表單的諮詢產品選項、個資同意與 AI Playbook 欄位文案、`industry: other` 的顯示名稱
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
-- M4 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
+- 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
