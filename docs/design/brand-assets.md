@@ -72,7 +72,9 @@
 
 生圖工具：ChatGPT（使用者 2026-10-25 確認）。現有影像夠用，不重新產生；`image-prompts.md` 的素材清單裡只有 `ambient-glow-2` 沒做，M3-02 已決定一張光暈就夠，目前沒有要補的圖。
 
-授權：使用的 ChatGPT 帳號方案與 OpenAI 條款對商用的規定待確認。
+帳號方案：ChatGPT Enterprise（使用者 2026-10-25 確認）。
+
+授權：公司與 OpenAI 的 Enterprise 合約對輸出內容商用的規定沒有查證（這個環境連不到 openai.com），待確認。
 
 | 檔案 | 用在哪裡 |
 |---|---|
@@ -90,4 +92,4 @@ M3-07（#54）選定的方向 B Modular Stack 由 three.js 在瀏覽器產生抽
 | # | 項目 | 現況 | 需要誰提供 |
 |---|---|---|---|
 | 1 | logo AI 檔：符號（彩色、反白）、橫式中英（彩色、反白）、直式中文（彩色）。使用者決定轉成 SVG 取代 PNG（2026-10-25），收到後在 #122 匯入 | 網站用 PNG，header 的 2x 顯示靠 PNG 的解析度 | 使用者 |
-| 2 | 產生 `src/assets/design/` 影像時用的 ChatGPT 帳號方案，以及 OpenAI 條款是否允許商用 | 生圖工具已確認是 ChatGPT | 使用者 |
+| 2 | 公司與 OpenAI 的 Enterprise 合約是否允許 `src/assets/design/` 影像商用 | 生圖工具與帳號方案已確認是 ChatGPT Enterprise | 使用者或合約負責人 |
