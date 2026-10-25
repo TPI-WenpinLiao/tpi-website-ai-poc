@@ -4,20 +4,47 @@
 // #fragment points at an id (or a[name]) on the target page. Internal means relative, root-relative
 // or on the origin of the page's canonical URL; external URLs are not fetched (the cloud proxy and
 // the old site make that flaky).
-// Links to nodes in docs/ia/nodes.csv that have no page yet (hub pages waiting for content, the
-// external sub-sites such as /tpu) are listed separately and do not fail: they are planned pages,
-// not mistakes. scripts/i18n/routes.mjs checks the locale side of the same links.
+// Two kinds of target are listed separately and do not fail: the external nodes in
+// docs/ia/nodes.csv (sub-sites such as /tpu, served by other apps; the same rule as
+// scripts/i18n/routes.mjs, which checks the locale side of these links) and the PENDING pages
+// below. Any other page that is linked but not built fails, so a page dropping out of the build is
+// caught. A PENDING page that gets built fails too, until it is taken off the list.
 // Part of `npm run check`, after the build: node scripts/seo/links.mjs [dist]
 
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'node-html-parser';
-import { parseCsv } from '../inventory/csv.mjs';
 import { fileKind, servedFile } from '../lib/static-server.mjs';
-import { urlPath } from '../i18n/routes.mjs';
+import { externalPaths, urlPath } from '../i18n/routes.mjs';
 
 const SHOWN = 5;
+
+// Page nodes in docs/ia/nodes.csv that the navigation links to but that have no content yet (their
+// `note` says what is missing), so no page is built for them. Remove a path once its page is built.
+export const PENDING = [
+  '/chatgpt-enterprise',
+  '/cloudservice',
+  '/industries',
+  '/industries/manufacturing',
+  '/outsourcing',
+  '/products/gadosecurity',
+  '/resource',
+  '/services',
+  '/whitepaper/api-strategies',
+  '/whitepaper/digilogs',
+  '/whitepaper/greenswift',
+  '/whitepaper/systalk-ai',
+];
+
+/** decodeURIComponent, or undefined for malformed percent-encoding @param {string} s */
+const decode = (s) => {
+  try {
+    return decodeURIComponent(s);
+  } catch {
+    return undefined;
+  }
+};
 
 /** Every URL a page references, as written. @param {import('node-html-parser').HTMLElement} root */
 export function references(root) {
@@ -68,23 +95,29 @@ export function linkProblems({ pages, kind, planned = new Set() }) {
       const url = URL.parse(ref, base);
       if (!url || url.origin !== origin) continue;
       checked += 1;
-      const path = decodeURIComponent(url.pathname);
+      const path = decode(url.pathname);
+      if (path === undefined) {
+        add(broken, `${url.pathname} (malformed percent-encoding)`, page);
+        continue;
+      }
       const target = servedFile(path, kind);
       if (!target) {
         add(planned.has(path) ? plannedHits : broken, url.pathname, page);
         continue;
       }
-      const fragment = decodeURIComponent(url.hash.slice(1));
-      if (fragment && target.endsWith('.html') && !idsOf(target).has(fragment)) add(broken, `${url.pathname}${url.hash}`, page);
+      const fragment = decode(url.hash.slice(1));
+      if (fragment === undefined) add(broken, `${url.pathname}${url.hash} (malformed percent-encoding)`, page);
+      else if (fragment && target.endsWith('.html') && !idsOf(target).has(fragment)) add(broken, `${url.pathname}${url.hash}`, page);
     }
   }
   return { broken, planned: plannedHits, checked };
 }
 
-/** URL paths of the nodes in docs/ia/nodes.csv @param {string} csv */
-export function nodePaths(csv) {
-  return new Set(parseCsv(csv.replace(/^\uFEFF/, '')).map((/** @type {Record<string, string>} */ n) => n.path).filter(Boolean));
-}
+/**
+ * PENDING paths that have a page now, and so must come off the list.
+ * @param {readonly string[]} pending @param {(file: string) => 'file' | 'dir' | undefined} kind
+ */
+export const builtPending = (pending, kind) => pending.filter((path) => servedFile(path, kind));
 
 /** @param {string[]} pages */
 const sample = (pages) => `${pages.slice(0, SHOWN).join(', ')}${pages.length > SHOWN ? `, … (${pages.length - SHOWN} more)` : ''}`;
@@ -95,8 +128,10 @@ function main([dist = resolve(import.meta.dirname, '../../dist')]) {
     .filter((d) => d.isFile() && d.name.endsWith('.html'))
     .map((d) => relative(dist, join(d.parentPath, d.name)).split('\\').join('/'));
   const pages = new Map(files.map((f) => [f, readFileSync(join(dist, f), 'utf8')]));
-  const planned = nodePaths(readFileSync(resolve(import.meta.dirname, '../../docs/ia/nodes.csv'), 'utf8'));
-  const { broken, planned: plannedHits, checked } = linkProblems({ pages, kind: fileKind(dist), planned });
+  const kind = fileKind(dist);
+  const planned = new Set([...externalPaths(), ...PENDING]);
+  const { broken, planned: plannedHits, checked } = linkProblems({ pages, kind, planned });
+  const stale = builtPending(PENDING, kind);
   const byTarget = (map) => [...map].map(([target, from]) => [target, [...from].sort()]).sort(([a], [b]) => a.localeCompare(b));
   if (broken.size) {
     console.log(`Broken internal links: ${broken.size} targets`);
@@ -104,10 +139,11 @@ function main([dist = resolve(import.meta.dirname, '../../dist')]) {
   }
   if (plannedHits.size) {
     const targets = byTarget(plannedHits);
-    console.log(`Planned pages not built yet (docs/ia/nodes.csv, not an error): ${targets.map(([t, from]) => `${t} (${from.length})`).join(', ')}`);
+    console.log(`External nodes and PENDING pages, not an error: ${targets.map(([t, from]) => `${t} (${from.length})`).join(', ')}`);
   }
+  for (const path of stale) console.log(`${path} is built now: remove it from PENDING in scripts/seo/links.mjs`);
   console.log(`${pages.size} pages, ${checked} internal references checked, ${broken.size} broken targets`);
-  if (broken.size) process.exitCode = 1;
+  if (broken.size || stale.length) process.exitCode = 1;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) main(process.argv.slice(2));

@@ -130,7 +130,7 @@ baseline 只在 CI 產生、只在 CI 比對，兩者都在同版本的 Playwrig
 
 以下變更會改到截圖，baseline 要跟著更新：改樣式、token、元件、模板，改首頁或模板預覽頁用到的內容，新增模板。
 
-1. 在 PR 加上 `update-visual-baseline` label。`visual-baseline.yml` 會在 Playwright image 裡 build、執行 `npm run test:visual:update`，把有變的截圖 commit 回 PR branch，再拿掉 label。畫面沒變的檔案內容不變，不會出現在 diff
+1. 在 PR 加上 `update-visual-baseline` label。`visual-baseline.yml` 會在 Playwright image 裡 build、執行 `npm run test:visual:update`，把有變的截圖 commit 回 PR branch，再拿掉 label。畫面沒變的檔案內容不變，不會出現在 diff。刪除或改名模板時，舊的截圖不會被刪掉，要自己 `git rm`；留著的話 `tests/visual/pages.spec.ts` 的「every baseline belongs to a page」測試會失敗（這個測試在雲端 session 也會跑）
 2. 確認 commit 改到的截圖只限這次變更影響的頁面（workflow 的 job summary 會列出檔名）。雲端 session 先 `git pull`，再用 Read 看改動的截圖
 3. GitHub token 推的 commit 不會觸發 quality-gate。下一次 push 程式碼時 CI 才會用新的 baseline 比對；沒有其他要改的東西時，在 GitHub 上對 quality-gate 按 Re-run 不會生效（它跑的是舊的 head），要等下一個 commit
 4. PR body 的「preview 檢查重點」列出改動的截圖檔名與原因。reviewer 在 PR 的 Files changed 用 GitHub 的圖片 diff（2-up、Swipe、Onion skin）確認

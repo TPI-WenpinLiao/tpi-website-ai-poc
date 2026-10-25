@@ -18,6 +18,7 @@ const TEMPLATES = readdirSync(resolve(import.meta.dirname, '../../dist/templates
 
 const PAGES = ['/', '/en', '/vi', ...TEMPLATES];
 
+const SCREENSHOTS = resolve(import.meta.dirname, '__screenshots__');
 const name = (path: string, width: number) => `${path === '/' ? 'home' : path.slice(1).replaceAll('/', '-')}-${width}.png`;
 
 /** Loads every image, including lazy ones below the fold, and waits for the web fonts. */
@@ -30,19 +31,27 @@ async function settle(page: Page) {
   });
 }
 
-// The baselines come from CI (Playwright's image, .github/workflows/visual-baseline.yml). Elsewhere,
-// the cloud session included, lines close to the container width wrap differently and whole pages
-// shift (#24), so the comparison only runs in CI
-test.skip(!process.env.CI, 'visual baselines are taken and compared in CI only: see the quality-gate result (docs/workflow.md「視覺回歸」)');
+// --update-snapshots never deletes: a removed or renamed page would leave its baselines behind
+test('every baseline belongs to a page and width that is tested', () => {
+  const expected = new Set(PAGES.flatMap((path) => WIDTHS.map((width) => name(path, width))));
+  expect(readdirSync(SCREENSHOTS).filter((f) => !expected.has(f))).toEqual([]);
+});
 
-for (const path of PAGES) {
-  for (const width of WIDTHS) {
-    test(`${path} at ${width}px`, async ({ page }) => {
-      await page.setViewportSize({ width, height: 900 });
-      const response = await page.goto(path, { waitUntil: 'load' });
-      expect(response?.status(), `${path} was not built`).toBe(200);
-      await settle(page);
-      await expect(page).toHaveScreenshot(name(path, width), { fullPage: true, mask: [page.locator('canvas')] });
-    });
+test.describe('screenshots', () => {
+  // The baselines come from CI (Playwright's image, .github/workflows/visual-baseline.yml). Elsewhere,
+  // the cloud session included, lines close to the container width wrap differently and whole pages
+  // shift (#24), so the comparison only runs in CI
+  test.skip(!process.env.CI, 'visual baselines are taken and compared in CI only: see the quality-gate result (docs/workflow.md「視覺回歸」)');
+
+  for (const path of PAGES) {
+    for (const width of WIDTHS) {
+      test(`${path} at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        const response = await page.goto(path, { waitUntil: 'load' });
+        expect(response?.status(), `${path} was not built`).toBe(200);
+        await settle(page);
+        await expect(page).toHaveScreenshot(name(path, width), { fullPage: true, mask: [page.locator('canvas')] });
+      });
+    }
   }
-}
+});
