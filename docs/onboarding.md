@@ -53,7 +53,7 @@ npm ci
 npm run dev
 ```
 
-推送前執行 `npm run check`（需要本機有 Chrome）。視覺回歸要用 `@playwright/test` 附帶的 Chromium，第一次先執行 `npx playwright install chromium`。baseline 是 Linux 的字型渲染，所以 macOS 與 Windows 上會 skip 視覺回歸，由 CI 比對；Linux 上字型和 CI 不同時會失敗，見 `docs/workflow.md`「視覺回歸」。雲端 session 的容器已經預裝這個 Chromium（`PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers`），不用安裝。
+推送前執行 `npm run check`（需要本機有 Chrome）。視覺回歸在本機與雲端 session 都會 skip，只在 CI 比對，見 `docs/workflow.md`「視覺回歸」。
 
 ## 5. 開始工作
 
