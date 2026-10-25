@@ -28,11 +28,16 @@ await cdp.send('CSS.enable');
 const { root } = await cdp.send('DOM.getDocument', { depth: -1 });
 const { nodeIds } = await cdp.send('DOM.querySelectorAll', { nodeId: root.nodeId, selector: 'h1, h2, h3, p, li, a, span, button' });
 const seen = new Map();
-for (const nodeId of nodeIds.slice(0, 400)) {
+const perNode = [];
+for (const [i, nodeId] of nodeIds.entries()) {
   const { fonts } = await cdp.send('CSS.getPlatformFontsForNode', { nodeId }).catch(() => ({ fonts: [] }));
+  if (fonts.length) perNode.push(`${i}:${fonts.map((f) => `${f.familyName}${f.isCustomFont ? '*' : ''}=${f.glyphCount}`).join('+')}`);
   for (const f of fonts) seen.set(`${f.familyName}${f.isCustomFont ? ' (web)' : ''}`, (seen.get(`${f.familyName}${f.isCustomFont ? ' (web)' : ''}`) ?? 0) + f.glyphCount);
 }
 console.log('platform fonts', JSON.stringify(Object.fromEntries(seen)));
+console.log('per node', perNode.join(' '));
+console.log('env', JSON.stringify({ lang: process.env.LANG, lc: process.env.LC_ALL, tz: process.env.TZ, nproc: sh('nproc'), kernel: sh('uname -r'), cpu: sh('grep -m1 "model name" /proc/cpuinfo'), avx512: sh('grep -c avx512f /proc/cpuinfo') }));
+console.log('rects', await page.evaluate(() => [...document.querySelectorAll('main p, main h2, main h3, main li')].map((e, i) => `${i}:${Math.round(e.getBoundingClientRect().width)}x${Math.round(e.getBoundingClientRect().height * 10) / 10}`).join(' ')));
 const boxes = await page.evaluate(() => [...document.querySelectorAll('main > *, main section, header, footer')].map((e) => `${e.tagName.toLowerCase()}.${[...e.classList][0] ?? ''}:${Math.round(e.getBoundingClientRect().height * 10) / 10}`).join(' '));
 console.log('boxes', boxes);
 await browser.close();
