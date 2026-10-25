@@ -11,8 +11,8 @@ description: 新增或修改任何頁面、版型、內容時使用。列出每�
 
 | 項目 | 規則 |
 |---|---|
-| `<title>` | 全站唯一，同一頁的不同語系版本（hreflang 互指）之間可以相同，例如人名、產品名；zh-TW 約 20–32 個全形字（en 50–60 字元）；格式 zh-TW 是 `頁面主題｜TPIsoftware 昕力資訊`，en、vi 是 `Subject \| TPIsoftware`（`src/lib/seo/meta.ts` 的 `pageTitle`），首頁可例外。頁面主題取內容的 `title`，要和 h1 不同時才用 `seoTitle`（`content-model.md`「共用欄位」） |
-| meta description | 全站唯一（同一頁的不同語系版本之間可以相同）；zh-TW 約 60–80 個全形字（en 120–160 字元）；描述頁面內容，不堆砌關鍵字 |
+| `<title>` | 全站唯一，同一頁的不同語系版本（hreflang 互指）之間可以相同，例如人名、產品名；zh-TW 約 20–32 個全形字（en、vi 50–60 字元，加上後綴不超過 70 字元）；格式 zh-TW 是 `頁面主題｜TPIsoftware 昕力資訊`，en、vi 是 `Subject \| TPIsoftware`（`src/lib/seo/meta.ts` 的 `pageTitle`），首頁可例外。頁面主題取內容的 `title`，要和 h1 不同時才用 `seoTitle`（`content-model.md`「共用欄位」） |
+| meta description | 全站唯一（同一頁的不同語系版本之間可以相同）；zh-TW 約 60–80 個全形字（en、vi 120–160 字元）；描述頁面內容，不堆砌關鍵字 |
 | canonical | 指向自己的絕對 URL，以 `Astro.site` 組出；沒有尾斜線（`/` 除外）、`.html` 或 query string（ADR 0002，由 `Seo.astro` 產生） |
 | `lang` | `<html lang>` 對應頁面語系（`zh-TW` / `en` / `vi`） |
 | Open Graph | `og:type`、`og:title`、`og:description`、`og:url`、`og:image`（1200×630，M3 後必填）、`og:locale`（「語言_地區」格式：`zh_TW`、`en_US`、`vi_VN`，`src/lib/i18n/locales.ts` 的 `OG_LOCALES`，`scripts/seo/meta.mjs` 檢查）、`og:site_name` |
@@ -46,6 +46,15 @@ description: 新增或修改任何頁面、版型、內容時使用。列出每�
 
 JSON-LD 產生函式一個內容類型一個（`home`、`offering`、`hub`、`article` 的 case-study／blog／news、`page`、`person`、`whitepaper`），共用的 `Organization` 參照與 `BreadcrumbList` 在 `jsonld/shared.ts`。圖片網址、分類名稱等由頁面解析後傳入，函式本身是純函式，測試在 `scripts/seo/jsonld.test.mjs`。
 
+## 多語系頁面
+
+en、vi 頁面除了上表，還要注意：
+
+- 同一份內容的各語系版本填相同的 `translationKey`。`src/pages/[...path].astro` 依它把其他語系的路徑傳給 `translations`，hreflang 與語系切換才找得到彼此；新的 dynamic route 也要傳
+- 頁面上的文字與 `alt`、`title`、`aria-label`、meta 不得留下漢字或全形標點（`scripts/i18n/routes.mjs`）。選單、麵包屑、`BreadcrumbList` 的名稱讀 `docs/i18n/glossary.csv`，不在頁面裡另寫譯名
+- 該語系沒有的頁面不產生，連結由 `src/lib/ia/built.ts` 改連到 zh-TW 版，不在元件裡自己判斷
+- en、vi 的 description、`seoTitle`、alt 修正寫在哪裡，見 `content-migration` 的「多語系內容」
+
 ## JSON-LD 類型對照
 
 各頁面類型的 schema（含首頁與 `BreadcrumbList`）與屬性對應只寫在 [`docs/ia/content-model.md`](../../../docs/ia/content-model.md)，見「內容類型總覽」與各類型的 JSON-LD 段落。內容模型沒有涵蓋的：
@@ -56,7 +65,7 @@ JSON-LD 產生函式一個內容類型一個（`home`、`offering`、`hub`、`ar
 
 ## 驗收方式
 
-1. `npm run check` 通過（`scripts/seo/meta.mjs` 檢查每頁 head 與 sitemap、`headings.mjs` 檢查 heading、Lighthouse SEO = 1、html-validate 無錯誤）
+1. `npm run check` 通過（`scripts/seo/meta.mjs` 檢查每頁 head 與 sitemap，結尾輸出各語系頁數；`headings.mjs` 檢查 heading；`scripts/i18n/routes.mjs` 檢查語系與連結；Lighthouse SEO = 1；html-validate 無錯誤）。頁數和預期不同時，先查是不是少了某個語系的內容檔或 `translationKey` 對不上
 2. 用瀏覽器檢視原始碼，確認上表各項存在且值正確
 3. JSON-LD 貼到 [Schema Markup Validator](https://validator.schema.org/) 無錯誤
 4. PR 的 preview 檢查重點列出新增 / 變更頁面的 title 與 description

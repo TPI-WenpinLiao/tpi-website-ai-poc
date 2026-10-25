@@ -6,7 +6,7 @@
 
 - 可上線品質的真實開發，但目前只部署到 Cloudflare Pages（`*.pages.dev`），不上正式網域
 - 本站是現站的改版複製品，**不可被搜尋引擎收錄**：`public/_headers` 與 `public/robots.txt` 不得移除或放寬
-- 語系：zh-TW 優先；架構需支援 en、vi（M7 才翻譯）。URL 與語系路徑規則見 `docs/decisions/0002-url-and-locale.md`
+- 語系：zh-TW、en、vi 三語上線（M7），zh-TW 優先。URL 與語系路徑規則見 `docs/decisions/0002-url-and-locale.md`，多語系內容的維護規則見 `content-migration` skill 的「多語系內容」
 - 目前 milestone、進度與下一步以 `docs/status.md` 為準
 
 ## 技術棧
@@ -34,6 +34,7 @@ M2 定案的規則，細節以連結的文件為準：
 - 導覽只讀 `docs/ia/navigation.csv`（`docs/ia/navigation.md`），不在元件裡另寫一份選單
 - URL：zh-TW 不加前綴，en、vi 加 `/en`、`/vi`；路徑只用小寫英文、數字與 `-`，不加尾斜線（`/` 除外），slug 三語共用。完整規則見 ADR 0002
 - 語系前綴與路徑正規化一律用 `src/lib/i18n/` 的函式，不在元件裡手接 `/en`；未翻譯的頁面不產生（不設 `i18n.fallback`）
+- 有 `src/data/strings/<locale>.ts` 與 `src/data/home/<locale>.ts` 的語系才產生頁面。選單、footer、麵包屑的 en、vi 名稱讀 `docs/i18n/glossary.csv`，沒有譯名時 build 失敗；該語系沒有的頁面連到 zh-TW 版（`docs/ia/navigation.md`「語系」）
 - 現站頁面在新站的位置看 `docs/ia/page-map.csv`，舊網址的轉址看 `docs/ia/redirects.csv`
 - `page-map.csv`、`redirects.csv`、`sitemap-summary.json`、`blog-categories.csv` 與 `sitemap.md`、`navigation.md` 的自動產生段落由 `scripts/ia/` 產生，不手改；改了輸入就重跑對應 script。`npm run check:ia` 會擋下過期的產出，`blog-categories.csv` 要連現站，不在檢查範圍
 - 內容類型的欄位與 JSON-LD 見 `docs/ia/content-model.md`
@@ -100,7 +101,7 @@ M2、M3 的關卡 issue 改用對應的 label（`ia-approved`、`wireframe-appro
 
 - 不得捏造產品功能、數據、客戶名稱、認證或獎項
 - 不確定的內容在 PR 中列為「待確認」，不要自行補上
-- 從現站搬移內容時依 `.claude/skills/content-migration/SKILL.md`：各內容類型的轉換或對照 script、schema 沒有欄位的段落不搬、en 與 vi 內容檔先進版控（M7 才產生頁面）
+- 從現站搬移內容時依 `.claude/skills/content-migration/SKILL.md`：各內容類型的轉換或對照 script、schema 沒有欄位的段落不搬；en、vi 內容的來源、用語與修正位置依同一個 skill 的「多語系內容」
 - 現站每一頁的處置（`disposition`）與待確認（`to_confirm`）看 `docs/research/inventory.csv`，依據見 `docs/research/content-audit.md`
 
 ## 文件維護
