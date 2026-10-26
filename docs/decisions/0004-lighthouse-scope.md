@@ -26,9 +26,9 @@
 ## 決策
 
 1. **`npm run check` 測代表頁**：`lighthouserc.cjs` 的 `PAGES` 列出每個 `src/layouts/templates/` 模板至少一頁，取該模板在全站量測中 performance 最低的真實頁面；同分時取 vi（字型最多）。另外加上三語首頁與 404，offering 模板的 3D 頁與沒有 3D 的服務頁各一頁。還沒有真實頁面的模板（目前是 `gated-download`，沒有白皮書）用 `/templates/<id>` 預覽頁。共 15 頁，各跑 3 次
-2. **清單不會指到不存在的頁面**：`scripts/lhci-prepare.mjs` 在路徑不在 `dist/`，或有模板沒有任何一頁時失敗。改 slug 或新增模板的 PR 會被擋下，要同時改 `PAGES`。它不檢查頁面實際用哪個模板、有沒有 3D：頁面換模板或拿掉 3D 時，`template` 與 `scene` 要手動改
-3. **3D 頁面的 performance 暫時只 warn**：`PAGES` 中 `scene: true` 的 4 頁（三語首頁、`/products/systalk-chat`）用 `assertMatrix` 把 performance 降成 `warn`，log 仍印出分數；其他類別與其他頁面維持 `error`。#127 把 TBT 降下來後拿掉這個例外
-4. **全站量測留成工具**：`npm run lighthouse:all`（`LHCI_ALL=1`）測每一頁各 1 次，所有頁面的 performance 都是 `error`，沒有 3D 例外。不在 `npm run check` 裡；改到全站共用的部分（字型、`BaseLayout`、`PageLayout`、`astro.config.mjs` 的圖片設定）、新增大量內容，以及 M8-01 全站驗收時重跑，再依結果更新 `PAGES`
+2. **清單不會指到不存在的頁面**：`scripts/lhci-prepare.mjs` 在路徑不在 `dist/`，或有模板沒有任何一頁時失敗。改 slug 或新增模板的 PR 會被擋下，要同時改 `PAGES`。它不檢查頁面實際用哪個模板：頁面換模板時，`template` 要手動改
+3. **3D 頁面的 performance 暫時只 warn**（#127 已拿掉）：`PAGES` 中載入 3D 的 4 頁（三語首頁、`/products/systalk-chat`）原本用 `assertMatrix` 把 performance 降成 `warn`。#127 把 3D 初始化拆成多個 task（ADR 0003「初始化的長任務」）後，所有頁面的 performance 都是 `error`
+4. **全站量測留成工具**：`npm run lighthouse:all`（`LHCI_ALL=1`）測每一頁各 1 次，所有頁面的 performance 都是 `error`。不在 `npm run check` 裡；改到全站共用的部分（字型、`BaseLayout`、`PageLayout`、`astro.config.mjs` 的圖片設定）、新增大量內容，以及 M8-01 全站驗收時重跑，再依結果更新 `PAGES`
 
 ## 取捨
 

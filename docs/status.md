@@ -108,12 +108,12 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - logo 改用 AI 檔轉出的 SVG 完成（#122）：`node scripts/design/import-brand.mjs <AI 檔資料夾>` 用 `pdftocairo` 把行銷部門的 AI 檔轉成 SVG，刪掉反白版的預覽底色與空字形、裁掉留白，產生 `src/assets/brand/logo-*.svg`、favicon 與 apple-touch-icon；header、footer 與 `public/og/default.png` 改用 SVG，顯示高度不變；JSON-LD 的 organization `logo` 用 script 從 SVG 產生的 PNG。AI 原始檔不進 repo（`docs/design/brand-assets.md`）
 - `npm run check` 的 LHCI 涵蓋所有模板完成（#87）：`lighthouserc.cjs` 的 `PAGES` 是每個模板在全站量測中分數最低的一頁，加上三語首頁與 404，共 15 頁；`scripts/lhci-prepare.mjs` 在路徑不存在或有模板沒有代表頁時失敗（ADR 0004）。`npm run lighthouse:all` 測全部 485 頁，第一次 202 頁沒達標，修掉 vi 字型（多下載 `latin-ext` subset）、新聞內頁圖片（手機下載 1440w 封面與 1600px 內文原檔）與 `/en` 的「Learn More」連結文字後，剩下載入 3D 的 59 頁，交給 #127，這段期間 3D 頁的 performance 只 warn
 - 只改文件的 PR 在 quality-gate 跳過 Lighthouse 完成（#129）：變更的檔案全部在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY` 白名單內時，quality-gate 不跑 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify`：拿掉這些檔案重新 build，`dist/` 逐檔相同才通過，白名單失效時會在這裡失敗。job summary 寫明原因。`npm run check` 拆成 `check:before-lighthouse` 與 `lighthouse`，本機行為不變（ADR 0004「例外」）
+- 3D 場景頁面的 TBT 降到 Lighthouse performance 門檻內完成（#127）：3D 初始化的每一步各自一個 task，canvas 上頁面前先畫完第一個 frame 並等 GPU 做完（headless Chromium 的 compositor 讀回 canvas 時要等 SwiftShader 編譯 shader，原本是一個約 250 ms 的模擬長任務），WebGL 偵測建立的 context 直接交給 renderer；`Scene3D` 等 hero 圖的 LCP entry 才載入 3D。`npm run lighthouse:all` 485 頁全部 performance ≥ 0.95，3D 的 60 頁 0.97–0.99；`lighthouserc.cjs` 拿掉 3D 頁的 warn。`scripts/lib/static-server.mjs` 加上 gzip，`lighthouse-3d.mjs` 的數字和 LHCI 一致（ADR 0003「初始化的長任務」）
 
 ## 下一步
 
 - M8-01 全站驗收（#43）可以開始
 - M3-08 動態規範（#55）可以開始
-- 3D 場景頁面的 TBT（#127）可以開始：載入 3D 的頁面是全站唯一沒達到 performance 門檻的頁面，`lighthouserc.cjs` 暫時只 warn
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落
@@ -152,9 +152,8 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - 正式網域未定；`astro.config.mjs` 的 `site` 目前以 `SITE_URL` 環境變數覆寫，預設 `https://tpi-website-ai-poc.pages.dev`
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
 - `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 是行銷部門 AI 檔轉出的 SVG（`node scripts/design/import-brand.mjs <AI 檔資料夾>` 匯入 `src/assets/brand/`、favicon，OG 圖由 `og-image.mjs` 產生），沒有使用規範（`docs/design/brand-assets.md`）
-- 首頁行動版 Lighthouse performance 中位數 0.94（`node scripts/design/lighthouse-3d.mjs /`，2026-10-23，各跑 3 次），單次在 0.91–0.96 之間浮動。M4-04 比較了三種 CSS 載入方式：現狀（3 個 CSS 檔）、`build.inlineStylesheets: 'always'`、小檔 inline，分數都是 0.94；全部 inline 讓 FCP 快約 450 ms、LCP 快約 150 ms，但每頁 HTML 從 23 KB 變 89 KB、換頁沒有 CSS 快取，所以維持現狀。扣分主要來自 3D chunk 的 TBT。preview 上的真機量測還沒做
+- 首頁行動版 Lighthouse performance 中位數 0.94（`node scripts/design/lighthouse-3d.mjs /`，2026-10-23，各跑 3 次），單次在 0.91–0.96 之間浮動；#127 後是 0.99（2026-10-26，量測的 server 加上 gzip 後）。M4-04 比較了三種 CSS 載入方式：現狀（3 個 CSS 檔）、`build.inlineStylesheets: 'always'`、小檔 inline，分數都是 0.94；全部 inline 讓 FCP 快約 450 ms、LCP 快約 150 ms，但每頁 HTML 從 23 KB 變 89 KB、換頁沒有 CSS 快取，所以維持現狀。preview 上的真機量測還沒做
 - 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；文章已在 M5-05 遷移，改讀 content collections 並刪除這個檔案的工作在「下一步」。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
-- `lighthouserc.cjs` 中載入 3D 的 4 頁（`scene: true`）performance 只 warn，#127 修好 TBT 後拿掉（ADR 0004）
