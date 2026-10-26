@@ -31,6 +31,7 @@ import Backdrop from '../../components/ui/Backdrop.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import InPageNav from '../../components/ui/InPageNav.astro';
 import Faq from '../../components/ui/Faq.astro';
+import VideoFacade from '../../components/ui/VideoFacade.astro';
 import SceneChapter from '../../components/ui/SceneChapter.astro';
 import { Image } from 'astro:assets';
 import tokensCss from '../../styles/tokens.css?raw';
@@ -80,6 +81,9 @@ const principles = [
   { title: '光標示資料與互動', body: '紫、品紅、橘的能量漸層與光點只用來標示流動、焦點與 hover，不當文字的底色。' },
   { title: '動態跟著捲動', body: '進場、圖層分離與進度條都由捲動驅動，不需要 client JS；偏好減少動態時全部靜止。' },
 ];
+
+// The deployment video on the current site's /products/digirunner/awsmarketplace
+const VIDEO_DEMO_ID = 'rFrW8Cbl5LY';
 
 // States drawn statically with data-preview-state; components have no :active style to show
 type PreviewState = 'hover' | 'focus' | undefined;
@@ -431,6 +435,21 @@ const description =
                 image={{ src: coverData, alt: '' }}
               />
             </li>
+          </ul>
+
+          <h3>VideoFacade</h3>
+          <ul class="cards">
+            {linkStates.map((st) => (
+              <li class="state" inert={st.preview !== undefined}>
+                <span class="state-label">{st.label}</span>
+                <VideoFacade
+                  video={{ kind: 'youtube', id: VIDEO_DEMO_ID }}
+                  title="digiRunner Cloud：從選擇到部署 即刻啟動"
+                  poster={coverPlatform}
+                  data-preview-state={st.preview}
+                />
+              </li>
+            ))}
           </ul>
 
           <h3>CardGrid</h3>

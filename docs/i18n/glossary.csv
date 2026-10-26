@@ -125,6 +125,8 @@ ui:person.certifications,ui,證照,Certifications,Chứng chỉ,draft,src/data/s
 ui:person.backToTeam,ui,回到 ESG 顧問團隊,Back to ESG advisory team,Quay lại đội ngũ tư vấn ESG,draft,src/data/strings/zh-TW.ts,
 ui:content.effectiveDate,ui,生效日期,Effective date,Ngày hiệu lực,draft,src/data/strings/zh-TW.ts,
 ui:content.pdf,ui,下載 PDF,Download PDF,Tải PDF,draft,src/data/strings/zh-TW.ts,
+ui:video.play,ui,播放影片,Play video,Phát video,draft,src/data/strings/zh-TW.ts,VideoFacade 按鈕上的文字
+ui:video.playPrefix,ui,播放影片：,"Play video: ","Phát video: ",draft,src/data/strings/zh-TW.ts,VideoFacade 按鈕的 accessible name，接在影片標題前面，結尾有半形空格
 ui:form.name,ui,姓名,Name,Họ và tên,draft,src/data/strings/zh-TW.ts,
 ui:form.phone,ui,電話,Phone,Điện thoại,draft,src/data/strings/zh-TW.ts,
 ui:form.email,ui,Email,Email,Email,draft,src/data/strings/zh-TW.ts,
