@@ -21,11 +21,14 @@ export const TIERS = {
   mobile: { kind: 'mobile', maxDpr: 1.5, density: 0.35, antialias: false, parallax: false, path: 'dolly' },
 } as const satisfies Record<Tier['kind'], Tier>;
 
-// The rendering budget drops on narrow layouts (--bp-lg-down in src/styles/media.css; scripts
-// can't read @custom-media) and on touch devices, whatever their layout (a landscape tablet gets
-// the desktop layout but the mobile tier). Picked when the scene starts; Scene3D restarts the
-// scene when this query flips (a window resized across the breakpoint).
-export const LOW_POWER = '(width < 64rem), (pointer: coarse)';
+// The narrow layout follows the CSS: scripts can't read @custom-media, so this is --bp-lg-down
+// from src/styles/media.css. runtime.ts frames the scene by it.
+export const NARROW = '(width < 64rem)';
+
+// The rendering budget drops on narrow layouts and on touch devices, whatever their layout (a
+// landscape tablet gets the desktop layout but the mobile tier). Picked when the scene starts;
+// Scene3D restarts the scene when this query flips (a window resized across the breakpoint).
+export const LOW_POWER = `${NARROW}, (pointer: coarse)`;
 
 export const pickTier = (): Tier => (matchMedia(LOW_POWER).matches ? TIERS.mobile : TIERS.desktop);
 

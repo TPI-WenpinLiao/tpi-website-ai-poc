@@ -3,11 +3,10 @@
 // The camera is aligned with the CSS 3D fallback: --scene-angle-x/-z give the isometric view and
 // --perspective the field of view. Colors come from the surface's semantic tokens.
 import { Color, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
-import { createSurface, pickTier, type SceneSurface, type Tier } from './tiers';
+import { createSurface, NARROW, pickTier, type SceneSurface, type Tier } from './tiers';
 
-// Layout follows the CSS: scripts can't read @custom-media, so this is --bp-lg-down from
-// src/styles/media.css. Read it live, since the viewport can cross it after the scene starts.
-const narrowLayout = () => matchMedia('(width < 64rem)').matches;
+// Read live, since the viewport can cross it after the scene starts
+const narrowLayout = () => matchMedia(NARROW).matches;
 
 // How fast the damped progress follows the scroll position, per second
 const PROGRESS_DAMPING = 6;
@@ -174,6 +173,8 @@ export function mount(options: MountOptions): () => void {
     if (stopped) return;
     stopped = true;
     stop?.();
+    // Let go of the stopped scene's renderer, scene and buffers
+    stop = undefined;
   };
 }
 

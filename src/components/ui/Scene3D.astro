@@ -118,12 +118,17 @@ const { direction, family } = Astro.props;
     const onTierChange = () => {
       clearTimeout(rebuild);
       rebuild = window.setTimeout(() => {
-        // Several rebuilds can overlap; stopping is idempotent, so the chain stops whatever is left
-        const previous = stop;
-        const next = start(previous);
+        // Several rebuilds can overlap, so stopping covers the scene being replaced too. Once it has
+        // stopped, drop it, so a page resized back and forth doesn't keep every old scene.
+        let previous: (() => void) | undefined = stop;
+        const retire = () => {
+          previous?.();
+          previous = undefined;
+        };
+        const next = start(retire);
         stop = () => {
           next();
-          previous();
+          retire();
         };
       }, TIER_DEBOUNCE);
     };
