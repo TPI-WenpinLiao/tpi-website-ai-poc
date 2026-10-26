@@ -81,13 +81,14 @@ const t = strings(localeFromPath(Astro.url.pathname));
   .frame {
     position: relative;
     aspect-ratio: 16 / 9;
-    overflow: hidden;
     border: var(--border-width) solid var(--glass-border);
     border-radius: var(--radius-xl);
     background: var(--color-bg-muted);
     box-shadow: var(--shadow-md);
   }
 
+  /* The frame doesn't clip (overflow would cut off the button's focus ring, which sits outside on
+     the surface like everywhere else), so the poster and the player round their own corners */
   .poster,
   .player {
     display: block;
@@ -95,6 +96,7 @@ const t = strings(localeFromPath(Astro.url.pathname));
     block-size: 100%;
     object-fit: cover;
     border: 0;
+    border-radius: inherit;
   }
 
   .player {
@@ -112,11 +114,6 @@ const t = strings(localeFromPath(Astro.url.pathname));
     border-radius: inherit;
     background: transparent;
     cursor: pointer;
-  }
-
-  /* Focus ring inside the frame, which clips anything drawn outside it */
-  .play:is(:focus-visible, [data-preview-state='focus']) {
-    outline-offset: calc(-1 * (var(--focus-ring-width) + var(--focus-ring-offset)));
   }
 
   .badge {

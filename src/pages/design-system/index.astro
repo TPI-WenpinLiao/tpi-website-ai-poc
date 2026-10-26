@@ -82,11 +82,12 @@ const principles = [
   { title: '動態跟著捲動', body: '進場、圖層分離與進度條都由捲動驅動，不需要 client JS；偏好減少動態時全部靜止。' },
 ];
 
-// States drawn statically with data-preview-state; components have no :active style to show
-type PreviewState = 'hover' | 'focus' | undefined;
 // The deployment video on the current site's /products/digirunner/awsmarketplace
 const VIDEO_DEMO_ID = 'rFrW8Cbl5LY';
-const linkStates:{ label: string; preview: PreviewState }[] = [
+
+// States drawn statically with data-preview-state; components have no :active style to show
+type PreviewState = 'hover' | 'focus' | undefined;
+const linkStates: { label: string; preview: PreviewState }[] = [
   { label: '預設', preview: undefined },
   { label: 'Hover', preview: 'hover' },
   { label: 'Focus', preview: 'focus' },
