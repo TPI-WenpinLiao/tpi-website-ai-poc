@@ -39,9 +39,10 @@ const git = (args, cwd) => execFileSync('git', args, { cwd, encoding: 'utf8' }).
  * --no-renames lists both sides of a move, so moving src/x.ts to docs/x.md counts src/x.ts.
  * diff-tree, not diff: outside a repository git diff falls back to --no-index and reports
  * "Could not access 'HEAD^1'" instead of the real cause.
+ * @param {string} [cwd]
  */
-export function changedFiles() {
-  return git(['diff-tree', '-r', '--name-only', '--no-renames', '-z', 'HEAD^1', 'HEAD']);
+export function changedFiles(cwd) {
+  return git(['diff-tree', '-r', '--name-only', '--no-renames', '-z', 'HEAD^1', 'HEAD'], cwd);
 }
 
 /** sha256 of every file under dir, keyed by path relative to dir. @param {string} dir */

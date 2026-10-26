@@ -108,7 +108,7 @@ Claude 會依序：
 
 PR 開了之後 session 會持續監看，CI 失敗、review 留言都會自動喚醒 session 處理。
 
-quality-gate 對只改文件的 PR（變更的檔案全部是 `.claude/**`、`docs/**/*.md` 或根目錄的 `*.md`）跳過 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify` 確認這些檔案不影響 `dist/`，job summary 寫明原因。開 PR 前本機的 `npm run check` 照樣包含 Lighthouse。規則見 [ADR 0004](decisions/0004-lighthouse-scope.md)「例外」。
+quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY` 白名單內）跳過 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify` 確認這些檔案不影響 `dist/`，job summary 寫明原因。開 PR 前本機的 `npm run check` 照樣包含 Lighthouse。規則見 [ADR 0004](decisions/0004-lighthouse-scope.md)「例外」。
 
 ## 視覺回歸
 

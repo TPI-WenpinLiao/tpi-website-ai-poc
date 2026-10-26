@@ -51,8 +51,8 @@ quality-gate 的 `timeout-minutes` 從 20 調到 30。
 
 變更的檔案全部在白名單內的 PR，quality-gate 跳過 Lighthouse，其他檢查照跑。這類 PR 不會改變 `dist/`，Lighthouse 量到的頁面和 base 相同。
 
-- 白名單只寫在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY`：`.claude/**`、`docs/**/*.md`、根目錄的 `*.md`。`docs/` 不整個列入：build 會讀 `docs/ia/nodes.csv`、`docs/i18n/glossary.csv` 等 CSV
+- 白名單只寫在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY`，這裡不另列。`docs/` 不整個列入：build 會讀 `docs/ia/nodes.csv`、`docs/i18n/glossary.csv` 等 CSV
 - 判斷：`lighthouse-scope.mjs --changed` 比對 PR 的 merge commit 與它的第一個 parent（base）。用 `--no-renames`，把 `src/` 的檔案移到 `docs/` 也算改到 `src/`
-- 白名單的依據：跳過時改跑 `lighthouse-scope.mjs --verify`。它把白名單內的檔案全部拿掉再 build 一次，和完整 build 的 `dist/` 逐檔比對 sha256；build 失敗或有任何檔案不同就失敗。之後 build 開始讀某個 `.md` 時，第一個只改文件的 PR 會在這裡失敗，不會默默跳過。本機也能執行，約 12 秒（雲端 session）
+- 白名單的依據：跳過時改跑 `lighthouse-scope.mjs --verify`。它把白名單內的檔案全部拿掉再 build 一次，和完整 build 的 `dist/` 逐檔比對 sha256；build 失敗或有任何檔案不同就失敗。之後 build 開始讀某個 `.md` 時，第一個只改文件的 PR 會在這裡失敗，不會默默跳過。本機也能執行；CI 上約 10 秒（#131 的 run）
 - job summary 寫明跳過的原因、白名單、`--verify` 的結果與變更的檔案
 - 本機與雲端 session 的 `npm run check` 不受影響，仍包含 Lighthouse。`npm run check` = `npm run check:before-lighthouse` 加 `npm run lighthouse`，quality-gate 把兩段分開執行
