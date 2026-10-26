@@ -136,7 +136,7 @@ interface MountOptions {
   /** Called once the first frame is on the canvas */
   onReady: () => void;
   family?: number;
-  /** The canvas and context Scene3D created to check for WebGL; a new one otherwise */
+  /** The canvas and context Scene3D created to check for WebGL, used if its tier still applies */
   surface?: SceneSurface;
 }
 
@@ -160,7 +160,8 @@ async function gpuDone(gl: WebGLRenderingContext | WebGL2RenderingContext) {
 
 /**
  * Starts the scene, one step per task; returns a function that stops it and frees GPU resources,
- * also while it is still starting.
+ * also while it is still starting. The canvas joins the host only once its first frame is drawn
+ * (onReady), so a scene being replaced can keep playing until then.
  */
 export function mount(options: MountOptions): () => void {
   let stopped = false;
@@ -170,6 +171,7 @@ export function mount(options: MountOptions): () => void {
     else stop = started;
   });
   return () => {
+    if (stopped) return;
     stopped = true;
     stop?.();
   };
@@ -178,12 +180,14 @@ export function mount(options: MountOptions): () => void {
 /** Builds the scene and starts its frame loop; resolves undefined if `stopped` turns true first. */
 async function start({ host, track, factory, onReady, family, surface }: MountOptions, stopped: () => boolean) {
   // Creating a context is a task of its own; without one there is no scene (a rebuild on a
-  // browser that just lost WebGL)
-  const created = surface ?? createSurface(pickTier());
+  // browser that just lost WebGL). The viewport may have crossed LOW_POWER while three.js
+  // downloaded, before Scene3D listens for it, so Scene3D's context may be for the wrong tier.
+  const tier = pickTier();
+  const created = surface?.tier === tier ? surface : createSurface(tier);
   // Leave the task that evaluated the chunk or created the context
   await nextTask();
   if (stopped() || !created) return undefined;
-  const { tier, canvas, context } = created;
+  const { canvas, context } = created;
   const perspective = readLength(css(host, '--perspective'));
   const renderer = new WebGLRenderer({ canvas, context });
   const palette = readPalette(host);
@@ -196,7 +200,6 @@ async function start({ host, track, factory, onReady, family, surface }: MountOp
   }
   const scene = new Scene();
   const camera = new PerspectiveCamera(50, 1, 0.1, 400);
-  host.dataset.sceneTier = tier.kind;
 
   // Narrow heroes frame the scene in PageHero's visual area: between the breadcrumb row (or
   // whatever bar is above the hero) and the copy, measured at scroll 0 in the host's coordinates,
@@ -260,8 +263,6 @@ async function start({ host, track, factory, onReady, family, surface }: MountOp
   };
   resize();
 
-  // Compile the shaders before the first frame needs them; with KHR_parallel_shader_compile the
-  // driver does it off the main thread
   // Compile the shaders and draw one frame before the canvas is on the page, then wait for the GPU
   // to finish it. The first draw is when the driver finishes building the shaders (SwiftShader
   // compiles them to machine code then); on the page, the compositor would read the canvas back
@@ -276,13 +277,14 @@ async function start({ host, track, factory, onReady, family, surface }: MountOp
     instance.dispose();
     renderer.dispose();
     renderer.domElement.remove();
-    delete host.dataset.sceneTier;
   };
   if (stopped()) {
     release();
     return undefined;
   }
   host.append(renderer.domElement);
+  // Set here, not when the scene stops: the scene being replaced stops after this one has started
+  host.dataset.sceneTier = tier.kind;
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(host);

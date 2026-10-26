@@ -38,12 +38,13 @@ export interface SceneSurface {
 
 /**
  * Creates the canvas and its WebGL 2 context (three.js renders only with WebGL 2), with the
- * attributes WebGLRenderer would ask for; undefined when the browser can't.
+ * attributes WebGLRenderer asks for when it creates the context itself (three r186); undefined
+ * when the browser can't.
  */
 export function createSurface(tier: Tier): SceneSurface | undefined {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('webgl2', {
-    alpha: false,
+    alpha: true,
     depth: true,
     stencil: false,
     antialias: tier.antialias,

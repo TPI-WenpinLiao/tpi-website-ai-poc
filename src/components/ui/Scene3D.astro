@@ -93,7 +93,7 @@ const { direction, family } = Astro.props;
     // Reduced motion may have been turned on while the chunk downloaded
     if (reduceMotion.matches) return;
     host.hidden = false;
-    const start = () =>
+    const start = (onReady?: () => void) =>
       mount({
         host,
         track,
@@ -102,6 +102,7 @@ const { direction, family } = Astro.props;
         surface,
         onReady: () => {
           track.dataset.scene = 'ready';
+          onReady?.();
         },
       });
     let stop = start();
@@ -109,15 +110,21 @@ const { direction, family } = Astro.props;
     surface = undefined;
 
     // The rendering tier (block count, camera path, DPR) is picked when the scene starts, so a
-    // resize across the low-power breakpoint rebuilds it. data-scene stays "ready" meanwhile, so the
-    // static image doesn't flash in for the one frame the new canvas takes.
+    // resize across the low-power breakpoint rebuilds it. The new scene starts over several tasks
+    // (mount), so the old one keeps playing until the new canvas has drawn its first frame, and
+    // data-scene stays "ready": the static image never shows in between.
     const lowPower = matchMedia(LOW_POWER);
     let rebuild = 0;
     const onTierChange = () => {
       clearTimeout(rebuild);
       rebuild = window.setTimeout(() => {
-        stop();
-        stop = start();
+        // Several rebuilds can overlap; stopping is idempotent, so the chain stops whatever is left
+        const previous = stop;
+        const next = start(previous);
+        stop = () => {
+          next();
+          previous();
+        };
       }, TIER_DEBOUNCE);
     };
     lowPower.addEventListener('change', onTierChange);
@@ -130,6 +137,7 @@ const { direction, family } = Astro.props;
         lowPower.removeEventListener('change', onTierChange);
         stop();
         host.hidden = true;
+        delete host.dataset.sceneTier;
         delete track.dataset.scene;
       },
       { once: true },

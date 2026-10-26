@@ -104,7 +104,8 @@ const REBUILD_WAIT = 2500;
  * Loads at `from`, resizes to `to` while the scene plays, and screenshots the hero. Only the size
  * changes: switching isMobile or hasTouch makes puppeteer reload the page, which would pick the new
  * tier on its own and never exercise Scene3D's rebuild. Without touch the tier follows the width
- * alone. The page must not reload, and the canvas must be a new one.
+ * alone. The page must not reload, the canvas must be a new one, and the host must never be left
+ * without a canvas while the scene rebuilds.
  * @param {import('puppeteer-core').Browser} browser
  */
 async function resized(browser, base, path, from, to, outDir) {
@@ -120,6 +121,14 @@ async function resized(browser, base, path, from, to, outDir) {
   const before = await page.evaluate(() => {
     Reflect.set(window, '__sceneCaptureNoReload', true);
     document.querySelector('canvas')?.setAttribute('data-capture-before', '');
+    // The old scene must keep its canvas until the new one is on the page (#127): record any
+    // moment the host is left without one
+    const host = document.querySelector('[data-scene-host]');
+    if (host) {
+      new MutationObserver(() => {
+        if (!host.querySelector('canvas')) Reflect.set(window, '__sceneCaptureEmpty', true);
+      }).observe(host, { childList: true });
+    }
     return document.querySelector('[data-scene-tier]')?.getAttribute('data-scene-tier');
   });
   await page.setViewport({ width: to.width, height: to.height });
@@ -128,6 +137,7 @@ async function resized(browser, base, path, from, to, outDir) {
   const state = await page.evaluate(() => ({
     reloaded: Reflect.get(window, '__sceneCaptureNoReload') !== true,
     rebuilt: document.querySelectorAll('canvas').length === 1 && !document.querySelector('canvas[data-capture-before]'),
+    gap: Reflect.get(window, '__sceneCaptureEmpty') === true,
     tier: document.querySelector('[data-scene-tier]')?.getAttribute('data-scene-tier'),
     canvas: document.querySelectorAll('canvas').length,
     ready: document.querySelector('[data-scene-track]')?.getAttribute('data-scene') === 'ready',
@@ -212,7 +222,7 @@ async function main() {
       for (const [from, to] of [VIEWPORTS.toReversed(), VIEWPORTS]) {
         const result = await resized(browser, base, path, from, to, outDir);
         console.log(JSON.stringify(result));
-        if (!result.loaded || result.reloaded || !result.rebuilt || result.tier !== result.expected || !result.ready || result.errors.length) failed = true;
+        if (!result.loaded || result.reloaded || !result.rebuilt || result.gap || result.tier !== result.expected || !result.ready || result.errors.length) failed = true;
       }
     }
   } finally {

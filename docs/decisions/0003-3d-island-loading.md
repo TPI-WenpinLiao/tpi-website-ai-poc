@@ -79,7 +79,7 @@ LCP 都是 hero 靜態圖，3D chunk 在實測 LCP 與 `load` 之後請求。同
 - 靜態圖寬度也加上同比例的上限（`--hero-narrow-image-max`），有麵包屑時往下移一列（`--hero-image-drop`），主體中心落在視覺區中央。麵包屑在窄螢幕固定一列（目前頁只給螢幕閱讀器讀，h1 就在下面），列高才能先算進 CSS
 - runtime 在每次 resize 量視覺區（捲動位置 0 時、換算成畫布座標），場景中心放在視覺區中央，隨頁面捲動一起往上，視覺區捲出畫面時漸漸改回章節的構圖（`FOCUS_SHIFT.narrow`）。鏡頭距離由 `SceneContext.fitDistance()` 算出，讓 hero 的方塊佔視覺區高度的 80%。runtime 不寫 header 或頁內導覽列的高度
 - 首頁沒有麵包屑，視覺區從 hero 頂端開始，375 與 1280 寬的靜態版面與改動前逐像素相同；768 寬因為上限變短 124 px。首頁的窄螢幕 3D 方塊塔改由 `fitDistance` 決定大小，和改動前不同
-- tier（方塊數、運鏡、DPR）在場景啟動時決定。視窗縮放跨過 `LOW_POWER` 時，`Scene3D` 等 200 ms 後 `stop()` 再 `mount()`；重建期間 `data-scene` 保持 `ready`，靜態圖不會閃出來。`pointer: coarse` 的裝置不因寬度改變換 tier。`scene-capture.mjs` 加上 mobile → desktop、desktop → mobile 兩個情境，檢查 `data-scene-tier`
+- tier（方塊數、運鏡、DPR）在場景啟動時決定。視窗縮放跨過 `LOW_POWER` 時，`Scene3D` 等 200 ms 後 `mount()` 新的場景，新 canvas 畫出第一個 frame 時才停掉舊的（#127 起 mount 分成多個 task，先停舊的會空白約 0.2 秒）；重建期間 `data-scene` 保持 `ready`，靜態圖不會閃出來。`pointer: coarse` 的裝置不因寬度改變換 tier。`scene-capture.mjs` 加上 mobile → desktop、desktop → mobile 兩個情境，檢查 `data-scene-tier`，以及重建期間 host 一直有 canvas
 
 改動後重量（與本節同一個 commit）：`lighthouse-3d.mjs` 的 `/` 行動版第一輪 0.95（其中一次 0.78，TBT 170 ms），重跑 0.97；桌機 1。`/products/digirunner` 行動版 0.97、桌機 1。LCP 仍是 hero 靜態圖。
 
@@ -106,7 +106,7 @@ headless Chromium 用軟體合成，compositor 每個 frame 都把 canvas 讀回
 
 1. **每一步各自一個 task**：建立 renderer、建構場景、編譯 shader、第一個 frame 之間用 `setTimeout(0)` 讓出主執行緒。`mount()` 仍同步回傳 stop，啟動途中呼叫也會停止並釋放資源
 2. **canvas 上頁面前先畫完第一個 frame**：`renderer.compileAsync()` 之後在還沒加進 DOM 的 canvas 上畫一個 frame，用 WebGL 2 的 fence（`fenceSync`，每個 task 檢查一次）等 GPU 做完，才把 canvas 加到 host。不在頁面上的 canvas 不會被 compositor 讀回，等 shader 的時間不在主執行緒上
-3. **只建立一個 context**：`Scene3D` 偵測 WebGL 2 時用 `createSurface(tier)` 建立 canvas 與 context，屬性和 `WebGLRenderer` 預設相同，第一次 mount 直接交給 renderer。tier 切換時的重建由 runtime 自己建立新的 context（antialias 依 tier 不同）
+3. **只建立一個 context**：`Scene3D` 偵測 WebGL 2 時用 `createSurface(tier)` 建立 canvas 與 context，屬性和 `WebGLRenderer` 自己建立 context 時相同（three r186），第一次 mount 直接交給 renderer。tier 已經不同（下載 three.js 期間跨過 `LOW_POWER`）或 tier 切換重建時，runtime 自己建立新的 context（antialias 依 tier 不同）
 
 真機的 GPU 合成不會每個 frame 讀回 canvas，這三項在真機上的效果比在雲端小；shader 編譯不擋主執行緒、少建一個 context 仍然有效。
 
