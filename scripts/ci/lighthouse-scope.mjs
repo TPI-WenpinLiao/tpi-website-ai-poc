@@ -38,9 +38,11 @@ const git = (args, cwd) => execFileSync('git', args, { cwd, encoding: 'utf8' }).
 /**
  * Files the PR changes. CI checks out the PR's merge commit, whose first parent is the base branch.
  * --no-renames lists both sides of a move, so moving src/x.ts to docs/x.md counts src/x.ts.
+ * diff-tree, not diff: outside a repository git diff falls back to --no-index and reports
+ * "Could not access 'HEAD^1'" instead of the real cause.
  */
 export function changedFiles() {
-  return git(['diff', '--name-only', '--no-renames', '-z', 'HEAD^1', 'HEAD']);
+  return git(['diff-tree', '-r', '--name-only', '--no-renames', '-z', 'HEAD^1', 'HEAD']);
 }
 
 /** sha256 of every file under dir, keyed by path relative to dir. @param {string} dir */

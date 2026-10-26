@@ -36,7 +36,11 @@ jobs:
       # Docs-only PRs cannot change dist/, so Lighthouse is skipped for them (#129)
       - name: Lighthouse scope
         id: scope
-        run: node scripts/ci/lighthouse-scope.mjs --changed
+        # checkout only marks the repo safe in a temporary HOME; the container runs as root on a
+        # workspace owned by the runner user, so later git calls would not see a repository
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          node scripts/ci/lighthouse-scope.mjs --changed
       - run: npm ci
       # Puppeteer checks and Lighthouse use the same Chromium as the visual regression tests
       - run: echo "CHROME_PATH=$(node -p "require('playwright-core').chromium.executablePath()")" >> "$GITHUB_ENV"
