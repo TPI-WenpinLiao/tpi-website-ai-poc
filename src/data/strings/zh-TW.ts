@@ -76,6 +76,11 @@ export const strings = {
     effectiveDate: '生效日期',
     pdf: '下載 PDF',
   },
+  // VideoFacade: the visible button text, and the start of its accessible name before the video title
+  video: {
+    play: '播放影片',
+    playPrefix: '播放影片：',
+  },
   // Field names of the current site's forms (docs/research/features.md「表單」)
   form: {
     name: '姓名',

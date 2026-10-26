@@ -31,6 +31,7 @@ import Backdrop from '../../components/ui/Backdrop.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import InPageNav from '../../components/ui/InPageNav.astro';
 import Faq from '../../components/ui/Faq.astro';
+import VideoFacade from '../../components/ui/VideoFacade.astro';
 import SceneChapter from '../../components/ui/SceneChapter.astro';
 import { Image } from 'astro:assets';
 import tokensCss from '../../styles/tokens.css?raw';
@@ -83,7 +84,9 @@ const principles = [
 
 // States drawn statically with data-preview-state; components have no :active style to show
 type PreviewState = 'hover' | 'focus' | undefined;
-const linkStates: { label: string; preview: PreviewState }[] = [
+// The deployment video on the current site's /products/digirunner/awsmarketplace
+const VIDEO_DEMO_ID = 'rFrW8Cbl5LY';
+const linkStates:{ label: string; preview: PreviewState }[] = [
   { label: '預設', preview: undefined },
   { label: 'Hover', preview: 'hover' },
   { label: 'Focus', preview: 'focus' },
@@ -431,6 +434,21 @@ const description =
                 image={{ src: coverData, alt: '' }}
               />
             </li>
+          </ul>
+
+          <h3>VideoFacade</h3>
+          <ul class="cards">
+            {linkStates.map((st) => (
+              <li class="state" inert={st.preview !== undefined}>
+                <span class="state-label">{st.label}</span>
+                <VideoFacade
+                  video={{ kind: 'youtube', id: VIDEO_DEMO_ID }}
+                  title="digiRunner Cloud：從選擇到部署 即刻啟動"
+                  poster={coverPlatform}
+                  data-preview-state={st.preview}
+                />
+              </li>
+            ))}
           </ul>
 
           <h3>CardGrid</h3>

@@ -94,6 +94,10 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - `esg-advisory` 服務頁與 ESG 顧問頁內容遷移完成（#107）：`node scripts/content/migrate/esg-advisory.mjs` 把 `/esg-advisory` 三語轉成 `offering`（`kind: service`，tagline、轉型策略三階段、FAQ），顧問頁轉成 `person`（zh-TW 8、en 9、vi 8，取代 M4-01 的 draft 範例）；照片授權未確認不放，`description` 由頁面上的姓名、職稱、單位與專長組成。`OfferingTemplate` 加上「ESG 顧問團隊」段落（只在 person 節點的上層是這個 offering 時出現，依新的 `person.order` 排序），只用既有 `Card`。zh-TW 服務頁的 4 位顧問沒有個人頁，依使用者決定不建內容檔。`offering-content.mjs` 改為也比對 person（1261/1261）。`serializeFrontmatter` 的字串陣列在 flow 寫法讀不回原值時改寫成 block list。用法見 `docs/content/migration.md`「ESG 顧問服務」
 - `orient-ai`、`aiso` 服務頁內容遷移完成（#106）：`node scripts/content/migrate/offerings.mjs` 另外轉這兩個服務頁（三語 6 篇，版型各自的 extractor 在 `TEMPLATES`），`page-map.csv` 的 merge 列（`/orient-aI`）接在 `sourceUrl` 後面；zh-TW 的 `/orient-ai`、`/aiso` 上線，`/products/systalk-ai` 子頁卡片的失效連結補上。`page_type` 是 service，`kind` 依使用者決定填 `product`；family-ai hub 的 `highlights`（取自 `systalk-ai-phison`）依使用者決定維持在 family-ai，不移到 aiso。沒有欄位的段落見 `docs/content/migration.md`「服務頁」。`offering-content.mjs` 新增 110 行，含 #107 的 person 全部是 1371/1371
 
+### M6 功能
+
+- M6-03 影片延遲載入完成（#35）：新元件 `VideoFacade`。初始只有本機 poster 與原生按鈕，播放器（YouTube 用 `youtube-nocookie.com` 的 iframe，自架 MP4 用 `<video>`）放在 `<template>`，點擊後才換上並取得焦點；poster 不用 YouTube 縮圖，首次載入不連任何站外網域。`node scripts/design/video-facade.mjs` 接進 `npm run check`，對每個有 facade 的頁面檢查載入時沒有站外請求、鍵盤 Tab＋Enter 能換上有 `title` 的播放器並取得焦點。目前只有 `/design-system` 使用：現站影片在產品、服務、about 頁，offering schema 沒有影片欄位，M5 決定不搬
+
 ### M7 多語系
 
 - M7-01 翻譯詞彙表完成（#38）：`docs/i18n/glossary.csv` 列出產品、頁面、選單標籤與介面字串的 zh-TW／en／vi 對照（155 列），由 `node scripts/i18n/glossary.mjs` 依 `nodes.csv`、`navigation.csv`、`src/data/strings/zh-TW.ts` 產生，`--check` 在 `npm run check` 擋下過期與不合格的列。產品與頁面名稱的 en、vi 只取現站寫法（en、vi 內容檔的 `title`、`inventory.csv` 的選單文字），現站沒有就留空；介面字串與選單標籤由 AI 草擬（`draft`）。使用者決定產品名不加描述、en 與 vi 一律用產品名，公司名用 TPIsoftware，這 26 列已是 `confirmed`；沒有產品名的 product 列、page 列與 AI 草擬的介面字串在 M7-02、M7-03 翻譯時確認（`docs/i18n/glossary.md`「已確認的規則」）
@@ -123,7 +127,8 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - 回覆 M5-06（#31）PR 的「待確認」：合作夥伴頁的翻譯、法務文件是否要法務審閱、資訊安全政策的生效日、en 法務頁的英譯、關於我們的圖片授權
 - 回覆 M5-03（#28）PR 的「待確認」：客戶名稱與 logo 的使用授權、內頁內容只有一段描述、獎項與年份、產業對應
 - 回覆 `docs/content/products.md`「待確認」（M5-01）：banner 圖庫照能否沿用、各頁未搬的段落要刪減或擴充 content model、feature 數量多的產品頁捲動長度、價格與認證等可能過時的說法
-- M6-01 表單（#33）、M6-02 Pagefind 站內搜尋（#34）、M6-03 影片延遲載入（#35）、M6-04 GTM 與 consent 管理（#36）可以開始；表單與搜尋框的版面已在 contact、gated-download、utility 模板，沒有 `action`
+- M6-01 表單（#33）、M6-02 Pagefind 站內搜尋（#34）、M6-04 GTM 與 consent 管理（#36）可以開始；表單與搜尋框的版面已在 contact、gated-download、utility 模板，沒有 `action`
+- 回覆 M6-03（#35）PR 的「待確認」：現站產品、服務、about 頁的影片要不要放回新站（要在 offering schema 加影片欄位、改模板、下載自架 MP4）
 - 回覆 PR #98「待確認問題」：listing、utility、contact 頁的暫定描述（`src/data/strings/zh-TW.ts` 的 `pages`）、聯絡表單的諮詢產品選項、個資同意與 AI Playbook 欄位文案、`industry: other` 的顯示名稱
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
 - 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）

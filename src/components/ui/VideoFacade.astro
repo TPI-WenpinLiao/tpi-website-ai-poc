@@ -1,0 +1,156 @@
+---
+// Video that loads its player only when asked (M6-03, #35). The page ships a local poster image and
+// a native button; the player sits in a <template>, whose content the browser does not fetch, and a
+// click swaps it in and moves focus to it. So the first load requests nothing from a third party.
+// video is { kind: 'youtube', id } (played from youtube-nocookie.com) or { kind: 'file', src } (a
+// self-hosted MP4).
+// title names the video: the visible caption, the button's accessible name after video.playPrefix
+// and the player's title. The poster is a local image, never YouTube's thumbnail (i.ytimg.com); it
+// sits behind the button, so its alt is empty.
+// data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
+// scripts/design/video-facade.mjs checks every built page that has one (npm run check).
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { strings } from '../../data/strings';
+import { localeFromPath } from '../../lib/i18n/paths';
+
+interface Props {
+  video: { kind: 'youtube'; id: string } | { kind: 'file'; src: string };
+  title: string;
+  poster: ImageMetadata;
+  'data-preview-state'?: 'hover' | 'focus';
+}
+
+const { video, title, poster, 'data-preview-state': previewState } = Astro.props;
+const t = strings(localeFromPath(Astro.url.pathname));
+---
+
+<figure class="video" data-video-facade>
+  <div class="frame">
+    <Image class="poster" src={poster} alt="" widths={[480, 800, 1200]} sizes="(width >= 64rem) 46rem, 100vw" />
+    <button class="play" type="button" data-preview-state={previewState}>
+      <span class="badge">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"></path></svg>
+        <span class="label" aria-hidden="true">{t.video.play}</span>
+      </span>
+      <span class="sr-only">{t.video.playPrefix}{title}</span>
+    </button>
+    <template>
+      {
+        video.kind === 'youtube' ? (
+          <iframe
+            class="player"
+            src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(video.id)}?autoplay=1`}
+            title={title}
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            referrerpolicy="strict-origin-when-cross-origin"
+          />
+        ) : (
+          <video class="player" src={video.src} title={title} controls autoplay playsinline />
+        )
+      }
+    </template>
+  </div>
+  <figcaption class="caption">{title}</figcaption>
+</figure>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-video-facade]')) {
+    const frame = root.querySelector('.frame');
+    const button = root.querySelector('button');
+    const player = root.querySelector('template')?.content.firstElementChild;
+    if (!frame || !button || !(player instanceof HTMLElement)) continue;
+    button.addEventListener(
+      'click',
+      () => {
+        const live = player.cloneNode(true);
+        if (!(live instanceof HTMLElement)) return;
+        frame.replaceChildren(live);
+        live.focus();
+      },
+      { once: true },
+    );
+  }
+</script>
+
+<style>
+  .video {
+    margin: 0;
+  }
+
+  .frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-bg-muted);
+    box-shadow: var(--shadow-md);
+  }
+
+  .poster,
+  .player {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    border: 0;
+  }
+
+  .player {
+    background: var(--color-bg-muted);
+  }
+
+  /* The whole poster is the button; the badge only shows where to press */
+  .play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  /* Focus ring inside the frame, which clips anything drawn outside it */
+  .play:is(:focus-visible, [data-preview-state='focus']) {
+    outline-offset: calc(-1 * (var(--focus-ring-width) + var(--focus-ring-offset)));
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--touch-target);
+    padding: var(--space-3) var(--space-6) var(--space-3) var(--space-5);
+    border-radius: var(--radius-pill);
+    background: var(--color-action);
+    color: var(--color-action-text);
+    font-weight: var(--font-weight-semibold);
+    box-shadow: var(--shadow-md);
+    transition-property: transform, background-color, box-shadow;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  .play:is(:hover, [data-preview-state='hover']) .badge {
+    background: var(--color-action-hover);
+    box-shadow: var(--glow-brand);
+    transform: translateY(var(--lift));
+  }
+
+  .icon {
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    fill: currentColor;
+  }
+
+  .caption {
+    margin-block-start: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
+  }
+</style>

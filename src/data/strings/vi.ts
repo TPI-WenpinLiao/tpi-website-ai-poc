@@ -75,6 +75,10 @@ export const strings: Strings = {
     effectiveDate: 'Ngày hiệu lực',
     pdf: 'Tải PDF',
   },
+  video: {
+    play: 'Phát video',
+    playPrefix: 'Phát video: ',
+  },
   form: {
     name: 'Họ và tên',
     phone: 'Điện thoại',

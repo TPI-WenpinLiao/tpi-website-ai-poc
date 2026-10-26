@@ -74,6 +74,10 @@ export const strings: Strings = {
     effectiveDate: 'Effective date',
     pdf: 'Download PDF',
   },
+  video: {
+    play: 'Play video',
+    playPrefix: 'Play video: ',
+  },
   form: {
     name: 'Name',
     phone: 'Phone',
