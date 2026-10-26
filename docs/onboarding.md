@@ -60,3 +60,5 @@ npm run dev
 1. 在 GitHub 開 issue（使用 issue form），或挑選既有 issue
 2. 點 issue 留言中的「在 Claude Code 開啟」連結，會帶入 prompt、repo 與環境
 3. 之後的流程（`/issue-start`、`/issue-ship`、`/next-issue` 與人工確認點）見 [`workflow.md`](./workflow.md)
+
+<!-- #129 驗證用：只改文件的 PR 跳過 Lighthouse。不合併 -->
