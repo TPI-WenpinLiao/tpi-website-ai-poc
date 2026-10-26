@@ -26,14 +26,29 @@ jobs:
       LHCI_COLLECT__SETTINGS__CHROME_FLAGS: --no-sandbox --headless=new
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The PR's merge commit and its first parent (the base), for lighthouse-scope.mjs --changed
+          fetch-depth: 2
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
+      # Docs-only PRs cannot change dist/, so Lighthouse is skipped for them (#129)
+      - name: Lighthouse scope
+        id: scope
+        run: node scripts/ci/lighthouse-scope.mjs --changed
       - run: npm ci
       # Puppeteer checks and Lighthouse use the same Chromium as the visual regression tests
       - run: echo "CHROME_PATH=$(node -p "require('playwright-core').chromium.executablePath()")" >> "$GITHUB_ENV"
-      - run: npm run check
+      # npm run check without its last step, Lighthouse, which runs below unless the PR is docs-only
+      - run: npm run check:before-lighthouse
+      - name: Lighthouse
+        if: steps.scope.outputs.skip != 'true'
+        run: npm run lighthouse
+      - name: Verify DOCS_ONLY
+        id: verify
+        if: steps.scope.outputs.skip == 'true'
+        run: node scripts/ci/lighthouse-scope.mjs --verify
       - name: Visual regression report
         if: failure() && hashFiles('playwright-report/index.html') != ''
         uses: actions/upload-artifact@v7
@@ -45,4 +60,7 @@ jobs:
           retention-days: 14
       - name: Lighthouse summary
         if: always()
+        env:
+          LIGHTHOUSE_SKIP: ${{ steps.scope.outputs.skip }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
         run: node .github/scripts/lighthouse-summary.mjs >> "$GITHUB_STEP_SUMMARY"

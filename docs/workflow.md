@@ -108,9 +108,11 @@ Claude 會依序：
 
 PR 開了之後 session 會持續監看，CI 失敗、review 留言都會自動喚醒 session 處理。
 
+quality-gate 對只改文件的 PR（變更的檔案全部是 `.claude/**`、`docs/**/*.md` 或根目錄的 `*.md`）跳過 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify` 確認這些檔案不影響 `dist/`，job summary 寫明原因。開 PR 前本機的 `npm run check` 照樣包含 Lighthouse。規則見 [ADR 0004](decisions/0004-lighthouse-scope.md)「例外」。
+
 ## 視覺回歸
 
-quality-gate 的 `npm run check` 會用 `npm run test:visual` 把下列頁面的 full-page 截圖，和 `tests/visual/__screenshots__/` 的 baseline 比對。不同的像素超過 300 個就算失敗（理由寫在 `playwright.config.ts`）：
+quality-gate 的 `npm run check:before-lighthouse`（`npm run check` 去掉最後的 Lighthouse）會用 `npm run test:visual` 把下列頁面的 full-page 截圖，和 `tests/visual/__screenshots__/` 的 baseline 比對。不同的像素超過 300 個就算失敗（理由寫在 `playwright.config.ts`）：
 
 - 首頁 `/`、`/en`、`/vi`
 - `/templates/<id>`：首頁以外每個模板的預覽頁，`dist/templates/` 有幾頁就測幾頁
