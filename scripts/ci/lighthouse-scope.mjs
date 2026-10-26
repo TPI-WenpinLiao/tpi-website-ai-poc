@@ -7,7 +7,6 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { appendFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync } from 'node:fs';
-import { tmpdir } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -73,7 +72,10 @@ function build(cwd, outDir) {
 
 function verify() {
   const root = resolve(import.meta.dirname, '../..');
-  const tmp = mkdtempSync(join(tmpdir(), 'lighthouse-scope-'));
+  // Inside the repo, not os.tmpdir(): astro renames assets from <root>/.astro into the outDir, which
+  // fails with EXDEV when /tmp is another filesystem (CI). .cache/ is gitignored, so ls-files skips it
+  mkdirSync(join(root, '.cache'), { recursive: true });
+  const tmp = mkdtempSync(join(root, '.cache', 'lighthouse-scope-'));
   try {
     // Tracked and untracked files that git does not ignore: what a checkout of this tree builds from
     const files = git(['ls-files', '-z', '--cached', '--others', '--exclude-standard'], root).filter((f) => existsSync(join(root, f)));
