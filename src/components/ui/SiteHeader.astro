@@ -57,7 +57,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
   {skipTo && <a class="skip" href={skipTo}>{t.skipToMain}</a>}
   <div class="bar">
     <a class="brand" href={nodeHref('home', currentLocale)}>
-      <Image class="logo" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} loading="eager" />
+      <Image class="logo" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} loading="eager" layout="none" />
     </a>
 
     <nav class="desktop-nav" aria-label={navLabel}>

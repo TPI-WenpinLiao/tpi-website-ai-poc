@@ -1,8 +1,32 @@
 /* Site-wide base styles (M4-04, #23): the only global CSS besides the tokens (tokens.css) and the
-   breakpoints (media.css). Imported once, by BaseLayout. In order: reset, typography rules,
+   breakpoints (media.css). Imported once, by BaseLayout. In order: fonts, reset, typography rules,
    surface paint, focus, utility classes. Everything else is scoped to its component, template or
    page; scripts/design/token-usage.mjs fails on a <style is:global> in an .astro file. */
 @import './media.css';
+
+/* ---- Fonts ---- */
+
+/* The @fontsource-variable imports in BaseLayout declare vietnamese before latin-ext, and for a
+   character both cover the face declared last wins, so Đ, Ă, Ơ, Ư (U+0100-02BA) came from latin-ext
+   and every vi page downloaded both subsets of both fonts (about 120 KB, #87). Declaring the
+   vietnamese faces again, after them, serves all Vietnamese text from that subset alone. */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/inter/files/inter-vietnamese-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url('@fontsource-variable/jetbrains-mono/files/jetbrains-mono-vietnamese-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
 
 /* ---- Reset ---- */
 
