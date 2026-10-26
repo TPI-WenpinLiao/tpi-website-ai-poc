@@ -95,6 +95,6 @@ npm run check
 
 | Workflow | 觸發 | 用途 |
 |---|---|---|
-| `quality-gate` | pull_request | `npm run check`，Lighthouse 分數寫入 job summary |
+| `quality-gate` | pull_request | `npm run check`，Lighthouse 分數寫入 job summary；只改文件的 PR 跳過 Lighthouse（ADR 0004） |
 | `issue-launcher` | issues opened / edited | 留言 Claude Code 開啟連結；依表單勾選加上 `needs-design` |
 | `bootstrap` | workflow_dispatch | 依 `.github/bootstrap/` 冪等建立 labels、milestones、issues |
