@@ -103,6 +103,7 @@ export const strings = {
     challenge: '安全驗證',
     errors: {
       required: (label: string) => `請填寫${label}`,
+      tooLong: (label: string, max: string) => `${label}最多 ${max} 個字`,
       email: '請輸入正確的 Email，例如 name@example.com',
       phone: '電話只能包含數字、空格與 + - ( )',
       choose: '請至少選擇一項',

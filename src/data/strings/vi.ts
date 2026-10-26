@@ -94,6 +94,7 @@ export const strings: Strings = {
     challenge: 'Xác minh bảo mật',
     errors: {
       required: (label: string) => `${label} là bắt buộc`,
+      tooLong: (label: string, max: string) => `${label} tối đa ${max} ký tự`,
       email: 'Vui lòng nhập email hợp lệ, ví dụ name@example.com',
       phone: 'Số điện thoại chỉ được gồm chữ số, khoảng trắng và + - ( )',
       choose: 'Vui lòng chọn ít nhất một mục',

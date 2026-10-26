@@ -14,11 +14,21 @@
 // `challenge` reserves the space of the Cloudflare Turnstile widget above the actions: the compact
 // size below --bp-sm-up, where the flexible size's 300px minimum doesn't fit, flexible from there.
 // `busy` marks the form as being sent (aria-busy); the page sets the button's label and disabled.
-// `preview` outlines the reserved challenge space with its name, for /design-system and
-// /templates only: the widget itself loads with sending (M6-01 phase 2).
+// `preview` outlines the reserved challenge space with its name, for /design-system and /templates.
+//
+// `form` (an id in src/lib/forms/rules.ts) makes the form send: it posts to `action` (its Pages
+// Function), and the script (src/lib/forms/client.ts) validates with the same rules as the Function,
+// fills the status area and the fields' error paragraphs, loads the Turnstile widget into the
+// challenge space when the visitor first focuses the form, and goes to `next` after a successful
+// submit. The status area's markup sits in <template>s so the script's copies keep the scoped styles.
+// The site key is PUBLIC_TURNSTILE_SITE_KEY at build time, else Cloudflare's always-pass test key.
 import SectionHeading from './SectionHeading.astro';
 import { strings } from '../../data/strings';
 import { localeFromPath } from '../../lib/i18n/paths';
+import type { Messages } from '../../lib/forms/client';
+import { NEXT_FIELD } from '../../lib/forms/handler';
+import type { FormId } from '../../lib/forms/rules';
+import { TEST_SITE_KEY } from '../../lib/forms/turnstile';
 
 interface Props {
   // id of the heading, unique on the page
@@ -29,16 +39,45 @@ interface Props {
   challenge?: boolean;
   busy?: boolean;
   preview?: boolean;
+  // Sending: all three together
+  form?: FormId;
+  action?: string;
+  next?: string;
 }
 
-const { id, title, errors = [], message, challenge = false, busy = false, preview = false } = Astro.props;
+const { id, title, errors = [], message, challenge = false, busy = false, preview = false, form, action, next } = Astro.props;
 const t = strings(localeFromPath(Astro.url.pathname));
 const pad = (n: number) => String(n).padStart(2, '0');
+const e = t.form.errors;
+// The script's messages; {label} and {max} are filled in per field
+const messages = {
+  required: e.required('{label}'),
+  tooLong: e.tooLong('{label}', '{max}'),
+  email: e.email,
+  phone: e.phone,
+  choose: e.choose,
+  consent: e.consent,
+  challenge: e.challenge,
+  failed: t.form.failed,
+  pending: t.form.pending,
+} satisfies Messages;
+const key: unknown = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const siteKey = typeof key === 'string' && key ? key : TEST_SITE_KEY;
 ---
 
-<form class="form-panel" aria-labelledby={id} aria-busy={busy ? 'true' : undefined}>
+<form
+  class="form-panel"
+  aria-labelledby={id}
+  aria-busy={busy ? 'true' : undefined}
+  method={form ? 'post' : undefined}
+  action={form ? action : undefined}
+  data-form={form}
+  data-sitekey={form ? siteKey : undefined}
+  data-messages={form ? JSON.stringify(messages) : undefined}
+>
   <h2 id={id} class="title">{title}</h2>
-  <div class="status" id={`${id}-status`} role="alert" tabindex="-1">{
+  {form && next && <input type="hidden" name={NEXT_FIELD} value={next} />}
+  <div class="status" id={`${id}-status`} role="alert" tabindex="-1" data-form-status>{
     errors.length > 0 ? (
       <div class="summary">
         <SectionHeading level={3} size="sm" index={pad(errors.length)} eyebrow="Errors" title={t.form.errorSummary} />
@@ -62,9 +101,41 @@ const pad = (n: number) => String(n).padStart(2, '0');
     ) : null
   }</div>
   <slot />
-  {challenge && <div class:list={['challenge', preview && 'preview']}>{preview && t.form.challenge}</div>}
+  {challenge && <div class:list={['challenge', preview && 'preview']} data-form-challenge>{preview && t.form.challenge}</div>}
   <slot name="actions" />
+  {
+    form && (
+      <>
+        <template data-form-summary>
+          <div class="summary">
+            <SectionHeading level={3} size="sm" index="00" eyebrow="Errors" title={t.form.errorSummary} />
+            <ol class="rows">
+              <li>
+                <a class="row" href="#">
+                  <span class="n" />
+                  <span class="text" />
+                  <span class="icon" aria-hidden="true">→</span>
+                </a>
+              </li>
+            </ol>
+          </div>
+        </template>
+        <template data-form-message>
+          <p class="row message">
+            <span class="dot" aria-hidden="true" />
+            <span class="text" />
+          </p>
+        </template>
+      </>
+    )
+  }
 </form>
+
+<script>
+  import { enhance } from '../../lib/forms/client';
+
+  for (const form of document.querySelectorAll<HTMLFormElement>('form[data-form]')) enhance(form);
+</script>
 
 <style>
   @import '../../styles/media.css';

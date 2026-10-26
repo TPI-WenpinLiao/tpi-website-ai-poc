@@ -149,7 +149,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `FilterBar` | 列表篩選 | 有 `href` 的項目是連結（blog 分類），沒有的是標籤；窄螢幕在列內橫向捲動 |
 | `Pagination` | 列表分頁 | 第 2 頁起 `/page/n`（ADR 0002）；只有一頁不輸出 |
 | `EmptyState` | 沒有項目時 | 虛線框、標題、說明與 `action` slot |
-| `FormPanel` | 頁面唯一的表單 | 有標題的面板，表單以標題命名；送出按鈕放 `actions` slot。標題下方是送出後的狀態區（`role="alert"`、`tabindex="-1"`）：`errors` 是錯誤摘要（`SectionHeading size="sm"` 的編號 eyebrow，下面每個錯誤一列、連到欄位，錯誤色只用在編號，不用淡紅底與左側粗線），`message` 是整張表單的訊息（送出失敗、安全驗證未通過）；`challenge` 在按鈕上方預留 Turnstile 的高度（窄螢幕 compact、`--bp-sm-up` 起 flexible，`--challenge-height*`），`preview` 在展示頁畫出預留框；`busy` 加 `aria-busy`。送出與驗證由 M6-01 階段二處理 |
+| `FormPanel` | 頁面唯一的表單 | 有標題的面板，表單以標題命名；送出按鈕放 `actions` slot。標題下方是送出後的狀態區（`role="alert"`、`tabindex="-1"`）：`errors` 是錯誤摘要（`SectionHeading size="sm"` 的編號 eyebrow，下面每個錯誤一列、連到欄位，錯誤色只用在編號，不用淡紅底與左側粗線），`message` 是整張表單的訊息（送出失敗、安全驗證未通過）；`challenge` 在按鈕上方預留 Turnstile 的高度（窄螢幕 compact、`--bp-sm-up` 起 flexible，`--challenge-height*`），`preview` 在展示頁畫出預留框；`busy` 加 `aria-busy`。要送出的表單傳 `form`（`src/lib/forms/rules.ts` 的 id）、`action`、`next`：script 用同一套規則驗證、填入錯誤、第一次 focus 時載入 Turnstile、成功後導到 `next`（ADR 0005）；錯誤元素預先 render，script 才不會失去 scoped 樣式 |
 | `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
 | `SceneChapter` | 3D 場景上的章節 | 見「3D 場景」 |
 | `VideoFacade` | 影片 | `video` 是 `{ kind: 'youtube', id }` 或 `{ kind: 'file', src }`（自架 MP4）；初始只有本機 `poster` 與原生 `<button>`，播放器在 `<template>` 裡，點擊後才換上並取得焦點，首次載入不請求第三方資源；`poster` 不用 YouTube 縮圖；`title` 是圖說、按鈕的 accessible name 與播放器的 `title`；`node scripts/design/video-facade.mjs` 檢查（`npm run check`） |

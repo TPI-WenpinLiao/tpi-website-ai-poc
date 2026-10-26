@@ -3,8 +3,9 @@
 // the M3-01 contact wireframe (#14): title block, then the form beside the offices (form first on narrow
 // screens). Fields are the current site's contact form (docs/research/features.md「聯絡我們」);
 // the 諮詢產品 options are the products in the header, in its order. Offices come from the
-// organization data file. Sending, spam protection and the endpoint are M6-01's: no action yet; the
-// form already reserves the spam check's space (FormPanel `challenge`).
+// organization data file. The form posts to /api/contact (functions/api/contact.ts) with the rules
+// in src/lib/forms/rules.ts, which also give the fields their maxlength; after sending it goes to
+// /thanks in the page's locale (FormPanel `form`).
 // `preview="errors"` draws the form after a failed submit (error summary and field errors), for the
 // /templates/contact preview only.
 // The page's title and description come from the locale's `page` entry for the contact node
@@ -26,6 +27,7 @@ import { canonicalUrl } from '../../lib/seo/meta';
 import type { Locale } from '../../lib/i18n/locales';
 import { home } from '../../data/home';
 import { pageDescription, strings } from '../../data/strings';
+import { FORMS } from '../../lib/forms/rules';
 
 interface Props {
   locale: Locale;
@@ -38,6 +40,7 @@ const { locale, entry, translations, preview } = Astro.props;
 const t = strings(locale);
 const { contactCta } = home(locale);
 const f = t.form;
+const rules = FORMS.contact;
 const self = localNode('contact', locale);
 // The header's 產品 menu (the one holding the products overview): families and their products
 const productMenu = localizedNav('header', locale).find((item) => item.children.some((c) => c.key === 'products'));
@@ -77,27 +80,37 @@ const jsonLd = pageJsonLd({
 
   <Surface tone="light">
     <div class="split">
-      <FormPanel id="form-title" title={t.contact.request} errors={summary} challenge preview={sample}>
+      <FormPanel
+        id="form-title"
+        title={t.contact.request}
+        errors={summary}
+        challenge
+        preview={sample}
+        form="contact"
+        action="/api/contact"
+        next={nodeHref('thanks', locale)}
+      >
         <div class="fields">
-          <FormField kind="text" id="name" name="name" label={f.name} autocomplete="name" required error={errors.name} />
-          <FormField kind="tel" id="phone" name="phone" label={f.phone} autocomplete="tel" required />
+          <FormField kind="text" id="name" name="name" label={f.name} autocomplete="name" maxlength={rules.name.maxLength} required error={errors.name} />
+          <FormField kind="tel" id="phone" name="phone" label={f.phone} autocomplete="tel" maxlength={rules.phone.maxLength} required />
           <FormField
             kind="email"
             id="email"
             name="email"
             label={f.email}
             autocomplete="email"
+            maxlength={rules.email.maxLength}
             required
             value={sample ? 'name.example.com' : undefined}
             error={errors.email}
           />
-          <FormField kind="text" id="company" name="company" label={f.company} autocomplete="organization" required />
+          <FormField kind="text" id="company" name="company" label={f.company} autocomplete="organization" maxlength={rules.company.maxLength} required />
         </div>
         <FormGroup id="offerings" legend={t.contact.offerings} required error={errors.offerings}>
           {products.map((p) => <FormField kind="checkbox" id={`offering-${p.value}`} name="offerings[]" label={p.label} />)}
         </FormGroup>
-        <FormField kind="text" id="subject" name="subject" label={t.contact.subject} required />
-        <FormField kind="textarea" id="message" name="message" label={t.contact.message} rows={5} />
+        <FormField kind="text" id="subject" name="subject" label={t.contact.subject} maxlength={rules.subject.maxLength} required />
+        <FormField kind="textarea" id="message" name="message" label={t.contact.message} rows={5} maxlength={rules.message.maxLength} />
         <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required error={errors.consent}>
           <Link slot="hint" href={nodeHref('privacy', locale)}>{f.privacyLink}</Link>
         </FormField>

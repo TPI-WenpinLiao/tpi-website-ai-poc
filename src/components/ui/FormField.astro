@@ -1,7 +1,9 @@
 ---
 // Labelled form control with hint and error text. Hint and error are wired to the control with
 // aria-describedby; an error also sets aria-invalid. A hint with markup (a link) goes in the `hint` slot
-// instead of the prop. Validation itself belongs to M6-01.
+// instead of the prop. The error paragraph is always rendered, hidden while empty, so a form's script
+// (FormPanel `form`) can fill it and the scoped styles still apply; `data-label` gives the script the
+// label for its messages. `maxlength` comes from the form's rules (src/lib/forms/rules.ts).
 // The textarea value sits inline between its tags: any whitespace there becomes the value.
 // data-preview-state="hover" | "focus" goes on the control and draws that state statically, for
 // the /design-system page only.
@@ -23,8 +25,8 @@ type Common = {
 
 type Props = Common &
   (
-    | { kind: 'text' | 'email' | 'tel'; autocomplete?: HTMLAttributes<'input'>['autocomplete']; value?: string }
-    | { kind: 'textarea'; rows?: number; value?: string }
+    | { kind: 'text' | 'email' | 'tel'; autocomplete?: HTMLAttributes<'input'>['autocomplete']; value?: string; maxlength?: number }
+    | { kind: 'textarea'; rows?: number; value?: string; maxlength?: number }
     | { kind: 'select'; options: { value: string; label: string }[]; placeholder?: string; value?: string }
     | { kind: 'checkbox'; checked?: boolean }
   );
@@ -33,8 +35,8 @@ const props = Astro.props;
 const { id, name, label, hint, error, required = false, requiredLabel = strings(localeFromPath(Astro.url.pathname)).form.required } = props;
 const hasHint = hint !== undefined || Astro.slots.has('hint');
 const hintId = hasHint ? `${id}-hint` : undefined;
-const errorId = error ? `${id}-error` : undefined;
-const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined;
+const errorId = `${id}-error`;
+const describedBy = [hintId, error && errorId].filter(Boolean).join(' ') || undefined;
 const aria = {
   'aria-describedby': describedBy,
   'aria-invalid': error ? true : undefined,
@@ -42,7 +44,7 @@ const aria = {
 };
 ---
 
-<div class:list={['field', props.kind === 'checkbox' && 'checkbox', error && 'has-error']}>
+<div class:list={['field', props.kind === 'checkbox' && 'checkbox', error && 'has-error']} data-form-field data-label={label}>
   {
     props.kind === 'checkbox' ? (
       <>
@@ -59,7 +61,7 @@ const aria = {
           {required && <span class="required">{requiredLabel}</span>}
         </label>
         {props.kind === 'textarea' ? (
-          <textarea class="control" id={id} name={name} rows={props.rows ?? 5} required={required} {...aria}>{props.value}</textarea>
+          <textarea class="control" id={id} name={name} rows={props.rows ?? 5} maxlength={props.maxlength} required={required} {...aria}>{props.value}</textarea>
         ) : props.kind === 'select' ? (
           <select class="control" id={id} name={name} required={required} {...aria}>
             {props.placeholder && (
@@ -81,6 +83,7 @@ const aria = {
             name={name}
             value={props.value}
             autocomplete={props.autocomplete}
+            maxlength={props.maxlength}
             required={required}
             {...aria}
           />
@@ -96,7 +99,7 @@ const aria = {
       </p>
     )
   }
-  {error && <p class="error" id={errorId}>{error}</p>}
+  <p class="error" id={errorId} hidden={!error} data-form-error>{error}</p>
 </div>
 
 <style>

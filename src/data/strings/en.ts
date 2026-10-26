@@ -93,6 +93,7 @@ export const strings: Strings = {
     challenge: 'Security check',
     errors: {
       required: (label: string) => `${label} is required`,
+      tooLong: (label: string, max: string) => `${label} can be at most ${max} characters`,
       email: 'Enter a valid email address, for example name@example.com',
       phone: 'Phone numbers can only contain digits, spaces and + - ( )',
       choose: 'Select at least one option',

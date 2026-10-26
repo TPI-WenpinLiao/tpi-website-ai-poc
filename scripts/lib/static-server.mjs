@@ -1,6 +1,7 @@
 // Serves a built site (dist/) on a random local port, resolving /path to path.html or
 // path/index.html like Cloudflare Pages. Used by the puppeteer checks in scripts/ and by the
-// Playwright visual regression tests (tests/visual/).
+// Playwright visual regression tests (tests/visual/). `routes` stands in for Pages Functions:
+// "POST /api/contact" → a fetch-style handler (scripts/forms/contact.mjs).
 // Text files are gzipped when the client accepts it, like Cloudflare Pages and LHCI's server:
 // Lighthouse simulates the network from the transferred bytes, so uncompressed HTML and CSS
 // would add about 0.6 s to the mobile FCP (#127).
@@ -49,10 +50,35 @@ export function fileKind(root) {
 /** Whether a response of this content type is gzipped; images and fonts already are compressed. @param {string} type */
 export const compressible = (type) => /^text\/|^image\/svg\+xml$/.test(type);
 
-/** @param {string} root absolute path @param {number} [port] 0 picks a free port @returns {Promise<import('node:http').Server>} */
-export function serve(root, port = 0) {
+/** @typedef {(request: Request) => Promise<Response>} Route */
+
+/** @param {import('node:http').IncomingMessage} req @param {import('node:http').ServerResponse} res @param {Route} route */
+async function answer(req, res, route) {
+  const chunks = [];
+  for await (const chunk of req) chunks.push(chunk);
+  /** @type {Record<string, string>} */
+  const headers = {};
+  for (const [name, value] of Object.entries(req.headers)) if (typeof value === 'string') headers[name] = value;
+  const request = new Request(new URL(req.url ?? '/', `http://${req.headers.host}`), { method: req.method, headers, body: Buffer.concat(chunks) });
+  const response = await route(request);
+  res.writeHead(response.status, Object.fromEntries(response.headers));
+  res.end(Buffer.from(await response.arrayBuffer()));
+}
+
+/**
+ * @param {string} root absolute path
+ * @param {number} [port] 0 picks a free port
+ * @param {Record<string, Route>} [routes] keyed by "METHOD /path"
+ * @returns {Promise<import('node:http').Server>}
+ */
+export function serve(root, port = 0, routes = {}) {
   const kind = fileKind(root);
   const server = createServer((req, res) => {
+    const route = routes[`${req.method} ${new URL(req.url ?? '/', 'http://x').pathname}`];
+    if (route) {
+      answer(req, res, route).catch(() => res.writeHead(500).end());
+      return;
+    }
     const file = servedFile(decodeURIComponent(new URL(req.url ?? '/', 'http://x').pathname), kind);
     if (!file) {
       res.writeHead(404).end();
