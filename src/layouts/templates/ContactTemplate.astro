@@ -107,7 +107,7 @@ const jsonLd = pageJsonLd({
           <FormField kind="text" id="company" name="company" label={f.company} autocomplete="organization" maxlength={rules.company.maxLength} required />
         </div>
         <FormGroup id="offerings" legend={t.contact.offerings} required error={errors.offerings}>
-          {products.map((p) => <FormField kind="checkbox" id={`offering-${p.value}`} name="offerings[]" label={p.label} />)}
+          {products.map((p) => <FormField kind="checkbox" id={`offering-${p.value}`} name="offerings[]" value={p.value} label={p.label} />)}
         </FormGroup>
         <FormField kind="text" id="subject" name="subject" label={t.contact.subject} maxlength={rules.subject.maxLength} required />
         <FormField kind="textarea" id="message" name="message" label={t.contact.message} rows={5} maxlength={rules.message.maxLength} />

@@ -5,7 +5,7 @@ import { problems } from './contact.mjs';
 const OK = {
   loadRequests: [],
   empty: { rows: ['name', 'consent'], server: ['name', 'consent'], focused: true, unmarked: [] },
-  sent: { path: '/thanks', next: '/thanks', submissions: 1 },
+  sent: { path: '/thanks', next: '/thanks', submissions: 1, offerings: 'digirunner', checked: 'digirunner' },
   refused: { path: '/contact-us', start: '/contact-us', message: '安全驗證未通過', expected: '安全驗證未通過', submissions: 0, resets: 1, buttonEnabled: true },
   sizes: { wide: 'flexible', narrow: 'compact' },
 };
@@ -19,7 +19,7 @@ test('each broken behavior is reported', () => {
     problems({
       loadRequests: ['https://challenges.cloudflare.com/turnstile/v0/api.js'],
       empty: { rows: ['name'], server: ['name', 'consent'], focused: false, unmarked: ['name'] },
-      sent: { path: '/contact-us', next: '/thanks', submissions: 0 },
+      sent: { path: '/contact-us', next: '/thanks', submissions: 0, offerings: '', checked: 'digirunner' },
       refused: { path: '/thanks', start: '/contact-us', message: '', expected: '安全驗證未通過', submissions: 1, resets: 0, buttonEnabled: false },
       sizes: { wide: 'compact', narrow: '' },
     }),
@@ -43,4 +43,8 @@ test('each broken behavior is reported', () => {
 
 test('an empty form without a summary is a problem', () => {
   assert.deepEqual(problems({ ...OK, empty: { ...OK.empty, rows: [], server: [] } }), ['the empty form shows no error summary']);
+});
+
+test('a checkbox sending the browser default is reported', () => {
+  assert.deepEqual(problems({ ...OK, sent: { ...OK.sent, offerings: 'on' } }), ['the adapter got offerings "on", not the checked "digirunner"']);
 });

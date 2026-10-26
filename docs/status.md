@@ -130,7 +130,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - 回覆 `docs/content/products.md`「待確認」（M5-01）：banner 圖庫照能否沿用、各頁未搬的段落要刪減或擴充 content model、feature 數量多的產品頁捲動長度、價格與認證等可能過時的說法
 - M6-02 Pagefind 站內搜尋（#34）、M6-04 GTM 與 consent 管理（#36）可以開始；搜尋框的版面已在 utility 模板，沒有 `action`
 - 在 Cloudflare 建立 Turnstile widget，Pages 專案（production 與 preview）設定環境變數 `PUBLIC_TURNSTILE_SITE_KEY`、`TURNSTILE_SECRET_KEY`，步驟見 ADR 0005「設定」；沒設定前聯絡表單送出一律失敗
-- 回覆 M6-01（#33）PR 的「待確認問題」：錯誤訊息與「閱讀隱私權政策」的文案、en、vi 新字串的譯文；表單改送 `/tpi/api/*` 要等 `docs/research/features.md` 待確認 1、2
+- 回覆 M6-01（#33）PR 的「待確認」：錯誤訊息與「閱讀隱私權政策」的文案、en、vi 新字串的譯文；表單改送 `/tpi/api/*` 要等 `docs/research/features.md` 待確認 1、2
 - 回覆 M6-03（#35）PR 的「待確認」：現站產品、服務、about 頁的影片要不要放回新站（要在 offering schema 加影片欄位、改模板、下載自架 MP4）
 - 回覆 PR #98「待確認問題」：listing、utility、contact 頁的暫定描述（`src/data/strings/zh-TW.ts` 的 `pages`）、聯絡表單的諮詢產品選項、個資同意與 AI Playbook 欄位文案、`industry: other` 的顯示名稱
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）

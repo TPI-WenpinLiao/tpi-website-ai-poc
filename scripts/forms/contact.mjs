@@ -5,7 +5,8 @@
 // 1. Loading the page requests nothing outside the site (Turnstile loads on the first focus)
 // 2. Submitting the empty form shows the error summary, focused, with one row per error, and the same
 //    fields the Function reports for the same data; each field shows its error and aria-invalid
-// 3. Filled in, the form sends once to the adapter and goes to the form's `next` page
+// 3. Filled in, the form sends once to the adapter, with the checked option's value (not the
+//    browser's default "on"), and goes to the form's `next` page
 // 4. When Turnstile refuses the token the form shows the spam check message, stays on the page, the
 //    adapter gets nothing and the widget is reset
 // 5. The widget is flexible at 1280px and compact at 375px, where the reserved space is narrower than 300px
@@ -44,7 +45,7 @@ const FAKE_TURNSTILE = `window.turnstile = {
  * @typedef {{
  *   loadRequests: string[],
  *   empty: { rows: string[], server: string[], focused: boolean, unmarked: string[] },
- *   sent: { path: string, next: string, submissions: number },
+ *   sent: { path: string, next: string, submissions: number, offerings: string, checked: string },
  *   refused: { path: string, start: string, message: string, expected: string, submissions: number, resets: number, buttonEnabled: boolean },
  *   sizes: { wide: string, narrow: string },
  * }} Result
@@ -59,6 +60,7 @@ export function problems({ loadRequests, empty, sent, refused, sizes }) {
   for (const field of empty.unmarked) out.push(`${field} shows no error of its own`);
   if (sent.path !== sent.next) out.push(`after sending the page is ${sent.path}, not ${sent.next}`);
   if (sent.submissions !== 1) out.push(`a valid submit reached the adapter ${sent.submissions} times`);
+  else if (sent.offerings !== sent.checked) out.push(`the adapter got offerings "${sent.offerings}", not the checked "${sent.checked}"`);
   if (refused.path !== refused.start) out.push(`a refused token left the page for ${refused.path}`);
   if (refused.message !== refused.expected) out.push(`a refused token shows "${refused.message}", not "${refused.expected}"`);
   if (refused.submissions !== 0) out.push('a refused token still reached the adapter');
@@ -119,8 +121,13 @@ async function fill(page) {
   for (const selector of ['#offerings input[type="checkbox"]', '#consent']) await page.$eval(selector, (el) => el instanceof HTMLElement && el.click());
 }
 
-/** @param {import('puppeteer-core').Browser} browser @param {string} url @param {() => number} submissions */
-async function check(browser, url, submissions) {
+/**
+ * @param {import('puppeteer-core').Browser} browser
+ * @param {string} url
+ * @param {() => number} submissions
+ * @param {() => import('../../src/lib/forms/adapter.ts').Submission | undefined} last
+ */
+async function check(browser, url, submissions, last) {
   // 1, 2: load, then submit the form as it is
   const first = await open(browser, 1280);
   await first.page.goto(url, { waitUntil: 'networkidle0' });
@@ -157,8 +164,10 @@ async function check(browser, url, submissions) {
   const before = submissions();
   await fill(first.page);
   const next = await first.page.$eval('form[data-form] input[name="next"]', (el) => (el instanceof HTMLInputElement ? el.value : ''));
+  // The value attribute, not .value: a box without one reports the browser's default "on"
+  const checked = await first.page.$eval('#offerings input[type="checkbox"]', (el) => el.getAttribute('value') ?? '');
   await Promise.all([first.page.waitForNavigation({ waitUntil: 'load' }), first.page.click('form[data-form] button[type="submit"]')]);
-  const sent = { path: new URL(first.page.url()).pathname, next, submissions: submissions() - before };
+  const sent = { path: new URL(first.page.url()).pathname, next, submissions: submissions() - before, offerings: (last()?.fields.offerings ?? []).join(), checked };
   await first.page.close();
 
   // 4: Turnstile refuses the token
@@ -216,6 +225,8 @@ async function main() {
     .sort((a, b) => a.path.localeCompare(b.path));
 
   let count = 0;
+  /** @type {import('../../src/lib/forms/adapter.ts').Submission | undefined} */
+  let latest;
   /** @type {Record<string, import('../lib/static-server.mjs').Route>} */
   const routes = {};
   for (const { form, action } of pages) {
@@ -225,7 +236,7 @@ async function main() {
         form,
         secret: 'test-secret',
         verify: async ({ token }) => token === 'pass',
-        adapter: { send: async () => void count++ },
+        adapter: { send: async (submission) => void ((latest = submission), count++) },
       });
   }
   const server = await serve(DIST, 0, routes);
@@ -236,7 +247,7 @@ async function main() {
   let failing = 0;
   try {
     for (const { path } of pages) {
-      const found = await check(browser, `http://localhost:${port}${path}`, () => count);
+      const found = await check(browser, `http://localhost:${port}${path}`, () => count, () => latest);
       for (const p of found) console.log(`${path}: ${p}`);
       if (found.length) failing++;
     }
