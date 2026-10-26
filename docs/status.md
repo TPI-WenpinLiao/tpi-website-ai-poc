@@ -96,6 +96,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 
 ### M6 功能
 
+- M6-01 表單（#33），階段一，等待 design-approved：`/contact-us` 的表單加上送出後的狀態（錯誤摘要、欄位與多選題錯誤、送出中、送出失敗）、Cloudflare Turnstile 的預留空間（窄螢幕 compact、`--bp-sm-up` 起 flexible，`--challenge-height*`）與隱私權政策連結；新元件 `FormGroup`，`FormPanel` 加上 `errors`、`message`、`challenge`、`busy` 與 `actions` slot。`/templates/contact` 畫出送出失敗後的狀態。Pages Function、驗證、Turnstile 與 log adapter 在階段二
 - M6-03 影片延遲載入完成（#35）：新元件 `VideoFacade`。初始只有本機 poster 與原生按鈕，播放器（YouTube 用 `youtube-nocookie.com` 的 iframe，自架 MP4 用 `<video>`）放在 `<template>`，點擊後才換上並取得焦點；poster 不用 YouTube 縮圖，首次載入不連任何站外網域。`node scripts/design/video-facade.mjs` 接進 `npm run check`，對每個有 facade 的頁面檢查載入時沒有站外請求、鍵盤 Tab＋Enter 能換上有 `title` 的播放器並取得焦點。目前只有 `/design-system` 使用：現站影片在產品、服務、about 頁，offering schema 沒有影片欄位，M5 決定不搬
 
 ### M7 多語系
@@ -127,7 +128,9 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - 回覆 M5-06（#31）PR 的「待確認」：合作夥伴頁的翻譯、法務文件是否要法務審閱、資訊安全政策的生效日、en 法務頁的英譯、關於我們的圖片授權
 - 回覆 M5-03（#28）PR 的「待確認」：客戶名稱與 logo 的使用授權、內頁內容只有一段描述、獎項與年份、產業對應
 - 回覆 `docs/content/products.md`「待確認」（M5-01）：banner 圖庫照能否沿用、各頁未搬的段落要刪減或擴充 content model、feature 數量多的產品頁捲動長度、價格與認證等可能過時的說法
-- M6-01 表單（#33）、M6-02 Pagefind 站內搜尋（#34）、M6-04 GTM 與 consent 管理（#36）可以開始；表單與搜尋框的版面已在 contact、gated-download、utility 模板，沒有 `action`
+- M6-02 Pagefind 站內搜尋（#34）、M6-04 GTM 與 consent 管理（#36）可以開始；搜尋框的版面已在 utility 模板，沒有 `action`
+- 確認 M6-01（#33）PR 的「設計決策」與「待確認問題」，通過後加上 `design-approved`，再開始階段二
+- M6-01 階段二之前，在 Cloudflare Pages（production 與 preview）建立 Turnstile widget，設定環境變數 `PUBLIC_TURNSTILE_SITE_KEY`、`TURNSTILE_SECRET_KEY`（不要貼進 issue 或對話）
 - 回覆 M6-03（#35）PR 的「待確認」：現站產品、服務、about 頁的影片要不要放回新站（要在 offering schema 加影片欄位、改模板、下載自架 MP4）
 - 回覆 PR #98「待確認問題」：listing、utility、contact 頁的暫定描述（`src/data/strings/zh-TW.ts` 的 `pages`）、聯絡表單的諮詢產品選項、個資同意與 AI Playbook 欄位文案、`industry: other` 的顯示名稱
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）

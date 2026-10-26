@@ -22,6 +22,7 @@ import FilterBar from '../../components/ui/FilterBar.astro';
 import Pagination from '../../components/ui/Pagination.astro';
 import EmptyState from '../../components/ui/EmptyState.astro';
 import FormPanel from '../../components/ui/FormPanel.astro';
+import FormGroup from '../../components/ui/FormGroup.astro';
 import TagList from '../../components/ui/TagList.astro';
 import Card from '../../components/ui/Card.astro';
 import SiteHeader from '../../components/ui/SiteHeader.astro';
@@ -480,12 +481,58 @@ const description =
           <TagList items={['碳盤查', '能源轉型']} tone="node" label={`專長（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
 
           <h3>FormPanel</h3>
-          <FormPanel id={`form-panel-${tone}`} title={`表單標題（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`}>
-            <FormField kind="text" id={`form-panel-name-${tone}`} name="name" label="姓名" required />
-            <FormField kind="checkbox" id={`form-panel-consent-${tone}`} name="consent" label="個資同意" required />
-            <Button type="submit">送出</Button>
-          </FormPanel>
-          <p class="note">頁面唯一的表單（聯絡、索取文件）放在這個面板裡；送出由 M6-01 處理。</p>
+          <div class="form-states">
+            <FormPanel id={`form-panel-${tone}`} title={`預設（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} challenge preview>
+              <FormField kind="text" id={`form-panel-name-${tone}`} name="name" label="姓名" required />
+              <FormField kind="checkbox" id={`form-panel-consent-${tone}`} name="consent" label="個資同意" required>
+                <Link slot="hint" href={`#components-${tone}`}>閱讀隱私權政策</Link>
+              </FormField>
+              <Button slot="actions" type="submit">送出</Button>
+            </FormPanel>
+            <FormPanel
+              id={`form-panel-errors-${tone}`}
+              title={`欄位錯誤（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`}
+              errors={[
+                { id: `form-panel-errors-name-${tone}`, message: '請填寫姓名' },
+                { id: `form-panel-errors-consent-${tone}`, message: '請勾選同意後再送出' },
+              ]}
+              challenge
+              preview
+            >
+              <FormField kind="text" id={`form-panel-errors-name-${tone}`} name="name" label="姓名" required error="請填寫姓名" />
+              <FormField kind="checkbox" id={`form-panel-errors-consent-${tone}`} name="consent" label="個資同意" required error="請勾選同意後再送出" />
+              <Button slot="actions" type="submit">送出</Button>
+            </FormPanel>
+            <FormPanel
+              id={`form-panel-failed-${tone}`}
+              title={`送出失敗（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`}
+              message="送出失敗，請稍後再試。您填寫的內容仍保留在表單中。"
+              challenge
+              preview
+            >
+              <FormField kind="text" id={`form-panel-failed-name-${tone}`} name="name" label="姓名" required value="王小明" />
+              <Button slot="actions" type="submit">送出</Button>
+            </FormPanel>
+            <FormPanel id={`form-panel-busy-${tone}`} title={`送出中（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} challenge preview busy>
+              <FormField kind="text" id={`form-panel-busy-name-${tone}`} name="name" label="姓名" required value="王小明" />
+              <Button slot="actions" type="submit" disabled>送出中…</Button>
+            </FormPanel>
+          </div>
+          <p class="note">
+            頁面唯一的表單（聯絡、索取文件）放在這個面板裡。錯誤摘要與送出失敗的訊息出現在標題下方，送出後焦點移到這裡；虛線框是 Cloudflare Turnstile 的預留空間（窄螢幕 compact，--bp-sm-up 起 flexible），widget 在 M6-01 階段二接上。
+          </p>
+
+          <h3>FormGroup</h3>
+          <div class="fields">
+            <FormGroup id={`form-group-${tone}`} legend="多選題（預設）" required>
+              <FormField kind="checkbox" id={`form-group-a-${tone}`} name={`group-${tone}[]`} label="選項一" />
+              <FormField kind="checkbox" id={`form-group-b-${tone}`} name={`group-${tone}[]`} label="選項二" checked />
+            </FormGroup>
+            <FormGroup id={`form-group-error-${tone}`} legend="多選題（錯誤）" required error="請至少選擇一項">
+              <FormField kind="checkbox" id={`form-group-error-a-${tone}`} name={`group-error-${tone}[]`} label="選項一" />
+              <FormField kind="checkbox" id={`form-group-error-b-${tone}`} name={`group-error-${tone}[]`} label="選項二" />
+            </FormGroup>
+          </div>
 
           <h3>FilterBar</h3>
           <ul class="states">
@@ -944,6 +991,12 @@ const description =
     align-items: start;
   }
 
+  .form-states {
+    display: grid;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
   .reading-demo {
     margin-block-start: var(--space-8);
   }
@@ -956,6 +1009,7 @@ const description =
   }
 
   @media (--bp-lg-up) {
+    .form-states,
     .directions {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }

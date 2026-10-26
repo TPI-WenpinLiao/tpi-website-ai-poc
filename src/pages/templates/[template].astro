@@ -2,7 +2,8 @@
 // Preview of each template with sample data (M4-04, #23): the first zh-TW entry the template
 // serves, drafts included, which no real route builds (content-model.md: drafts have no page).
 // The listing preview is the blog's real first page (published posts only, PAGE_SIZE of them);
-// the contact preview uses the contact page entry when there is one.
+// the contact preview uses the contact page entry when there is one and shows the form after a failed
+// submit (`preview="errors"`); the default form is the real /contact-us.
 // Internal page (src/lib/seo/indexing.ts); PageLayout marks it as a preview. The home template
 // is the home page itself, so it has no preview here.
 import type { GetStaticPaths } from 'astro';
@@ -52,5 +53,5 @@ const contactEntry = template === 'contact' ? (await getCollection('page', (e) =
     <ListingTemplate id="blog" locale={locale} items={blogPages[0] ?? []} featured={blogListing.featured} page={1} pages={blogPages.length} />
   )
 }
-{template === 'contact' && <ContactTemplate locale={locale} entry={contactEntry} />}
+{template === 'contact' && <ContactTemplate locale={locale} entry={contactEntry} preview="errors" />}
 {template === 'utility' && <UtilityTemplate kind="not-found" locale={locale} />}

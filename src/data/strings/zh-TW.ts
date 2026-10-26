@@ -91,6 +91,24 @@ export const strings = {
     consent: '個資同意',
     // Mark after the label of a required field
     required: '必填',
+    // Link to the privacy policy under the consent checkbox; the whole phrase is the link text
+    privacyLink: '閱讀隱私權政策',
+    // Heading of the error summary at the top of a form that failed validation
+    errorSummary: '請修正以下欄位後再送出',
+    // Submit button while the form is being sent
+    pending: '送出中…',
+    // Server or network failure; the fields keep what was typed
+    failed: '送出失敗，請稍後再試。您填寫的內容仍保留在表單中。',
+    // The spam check (Cloudflare Turnstile) above the submit button
+    challenge: '安全驗證',
+    errors: {
+      required: (label: string) => `請填寫${label}`,
+      email: '請輸入正確的 Email，例如 name@example.com',
+      phone: '電話只能包含數字、空格與 + - ( )',
+      choose: '請至少選擇一項',
+      consent: '請勾選同意後再送出',
+      challenge: '安全驗證未通過，請重新驗證後再送出',
+    },
   },
   download: {
     summary: '內容重點',

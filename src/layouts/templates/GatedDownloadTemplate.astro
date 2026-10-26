@@ -93,7 +93,7 @@ const jsonLd = whitepaperJsonLd({
         <FormField kind="text" id="company" name="company" label={f.company} autocomplete="organization" required />
         <FormField kind="text" id="job" name="job" label={f.jobTitle} autocomplete="organization-title" required />
         <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required />
-        <Button type="submit" size="lg">{t.download.submit}</Button>
+        <Button slot="actions" type="submit" size="lg">{t.download.submit}</Button>
         </FormPanel>
       </div>
     </div>

@@ -1,23 +1,74 @@
 ---
 // A page's one form (contact, document request, newsletter) on a raised panel, so it reads as the
 // page's task: the form's heading, then its fields with even spacing. The form is labelled by its
-// heading. Fields are FormField; the page lays out anything more (a two-column row, a fieldset).
-// Sending is M6-01's, so there is no action yet.
+// heading. Fields are FormField and FormGroup; the page lays out anything more (a two-column row).
+// The submit button goes in the `actions` slot, so the spam check can sit between it and the fields.
+//
+// Feedback after a submit, shown in a status area under the heading (role="alert", so filling it
+// is announced; tabindex="-1", so focus can move to it):
+// - `errors`: an error summary in the site's index style (SectionHeading's numbered eyebrow on the
+//   energy line, then one numbered row per invalid field linking to it; `id` is the control's or
+//   FormGroup's id). The error color marks only the numbers, not a tinted box
+// - `message`: one message for the whole form (sending failed, the spam check failed), a row of
+//   the same list with an error dot
+// `challenge` reserves the space of the Cloudflare Turnstile widget above the actions: the compact
+// size below --bp-sm-up, where the flexible size's 300px minimum doesn't fit, flexible from there.
+// `busy` marks the form as being sent (aria-busy); the page sets the button's label and disabled.
+// `preview` outlines the reserved challenge space with its name, for /design-system and
+// /templates only: the widget itself loads with sending (M6-01 phase 2).
+import SectionHeading from './SectionHeading.astro';
+import { strings } from '../../data/strings';
+import { localeFromPath } from '../../lib/i18n/paths';
+
 interface Props {
   // id of the heading, unique on the page
   id: string;
   title: string;
+  errors?: readonly { id: string; message: string }[];
+  message?: string;
+  challenge?: boolean;
+  busy?: boolean;
+  preview?: boolean;
 }
 
-const { id, title } = Astro.props;
+const { id, title, errors = [], message, challenge = false, busy = false, preview = false } = Astro.props;
+const t = strings(localeFromPath(Astro.url.pathname));
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
-<form class="form-panel" aria-labelledby={id}>
+<form class="form-panel" aria-labelledby={id} aria-busy={busy ? 'true' : undefined}>
   <h2 id={id} class="title">{title}</h2>
+  <div class="status" id={`${id}-status`} role="alert" tabindex="-1">{
+    errors.length > 0 ? (
+      <div class="summary">
+        <SectionHeading level={3} size="sm" index={pad(errors.length)} eyebrow="Errors" title={t.form.errorSummary} />
+        <ol class="rows">
+          {errors.map((e, i) => (
+            <li>
+              <a class="row" href={`#${e.id}`}>
+                <span class="n">{pad(i + 1)}</span>
+                <span class="text">{e.message}</span>
+                <span class="icon" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ) : message ? (
+      <p class="row message">
+        <span class="dot" aria-hidden="true" />
+        <span class="text">{message}</span>
+      </p>
+    ) : null
+  }</div>
   <slot />
+  {challenge && <div class:list={['challenge', preview && 'preview']}>{preview && t.form.challenge}</div>}
+  <slot name="actions" />
 </form>
 
 <style>
+  @import '../../styles/media.css';
+
   .form-panel {
     display: flex;
     flex-direction: column;
@@ -33,5 +84,91 @@ const { id, title } = Astro.props;
     margin: 0;
     font-size: var(--font-size-h3);
     line-height: var(--line-height-snug);
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  .summary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .rows {
+    margin: 0;
+    padding: 0;
+    border-block-start: var(--border-width) solid var(--color-border);
+    list-style: none;
+  }
+
+  .rows li {
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--space-4);
+    align-items: center;
+    min-block-size: var(--touch-target);
+    padding-block: var(--space-2);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .n {
+    color: var(--color-error);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-mono);
+  }
+
+  .icon {
+    color: var(--color-text-muted);
+    transition: transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  a.row:is(:hover, [data-preview-state='hover']) .text {
+    text-decoration: underline;
+  }
+
+  a.row:is(:hover, [data-preview-state='hover']) .icon {
+    color: var(--color-text);
+    transform: translateX(var(--space-1));
+  }
+
+  .message {
+    grid-template-columns: auto minmax(0, 1fr);
+    margin: 0;
+    border-block: var(--border-width) solid var(--color-border);
+  }
+
+  .dot {
+    inline-size: var(--space-2);
+    block-size: var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--color-error);
+  }
+
+  .challenge {
+    min-block-size: var(--challenge-height-compact);
+  }
+
+  .challenge.preview {
+    display: grid;
+    place-items: center;
+    border: var(--border-width) dashed var(--color-border-strong);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  @media (--bp-sm-up) {
+    .challenge {
+      min-block-size: var(--challenge-height);
+    }
   }
 </style>
