@@ -4,7 +4,7 @@
 // `data-scene-track` (the hero plus the sections the scene plays behind).
 // The static Backdrop stays the LCP and the complete fallback. three.js loads only after the
 // page's load event, the hero image's first paint and an idle callback, and never with prefers-reduced-motion: reduce, Save-Data
-// or without WebGL. Once the first frame is drawn the track gets data-scene="ready" and the canvas
+// or without WebGL 2. Once the first frame is drawn the track gets data-scene="ready" and the canvas
 // fades in over the static image; it is fixed to the viewport so it keeps playing while the
 // track's later sections (which must then drop their background) scroll over it.
 // `family` (0–3, the home page's family order: AI, digital transformation, security, ESG) shows only
@@ -22,11 +22,13 @@ const { direction, family } = Astro.props;
 
 <script>
   import type { SceneFactory } from '../../lib/scene/runtime';
+  import { createSurface, LOW_POWER, pickTier } from '../../lib/scene/tiers';
 
   const LOADERS: Record<string, () => Promise<{ default: SceneFactory }>> = {
     'modular-stack': () => import('../../lib/scene/modular-stack'),
   };
   const IDLE_TIMEOUT = 2000;
+  const LCP_TIMEOUT = 1000;
   // Wait for a resize across the low-power breakpoint to settle before rebuilding the scene
   const TIER_DEBOUNCE = 200;
 
@@ -38,24 +40,34 @@ const { direction, family } = Astro.props;
     return typeof connection === 'object' && connection !== null && Reflect.get(connection, 'saveData') === true;
   };
 
-  const supportsWebGL = () => {
-    const canvas = document.createElement('canvas');
-    return Boolean(canvas.getContext('webgl2') ?? canvas.getContext('webgl'));
-  };
-
   const afterLoad = () =>
     new Promise<void>((resolve) => {
       if (document.readyState === 'complete') resolve();
       else addEventListener('load', () => resolve(), { once: true });
     });
 
-  // `load` can fire before the decoded hero image is on screen; the scene must start after it (#54)
+  // `load` can fire before the decoded hero image is on screen; the scene must start after it (#54).
+  // Two animation frames after decode() is not always enough for the frame to reach the screen, so
+  // where the browser reports LCP, wait for the hero image's entry: the scene then starts after the
+  // LCP by definition (#127). Without such an entry (another element is the LCP) give up after
+  // LCP_TIMEOUT.
   const heroPainted = async (track: HTMLElement) => {
-    await track
-      .querySelector('img')
-      ?.decode()
-      .catch(() => undefined);
+    const img = track.querySelector('img');
+    await img?.decode().catch(() => undefined);
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    if (!img || !PerformanceObserver.supportedEntryTypes.includes('largest-contentful-paint')) return;
+    await new Promise<void>((resolve) => {
+      const done = () => {
+        observer.disconnect();
+        clearTimeout(timer);
+        resolve();
+      };
+      const observer = new PerformanceObserver((list) => {
+        if (list.getEntries().some((e) => e instanceof LargestContentfulPaint && e.element === img)) done();
+      });
+      const timer = setTimeout(done, LCP_TIMEOUT);
+      observer.observe({ type: 'largest-contentful-paint', buffered: true });
+    });
   };
 
   const idle = () =>
@@ -72,34 +84,52 @@ const { direction, family } = Astro.props;
     await afterLoad();
     await heroPainted(track);
     await idle();
-    if (reduceMotion.matches || !supportsWebGL()) return;
+    if (reduceMotion.matches) return;
+    // Checks for WebGL 2 before downloading three.js; the first scene renders into this context
+    let surface = createSurface(pickTier());
+    if (!surface) return;
 
-    const [{ mount, LOW_POWER }, { default: factory }] = await Promise.all([import('../../lib/scene/runtime'), load()]);
+    const [{ mount }, { default: factory }] = await Promise.all([import('../../lib/scene/runtime'), load()]);
     // Reduced motion may have been turned on while the chunk downloaded
     if (reduceMotion.matches) return;
     host.hidden = false;
-    const start = () =>
+    const start = (onReady?: () => void) =>
       mount({
         host,
         track,
         factory,
         family: host.dataset.sceneFamily ? Number(host.dataset.sceneFamily) : undefined,
+        surface,
         onReady: () => {
           track.dataset.scene = 'ready';
+          onReady?.();
         },
       });
     let stop = start();
+    // A rebuild needs a context for its own tier
+    surface = undefined;
 
     // The rendering tier (block count, camera path, DPR) is picked when the scene starts, so a
-    // resize across the low-power breakpoint rebuilds it. data-scene stays "ready" meanwhile, so the
-    // static image doesn't flash in for the one frame the new canvas takes.
+    // resize across the low-power breakpoint rebuilds it. The new scene starts over several tasks
+    // (mount), so the old one keeps playing until the new canvas has drawn its first frame, and
+    // data-scene stays "ready": the static image never shows in between.
     const lowPower = matchMedia(LOW_POWER);
     let rebuild = 0;
     const onTierChange = () => {
       clearTimeout(rebuild);
       rebuild = window.setTimeout(() => {
-        stop();
-        stop = start();
+        // Several rebuilds can overlap, so stopping covers the scene being replaced too. Once it has
+        // stopped, drop it, so a page resized back and forth doesn't keep every old scene.
+        let previous: (() => void) | undefined = stop;
+        const retire = () => {
+          previous?.();
+          previous = undefined;
+        };
+        const next = start(retire);
+        stop = () => {
+          next();
+          retire();
+        };
       }, TIER_DEBOUNCE);
     };
     lowPower.addEventListener('change', onTierChange);
@@ -112,6 +142,7 @@ const { direction, family } = Astro.props;
         lowPower.removeEventListener('change', onTierChange);
         stop();
         host.hidden = true;
+        delete host.dataset.sceneTier;
         delete track.dataset.scene;
       },
       { once: true },

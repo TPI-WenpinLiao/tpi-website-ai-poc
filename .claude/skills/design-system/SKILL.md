@@ -175,7 +175,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 窄螢幕的取景由 runtime 量 `PageHero` 的 `data-hero-visual` 決定（中心與鏡頭距離 `fitDistance()`），不要在場景裡寫 header、頁內導覽列的高度；改到 hero 的版面後跑 `scene-capture.mjs`，它也檢查跨斷點 resize 後的 tier（ADR 0003「窄螢幕的取景」）
 - 產品頁用 `Scene3D` 的 `family`（`sceneFamily()`，`src/lib/scene/families.ts`），只畫該家族的模組，每一章點亮一組方塊，組數取 track 裡 `SceneChapter` 的數量（M3-05）
 - 場景上的文字放在玻璃面板（`--glass-bg`）或 scrim 那一側，不直接壓在方塊上
-- 新場景寫成 `src/lib/scene/<名稱>.ts`，default export 一個 `SceneFactory`，加進 `Scene3D` 的 `LOADERS`；數量依 `tier.density` 減少，讓行動版降級生效（降級的數值只寫在 `runtime.ts` 的 `TIERS`）
+- 新場景寫成 `src/lib/scene/<名稱>.ts`，default export 一個 `SceneFactory`，加進 `Scene3D` 的 `LOADERS`；數量依 `tier.density` 減少，讓行動版降級生效（降級的數值只寫在 `tiers.ts` 的 `TIERS`）。factory 與 `update` 不做大量計算：`mount` 把初始化拆成多個 task，但 factory 本身是一個 task，Lighthouse 行動版把它的時間乘 4 計入 TBT（ADR 0003「初始化的長任務」）
 - 改到 `Scene3D`、`src/lib/scene/` 或用到它的頁面後，跑 ADR 0003「量測」的三個 script
 
 ## 展示頁

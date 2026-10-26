@@ -3,33 +3,10 @@
 // The camera is aligned with the CSS 3D fallback: --scene-angle-x/-z give the isometric view and
 // --perspective the field of view. Colors come from the surface's semantic tokens.
 import { Color, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { createSurface, NARROW, pickTier, type SceneSurface, type Tier } from './tiers';
 
-/** Rendering budget per device class; mobile is the degraded tier (#54 acceptance). */
-export interface Tier {
-  kind: 'desktop' | 'mobile';
-  /** Cap on devicePixelRatio */
-  maxDpr: number;
-  /** Multiplier for particle and block counts */
-  density: number;
-  antialias: boolean;
-  /** Camera follows the pointer */
-  parallax: boolean;
-  /** Camera path: 'orbit' moves on several axes, 'dolly' only along one */
-  path: 'orbit' | 'dolly';
-}
-
-export const TIERS = {
-  desktop: { kind: 'desktop', maxDpr: 2, density: 1, antialias: true, parallax: true, path: 'orbit' },
-  mobile: { kind: 'mobile', maxDpr: 1.5, density: 0.35, antialias: false, parallax: false, path: 'dolly' },
-} as const satisfies Record<Tier['kind'], Tier>;
-
-// Layout follows the CSS: scripts can't read @custom-media, so this is --bp-lg-down from
-// src/styles/media.css. Read it live, since the viewport can cross it after the scene starts.
-const narrowLayout = () => matchMedia('(width < 64rem)').matches;
-// The rendering budget also drops on touch devices, whatever their layout (a landscape tablet
-// gets the desktop layout but the mobile tier). Picked when the scene starts; Scene3D restarts the
-// scene when this query flips (a window resized across the breakpoint).
-export const LOW_POWER = '(width < 64rem), (pointer: coarse)';
+// Read live, since the viewport can cross it after the scene starts
+const narrowLayout = () => matchMedia(NARROW).matches;
 
 // How fast the damped progress follows the scroll position, per second
 const PROGRESS_DAMPING = 6;
@@ -39,8 +16,6 @@ const PROGRESS_DAMPING = 6;
 const FOCUS_SHIFT = { wide: 0.22, narrow: 0.3 };
 // Narrow heroes: share of the visual area's height the scene's subject fills (fitDistance)
 const NARROW_FILL = 0.8;
-
-export const pickTier = (): Tier => (matchMedia(LOW_POWER).matches ? TIERS.mobile : TIERS.desktop);
 
 export interface Palette {
   bg: Color;
@@ -160,20 +135,72 @@ interface MountOptions {
   /** Called once the first frame is on the canvas */
   onReady: () => void;
   family?: number;
+  /** The canvas and context Scene3D created to check for WebGL, used if its tier still applies */
+  surface?: SceneSurface;
 }
 
-/** Starts the scene; returns a function that stops it and frees GPU resources. */
-export function mount({ host, track, factory, onReady, family }: MountOptions): () => void {
+// A task that runs longer than 50 ms blocks input, and Lighthouse counts it in TBT. Evaluating
+// three.js, creating the WebGL context, building the scene, compiling its shaders and drawing the
+// first frame each take tens of ms on a slow phone, so each runs in its own task (#127).
+const nextTask = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
+
+/** Resolves once the GPU has run every command issued so far, checking once per task. */
+async function gpuDone(gl: WebGLRenderingContext | WebGL2RenderingContext) {
+  // three.js only renders with WebGL 2; the union is @types/three's
+  if (!(gl instanceof WebGL2RenderingContext)) return;
+  const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+  if (!sync) return;
+  gl.flush();
+  // The sync status only changes between tasks, and a 0 timeout returns at once
+  do await nextTask();
+  while (gl.clientWaitSync(sync, 0, 0) === gl.TIMEOUT_EXPIRED);
+  gl.deleteSync(sync);
+}
+
+/**
+ * Starts the scene, one step per task; returns a function that stops it and frees GPU resources,
+ * also while it is still starting. The canvas joins the host only once its first frame is drawn
+ * (onReady), so a scene being replaced can keep playing until then.
+ */
+export function mount(options: MountOptions): () => void {
+  let stopped = false;
+  let stop: (() => void) | undefined;
+  void start(options, () => stopped).then((started) => {
+    if (stopped) started?.();
+    else stop = started;
+  });
+  return () => {
+    if (stopped) return;
+    stopped = true;
+    stop?.();
+    // Let go of the stopped scene's renderer, scene and buffers
+    stop = undefined;
+  };
+}
+
+/** Builds the scene and starts its frame loop; resolves undefined if `stopped` turns true first. */
+async function start({ host, track, factory, onReady, family, surface }: MountOptions, stopped: () => boolean) {
+  // Creating a context is a task of its own; without one there is no scene (a rebuild on a
+  // browser that just lost WebGL). The viewport may have crossed LOW_POWER while three.js
+  // downloaded, before Scene3D listens for it, so Scene3D's context may be for the wrong tier.
   const tier = pickTier();
+  const created = surface?.tier === tier ? surface : createSurface(tier);
+  // Leave the task that evaluated the chunk or created the context
+  await nextTask();
+  if (stopped() || !created) return undefined;
+  const { canvas, context } = created;
   const perspective = readLength(css(host, '--perspective'));
-  const renderer = new WebGLRenderer({ antialias: tier.antialias, powerPreference: 'low-power' });
+  const renderer = new WebGLRenderer({ canvas, context });
   const palette = readPalette(host);
   renderer.setClearColor(palette.bg, 1);
-  host.append(renderer.domElement);
 
+  await nextTask();
+  if (stopped()) {
+    renderer.dispose();
+    return undefined;
+  }
   const scene = new Scene();
   const camera = new PerspectiveCamera(50, 1, 0.1, 400);
-  host.dataset.sceneTier = tier.kind;
 
   // Narrow heroes frame the scene in PageHero's visual area: between the breadcrumb row (or
   // whatever bar is above the hero) and the copy, measured at scroll 0 in the host's coordinates,
@@ -236,6 +263,30 @@ export function mount({ host, track, factory, onReady, family }: MountOptions): 
     applyOffset();
   };
   resize();
+
+  // Compile the shaders and draw one frame before the canvas is on the page, then wait for the GPU
+  // to finish it. The first draw is when the driver finishes building the shaders (SwiftShader
+  // compiles them to machine code then); on the page, the compositor would read the canvas back
+  // and block the main thread until it's done.
+  await nextTask();
+  if (!stopped()) {
+    await renderer.compileAsync(scene, camera);
+    renderer.render(scene, camera);
+    await gpuDone(renderer.getContext());
+  }
+  const release = () => {
+    instance.dispose();
+    renderer.dispose();
+    renderer.domElement.remove();
+  };
+  if (stopped()) {
+    release();
+    return undefined;
+  }
+  host.append(renderer.domElement);
+  // Set here, not when the scene stops: the scene being replaced stops after this one has started
+  host.dataset.sceneTier = tier.kind;
+
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(host);
 
@@ -295,9 +346,6 @@ export function mount({ host, track, factory, onReady, family }: MountOptions): 
     resizeObserver.disconnect();
     removeEventListener('pointermove', onPointer);
     document.removeEventListener('visibilitychange', schedule);
-    instance.dispose();
-    renderer.dispose();
-    renderer.domElement.remove();
-    delete host.dataset.sceneTier;
+    release();
   };
 }

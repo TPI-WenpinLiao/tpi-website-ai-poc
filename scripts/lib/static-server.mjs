@@ -1,9 +1,13 @@
 // Serves a built site (dist/) on a random local port, resolving /path to path.html or
 // path/index.html like Cloudflare Pages. Used by the puppeteer checks in scripts/ and by the
 // Playwright visual regression tests (tests/visual/).
+// Text files are gzipped when the client accepts it, like Cloudflare Pages and LHCI's server:
+// Lighthouse simulates the network from the transferred bytes, so uncompressed HTML and CSS
+// would add about 0.6 s to the mobile FCP (#127).
 
 import { createReadStream, statSync } from 'node:fs';
 import { createServer } from 'node:http';
+import { createGzip } from 'node:zlib';
 import { extname, join, posix, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -42,6 +46,9 @@ export function fileKind(root) {
   };
 }
 
+/** Whether a response of this content type is gzipped; images and fonts already are compressed. @param {string} type */
+export const compressible = (type) => /^text\/|^image\/svg\+xml$/.test(type);
+
 /** @param {string} root absolute path @param {number} [port] 0 picks a free port @returns {Promise<import('node:http').Server>} */
 export function serve(root, port = 0) {
   const kind = fileKind(root);
@@ -51,8 +58,15 @@ export function serve(root, port = 0) {
       res.writeHead(404).end();
       return;
     }
-    res.writeHead(200, { 'content-type': TYPES[extname(file)] ?? 'application/octet-stream' });
-    createReadStream(join(root, file)).pipe(res);
+    const type = TYPES[extname(file)] ?? 'application/octet-stream';
+    const stream = createReadStream(join(root, file));
+    if (compressible(type) && /\bgzip\b/.test(String(req.headers['accept-encoding'] ?? ''))) {
+      res.writeHead(200, { 'content-type': type, 'content-encoding': 'gzip', vary: 'accept-encoding' });
+      stream.pipe(createGzip()).pipe(res);
+      return;
+    }
+    res.writeHead(200, { 'content-type': type });
+    stream.pipe(res);
   });
   return new Promise((resolve) => server.listen(port, '127.0.0.1', () => resolve(server)));
 }

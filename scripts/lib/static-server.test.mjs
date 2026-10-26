@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { servedFile } from './static-server.mjs';
+import { compressible, servedFile } from './static-server.mjs';
 
 const FILES = new Set(['index.html', 'blog.html', 'blog/index.html', 'blog/post.html', 'docs/index.html', 'a.webp']);
 const DIRS = new Set(['', 'blog', 'docs']);
@@ -21,4 +21,12 @@ test('returns nothing for missing paths and never leaves the root', () => {
   assert.equal(servedFile('/missing', kind), undefined);
   assert.equal(servedFile('/a.webp/', kind), undefined);
   assert.equal(servedFile('/../../etc/passwd', kind), undefined);
+});
+
+test('gzips text and SVG, not images or fonts', () => {
+  assert.equal(compressible('text/html; charset=utf-8'), true);
+  assert.equal(compressible('text/javascript'), true);
+  assert.equal(compressible('image/svg+xml'), true);
+  assert.equal(compressible('image/webp'), false);
+  assert.equal(compressible('font/woff2'), false);
 });

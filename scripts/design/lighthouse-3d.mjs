@@ -35,6 +35,8 @@ export function summarize(lhr) {
   const lcpItem = audit('largest-contentful-paint-element')?.details?.items?.[0]?.items?.[0]?.node;
   // Observed (unthrottled) timings share the network-requests time origin: navigation start
   const observed = audit('metrics')?.details?.items?.[0] ?? {};
+  // Long tasks (simulated, over 50 ms) attributed to the 3D chunk: what the scene adds to TBT
+  const sceneTasks = (audit('long-tasks')?.details?.items ?? []).filter((t) => SCENE_CHUNK.test(t.url));
   return {
     score: lhr.categories.performance.score,
     fcp: audit('first-contentful-paint')?.numericValue,
@@ -47,6 +49,7 @@ export function summarize(lhr) {
     chunkStart: chunk?.networkRequestTime,
     observedLoad: observed.observedLoad,
     observedLcp: observed.observedLargestContentfulPaint,
+    sceneTasks: sceneTasks.map((t) => Math.round(t.duration)),
   };
 }
 
@@ -88,11 +91,11 @@ async function main() {
     server.close();
   }
 
-  console.log(`| 頁面 | 裝置 | Performance（${RUNS} 次） | FCP | LCP | TBT | CLS | SI | LCP 元素 | 實測 LCP／load／3D chunk 請求 |`);
-  console.log('|---|---|---|---|---|---|---|---|---|---|');
+  console.log(`| 頁面 | 裝置 | Performance（${RUNS} 次） | FCP | LCP | TBT | CLS | SI | 3D 長任務 | LCP 元素 | 實測 LCP／load／3D chunk 請求 |`);
+  console.log('|---|---|---|---|---|---|---|---|---|---|---|');
   for (const r of rows) {
     console.log(
-      `| \`${r.path}\` | ${r.formFactor} | **${r.score}**（${r.scores.join('、')}） | ${ms(r.fcp)} | ${ms(r.lcp)} | ${ms(r.tbt)} | ${r.cls?.toFixed(3)} | ${ms(r.si)} | ${r.lcpIsImage ? 'hero 靜態圖' : r.lcpElement} | ${ms(r.observedLcp)}／${ms(r.observedLoad)}／${ms(r.chunkStart)} |`,
+      `| \`${r.path}\` | ${r.formFactor} | **${r.score}**（${r.scores.join('、')}） | ${ms(r.fcp)} | ${ms(r.lcp)} | ${ms(r.tbt)} | ${r.cls?.toFixed(3)} | ${ms(r.si)} | ${r.sceneTasks.length ? r.sceneTasks.map((d) => `${d} ms`).join('、') : '無'} | ${r.lcpIsImage ? 'hero 靜態圖' : r.lcpElement} | ${ms(r.observedLcp)}／${ms(r.observedLoad)}／${ms(r.chunkStart)} |`,
     );
   }
   // Acceptance (#54): the LCP is the static image and the 3D chunk is requested after it and after load

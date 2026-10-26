@@ -4,14 +4,13 @@
 const ALL = process.env.LHCI_ALL === '1';
 
 // One page per src/layouts/templates/ file: the lowest performance score of that template in the
-// full-site run of 2026-10-25 (ADR 0004), plus every home page and 404. `scene` marks the pages
-// that load the 3D scene, whose performance only warns until #127 brings their TBT down.
+// full-site run of 2026-10-25 (ADR 0004), plus every home page and 404.
 // Paths end in .html: LHCI's static server does not add the extension.
 const PAGES = [
-  { template: 'home', path: '/index.html', scene: true },
-  { template: 'home', path: '/en.html', scene: true },
-  { template: 'home', path: '/vi.html', scene: true },
-  { template: 'offering', path: '/products/systalk-chat.html', scene: true },
+  { template: 'home', path: '/index.html' },
+  { template: 'home', path: '/en.html' },
+  { template: 'home', path: '/vi.html' },
+  { template: 'offering', path: '/products/systalk-chat.html' },
   // Service pages use the offering template without the scene
   { template: 'offering', path: '/vi/aiso.html' },
   { template: 'hub', path: '/vi/products.html' },
@@ -27,8 +26,6 @@ const PAGES = [
   { template: 'utility', path: '/404.html' },
 ];
 
-const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const pattern = (pages) => `^[a-z]+://[^/]+(${pages.map((p) => escape(p.path)).join('|')})$`;
 const score = (level, minScore) => [level, { minScore }];
 
 module.exports = {
@@ -41,22 +38,12 @@ module.exports = {
         : { numberOfRuns: 3, url: PAGES.map((p) => p.path) }),
     },
     assert: {
-      assertMatrix: [
-        {
-          matchingUrlPattern: '.*',
-          assertions: {
-            'categories:accessibility': score('error', 0.95),
-            'categories:best-practices': score('error', 0.95),
-            'categories:seo': score('error', 1),
-          },
-        },
-        {
-          // The full-site run asserts every page; the scene exception applies to the listed ones
-          matchingUrlPattern: ALL ? '.*' : pattern(PAGES.filter((p) => !p.scene)),
-          assertions: { 'categories:performance': score('error', 0.95) },
-        },
-        ...(ALL ? [] : [{ matchingUrlPattern: pattern(PAGES.filter((p) => p.scene)), assertions: { 'categories:performance': score('warn', 0.95) } }]),
-      ],
+      assertions: {
+        'categories:performance': score('error', 0.95),
+        'categories:accessibility': score('error', 0.95),
+        'categories:best-practices': score('error', 0.95),
+        'categories:seo': score('error', 1),
+      },
     },
     upload: {
       target: 'filesystem',
