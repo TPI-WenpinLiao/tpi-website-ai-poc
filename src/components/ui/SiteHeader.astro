@@ -4,8 +4,10 @@
 // reads the same over the hero, the 3D scene and the light sections below.
 // Menus are native <details> disclosures sharing one `name`, so opening one closes the others
 // without client JS. A small script closes the open menu on a click outside it, and on Esc (focus
-// goes back to its summary). The rest of the keyboard model is M4-04's; the search box is M6's and
-// links to its page for now.
+// goes back to its summary). The rest of the keyboard model is M4-04's.
+// The search button opens a search box in the same group (M6-02, #34): a GET form to the locale's
+// /search page, where SearchResults loads Pagefind; the header itself loads nothing for search, the
+// script only moves focus into the field when the box opens.
 // The language menu lists the page's locale versions (`locales`, from PageLayout; pageLocales()
 // for a static page), the same entries as LocaleSwitcher and hreflang (ADR 0002): locales without
 // a built page or home are left out, so it doesn't render while zh-TW is the only one. Every other
@@ -14,7 +16,8 @@
 // The first focusable element is the 跳到主要內容 link to `skipTo` (the page's <main id>); pages
 // showing more than one header, like /design-system, pass skipTo={false} on the extra ones.
 // While the 選單 sheet is open the page behind it does not scroll (CSS :has, no client JS).
-// `open` draws one menu open (a first-level label, or 'mobile'), for the /design-system page only.
+// `open` draws one menu open (a first-level label, 'search' or 'mobile'), for the /design-system
+// page only.
 import { localizedNav, localNode, nodeHref, type NavItem } from '../../lib/ia/navigation';
 import type { LocaleLink } from '../../lib/i18n/alternates';
 import { LOCALE_NAMES } from '../../lib/i18n/locales';
@@ -22,6 +25,7 @@ import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
 import { pageLocales } from '../../lib/i18n/routes';
 import { strings } from '../../data/strings';
 import Button from './Button.astro';
+import FormField from './FormField.astro';
 import { Image } from 'astro:assets';
 import logo from '../../assets/brand/logo-symbol-white.svg';
 
@@ -47,6 +51,8 @@ const header = localizedNav('header', currentLocale);
 const current = (href: string | undefined) => (href === path ? 'page' : undefined);
 const contact = localNode('contact', currentLocale);
 const search = localNode('search', currentLocale);
+// The search field's id, unique per header like menuGroup (navLabel may hold spaces and CJK)
+const searchId = `site-search-${Array.from(navLabel, (c) => c.codePointAt(0)?.toString(36)).join('')}`;
 // The 產品 menu is the mega menu: its overview link on top, then one column per family with its
 // products below the family link
 const groups = (item: NavItem) => item.children.filter((c) => c.children.length > 0);
@@ -124,10 +130,16 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     </nav>
 
     <div class="tools">
-      <a class="icon" href={nodeHref('search', currentLocale)}>
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6"></circle><path d="m15 15 5 5"></path></svg>
-        <span class="sr-only">{search.title}</span>
-      </a>
+      <details class="search" name={menuGroup} open={open === 'search'}>
+        <summary class="icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6"></circle><path d="m15 15 5 5"></path></svg>
+          <span class="sr-only">{search.title}</span>
+        </summary>
+        <form class="menu search-box" role="search" action={nodeHref('search', currentLocale)}>
+          <FormField kind="text" id={searchId} name="q" label={t.utility.searchLabel} />
+          <Button type="submit">{t.utility.searchSubmit}</Button>
+        </form>
+      </details>
       {
         locales.length > 1 && (
           <details class="locale" name={menuGroup} open={open === 'locale'}>
@@ -227,6 +239,13 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     const menu = e.target instanceof Element ? e.target.closest<HTMLDetailsElement>('.site-header details[open]:not(.mobile)') : null;
     if (menu && live(menu) && e.relatedTarget instanceof Node && !menu.contains(e.relatedTarget)) menu.open = false;
   });
+
+  // The search box: focus goes to its field when it opens
+  for (const box of [...document.querySelectorAll<HTMLDetailsElement>('.site-header details.search')].filter(live)) {
+    box.addEventListener('toggle', () => {
+      if (box.open) box.querySelector('input')?.focus();
+    });
+  }
 
   // Everything on the page outside `sheet`: the siblings of the sheet and of each of its ancestors
   function outside(sheet: Element): Element[] {
@@ -489,6 +508,20 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     inset-inline: auto 0;
   }
 
+  /* The search box spans the bar on phones (the button sits near the middle of it), and hangs
+     from the button's right edge from --bp-sm-up */
+  .search {
+    position: static;
+  }
+
+  .search-box {
+    inset-inline: var(--space-gutter);
+    display: grid;
+    gap: var(--space-4);
+    align-items: end;
+    padding: var(--space-5);
+  }
+
   /* Phones: logo, search and the menu button; 聯絡我們 and the locale move into the sheet. The
      mobile disclosure is static so the sheet positions against the header, not the button */
   .mobile {
@@ -534,6 +567,16 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     .cta,
     .locale {
       display: block;
+    }
+
+    .search {
+      position: relative;
+    }
+
+    .search-box {
+      inset-inline: auto 0;
+      inline-size: calc(var(--space-24) * 4);
+      grid-template-columns: minmax(0, 1fr) auto;
     }
   }
 

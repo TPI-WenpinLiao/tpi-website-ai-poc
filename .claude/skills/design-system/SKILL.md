@@ -149,6 +149,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `FilterBar` | 列表篩選 | 有 `href` 的項目是連結（blog 分類），沒有的是標籤；窄螢幕在列內橫向捲動 |
 | `Pagination` | 列表分頁 | 第 2 頁起 `/page/n`（ADR 0002）；只有一頁不輸出 |
 | `EmptyState` | 沒有項目時 | 虛線框、標題、說明與 `action` slot |
+| `SearchResults` | `/search` 的搜尋結果 | Pagefind 的 island：`form` 是頁面 GET 搜尋表單的 id（欄位 `q`），第一次 focus 或網址有 `?q=` 才載入 `/pagefind/pagefind.js`，其他頁面不用。狀態 idle／loading／results／none／error 由 `data-state` 切換，每次顯示 10 筆加「顯示更多」；`level` 是結果標題與狀態標題的層級；`preview` 只給 `/design-system` 畫靜態狀態。索引範圍見 `PageLayout` 的 `searchTrail` |
 | `FormPanel` | 頁面唯一的表單 | 有標題的面板，表單以標題命名；送出按鈕放 `actions` slot。標題下方是送出後的狀態區（`role="alert"`、`tabindex="-1"`）：`errors` 是錯誤摘要（`SectionHeading size="sm"` 的編號 eyebrow，下面每個錯誤一列、連到欄位，錯誤色只用在編號，不用淡紅底與左側粗線），`message` 是整張表單的訊息（送出失敗、安全驗證未通過）；`challenge` 在按鈕上方預留 Turnstile 的高度（窄螢幕 compact、`--bp-sm-up` 起 flexible，`--challenge-height*`），`preview` 在展示頁畫出預留框；`busy` 加 `aria-busy`。要送出的表單傳 `form`（`src/lib/forms/rules.ts` 的 id）、`action`、`next`：script 用同一套規則驗證、填入錯誤、第一次 focus 時載入 Turnstile、成功後導到 `next`（ADR 0005）；錯誤元素預先 render，script 才不會失去 scoped 樣式 |
 | `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
 | `SceneChapter` | 3D 場景上的章節 | 見「3D 場景」 |

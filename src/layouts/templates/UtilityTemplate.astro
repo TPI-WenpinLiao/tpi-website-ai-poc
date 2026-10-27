@@ -3,7 +3,8 @@
 // (unsubscribe, cancelrecord: the current site asks only for the Email), thank-you, 404 and the
 // download page of an offering, one column on the light surface. Structure follows the M3-01
 // utility wireframe (#14). Copy is in src/data/strings; the behavior is M6's (search with Pagefind,
-// the sign-up form's provider, what a thank-you page offers), so forms have no action yet.
+// the sign-up form's provider, what a thank-you page offers), so forms have no action yet. Search
+// is done (#34): the form sends ?q= to /search, where SearchResults shows the Pagefind results.
 // These pages stay out of the sitemap (FLOW_PATHS in src/lib/seo/indexing.ts).
 import type { CollectionEntry } from 'astro:content';
 import PageLayout from '../PageLayout.astro';
@@ -14,7 +15,7 @@ import CardGrid from '../../components/ui/CardGrid.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import Button from '../../components/ui/Button.astro';
 import FormField from '../../components/ui/FormField.astro';
-import EmptyState from '../../components/ui/EmptyState.astro';
+import SearchResults from '../../components/ui/SearchResults.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import { breadcrumb, entryTrail, localeHref, localNode, nodeHref } from '../../lib/ia/navigation';
 import { breadcrumbList, graph } from '../../lib/seo/jsonld/shared';
@@ -56,13 +57,13 @@ const jsonLd = props.kind === 'not-found' ? undefined : graph(breadcrumbList(tra
   <Surface tone="light" width="reading">
     {
       (props.kind === 'search' || props.kind === 'not-found') && (
-        <form class="search" role="search" action={searchHref}>
+        <form class="search" id="search-form" role="search" action={searchHref}>
           <FormField kind="text" id="q" name="q" label={u.searchLabel} />
           <Button type="submit">{u.searchSubmit}</Button>
         </form>
       )
     }
-    {props.kind === 'search' && <EmptyState title={u.searchPending} level={2} />}
+    {props.kind === 'search' && <SearchResults form="search-form" />}
     {
       props.kind === 'subscribe' && (
         <form class="stack">

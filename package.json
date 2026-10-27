@@ -37,6 +37,7 @@
     "html-validate": "^11.16.4",
     "lightningcss": "^1.33.0",
     "node-html-parser": "^9.0.5",
+    "pagefind": "1.5.2",
     "puppeteer-core": "^24.43.1",
     "turndown": "^7.2.4",
     "typescript": "^6.0.3",

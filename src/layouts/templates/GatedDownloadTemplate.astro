@@ -44,19 +44,21 @@ if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
 const site = Astro.site;
 const cover = data.ogImage ?? data.coverImage;
+const trail = breadcrumb(self.id, locale);
 const jsonLd = whitepaperJsonLd({
   whitepaper: data,
   org: org.data,
   site,
   url: canonicalUrl(Astro.url.pathname, site),
   inLanguage: locale,
-  trail: breadcrumb(self.id, locale),
+  trail,
   imageUrl: new URL(cover.src, site).href,
   about: { name: offering.title, url: new URL(offeringHref ?? '/', site).href },
 });
 ---
 
 <PageLayout
+  searchTrail={trail}
   title={data.seoTitle ?? data.title}
   description={data.description}
   image={{ src: cover.src, width: cover.width, height: cover.height, alt: data.title }}

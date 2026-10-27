@@ -1,0 +1,323 @@
+---
+// Site search results (M6-02, #34): the island of the /search page. It searches the Pagefind index
+// that src/integrations/pagefind.ts writes to /pagefind/ at build time; Pagefind picks the index of
+// the page's <html lang>, so each locale only finds its own pages. `form` is the id of the page's
+// GET search form (field `q`): without JS the form still sends ?q= to the page, with JS the results
+// follow the field as it is typed in (300 ms after the last key) and ?q= follows the results.
+// Pagefind's script loads on the first focus of the field, or right away when the URL has ?q=, so
+// the page's first load fetches nothing from /pagefind/.
+// States: idle (no query yet), loading, results, none and error (the index can't load: `astro dev`
+// has none, use `npm run build && npm run preview`). Results show 10 at a time with a 顯示更多 button.
+// Each result is the page's section (PageLayout's searchTrail), its title link and Pagefind's
+// excerpt, of which only the <mark> highlights are kept as markup. The zh-TW index has spaces
+// between words (src/lib/search/segment.ts), which despace() takes out of titles and excerpts.
+// `preview` draws one state statically with sample results, for the /design-system page only.
+import Button from './Button.astro';
+import EmptyState from './EmptyState.astro';
+import { strings } from '../../data/strings';
+import { localeFromPath } from '../../lib/i18n/paths';
+
+type Sample = { section?: string; title: string; url: string; excerpt: string };
+
+interface Props {
+  form: string;
+  // Heading level of the result titles and the state headings (the /search page's are h2)
+  level?: 2 | 3 | 4;
+  preview?: { state: 'idle' | 'loading' | 'none' | 'error' } | { state: 'results'; count: number; results: Sample[]; more?: boolean };
+}
+
+const { form, level = 2, preview } = Astro.props;
+const Heading = `h${level}` as const;
+const u = strings(localeFromPath(Astro.url.pathname)).utility;
+const state = preview?.state ?? 'idle';
+const samples = preview?.state === 'results' ? preview.results : [];
+const status = preview?.state === 'results' ? u.searchCount(preview.count) : preview?.state === 'loading' ? u.searchLoading : '';
+const more = preview?.state === 'results' && preview.more === true;
+// The client fills in the count: searchCount() of this placeholder number, which no count reaches
+const COUNT = 999999999;
+// Sample excerpts mark the match as [text]
+const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) => ({ part, mark: i % 2 === 1 }));
+---
+
+<div
+  class="search-results"
+  data-search-results={preview ? undefined : ''}
+  data-search-form={form}
+  data-state={state}
+  data-count={u.searchCount(COUNT).replace(String(COUNT), '{n}')}
+  data-loading={u.searchLoading}
+  data-none={u.searchNone}
+  data-error={u.searchError}
+>
+  <p class="status" role="status">{status}</p>
+  <div class="when-idle"><EmptyState title={u.searchPending} level={level} /></div>
+  <div class="when-none"><EmptyState title={u.searchNone} description={u.searchNoneText} level={level} /></div>
+  <div class="when-error"><EmptyState title={u.searchError} description={u.searchErrorText} level={level} /></div>
+  <ol class="list" data-list>
+    {
+      samples.map((r) => (
+        <li class="result">
+          {r.section && <p class="section">{r.section}</p>}
+          <Heading class="title">
+            <a href={r.url}>{r.title}</a>
+          </Heading>
+          <p class="excerpt">{marked(r.excerpt).map((p) => (p.mark ? <mark>{p.part}</mark> : p.part))}</p>
+          <p class="url">{r.url}</p>
+        </li>
+      ))
+    }
+  </ol>
+  <div class="more" hidden={!more} data-more>
+    <Button type="button" variant="secondary">{u.searchMore}</Button>
+  </div>
+  <template data-result>
+    <li class="result">
+      <p class="section"></p>
+      <!-- [html-validate-disable-next empty-heading -- the script fills in the title of each result] -->
+      <Heading class="title"><a></a></Heading>
+      <p class="excerpt"></p>
+      <p class="url"></p>
+    </li>
+  </template>
+</div>
+
+<script>
+  import { despace } from '../../lib/search/display';
+
+  const PAGE = 10;
+  const DEBOUNCE = 300;
+  // The index sits next to the site at /pagefind/ and only exists after a build, so Vite must not
+  // resolve it
+  const BUNDLE = '/pagefind/pagefind.js';
+
+  type Result = { data: () => Promise<{ url: string; excerpt: string; meta: Record<string, string | undefined> }> };
+  type Pagefind = { search: (q: string) => Promise<{ results: Result[] } | null> };
+  type State = 'idle' | 'loading' | 'results' | 'none' | 'error';
+
+  function isPagefind(mod: unknown): mod is Pagefind {
+    return typeof mod === 'object' && mod !== null && 'search' in mod && typeof mod.search === 'function';
+  }
+
+  // Pagefind's excerpt is escaped page text with <mark> around the matches: keep the text and the
+  // marks, drop anything else
+  function excerptNodes(html: string): Node[] {
+    const body = new DOMParser().parseFromString(despace(html), 'text/html').body;
+    return [...body.childNodes].map((n) => {
+      if (n.nodeName !== 'MARK') return document.createTextNode(n.textContent ?? '');
+      const mark = document.createElement('mark');
+      mark.textContent = n.textContent;
+      return mark;
+    });
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-search-results]')) {
+    const form = document.getElementById(root.dataset.searchForm ?? '');
+    const input = form instanceof HTMLFormElement ? form.elements.namedItem('q') : null;
+    const status = root.querySelector('[role="status"]');
+    const list = root.querySelector('[data-list]');
+    const more = root.querySelector<HTMLElement>('[data-more]');
+    const item = root.querySelector<HTMLTemplateElement>('template[data-result]')?.content.firstElementChild;
+    const { count, loading, none, error } = root.dataset;
+    if (!(form instanceof HTMLFormElement) || !(input instanceof HTMLInputElement) || !status || !list || !more || !item) continue;
+    if (count === undefined || loading === undefined || none === undefined || error === undefined) continue;
+
+    let pagefind: Promise<Pagefind> | undefined;
+    const load = () =>
+      (pagefind ??= import(/* @vite-ignore */ BUNDLE).then((mod: unknown) => {
+        if (!isPagefind(mod)) throw new Error('SearchResults: /pagefind/pagefind.js has no search()');
+        return mod;
+      }));
+
+    let results: Result[] = [];
+    let shown = 0;
+    // Each search gets a number; a slower earlier search must not overwrite a later one
+    let latest = 0;
+
+    const show = (state: State, message = '') => {
+      root.dataset.state = state;
+      status.textContent = message;
+    };
+
+    const render = (node: Awaited<ReturnType<Result['data']>>) => {
+      const li = item.cloneNode(true);
+      if (!(li instanceof HTMLElement)) return;
+      const section = li.querySelector('.section');
+      const link = li.querySelector('a');
+      const excerpt = li.querySelector('.excerpt');
+      const url = li.querySelector('.url');
+      if (node.meta.section) section?.replaceChildren(node.meta.section);
+      else section?.remove();
+      if (link) {
+        link.href = node.url;
+        link.textContent = despace(node.meta.title ?? node.url);
+      }
+      excerpt?.replaceChildren(...excerptNodes(node.excerpt));
+      url?.replaceChildren(node.url);
+      list.append(li);
+    };
+
+    const showMore = async (run: number) => {
+      const page = await Promise.all(results.slice(shown, shown + PAGE).map((r) => r.data()));
+      if (run !== latest) return;
+      page.forEach(render);
+      shown += page.length;
+      more.hidden = shown >= results.length;
+    };
+
+    const search = async (raw: string) => {
+      const q = raw.trim();
+      const run = ++latest;
+      const url = new URL(location.href);
+      if (q) url.searchParams.set('q', q);
+      else url.searchParams.delete('q');
+      history.replaceState(history.state, '', url);
+      list.replaceChildren();
+      more.hidden = true;
+      results = [];
+      shown = 0;
+      if (!q) return show('idle');
+      show('loading', loading);
+      try {
+        const found = await (await load()).search(q);
+        if (run !== latest) return;
+        results = found?.results ?? [];
+        if (results.length === 0) return show('none', none);
+        await showMore(run);
+        if (run === latest) show('results', count.replace('{n}', String(results.length)));
+      } catch {
+        if (run === latest) show('error', error);
+      }
+    };
+
+    let timer: number | undefined;
+    input.addEventListener('focus', () => void load().catch(() => undefined), { once: true });
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = window.setTimeout(() => void search(input.value), DEBOUNCE);
+    });
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      clearTimeout(timer);
+      void search(input.value);
+    });
+    more.querySelector('button')?.addEventListener('click', () => void showMore(latest));
+
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) {
+      input.value = q;
+      void search(q);
+    }
+  }
+</script>
+
+<style>
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin-block-start: var(--space-8);
+  }
+
+  .status {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  /* One state at a time; the list and the 顯示更多 button belong to the results state */
+  .when-idle,
+  .when-none,
+  .when-error,
+  .list {
+    display: none;
+  }
+
+  [data-state='idle'] > .when-idle,
+  [data-state='none'] > .when-none,
+  [data-state='error'] > .when-error {
+    display: block;
+  }
+
+  [data-state='results'] > .list {
+    display: flex;
+  }
+
+  .search-results:not([data-state='results']) > .more {
+    display: none;
+  }
+
+  .list {
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: var(--border-width) solid var(--color-border);
+  }
+
+  .result {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-block: var(--space-6);
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  .result p {
+    margin: 0;
+  }
+
+  .section {
+    color: var(--color-text-brand);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-mono);
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-snug);
+  }
+
+  .title a {
+    color: var(--color-link);
+    text-decoration: none;
+  }
+
+  .title a:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+    text-underline-offset: var(--underline-offset);
+  }
+
+  .excerpt {
+    color: var(--color-text-muted);
+    line-height: var(--line-height-base);
+    overflow-wrap: break-word;
+  }
+
+  mark {
+    background: var(--color-bg-accent-subtle);
+    color: var(--color-text);
+  }
+
+  .url {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    overflow-wrap: anywhere;
+  }
+
+  .more {
+    display: flex;
+    justify-content: center;
+  }
+
+  .more[hidden] {
+    display: none;
+  }
+</style>

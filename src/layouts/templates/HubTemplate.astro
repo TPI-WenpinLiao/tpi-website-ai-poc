@@ -65,20 +65,21 @@ if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URL
 const site = Astro.site;
 const pageImage = data.heroImage ?? data.ogImage;
 const ogImage = pageImage && { src: pageImage.src, width: pageImage.width, height: pageImage.height, alt: data.title };
+const trail = breadcrumb(self.id, locale);
 const jsonLd = hubJsonLd({
   hub: data,
   org: org.data,
   site,
   url: canonicalUrl(Astro.url.pathname, site),
   inLanguage: locale,
-  trail: breadcrumb(self.id, locale),
+  trail,
   parts: parts.flatMap((p) => (p.href && p.kind === 'page' ? [{ name: p.title, url: new URL(p.href, site).href }] : [])),
 });
 
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 ---
 
-<PageLayout title={data.seoTitle ?? data.title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
+<PageLayout searchTrail={trail} title={data.seoTitle ?? data.title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
   <PageHero eyebrow={localNode(self.parent, locale).title} title={data.title} description={data.tagline ?? data.description}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
     <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />

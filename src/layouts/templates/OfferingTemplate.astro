@@ -106,13 +106,14 @@ if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URL
 // Page image: heroImage, else ogImage, else the site default (content-model.md「共用欄位」)
 const pageImage = data.heroImage ?? data.ogImage;
 const ogImage = pageImage && { src: pageImage.src, width: pageImage.width, height: pageImage.height, alt: data.title };
+const trail = breadcrumb(self.id, locale);
 const jsonLd = offeringJsonLd({
   offering: data,
   org: org.data,
   site: Astro.site,
   url: canonicalUrl(Astro.url.pathname, Astro.site),
   imageUrl: new URL((ogImage ?? defaultOgImage(locale)).src, Astro.site).href,
-  trail: breadcrumb(self.id, locale),
+  trail,
   inLanguage: locale,
 });
 
@@ -120,7 +121,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 const blog = localNode('blog', locale);
 ---
 
-<PageLayout title={title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
+<PageLayout searchTrail={trail} title={title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
   <InPageNav slot="nav" label={t.toc} items={anchors} />
   <div class="track" data-scene-track>
     <PageHero eyebrow={brand} title={data.title} description={data.tagline}>

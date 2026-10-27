@@ -45,18 +45,19 @@ if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
 const pageImage = data.heroImage ?? data.ogImage;
 const ogImage = pageImage && { src: pageImage.src, width: pageImage.width, height: pageImage.height, alt: data.title };
+const trail = breadcrumb(self.id, locale);
 const jsonLd = pageJsonLd({
   page: data,
   org: org.data,
   site: Astro.site,
   url: canonicalUrl(Astro.url.pathname, Astro.site),
   inLanguage: locale,
-  trail: breadcrumb(self.id, locale),
+  trail,
   logoUrl: new URL(org.data.logo.src, Astro.site).href,
 });
 ---
 
-<PageLayout title={data.seoTitle ?? data.title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
+<PageLayout searchTrail={trail} title={data.seoTitle ?? data.title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
   {anchors.length > 0 && <InPageNav slot="nav" label={t.toc} items={anchors} />}
   <PageHero tone="light" size="compact" title={data.title} description={data.description}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
