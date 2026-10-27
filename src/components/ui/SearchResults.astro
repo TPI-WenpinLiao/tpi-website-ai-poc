@@ -147,8 +147,8 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
 
     let results: Result[] = [];
     let query = '';
-    // Set when a page of results failed to load: Pagefind keeps the failed load of each result, so
-    // the next click starts a new Pagefind instance and takes fresh results for the same query
+    // Set when results failed to load (the first page or a later one): Pagefind keeps the failed
+    // load of each result, so the next search or click starts a new Pagefind instance first
     let stale = false;
     let shown = 0;
     // Each search gets a number; a slower earlier search must not overwrite a later one
@@ -218,6 +218,8 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
         await showMore(run);
         if (run === latest) show('results', count.replace('{n}', String(results.length)));
       } catch {
+        // Pagefind keeps the failed load, so the next search starts a new instance (`stale`)
+        stale = true;
         if (run === latest) show('error', error);
       }
     };
@@ -245,7 +247,9 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
           if (stale && run === latest) {
             const pf = await load();
             await pf.destroy();
-            results = (await pf.search(query))?.results ?? [];
+            const fresh = (await pf.search(query))?.results ?? [];
+            if (run !== latest) return undefined;
+            results = fresh;
             stale = false;
           }
           return showMore(run);

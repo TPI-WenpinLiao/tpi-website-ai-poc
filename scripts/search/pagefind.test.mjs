@@ -14,7 +14,7 @@ const OK = {
   loads: [{ path: '/', requests: [] }],
   keyboard: { field: true, results: 10, result: true, moreFocus: true },
   axe: [{ path: '/search?q=企業', violations: [] }],
-  list: { liveRegion: true, repeated: [], ordered: true, retried: true },
+  list: { liveRegion: true, repeated: [], ordered: true, retried: true, researched: true },
 };
 
 test('a search that behaves has no problems', () => {
@@ -64,10 +64,11 @@ test('foreign() keeps the URLs outside a locale: zh-TW is every URL without /en 
 });
 
 test('a hidden live region and results listed twice are reported', () => {
-  assert.deepEqual(problems({ ...OK, list: { liveRegion: false, repeated: ['/about-us'], ordered: false, retried: false } }), [
+  assert.deepEqual(problems({ ...OK, list: { liveRegion: false, repeated: ['/about-us'], ordered: false, retried: false, researched: false } }), [
     '/search: the empty role="status" region is display: none, out of the accessibility tree',
     '/search: two clicks on 顯示更多結果 listed /about-us twice',
     '/search: after a page of results failed to load, the status line did not say so or the next click did not add results 11-20',
+    '/search: after the first page of results failed to load, sending the query again did not show results',
     "/search: after two clicks on 顯示更多結果 with slow responses, the first 30 results are not in Pagefind's order",
   ]);
 });
