@@ -23,6 +23,16 @@
 
 修完後第二次全站量測，沒達標的 59 頁全部載入 3D 場景：offering 模板中有 `Scene3D` 的 57 頁有 56 頁、三語首頁 3 頁，最低 89。accessibility、best-practices、SEO 全部達標。
 
+### M8-01 重跑（#43）
+
+2026-10-27 在 `main` `753ed04` 上重跑 `npm run lighthouse:all`，雲端 session 共 96 分 20 秒。485 頁中 483 頁達標：
+
+- performance：2 頁 0.93，`/en/products/systalk-coach`、`/vi/solutions/smartfilling`。這兩頁的 TBT 約 258 ms，同一頁的其他語系只有 12–36 ms。用 `node scripts/design/lighthouse-3d.mjs` 各重跑 3 次，行動版都是 0.98（TBT 20 ms、11 ms），判定是單次量測的起伏
+- accessibility、SEO 全部 1
+- best-practices：182 頁 0.96，達標但不是滿分。其中 180 頁是成功案例內頁，原因是客戶 logo 只輸出 1x（`image-size-responsive`），在 DPR 2 的螢幕上會模糊。`CaseStudyTemplate` 的 logo 從 `layout="none"` 改成 `layout="fixed"`（`srcset` 有 1x、2x 兩個寬度；`densities` 不能和 `layout` 一起用，型別不允許）後，抽測兩頁都是 1。另外 2 頁是 `/templates/*` 預覽頁的範例圖，不是正式頁面
+
+`PAGES` 不變：除了上述 2 頁，其他頁面的 performance 都在 0.95 以上（0.95 的 4 頁：`/vi`、`/en/contact-us`、`/vi/contact-us`、`/media-center/572`），沒有新的未達標頁面要補進代表頁。
+
 ## 決策
 
 1. **`npm run check` 測代表頁**：`lighthouserc.cjs` 的 `PAGES` 列出每個 `src/layouts/templates/` 模板至少一頁，取該模板在全站量測中 performance 最低的真實頁面；同分時取 vi（字型最多）。另外加上三語首頁與 404，offering 模板的 3D 頁與沒有 3D 的服務頁各一頁，以及帶查詢字串、會載入 Pagefind 的 `/search?q=企業`（M6-02，#34；`lhci-prepare.mjs` 檢查路徑時去掉 `?` 之後）。還沒有真實頁面的模板（目前是 `gated-download`，沒有白皮書）用 `/templates/<id>` 預覽頁。共 16 頁，各跑 3 次

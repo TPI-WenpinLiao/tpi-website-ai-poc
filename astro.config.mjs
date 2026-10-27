@@ -17,7 +17,8 @@ export default defineConfig({
   },
   // Gives Markdown body images (and <Image> without widths) a srcset: without it a phone downloads
   // the 1600px original of every news and blog photo (#87). Fixed-height logos opt out with
-  // layout="none"; responsiveStyles stays off, so no image gets styles it did not ask for
+  // layout="none", or take layout="fixed" for a 1x and 2x srcset (case-study logos, #43);
+  // responsiveStyles stays off, so no image gets styles it did not ask for
   image: {
     layout: 'constrained',
   },

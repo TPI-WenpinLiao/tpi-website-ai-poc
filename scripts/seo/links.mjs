@@ -21,7 +21,8 @@ import { externalPaths, urlPath } from '../i18n/routes.mjs';
 const SHOWN = 5;
 
 // Page nodes in docs/ia/nodes.csv that the navigation links to but that have no content entry yet
-// (src/content), so no page is built for them. Remove a path once its page is built.
+// (src/content), so no page is built for them; scripts/ia/redirect-targets.mjs exempts the redirects
+// to them too. Tracked in #138. Remove a path once its page is built.
 export const PENDING = [
   '/chatgpt-enterprise',
   '/cloudservice',

@@ -111,6 +111,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 
 ### M8 驗收
 
+- M8-01 全站驗收完成（#43）：`docs/launch/audit.md` 逐項記錄 `npm run check` 每個子檢查、redirect map、全站 Lighthouse 與內容待確認的結果。新增 `scripts/ia/redirect-targets.mjs`（`npm run check`）：`redirects.csv` 每一列的目標都要在 `dist/` 建出、沒有轉址鏈，已知沒建出的目標列在 `UNBUILT`（#137）。`npm run lighthouse:all` 485 頁中 483 頁達標，另外 2 頁重跑後 0.98；成功案例的客戶 logo 加上 2x（ADR 0004「M8-01 重跑」）。無法當場修的問題開 #137、#138、#139
 - logo 改用 AI 檔轉出的 SVG 完成（#122）：`node scripts/design/import-brand.mjs <AI 檔資料夾>` 用 `pdftocairo` 把行銷部門的 AI 檔轉成 SVG，刪掉反白版的預覽底色與空字形、裁掉留白，產生 `src/assets/brand/logo-*.svg`、favicon 與 apple-touch-icon；header、footer 與 `public/og/default.png` 改用 SVG，顯示高度不變；JSON-LD 的 organization `logo` 用 script 從 SVG 產生的 PNG。AI 原始檔不進 repo（`docs/design/brand-assets.md`）
 - `npm run check` 的 LHCI 涵蓋所有模板完成（#87）：`lighthouserc.cjs` 的 `PAGES` 是每個模板在全站量測中分數最低的一頁，加上三語首頁與 404，共 15 頁；`scripts/lhci-prepare.mjs` 在路徑不存在或有模板沒有代表頁時失敗（ADR 0004）。`npm run lighthouse:all` 測全部 485 頁，第一次 202 頁沒達標，修掉 vi 字型（多下載 `latin-ext` subset）、新聞內頁圖片（手機下載 1440w 封面與 1600px 內文原檔）與 `/en` 的「Learn More」連結文字後，剩下載入 3D 的 59 頁，交給 #127，這段期間 3D 頁的 performance 只 warn
 - 只改文件的 PR 在 quality-gate 跳過 Lighthouse 完成（#129）：變更的檔案全部在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY` 白名單內時，quality-gate 不跑 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify`：拿掉這些檔案重新 build，`dist/` 逐檔相同才通過，白名單失效時會在這裡失敗。job summary 寫明原因。`npm run check` 拆成 `check:before-lighthouse` 與 `lighthouse`，本機行為不變（ADR 0004「例外」）
@@ -118,7 +119,9 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 
 ## 下一步
 
-- M8-01 全站驗收（#43）可以開始
+- M8-02 launch-readiness（#44）可以開始
+- redirect 目標頁沒有建出的 12 列（#137）可以開始
+- 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
 - M3-08 動態規範（#55）可以開始
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
@@ -135,7 +138,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - 回覆 M6-03（#35）PR 的「待確認」：現站產品、服務、about 頁的影片要不要放回新站（要在 offering schema 加影片欄位、改模板、下載自架 MP4）
 - 回覆 PR #98「待確認問題」：listing、utility、contact 頁的暫定描述（`src/data/strings/zh-TW.ts` 的 `pages`）、聯絡表單的諮詢產品選項、個資同意與 AI Playbook 欄位文案、`industry: other` 的顯示名稱
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
-- 部署 `_redirects` 時實測 Cloudflare Pages 比對來源路徑是否區分大小寫、`%` 編碼怎麼比對（見 `docs/ia/redirects.md`「待確認」）
+- 在 preview 實測 `_redirects` 的大小寫與 `%` 編碼比對（#139）可以開始
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
@@ -167,3 +170,4 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
 - 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，列進 M8-02 launch-readiness（#44）
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
+- M8-01 的全站驗收在 #36（GTM／consent）、#101（最新文章改讀 collection）合併前執行，這兩處的結果標「待這兩張合併後重驗」。兩張都合併後在 `main` 重跑 `npm run check` 與 `npm run lighthouse:all`，結果補進 `docs/launch/audit.md`
