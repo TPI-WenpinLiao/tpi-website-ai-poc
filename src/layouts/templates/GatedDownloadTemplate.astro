@@ -3,7 +3,8 @@
 // whitepaper entry. Structure follows the M3-01 gated-download wireframe (#14): cover, summary and key points
 // beside the request form (below it on narrow screens), then the offering the document is about.
 // The form shows the fields of the current site's whitepaper forms (docs/research/features.md);
-// sending it, the endpoint and the file are M6-01's, so it has no action yet.
+// sending it waits for the files (`file: 待確認`): M6-01 wired only the contact form, and a new form is a
+// rule set, a Function and FormPanel `form` (ADR 0005「之後」), so it has no action yet.
 import type { CollectionEntry } from 'astro:content';
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';

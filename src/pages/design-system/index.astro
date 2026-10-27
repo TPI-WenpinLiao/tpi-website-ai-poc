@@ -519,7 +519,7 @@ const description =
             </FormPanel>
           </div>
           <p class="note">
-            頁面唯一的表單（聯絡、索取文件）放在這個面板裡。錯誤摘要與送出失敗的訊息出現在標題下方，送出後焦點移到這裡；虛線框是 Cloudflare Turnstile 的預留空間（窄螢幕 compact，--bp-sm-up 起 flexible），widget 在 M6-01 階段二接上。
+            頁面唯一的表單（聯絡、索取文件）放在這個面板裡。錯誤摘要與送出失敗的訊息出現在標題下方，送出後焦點移到這裡；虛線框是 Cloudflare Turnstile 的預留空間（窄螢幕 compact，--bp-sm-up 起 flexible）。傳了 form 的 FormPanel 才會在第一次 focus 進表單時載入 widget，這裡只畫出預留框。
           </p>
 
           <h3>FormGroup</h3>
