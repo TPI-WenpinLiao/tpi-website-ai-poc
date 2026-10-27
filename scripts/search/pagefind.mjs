@@ -17,6 +17,7 @@
 // Uses CHROME_PATH (set by the SessionStart hook), else CHROME_BIN (set on GitHub's runners), else the installed Chrome.
 
 import { readdirSync, readFileSync } from 'node:fs';
+import { createServer, request } from 'node:http';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -169,25 +170,42 @@ async function keyboard(browser, origin) {
   return { field, results: shown, result, moreFocus };
 }
 
+// A proxy to `origin` whose hold(n) makes the next n /pagefind/fragment/ responses 1.5 s late
+/** @param {string} origin */
+async function lateFragments(origin) {
+  let held = 0;
+  const server = createServer((req, res) => {
+    const late = (req.url ?? '').startsWith('/pagefind/fragment/') && held > 0;
+    if (late) held--;
+    setTimeout(
+      () =>
+        req.pipe(
+          request(`${origin}${req.url}`, { method: req.method, headers: req.headers }, (up) => {
+            res.writeHead(up.statusCode ?? 502, up.headers);
+            up.pipe(res);
+          }),
+        ),
+      late ? 1500 : 0,
+    );
+  });
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(undefined)));
+  const { port } = /** @type {import('node:net').AddressInfo} */ (server.address());
+  return { server, origin: `http://localhost:${port}`, hold: (/** @type {number} */ n) => void (held = n) };
+}
+
 // The live region before a search, then two clicks on 顯示更多 in a row
 /** @param {import('puppeteer-core').Browser} browser @param {string} origin */
 async function resultList(browser, origin) {
   const idle = await open(browser, origin, '/search');
   const liveRegion = await idle.page.$eval('[data-search-results] [role="status"]', (el) => getComputedStyle(el).display !== 'none');
   await idle.page.close();
-  const { page } = await open(browser, origin, `/search?q=${encodeURIComponent(ZH_QUERIES[0].q)}`);
+  // Through a proxy that, once the first results show, holds the next PAGE_SIZE fragment responses
+  // back, so a page that lands in arrival order shows results 21-30 before 11-20. The delay is on
+  // the server side: request interception in the browser stalled a request now and then
+  const slow = await lateFragments(origin);
+  const { page } = await open(browser, slow.origin, `/search?q=${encodeURIComponent(ZH_QUERIES[0].q)}`);
   await page.waitForSelector('[data-search-results][data-state="results"]');
-  // The next PAGE_SIZE result fragments answer late, so a page that lands in arrival order shows
-  // results 21-30 before 11-20
-  let late = PAGE_SIZE;
-  await page.setRequestInterception(true);
-  page.on('request', (r) => {
-    if (late > 0 && r.url().includes('/pagefind/fragment/')) {
-      late--;
-      // A request still held when the page closes can no longer continue
-      setTimeout(() => void r.continue().catch(() => undefined), 1500);
-    } else void r.continue().catch(() => undefined);
-  });
+  slow.hold(PAGE_SIZE);
   await page.$eval('[data-more] button', (b) => {
     if (!(b instanceof HTMLElement)) return;
     b.click();
@@ -202,6 +220,7 @@ async function resultList(browser, origin) {
     return Promise.all(found.results.slice(0, n).map(async (/** @type {{ data: () => Promise<{ url: string }> }} */ r) => (await r.data()).url));
   }, ZH_QUERIES[0].q, PAGE_SIZE * 3);
   await page.close();
+  slow.server.close();
   return { liveRegion, repeated: [...new Set(hrefs.filter((h, i) => hrefs.indexOf(h) !== i))], ordered: hrefs.length === order.length && hrefs.every((h, i) => h === order[i]) };
 }
 
