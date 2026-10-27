@@ -14,6 +14,7 @@ const OK = {
   loads: [{ path: '/', requests: [] }],
   keyboard: { field: true, results: 10, result: true, moreFocus: true },
   axe: [{ path: '/search?q=企業', violations: [] }],
+  list: { liveRegion: true, repeated: [] },
 };
 
 test('a search that behaves has no problems', () => {
@@ -60,4 +61,11 @@ test('foreign() keeps the URLs outside a locale: zh-TW is every URL without /en 
   const urls = ['/about-us', '/en/about-us', '/vi', '/vietnam', '/en'];
   assert.deepEqual(foreign(urls, ''), ['/en/about-us', '/vi', '/en']);
   assert.deepEqual(foreign(urls, '/en'), ['/about-us', '/vi', '/vietnam']);
+});
+
+test('a hidden live region and results listed twice are reported', () => {
+  assert.deepEqual(problems({ ...OK, list: { liveRegion: false, repeated: ['/about-us'] } }), [
+    '/search: the empty role="status" region is display: none, out of the accessibility tree',
+    '/search: two clicks on 顯示更多結果 listed /about-us twice',
+  ]);
 });

@@ -130,7 +130,7 @@ export const strings: Strings = {
     searchSubmit: 'Search',
     searchPending: 'Enter a keyword to start searching',
     searchLoading: 'Searching…',
-    searchCount: (n: number) => `${n} results found`,
+    searchCount: (n: number) => `Results found: ${n}`,
     searchNone: 'No matching results',
     searchNoneText: 'Try another keyword, or a shorter one.',
     searchError: 'Search is unavailable right now',

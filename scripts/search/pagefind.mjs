@@ -7,6 +7,9 @@
 //   (one page per template, the lighthouserc.cjs PAGES but /search)
 // - the keyboard alone can't get from the search field to a result, or 顯示更多 doesn't move focus
 //   to the first result it adds
+// - the role="status" live region is out of the accessibility tree while empty (display: none),
+//   so its first text may not be announced
+// - two quick clicks on 顯示更多 list a result twice
 // - axe finds a WCAG 2.2 A/AA violation on /search with results or with none (scripts/design/axe.mjs
 //   only sees the page before a search)
 // Part of `npm run check`, after the build: node scripts/search/pagefind.mjs
@@ -58,11 +61,12 @@ export const foreign = (/** @type {string[]} */ urls, /** @type {string} */ pref
  * @typedef {{ search: string, foreign: string[], found: number }} Locale
  * @typedef {{ path: string, requests: string[] }} Load
  * @typedef {{ field: boolean, results: number, result: boolean, moreFocus: boolean }} Keyboard
+ * @typedef {{ liveRegion: boolean, repeated: string[] }} Results
  * @typedef {{ path: string, violations: string[] }} Axe
- * @param {{ counts: IndexCount[], queries: Query[], locales: Locale[], loads: Load[], keyboard: Keyboard, axe: Axe[] }} r
+ * @param {{ counts: IndexCount[], queries: Query[], locales: Locale[], loads: Load[], keyboard: Keyboard, axe: Axe[], list: Results }} r
  * @returns {string[]}
  */
-export function problems({ counts, queries, locales, loads, keyboard, axe }) {
+export function problems({ counts, queries, locales, loads, keyboard, axe, list }) {
   const out = [];
   for (const c of counts) {
     if (c.indexed === undefined) out.push(`no ${c.lang} index in pagefind-entry.json (${c.built} pages to index)`);
@@ -79,6 +83,8 @@ export function problems({ counts, queries, locales, loads, keyboard, axe }) {
   else if (!keyboard.result) out.push(`/search: no result link within ${RESULT_TABS} Tab presses after the field`);
   else if (!keyboard.moreFocus) out.push(`/search: Enter on 顯示更多結果 did not move focus to result ${PAGE_SIZE + 1}`);
   for (const a of axe) for (const v of a.violations) out.push(`${a.path}: axe ${v}`);
+  if (!list.liveRegion) out.push('/search: the empty role="status" region is display: none, out of the accessibility tree');
+  for (const u of list.repeated) out.push(`/search: two clicks on 顯示更多結果 listed ${u} twice`);
   return out;
 }
 
@@ -161,6 +167,25 @@ async function keyboard(browser, origin) {
   return { field, results: shown, result, moreFocus };
 }
 
+// The live region before a search, then two clicks on 顯示更多 in a row
+/** @param {import('puppeteer-core').Browser} browser @param {string} origin */
+async function resultList(browser, origin) {
+  const idle = await open(browser, origin, '/search');
+  const liveRegion = await idle.page.$eval('[data-search-results] [role="status"]', (el) => getComputedStyle(el).display !== 'none');
+  await idle.page.close();
+  const { page } = await open(browser, origin, `/search?q=${encodeURIComponent(ZH_QUERIES[0].q)}`);
+  await page.waitForSelector('[data-search-results][data-state="results"]');
+  await page.$eval('[data-more] button', (b) => {
+    if (!(b instanceof HTMLElement)) return;
+    b.click();
+    b.click();
+  });
+  await page.waitForFunction((n) => document.querySelectorAll('[data-list] li').length >= n, { timeout: 5000 }, PAGE_SIZE * 3).catch(() => undefined);
+  const hrefs = await page.$$eval('[data-list] a', (links) => links.map((a) => a.getAttribute('href') ?? ''));
+  await page.close();
+  return { liveRegion, repeated: [...new Set(hrefs.filter((h, i) => hrefs.indexOf(h) !== i))] };
+}
+
 /** @param {import('puppeteer-core').Browser} browser @param {string} origin @param {string} path */
 async function axeState(browser, origin, path) {
   const { page } = await open(browser, origin, path);
@@ -200,7 +225,7 @@ async function main() {
     for (const path of others) loads.push(await load(browser, origin, path));
     const axeResults = [];
     for (const path of AXE_PATHS) axeResults.push(await axeState(browser, origin, path));
-    found = problems({ counts, queries, locales, loads, keyboard: await keyboard(browser, origin), axe: axeResults });
+    found = problems({ counts, queries, locales, loads, keyboard: await keyboard(browser, origin), axe: axeResults, list: await resultList(browser, origin) });
     const summary = queries.map((q) => `${q.q} ${q.found}`).join(', ');
     console.log(`search: ${counts.map((c) => `${c.lang} ${c.indexed}`).join(', ')} pages indexed; zh-TW ${summary}; ${loads.length} pages without /pagefind/ requests checked`);
   } finally {

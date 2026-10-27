@@ -134,10 +134,16 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
 
     let pagefind: Promise<Pagefind> | undefined;
     const load = () =>
-      (pagefind ??= import(/* @vite-ignore */ BUNDLE).then((mod: unknown) => {
-        if (!isPagefind(mod)) throw new Error('SearchResults: /pagefind/pagefind.js has no search()');
-        return mod;
-      }));
+      (pagefind ??= import(/* @vite-ignore */ BUNDLE)
+        .then((mod: unknown) => {
+          if (!isPagefind(mod)) throw new Error('SearchResults: /pagefind/pagefind.js has no search()');
+          return mod;
+        })
+        // A failed load is not kept: the next search tries again, as the error text says to
+        .catch((e: unknown) => {
+          pagefind = undefined;
+          throw e;
+        }));
 
     let results: Result[] = [];
     let shown = 0;
@@ -169,11 +175,13 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
     };
 
     // Adds the next PAGE results and returns the first one's link
+    // The range is taken before the await, so a second click while a page loads gets the next one
     const showMore = async (run: number) => {
-      const page = await Promise.all(results.slice(shown, shown + PAGE).map((r) => r.data()));
+      const start = shown;
+      shown = Math.min(shown + PAGE, results.length);
+      const page = await Promise.all(results.slice(start, shown).map((r) => r.data()));
       if (run !== latest) return undefined;
       const links = page.map(render);
-      shown += page.length;
       more.hidden = shown >= results.length;
       return links[0];
     };
@@ -240,7 +248,9 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
   }
 
   .status:empty {
-    display: none;
+    /* Stays in the accessibility tree, so screen readers announce the live region's first text;
+       the negative margin takes back the gap it would leave while empty */
+    margin-block-end: calc(var(--space-6) * -1);
   }
 
   /* One state at a time; the list and the 顯示更多 button belong to the results state */

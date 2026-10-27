@@ -168,7 +168,7 @@ ui:utility.searchLabel,ui,搜尋關鍵字,Search keywords,Từ khóa tìm kiếm
 ui:utility.searchSubmit,ui,搜尋,Search,Tìm kiếm,draft,src/data/strings/zh-TW.ts,
 ui:utility.searchPending,ui,輸入關鍵字開始搜尋,Enter a keyword to start searching,Nhập từ khóa để bắt đầu tìm kiếm,draft,src/data/strings/zh-TW.ts,
 ui:utility.searchLoading,ui,搜尋中…,Searching…,Đang tìm kiếm…,draft,src/data/strings/zh-TW.ts,
-ui:utility.searchCount,ui,找到 {n} 筆結果,{n} results found,Tìm thấy {n} kết quả,draft,src/data/strings/zh-TW.ts,
+ui:utility.searchCount,ui,找到 {n} 筆結果,Results found: {n},Tìm thấy {n} kết quả,draft,src/data/strings/zh-TW.ts,
 ui:utility.searchNone,ui,找不到符合的結果,No matching results,Không tìm thấy kết quả phù hợp,draft,src/data/strings/zh-TW.ts,
 ui:utility.searchNoneText,ui,換個關鍵字，或改用較短的詞再試一次。,"Try another keyword, or a shorter one.",Hãy thử từ khóa khác hoặc từ khóa ngắn hơn.,draft,src/data/strings/zh-TW.ts,
 ui:utility.searchError,ui,搜尋暫時無法使用,Search is unavailable right now,Tính năng tìm kiếm tạm thời không khả dụng,draft,src/data/strings/zh-TW.ts,
