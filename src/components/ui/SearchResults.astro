@@ -102,11 +102,11 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
   const BUNDLE = '/pagefind/pagefind.js';
 
   type Result = { data: () => Promise<{ url: string; excerpt: string; meta: Record<string, string | undefined> }> };
-  type Pagefind = { search: (q: string) => Promise<{ results: Result[] } | null> };
+  type Pagefind = { search: (q: string) => Promise<{ results: Result[] } | null>; destroy: () => Promise<void> };
   type State = 'idle' | 'loading' | 'results' | 'none' | 'error';
 
   function isPagefind(mod: unknown): mod is Pagefind {
-    return typeof mod === 'object' && mod !== null && 'search' in mod && typeof mod.search === 'function';
+    return typeof mod === 'object' && mod !== null && 'search' in mod && typeof mod.search === 'function' && 'destroy' in mod && typeof mod.destroy === 'function';
   }
 
   // Pagefind's excerpt is escaped page text with <mark> around the matches: keep the text and the
@@ -146,6 +146,10 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
         }));
 
     let results: Result[] = [];
+    let query = '';
+    // Set when a page of results failed to load: Pagefind keeps the failed load of each result, so
+    // the next click starts a new Pagefind instance and takes fresh results for the same query
+    let stale = false;
     let shown = 0;
     // Each search gets a number; a slower earlier search must not overwrite a later one
     let latest = 0;
@@ -174,16 +178,15 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
       return link;
     };
 
-    // Adds the next PAGE results and returns the first one's link
-    // The range is taken before the await, so a second click while a page loads gets the next one
+    // Adds the next PAGE results and returns the first one's link. `shown` moves on only once they
+    // are in, so a page that fails to load is asked for again on the next click
     const showMore = async (run: number) => {
       // A click queued before a new search must not take that search's range
       if (run !== latest) return undefined;
-      const start = shown;
-      shown = Math.min(shown + PAGE, results.length);
-      const page = await Promise.all(results.slice(start, shown).map((r) => r.data()));
+      const page = await Promise.all(results.slice(shown, shown + PAGE).map((r) => r.data()));
       if (run !== latest) return undefined;
       const links = page.map(render);
+      shown += page.length;
       more.hidden = shown >= results.length;
       return links[0];
     };
@@ -191,6 +194,7 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
     const search = async (raw: string) => {
       const q = raw.trim();
       const run = ++latest;
+      query = q;
       const url = new URL(location.href);
       if (q) url.searchParams.set('q', q);
       else url.searchParams.delete('q');
@@ -202,7 +206,12 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
       if (!q) return show('idle');
       show('loading', loading);
       try {
-        const found = await (await load()).search(q);
+        const pf = await load();
+        if (stale) {
+          await pf.destroy();
+          stale = false;
+        }
+        const found = await pf.search(q);
         if (run !== latest) return;
         results = found?.results ?? [];
         if (results.length === 0) return show('none', none);
@@ -224,13 +233,29 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
       clearTimeout(timer);
       void search(input.value);
     });
-    // Focus moves to the first added result: reading on from there, and the button may be gone
+    // Focus moves to the first added result: reading on from there, and the button may be gone.
     // Clicks queue up: a page is added only after the one before it, so a slow batch can't land
-    // after a later one
+    // after a later one. A page that fails says so in the status line and leaves the queue ready
+    // for the next click, which tries the same page again (with fresh results, see `stale`)
     let queue: Promise<unknown> = Promise.resolve();
     more.querySelector('button')?.addEventListener('click', () => {
       const run = latest;
-      queue = queue.then(() => showMore(run)).then((link) => link?.focus());
+      queue = queue
+        .then(async () => {
+          if (stale && run === latest) {
+            const pf = await load();
+            await pf.destroy();
+            results = (await pf.search(query))?.results ?? [];
+            stale = false;
+          }
+          return showMore(run);
+        })
+        .then((link) => link?.focus())
+        .catch(() => {
+          if (run !== latest) return;
+          stale = true;
+          status.textContent = error;
+        });
     });
 
     const q = new URLSearchParams(location.search).get('q');

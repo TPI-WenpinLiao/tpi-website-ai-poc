@@ -67,4 +67,5 @@ Pagefind 1.5.2 依每頁的 `<html lang>` 分開索引，瀏覽器端也依 `<ht
 - ICU 字典沒有的詞會切成單字（「在地化」→「在」「地」「化」）。查詢也照同樣規則切，所以仍然找得到（「在地化」24 頁、「在地」32 頁）。但每個單字是分開比對的，只要這幾個字分散出現在同一頁，那一頁也會被找到
 - 依賴 Node 與瀏覽器的 ICU 斷詞結果一致。兩邊版本不同時，少數詞可能切法不同；`pagefind.mjs` 的命中數下限會擋下大範圍的失效
 - `astro dev` 沒有索引，`/search` 顯示載入失敗的狀態。要用 `npm run build && npm run preview` 看搜尋
+- Pagefind 會把每筆結果的 fragment 載入 promise 存起來，載入失敗的也一樣，所以同一個實例裡，失敗的結果之後一直失敗。`SearchResults` 在「顯示更多結果」載入失敗時，會在 `role="status"` 顯示錯誤；下一次點擊或下一次搜尋前，先呼叫 Pagefind 的 `destroy()`，再用同一個查詢取得新的結果，從失敗的那一段接著補。`pagefind.mjs` 會讓一個 fragment 回 500，檢查這個流程
 - 升級 Pagefind 時要確認：Pagefind 是否仍會對 `zhtw` 以外的 `zh-*` 頁面斷詞、瀏覽器端是否仍依 `<html lang>` 找索引名稱，以及 `pagefind-entry.json` 的格式。`pagefind.mjs` 的命中數與索引頁數檢查會擋下這三種變化

@@ -11,6 +11,8 @@
 //   so its first text may not be announced
 // - two quick clicks on 顯示更多 list a result twice, or, with the first batch answering late, out
 //   of Pagefind's order
+// - a page of results that fails to load is not reported in the status line, or the next click
+//   doesn't add that same page
 // - axe finds a WCAG 2.2 A/AA violation on /search with results or with none (scripts/design/axe.mjs
 //   only sees the page before a search)
 // Part of `npm run check`, after the build: node scripts/search/pagefind.mjs
@@ -63,7 +65,7 @@ export const foreign = (/** @type {string[]} */ urls, /** @type {string} */ pref
  * @typedef {{ search: string, foreign: string[], found: number }} Locale
  * @typedef {{ path: string, requests: string[] }} Load
  * @typedef {{ field: boolean, results: number, result: boolean, moreFocus: boolean }} Keyboard
- * @typedef {{ liveRegion: boolean, repeated: string[], ordered: boolean }} Results
+ * @typedef {{ liveRegion: boolean, repeated: string[], ordered: boolean, retried: boolean }} Results
  * @typedef {{ path: string, violations: string[] }} Axe
  * @param {{ counts: IndexCount[], queries: Query[], locales: Locale[], loads: Load[], keyboard: Keyboard, axe: Axe[], list: Results }} r
  * @returns {string[]}
@@ -87,6 +89,7 @@ export function problems({ counts, queries, locales, loads, keyboard, axe, list 
   for (const a of axe) for (const v of a.violations) out.push(`${a.path}: axe ${v}`);
   if (!list.liveRegion) out.push('/search: the empty role="status" region is display: none, out of the accessibility tree');
   for (const u of list.repeated) out.push(`/search: two clicks on 顯示更多結果 listed ${u} twice`);
+  if (!list.retried) out.push(`/search: after a page of results failed to load, the status line did not say so or the next click did not add results ${PAGE_SIZE + 1}-${PAGE_SIZE * 2}`);
   if (!list.ordered) out.push(`/search: after two clicks on 顯示更多結果 with slow responses, the first ${PAGE_SIZE * 3} results are not in Pagefind's order`);
   return out;
 }
@@ -170,12 +173,20 @@ async function keyboard(browser, origin) {
   return { field, results: shown, result, moreFocus };
 }
 
-// A proxy to `origin` whose hold(n) makes the next n /pagefind/fragment/ responses 1.5 s late
+// A proxy to `origin`: hold(n) makes the next n /pagefind/fragment/ responses 1.5 s late, fail(n)
+// answers the next n with a 500
 /** @param {string} origin */
 async function lateFragments(origin) {
   let held = 0;
+  let failing = 0;
   const server = createServer((req, res) => {
-    const late = (req.url ?? '').startsWith('/pagefind/fragment/') && held > 0;
+    const fragment = (req.url ?? '').startsWith('/pagefind/fragment/');
+    if (fragment && failing > 0) {
+      failing--;
+      res.writeHead(500).end();
+      return;
+    }
+    const late = fragment && held > 0;
     if (late) held--;
     setTimeout(
       () =>
@@ -190,10 +201,16 @@ async function lateFragments(origin) {
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(undefined)));
   const { port } = /** @type {import('node:net').AddressInfo} */ (server.address());
-  return { server, origin: `http://localhost:${port}`, hold: (/** @type {number} */ n) => void (held = n) };
+  return {
+    server,
+    origin: `http://localhost:${port}`,
+    hold: (/** @type {number} */ n) => void (held = n),
+    fail: (/** @type {number} */ n) => void (failing = n),
+  };
 }
 
-// The live region before a search, then two clicks on 顯示更多 in a row
+// The live region before a search; two clicks on 顯示更多 in a row with slow responses; and a
+// click whose page fails to load, then a click that must add the same page
 /** @param {import('puppeteer-core').Browser} browser @param {string} origin */
 async function resultList(browser, origin) {
   const idle = await open(browser, origin, '/search');
@@ -220,8 +237,30 @@ async function resultList(browser, origin) {
     return Promise.all(found.results.slice(0, n).map(async (/** @type {{ data: () => Promise<{ url: string }> }} */ r) => (await r.data()).url));
   }, ZH_QUERIES[0].q, PAGE_SIZE * 3);
   await page.close();
+
+  const retry = await open(browser, slow.origin, `/search?q=${encodeURIComponent(ZH_QUERIES[0].q)}`);
+  await retry.page.waitForSelector('[data-search-results][data-state="results"]');
+  const before = await retry.page.$eval('[role="status"]', (el) => el.textContent ?? '');
+  slow.fail(1);
+  await retry.page.click('[data-more] button');
+  const errorShown = await retry.page
+    .waitForFunction((t) => document.querySelector('[role="status"]')?.textContent !== t, { timeout: 5000 }, before)
+    .then(
+      () => true,
+      () => false,
+    );
+  await retry.page.click('[data-more] button');
+  await retry.page.waitForFunction((n) => document.querySelectorAll('[data-list] li').length >= n, { timeout: 5000 }, PAGE_SIZE * 2).catch(() => undefined);
+  const again = await retry.page.$$eval('[data-list] a', (links) => links.map((a) => a.getAttribute('href') ?? ''));
+  await retry.page.close();
   slow.server.close();
-  return { liveRegion, repeated: [...new Set(hrefs.filter((h, i) => hrefs.indexOf(h) !== i))], ordered: hrefs.length === order.length && hrefs.every((h, i) => h === order[i]) };
+  const first = order.slice(0, PAGE_SIZE * 2);
+  return {
+    liveRegion,
+    repeated: [...new Set(hrefs.filter((h, i) => hrefs.indexOf(h) !== i))],
+    ordered: hrefs.length === order.length && hrefs.every((h, i) => h === order[i]),
+    retried: errorShown && again.length === first.length && again.every((h, i) => h === first[i]),
+  };
 }
 
 /** @param {import('puppeteer-core').Browser} browser @param {string} origin @param {string} path */
