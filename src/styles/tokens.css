@@ -243,6 +243,10 @@
   --logo-height: 2rem;
   --logo-height-lg: 3rem;
   --icon-size: 1.25rem;
+  /* Space a form reserves for the Cloudflare Turnstile widget, so it does not shift the layout when it
+     appears: 65px for the flexible size, 140px for compact on narrow screens (FormPanel) */
+  --challenge-height: 4.0625rem;
+  --challenge-height-compact: 8.75rem;
   --icon-stroke: 1.75;
 
 }

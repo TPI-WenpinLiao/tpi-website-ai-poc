@@ -1,0 +1,76 @@
+---
+// A group of checkboxes answering one question (諮詢產品): a fieldset whose legend is the question,
+// with the options in a grid (two columns from --bp-sm-up). `error` belongs to the whole group (at
+// least one option), so it sits under the options and is wired to the fieldset with
+// aria-describedby; the options are FormField kind="checkbox" without their own `required`. As in
+// FormField, the error paragraph is always rendered (hidden while empty) for a form's script.
+// `required` only draws the mark after the legend.
+import { strings } from '../../data/strings';
+import { localeFromPath } from '../../lib/i18n/paths';
+
+interface Props {
+  // Prefix for the error id, unique on the page
+  id: string;
+  legend: string;
+  error?: string;
+  required?: boolean;
+}
+
+const { id, legend, error, required = false } = Astro.props;
+const errorId = `${id}-error`;
+const t = strings(localeFromPath(Astro.url.pathname));
+---
+
+<fieldset class="form-group" id={id} aria-describedby={error ? errorId : undefined} data-form-field data-label={legend}>
+  <legend>
+    {legend}
+    {required && <span class="required">{t.form.required}</span>}
+  </legend>
+  <div class="options">
+    <slot />
+  </div>
+  <p class="error" id={errorId} hidden={!error} data-form-error>{error}</p>
+</fieldset>
+
+<style>
+  @import '../../styles/media.css';
+
+  .form-group {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    margin-block-end: var(--space-3);
+    padding: 0;
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* shared-ok: the same required mark as FormField's label; a base.css class would lose to the scoped rules */
+  .required {
+    margin-inline-start: var(--space-2);
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .options {
+    display: grid;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  .error {
+    margin: var(--space-2) 0 0;
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
+  @media (--bp-sm-up) {
+    .options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

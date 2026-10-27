@@ -1,7 +1,8 @@
 ---
 // Heading block that opens a page section: optional index ("01") and mono eyebrow on an energy
 // line, the heading, optional lead text. The level is set by the caller so headings never skip a
-// level (seo-checklist); `size="display"` is for the one statement section per page.
+// level (seo-checklist); `size="display"` is for the one statement section per page, `size="sm"` for a
+// heading inside a panel (a form's error summary).
 // The `action` slot puts links for the whole section (所有成功案例, 部落格) on the heading's row,
 // at its end on wide screens and below it when the row is too narrow.
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
   index?: string;
   eyebrow?: string;
   description?: string;
-  size?: 'default' | 'display';
+  size?: 'default' | 'display' | 'sm';
   align?: 'start' | 'center';
 }
 
@@ -114,6 +115,10 @@ const hasAction = Astro.slots.has('action');
     font-size: var(--font-size-display);
     line-height: var(--line-height-display);
     letter-spacing: var(--letter-spacing-display);
+  }
+
+  .sm {
+    font-size: var(--font-size-h4);
   }
 
   .description {

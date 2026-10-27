@@ -3,7 +3,11 @@
 // the M3-01 contact wireframe (#14): title block, then the form beside the offices (form first on narrow
 // screens). Fields are the current site's contact form (docs/research/features.md「聯絡我們」);
 // the 諮詢產品 options are the products in the header, in its order. Offices come from the
-// organization data file. Sending, spam protection and the endpoint are M6-01's: no action yet.
+// organization data file. The form posts to /api/contact (functions/api/contact.ts) with the rules
+// in src/lib/forms/rules.ts, which also give the fields their maxlength; after sending it goes to
+// /thanks in the page's locale (FormPanel `form`).
+// `preview="errors"` draws the form after a failed submit (error summary and field errors), for the
+// /templates/contact preview only.
 // The page's title and description come from the locale's `page` entry for the contact node
 // (content-model.md「page」) once M5-06 writes it; until then from the node and src/data/strings.
 import { getEntry, type CollectionEntry } from 'astro:content';
@@ -13,29 +17,45 @@ import Surface from '../../components/ui/Surface.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import Button from '../../components/ui/Button.astro';
 import FormField from '../../components/ui/FormField.astro';
+import FormGroup from '../../components/ui/FormGroup.astro';
 import FormPanel from '../../components/ui/FormPanel.astro';
+import Link from '../../components/ui/Link.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
-import { breadcrumb, localizedNav, localNode } from '../../lib/ia/navigation';
+import { breadcrumb, localizedNav, localNode, nodeHref } from '../../lib/ia/navigation';
 import { pageJsonLd } from '../../lib/seo/jsonld/page';
 import { canonicalUrl } from '../../lib/seo/meta';
 import type { Locale } from '../../lib/i18n/locales';
 import { home } from '../../data/home';
 import { pageDescription, strings } from '../../data/strings';
+import { FORMS } from '../../lib/forms/rules';
 
 interface Props {
   locale: Locale;
   entry?: CollectionEntry<'page'> | undefined;
   translations?: readonly string[];
+  preview?: 'errors';
 }
 
-const { locale, entry, translations } = Astro.props;
+const { locale, entry, translations, preview } = Astro.props;
 const t = strings(locale);
 const { contactCta } = home(locale);
 const f = t.form;
+const rules = FORMS.contact;
 const self = localNode('contact', locale);
 // The header's 產品 menu (the one holding the products overview): families and their products
 const productMenu = localizedNav('header', locale).find((item) => item.children.some((c) => c.key === 'products'));
 const products = (productMenu?.children ?? []).flatMap((family) => family.children.map((p) => ({ value: p.key, label: p.label })));
+// Sample errors for preview="errors": a missing field, a malformed one, the group and the consent
+const sample = preview === 'errors';
+const errors: Partial<Record<'name' | 'email' | 'offerings' | 'consent', string>> = sample
+  ? {
+      name: f.errors.required(f.name),
+      email: f.errors.email,
+      offerings: f.errors.choose,
+      consent: f.errors.consent,
+    }
+  : {};
+const summary = Object.entries(errors).map(([id, message]) => ({ id, message }));
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
@@ -60,23 +80,41 @@ const jsonLd = pageJsonLd({
 
   <Surface tone="light">
     <div class="split">
-      <FormPanel id="form-title" title={t.contact.request}>
+      <FormPanel
+        id="form-title"
+        title={t.contact.request}
+        errors={summary}
+        challenge
+        preview={sample}
+        form="contact"
+        action="/api/contact"
+        next={nodeHref('thanks', locale)}
+      >
         <div class="fields">
-          <FormField kind="text" id="name" name="name" label={f.name} autocomplete="name" required />
-          <FormField kind="tel" id="phone" name="phone" label={f.phone} autocomplete="tel" required />
-          <FormField kind="email" id="email" name="email" label={f.email} autocomplete="email" required />
-          <FormField kind="text" id="company" name="company" label={f.company} autocomplete="organization" required />
+          <FormField kind="text" id="name" name="name" label={f.name} autocomplete="name" maxlength={rules.name.maxLength} required error={errors.name} />
+          <FormField kind="tel" id="phone" name="phone" label={f.phone} autocomplete="tel" maxlength={rules.phone.maxLength} required />
+          <FormField
+            kind="email"
+            id="email"
+            name="email"
+            label={f.email}
+            autocomplete="email"
+            maxlength={rules.email.maxLength}
+            required
+            value={sample ? 'name.example.com' : undefined}
+            error={errors.email}
+          />
+          <FormField kind="text" id="company" name="company" label={f.company} autocomplete="organization" maxlength={rules.company.maxLength} required />
         </div>
-        <fieldset class="choices">
-          <legend>{t.contact.offerings}</legend>
-          <div class="options">
-            {products.map((p) => <FormField kind="checkbox" id={`offering-${p.value}`} name="offerings[]" label={p.label} />)}
-          </div>
-        </fieldset>
-        <FormField kind="text" id="subject" name="subject" label={t.contact.subject} required />
-        <FormField kind="textarea" id="message" name="message" label={t.contact.message} rows={5} />
-        <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required />
-        <Button type="submit" size="lg">{t.contact.submit}</Button>
+        <FormGroup id="offerings" legend={t.contact.offerings} required error={errors.offerings}>
+          {products.map((p) => <FormField kind="checkbox" id={`offering-${p.value}`} name="offerings[]" value={p.value} label={p.label} />)}
+        </FormGroup>
+        <FormField kind="text" id="subject" name="subject" label={t.contact.subject} maxlength={rules.subject.maxLength} required />
+        <FormField kind="textarea" id="message" name="message" label={t.contact.message} rows={5} maxlength={rules.message.maxLength} />
+        <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required error={errors.consent}>
+          <Link slot="hint" href={nodeHref('privacy', locale)}>{f.privacyLink}</Link>
+        </FormField>
+        <Button slot="actions" type="submit" size="lg">{t.contact.submit}</Button>
       </FormPanel>
 
       <section class="offices">
@@ -115,22 +153,6 @@ const jsonLd = pageJsonLd({
     gap: var(--space-5);
   }
 
-  .choices {
-    margin: 0;
-    padding: 0;
-    border: 0;
-  }
-
-  legend {
-    margin-block-end: var(--space-3);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  .options {
-    display: grid;
-    gap: var(--space-1) var(--space-4);
-  }
-
   .offices ul {
     display: flex;
     flex-direction: column;
@@ -164,8 +186,7 @@ const jsonLd = pageJsonLd({
   }
 
   @media (--bp-sm-up) {
-    .fields,
-    .options {
+    .fields {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
