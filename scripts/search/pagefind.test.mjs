@@ -12,7 +12,8 @@ const OK = {
   queries: [{ q: '企業', found: 53, min: 30 }],
   locales: [{ search: '/en/search', found: 23, foreign: [] }],
   loads: [{ path: '/', requests: [] }],
-  keyboard: { field: true, results: 10, result: true },
+  keyboard: { field: true, results: 10, result: true, moreFocus: true },
+  axe: [{ path: '/search?q=企業', violations: [] }],
 };
 
 test('a search that behaves has no problems', () => {
@@ -45,9 +46,14 @@ test('a zh-TW query under its floor, other-locale results and /pagefind/ request
 });
 
 test('the keyboard failing at any step is reported once, at the first step that fails', () => {
-  assert.match(problems({ ...OK, keyboard: { field: false, results: 0, result: false } })[0], /no search field/);
-  assert.deepEqual(problems({ ...OK, keyboard: { field: true, results: 0, result: false } }), ['/search: typing in the field showed no results']);
-  assert.match(problems({ ...OK, keyboard: { field: true, results: 10, result: false } })[0], /no result link/);
+  assert.match(problems({ ...OK, keyboard: { field: false, results: 0, result: false, moreFocus: false } })[0], /no search field/);
+  assert.deepEqual(problems({ ...OK, keyboard: { field: true, results: 0, result: false, moreFocus: false } }), ['/search: typing in the field showed no results']);
+  assert.match(problems({ ...OK, keyboard: { field: true, results: 10, result: false, moreFocus: false } })[0], /no result link/);
+  assert.deepEqual(problems({ ...OK, keyboard: { field: true, results: 10, result: true, moreFocus: false } }), ['/search: Enter on 顯示更多結果 did not move focus to result 11']);
+});
+
+test('axe violations are reported per search state', () => {
+  assert.deepEqual(problems({ ...OK, axe: [{ path: '/search?q=企業', violations: ['color-contrast (2)'] }] }), ['/search?q=企業: axe color-contrast (2)']);
 });
 
 test('foreign() keeps the URLs outside a locale: zh-TW is every URL without /en or /vi', () => {

@@ -4,8 +4,11 @@
 //   broke: Pagefind's own zh segmentation found 企業 on 7 pages, the ICU one on 53)
 // - a locale's /search links to a page of another locale
 // - a page other than /search requests /pagefind/, on load or with the header's search box open
-//   (one page per template, the lighthouserc.cjs PAGES)
-// - the keyboard alone can't get from the search field to a result
+//   (one page per template, the lighthouserc.cjs PAGES but /search)
+// - the keyboard alone can't get from the search field to a result, or 顯示更多 doesn't move focus
+//   to the first result it adds
+// - axe finds a WCAG 2.2 A/AA violation on /search with results or with none (scripts/design/axe.mjs
+//   only sees the page before a search)
 // Part of `npm run check`, after the build: node scripts/search/pagefind.mjs
 // Uses CHROME_PATH (set by the SessionStart hook), else CHROME_BIN (set on GitHub's runners), else the installed Chrome.
 
@@ -13,9 +16,11 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import axe from 'axe-core';
 import puppeteer from 'puppeteer-core';
 import { serve } from '../lib/static-server.mjs';
 import { urlPath } from '../i18n/routes.mjs';
+import { TAGS } from '../design/axe.mjs';
 
 const DIST = resolve(import.meta.dirname, '../../dist');
 const { PAGES } = createRequire(import.meta.url)('../../lighthouserc.cjs');
@@ -36,6 +41,10 @@ const SHARED_QUERY = 'API';
 // Tab presses from the top of /search to its field, and from the field to the first result
 const MAX_TABS = 60;
 const RESULT_TABS = 5;
+// Results SearchResults shows at a time
+const PAGE_SIZE = 10;
+// /search states axe runs on: results, and a query nothing matches
+const AXE_PATHS = [`/search?q=${encodeURIComponent('企業')}`, '/search?q=zzzzqqqq'];
 
 const within = (/** @type {string} */ url, /** @type {string} */ prefix) => url === prefix || url.startsWith(`${prefix}/`);
 
@@ -48,11 +57,12 @@ export const foreign = (/** @type {string[]} */ urls, /** @type {string} */ pref
  * @typedef {{ q: string, found: number, min: number }} Query
  * @typedef {{ search: string, foreign: string[], found: number }} Locale
  * @typedef {{ path: string, requests: string[] }} Load
- * @typedef {{ field: boolean, results: number, result: boolean }} Keyboard
- * @param {{ counts: IndexCount[], queries: Query[], locales: Locale[], loads: Load[], keyboard: Keyboard }} r
+ * @typedef {{ field: boolean, results: number, result: boolean, moreFocus: boolean }} Keyboard
+ * @typedef {{ path: string, violations: string[] }} Axe
+ * @param {{ counts: IndexCount[], queries: Query[], locales: Locale[], loads: Load[], keyboard: Keyboard, axe: Axe[] }} r
  * @returns {string[]}
  */
-export function problems({ counts, queries, locales, loads, keyboard }) {
+export function problems({ counts, queries, locales, loads, keyboard, axe }) {
   const out = [];
   for (const c of counts) {
     if (c.indexed === undefined) out.push(`no ${c.lang} index in pagefind-entry.json (${c.built} pages to index)`);
@@ -67,6 +77,8 @@ export function problems({ counts, queries, locales, loads, keyboard }) {
   if (!keyboard.field) out.push(`/search: no search field within ${MAX_TABS} Tab presses`);
   else if (keyboard.results === 0) out.push('/search: typing in the field showed no results');
   else if (!keyboard.result) out.push(`/search: no result link within ${RESULT_TABS} Tab presses after the field`);
+  else if (!keyboard.moreFocus) out.push(`/search: Enter on 顯示更多結果 did not move focus to result ${PAGE_SIZE + 1}`);
+  for (const a of axe) for (const v of a.violations) out.push(`${a.path}: axe ${v}`);
   return out;
 }
 
@@ -129,7 +141,7 @@ async function keyboard(browser, origin) {
     await page.keyboard.press('Tab');
     field = await active('#search-form input[name="q"]');
   }
-  if (!field) return { field, results: 0, result: false };
+  if (!field) return { field, results: 0, result: false, moreFocus: false };
   await page.keyboard.type(ZH_QUERIES[0].q);
   await page.waitForSelector('[data-search-results]:is([data-state="results"], [data-state="none"], [data-state="error"])');
   const shown = await page.$$eval('[data-list] a', (links) => links.length);
@@ -138,8 +150,28 @@ async function keyboard(browser, origin) {
     await page.keyboard.press('Tab');
     result = await active('[data-list] a');
   }
+  await page.focus('[data-more] button');
+  await page.keyboard.press('Enter');
+  const next = `[data-list] li:nth-child(${PAGE_SIZE + 1}) a`;
+  const moreFocus = await page.waitForFunction((s) => document.activeElement?.matches(s), { timeout: 5000 }, next).then(
+    () => true,
+    () => false,
+  );
   await page.close();
-  return { field, results: shown, result };
+  return { field, results: shown, result, moreFocus };
+}
+
+/** @param {import('puppeteer-core').Browser} browser @param {string} origin @param {string} path */
+async function axeState(browser, origin, path) {
+  const { page } = await open(browser, origin, path);
+  await page.waitForSelector('[data-search-results]:is([data-state="results"], [data-state="none"])');
+  await page.evaluate(axe.source);
+  const violations = await page.evaluate(
+    (tags) => /** @type {any} */ (window).axe.run(document, { runOnly: { type: 'tag', values: tags }, resultTypes: ['violations'] }).then((/** @type {any} */ r) => r.violations.map((/** @type {any} */ v) => `${v.id} (${v.nodes.length})`)),
+    TAGS,
+  );
+  await page.close();
+  return { path: decodeURIComponent(path), violations };
 }
 
 async function main() {
@@ -163,8 +195,12 @@ async function main() {
       locales.push({ search, found: urls.length, foreign: foreign(urls, prefix) });
     }
     const loads = [];
-    for (const { path } of PAGES) loads.push(await load(browser, origin, urlPath(path.replace(/^\//, ''))));
-    found = problems({ counts, queries, locales, loads, keyboard: await keyboard(browser, origin) });
+    // Every PAGES entry but the search page itself, which PAGES lists with a query
+    const others = PAGES.map((/** @type {{ path: string }} */ p) => urlPath(p.path.split('?')[0].replace(/^\//, ''))).filter((p) => !LOCALES.some((l) => l.search === p));
+    for (const path of others) loads.push(await load(browser, origin, path));
+    const axeResults = [];
+    for (const path of AXE_PATHS) axeResults.push(await axeState(browser, origin, path));
+    found = problems({ counts, queries, locales, loads, keyboard: await keyboard(browser, origin), axe: axeResults });
     const summary = queries.map((q) => `${q.q} ${q.found}`).join(', ');
     console.log(`search: ${counts.map((c) => `${c.lang} ${c.indexed}`).join(', ')} pages indexed; zh-TW ${summary}; ${loads.length} pages without /pagefind/ requests checked`);
   } finally {

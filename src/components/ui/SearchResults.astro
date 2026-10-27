@@ -7,7 +7,8 @@
 // Pagefind's script loads on the first focus of the field, or right away when the URL has ?q=, so
 // the page's first load fetches nothing from /pagefind/.
 // States: idle (no query yet), loading, results, none and error (the index can't load: `astro dev`
-// has none, use `npm run build && npm run preview`). Results show 10 at a time with a 顯示更多 button.
+// has none, use `npm run build && npm run preview`). Results show 10 at a time with a 顯示更多 button,
+// which moves focus to the first result it adds.
 // Each result is the page's section (PageLayout's searchTrail), its title link and Pagefind's
 // excerpt, of which only the <mark> highlights are kept as markup. The zh-TW index has spaces
 // between words (src/lib/search/segment.ts), which despace() takes out of titles and excerpts.
@@ -154,14 +155,17 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
       excerpt?.replaceChildren(...excerptNodes(node.excerpt));
       url?.replaceChildren(node.url);
       list.append(li);
+      return link;
     };
 
+    // Adds the next PAGE results and returns the first one's link
     const showMore = async (run: number) => {
       const page = await Promise.all(results.slice(shown, shown + PAGE).map((r) => r.data()));
-      if (run !== latest) return;
-      page.forEach(render);
+      if (run !== latest) return undefined;
+      const links = page.map(render);
       shown += page.length;
       more.hidden = shown >= results.length;
+      return links[0];
     };
 
     const search = async (raw: string) => {
@@ -200,7 +204,8 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
       clearTimeout(timer);
       void search(input.value);
     });
-    more.querySelector('button')?.addEventListener('click', () => void showMore(latest));
+    // Focus moves to the first added result: reading on from there, and the button may be gone
+    more.querySelector('button')?.addEventListener('click', () => void showMore(latest).then((link) => link?.focus()));
 
     const q = new URLSearchParams(location.search).get('q');
     if (q) {
