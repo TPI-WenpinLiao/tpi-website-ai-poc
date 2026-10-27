@@ -33,6 +33,7 @@ Pagefind 1.5.2 依每頁的 `<html lang>` 分開索引，瀏覽器端也依 `<ht
    - `SearchResults` 在第一次 focus 搜尋欄位，或網址有 `?q=` 時，才 `import('/pagefind/pagefind.js')`
    - 頁首的搜尋框是 `<details>` 裡的 GET 表單，送到該語系的 `/search?q=`。頁首只多一段 script：打開時把 focus 移到欄位
    - 不做每一頁都能用的即時搜尋 modal：那需要每頁載入搜尋的 JS
+   - 網址有 `?q=` 時，`SearchResults` 後面的一小段 inline script 在第一次繪製前就切到 loading 狀態，loading 狀態預留結果的高度。沒有這樣做時，第一次繪製是「輸入關鍵字開始搜尋」的框，接著被結果取代，下方的 footer 跟著移動，Lighthouse 量到 CLS 0.26（mobile）、0.38（desktop），performance 0.83。修正後 CLS 0，performance mobile 0.98、desktop 1（`node scripts/design/lighthouse-3d.mjs '/search?q=%E4%BC%81%E6%A5%AD'`，各 3 次）
 6. **輸出固定**：Pagefind 每次寫 `pagefind-entry.json` 的語系順序不同。integration 改寫成排序後的內容，同樣的頁面 build 出相同的 `dist/`，`scripts/ci/lighthouse-scope.mjs --verify` 才能比對
 
 ## 數字

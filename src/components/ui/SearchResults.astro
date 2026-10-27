@@ -5,7 +5,8 @@
 // GET search form (field `q`): without JS the form still sends ?q= to the page, with JS the results
 // follow the field as it is typed in (300 ms after the last key) and ?q= follows the results.
 // Pagefind's script loads on the first focus of the field, or right away when the URL has ?q=, so
-// the page's first load fetches nothing from /pagefind/.
+// the page's first load fetches nothing from /pagefind/. With ?q=, a small inline script sets the
+// loading state before the first paint, and that state keeps room for the results (no layout shift).
 // States: idle (no query yet), loading, results, none and error (the index can't load: `astro dev`
 // has none, use `npm run build && npm run preview`). Results show 10 at a time with a 顯示更多 button,
 // which moves focus to the first result it adds.
@@ -81,6 +82,15 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
     </li>
   </template>
 </div>
+{
+  /* Runs before the first paint: with ?q= the page starts in the loading state, not with the idle
+     box that the results would then replace, which Lighthouse counted as layout shift (CLS 0.26) */
+  !preview && (
+    <script is:inline>
+      if (new URLSearchParams(location.search).get('q')?.trim()) document.currentScript.previousElementSibling.dataset.state = 'loading';
+    </script>
+  )
+}
 
 <script>
   import { despace } from '../../lib/search/display';
@@ -249,6 +259,12 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
 
   [data-state='results'] > .list {
     display: flex;
+  }
+
+  /* Room for the first results while they load, so what follows (the footer) is already below the
+     fold on a phone and the results don't push it down */
+  .search-results[data-state='loading'] {
+    min-block-size: calc(var(--space-24) * 5);
   }
 
   .search-results:not([data-state='results']) > .more {
