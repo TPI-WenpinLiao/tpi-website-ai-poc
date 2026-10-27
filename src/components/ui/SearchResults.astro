@@ -177,6 +177,8 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
     // Adds the next PAGE results and returns the first one's link
     // The range is taken before the await, so a second click while a page loads gets the next one
     const showMore = async (run: number) => {
+      // A click queued before a new search must not take that search's range
+      if (run !== latest) return undefined;
       const start = shown;
       shown = Math.min(shown + PAGE, results.length);
       const page = await Promise.all(results.slice(start, shown).map((r) => r.data()));
@@ -223,7 +225,13 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
       void search(input.value);
     });
     // Focus moves to the first added result: reading on from there, and the button may be gone
-    more.querySelector('button')?.addEventListener('click', () => void showMore(latest).then((link) => link?.focus()));
+    // Clicks queue up: a page is added only after the one before it, so a slow batch can't land
+    // after a later one
+    let queue: Promise<unknown> = Promise.resolve();
+    more.querySelector('button')?.addEventListener('click', () => {
+      const run = latest;
+      queue = queue.then(() => showMore(run)).then((link) => link?.focus());
+    });
 
     const q = new URLSearchParams(location.search).get('q');
     if (q) {

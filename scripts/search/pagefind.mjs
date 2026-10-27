@@ -9,7 +9,8 @@
 //   to the first result it adds
 // - the role="status" live region is out of the accessibility tree while empty (display: none),
 //   so its first text may not be announced
-// - two quick clicks on 顯示更多 list a result twice
+// - two quick clicks on 顯示更多 list a result twice, or, with the first batch answering late, out
+//   of Pagefind's order
 // - axe finds a WCAG 2.2 A/AA violation on /search with results or with none (scripts/design/axe.mjs
 //   only sees the page before a search)
 // Part of `npm run check`, after the build: node scripts/search/pagefind.mjs
@@ -61,7 +62,7 @@ export const foreign = (/** @type {string[]} */ urls, /** @type {string} */ pref
  * @typedef {{ search: string, foreign: string[], found: number }} Locale
  * @typedef {{ path: string, requests: string[] }} Load
  * @typedef {{ field: boolean, results: number, result: boolean, moreFocus: boolean }} Keyboard
- * @typedef {{ liveRegion: boolean, repeated: string[] }} Results
+ * @typedef {{ liveRegion: boolean, repeated: string[], ordered: boolean }} Results
  * @typedef {{ path: string, violations: string[] }} Axe
  * @param {{ counts: IndexCount[], queries: Query[], locales: Locale[], loads: Load[], keyboard: Keyboard, axe: Axe[], list: Results }} r
  * @returns {string[]}
@@ -85,6 +86,7 @@ export function problems({ counts, queries, locales, loads, keyboard, axe, list 
   for (const a of axe) for (const v of a.violations) out.push(`${a.path}: axe ${v}`);
   if (!list.liveRegion) out.push('/search: the empty role="status" region is display: none, out of the accessibility tree');
   for (const u of list.repeated) out.push(`/search: two clicks on 顯示更多結果 listed ${u} twice`);
+  if (!list.ordered) out.push(`/search: after two clicks on 顯示更多結果 with slow responses, the first ${PAGE_SIZE * 3} results are not in Pagefind's order`);
   return out;
 }
 
@@ -175,15 +177,32 @@ async function resultList(browser, origin) {
   await idle.page.close();
   const { page } = await open(browser, origin, `/search?q=${encodeURIComponent(ZH_QUERIES[0].q)}`);
   await page.waitForSelector('[data-search-results][data-state="results"]');
+  // The next PAGE_SIZE result fragments answer late, so a page that lands in arrival order shows
+  // results 21-30 before 11-20
+  let late = PAGE_SIZE;
+  await page.setRequestInterception(true);
+  page.on('request', (r) => {
+    if (late > 0 && r.url().includes('/pagefind/fragment/')) {
+      late--;
+      // A request still held when the page closes can no longer continue
+      setTimeout(() => void r.continue().catch(() => undefined), 1500);
+    } else void r.continue().catch(() => undefined);
+  });
   await page.$eval('[data-more] button', (b) => {
     if (!(b instanceof HTMLElement)) return;
     b.click();
     b.click();
   });
-  await page.waitForFunction((n) => document.querySelectorAll('[data-list] li').length >= n, { timeout: 5000 }, PAGE_SIZE * 3).catch(() => undefined);
+  await page.waitForFunction((n) => document.querySelectorAll('[data-list] li').length >= n, { timeout: 10000 }, PAGE_SIZE * 3).catch(() => undefined);
   const hrefs = await page.$$eval('[data-list] a', (links) => links.map((a) => a.getAttribute('href') ?? ''));
+  // Pagefind's own order of the same query
+  const order = await page.evaluate(async (q, n) => {
+    const pagefind = await import('/pagefind/pagefind.js');
+    const found = await pagefind.search(q);
+    return Promise.all(found.results.slice(0, n).map(async (/** @type {{ data: () => Promise<{ url: string }> }} */ r) => (await r.data()).url));
+  }, ZH_QUERIES[0].q, PAGE_SIZE * 3);
   await page.close();
-  return { liveRegion, repeated: [...new Set(hrefs.filter((h, i) => hrefs.indexOf(h) !== i))] };
+  return { liveRegion, repeated: [...new Set(hrefs.filter((h, i) => hrefs.indexOf(h) !== i))], ordered: hrefs.length === order.length && hrefs.every((h, i) => h === order[i]) };
 }
 
 /** @param {import('puppeteer-core').Browser} browser @param {string} origin @param {string} path */
