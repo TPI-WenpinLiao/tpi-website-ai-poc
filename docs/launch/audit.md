@@ -10,7 +10,7 @@ M8-01（#43）對全站逐項驗收的結果與問題清單。上線步驟、風
 
 `npm run check` 全部通過，redirect map 1,306 列都驗證過，全站 Lighthouse 485 頁中 483 頁達標，另外 2 頁重跑後達標。找到 5 個問題：2 個已在本 PR 修正，另外 3 個無法在本 PR 修正，各開 issue 追蹤（見「問題清單」）。
 
-上線前還要處理的是內容，不是程式：導覽連到的 12 頁沒有內容（#138），各內容類型的「待確認」也還沒回覆（「內容待確認」）。追蹤碼與 consent（#36）、首頁與產品頁的最新文章（#101）合併後要重驗。
+上線前還要處理：導覽連到的 12 頁沒有內容（#138）；12 列 redirect 的目標要補內容或改轉址規則（#137）；`_redirects` 的比對方式要在 preview 實測（#139）；各內容類型的「待確認」也還沒回覆（「內容待確認」）。追蹤碼與 consent（#36）、首頁與產品頁的最新文章（#101）合併後要重驗。
 
 ## `npm run check`
 
@@ -77,11 +77,9 @@ M8-01（#43）對全站逐項驗收的結果與問題清單。上線步驟、風
 | best-practices | 303 頁 1，182 頁 0.96 |
 | SEO | 485 頁都是 1 |
 
-performance 0.93 的 2 頁，TBT 約 258 ms，同一頁的其他語系只有 12–36 ms。用 `node scripts/design/lighthouse-3d.mjs /en/products/systalk-coach /vi/solutions/smartfilling` 各跑 3 次，行動版都是 0.98，判定是單次量測的起伏，不算問題。
+performance 0.93 的 2 頁重跑 3 次都是 0.98，判定是單次量測的起伏。best-practices 0.96 的 182 頁都是 `image-size-responsive`，其中 180 頁是成功案例的客戶 logo，本 PR 已修正（問題 5）。
 
-best-practices 0.96 的 182 頁都是 `image-size-responsive`：180 頁是成功案例內頁，客戶 logo 只輸出 1x，在 DPR 2 的螢幕上會模糊；另外 2 頁是 `/templates/*` 預覽頁的範例圖。`CaseStudyTemplate` 的 logo 從 `layout="none"` 改成 `layout="fixed"`，輸出 1x、2x 兩個寬度後，`/en/success-story/anz-interactive-credit-card-digital-platform` 與 `/success-story/johnson-maintenance-record-app` 的 best-practices 都是 1（見問題 5）。
-
-細節與 `PAGES` 不變的理由寫在 ADR 0004「M8-01 重跑」。
+重跑的數字、logo 修正的抽測結果與 `PAGES` 不變的理由寫在 ADR 0004「M8-01 重跑」。
 
 ## 待 #36、#101 合併後重驗
 
