@@ -6,6 +6,8 @@
 // Without href the card is a static panel (offering features and use cases): no link, no hover or
 // focus state; links in the meta slot (a Tag) stay their own.
 // size="sm" is the short card for title-only lists laid out two to a row on phones (home services).
+// A linked card only repeats another page's title and summary, so the site search leaves it out
+// (data-pagefind-ignore); static panels are the page's own content and stay in the index.
 // data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -39,7 +41,7 @@ const {
 const Heading = `h${level}` as const;
 ---
 
-<article class:list={['card', size, { linked: href }]} data-preview-state={previewState}>
+<article class:list={['card', size, { linked: href }]} data-pagefind-ignore={href ? '' : undefined} data-preview-state={previewState}>
   {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes="(width >= 64rem) 22rem, 100vw" />}
   <div class="body">
     {

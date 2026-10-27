@@ -6,6 +6,9 @@
 // The `nav` slot sits between the header and <main>, for an in-page table of contents (InPageNav).
 // On internal pages (the /templates previews) a bar says the page shows sample data, and the
 // title and description say so too, so they don't repeat those of the real page.
+// Pages passing `searchTrail` go into the Pagefind index (src/integrations/pagefind.ts): <main> gets
+// data-pagefind-body, and pages below a first-level page are labelled with their parent's name in
+// the search results (部落格, 新聞中心, a product family). Pages without it (home, listings, utility, internal pages) are left out.
 import BaseLayout from './BaseLayout.astro';
 import SiteHeader from '../components/ui/SiteHeader.astro';
 import SiteFooter from '../components/ui/SiteFooter.astro';
@@ -13,16 +16,22 @@ import ScrollProgress from '../components/ui/ScrollProgress.astro';
 import type { Props as SeoProps } from '../components/seo/Seo.astro';
 import { pageLocales } from '../lib/i18n/routes';
 import { isInternal } from '../lib/seo/indexing';
+import type { TrailNode } from '../lib/ia/navigation';
 
 type Props = Omit<SeoProps, 'locales'> & {
   // URL paths of this page's other locale versions (dynamic routes only; static pages are found
   // in staticRoutes)
   translations?: readonly string[];
+  // The page's breadcrumb trail, for pages that are found through the site search
+  searchTrail?: readonly TrailNode[];
 };
 
-const { translations, title, description, ...seo } = Astro.props;
+const { translations, searchTrail, title, description, ...seo } = Astro.props;
 const locales = pageLocales(Astro.url.pathname, translations);
 const preview = isInternal(Astro.url.pathname);
+// Template previews show sample data, so they stay out of the index like the other internal pages
+const indexed = searchTrail !== undefined && !preview;
+const section = indexed && searchTrail.length > 2 ? searchTrail.at(-2)?.title : undefined;
 const PREVIEW = '模板預覽';
 ---
 
@@ -38,7 +47,7 @@ const PREVIEW = '模板預覽';
   <!-- Below the header: above it, the notice would uncover the skip link hidden above the header -->
   {preview && <p class="preview-notice">{PREVIEW}：範例資料，包含不會發布的 draft 內容；不在導覽與 sitemap 裡。</p>}
   <slot name="nav" />
-  <main id="main">
+  <main id="main" data-pagefind-body={indexed ? '' : undefined} data-pagefind-meta={section && `section:${section}`}>
     <slot />
   </main>
   <SiteFooter />

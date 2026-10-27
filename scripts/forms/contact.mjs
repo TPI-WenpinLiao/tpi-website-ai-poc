@@ -219,7 +219,9 @@ async function main() {
     .flatMap((f) => {
       const html = readFileSync(join(DIST, f), 'utf8');
       const form = html.match(/data-form="([^"]+)"/)?.[1];
-      const action = html.match(/<form[^>]*\baction="([^"]+)"/)?.[1];
+      // The action of the form carrying data-form: the header's search form comes first on every page
+      const tag = html.match(/<form\b[^>]*\bdata-form="[^"]+"[^>]*>/)?.[0];
+      const action = tag?.match(/\baction="([^"]+)"/)?.[1];
       return html.includes(MARKER) && form && action ? [{ path: urlPath(f), form, action }] : [];
     })
     .sort((a, b) => a.path.localeCompare(b.path));

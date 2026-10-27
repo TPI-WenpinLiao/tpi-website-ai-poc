@@ -2,7 +2,7 @@
 // Closing call to action of a page: a dark section with the coordinate grid and a centered panel
 // framed by the energy gradient, with the contact copy from the current site (src/data/home/<locale>.ts)
 // and one button to 聯絡我們 in the page's locale. `label` replaces the button text (an offering
-// whose cta is demo says 預約演示).
+// whose cta is demo says 預約演示). The same on every page, so the site search leaves it out.
 import Surface from './Surface.astro';
 import SectionHeading from './SectionHeading.astro';
 import Button from './Button.astro';
@@ -21,7 +21,7 @@ const href = nodeHref('contact', locale);
 ---
 
 <Surface tone="dark" pattern="grid">
-  <div class="contact-cta">
+  <div class="contact-cta" data-pagefind-ignore>
     <SectionHeading eyebrow="Contact" title={contactCta.title.text} description={contactCta.description.text} align="center" />
     <Button href={href} size="lg">{label}</Button>
   </div>

@@ -4,7 +4,7 @@
 const ALL = process.env.LHCI_ALL === '1';
 
 // One page per src/layouts/templates/ file: the lowest performance score of that template in the
-// full-site run of 2026-10-25 (ADR 0004), plus every home page and 404.
+// full-site run of 2026-10-25 (ADR 0004), plus every home page, 404 and a search.
 // Paths end in .html: LHCI's static server does not add the extension.
 const PAGES = [
   { template: 'home', path: '/index.html' },
@@ -24,6 +24,8 @@ const PAGES = [
   { template: 'contact', path: '/en/contact-us.html' },
   { template: 'utility', path: '/vi/download/digirunner-cloud.html' },
   { template: 'utility', path: '/404.html' },
+  // The search page with a query: it loads Pagefind and draws results (M6-02, #34)
+  { template: 'utility', path: '/search.html?q=%E4%BC%81%E6%A5%AD' },
 ];
 
 const score = (level, minScore) => [level, { minScore }];

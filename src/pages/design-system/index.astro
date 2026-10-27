@@ -33,6 +33,7 @@ import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import InPageNav from '../../components/ui/InPageNav.astro';
 import Faq from '../../components/ui/Faq.astro';
 import VideoFacade from '../../components/ui/VideoFacade.astro';
+import SearchResults from '../../components/ui/SearchResults.astro';
 import SceneChapter from '../../components/ui/SceneChapter.astro';
 import { Image } from 'astro:assets';
 import tokensCss from '../../styles/tokens.css?raw';
@@ -576,6 +577,33 @@ const description =
             <Button slot="action" href={`#components-${tone}`} variant="secondary">往其他地方看看</Button>
           </EmptyState>
 
+          <h3>SearchResults</h3>
+          <ul class="search-states">
+            {[
+              {
+                label: '有結果',
+                preview: {
+                  state: 'results' as const,
+                  count: 19,
+                  more: true,
+                  results: [
+                    { section: '部落格', title: '醫療數位轉型怎麼開始？', url: '/blog/healthcare-fhir-data-platform-7-steps', excerpt: '醫療[數位轉型]怎麼開始？FHIR＋數據中台 7 大實戰步驟解析。' },
+                    { title: '關於我們', url: '/about-us', excerpt: '協助企業實現[數位轉型]，服務遍及金融、政府、零售與醫療等產業。' },
+                  ],
+                },
+              },
+              { label: '搜尋中', preview: { state: 'loading' as const } },
+              { label: '沒有結果', preview: { state: 'none' as const } },
+              { label: '載入失敗', preview: { state: 'error' as const } },
+            ].map((st) => (
+              <li class="state">
+                <span class="state-label">{st.label}</span>
+                <SearchResults form="" level={4} preview={st.preview} />
+              </li>
+            ))}
+          </ul>
+          <p class="note">/search 頁的結果；輸入關鍵字時才載入 Pagefind，結果依頁面語系的索引。分類標籤是頁面上一層的名稱，摘要的 mark 是符合的詞。</p>
+
           <h3>Breadcrumb</h3>
           <div class="demo">
             <Breadcrumb node="digirunner" label={`麵包屑（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
@@ -640,7 +668,7 @@ const description =
       <SectionHeading
         eyebrow="Site chrome"
         title="頁首與頁尾"
-        description="選單是原生的 details 展開，共用同一個 name，一次只開一個；點選單外或按 Esc 會收起（一小段 script）。寬度小於 64rem 時第一層收進「選單」。"
+        description="選單是原生的 details 展開，共用同一個 name，一次只開一個；點選單外或按 Esc 會收起（一小段 script）。寬度小於 64rem 時第一層收進「選單」。搜尋按鈕打開的搜尋框送到 /search，頁首本身不載入 Pagefind。"
       />
       <h3>SiteHeader</h3>
       <div class="chrome-demo">
@@ -653,6 +681,10 @@ const description =
       <h3>SiteHeader：下拉選單展開（示意）</h3>
       <div class="chrome-demo open-short" inert>
         <SiteHeader navLabel="主選單（展示：公司展開）" skipTo={false} open="公司" />
+      </div>
+      <h3>SiteHeader：搜尋框展開（示意）</h3>
+      <div class="chrome-demo open-short" inert>
+        <SiteHeader navLabel="主選單（展示：搜尋展開）" skipTo={false} open="search" />
       </div>
       <h3>InPageNav</h3>
       <div class="chrome-demo">
@@ -888,7 +920,8 @@ const description =
   }
 
   .cards,
-  .faq-states {
+  .faq-states,
+  .search-states {
     display: grid;
     gap: var(--space-6);
   }

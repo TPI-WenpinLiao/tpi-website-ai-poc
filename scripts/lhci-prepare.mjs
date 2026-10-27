@@ -17,7 +17,7 @@ const templates = readdirSync(TEMPLATES)
   .map((f) => f.replace(/Template\.astro$/, '').replace(/(?<!^)[A-Z]/g, (c) => `-${c}`).toLowerCase());
 
 const errors = [
-  ...PAGES.filter((p) => !existsSync(`${SRC}${p.path}`)).map((p) => `${p.path} is not in ${SRC}/`),
+  ...PAGES.filter((p) => !existsSync(`${SRC}${p.path.split('?')[0]}`)).map((p) => `${p.path} is not in ${SRC}/`),
   ...PAGES.filter((p) => !templates.includes(p.template)).map((p) => `${p.path}: no ${TEMPLATES} file for template "${p.template}"`),
   ...templates.filter((t) => !PAGES.some((p) => p.template === t)).map((t) => `no page for template "${t}"`),
 ];
