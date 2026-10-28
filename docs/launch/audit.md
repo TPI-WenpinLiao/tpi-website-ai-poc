@@ -2,8 +2,8 @@
 
 M8-01（#43）對全站逐項驗收的結果與問題清單。上線步驟、風險與待決事項的負責人在 M8-02 launch-readiness（#44）整理。
 
-- 驗收對象：`main` `753ed04`（PR #135 合併後）加上本 PR 的變更。`npm run check` 是本 PR 的最終版本；全站 Lighthouse 在 `753ed04` 上量測，成功案例 logo 的修正另外抽測
-- 日期：2026-10-27，雲端 session，Node `v24.22.1`
+- 驗收對象：本 PR 合併 `main` `6f8c823`（含 #136）後的 head。`npm run check` 在這個 head 上執行；全站 Lighthouse 在 #136 合併前的 `753ed04` 上量測，成功案例 logo 的修正另外抽測
+- 日期：2026-10-27（全站 Lighthouse）、2026-10-28（`npm run check`），雲端 session，Node `v24.22.1`
 - 範圍：`dist/` 的 485 頁（zh-TW 170、en 144、vi 171）與 `docs/ia/redirects.csv` 的 1,309 列
 
 ## 結論
@@ -22,8 +22,8 @@ M8-01（#43）對全站逐項驗收的結果與問題清單。上線步驟、風
 | 翻譯詞彙表 | `node scripts/i18n/glossary.mjs --check` | 189 列 | 通過；`confirmed` 26、`to-confirm` 26、`draft` 137（見「內容待確認」） |
 | `status.md` | `node scripts/status/check.mjs` | | 通過 |
 | design | `npm run check:design` | 90 組對比、53 個 CSS 檔、31 個元件、167 個 token | 0 個問題 |
-| scripts 測試 | `npm run test:scripts` | 311 個測試 | 全部通過 |
-| 型別 | `astro check` | 222 個檔案 | 0 errors、0 warnings、2 hints（`scripts/` 裡沒用到的參數，不影響產出） |
+| scripts 測試 | `npm run test:scripts` | 316 個測試 | 全部通過 |
+| 型別 | `astro check` | 225 個檔案 | 0 errors、0 warnings、2 hints（`scripts/` 裡沒用到的參數，不影響產出） |
 | 輸出 CSS | `node scripts/design/dist-css.mjs` | | 0 個問題 |
 | heading | `node scripts/seo/headings.mjs` | 485 頁 | 0 個問題 |
 | 語系路由 | `node scripts/i18n/routes.mjs` | 485 頁 | 0 個問題 |
@@ -33,6 +33,7 @@ M8-01（#43）對全站逐項驗收的結果與問題清單。上線步驟、風
 | 水平捲動 | `node scripts/design/overflow.mjs` | 485 頁 × 4 種寬度 | 0 頁溢出 |
 | 無障礙 | `node scripts/design/axe.mjs` | 485 頁，axe-core 4.14.0，WCAG 2.0／2.1 A、AA 與 2.2 AA | 0 個違規 |
 | 影片 facade | `node scripts/design/video-facade.mjs` | 1 頁 | 0 個問題 |
+| 3D 等待上限 | `node scripts/design/scene-wait.mjs`（#136 新增） | `/products/systalk-chat` | fence 與 shader 永遠不完成時，3D 分別在 1,101 ms、1,156 ms 後上頁，上限 2,656 ms |
 | 站內搜尋 | `node scripts/search/pagefind.mjs` | 索引 zh-TW 133、en 122、vi 146 頁；15 頁確認沒有載入 `/pagefind/` | 0 個問題 |
 | 表單 | `node scripts/forms/contact.mjs` | 4 頁 | 0 個問題 |
 | 視覺回歸 | `npm run test:visual` | 首頁三語與 10 個模板預覽頁 × 3 種寬度 | 只在 CI 比對（`docs/workflow.md`「視覺回歸」），以本 PR 的 quality-gate 為準 |
