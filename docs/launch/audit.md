@@ -33,7 +33,7 @@ M8-01（#43）對全站逐項驗收的結果與問題清單。上線步驟、風
 | 水平捲動 | `node scripts/design/overflow.mjs` | 485 頁 × 4 種寬度 | 0 頁溢出 |
 | 無障礙 | `node scripts/design/axe.mjs` | 485 頁，axe-core 4.14.0，WCAG 2.0／2.1 A、AA 與 2.2 AA | 0 個違規 |
 | 影片 facade | `node scripts/design/video-facade.mjs` | 1 頁 | 0 個問題 |
-| 3D 等待上限 | `node scripts/design/scene-wait.mjs`（#136 新增） | `/products/systalk-chat` | fence 與 shader 永遠不完成時，3D 分別在 1,101 ms、1,156 ms 後上頁，上限 2,656 ms |
+| 3D 等待上限 | `node scripts/design/scene-wait.mjs`（#136 新增） | `/products/systalk-chat` | fence 與 shader 永遠不完成時，3D 都在上限內上頁（上限＝未改動時的耗時加上 `WAIT_LIMIT_MS` 與容許誤差，每次量測不同；本機一次為 1,101 ms、1,156 ms，上限 2,656 ms） |
 | 站內搜尋 | `node scripts/search/pagefind.mjs` | 索引 zh-TW 133、en 122、vi 146 頁；15 頁確認沒有載入 `/pagefind/` | 0 個問題 |
 | 表單 | `node scripts/forms/contact.mjs` | 4 頁 | 0 個問題 |
 | 視覺回歸 | `npm run test:visual` | 首頁三語與 10 個模板預覽頁 × 3 種寬度 | 只在 CI 比對（`docs/workflow.md`「視覺回歸」），以本 PR 的 quality-gate 為準 |
