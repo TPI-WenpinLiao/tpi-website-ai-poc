@@ -41,6 +41,13 @@ const PAGES = ['/', '/en', '/vi', '/privacy'];
 const WIDTHS = [375, 1280];
 const MAX_TABS = 400;
 
+// Pages are loaded until the load event, not network idle: the home page's 3D scene keeps a font
+// request open under request interception on a slow CPU, so networkidle0 never came on CI (#36).
+// The consent script is a module script, so it has run, and asked for gtm.js if it would, by then.
+const LOAD = /** @type {const} */ ({ waitUntil: 'load' });
+// How long a click may take to make the page ask for gtm.js
+const GTM_WAIT = 10_000;
+
 const MARKERS = ['data-consent-config', 'googletagmanager'];
 const optional = consent.categories.filter((c) => !c.required);
 
@@ -65,6 +72,13 @@ function build(out) {
     throw new Error(`the build with PUBLIC_GTM_ID=${GTM_ID} failed`);
   }
 }
+
+/** Resolves true once `page` asks for gtm.js, false after GTM_WAIT. @param {import('puppeteer-core').Page} page */
+const gtmRequested = (page) =>
+  page.waitForRequest((r) => r.url().startsWith(GTM_JS), { timeout: GTM_WAIT }).then(
+    () => true,
+    () => false,
+  );
 
 /** dataLayer entries, gtag's arguments objects turned into arrays. @param {import('puppeteer-core').Page} page */
 const dataLayer = (page) =>
@@ -135,7 +149,7 @@ async function check(browser, origin, path) {
   });
   const load = async () => {
     requests = [];
-    await page.goto(`${origin}${path}`, { waitUntil: 'networkidle0' });
+    await page.goto(`${origin}${path}`, LOAD);
   };
   const gtmRequests = () => requests.filter((u) => u === `${GTM_JS}?id=${GTM_ID}`);
 
@@ -195,8 +209,9 @@ async function check(browser, origin, path) {
   if (!s.dialog) fail('the footer button did not open the dialog');
   if (Object.values(s.switches).some(Boolean)) fail(`after 全部拒絕 the dialog shows switches on: ${JSON.stringify(s.switches)}`);
   await page.click(`#consent-dialog-${first.id}`);
+  const granted = gtmRequested(page);
   await page.click('#consent-dialog [data-consent-action="save"]');
-  await page.waitForNetworkIdle();
+  if (!(await granted)) fail(`granting ${first.id}: gtm.js not requested within ${GTM_WAIT} ms`);
   if (gtmRequests().length !== 1) fail(`granting ${first.id}: gtm.js requested ${gtmRequests().length} times`);
   const others = requests.filter((u) => !u.startsWith(GTM_JS));
   if (others.length) fail(`granting ${first.id}: also requested ${others.join(', ')}`);
@@ -214,7 +229,7 @@ async function check(browser, origin, path) {
   if (!s.switches[first.id]) fail(`reopened, the dialog does not show ${first.id} on`);
   await page.click(`#consent-dialog-${first.id}`);
   requests = [];
-  await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle0' }), page.click('#consent-dialog [data-consent-action="save"]')]);
+  await Promise.all([page.waitForNavigation(LOAD), page.click('#consent-dialog [data-consent-action="save"]')]);
   if (requests.length) fail(`after taking ${first.id} back: requested off-site: ${requests.join(', ')}`);
   await context.close();
 
@@ -231,10 +246,10 @@ async function check(browser, origin, path) {
     if (url.startsWith(`${GTM_JS}?`)) void req.respond({ status: 200, contentType: 'application/javascript', body: '' });
     else void req.abort();
   });
-  await second.goto(`${origin}${path}`, { waitUntil: 'networkidle0' });
+  await second.goto(`${origin}${path}`, LOAD);
+  const accepted = gtmRequested(second);
   await second.click('[data-consent-config] section [data-consent-action="accept"]');
-  await second.waitForNetworkIdle();
-  if (!loaded.includes(`${GTM_JS}?id=${GTM_ID}`)) fail('全部接受 did not load gtm.js');
+  if (!(await accepted) || !loaded.includes(`${GTM_JS}?id=${GTM_ID}`)) fail('全部接受 did not load gtm.js');
   await fresh.close();
   return out;
 }
@@ -258,7 +273,8 @@ async function main() {
     const browser = await puppeteer.launch({ ...chrome, headless: true, args: ['--no-sandbox'] });
     try {
       for (const path of PAGES) {
-        const found = await check(browser, origin, path);
+        // A step that throws (a timeout) fails this page, and the other pages still run
+        const found = await check(browser, origin, path).catch((/** @type {Error} */ e) => [`stopped: ${e.message}`]);
         for (const p of found) console.log(`${path}: ${p}`);
         if (found.length) failing++;
       }
