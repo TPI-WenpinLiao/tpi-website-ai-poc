@@ -52,9 +52,6 @@ jobs:
       - name: Lighthouse
         if: steps.scope.outputs.skip != 'true'
         timeout-minutes: 15
-        # TEMPORARY (#136 acceptance): force a timeout to show the failure; reverted next commit
-        env:
-          LHCI_RUN_TIMEOUT_SECONDS: 3
         run: npm run lighthouse
       - name: Verify DOCS_ONLY
         id: verify

@@ -71,8 +71,9 @@ function chromeProfiles(pids) {
     .flatMap((args) => /--user-data-dir=(\S+)/.exec(args)?.[1] ?? []);
 }
 
+// The timer is unref'd so a probe that answered does not keep the process alive for `ms`
 const withTimeout = (promise, ms) =>
-  Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error(`no answer in ${ms} ms`)), ms))]);
+  Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error(`no answer in ${ms} ms`)), ms).unref())]);
 
 /** Evaluates `expression` in a DevTools target over its WebSocket. */
 async function evaluate(wsUrl, expression) {
@@ -179,7 +180,8 @@ export function run({ command, args, timeoutMs, progress = PROGRESS, github = !!
     const pids = descendants(child.pid ?? 0);
     // chrome-launcher removes the temporary profile when Chrome exits normally; a kill leaves it
     const profiles = chromeProfiles(pids).filter((dir) => dir.startsWith(join(tmpdir(), 'lighthouse.')));
-    for (const pid of [...pids, child.pid]) {
+    // LHCI first: autorun goes on to assert once its collect child dies
+    for (const pid of [child.pid, ...pids]) {
       try {
         if (pid) process.kill(pid, 'SIGKILL');
       } catch {
