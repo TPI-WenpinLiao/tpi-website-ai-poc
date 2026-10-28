@@ -154,7 +154,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
 | `SceneChapter` | 3D 場景上的章節 | 見「3D 場景」 |
 | `VideoFacade` | 影片 | `video` 是 `{ kind: 'youtube', id }` 或 `{ kind: 'file', src }`（自架 MP4）；初始只有本機 `poster` 與原生 `<button>`，播放器在 `<template>` 裡，點擊後才換上並取得焦點，首次載入不請求第三方資源；`poster` 不用 YouTube 縮圖；`title` 是圖說、按鈕的 accessible name 與播放器的 `title`；`node scripts/design/video-facade.mjs` 檢查（`npm run check`） |
-| `ConsentBanner` | cookie 同意 | 固定在視窗底部、不擋操作的深色橫幅，加上原生 `<dialog>` 的偏好設定（`showModal()` 鎖住焦點、Esc 關閉，關閉後焦點回到打開它的按鈕）；接受與拒絕同一個視覺層級；必要類別固定開啟，其他類別是 `role="switch"` 的 checkbox。只由 `PageLayout` 在 build 有 `PUBLIC_GTM_ID` 時放在 `body` 層級（放進有 transform 或 stacking context 的容器會被蓋住），類別與文案來自 `src/data/consent.ts`，`config` 交給 script 儲存選擇與載入 GTM（ADR 0007）；任何帶 `data-consent-open="<id>-dialog"` 的按鈕都能打開對話框。`preview` 只給 `/design-system`，不儲存也不載入 |
+| `ConsentBanner` | cookie 同意 | 固定在視窗底部、不擋操作的深色橫幅，加上原生 `<dialog>` 的偏好設定（`showModal()` 鎖住焦點、Esc 關閉，關閉後焦點回到打開它的按鈕）；接受與拒絕同一個視覺層級；必要類別固定開啟，其他類別是 `role="switch"` 的 checkbox。只由 `PageLayout` 在 build 有 `PUBLIC_GTM_ID` 時放在 `body` 層級（放進有 transform 或 stacking context 的容器會被蓋住），內部頁不放；顯示時以 `scroll-padding-block-end` 與頁尾後的 spacer 留出橫幅高度，焦點不會被蓋住（WCAG 2.4.11），類別與文案來自 `src/data/consent.ts`，`config` 交給 script 儲存選擇與載入 GTM（ADR 0007）；任何帶 `data-consent-open="<id>-dialog"` 的按鈕都能打開對話框。`preview` 只給 `/design-system`，不儲存也不載入 |
 | `LocaleSwitcher` | 語系切換 | 純連結，零 JS；連到同一頁的其他語系版本，沒有翻譯時連到該語系首頁，連首頁都沒有的語系不列，只剩目前語系時不輸出（ADR 0002）；語系名稱用各自的語言並加上 `lang`；同一頁有多個時用 `label` 給不同的 landmark 名稱 |
 
 ## 新增元件

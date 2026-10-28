@@ -1,10 +1,14 @@
 // Checks the cookie consent banner and GTM loading (M6-04, #36, ADR 0007) in a real browser.
-// 1. dist/ (built without PUBLIC_GTM_ID) has no banner and no GTM on any page
+// 1. dist/ (built without PUBLIC_GTM_ID) has no banner and no GTM on any page; skipped when
+//    PUBLIC_GTM_ID is set in the environment, since npm run build then made a dist/ with them
 // 2. A second build with a test container ID (PUBLIC_GTM_ID=GTM-TEST0000, CONSENT_ALLOW_DRAFT=1, into
 //    .consent-dist/, gitignored) is served, every off-site request recorded, gtm.js answered with an empty
-//    script and everything else off-site aborted. Per page, in a fresh browser context (no stored choice):
+//    script and everything else off-site aborted. The template previews (internal pages, sample data)
+//    must have no banner. Per page, in a fresh browser context (no stored choice):
 //    - first load: the banner shows, nothing is requested off-site, there is no dataLayer, one h1,
 //      no axe violation, no horizontal scroll at 375 and 1280px
+//    - at 375 and 1280px, Tab through the page: no focused element is entirely behind the banner
+//      (WCAG 2.4.11), the last ones in the footer included
 //    - Tab reaches the banner; 偏好設定 opens the dialog with focus inside, Tab never reaches the page
 //      behind it, axe passes with it open, Esc closes it and focus goes back to the button
 //    - 全部拒絕: the banner goes, focus moves to <main>, and after a reload the banner stays away and
@@ -100,6 +104,33 @@ const axeViolations = async (page) => {
   );
 };
 
+/**
+ * Tabs through the page and counts focused elements entirely covered by the banner.
+ * @param {import('puppeteer-core').Page} page @returns {Promise<{ tabs: number, covered: string[] }>}
+ */
+async function coveredFocus(page) {
+  /** @type {string[]} */
+  const covered = [];
+  let tabs = 0;
+  for (; tabs < MAX_TABS; tabs++) {
+    await page.keyboard.press('Tab');
+    const hit = await page.evaluate(() => {
+      const banner = document.querySelector('[data-consent-config] section');
+      const active = document.activeElement;
+      if (!(banner instanceof HTMLElement) || banner.hidden || !active || active === document.body) return { done: !active || active === document.body };
+      if (banner.contains(active)) return { done: false };
+      const b = banner.getBoundingClientRect();
+      const r = active.getBoundingClientRect();
+      const inside = r.width > 0 && r.top >= b.top && r.bottom <= b.bottom && r.left >= b.left && r.right <= b.right;
+      return { done: false, covered: inside ? `${active.tagName.toLowerCase()} "${(active.textContent ?? '').trim().slice(0, 30)}"` : undefined };
+    });
+    if (hit.covered) covered.push(hit.covered);
+    // Focus left the page (past the last element): one pass is done
+    if (hit.done && tabs > 0) break;
+  }
+  return { tabs, covered };
+}
+
 /** What the page shows. @param {import('puppeteer-core').Page} page */
 const state = (page) =>
   page.evaluate(() => {
@@ -166,7 +197,15 @@ async function check(browser, origin, path) {
     const { overflow } = await state(page);
     if (overflow > 0) fail(`${width}px: ${overflow}px wider than the viewport`);
   }
+  // Focus is never hidden behind the banner, at either width
+  for (const width of WIDTHS) {
+    await page.setViewport({ width, height: width < 768 ? 667 : 800 });
+    await load();
+    const { covered } = await coveredFocus(page);
+    if (covered.length) fail(`${width}px: ${covered.length} focused elements entirely behind the banner, first ${covered.slice(0, 3).join(', ')}`);
+  }
   await page.setViewport({ width: 1280, height: 860 });
+  await load();
 
   // Keyboard: Tab reaches the banner, its 偏好設定 opens the dialog
   let reached = false;
@@ -257,14 +296,18 @@ async function check(browser, origin, path) {
 async function main() {
   // /design-system shows the component: its script names GTM, but its previews have no config, so it
   // never loads it
-  const unexpected = pagesWithConsent(DIST).filter((f) => f !== 'design-system.html');
+  const withId = Boolean(process.env.PUBLIC_GTM_ID);
+  const unexpected = withId ? [] : pagesWithConsent(DIST).filter((f) => f !== 'design-system.html');
   for (const f of unexpected) console.log(`dist/${f}: has the consent banner or GTM without PUBLIC_GTM_ID`);
 
   const out = OUT;
   rmSync(out, { recursive: true, force: true });
-  let failing = unexpected.length ? 1 : 0;
+  let failing = 0;
   try {
     build(out);
+    const previews = pagesWithConsent(join(out, 'templates'));
+    for (const f of previews) console.log(`templates/${f}: a template preview has the consent banner or GTM`);
+    if (previews.length) failing++;
     const server = await serve(out);
     const { port } = /** @type {import('node:net').AddressInfo} */ (server.address());
     const origin = `http://localhost:${port}`;
@@ -285,8 +328,9 @@ async function main() {
   } finally {
     rmSync(out, { recursive: true, force: true });
   }
-  console.log(`no banner or GTM in dist/ (${unexpected.length} pages with one); ${PAGES.length} pages checked with ${GTM_ID}, ${failing} with problems`);
-  if (failing) process.exitCode = 1;
+  const distCheck = withId ? 'dist/ not checked (PUBLIC_GTM_ID is set)' : `${unexpected.length} pages in dist/ with a banner or GTM`;
+  console.log(`${distCheck}; ${PAGES.length} pages checked with ${GTM_ID}, ${failing} with problems`);
+  if (failing || unexpected.length) process.exitCode = 1;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) await main();

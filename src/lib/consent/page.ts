@@ -8,6 +8,8 @@ import { localNode, nodeHref } from '../ia/navigation';
 import type { Locale } from '../i18n/locales';
 
 const GTM_ID = /^GTM-[A-Z0-9]+$/;
+// ConsentBanner's id: its dialog is `${ID}-dialog`, which the footer's button opens
+const ID = 'consent';
 
 export interface ConsentConfig {
   gtmId: string;
@@ -33,6 +35,7 @@ export function consentProps(locale: Locale) {
   const text = consent.text[locale];
   const privacy = localNode('privacy', locale);
   return {
+    id: ID,
     config: { gtmId: id, version: consent.version, categories: consent.categories } satisfies ConsentConfig,
     categories: consent.categories.map((c) => {
       const t = text.categories[c.id];
@@ -40,6 +43,6 @@ export function consentProps(locale: Locale) {
       return { id: c.id, required: c.required, ...t };
     }),
     copy: { ...text, policy: { href: nodeHref('privacy', locale), label: privacy.title } },
-    footer: { label: text.footerLink, dialog: 'consent-dialog' },
+    footer: { label: text.footerLink, dialog: `${ID}-dialog` },
   };
 }

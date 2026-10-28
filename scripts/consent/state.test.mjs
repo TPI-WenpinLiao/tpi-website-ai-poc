@@ -12,7 +12,7 @@ const CATEGORIES = [
 
 const memory = (value) => {
   const data = new Map(value === undefined ? [] : [[STORAGE_KEY, value]]);
-  return { getItem: (k) => data.get(k) ?? null, setItem: (k, v) => data.set(k, v), data };
+  return { getItem: (k) => data.get(k) ?? null, setItem: (k, v) => data.set(k, v), removeItem: (k) => data.delete(k), data };
 };
 
 test('a stored choice of the current version is read back, unknown and required ids dropped', () => {
@@ -41,8 +41,17 @@ test('writeChoice stores JSON readChoice accepts, and reports a refusing storage
   assert.deepEqual(choice.granted, ['marketing']);
   assert.equal(writeChoice(storage, choice), true);
   assert.deepEqual(readChoice(storage, 2, CATEGORIES), choice);
-  assert.equal(writeChoice({ setItem: () => { throw new Error('quota'); } }, choice), false);
   assert.equal(writeChoice(undefined, choice), false);
+});
+
+test('a refused write drops the stored choice, so an older consent is not read back', () => {
+  const granted = makeChoice(2, CATEGORIES, ['analytics']);
+  const storage = memory(JSON.stringify(granted));
+  const full = { ...storage, setItem: () => { throw new Error('quota'); } };
+  assert.equal(writeChoice(full, makeChoice(2, CATEGORIES, [])), false);
+  assert.equal(readChoice(storage, 2, CATEGORIES), null);
+  const locked = { setItem: () => { throw new Error('quota'); }, removeItem: () => { throw new Error('blocked'); } };
+  assert.equal(writeChoice(locked, granted), false);
 });
 
 test('consentParams: required types always granted, the rest only for granted categories', () => {

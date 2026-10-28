@@ -76,6 +76,13 @@ const dialogId = `${id}-dialog`;
       </section>
     )
   }
+  {
+    config && (
+      // Room at the end of the page as tall as the fixed banner, so the last elements can be scrolled
+      // clear of it (WCAG 2.4.11); the script sizes it while the banner shows
+      <div class="spacer" aria-hidden="true" hidden />
+    )
+  }
 
   <dialog class="dialog" id={dialogId} aria-labelledby={`${dialogId}-title`} open={preview === 'dialog'}>
     <form method="dialog" class="sheet">
@@ -168,7 +175,33 @@ const dialogId = `${id}-dialog`;
 
     let choice: Choice | null = readChoice(storage(), version, categories);
     const start = () => loadGtm(gtmId, consentParams(categories, []), consentParams(categories, choice?.granted ?? []));
-    if (choice === null) banner.hidden = false;
+
+    // While the banner shows, the page keeps room for it: scroll-padding makes focus scroll clear of
+    // it, the spacer lets the page scroll far enough to uncover its last elements (WCAG 2.4.11)
+    const spacer = root.querySelector<HTMLElement>('.spacer');
+    const reserve = () => {
+      const space = banner.hidden ? 0 : Math.ceil(window.innerHeight - banner.getBoundingClientRect().top);
+      document.documentElement.style.scrollPaddingBlockEnd = space ? `${space}px` : '';
+      if (spacer) {
+        spacer.hidden = space === 0;
+        spacer.style.blockSize = space ? `${space}px` : '';
+      }
+    };
+    const resized = new ResizeObserver(reserve);
+    const show = () => {
+      banner.hidden = false;
+      resized.observe(banner);
+      window.addEventListener('resize', reserve);
+      reserve();
+    };
+    const hide = () => {
+      banner.hidden = true;
+      resized.disconnect();
+      window.removeEventListener('resize', reserve);
+      reserve();
+    };
+
+    if (choice === null) show();
     else if (wantsGtm(categories, choice)) start();
 
     // The dialog shows the stored choice each time it opens (nothing granted before any choice)
@@ -191,9 +224,11 @@ const dialogId = `${id}-dialog`;
       const next = makeChoice(version, categories, granted);
       const previous = choice;
       choice = next;
+      // When it can't be stored, writeChoice() also drops the old choice, so the reload below asks
+      // again instead of reading back a consent the visitor just took back
       writeChoice(storage(), next);
       const hadFocus = banner?.contains(document.activeElement) ?? false;
-      if (banner) banner.hidden = true;
+      if (banner && !banner.hidden) hide();
       // Tags already running can't be stopped: reload so the page starts under the new choice
       if (gtmLoaded() && revokes(previous, next)) return location.reload();
       if (gtmLoaded()) updateConsent(consentParams(categories, next.granted));
@@ -235,7 +270,8 @@ const dialogId = `${id}-dialog`;
     box-shadow: var(--shadow-lg);
   }
 
-  .banner[hidden] {
+  .banner[hidden],
+  .spacer[hidden] {
     display: none;
   }
 

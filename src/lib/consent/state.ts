@@ -31,7 +31,7 @@ export interface Choice {
 }
 
 type Readable = Pick<Storage, 'getItem'>;
-type Writable = Pick<Storage, 'setItem'>;
+type Writable = Pick<Storage, 'setItem' | 'removeItem'>;
 
 const optionalIds = (categories: readonly Category[]) => new Set(categories.filter((c) => !c.required).map((c) => c.id));
 
@@ -63,13 +63,21 @@ export function makeChoice(version: number, categories: readonly Category[], gra
   return { version, granted: [...new Set(granted)].filter((id) => known.has(id)), at: at.toISOString() };
 }
 
-/** Stores the choice; false when the browser refuses (the choice then lasts for this page only). */
+/**
+ * Stores the choice; false when the browser refuses (the choice then lasts for this page only). On a
+ * refused write the stored choice is removed, so an older consent can't be read back on the next page.
+ */
 export function writeChoice(storage: Writable | undefined, choice: Choice): boolean {
+  if (!storage) return false;
   try {
-    if (!storage) return false;
     storage.setItem(STORAGE_KEY, JSON.stringify(choice));
     return true;
   } catch {
+    try {
+      storage.removeItem(STORAGE_KEY);
+    } catch {
+      // Nothing more to do: the next visit asks again only if this choice was never stored
+    }
     return false;
   }
 }

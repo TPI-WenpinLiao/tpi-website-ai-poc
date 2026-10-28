@@ -27,10 +27,13 @@ M1-05 定了新站只用 GTM，三語都要有 cookie 同意機制（`docs/resea
    - 不用 cookie：這是靜態站，伺服器不需要讀這個值
    - 存的 `version` 跟 `consent.ts` 的不同，或資料格式錯誤時，視為還沒選，橫幅重新出現。類別或文案改版時要把 `version` 加 1
    - `localStorage` 不能用時（無痕視窗、封鎖網站資料）不報錯，這次的選擇只在這一頁有效，下次造訪會再問
+   - 寫入失敗時（例如容量已滿）刪掉原本存的選擇。否則撤回同意後重新載入頁面，會讀回舊的同意，又載入 GTM
 5. **撤回同意時重新載入頁面**：已經執行的 tag 無法從頁面上移除。存下新的選擇後重新載入，頁面就在新的狀態下開始。只增加類別的話不用重新載入，推一次 consent `update` 即可
 6. **元件**：`ConsentBanner` 的畫面在階段一定案（`design-approved`），見 `design-system` skill 的元件表。
    - 橫幅預設 `hidden`，由 script 判斷要不要顯示。沒有 JavaScript 時不顯示，也不會載入 GTM
    - 元件放在 `PageLayout` 的 `body` 層級。放進有 transform 或自己 stacking context 的容器，固定定位的橫幅會被蓋住
+   - 橫幅顯示時，頁面留出它的高度：`<html>` 設 `scroll-padding-block-end`，讓取得焦點的元素捲到橫幅上方；`body` 最後放一個同高的 spacer，讓頁尾最後的連結也能捲出來。沒有這兩項時，手機上的鍵盤焦點會整個落在橫幅底下（WCAG 2.2 SC 2.4.11，axe 測不到）。PR #142 第 1 輪審查實測：375px 寬時 `/` 有 69/240 次
+   - 內部頁（`/templates/*` 等範例資料頁）不輸出橫幅，也不載入 GTM，避免範例頁的流量進到正式容器
 
 ## 數字
 
@@ -51,7 +54,11 @@ M1-05 定了新站只用 GTM，三語都要有 cookie 同意機制（`docs/resea
 - `scripts/consent/gtm.mjs`（`npm run check`，build 之後）：
   - `dist/` 除了 `/design-system` 之外沒有橫幅與 GTM
   - 用測試 ID 另外 build 一份，在 `/`、`/en`、`/vi`、`/privacy` 上檢查：首次載入沒有站外請求、鍵盤操作與焦點、axe、拒絕後重新載入仍然沒有請求、同意一個類別後只請求一次 gtm.js 且 consent 參數正確、撤回後重新載入不再請求、全部接受會載入 GTM
-  - 2026-10-28 反向驗證：讓 script 不論選擇都載入 GTM，4 頁都失敗
+  - 用 Tab 走過整頁（375 與 1280px），焦點元素不得整個被橫幅蓋住；測試 build 的 `/templates/*` 不得有橫幅
+  - 2026-10-28 反向驗證：
+    - 讓 script 不論選擇都載入 GTM：4 頁都失敗
+    - 拿掉留空間的處理：4 頁都失敗，375px 時最多 28 個焦點元素被蓋住
+    - 拿掉內部頁的排除：`/templates/*` 失敗
 
 ## 取捨與限制
 

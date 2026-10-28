@@ -10,7 +10,8 @@
 // data-pagefind-body, and pages below a first-level page are labelled with their parent's name in
 // the search results (部落格, 新聞中心, a product family). Pages without it (home, listings, utility, internal pages) are left out.
 // Builds with PUBLIC_GTM_ID get the cookie consent banner after the footer, at body level, and the
-// footer's Cookie 設定 button (src/lib/consent/page.ts, ADR 0007); without it neither is rendered.
+// footer's Cookie 設定 button (src/lib/consent/page.ts, ADR 0007), except on internal pages; without
+// it neither is rendered.
 import BaseLayout from './BaseLayout.astro';
 import SiteHeader from '../components/ui/SiteHeader.astro';
 import SiteFooter from '../components/ui/SiteFooter.astro';
@@ -37,7 +38,8 @@ const preview = isInternal(Astro.url.pathname);
 const indexed = searchTrail !== undefined && !preview;
 const section = indexed && searchTrail.length > 2 ? searchTrail.at(-2)?.title : undefined;
 const PREVIEW = '模板預覽';
-const consent = consentProps(localeFromPath(normalizePath(Astro.url.pathname)));
+// Not on the template previews: their sample data must not reach the GTM container
+const consent = preview ? undefined : consentProps(localeFromPath(normalizePath(Astro.url.pathname)));
 // Imported only when the build has a GTM ID: a static import would add the banner's CSS to every page
 const ConsentBanner = import.meta.env.PUBLIC_GTM_ID ? (await import('../components/ui/ConsentBanner.astro')).default : undefined;
 ---
@@ -58,7 +60,7 @@ const ConsentBanner = import.meta.env.PUBLIC_GTM_ID ? (await import('../componen
     <slot />
   </main>
   <SiteFooter consentSettings={consent?.footer} />
-  {consent && ConsentBanner && <ConsentBanner id="consent" config={consent.config} categories={consent.categories} copy={consent.copy} />}
+  {consent && ConsentBanner && <ConsentBanner id={consent.id} config={consent.config} categories={consent.categories} copy={consent.copy} />}
 </BaseLayout>
 
 <style>
