@@ -103,6 +103,18 @@ body {
   box-shadow: var(--glow-accent);
 }
 
+/* A list of rows between hairlines (FormPanel's error summary, ConsentBanner's categories) */
+.ruled-list {
+  margin: 0;
+  padding: 0;
+  border-block-start: var(--border-width) solid var(--color-border);
+  list-style: none;
+}
+
+.ruled-list > li {
+  border-block-end: var(--border-width) solid var(--color-border);
+}
+
 /* An in-page anchor target (a section InPageNav links to): it lands below the sticky header, and
    from --bp-lg-up also below the in-page bar that sticks under it */
 .anchor-target {

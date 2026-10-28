@@ -35,6 +35,7 @@ import Faq from '../../components/ui/Faq.astro';
 import VideoFacade from '../../components/ui/VideoFacade.astro';
 import SearchResults from '../../components/ui/SearchResults.astro';
 import SceneChapter from '../../components/ui/SceneChapter.astro';
+import ConsentBanner, { type ConsentCategory, type ConsentCopy } from '../../components/ui/ConsentBanner.astro';
 import { Image } from 'astro:assets';
 import tokensCss from '../../styles/tokens.css?raw';
 import { parseSurfaces, resolveColor, checkPairs, contrastRatio, PAIRS } from '../../../scripts/design/contrast.mjs';
@@ -119,6 +120,27 @@ const tagTones = [
   { tone: 'brand', label: '品牌標籤' },
   { tone: 'node', label: 'Node label' },
 ] as const;
+
+// ConsentBanner sample data. The categories and all of the copy are needs-input (#36: the rules
+// to follow and the GTM tags decide them), so these only show the layout.
+const consentCopy: ConsentCopy = {
+  title: 'Cookie 使用說明（範例文案）',
+  description: '這段是佔位文字，正式文案待提供。橫幅說明網站使用哪些 cookie，以及訪客可以如何選擇。',
+  policy: { href: '#chrome', label: '隱私權政策' },
+  acceptAll: '全部接受',
+  rejectAll: '全部拒絕',
+  settings: '偏好設定',
+  dialogTitle: 'Cookie 偏好設定',
+  dialogDescription: '這段是佔位文字，正式文案待提供。說明每一類 cookie 的用途，以及之後可以在頁尾的「Cookie 設定」修改。',
+  save: '儲存設定',
+  close: '關閉',
+  alwaysOn: '一律啟用',
+};
+const consentCategories: ConsentCategory[] = [
+  { id: 'necessary', name: '必要（範例）', description: '網站運作所需，無法關閉。範例類別，正式分類待確認。', required: true },
+  { id: 'sample-a', name: '範例類別 A', description: '關閉狀態的範例。', checked: false },
+  { id: 'sample-b', name: '範例類別 B', description: '開啟狀態的範例。', checked: true },
+];
 
 const toc = [
   { id: 'principles', label: '原則' },
@@ -701,8 +723,16 @@ const description =
       <p class="note">有 SiteHeader 的頁面用 stick="header"：寬度 64rem 以上時固定在頁首下方，手機上隨頁面捲走、選項多時在列內橫向捲動。本頁頂端的目錄是 stick="top"。</p>
       <h3>SiteFooter</h3>
       <div class="chrome-demo">
-        <SiteFooter />
+        <SiteFooter consentSettings={{ label: 'Cookie 設定', dialog: 'consent-demo-dialog' }} />
       </div>
+      <h3>ConsentBanner：橫幅</h3>
+      <ConsentBanner id="consent-demo" categories={consentCategories} copy={consentCopy} preview="banner" />
+      <p class="note">正式頁面上固定在視窗底部，不擋頁面操作；這裡畫在頁面中。「偏好設定」與上方頁尾的「Cookie 設定」會打開對話框。接受與拒絕同一個視覺層級。文案與類別都是範例，待確認（#36）。</p>
+      <h3>ConsentBanner：偏好設定對話框（示意）</h3>
+      <div class="chrome-demo" inert>
+        <ConsentBanner id="consent-preview" categories={consentCategories} copy={consentCopy} preview="dialog" />
+      </div>
+      <p class="note">原生 dialog，以 showModal() 打開：焦點留在對話框內，Esc 關閉。必要類別固定開啟；其他類別用開關。階段一還不儲存選擇，按鈕只會關閉對話框。</p>
       <h3>ContactCta</h3>
       <div class="chrome-demo">
         <ContactCta />

@@ -3,6 +3,8 @@
 // from docs/ia/navigation.csv (src/lib/ia/navigation.ts); the phone is the headquarters office of
 // the organization data file (src/content/organization), Email and copyright come from the current
 // site (src/data/site.ts). Dark surface, so it closes every page the same way.
+// `consentSettings` adds a button at the end of the legal row that reopens ConsentBanner's
+// preferences dialog (`dialog` is its id). Only /design-system passes it until #36 phase 2.
 import { localizedNav, localNode, nodeHref } from '../../lib/ia/navigation';
 import { getEntry } from 'astro:content';
 import { company } from '../../data/site';
@@ -14,6 +16,9 @@ import logo from '../../assets/brand/logo-horizontal-white.svg';
 
 // Rendered height in px; matches --logo-height-lg (3rem)
 const LOGO_HEIGHT = 48;
+
+type Props = { consentSettings?: { label: string; dialog: string } };
+const { consentSettings } = Astro.props;
 
 const locale = localeFromPath(normalizePath(Astro.url.pathname));
 const contact = localNode('contact', locale);
@@ -80,6 +85,15 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
               </a>
             </li>
           ))
+        }
+        {
+          consentSettings && (
+            <li>
+              <button class="consent-settings" type="button" data-consent-open={consentSettings.dialog}>
+                {consentSettings.label}
+              </button>
+            </li>
+          )
         }
       </ul>
     </div>
@@ -211,10 +225,26 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
     gap: var(--space-1) var(--space-6);
   }
 
-  .legal a {
+  .legal a,
+  .consent-settings {
     display: inline-flex;
     align-items: center;
     min-block-size: var(--touch-target);
+  }
+
+  /* A button that reads as one more legal link */
+  .consent-settings {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text-muted);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .consent-settings:hover {
+    color: var(--color-text);
+    text-decoration: underline;
   }
 
   @media (--bp-sm-up) {

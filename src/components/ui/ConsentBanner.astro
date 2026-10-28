@@ -1,0 +1,375 @@
+---
+// Cookie consent (M6-04, #36): a banner fixed to the bottom of the viewport and a preferences
+// dialog (native <dialog>, so showModal() traps focus and Esc closes it). Dark chrome like the
+// header and footer, on every page whatever its surface.
+// Phase 1 (needs-design): visual and structure only. The choice is not stored and nothing loads
+// GTM yet; accept, reject and save just close the dialog. Which categories exist and all of the copy
+// are needs-input (docs/research/audience-and-goals.md 問題 6、8), so both come in as props and only
+// /design-system passes sample values.
+// `id` names the dialog `${id}-dialog`: any button with data-consent-open="<that id>" (the footer's
+// Cookie 設定) opens it. Accept and reject share one visual weight on purpose.
+// `preview` is for /design-system only: "banner" draws the banner in the page flow instead of fixed
+// to the viewport, "dialog" draws the dialog open in the flow (non-modal, wrap it in inert).
+import Button from './Button.astro';
+import Link from './Link.astro';
+
+export type ConsentCategory = {
+  id: string;
+  name: string;
+  description: string;
+  // Always on, can't be switched off (strictly necessary cookies)
+  required?: boolean;
+  // Initial state of an optional category
+  checked?: boolean;
+};
+
+export type ConsentCopy = {
+  title: string;
+  description: string;
+  policy: { href: string; label: string };
+  acceptAll: string;
+  rejectAll: string;
+  settings: string;
+  dialogTitle: string;
+  dialogDescription: string;
+  save: string;
+  close: string;
+  alwaysOn: string;
+};
+
+type Props = {
+  id: string;
+  categories: readonly ConsentCategory[];
+  copy: ConsentCopy;
+  preview?: 'banner' | 'dialog';
+};
+
+const { id, categories, copy, preview } = Astro.props;
+const dialogId = `${id}-dialog`;
+---
+
+<div class="consent" data-surface="dark" data-preview={preview}>
+  {
+    preview !== 'dialog' && (
+      <section class="banner" aria-labelledby={`${id}-title`}>
+        <div class="text">
+          <h2 class="title" id={`${id}-title`}>{copy.title}</h2>
+          <p class="description">
+            {copy.description} <Link href={copy.policy.href}>{copy.policy.label}</Link>
+          </p>
+        </div>
+        <div class="actions">
+          <div class="settings">
+            <Button variant="text" size="sm" data-consent-open={dialogId}>{copy.settings}</Button>
+          </div>
+          <Button variant="secondary" size="sm">{copy.rejectAll}</Button>
+          <Button variant="secondary" size="sm">{copy.acceptAll}</Button>
+        </div>
+      </section>
+    )
+  }
+
+  <dialog class="dialog" id={dialogId} aria-labelledby={`${dialogId}-title`} open={preview === 'dialog'}>
+    <form method="dialog" class="sheet">
+      <div class="head">
+        <h2 class="title" id={`${dialogId}-title`}>{copy.dialogTitle}</h2>
+        <button class="close" type="submit" aria-label={copy.close}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
+      </div>
+      <p class="description">
+        {copy.dialogDescription} <Link href={copy.policy.href}>{copy.policy.label}</Link>
+      </p>
+      <ul class="ruled-list">
+        {
+          categories.map((c) => (
+            <li class="category">
+              <label class="name" for={`${dialogId}-${c.id}`}>
+                {c.name}
+              </label>
+              <p class="category-description" id={`${dialogId}-${c.id}-description`}>
+                {c.description}
+              </p>
+              <span class="toggle">
+                {c.required && <span class="always">{copy.alwaysOn}</span>}
+                <input
+                  class="switch"
+                  type="checkbox"
+                  role="switch"
+                  id={`${dialogId}-${c.id}`}
+                  name={c.id}
+                  checked={c.required || c.checked}
+                  disabled={c.required}
+                  aria-describedby={`${dialogId}-${c.id}-description`}
+                />
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="actions">
+        <Button variant="secondary" size="sm" type="submit">{copy.rejectAll}</Button>
+        <Button variant="secondary" size="sm" type="submit">{copy.acceptAll}</Button>
+        <Button size="sm" type="submit">{copy.save}</Button>
+      </div>
+    </form>
+  </dialog>
+</div>
+
+<script>
+  // Opens the preferences dialog named by data-consent-open. Inert /design-system previews are
+  // left alone. Phase 1 stops here: the dialog's buttons only close it (form method="dialog").
+  document.addEventListener('click', (e) => {
+    const opener = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-consent-open]') : null;
+    if (!opener || opener.closest('[inert]')) return;
+    const dialog = document.getElementById(opener.dataset.consentOpen ?? '');
+    if (dialog instanceof HTMLDialogElement) dialog.showModal();
+  });
+</script>
+
+<style>
+  @import '../../styles/media.css';
+
+  .consent {
+    display: contents;
+    color: var(--color-text);
+  }
+
+  .banner {
+    position: fixed;
+    inset-inline: var(--space-2);
+    inset-block-end: var(--space-2);
+    z-index: var(--z-overlay);
+    display: grid;
+    gap: var(--space-4);
+    max-inline-size: var(--content-max-width);
+    margin-inline: auto;
+    padding: var(--space-4) var(--space-5);
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-subtle);
+    box-shadow: var(--shadow-lg);
+  }
+
+  [data-preview] .banner {
+    position: static;
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .description {
+    margin: var(--space-1) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-base);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* Narrow screens: settings on its own line, reject and accept share the row below at equal width */
+  .banner .actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .settings {
+    display: flex;
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+
+  .dialog {
+    inline-size: min(100% - 2 * var(--space-gutter), var(--reading-max-width));
+    max-block-size: calc(100% - 2 * var(--space-gutter));
+    padding: 0;
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-subtle);
+    color: var(--color-text);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .dialog::backdrop {
+    background: var(--color-bg-overlay);
+  }
+
+  [data-preview='dialog'] .dialog {
+    position: static;
+    display: block;
+    inline-size: auto;
+    max-inline-size: var(--reading-max-width);
+    margin: 0;
+  }
+
+  .sheet {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-5);
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .head .title {
+    font-size: var(--font-size-lg);
+  }
+
+  .close {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--touch-target);
+    block-size: var(--touch-target);
+    margin-inline-end: calc(var(--space-2) * -1);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+
+  .close:is(:hover, [data-preview-state='hover']) {
+    background: var(--color-bg-muted);
+    color: var(--color-text);
+  }
+
+  .close svg {
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--icon-stroke);
+    stroke-linecap: round;
+  }
+
+  .sheet > .description {
+    margin: 0;
+  }
+
+  .category {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-4);
+    padding-block: var(--space-3);
+  }
+
+  .name {
+    align-self: center;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .category-description {
+    grid-column: 1;
+    margin: var(--space-1) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-base);
+  }
+
+  .toggle {
+    display: flex;
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .always {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+
+  /* A checkbox drawn as a switch: track and thumb. The touch target is the label plus the row. */
+  .switch {
+    position: relative;
+    flex: none;
+    inline-size: var(--space-10);
+    block-size: var(--space-6);
+    margin: 0;
+    border: var(--border-width-strong) solid var(--color-border-strong);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg);
+    appearance: none;
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .switch::before {
+    position: absolute;
+    inset-block: var(--border-width-strong);
+    inset-inline-start: var(--border-width-strong);
+    aspect-ratio: 1;
+    border-radius: var(--radius-pill);
+    background: var(--color-text-muted);
+    content: '';
+    transition: translate var(--duration-fast) var(--ease-standard);
+  }
+
+  .switch:checked {
+    border-color: var(--color-action);
+    background: var(--color-action);
+  }
+
+  .switch:checked::before {
+    background: var(--color-action-text);
+    translate: calc(var(--space-10) - var(--space-6)) 0;
+  }
+
+  /* Required categories: on, but can't be switched off */
+  .switch:disabled {
+    border-color: var(--color-disabled-bg);
+    background: var(--color-disabled-bg);
+    cursor: not-allowed;
+  }
+
+  .switch:disabled::before {
+    background: var(--color-disabled-text);
+  }
+
+  .sheet .actions {
+    justify-content: end;
+  }
+
+  @media (--bp-sm-up) {
+    .banner {
+      inset-inline: var(--space-gutter);
+      inset-block-end: var(--space-gutter);
+    }
+
+    .banner .actions {
+      display: flex;
+      justify-content: end;
+    }
+
+    .settings {
+      display: contents;
+    }
+  }
+
+  @media (--bp-lg-up) {
+    .banner {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--space-8);
+      padding: var(--space-5) var(--space-6);
+    }
+
+    .banner .actions {
+      flex-wrap: nowrap;
+    }
+  }
+</style>

@@ -30,7 +30,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | 層 | 位置 | 放什麼 |
 |---|---|---|
 | tokens | `src/styles/tokens.css`、`media.css` | design tokens（三層，見「Token 分層」）與斷點 |
-| base | `src/styles/base.css`（只由 `BaseLayout` import） | reset（`box-sizing`、`body`）、標題與 `.text-phrase` 的換行、`[data-surface='dark']` 的底色、`:focus-visible`、跨元件的工具類（`.sr-only`、`.anchor-target`、`.signal-dot`） |
+| base | `src/styles/base.css`（只由 `BaseLayout` import） | reset（`box-sizing`、`body`）、標題與 `.text-phrase` 的換行、`[data-surface='dark']` 的底色、`:focus-visible`、跨元件的工具類（`.sr-only`、`.anchor-target`、`.signal-dot`、`.ruled-list`） |
 | 元件 | `src/components/ui/*.astro` 的 scoped `<style>` | 跨頁共用的區塊：卡片格線（`CardGrid`）、表單面板（`FormPanel`）、標籤列（`TagList`）、長文排版（`Prose`）等 |
 | 模板與頁面 | `src/layouts/templates/`、`src/pages/` 的 scoped `<style>` | 只屬於這個模板或頁面的版面 |
 
@@ -139,7 +139,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
 | `Scene3D` | three.js 3D 捲動場景 | 見下方「3D 場景」 |
 | `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的深色玻璃列；寬度小於 64rem 收進「選單」 |
-| `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts` |
+| `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕 |
 | `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴 |
 | `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動 |
 | `Faq` | 常見問題 | 原生 `<details>`，零 JS |
@@ -154,6 +154,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
 | `SceneChapter` | 3D 場景上的章節 | 見「3D 場景」 |
 | `VideoFacade` | 影片 | `video` 是 `{ kind: 'youtube', id }` 或 `{ kind: 'file', src }`（自架 MP4）；初始只有本機 `poster` 與原生 `<button>`，播放器在 `<template>` 裡，點擊後才換上並取得焦點，首次載入不請求第三方資源；`poster` 不用 YouTube 縮圖；`title` 是圖說、按鈕的 accessible name 與播放器的 `title`；`node scripts/design/video-facade.mjs` 檢查（`npm run check`） |
+| `ConsentBanner` | cookie 同意 | 固定在視窗底部、不擋操作的深色橫幅，加上原生 `<dialog>` 的偏好設定（`showModal()` 鎖住焦點、Esc 關閉）；接受與拒絕同一個視覺層級；必要類別固定開啟，其他類別是 `role="switch"` 的 checkbox。類別與文案由 props 傳入；任何帶 `data-consent-open="<id>-dialog"` 的按鈕都能打開對話框。#36 階段一只有視覺與結構，還不儲存選擇、不載入 GTM，只有 `/design-system` 使用；`preview` 只給展示頁 |
 | `LocaleSwitcher` | 語系切換 | 純連結，零 JS；連到同一頁的其他語系版本，沒有翻譯時連到該語系首頁，連首頁都沒有的語系不列，只剩目前語系時不輸出（ADR 0002）；語系名稱用各自的語言並加上 `lang`；同一頁有多個時用 `label` 給不同的 landmark 名稱 |
 
 ## 新增元件
