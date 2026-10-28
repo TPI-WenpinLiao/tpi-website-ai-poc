@@ -1,7 +1,7 @@
 // Checks the cookie consent banner and GTM loading (M6-04, #36, ADR 0007) in a real browser.
 // 1. dist/ (built without PUBLIC_GTM_ID) has no banner and no GTM on any page
 // 2. A second build with a test container ID (PUBLIC_GTM_ID=GTM-TEST0000, CONSENT_ALLOW_DRAFT=1, into
-//    a temporary directory) is served, every off-site request recorded, gtm.js answered with an empty
+//    .consent-dist/, gitignored) is served, every off-site request recorded, gtm.js answered with an empty
 //    script and everything else off-site aborted. Per page, in a fresh browser context (no stored choice):
 //    - first load: the banner shows, nothing is requested off-site, there is no dataLayer, one h1,
 //      no axe violation, no horizontal scroll at 375 and 1280px
@@ -19,8 +19,7 @@
 // Uses CHROME_PATH (set by the SessionStart hook), else CHROME_BIN (set on GitHub's runners), else the installed Chrome.
 
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { readdirSync, readFileSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import axe from 'axe-core';
@@ -32,6 +31,9 @@ import { consent } from '../../src/data/consent.ts';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const DIST = join(ROOT, 'dist');
+// Inside the repo, not the OS temp dir: Astro moves the built assets into outDir with rename(), which
+// fails across file systems (EXDEV on the CI container, where /tmp is another mount)
+const OUT = join(ROOT, '.consent-dist');
 const GTM_ID = 'GTM-TEST0000';
 const GTM_JS = 'https://www.googletagmanager.com/gtm.js';
 // The three home pages and a reading page (light surface)
@@ -243,7 +245,8 @@ async function main() {
   const unexpected = pagesWithConsent(DIST).filter((f) => f !== 'design-system.html');
   for (const f of unexpected) console.log(`dist/${f}: has the consent banner or GTM without PUBLIC_GTM_ID`);
 
-  const out = mkdtempSync(join(tmpdir(), 'consent-'));
+  const out = OUT;
+  rmSync(out, { recursive: true, force: true });
   let failing = unexpected.length ? 1 : 0;
   try {
     build(out);
