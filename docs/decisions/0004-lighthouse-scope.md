@@ -66,3 +66,26 @@ quality-gate 的 `timeout-minutes` 從 20 調到 30。
 - 白名單的依據：跳過時改跑 `lighthouse-scope.mjs --verify`。它把白名單內的檔案全部拿掉再 build 一次，和完整 build 的 `dist/` 逐檔比對 sha256；build 失敗或有任何檔案不同就失敗。之後 build 開始讀某個 `.md` 時，第一個只改文件的 PR 會在這裡失敗，不會默默跳過。本機也能執行；CI 上約 10 秒（#131 的 run）
 - job summary 寫明跳過的原因、白名單、`--verify` 的結果與變更的檔案
 - 本機與雲端 session 的 `npm run check` 不受影響，仍包含 Lighthouse。`npm run check` = `npm run check:before-lighthouse` 加 `npm run lighthouse`，quality-gate 把兩段分開執行
+
+### 卡住的量測與時間上限（#136）
+
+10-27 起 quality-gate 有 3 次在單次量測卡住：log 停在某一次的 `Run #k...`，直到 job 的 `timeout-minutes: 30` 被取消，只留下 `context canceled`。3 次都是載入 3D 的頁面（`/products/systalk-chat` 兩次、`/en` 一次），同一個 commit 重跑都通過。
+
+**原因**：LHCI 0.15.1 spawn Lighthouse 時沒有 timeout（`@lhci/cli/src/collect/node-runner.js`），stderr 也要等 Lighthouse 結束才會用到。Lighthouse 12.6.1 的大部分等待有上限（載入 45 秒、每個 CDP 指令 30 秒），但 `BFCacheFailures` gatherer 測 BFCache 時把頁面導到 `chrome://terms` 再返回，等 load 事件與 `frameNavigated` 都沒有上限，也不會因為 `Inspector.targetCrashed` 失敗。頁面在這一步 crash 時，Lighthouse 就永遠停住。
+
+本機能穩定重現這種卡住，但只在一種 CI 不用的呼叫方式（把 puppeteer 的 page 傳給 Lighthouse）：3D canvas 上頁後每次都在 `chrome://terms` 那一步 crash，#127 之前的 build 也一樣，關掉 BackForwardCache 就不會。用 CI 的方式（`lhci collect`）量 `/products/systalk-chat` 30 次沒有卡住，所以 CI 的 3 次是不是同一件事沒有直接證據。#136 原本推測的 3D 初始化等待（`gpuDone`、`compileAsync`）已排除：讓兩者永遠不結束，Lighthouse 仍在 7 秒內正常完成（ADR 0003「等待的上限」）。
+
+**決策**：
+
+1. **跳過 `bf-cache` audit**：`lighthouserc.cjs` 的 `collect.settings.skipAudits`。Lighthouse 只為這個 audit 執行 `BFCacheFailures`，跳過後就不再導頁。它在 performance 的 weight 是 0，四個分數都不變；少掉的是「能不能進 BFCache」的診斷，改到這方面時用 Chrome DevTools 檢查
+2. **單次量測 3 分鐘上限**：`npm run lighthouse` 與 `lighthouse:all` 經過 `scripts/lhci-run.mjs`。它轉送 LHCI 的輸出，每一次 `Run #k...` 開始時重設計時；超過 3 分鐘就印出 URL 與第幾次、Chrome 各 process 的 CPU 與 DevTools targets（頁面停在哪個網址、還有沒有回應、3D 的狀態），停掉 LHCI、Lighthouse 與 Chrome，exit 1。不自動重試，重試會把卡住藏起來。正常一次 11–13 秒，Lighthouse 自己的上限加起來約 2 分鐘。LHCI 在同一個 `Run #k` 裡會重試失敗的 Lighthouse，最多 3 次（`runUntilSuccess`）：失敗 1 次再成功約 2 分 15 秒，仍在 3 分鐘內；要失敗 2 次以上才會超過，這時那一頁本來就有問題，當成卡住回報。`LHCI_RUN_TIMEOUT_SECONDS` 可以調短，用來測試
+3. **CI 的 Lighthouse step 15 分鐘上限**：quality-gate 的 step `timeout-minutes: 15`，正常 8–9 分鐘。它是 `lhci-run.mjs` 本身出問題時的保險，不影響本機
+4. **job summary 寫出卡住的頁面**：`lhci-run.mjs` 在每一次量測開始時寫 `.lhci-progress.json`，`.github/scripts/lighthouse-summary.mjs` 讀它，沒有完成時寫出 URL、第幾次與診斷。job 被取消時檔案也已經寫好
+
+LHCI 沒有單次量測的 timeout 設定，Lighthouse 的 `maxWaitForLoad` 只管載入，所以上限放在 LHCI 外面。
+
+**Chrome flags 的環境變數**：本 issue 發現 `LHCI_COLLECT__SETTINGS__CHROME_FLAGS` 會讓 `lighthouserc.cjs` 的 `collect.settings` 整個失效：LHCI 用淺層展開把 `collect.*` 的環境變數蓋到 rc 檔上（`@lhci/cli/src/cli.js` 的 `mergeInCommandSpecificEnvironments`）。quality-gate、`scripts/session-start.sh` 與 `docs/onboarding.md` 改用 `LHCI_SETTINGS__CHROME_FLAGS`，yargs 會把它和 rc 檔合併。#136 之前開始的 session 環境裡還是舊名，`lhci-run.mjs` 會轉成新名並警告。
+
+**本機的影響**：`npm run check` 也套用 3 分鐘上限與 `skipAudits`，正常情況下輸出與耗時不變。
+
+**驗證方式**：模擬卡住用 `LHCI_RUN_TIMEOUT_SECONDS=3 npm run lighthouse`，第一次量測就會超時。

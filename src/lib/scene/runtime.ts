@@ -144,16 +144,22 @@ interface MountOptions {
 // first frame each take tens of ms on a slow phone, so each runs in its own task (#127).
 const nextTask = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
 
-/** Resolves once the GPU has run every command issued so far, checking once per task. */
+// The longest each wait before the canvas joins the page may take. Both normally take tens of ms;
+// if a driver never reports done, the canvas joins the page anyway once this has passed (#136).
+const WAIT_LIMIT_MS = 1000;
+const elapsed = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+/** Resolves once the GPU has run every command issued so far, checking once per task, or after WAIT_LIMIT_MS. */
 async function gpuDone(gl: WebGLRenderingContext | WebGL2RenderingContext) {
   // three.js only renders with WebGL 2; the union is @types/three's
   if (!(gl instanceof WebGL2RenderingContext)) return;
   const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
   if (!sync) return;
   gl.flush();
+  const deadline = performance.now() + WAIT_LIMIT_MS;
   // The sync status only changes between tasks, and a 0 timeout returns at once
   do await nextTask();
-  while (gl.clientWaitSync(sync, 0, 0) === gl.TIMEOUT_EXPIRED);
+  while (gl.clientWaitSync(sync, 0, 0) === gl.TIMEOUT_EXPIRED && performance.now() < deadline);
   gl.deleteSync(sync);
 }
 
@@ -265,12 +271,13 @@ async function start({ host, track, factory, onReady, family, surface }: MountOp
   resize();
 
   // Compile the shaders and draw one frame before the canvas is on the page, then wait for the GPU
-  // to finish it. The first draw is when the driver finishes building the shaders (SwiftShader
-  // compiles them to machine code then); on the page, the compositor would read the canvas back
-  // and block the main thread until it's done.
+  // to finish it, each wait at most WAIT_LIMIT_MS. The first draw is when the driver finishes
+  // building the shaders (SwiftShader compiles them to machine code then); on the page, the
+  // compositor would read the canvas back and block the main thread until it's done.
   await nextTask();
   if (!stopped()) {
-    await renderer.compileAsync(scene, camera);
+    // three.js polls the shaders every 10 ms until they are ready; past the limit it keeps polling
+    await Promise.race([renderer.compileAsync(scene, camera), elapsed(WAIT_LIMIT_MS)]);
     renderer.render(scene, camera);
     await gpuDone(renderer.getContext());
   }

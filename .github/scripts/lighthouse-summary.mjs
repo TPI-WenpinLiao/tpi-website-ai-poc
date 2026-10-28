@@ -1,6 +1,7 @@
 // Renders the representative Lighthouse CI runs as a Markdown table for the job summary.
 import { existsSync, readFileSync } from 'node:fs';
 import { changedFiles, DOCS_ONLY } from '../../scripts/ci/lighthouse-scope.mjs';
+import { PROGRESS } from '../../scripts/lhci-run.mjs';
 
 const MANIFEST = '.lighthouseci/manifest.json';
 const CATEGORIES = ['performance', 'accessibility', 'best-practices', 'seo'];
@@ -25,6 +26,20 @@ if (process.env.LIGHTHOUSE_SKIP === 'true') {
       ...files.map((f) => `  - \`${f}\``),
     ].join('\n'),
   );
+  process.exit(0);
+}
+
+// Written by scripts/lhci-run.mjs at every run start (#136): names the page of a run that never ended
+const progress = existsSync(PROGRESS) ? JSON.parse(readFileSync(PROGRESS, 'utf8')) : undefined;
+const unfinished = progress && !['done', 'failed'].includes(progress.status);
+if (unfinished) {
+  const where = progress.url ? `\`${new URL(progress.url).pathname}\` 第 ${progress.run}／${progress.runs} 次（${progress.startedAt} 開始）` : '第一次量測開始前';
+  const why = {
+    timeout: `超過 ${progress.timeoutSeconds} 秒沒有結束，\`lhci-run.mjs\` 停止了 Lighthouse`,
+    cancelled: 'step 被取消（timeout 或手動）',
+  }[progress.status] ?? `停在「${progress.status}」，step 在 \`lhci-run.mjs\` 處理前就結束`;
+  console.log(['## Lighthouse', '', `**量測沒有完成** ❌：${where}，${why}。`, ''].join('\n'));
+  if (progress.diagnostics) console.log(['卡住時的狀態：', '', '```', ...progress.diagnostics, '```'].join('\n'));
   process.exit(0);
 }
 

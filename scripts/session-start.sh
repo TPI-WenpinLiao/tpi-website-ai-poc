@@ -48,9 +48,10 @@ fi
 if [ -z "${CHROME_PATH:-}" ] && [ -x "$CHROMIUM_PATH" ]; then
   persist_env "export CHROME_PATH=$CHROMIUM_PATH"
 fi
-# Chromium refuses to start as root without --no-sandbox.
+# Chromium refuses to start as root without --no-sandbox. Not LHCI_COLLECT__SETTINGS__*: that one
+# replaces lighthouserc.cjs's whole collect.settings (#136).
 if [ "$(id -u)" = "0" ]; then
-  persist_env 'export LHCI_COLLECT__SETTINGS__CHROME_FLAGS="--no-sandbox --headless=new"'
+  persist_env 'export LHCI_SETTINGS__CHROME_FLAGS="--no-sandbox --headless=new"'
 fi
 
 warn_and_exit() {

@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-10-27
+最後更新：2026-10-28
 
 ## 目前 milestone
 
@@ -116,6 +116,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - `npm run check` 的 LHCI 涵蓋所有模板完成（#87）：`lighthouserc.cjs` 的 `PAGES` 是每個模板在全站量測中分數最低的一頁，加上三語首頁與 404，共 15 頁；`scripts/lhci-prepare.mjs` 在路徑不存在或有模板沒有代表頁時失敗（ADR 0004）。`npm run lighthouse:all` 測全部 485 頁，第一次 202 頁沒達標，修掉 vi 字型（多下載 `latin-ext` subset）、新聞內頁圖片（手機下載 1440w 封面與 1600px 內文原檔）與 `/en` 的「Learn More」連結文字後，剩下載入 3D 的 59 頁，交給 #127，這段期間 3D 頁的 performance 只 warn
 - 只改文件的 PR 在 quality-gate 跳過 Lighthouse 完成（#129）：變更的檔案全部在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY` 白名單內時，quality-gate 不跑 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify`：拿掉這些檔案重新 build，`dist/` 逐檔相同才通過，白名單失效時會在這裡失敗。job summary 寫明原因。`npm run check` 拆成 `check:before-lighthouse` 與 `lighthouse`，本機行為不變（ADR 0004「例外」）
 - 3D 場景頁面的 TBT 降到 Lighthouse performance 門檻內完成（#127）：3D 初始化的每一步各自一個 task，canvas 上頁面前先畫完第一個 frame 並等 GPU 做完（headless Chromium 的 compositor 讀回 canvas 時要等 SwiftShader 編譯 shader，原本是一個約 250 ms 的模擬長任務），WebGL 偵測建立的 context 直接交給 renderer；`Scene3D` 等 hero 圖的 LCP entry 才載入 3D。`npm run lighthouse:all` 485 頁全部 performance ≥ 0.95，3D 的 60 頁 0.97–0.99；`lighthouserc.cjs` 拿掉 3D 頁的 warn。`scripts/lib/static-server.mjs` 加上 gzip，`lighthouse-3d.mjs` 的數字和 LHCI 一致（ADR 0003「初始化的長任務」）
+- quality-gate 的 Lighthouse 卡住時提早失敗完成（#136）：`npm run lighthouse` 經過 `scripts/lhci-run.mjs`，單次量測超過 3 分鐘就印出 URL、Chrome 的 process 與 DevTools targets 並 exit 1，job summary 寫出卡住的頁面，CI 的 Lighthouse step 另有 15 分鐘上限。卡住的位置推測是 Lighthouse 測 BFCache 時沒有上限的導頁（`BFCacheFailures`），依使用者決定跳過 weight 0 的 `bf-cache` audit。原本推測的 3D 等待已排除，仍各加 1 秒上限（`scripts/design/scene-wait.mjs` 接進 `npm run check`）。Chrome flags 的環境變數改名為 `LHCI_SETTINGS__CHROME_FLAGS`，舊名會蓋掉 `lighthouserc.cjs` 的 `settings`（ADR 0004「卡住的量測與時間上限」、ADR 0003「等待的上限」）
 
 ## 下一步
 

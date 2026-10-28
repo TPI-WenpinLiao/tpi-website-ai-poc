@@ -35,6 +35,10 @@ module.exports = {
   ci: {
     collect: {
       staticDistDir: './.lhci-dist',
+      // bf-cache navigates to chrome://terms and back with no time limit; a page that crashes there
+      // stops Lighthouse for good. It has weight 0, so no score changes (#136, ADR 0004).
+      // Chrome flags come from LHCI_SETTINGS__CHROME_FLAGS, which LHCI merges into this object.
+      settings: { skipAudits: ['bf-cache'] },
       ...(ALL
         ? { numberOfRuns: 1, maxAutodiscoverUrls: 0, staticDirFileDiscoveryDepth: 10 }
         : { numberOfRuns: 3, url: PAGES.map((p) => p.path) }),

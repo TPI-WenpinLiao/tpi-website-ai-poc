@@ -42,7 +42,7 @@
   ```bash
   . /opt/nvm/nvm.sh --no-use && nvm install && npm ci
   export CHROME_PATH=/opt/pw-browsers/chromium
-  export LHCI_COLLECT__SETTINGS__CHROME_FLAGS="--no-sandbox --headless=new"
+  export LHCI_SETTINGS__CHROME_FLAGS="--no-sandbox --headless=new"
   ```
 
 ## 4. 本機開發（選用）
