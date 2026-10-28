@@ -94,7 +94,7 @@ LHCI 沒有單次量測的 timeout 設定，Lighthouse 的 `maxWaitForLoad` 只�
 
 M8-01 重跑時 performance 剛好 0.95 的 4 頁，任何 PR 都可能被擋下。PR #142 在 CI 上 3 次執行、9 次量測，`/en/contact-us` 的行動版都是 0.93，本機是 0.95。CI 當時沒有留下報告，差 2 分的原因無法直接確認。
 
-**CI 留下報告**：quality-gate 的 Lighthouse step 失敗時，把 `.lighthouseci/`（每次量測的 HTML、JSON 報告）與 `.lhci-progress.json` 上傳成 artifact `lighthouse-report`，保留 14 天。job summary 有頁面未達標時會指向它。
+**CI 留下報告**：quality-gate 的 Lighthouse step 失敗時，把 `.lighthouseci/`（每次量測的 HTML、JSON 報告）與 `.lhci-progress.json` 上傳成 artifact `lighthouse-report`，保留 14 天。Lighthouse step 失敗時，job summary 也會指向它（`LIGHTHOUSE_OUTCOME`，依 step 的結果判斷，不看分數：LHCI 3 次中有 1 次達標就算通過）。
 
 **分數卡在哪裡**：這幾頁沒有長任務，TBT 0、CLS 0，分數由 FCP、LCP 決定。Lighthouse 模擬 FCP、LCP 時，悲觀的那一半會把實際載入中、在首次繪製（或 LCP）前開始的請求都算進頻寬，所以首次繪製前開始下載的字型與圖片也會拖慢模擬結果，即使它們不阻擋繪製。本機用 Lighthouse 的 `blockedUrlPatterns` 逐項拿掉請求來量（`main` `7f3ad26`）：
 

@@ -84,4 +84,5 @@ jobs:
         env:
           LIGHTHOUSE_SKIP: ${{ steps.scope.outputs.skip }}
           VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          LIGHTHOUSE_OUTCOME: ${{ steps.lighthouse.outcome }}
         run: node .github/scripts/lighthouse-summary.mjs >> "$GITHUB_STEP_SUMMARY"

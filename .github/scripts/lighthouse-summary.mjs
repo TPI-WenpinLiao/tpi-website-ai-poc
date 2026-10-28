@@ -6,8 +6,10 @@ import { PROGRESS } from '../../scripts/lhci-run.mjs';
 const MANIFEST = '.lighthouseci/manifest.json';
 const CATEGORIES = ['performance', 'accessibility', 'best-practices', 'seo'];
 const THRESHOLDS = { performance: 0.95, accessibility: 0.95, 'best-practices': 0.95, seo: 1 };
-// Uploaded by quality-gate.yml when the Lighthouse step fails (#143)
-const ARTIFACT = '每次量測的 HTML／JSON 報告在這次 run 的 artifact `lighthouse-report`（`.lighthouseci/`）。';
+// quality-gate.yml uploads the reports when the Lighthouse step fails and passes that step's
+// outcome here (#143). Not the scores: LHCI passes a page when one of its 3 runs does
+const ARTIFACT =
+  process.env.LIGHTHOUSE_OUTCOME === 'failure' ? '\n每次量測的 HTML／JSON 報告在這次 run 的 artifact `lighthouse-report`（`.lighthouseci/`）。' : '';
 
 // Docs-only PR (#129): quality-gate ran lighthouse-scope.mjs --verify instead of Lighthouse
 if (process.env.LIGHTHOUSE_SKIP === 'true') {
@@ -42,7 +44,7 @@ if (unfinished) {
   }[progress.status] ?? `停在「${progress.status}」，step 在 \`lhci-run.mjs\` 處理前就結束`;
   console.log(['## Lighthouse', '', `**量測沒有完成** ❌：${where}，${why}。`, ''].join('\n'));
   if (progress.diagnostics) console.log(['卡住時的狀態：', '', '```', ...progress.diagnostics, '```'].join('\n'));
-  if (progress.status !== 'cancelled') console.log(`\n${ARTIFACT}`);
+  if (ARTIFACT) console.log(ARTIFACT);
   process.exit(0);
 }
 
@@ -69,5 +71,5 @@ const lines = [
     return `| \`${path}\` | ${CATEGORIES.map((c) => format(c, r.summary[c])).join(' | ')} |`;
   }),
 ];
-if (runs.some((r) => CATEGORIES.some((c) => r.summary[c] < THRESHOLDS[c]))) lines.push('', ARTIFACT);
+if (ARTIFACT) lines.push(ARTIFACT);
 console.log(lines.join('\n'));
