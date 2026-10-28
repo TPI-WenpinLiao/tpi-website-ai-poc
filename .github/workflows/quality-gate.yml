@@ -22,8 +22,9 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --ipc=host
     env:
-      # Chromium refuses to start as root without --no-sandbox
-      LHCI_COLLECT__SETTINGS__CHROME_FLAGS: --no-sandbox --headless=new
+      # Chromium refuses to start as root without --no-sandbox. Not LHCI_COLLECT__SETTINGS__*: that
+      # one replaces lighthouserc.cjs's whole collect.settings (#136)
+      LHCI_SETTINGS__CHROME_FLAGS: --no-sandbox --headless=new
     steps:
       - uses: actions/checkout@v7
         with:
@@ -46,8 +47,11 @@ jobs:
       - run: echo "CHROME_PATH=$(node -p "require('playwright-core').chromium.executablePath()")" >> "$GITHUB_ENV"
       # npm run check without its last step, Lighthouse, which runs below unless the PR is docs-only
       - run: npm run check:before-lighthouse
+      # A stuck run fails after 3 minutes (scripts/lhci-run.mjs); this is the backstop. Normally
+      # 8–9 minutes for 16 pages × 3 runs (#136, ADR 0004)
       - name: Lighthouse
         if: steps.scope.outputs.skip != 'true'
+        timeout-minutes: 15
         run: npm run lighthouse
       - name: Verify DOCS_ONLY
         id: verify

@@ -33,6 +33,7 @@ three.js 是本站第一個大型 client 依賴。ADR 0001 定了「預設零 cl
    - `node scripts/design/lighthouse-3d.mjs`：performance 與 3D chunk 的長任務，並檢查 LCP 元素是靜態圖、3D chunk 的請求時間晚於實測 LCP 與 `load`，不符合時 exit 1
    - `node scripts/design/a11y-smoke.mjs /`：不開減少動態、等場景畫出第一個 frame，在 track 的 0／25／50／75／100% 量 track 內每行文字和背後最不利像素的對比（375×800、1280×860）
    - `node scripts/design/scene-capture.mjs <dir>`：減少動態時沒有 canvas、沒有 3D chunk 請求；場景執行中切到減少動態時 canvas 被移除
+   - `node scripts/design/scene-wait.mjs`（在 `npm run check` 裡）：fence 一直不完成、shader 一直不 ready 時，canvas 仍在上限內上頁（見「等待的上限」）
 
 ## 與「預設零 client JS」的關係
 
@@ -126,6 +127,22 @@ headless Chromium 用軟體合成，compositor 每個 frame 都把 canvas 讀回
 LCP 都是 hero 靜態圖，3D chunk 都在實測 LCP 與 `load` 之後請求。
 
 `npm run lighthouse:all`（485 頁各 1 次，97 分鐘）：全部頁面 performance ≥ 0.95，載入 3D 的 60 頁 0.97–0.99、TBT 中位數 22 ms（最高 90 ms）。`lighthouserc.cjs` 拿掉 3D 頁的 `warn` 例外（ADR 0004）。
+
+### 等待的上限（#136）
+
+決策 2 的兩個等待原本沒有上限：`gpuDone` 每個 task 查一次 fence，`renderer.compileAsync()` 每 10 ms 查一次 shader 是否 ready（`KHR_parallel_shader_compile`），都直到完成為止。driver 一直不回報完成時，canvas 永遠不會上頁。`src/lib/scene/runtime.ts` 的 `WAIT_LIMIT_MS` 讓兩者各最多等 1 秒，超過就照常畫第一個 frame、把 canvas 放上頁面；`compileAsync` 超時後 three.js 仍會繼續查，那是每 10 ms 一個很短的 task，不處理。
+
+這不是 quality-gate 卡住的原因（ADR 0004「卡住的量測與時間上限」）：讓 fence 永遠不完成、shader 永遠不 ready，Lighthouse 仍在 7 秒內正常結束；headless Chromium 也不支援 `KHR_parallel_shader_compile`，three.js 一開始就把 shader 當成 ready。上限是給真機上有問題的 driver 用的。
+
+`node scripts/design/scene-wait.mjs` 用 `evaluateOnNewDocument` 模擬兩種情況，量 3D chunk 下載完到 track 加上 `data-scene="ready"` 的時間（雲端 session，`/products/systalk-chat`，390×844）：
+
+| 情況 | 沒有上限 | 有上限 |
+|---|---|---|
+| 一般 | 134 ms | 156–211 ms |
+| fence 一直不完成 | 20 秒內沒有上頁 | 1101–1107 ms |
+| shader 一直不 ready | 20 秒內沒有上頁 | 1126–1130 ms |
+
+`node scripts/design/lighthouse-3d.mjs / /products/systalk-chat /solutions/smartfilling /vi` 加上限後：行動版 0.99、0.98、0.98、0.99（TBT 2、18、7、1 ms），桌機都是 1，和 #127 的結果相同。
 
 ### 載入時序的修正
 
