@@ -26,7 +26,7 @@ src/integrations/ sitemap.ts（build 時寫 dist/sitemap.xml）、pagefind.ts（
 functions/        Cloudflare Pages Functions：api/contact.ts（聯絡表單的送出，判斷在 src/lib/forms/handler.ts）
 src/styles/       tokens.css（design tokens）、media.css（斷點）、base.css（reset 與全域工具類）
 public/           靜態檔（_headers、robots.txt）
-scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、content/（日期檢查、tag 清單、blog、新聞、成功案例、解決方案與服務頁、ESG 顧問頁轉換 `migrate/`、產品下載檔 `offering-files.mjs`、公司頁對照 `page-content.mjs`、法務 PDF 轉換 `legal-pdf.mjs`）、design/（對比、token 使用、輸出 CSS 檢查、預設 OG 圖、圖片匯入、瀏覽器無障礙實測、頁面橫向溢出 `overflow.mjs`、全站 axe `axe.mjs`、影片 facade 檢查 `video-facade.mjs`、offering 與 hub 內容對照 `offering-content.mjs`）、seo/（heading 檢查、每頁 head 與 sitemap 檢查、站內連結 `links.mjs`）、i18n/（語系路由檢查、翻譯詞彙表 `glossary.mjs`、測試語系 build `locale-fixture.mjs`）、forms/（表單規則與 Function 的單元測試、瀏覽器裡的表單檢查 `contact.mjs`）、search/（站內搜尋的索引、斷詞、載入範圍與無障礙檢查 `pagefind.mjs`）、lib/（共用的靜態伺服器）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應）、checkpoint/（進度推算）、bootstrap/（`issues.yml` 與 GitHub issue 的比對）、status/（`status.md` 檢查）、ci/（quality-gate 是否跳過 Lighthouse `lighthouse-scope.mjs`）
+scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、Lighthouse 單次量測的時間上限 `lhci-run.mjs`、content/（日期檢查、tag 清單、blog、新聞、成功案例、解決方案與服務頁、ESG 顧問頁轉換 `migrate/`、產品下載檔 `offering-files.mjs`、公司頁對照 `page-content.mjs`、法務 PDF 轉換 `legal-pdf.mjs`）、design/（對比、token 使用、輸出 CSS 檢查、預設 OG 圖、圖片匯入、瀏覽器無障礙實測、頁面橫向溢出 `overflow.mjs`、全站 axe `axe.mjs`、影片 facade 檢查 `video-facade.mjs`、3D 初始化等待上限 `scene-wait.mjs`、offering 與 hub 內容對照 `offering-content.mjs`）、seo/（heading 檢查、每頁 head 與 sitemap 檢查、站內連結 `links.mjs`）、i18n/（語系路由檢查、翻譯詞彙表 `glossary.mjs`、測試語系 build `locale-fixture.mjs`）、forms/（表單規則與 Function 的單元測試、瀏覽器裡的表單檢查 `contact.mjs`）、search/（站內搜尋的索引、斷詞、載入範圍與無障礙檢查 `pagefind.mjs`）、lib/（共用的靜態伺服器）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應）、checkpoint/（進度推算）、bootstrap/（`issues.yml` 與 GitHub issue 的比對）、status/（`status.md` 檢查）、ci/（quality-gate 是否跳過 Lighthouse `lighthouse-scope.mjs`）
 docs/             status.md、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）、content/（內容轉換的使用說明）、i18n/（翻譯詞彙表 `glossary.csv`）
 tests/visual/      Playwright 視覺回歸與 baseline（`__screenshots__/`）
 .claude/skills/   issue-start、issue-ship、checkpoint、pr-review、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
@@ -62,14 +62,14 @@ M4 定案的寫法：
 |---|---|
 | `npm run dev` | 本機開發 |
 | `npm run build` | 產生 `dist/` |
-| `npm run check` | IA 資料檢查 → 翻譯詞彙表檢查 → `status.md` 檢查 → design 檢查 → scripts 測試 → astro check → build → 輸出 CSS、heading、語系路由、head 與 sitemap、站內連結、水平捲動、axe、影片 facade、站內搜尋、表單檢查 → 視覺回歸（只在 CI 比對）→ html-validate → Lighthouse CI（推送前必跑） |
+| `npm run check` | IA 資料檢查 → 翻譯詞彙表檢查 → `status.md` 檢查 → design 檢查 → scripts 測試 → astro check → build → 輸出 CSS、heading、語系路由、head 與 sitemap、站內連結、水平捲動、axe、影片 facade、3D 等待上限、站內搜尋、表單檢查 → 視覺回歸（只在 CI 比對）→ html-validate → Lighthouse CI（推送前必跑） |
 | `npm run check:before-lighthouse` | `npm run check` 去掉最後的 Lighthouse。quality-gate 分兩段執行，只改文件的 PR 跳過 Lighthouse（`scripts/ci/lighthouse-scope.mjs`，ADR 0004「例外」） |
 | `npm run test:visual:update` | 重新產生視覺回歸的 baseline。只在 CI 執行（PR 加上 `update-visual-baseline` label），時機與流程見 `docs/workflow.md`「視覺回歸」 |
 | `npm run check:design` | tokens 的 WCAG 對比、元件樣式沒有寫死的數值、CSS 分層（全域樣式、`:global`、重複宣告）、每個元件都在 `/design-system` 展示頁與 `design-system` skill 的元件表上 |
 | `npm run lighthouse:all` | 對 `dist/` 每一頁各跑 1 次 Lighthouse，所有頁面的 performance 都是 error |
 | `npm run check:ia` | 驗證 `docs/ia/` 的 IA 資料，並確認 `sitemap.mjs`、`navigation.mjs`、`redirects.mjs` 的產出是最新的（不寫檔） |
 
-Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）執行；HTML 內不可放 `noindex` meta。`npm run check` 只測 `lighthouserc.cjs` 的 `PAGES`（每個模板的代表頁），全部頁面用 `npm run lighthouse:all`（約 97 分鐘，不在 `npm run check` 裡）；何時重跑與怎麼挑代表頁見 ADR 0004。
+Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）執行；HTML 內不可放 `noindex` meta。`npm run check` 只測 `lighthouserc.cjs` 的 `PAGES`（每個模板的代表頁），全部頁面用 `npm run lighthouse:all`（約 97 分鐘，不在 `npm run check` 裡）；何時重跑與怎麼挑代表頁見 ADR 0004。`npm run lighthouse` 經過 `scripts/lhci-run.mjs`，單次量測超過 3 分鐘就失敗並印出卡住的 URL；Chrome flags 用 `LHCI_SETTINGS__CHROME_FLAGS`，不用 `LHCI_COLLECT__SETTINGS__*`（會蓋掉 `lighthouserc.cjs` 的 `settings`，ADR 0004「卡住的量測與時間上限」）。
 
 ## 雲端 session 工作規則
 

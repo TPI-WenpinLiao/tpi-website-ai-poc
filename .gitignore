@@ -3,6 +3,7 @@ dist/
 .astro/
 .lhci-dist/
 .lighthouseci/
+.lhci-progress.json
 .lighthouse-baseline/
 .env
 .env.*
