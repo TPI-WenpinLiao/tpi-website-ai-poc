@@ -303,11 +303,12 @@ async function main() {
   const out = OUT;
   rmSync(out, { recursive: true, force: true });
   let failing = 0;
+  /** @type {string[]} */
+  let previews = [];
   try {
     build(out);
-    const previews = pagesWithConsent(join(out, 'templates'));
+    previews = pagesWithConsent(join(out, 'templates'));
     for (const f of previews) console.log(`templates/${f}: a template preview has the consent banner or GTM`);
-    if (previews.length) failing++;
     const server = await serve(out);
     const { port } = /** @type {import('node:net').AddressInfo} */ (server.address());
     const origin = `http://localhost:${port}`;
@@ -329,8 +330,8 @@ async function main() {
     rmSync(out, { recursive: true, force: true });
   }
   const distCheck = withId ? 'dist/ not checked (PUBLIC_GTM_ID is set)' : `${unexpected.length} pages in dist/ with a banner or GTM`;
-  console.log(`${distCheck}; ${PAGES.length} pages checked with ${GTM_ID}, ${failing} with problems`);
-  if (failing || unexpected.length) process.exitCode = 1;
+  console.log(`${distCheck}; ${previews.length} template previews with one; ${PAGES.length} pages checked with ${GTM_ID}, ${failing} with problems`);
+  if (failing || unexpected.length || previews.length) process.exitCode = 1;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) await main();
