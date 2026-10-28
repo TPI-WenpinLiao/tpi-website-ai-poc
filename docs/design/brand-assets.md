@@ -69,8 +69,8 @@ JSON-LD 的 `logo` 用 PNG。Google 要求 Organization logo 是 Google 圖片�
 
 | 字體 | 用途 | 來源 | 授權 |
 |---|---|---|---|
-| Inter Variable | 拉丁字母內文與標題（`--font-sans`） | npm `@fontsource-variable/inter`，`BaseLayout.astro` 載入 | OFL-1.1 |
-| JetBrains Mono Variable | 程式碼（`--font-mono`） | npm `@fontsource-variable/jetbrains-mono` | OFL-1.1 |
+| Inter Variable | 拉丁字母內文與標題（`--font-sans`） | npm `@fontsource-variable/inter`，`src/styles/base.css` 宣告 latin、vietnamese、greek subset（#143） | OFL-1.1 |
+| JetBrains Mono Variable | 程式碼（`--font-mono`） | npm `@fontsource-variable/jetbrains-mono`，同上 | OFL-1.1 |
 | PingFang TC、Microsoft JhengHei、Noto Sans TC | 中文 | 使用者裝置的系統字，網站不提供字檔 | 不需授權 |
 
 字體在 M3-02 選定。公司沒有指定字體，新站以 Inter 為基準（使用者 2026-10-25 確認）。

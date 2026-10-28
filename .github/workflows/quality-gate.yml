@@ -50,6 +50,7 @@ jobs:
       # A stuck run fails after 3 minutes (scripts/lhci-run.mjs); this is the backstop. Normally
       # 8–9 minutes for 16 pages × 3 runs (#136, ADR 0004)
       - name: Lighthouse
+        id: lighthouse
         if: steps.scope.outputs.skip != 'true'
         timeout-minutes: 15
         run: npm run lighthouse
@@ -65,6 +66,18 @@ jobs:
           path: |
             playwright-report/
             test-results/
+          retention-days: 14
+      # Every run's HTML and JSON report: a score that only fails in CI cannot be read locally (#143)
+      - name: Lighthouse report
+        if: failure() && steps.lighthouse.outcome == 'failure'
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-report
+          path: |
+            .lighthouseci/
+            .lhci-progress.json
+          include-hidden-files: true
+          if-no-files-found: ignore
           retention-days: 14
       - name: Lighthouse summary
         if: always()

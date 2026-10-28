@@ -89,3 +89,49 @@ LHCI 沒有單次量測的 timeout 設定，Lighthouse 的 `maxWaitForLoad` 只�
 **本機的影響**：`npm run check` 也套用 3 分鐘上限與 `skipAudits`，正常情況下輸出與耗時不變。
 
 **驗證方式**：模擬卡住用 `LHCI_RUN_TIMEOUT_SECONDS=3 npm run lighthouse`，第一次量測就會超時。
+
+### 剛好 0.95 的頁面（#143）
+
+M8-01 重跑時 performance 剛好 0.95 的 4 頁，任何 PR 都可能被擋下。PR #142 在 CI 上 3 次執行、9 次量測，`/en/contact-us` 的行動版都是 0.93，本機是 0.95。CI 當時沒有留下報告，差 2 分的原因無法直接確認。
+
+**CI 留下報告**：quality-gate 的 Lighthouse step 失敗時，把 `.lighthouseci/`（每次量測的 HTML、JSON 報告）與 `.lhci-progress.json` 上傳成 artifact `lighthouse-report`，保留 14 天。job summary 有頁面未達標時會指向它。
+
+**分數卡在哪裡**：這幾頁沒有長任務，TBT 0、CLS 0，分數由 FCP、LCP 決定。Lighthouse 模擬 FCP、LCP 時，悲觀的那一半會把實際載入中、在首次繪製（或 LCP）前開始的請求都算進頻寬，所以首次繪製前開始下載的字型與圖片也會拖慢模擬結果，即使它們不阻擋繪製。本機用 Lighthouse 的 `blockedUrlPatterns` 逐項拿掉請求來量（`main` `7f3ad26`）：
+
+| 頁面 | 現狀 | 拿掉的請求 | 結果 |
+|---|---|---|---|
+| `/en/contact-us` | 0.95，FCP 2.41 s | 全部字型（約 180 KB） | 1，FCP 1.53 s |
+| `/en/contact-us` | 同上 | 只有 Inter `latin-ext`（83 KB） | 0.98，FCP 1.82–1.96 s |
+| `/media-center/572` | 0.95，LCP 2.72 s | 內文圖與 3 張「More」卡片圖（約 145 KB） | 0.97，LCP 2.26–2.34 s |
+
+contact 頁的 `latin-ext` 只因為東京地址的「ō」（2-chōme）而下載。`/media-center/572` 的 LCP 是封面圖，卡片圖雖然是 `loading="lazy"`，但在手機上仍落在 Chrome 的 lazy load 距離內，和封面同時下載。`/vi` 本機已是 0.98，不需要處理。
+
+**CSS 的比較**：`scripts/design/css-blocking.mjs` 列出每頁 render-blocking 的 CSS、大小與載入時用到的比例。contact 頁載入 6 個 CSS，gzip 後共 14.9 KB，載入時用到 33%。比較過的改法：
+
+| 改法 | `/en/contact-us` | `/media-center/572` | contact 頁 HTML（gzip） |
+|---|---|---|---|
+| 現狀 | 0.95 | 0.95 | 7.6 KB |
+| 全部 inline（`build.inlineStylesheets: 'always'`） | 0.97 | 0.96 | 19.2 KB |
+| 只 inline 小檔 | 沒有變化：只要還有一個外部 CSS，就要多等一次往返。Astro 預設已 inline 4 KB 以下的 CSS | | |
+| `@font-face` 移到非阻塞的 CSS（`media="print"` 再切換） | 1 與 0.95 間跳動：字型請求有時仍在首次繪製前開始 | | |
+
+全部 inline 只多 0.01–0.02 分，代價是每頁 HTML 變成約 2.5 倍、CSS 不能跨頁快取，不採用（使用者 2026-10-28 決定）。
+
+**決策**（使用者 2026-10-28 決定）：
+
+1. **字型只宣告用到的 subset**：`BaseLayout` 不再 import fontsource 的整包 CSS。`src/styles/base.css` 自己宣告 Inter 與 JetBrains Mono 的 latin、vietnamese、greek 三個 subset，範圍抄自套件的 `unicode.json`。「ō」改由系統字型顯示。greek 保留給 SysTalk.Chat 產品名的「π」（3 頁的 h1，原本就下載 19 KB 的 greek 檔），以免 h1 的字型改變
+2. **用檢查擋下新的字元**：`scripts/design/font-subsets.mjs`（`npm run check`）比對 build 出的 `@font-face` 與套件的 `unicode.json`，並在頁面文字有字型涵蓋、但這三個 subset 沒有的字元時失敗。例外寫在 `ALLOWED`，目前只有「ō」；沒有頁面用到的例外也會失敗。內容新增這類字元時，要決定加進 `ALLOWED` 還是多宣告一個 subset
+3. **文章頁的「More」區塊延後繪製**：`ArticleTemplate` 的「More」Surface 加 `content-visibility: auto`（預留高度 `--offscreen-section-height`），卡片圖在區塊接近畫面時才下載
+4. **文章封面 `quality={70}`**：`/media-center/572` 的 720w 封面從 76 KB 變成 59 KB，放大兩倍比對看不出差異。只做第 3 項是 0.96
+
+**結果**：`node scripts/design/lighthouse-3d.mjs`，行動版各 3 次，取中位數：
+
+| 頁面 | 改之前 | 改之後 | FCP | LCP |
+|---|---|---|---|---|
+| `/en/contact-us` | 0.95 | 0.98（0.98、0.98、0.98） | 1812 ms | 1812 ms |
+| `/vi/contact-us` | 0.95 | 0.98（0.98、0.98、0.98） | 1968 ms | 1968 ms |
+| `/vi` | 0.98 | 0.98（0.98、0.98、0.98） | 1813 ms | 1813 ms |
+| `/media-center/572` | 0.95 | 0.97（0.97、0.97、0.98） | 1807 ms | 2258 ms |
+| `/` | 0.99 | 0.99（0.99、0.99、0.99） | 1659 ms | 1659 ms |
+
+CI 比本機低約 2 分，所以目標訂在本機 0.97 以上。2026-10-28 在本 PR 的 head 重跑 `npm run lighthouse:all`（雲端 session，96 分 59 秒）：485 頁全部達標，performance 最低 0.97（25 頁），其餘 0.98 以上；accessibility、SEO 全部 1，best-practices 最低 0.96。`PAGES` 不變
