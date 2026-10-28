@@ -6,7 +6,9 @@
 // unpatched one plus the limit and SLACK.
 // Run after `npm run build`: node scripts/design/scene-wait.mjs
 
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import { serve } from '../lib/static-server.mjs';
 import { LAUNCH_ARGS } from './scene-capture.mjs';
@@ -14,8 +16,10 @@ import { LAUNCH_ARGS } from './scene-capture.mjs';
 const DIST = resolve(import.meta.dirname, '../../dist');
 // The offering page with the scene in lighthouserc.cjs
 const PATH = '/products/systalk-chat';
-// WAIT_LIMIT_MS in src/lib/scene/runtime.ts
-const WAIT_LIMIT_MS = 1000;
+// Read from the runtime, so the limit is written in one place
+const RUNTIME = resolve(import.meta.dirname, '../../src/lib/scene/runtime.ts');
+const WAIT_LIMIT_MS = Number(/const WAIT_LIMIT_MS = (\d+);/.exec(readFileSync(RUNTIME, 'utf8'))?.[1]);
+if (!WAIT_LIMIT_MS) throw new Error(`no "const WAIT_LIMIT_MS = <ms>;" in ${RUNTIME}`);
 // SwiftShader timings vary between loads
 const SLACK_MS = 1500;
 const SCENE_TIMEOUT = 20_000;
@@ -100,4 +104,4 @@ async function main() {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) await main();
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) await main();

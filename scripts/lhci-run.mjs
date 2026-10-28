@@ -15,7 +15,8 @@ import { pathToFileURL } from 'node:url';
 
 export const PROGRESS = '.lhci-progress.json';
 // A run normally takes 11–13 s. Lighthouse's own limits (30 s for the FCP, 45 s for the load,
-// 30 s per protocol command) add up to about 2 minutes, so only a run that is stuck reaches this.
+// 30 s per protocol command) add up to about 2 minutes. LHCI retries a failed Lighthouse within
+// the same `Run #k...` (runUntilSuccess, up to 3 tries): one failed try still fits, two do not.
 const DEFAULT_TIMEOUT_SECONDS = 180;
 // Each diagnostic request gets this long: a stuck page may not answer
 const PROBE_MS = 5000;

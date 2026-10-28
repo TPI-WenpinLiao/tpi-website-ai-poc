@@ -68,7 +68,7 @@ quality-gate 的 `timeout-minutes` 從 20 調到 30。
 **決策**：
 
 1. **跳過 `bf-cache` audit**：`lighthouserc.cjs` 的 `collect.settings.skipAudits`。Lighthouse 只為這個 audit 執行 `BFCacheFailures`，跳過後就不再導頁。它在 performance 的 weight 是 0，四個分數都不變；少掉的是「能不能進 BFCache」的診斷，改到這方面時用 Chrome DevTools 檢查
-2. **單次量測 3 分鐘上限**：`npm run lighthouse` 與 `lighthouse:all` 經過 `scripts/lhci-run.mjs`。它轉送 LHCI 的輸出，每一次 `Run #k...` 開始時重設計時；超過 3 分鐘就印出 URL 與第幾次、Chrome 各 process 的 CPU 與 DevTools targets（頁面停在哪個網址、還有沒有回應、3D 的狀態），停掉 LHCI、Lighthouse 與 Chrome，exit 1。不自動重試，重試會把卡住藏起來。正常一次 11–13 秒，Lighthouse 自己的上限加起來約 2 分鐘，3 分鐘只有真的卡住才會到。`LHCI_RUN_TIMEOUT_SECONDS` 可以調短，用來測試
+2. **單次量測 3 分鐘上限**：`npm run lighthouse` 與 `lighthouse:all` 經過 `scripts/lhci-run.mjs`。它轉送 LHCI 的輸出，每一次 `Run #k...` 開始時重設計時；超過 3 分鐘就印出 URL 與第幾次、Chrome 各 process 的 CPU 與 DevTools targets（頁面停在哪個網址、還有沒有回應、3D 的狀態），停掉 LHCI、Lighthouse 與 Chrome，exit 1。不自動重試，重試會把卡住藏起來。正常一次 11–13 秒，Lighthouse 自己的上限加起來約 2 分鐘。LHCI 在同一個 `Run #k` 裡會重試失敗的 Lighthouse，最多 3 次（`runUntilSuccess`）：失敗 1 次再成功約 2 分 15 秒，仍在 3 分鐘內；要失敗 2 次以上才會超過，這時那一頁本來就有問題，當成卡住回報。`LHCI_RUN_TIMEOUT_SECONDS` 可以調短，用來測試
 3. **CI 的 Lighthouse step 15 分鐘上限**：quality-gate 的 step `timeout-minutes: 15`，正常 8–9 分鐘。它是 `lhci-run.mjs` 本身出問題時的保險，不影響本機
 4. **job summary 寫出卡住的頁面**：`lhci-run.mjs` 在每一次量測開始時寫 `.lhci-progress.json`，`.github/scripts/lighthouse-summary.mjs` 讀它，沒有完成時寫出 URL、第幾次與診斷。job 被取消時檔案也已經寫好
 
