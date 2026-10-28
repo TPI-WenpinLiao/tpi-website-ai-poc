@@ -732,7 +732,7 @@ const description =
       <div class="chrome-demo" inert>
         <ConsentBanner id="consent-preview" categories={consentCategories} copy={consentCopy} preview="dialog" />
       </div>
-      <p class="note">原生 dialog，以 showModal() 打開：焦點留在對話框內，Esc 關閉。必要類別固定開啟；其他類別用開關。階段一還不儲存選擇，按鈕只會關閉對話框。</p>
+      <p class="note">原生 dialog，以 showModal() 打開：焦點留在對話框內，Esc 關閉，關閉後焦點回到打開它的按鈕。必要類別固定開啟；其他類別用開關。本頁的範例不儲存選擇，也不載入 GTM，按鈕只會關閉對話框；正式頁面只在設定了 GTM ID 時顯示（ADR 0007）。</p>
       <h3>ContactCta</h3>
       <div class="chrome-demo">
         <ContactCta />

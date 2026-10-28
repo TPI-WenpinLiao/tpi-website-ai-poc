@@ -99,7 +99,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - M6-01 表單完成（#33）：`/contact-us`（三語）的表單送到 Pages Function `functions/api/contact.ts`。規則表 `src/lib/forms/rules.ts` 的 `validate()` 前後端共用，伺服器為準；順序是 secret 檢查（沒設定就拒絕）→ 欄位驗證 → Turnstile → adapter，預設的 log adapter 只記表單 id、欄位名稱與時間。Turnstile 在第一次 focus 進表單時才載入，預留空間寬度不到 300px 用 compact。成功後導到該語系的 `/thanks`。表單狀態（錯誤摘要、欄位與多選題錯誤、送出中、送出失敗）用新元件 `FormGroup` 與 `FormPanel` 的 `errors`、`message`、`form`。`node scripts/forms/contact.mjs` 接進 `npm run check`（ADR 0005）
 - M6-02 Pagefind 站內搜尋完成（#34，`design-approved`）：`src/integrations/pagefind.ts` 在 `astro build` 時產生 `dist/pagefind/`（zh-tw 133、en 122、vi 146 頁，依 `<html lang>` 分開）；索引範圍由 `PageLayout` 的 `searchTrail` 決定（七個內容模板，首頁、listing、contact、utility 不進）。Pagefind 的中文字典是簡體，繁體會切成單字，zh-TW 頁改用 `Intl.Segmenter` 預先斷詞後建索引（`src/lib/search/segment.ts`，「企業」從 7 頁變 53 頁）。`/search` 的結果由新元件 `SearchResults` 畫，只有它載入 Pagefind；頁首搜尋框是送到 `/search` 的 GET 表單。`node scripts/search/pagefind.mjs` 接進 `npm run check`，`/search?q=企業` 加進 LHCI 的 `PAGES`（16 頁）（ADR 0006）
 - M6-03 影片延遲載入完成（#35）：新元件 `VideoFacade`。初始只有本機 poster 與原生按鈕，播放器（YouTube 用 `youtube-nocookie.com` 的 iframe，自架 MP4 用 `<video>`）放在 `<template>`，點擊後才換上並取得焦點；poster 不用 YouTube 縮圖，首次載入不連任何站外網域。`node scripts/design/video-facade.mjs` 接進 `npm run check`，對每個有 facade 的頁面檢查載入時沒有站外請求、鍵盤 Tab＋Enter 能換上有 `title` 的播放器並取得焦點。目前只有 `/design-system` 使用：現站影片在產品、服務、about 頁，offering schema 沒有影片欄位，M5 決定不搬
-- M6-04 GTM 與 consent 管理（#36），階段一，等待 `design-approved`：新元件 `ConsentBanner`（固定在視窗底部的深色橫幅，加上原生 `<dialog>` 的偏好設定），`SiteFooter` 加上 `consentSettings`（法務列的「Cookie 設定」）。類別與文案是 needs-input，由 props 傳入，目前只有 `/design-system` 用範例值；還不儲存選擇、不載入 GTM，正式頁面沒有變更
+- M6-04 GTM 與 consent 管理完成（#36，`design-approved`）：新元件 `ConsentBanner`（底部的深色橫幅，加上原生 `<dialog>` 的偏好設定）與頁尾的「Cookie 設定」，只在 build 有 `PUBLIC_GTM_ID` 時由 `PageLayout` 輸出。同意至少一個非必要類別前不載入 gtm.js，也沒有 `dataLayer`，不用 Consent Mode 的 advanced 模式；選擇存在 `localStorage` 的 `tpi-consent`，撤回時重新載入頁面。類別與三語文案在 `src/data/consent.ts`，目前是 `draft: true` 的佔位內容，有 ID 但還是 draft 時 build 失敗。`node scripts/consent/gtm.mjs` 接進 `npm run check`：用測試 ID 另外 build 一份，在瀏覽器檢查同意前沒有站外請求、拒絕、同意、撤回與鍵盤操作（ADR 0007）
 
 ### M7 多語系
 
@@ -134,7 +134,8 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - 回覆 M5-06（#31）PR 的「待確認」：合作夥伴頁的翻譯、法務文件是否要法務審閱、資訊安全政策的生效日、en 法務頁的英譯、關於我們的圖片授權
 - 回覆 M5-03（#28）PR 的「待確認」：客戶名稱與 logo 的使用授權、內頁內容只有一段描述、獎項與年份、產業對應
 - 回覆 `docs/content/products.md`「待確認」（M5-01）：banner 圖庫照能否沿用、各頁未搬的段落要刪減或擴充 content model、feature 數量多的產品頁捲動長度、價格與認證等可能過時的說法
-- 回覆 #36 PR 的「待確認」：cookie 同意要遵循的法規或公司政策、cookie 要分哪幾類（跟 GTM 放哪些 tag 有關）、三語文案由誰提供；橫幅與偏好設定的設計確認後加上 `design-approved`
+- M6-05 M6 收尾（#37）可以開始
+- 回覆 M6-04（#36）PR 的「待確認」：cookie 同意要遵循的法規或公司政策、cookie 要分哪幾類（跟 GTM 放哪些 tag 有關）、三語文案由誰提供；提供後填進 `src/data/consent.ts` 並改成 `draft: false`
 - 回覆 M6-02（#34）PR 的「待確認」：en、vi 搜尋字串的譯文（`glossary.csv` 的 `draft`）、是否要加分類篩選
 - 回覆 M6-01（#33）PR 的「待確認」：錯誤訊息與「閱讀隱私權政策」的文案、en、vi 新字串的譯文；表單改送 `/tpi/api/*` 要等 `docs/research/features.md` 待確認 1、2
 - 回覆 M6-03（#35）PR 的「待確認」：現站產品、服務、about 頁的影片要不要放回新站（要在 offering schema 加影片欄位、改模板、下載自架 MP4）
@@ -171,5 +172,6 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
 - 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，列進 M8-02 launch-readiness（#44）
+- 正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。列進 M8-02 launch-readiness（#44）
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
 - M8-01 的全站驗收在 #36（GTM／consent）、#101（最新文章改讀 collection）合併前執行，這兩處的結果標「待這兩張合併後重驗」。兩張都合併後在 `main` 重跑 `npm run check` 與 `npm run lighthouse:all`，結果補進 `docs/launch/audit.md`

@@ -139,7 +139,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
 | `Scene3D` | three.js 3D 捲動場景 | 見下方「3D 場景」 |
 | `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的深色玻璃列；寬度小於 64rem 收進「選單」 |
-| `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕 |
+| `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入） |
 | `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴 |
 | `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動 |
 | `Faq` | 常見問題 | 原生 `<details>`，零 JS |
@@ -154,7 +154,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
 | `SceneChapter` | 3D 場景上的章節 | 見「3D 場景」 |
 | `VideoFacade` | 影片 | `video` 是 `{ kind: 'youtube', id }` 或 `{ kind: 'file', src }`（自架 MP4）；初始只有本機 `poster` 與原生 `<button>`，播放器在 `<template>` 裡，點擊後才換上並取得焦點，首次載入不請求第三方資源；`poster` 不用 YouTube 縮圖；`title` 是圖說、按鈕的 accessible name 與播放器的 `title`；`node scripts/design/video-facade.mjs` 檢查（`npm run check`） |
-| `ConsentBanner` | cookie 同意 | 固定在視窗底部、不擋操作的深色橫幅，加上原生 `<dialog>` 的偏好設定（`showModal()` 鎖住焦點、Esc 關閉）；接受與拒絕同一個視覺層級；必要類別固定開啟，其他類別是 `role="switch"` 的 checkbox。類別與文案由 props 傳入；任何帶 `data-consent-open="<id>-dialog"` 的按鈕都能打開對話框。#36 階段一只有視覺與結構，還不儲存選擇、不載入 GTM，只有 `/design-system` 使用；`preview` 只給展示頁 |
+| `ConsentBanner` | cookie 同意 | 固定在視窗底部、不擋操作的深色橫幅，加上原生 `<dialog>` 的偏好設定（`showModal()` 鎖住焦點、Esc 關閉，關閉後焦點回到打開它的按鈕）；接受與拒絕同一個視覺層級；必要類別固定開啟，其他類別是 `role="switch"` 的 checkbox。只由 `PageLayout` 在 build 有 `PUBLIC_GTM_ID` 時放在 `body` 層級（放進有 transform 或 stacking context 的容器會被蓋住），類別與文案來自 `src/data/consent.ts`，`config` 交給 script 儲存選擇與載入 GTM（ADR 0007）；任何帶 `data-consent-open="<id>-dialog"` 的按鈕都能打開對話框。`preview` 只給 `/design-system`，不儲存也不載入 |
 | `LocaleSwitcher` | 語系切換 | 純連結，零 JS；連到同一頁的其他語系版本，沒有翻譯時連到該語系首頁，連首頁都沒有的語系不列，只剩目前語系時不輸出（ADR 0002）；語系名稱用各自的語言並加上 `lang`；同一頁有多個時用 `label` 給不同的 landmark 名稱 |
 
 ## 新增元件
