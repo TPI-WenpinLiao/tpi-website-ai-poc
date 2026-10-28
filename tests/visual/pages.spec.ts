@@ -21,8 +21,13 @@ const PAGES = ['/', '/en', '/vi', ...TEMPLATES];
 const SCREENSHOTS = resolve(import.meta.dirname, '__screenshots__');
 const name = (path: string, width: number) => `${path === '/' ? 'home' : path.slice(1).replaceAll('/', '-')}-${width}.png`;
 
-/** Loads every image, including lazy ones below the fold, and waits for the web fonts. */
+/**
+ * Loads every image, including lazy ones below the fold, and waits for the web fonts. Sections with
+ * content-visibility: auto (the article's More, #143) are drawn first: until then they stand in at
+ * --offscreen-section-height, and the full-page screenshot would take that height, not the real one.
+ */
 async function settle(page: Page) {
+  await page.addStyleTag({ content: '* { content-visibility: visible !important; }' });
   await page.evaluate(async () => {
     const images = [...document.images];
     for (const img of images) img.loading = 'eager';
