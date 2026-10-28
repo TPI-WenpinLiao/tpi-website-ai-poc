@@ -119,8 +119,8 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   </PageHero>
 
   <Surface tone="light" width="reading">
-    {/* sizes: --reading-max-width (46rem) plus the gutters; below that, the viewport less the 1rem minimum gutters, so a 412px phone at 1.75x picks 720w */}
-    <Image class="cover" src={data.coverImage} alt="" widths={[720, 1440]} sizes="(width >= 50rem) 46rem, calc(100vw - 2rem)" loading="eager" fetchpriority="high" />
+    {/* sizes: --reading-max-width (46rem) plus the gutters; below that, the viewport less the 1rem minimum gutters, so a 412px phone at 1.75x picks 720w. quality 70 instead of 80: the 720w cover of /media-center/572 drops from 76 to 59 KB with no visible difference, and it is the LCP (#143) */}
+    <Image class="cover" src={data.coverImage} alt="" widths={[720, 1440]} sizes="(width >= 50rem) 46rem, calc(100vw - 2rem)" quality={70} loading="eager" fetchpriority="high" />
     {
       entry.body?.trim() && (
         <Prose>
@@ -148,7 +148,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
   {
     more.length > 0 && (
-      <Surface tone="light">
+      <Surface tone="light" class="more">
         <SectionHeading eyebrow="More" title={props.kind === 'blog' ? t.relatedPosts : t.article.moreNews} />
         <CardGrid>
           {more.map((p, i) => (
@@ -182,6 +182,14 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   .meta dd {
     margin: 0;
     color: var(--color-text);
+  }
+
+  /* Below the fold: its card images (lazy, but inside Chrome's lazy-load margin on a phone) start
+     only when the section nears the viewport, after the cover image, the LCP. Lighthouse counted
+     their 90 KB against the cover's load (#143) */
+  .more {
+    content-visibility: auto;
+    contain-intrinsic-size: auto var(--offscreen-section-height);
   }
 
   .cover {

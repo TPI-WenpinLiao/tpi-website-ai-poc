@@ -131,8 +131,8 @@
   --lift: -0.375rem;
 
   /* Typography. Latin and Vietnamese use self-hosted Inter; Chinese falls back to system fonts.
-     Mono (JetBrains Mono) is for indices, eyebrows and data labels only. Both are imported in
-     BaseLayout. */
+     Mono (JetBrains Mono) is for indices, eyebrows and data labels only. Both are declared in
+     base.css, latin, vietnamese and greek subsets only (#143). */
   --font-sans: "Inter Variable", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
   --font-weight-regular: 400;
@@ -249,6 +249,10 @@
      appears: 65px for the flexible size, 140px for compact on narrow screens (FormPanel) */
   --challenge-height: 4.0625rem;
   --challenge-height-compact: 8.75rem;
+  /* Height a below-the-fold section with content-visibility: auto stands in with until it is first
+     drawn (contain-intrinsic-size; the browser then remembers the real one). About a section of
+     three stacked cards on a phone (#143) */
+  --offscreen-section-height: 60rem;
   --icon-stroke: 1.75;
 
 }

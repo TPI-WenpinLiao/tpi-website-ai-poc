@@ -68,7 +68,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 - 品牌色沿用現站（2026-10-21 審核確認）：紫 `--purple-700`（`#662e8d`）、品紅 `--magenta-500`（`#b824d1`）、橘 `--orange-500`（`#ff6329`）。橘 500 對白只有 2.97:1，只當裝飾（`--color-accent`）
 - glass（`--glass-bg`）是半透明面板，背後可能是 3D 場景最亮的地方。對比以 `--scene-worst`（該 surface 最不利的背景）合成後計算
-- 字型：`--font-sans` 是 Inter＋系統中文字；`--font-mono`（JetBrains Mono）只用在編號、eyebrow、資料標籤。兩者都在 `BaseLayout` import，不載中文 webfont。`base.css` 開頭再宣告一次兩者的 vietnamese face，越南文才不會多下載 `latin-ext`（#87）；升級 fontsource 時確認 unicode-range 仍與套件一致
+- 字型：`--font-sans` 是 Inter＋系統中文字；`--font-mono`（JetBrains Mono）只用在編號、eyebrow、資料標籤。兩者的 `@font-face` 只寫在 `base.css` 開頭，只宣告 latin、vietnamese、greek 三個 subset，不 import fontsource 的整包 CSS，不載中文 webfont。頁面文字碰到哪個 subset，首次繪製前就下載哪個檔，contact 頁曾因一個「ō」多下載 83 KB（#143）。`npm run check` 的 `font-subsets.mjs` 在頁面出現這三個 subset 以外的字元、或範圍與套件的 `unicode.json` 不一致時失敗，例外列在它的 `ALLOWED`
 - 3D：`--scene-angle-x`、`--scene-angle-z` 是共用的等角視角，`--perspective` 是共用透視距離。`Scene3D` 的 three.js 相機從這些值換算（`src/lib/scene/runtime.ts`），靜態版與 3D 版才會重疊；顏色從 `--gradient-energy`、`--color-bg`、`--color-border-brand` 讀，方塊材質從 `--scene-block-*`、`--scene-rim-*` 讀（`SceneContext.readNumber`），TS 不寫色碼
 
 ## Token 命名
@@ -224,6 +224,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
   - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import，也要在本檔的「基礎元件」表有一列，表裡的元件都要有檔案；`tokens.css` 每個 token 都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；內部頁（`INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
+- build 後的 `scripts/design/font-subsets.mjs`：輸出的 `@font-face` 只能是 Inter 與 JetBrains Mono 的 latin、vietnamese、greek，範圍與套件的 `unicode.json` 相同；頁面文字不得有字型涵蓋、但這三個 subset 沒有的字元（例外在 `ALLOWED`）
 - build 後的 `scripts/design/overflow.mjs`：每頁在 320、390、1024、1440px 寬都不得比 viewport 寬。常見原因：沒寫 `grid-template-columns` 的 grid，隱含的 `auto` 欄會被子元素的 min-content 撐開（`<input>` 預設 20 字寬、`<select>` 跟最長選項一樣寬，`FormField` 的 `.control` 因此設 `inline-size: 100%`）；內文裡的長網址或長英文字（`Prose` 設 `overflow-wrap: break-word`）
 - build 後的 `scripts/design/axe.mjs`：每頁以 1280px、reduced motion 跑 axe-core（WCAG 2.2 A／AA），有任何 violation 就失敗
 - build 後的 `scripts/design/video-facade.mjs`：每個有 `VideoFacade` 的頁面，載入時不得有站外的請求；用鍵盤 Tab 到 facade 按鈕、按 Enter 後，要換上有 `title` 的播放器，焦點落在播放器上
