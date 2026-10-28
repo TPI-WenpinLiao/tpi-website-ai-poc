@@ -43,6 +43,8 @@ script 另外檢查：
 - 產出的 `_redirects` 規則（含萬用規則）不會比對到新站的頁面。Cloudflare Pages 不論檔案是否存在都會套用轉址，比對到新頁面就會蓋掉該頁或形成迴圈
 - 數量與長度在 Cloudflare Pages 的上限內：靜態 2,000 筆、動態 100 筆、每行 1,000 字元
 
+`npm run check` 在 build 後另外執行 `node scripts/ia/redirect-targets.mjs`（M8-01）：每一列的 `to`（含 200 列）都要在 `dist/` 建出，也不能又是另一條規則的來源（轉址鏈）。上面的檢查只看節點，看不到某語系有沒有內容檔、offering 有沒有 `downloads`。外部節點、`scripts/seo/links.mjs` 的 `PENDING` 與 script 內的 `UNBUILT`（#137）不算錯誤，清單上的頁面建出後要從清單拿掉。
+
 ## 轉成 `_redirects`
 
 ```bash
@@ -51,10 +53,10 @@ node scripts/ia/redirects.mjs --redirects public/_redirects
 
 - 輸出 `www.tpisoftware.com` 的 301 列：靜態規則在前，萬用規則在後（Cloudflare 對同一來源採用最上面一條）
 - `www.tpisoftware.vn` 的列不輸出：`_redirects` 不支援網域層級轉址。`.vn` 網域上線後是否保留（ADR 0002「影響」）決定後，用 Cloudflare Bulk Redirects 或 `.vn` 網域自己的設定處理
-- 新路由在 M4 才建立，目前不寫進 `public/`
+- 目前不寫進 `public/`。上線時是否部署由 M8-02 launch-readiness（#44）決定
 
 ## 待確認
 
-- Cloudflare Pages `_redirects` 比對來源路徑是否區分大小寫，官方文件沒有寫。不區分的話，`/products/gadoDIDO /products/gadodido 301` 這類規則會變成迴圈。M4 部署 `_redirects` 時在 preview 實測
-- 含 `%` 編碼的來源（例如 `/pdf/%E8%B3%87%E8%A8%8A%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96.pdf`）在 `_redirects` 是用編碼前還是編碼後的路徑比對，同上一起實測
+- Cloudflare Pages `_redirects` 比對來源路徑是否區分大小寫，官方文件沒有寫。不區分的話，`/products/gadoDIDO /products/gadodido 301` 這類規則會變成迴圈。在 preview 實測，見 #139
+- 含 `%` 編碼的來源（例如 `/pdf/%E8%B3%87%E8%A8%8A%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96.pdf`）在 `_redirects` 是用編碼前還是編碼後的路徑比對，同上一起實測（#139）
 - `www.tpisoftware.vn` 對 `/vn/*` 也回 200，內容與 `/*` 相同（`scripts/inventory/crawl.mjs`）。萬用規則 `www.tpisoftware.vn/*` → `/vi/:splat` 會把 `/vn/products/gadodido` 導到不存在的 `/vi/vn/products/gadodido`。`.vn` 網域的處理方式決定時，先把 `/vn/*` 去掉前綴再轉
