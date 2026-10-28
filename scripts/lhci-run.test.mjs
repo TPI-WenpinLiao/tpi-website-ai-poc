@@ -80,7 +80,8 @@ test('a command that finishes keeps its exit code and leaves status done', () =>
 
 test('a run longer than the limit exits 1, names the URL and kills the process tree', () =>
   withProgress(async (progress) => {
-    const code = await run({ command: process.execPath, args: fake(OUTPUT, true), timeoutMs: 500, progress });
+    // github: false, or the CI log gets an ::error:: annotation from this test
+    const code = await run({ command: process.execPath, args: fake(OUTPUT, true), timeoutMs: 500, progress, github: false });
     assert.equal(code, 1);
     const saved = JSON.parse(readFileSync(progress, 'utf8'));
     assert.equal(saved.status, 'timeout');
