@@ -1,17 +1,20 @@
 ---
-// Cookie consent (M6-04, #36): a banner fixed to the bottom of the viewport and a preferences
-// dialog (native <dialog>, so showModal() traps focus and Esc closes it). Dark chrome like the
-// header and footer, on every page whatever its surface.
-// Phase 1 (needs-design): visual and structure only. The choice is not stored and nothing loads
-// GTM yet; accept, reject and save just close the dialog. Which categories exist and all of the copy
-// are needs-input (docs/research/audience-and-goals.md 問題 6、8), so both come in as props and only
-// /design-system passes sample values.
+// Cookie consent (M6-04, #36, ADR 0007): a banner fixed to the bottom of the viewport and a
+// preferences dialog (native <dialog>, so showModal() traps focus and Esc closes it). Dark chrome like
+// the header and footer, on every page whatever its surface. Accept and reject share one visual weight.
+// PageLayout renders it, at body level, only when the build has PUBLIC_GTM_ID (src/lib/consent/page.ts):
+// `config` carries the container ID, the data version and the categories' consent types to the
+// script, which shows the banner while there is no stored choice, stores the visitor's choice
+// (src/lib/consent/state.ts) and loads GTM once an optional category is granted (src/lib/consent/gtm.ts).
+// Inside a container with a transform or its own stacking context the fixed banner would be covered.
 // `id` names the dialog `${id}-dialog`: any button with data-consent-open="<that id>" (the footer's
-// Cookie 設定) opens it. Accept and reject share one visual weight on purpose.
-// `preview` is for /design-system only: "banner" draws the banner in the page flow instead of fixed
-// to the viewport, "dialog" draws the dialog open in the flow (non-modal, wrap it in inert).
+// Cookie 設定) opens it.
+// `preview` is for /design-system only, without `config`: "banner" draws the banner in the page flow
+// instead of fixed to the viewport, "dialog" draws the dialog open in the flow (non-modal, wrap it in
+// inert). Previews store nothing and load nothing; their buttons only close the dialog.
 import Button from './Button.astro';
 import Link from './Link.astro';
+import type { ConsentConfig } from '../../lib/consent/page';
 
 export type ConsentCategory = {
   id: string;
@@ -41,17 +44,18 @@ type Props = {
   id: string;
   categories: readonly ConsentCategory[];
   copy: ConsentCopy;
+  config?: ConsentConfig;
   preview?: 'banner' | 'dialog';
 };
 
-const { id, categories, copy, preview } = Astro.props;
+const { id, categories, copy, config, preview } = Astro.props;
 const dialogId = `${id}-dialog`;
 ---
 
-<div class="consent" data-surface="dark" data-preview={preview}>
+<div class="consent" data-surface="dark" data-preview={preview} data-consent-config={config && JSON.stringify(config)}>
   {
     preview !== 'dialog' && (
-      <section class="banner" aria-labelledby={`${id}-title`}>
+      <section class="banner" aria-labelledby={`${id}-title`} hidden={config !== undefined}>
         <div class="text">
           <h2 class="title" id={`${id}-title`}>{copy.title}</h2>
           <p class="description">
@@ -62,8 +66,12 @@ const dialogId = `${id}-dialog`;
           <div class="settings">
             <Button variant="text" size="sm" data-consent-open={dialogId}>{copy.settings}</Button>
           </div>
-          <Button variant="secondary" size="sm">{copy.rejectAll}</Button>
-          <Button variant="secondary" size="sm">{copy.acceptAll}</Button>
+          <Button variant="secondary" size="sm" data-consent-action="reject">
+            {copy.rejectAll}
+          </Button>
+          <Button variant="secondary" size="sm" data-consent-action="accept">
+            {copy.acceptAll}
+          </Button>
         </div>
       </section>
     )
@@ -108,23 +116,99 @@ const dialogId = `${id}-dialog`;
         }
       </ul>
       <div class="actions">
-        <Button variant="secondary" size="sm" type="submit">{copy.rejectAll}</Button>
-        <Button variant="secondary" size="sm" type="submit">{copy.acceptAll}</Button>
-        <Button size="sm" type="submit">{copy.save}</Button>
+        <Button variant="secondary" size="sm" type="submit" data-consent-action="reject">
+          {copy.rejectAll}
+        </Button>
+        <Button variant="secondary" size="sm" type="submit" data-consent-action="accept">
+          {copy.acceptAll}
+        </Button>
+        <Button size="sm" type="submit" data-consent-action="save">
+          {copy.save}
+        </Button>
       </div>
     </form>
   </dialog>
 </div>
 
 <script>
-  // Opens the preferences dialog named by data-consent-open. Inert /design-system previews are
-  // left alone. Phase 1 stops here: the dialog's buttons only close it (form method="dialog").
+  import { consentParams, makeChoice, readChoice, revokes, wantsGtm, writeChoice, type Choice } from '../../lib/consent/state';
+  import { gtmLoaded, loadGtm, updateConsent } from '../../lib/consent/gtm';
+  import type { ConsentConfig } from '../../lib/consent/page';
+
+  // Opens the preferences dialog named by data-consent-open, remembering what opened it so focus can
+  // go back there. Inert /design-system previews are left alone.
+  let opener: HTMLElement | null = null;
   document.addEventListener('click', (e) => {
-    const opener = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-consent-open]') : null;
-    if (!opener || opener.closest('[inert]')) return;
-    const dialog = document.getElementById(opener.dataset.consentOpen ?? '');
-    if (dialog instanceof HTMLDialogElement) dialog.showModal();
+    const button = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-consent-open]') : null;
+    if (!button || button.closest('[inert]')) return;
+    const dialog = document.getElementById(button.dataset.consentOpen ?? '');
+    if (!(dialog instanceof HTMLDialogElement)) return;
+    opener = button;
+    dialog.dispatchEvent(new Event('consent:open'));
+    dialog.showModal();
   });
+
+  // localStorage can throw on access (blocked site data): then every visit asks again
+  function storage(): Storage | undefined {
+    try {
+      return window.localStorage;
+    } catch {
+      return undefined;
+    }
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-consent-config]')) {
+    const config = JSON.parse(root.dataset.consentConfig ?? '') as ConsentConfig;
+    const { categories, version, gtmId } = config;
+    const banner = root.querySelector<HTMLElement>('.banner');
+    const dialog = root.querySelector('dialog');
+    if (!banner || !dialog) continue;
+    const switches = [...dialog.querySelectorAll<HTMLInputElement>('input[role="switch"]:not(:disabled)')];
+    const optional = categories.filter((c) => !c.required).map((c) => c.id);
+
+    let choice: Choice | null = readChoice(storage(), version, categories);
+    const start = () => loadGtm(gtmId, consentParams(categories, []), consentParams(categories, choice?.granted ?? []));
+    if (choice === null) banner.hidden = false;
+    else if (wantsGtm(categories, choice)) start();
+
+    // The dialog shows the stored choice each time it opens (nothing granted before any choice)
+    dialog.addEventListener('consent:open', () => {
+      for (const s of switches) s.checked = choice?.granted.includes(s.name) ?? false;
+    });
+
+    // Focus goes back to what opened the dialog, unless that was in the banner and the banner is now
+    // hidden: then to <main>, so focus isn't left on an element that is gone
+    function restoreFocus() {
+      const target = opener && !opener.closest('[hidden]') ? opener : document.getElementById('main');
+      opener = null;
+      if (!target) return;
+      if (target.id === 'main' && !target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+    }
+    dialog.addEventListener('close', restoreFocus);
+
+    function decide(granted: string[]) {
+      const next = makeChoice(version, categories, granted);
+      const previous = choice;
+      choice = next;
+      writeChoice(storage(), next);
+      const hadFocus = banner?.contains(document.activeElement) ?? false;
+      if (banner) banner.hidden = true;
+      // Tags already running can't be stopped: reload so the page starts under the new choice
+      if (gtmLoaded() && revokes(previous, next)) return location.reload();
+      if (gtmLoaded()) updateConsent(consentParams(categories, next.granted));
+      else if (wantsGtm(categories, next)) start();
+      if (hadFocus) restoreFocus();
+    }
+
+    root.addEventListener('click', (e) => {
+      const button = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-consent-action]') : null;
+      const action = button?.dataset.consentAction;
+      if (action === 'accept') decide(optional);
+      else if (action === 'reject') decide([]);
+      else if (action === 'save') decide(switches.filter((s) => s.checked).map((s) => s.name));
+    });
+  }
 </script>
 
 <style>
@@ -149,6 +233,10 @@ const dialogId = `${id}-dialog`;
     border-radius: var(--radius-lg);
     background: var(--color-bg-subtle);
     box-shadow: var(--shadow-lg);
+  }
+
+  .banner[hidden] {
+    display: none;
   }
 
   [data-preview] .banner {

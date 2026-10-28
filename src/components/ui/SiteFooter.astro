@@ -4,7 +4,7 @@
 // the organization data file (src/content/organization), Email and copyright come from the current
 // site (src/data/site.ts). Dark surface, so it closes every page the same way.
 // `consentSettings` adds a button at the end of the legal row that reopens ConsentBanner's
-// preferences dialog (`dialog` is its id). Only /design-system passes it until #36 phase 2.
+// preferences dialog (`dialog` is its id); PageLayout passes it when the build has a GTM ID.
 import { localizedNav, localNode, nodeHref } from '../../lib/ia/navigation';
 import { getEntry } from 'astro:content';
 import { company } from '../../data/site';
