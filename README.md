@@ -84,7 +84,7 @@ npm run check
 ## 首次設定
 
 1. **Claude GitHub App**：安裝在本 repo（雲端 session clone / push 與 Auto-fix 需要）
-2. **雲端環境**：在 claude.ai/code 建立名為 `tpi-website-ai-poc` 的 environment，network access 用 Trusted，詳見 [docs/onboarding.md](docs/onboarding.md)
+2. **雲端環境**：在 claude.ai/code 建立名為 `tpi-website-ai-poc` 的 environment，network access 與 Allowed domains 照 [docs/onboarding.md](docs/onboarding.md) 第 3 步
 3. **Cloudflare Pages**：連接本 repo，build command `npm run build`、output `dist`、環境變數 `NODE_VERSION` 與 `.nvmrc` 一致；production branch `main`，啟用 preview deployments
 4. **Branch protection**：`main` 要求 PR 與 `quality-gate / check` 通過
 5. **Bootstrap**：Actions → `bootstrap` → Run workflow，建立 labels、milestones 與 issues（可重複執行，已存在者略過）

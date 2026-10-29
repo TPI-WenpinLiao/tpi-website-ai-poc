@@ -1,6 +1,6 @@
 ---
 name: writing-style
-description: 撰寫或修改任何給人讀的文字時使用：docs/ 文件、ADR、skill、PR 描述、commit message、issue 留言，以及 M5 改寫的網站內容。正體中文的去 AI 腔規則與技術文件結構。
+description: 撰寫或修改任何給人讀的文字時使用：docs/ 文件、ADR、skill、PR 描述、commit message、issue 留言，以及網站文案。正體中文的去 AI 腔規則與技術文件結構。
 ---
 
 # Writing style
@@ -69,7 +69,7 @@ description: 撰寫或修改任何給人讀的文字時使用：docs/ 文件、A
 15. **標點與空格不一致**：中文句子用全形標點（，。：「」）；中文與英文、數字、`code` 之間加一個半形空格，與既有文件一致
 16. **聊天腔**：「希望對你有幫助」「當然可以！」「好問題！」→ 刪掉
 
-## 行銷內容（M5）
+## 網站文案
 
 網站文案同樣適用以上規則，另外：
 

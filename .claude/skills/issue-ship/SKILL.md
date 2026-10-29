@@ -33,7 +33,7 @@ git diff --stat
 
 - 「最後更新」改為今天。與其他 PR 衝突時取較新的日期
 - 「進度」表只寫 milestone 層級的狀態：未開始／進行中／完成
-- 「Issue」段落一個 issue 一行，只列已關閉的 issue 與本 issue。放在所屬 milestone 的小標下，依 bootstrap-id（`M2-03`）排序；沒有 bootstrap-id 的排在該小標最後。沒有 milestone 的 issue（例如 `[chore]`）放在 issue 關閉當時「進度」表中編號最大的「進行中」milestone；本 issue 以寫入當下為準
+- 「Issue」段落一個 issue 一行，只列已關閉的 issue 與本 issue。放在所屬 milestone 的小標下，依 bootstrap-id（`M2-03`）排序；沒有 bootstrap-id 的排在該小標最後。沒有 milestone 的 issue（例如 `[chore]`）放在 issue 關閉當時「進度」表中編號最大的「進行中」milestone；沒有進行中的 milestone 時（M8 之後的維運），放在「M8 驗收」之後的「### 維運」小標，依關閉順序排列；本 issue 以寫入當下為準
 - 本 issue 寫成合併後的狀態：`M2-03 URL 規則與語系策略完成（#10）`
   - 不寫 PR 編號：開 PR 前還不知道編號，PR 可從 issue 的 `closed_by_pull_requests` 查到。既有條目的 PR 編號保留
   - `needs-design` 階段一的 draft PR 合併前要先拿到 approved label，這時還不算完成，寫成 `M3-01 wireframe（#13），階段一，等待 wireframe-approved`；階段二的 PR 再改成完成

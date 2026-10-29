@@ -4,9 +4,9 @@
 
 ## 目前 milestone
 
-**M6 功能**、**M8 驗收**
+**M6 功能**
 
-M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行中直到這張關閉。M4 開發骨架已收尾（#25）。
+M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行中直到這張關閉。M4 開發骨架已收尾（#25）。M8 驗收已收尾（#45），M3、M6 都完成後進入維運，沒有 milestone 的 issue 寫在「維運」小標（`issue-ship` 第 3 步）。
 
 ## 進度
 
@@ -20,7 +20,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 | M5 內容遷移 | 完成 |
 | M6 功能 | 進行中 |
 | M7 多語系 | 完成 |
-| M8 驗收 | 進行中 |
+| M8 驗收 | 完成 |
 
 ## Issue
 
@@ -114,6 +114,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 
 - M8-01 全站驗收完成（#43）：`docs/launch/audit.md` 逐項記錄 `npm run check` 每個子檢查、redirect map、全站 Lighthouse 與內容待確認的結果。新增 `scripts/ia/redirect-targets.mjs`（`npm run check`）：`redirects.csv` 每一列的目標都要在 `dist/` 建出、沒有轉址鏈，已知沒建出的目標列在 `UNBUILT`（#137）。`npm run lighthouse:all` 485 頁中 483 頁達標，另外 2 頁重跑後 0.98；成功案例的客戶 logo 加上 2x（ADR 0004「M8-01 重跑」）。無法當場修的問題開 #137、#138、#139
 - M8-02 launch-readiness 報告完成（#44）：`docs/launch/launch-readiness.md` 的結論是目前不能上線，列出上線前要完成的 6 個條件、8 個上線步驟（`SITE_URL`、Turnstile、GTM、`_redirects`、開放收錄、切換網域）、上線後的 curl 檢查、10 項風險與 12 個待決事項，負責人都寫「待確認」。`_redirects` 推薦部署，前提是 #137、#138、#139 完成，#139 的實測結果決定能不能照現在的產出部署
+- M8-03 M8 收尾完成（#45）：`CLAUDE.md` 的目錄結構補上 `src/assets/`、`docs/design/`、`launch-readiness.md`，新增 `node scripts/docs/claude-md.mjs`（`npm run check`），目錄結構漏列 `src/`、`src/lib/`、`scripts/`、`docs/` 底下的目錄或頂層目錄時失敗。「專案目標」寫明 M8 之後的維運（issue form 開需求、不掛 milestone）與上線照 `launch-readiness.md`，開放收錄的 PR 同時改哪些規則；「文件維護」改成維運期間由改了架構或流程的 PR 自己更新。`issue-ship` 第 3 步補上沒有進行中 milestone 時寫在「維運」小標；拿掉 skills 裡只在開發中途成立的 milestone 寫法（`seo-checklist`、`content-migration`、`writing-style`、`design-system`），README 的 network access 改連到 `onboarding.md`
 - logo 改用 AI 檔轉出的 SVG 完成（#122）：`node scripts/design/import-brand.mjs <AI 檔資料夾>` 用 `pdftocairo` 把行銷部門的 AI 檔轉成 SVG，刪掉反白版的預覽底色與空字形、裁掉留白，產生 `src/assets/brand/logo-*.svg`、favicon 與 apple-touch-icon；header、footer 與 `public/og/default.png` 改用 SVG，顯示高度不變；JSON-LD 的 organization `logo` 用 script 從 SVG 產生的 PNG。AI 原始檔不進 repo（`docs/design/brand-assets.md`）
 - `npm run check` 的 LHCI 涵蓋所有模板完成（#87）：`lighthouserc.cjs` 的 `PAGES` 是每個模板在全站量測中分數最低的一頁，加上三語首頁與 404，共 15 頁；`scripts/lhci-prepare.mjs` 在路徑不存在或有模板沒有代表頁時失敗（ADR 0004）。`npm run lighthouse:all` 測全部 485 頁，第一次 202 頁沒達標，修掉 vi 字型（多下載 `latin-ext` subset）、新聞內頁圖片（手機下載 1440w 封面與 1600px 內文原檔）與 `/en` 的「Learn More」連結文字後，剩下載入 3D 的 59 頁，交給 #127，這段期間 3D 頁的 performance 只 warn
 - 只改文件的 PR 在 quality-gate 跳過 Lighthouse 完成（#129）：變更的檔案全部在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY` 白名單內時，quality-gate 不跑 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify`：拿掉這些檔案重新 build，`dist/` 逐檔相同才通過，白名單失效時會在這裡失敗。job summary 寫明原因。`npm run check` 拆成 `check:before-lighthouse` 與 `lighthouse`，本機行為不變（ADR 0004「例外」）
@@ -123,7 +124,6 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 
 ## 下一步
 
-- M8-03 M8 收尾（#45）可以開始
 - 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
 - redirect 目標頁沒有建出的 12 列（#137）可以開始
 - 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
