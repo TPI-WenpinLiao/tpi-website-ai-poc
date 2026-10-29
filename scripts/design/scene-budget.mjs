@@ -6,6 +6,8 @@
 // Sizes are zlib's default gzip level, the same as scripts/lib/static-server.mjs and LHCI's server.
 // Internal pages (src/lib/seo/indexing.ts: /design-system loads every island at once) are skipped.
 // Pagefind's /pagefind/ files load only on /search and are outside /_astro/, so not counted.
+// The budgets are also listed in docs/design/motion.md for readers; the run fails when that table
+// and the constants below disagree, so the two can't drift apart.
 // Run after `astro build`: node scripts/design/scene-budget.mjs [dist]
 
 import { readFileSync, readdirSync } from 'node:fs';
@@ -77,11 +79,9 @@ export function pageBudget(html, read) {
     sources.filter((s) => s.startsWith('/_astro/')),
     initial,
   );
-  const deferred = new Set();
-  walk(
-    lazy.filter((p) => !initial.has(p)),
-    deferred,
-  );
+  // A deferred chunk can import() further chunks; follow them until none are new
+  const deferred = new Set(initial);
+  for (let next = lazy; next.length; ) next = walk(next, deferred);
   for (const p of initial) deferred.delete(p);
   const total = (/** @type {Set<string>} */ files) => [...files].reduce((sum, p) => sum + size(read(p)), 0);
   return {
@@ -90,6 +90,21 @@ export function pageBudget(html, read) {
     initialFiles: [...initial],
     deferredFiles: [...deferred],
   };
+}
+
+const MOTION_DOC = resolve(import.meta.dirname, '../../docs/design/motion.md');
+
+/**
+ * Budgets in motion.md's 效能預算 table, in bytes: the second column of the rows that start with
+ * 每頁初始 JS and 3D 延後載入的 JS. Undefined for a row that is missing.
+ * @param {string} markdown
+ */
+export function documentedBudgets(markdown) {
+  const row = (/** @type {string} */ label) => {
+    const m = markdown.match(new RegExp(`^\\| ${label}[^|]*\\| (\\d+(?:\\.\\d+)?) KB \\|`, 'm'));
+    return m ? Number(m[1]) * KB : undefined;
+  };
+  return { initial: row('每頁初始 JS'), deferred: row('3D 延後載入的 JS') };
 }
 
 const kb = (/** @type {number} */ bytes) => `${(bytes / KB).toFixed(1)} KB`;
@@ -118,6 +133,11 @@ function main([dist = resolve(import.meta.dirname, '../../dist')]) {
   }
   console.log(`${pages.length} pages; largest initial JS ${kb(maxInitial.bytes)} (${maxInitial.page}), budget ${kb(INITIAL_BUDGET)}`);
   console.log(`largest deferred JS ${kb(maxDeferred.bytes)} (${maxDeferred.page}), budget ${kb(DEFERRED_BUDGET)}`);
+  const documented = documentedBudgets(readFileSync(MOTION_DOC, 'utf8'));
+  if (documented.initial !== INITIAL_BUDGET || documented.deferred !== DEFERRED_BUDGET) {
+    console.log(`docs/design/motion.md lists ${JSON.stringify(documented)} bytes, but INITIAL_BUDGET is ${INITIAL_BUDGET} and DEFERRED_BUDGET ${DEFERRED_BUDGET}`);
+    failed += 1;
+  }
   if (failed) process.exitCode = 1;
 }
 

@@ -3,7 +3,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { gzipSync } from 'node:zlib';
-import { chunkImports, pageBudget, pageScripts } from './scene-budget.mjs';
+import { readFileSync } from 'node:fs';
+import { chunkImports, DEFERRED_BUDGET, documentedBudgets, INITIAL_BUDGET, pageBudget, pageScripts } from './scene-budget.mjs';
 
 test('reads module sources and inline scripts, skipping JSON-LD', () => {
   const html =
@@ -36,4 +37,26 @@ test('counts static imports as initial and import() chunks, with their imports, 
 
 test('a page without scripts has no JS', () => {
   assert.deepEqual(pageBudget('<p>static</p>', () => ''), { initial: 0, deferred: 0, initialFiles: [], deferredFiles: [] });
+});
+
+test('follows import() inside deferred chunks', () => {
+  const files = {
+    '/_astro/loader.js': '()=>import("./scene.js")',
+    '/_astro/scene.js': '()=>import("./extra.js");()=>import("./loader.js")',
+    '/_astro/extra.js': 'export const x=1',
+  };
+  const b = pageBudget('<script type="module" src="/_astro/loader.js"></script>', (p) => files[/** @type {keyof typeof files} */ (p)]);
+  assert.deepEqual(b.initialFiles, ['/_astro/loader.js']);
+  assert.deepEqual(b.deferredFiles, ['/_astro/scene.js', '/_astro/extra.js']);
+});
+
+test('reads the budgets from the motion.md table', () => {
+  const md = '| 項目 | 預算 |\n|---|---|\n| 每頁初始 JS（gzip） | 6 KB | x |\n| 3D 延後載入的 JS（gzip） | 140 KB | y |\n';
+  assert.deepEqual(documentedBudgets(md), { initial: 6 * 1024, deferred: 140 * 1024 });
+  assert.deepEqual(documentedBudgets('no table'), { initial: undefined, deferred: undefined });
+});
+
+test('motion.md lists the budgets the script enforces', () => {
+  const md = readFileSync(new URL('../../docs/design/motion.md', import.meta.url), 'utf8');
+  assert.deepEqual(documentedBudgets(md), { initial: INITIAL_BUDGET, deferred: DEFERRED_BUDGET });
 });

@@ -8,19 +8,21 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 
 只能用 `src/styles/tokens.css` 的值。`npm run check:design` 的 `token-usage.mjs` 擋下帶單位的時間、easing 關鍵字（`ease`、`ease-in-out`、`cubic-bezier()`、`steps()` 等），以及沒有指定 timing function、會套用瀏覽器預設 `ease` 的 `transition` 與 `animation`。
 
-| token | 值 | 用途 | 減少動態時 |
-|---|---|---|---|
-| `--duration-fast` | 120ms | 顏色、底線、caret 等小範圍的狀態變化 | 0ms |
-| `--duration-base` | 200ms | 按鈕上浮、連結箭頭、`Faq` 的展開符號 | 0ms |
-| `--duration-slow` | 480ms | 卡片傾斜、3D canvas 淡入 | 0ms |
-| `--duration-loop` | 2400ms | 循環動畫的一個週期（`LayerStack` 節點的脈動） | 0ms |
-| `--delay-step` | 480ms | 依序開始的元素之間的間隔（`LayerStack` 的節點） | 0ms |
-| `--ease-standard` | `cubic-bezier(0.2, 0, 0, 1)` | 顏色、透明度、展開等狀態變化 | 不變 |
-| `--ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | 位移：上浮、傾斜、箭頭 | 不變 |
-| `--reveal-distance` | 2rem | `Reveal` 進場時往上移的距離 | 不變（動畫本身不執行） |
-| `--reveal-stagger` | 8% | `Reveal` 的 `delay` 每一級把捲動範圍的起點往後推的量 | 不變（動畫本身不執行） |
-| `--tilt` | 3deg | 卡片 hover 時的傾斜 | 0deg |
-| `--lift` | -0.375rem | 卡片、按鈕、影片按鈕 hover 時的上浮 | 0 |
+值與減少動態時的覆寫寫在 `tokens.css` 的 Motion 區塊與文末的 `@media (prefers-reduced-motion: reduce)`，`/design-system` 的「動態」「動態數值」「3D 場景」三組會顯示目前的值。
+
+| token | 用途 | 減少動態時 |
+|---|---|---|
+| `--duration-fast` | 顏色、底線、caret 等小範圍的狀態變化 | 歸零 |
+| `--duration-base` | 按鈕上浮、連結箭頭、`Faq` 的展開符號 | 歸零 |
+| `--duration-slow` | 卡片傾斜、3D canvas 淡入 | 歸零 |
+| `--duration-loop` | 循環動畫的一個週期（`LayerStack` 節點的脈動） | 歸零 |
+| `--delay-step` | 依序開始的元素之間的間隔（`LayerStack` 的節點） | 歸零 |
+| `--ease-standard` | 顏色、透明度、展開等狀態變化 | 不變 |
+| `--ease-out-expo` | 位移：上浮、傾斜、箭頭 | 不變 |
+| `--reveal-distance` | `Reveal` 進場時往上移的距離 | 不變（動畫本身不執行） |
+| `--reveal-stagger` | `Reveal` 的 `delay` 每一級把捲動範圍的起點往後推的量 | 不變（動畫本身不執行） |
+| `--tilt` | 卡片 hover 時的傾斜 | 歸零 |
+| `--lift` | 卡片、按鈕、影片按鈕 hover 時的上浮 | 歸零 |
 
 - scroll-driven animation 的 timing function 寫 `linear`：進度就是捲動位置，再加 easing 會讓捲動和畫面對不上。`token-usage.mjs` 只允許這一個關鍵字
 - `Reveal` 的錯開量是捲動距離，不是時間，所以用 `--reveal-stagger`，不用 `--delay-step`
@@ -69,7 +71,7 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 
 - 「目前」的數字：main `f9ff8c1`、2026-10-29、`npm run build` 的輸出
 - `scene-budget.mjs` 量 `dist/` 每個公開頁面（略過 `/design-system` 等內部頁）。初始 JS 是 HTML 引用的 module script、它們靜態 import 的 chunk，以及 inline script（JSON-LD 不算）；延後載入的 JS 是這些檔案以 `import()` 載入的 chunk 與它們的 import。壓縮用 zlib 預設的 gzip 等級，和 `scripts/lib/static-server.mjs` 相同，1 KB = 1024 bytes
-- 超過預算時 `npm run check` 失敗。要調高預算，在 PR 寫出理由，並改 `scene-budget.mjs` 的 `INITIAL_BUDGET`、`DEFERRED_BUDGET` 與本表
+- 超過預算時 `npm run check` 失敗。要調高預算，在 PR 寫出理由，並同時改 `scene-budget.mjs` 的 `INITIAL_BUDGET`、`DEFERRED_BUDGET` 與本表的「預算」欄；兩邊不一致時 `scene-budget.mjs` 也會失敗
 
 ### Lighthouse
 
@@ -86,15 +88,7 @@ headless Chromium 的 TBT 偏高，當成上限看；真機待 preview 部署後
 
 ### 行動版降級
 
-`(width < 64rem), (pointer: coarse)` 的裝置用行動版 tier（`src/lib/scene/tiers.ts` 的 `LOW_POWER`），在場景啟動時決定，視窗縮放跨過條件時重建。數值只寫在 `tiers.ts` 的 `TIERS`：
-
-| | 桌機 | 行動版 |
-|---|---|---|
-| `devicePixelRatio` 上限（`maxDpr`） | 2 | 1.5 |
-| 方塊數量的倍數（`density`） | 1 | 0.35 |
-| antialias | 開 | 關 |
-| 滑鼠視差（`parallax`） | 開 | 關 |
-| 鏡頭路徑（`path`） | `orbit`（多軸） | `dolly`（只沿一個方向） |
+`(width < 64rem), (pointer: coarse)` 的裝置用行動版 tier（`src/lib/scene/tiers.ts` 的 `LOW_POWER`），在場景啟動時決定，視窗縮放跨過條件時重建。行動版降低 `devicePixelRatio` 上限（`maxDpr`）與方塊數量（`density`），關掉 antialias 與滑鼠視差（`parallax`），鏡頭只沿一個方向移動（`path: 'dolly'`）。數值只寫在 `tiers.ts` 的 `TIERS`。
 
 以下情況完全不載入 3D，只顯示靜態圖：`prefers-reduced-motion: reduce`、`navigator.connection.saveData`、瀏覽器不支援 WebGL 2。
 
