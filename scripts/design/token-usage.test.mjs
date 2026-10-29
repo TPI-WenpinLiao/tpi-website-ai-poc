@@ -41,10 +41,74 @@ test('reports hex, color functions, lengths, durations and undefined tokens with
     [
       '19 hex color #662E8D',
       '19 length or duration -0.5rem',
+      '20 implicit easing transition: color 200ms',
       '20 color function rgb(',
       '20 length or duration 200ms',
       '21 length or duration 40em',
       '22 undefined token --color-gone',
     ],
+  );
+});
+
+test('easing comes from --ease-* tokens; linear is allowed for scroll-driven animations', () => {
+  const source = `<style>
+  .ok {
+    transition:
+      transform var(--duration-base) var(--ease-out-expo),
+      color var(--duration-fast) var(--ease-standard);
+  }
+  .ok-longhand { transition-property: opacity; transition-duration: var(--duration-slow); transition-timing-function: var(--ease-standard); }
+  .ok-scroll { animation-name: a; animation-timing-function: linear; animation-timeline: view(); }
+  .ok-loop { animation: pulse var(--duration-loop) var(--ease-standard) infinite alternate; }
+  .ok-none { transition: none; }
+  .keyword { transition: color var(--duration-fast) ease-in-out; }
+  .bezier { transition-timing-function: cubic-bezier(0.2, 0, 0, 1); transition-duration: var(--duration-fast); }
+  .default { transition: color var(--duration-fast); }
+  .longhand { transition-property: transform; transition-duration: var(--duration-fast); }
+  .anim { animation-name: a; animation-duration: var(--duration-slow); }
+  .linear-transition { transition: color var(--duration-fast) linear; }
+</style>`;
+  const tokens = declaredProperties(':root { --duration-fast: 1ms; --duration-base: 1ms; --duration-slow: 1ms; --duration-loop: 1ms; --ease-standard: x; --ease-out-expo: x; }');
+  assert.deepEqual(
+    findViolations(source, tokens).map((v) => `${v.line} ${v.rule} ${v.text}`),
+    [
+      '11 implicit easing transition: color var(--duration-fast) ease-in-out',
+      '11 easing ease-in-out',
+      '12 easing cubic-bezier(',
+      '13 implicit easing transition: color var(--duration-fast)',
+      '14 implicit easing transition-duration without transition-timing-function',
+      '15 implicit easing animation-name without animation-timing-function',
+      '16 implicit easing transition: color var(--duration-fast) linear',
+    ],
+  );
+});
+
+test('linear only in a rule with animation-timeline', () => {
+  const source = `<style>
+  .scroll { animation-name: a; animation-timing-function: linear; animation-timeline: view(); }
+  .longhand { transition-property: color; transition-duration: var(--duration-fast); transition-timing-function: linear; }
+  .shorthand { animation: a var(--duration-slow) linear; }
+  .time { animation-name: a; animation-duration: var(--duration-slow); animation-timing-function: linear; }
+</style>`;
+  const tokens = declaredProperties(':root { --duration-fast: 1ms; --duration-slow: 1ms; }');
+  assert.deepEqual(
+    findViolations(source, tokens).map((v) => `${v.line} ${v.rule} ${v.text}`),
+    [
+      '3 implicit easing transition-timing-function: linear without animation-timeline',
+      '4 implicit easing animation: linear without animation-timeline',
+      '5 implicit easing animation-timing-function: linear without animation-timeline',
+    ],
+  );
+});
+
+test('a shorthand that is a single var() still needs an easing', () => {
+  const source = `<style>
+  .a { transition: var(--duration-fast); }
+  .b { animation: var(--duration-fast); }
+</style>`;
+  const tokens = declaredProperties(':root { --duration-fast: 1ms; }');
+  assert.deepEqual(
+    findViolations(source, tokens).map((v) => `${v.line} ${v.rule} ${v.text}`),
+    ['2 implicit easing transition: var(--duration-fast)', '3 implicit easing animation: var(--duration-fast)'],
   );
 });

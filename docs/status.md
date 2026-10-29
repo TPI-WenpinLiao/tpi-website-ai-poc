@@ -6,7 +6,7 @@
 
 **M6 功能**
 
-M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行中直到這張關閉。M4 開發骨架已收尾（#25）。M8 驗收已收尾（#45），M3、M6 都完成後進入維運，沒有 milestone 的 issue 寫在「維運」小標（`issue-ship` 第 3 步）。
+M3 設計系統已完成（收尾 #19，最後一張是 M3-08 動態規範 #55）。M4 開發骨架已收尾（#25）。M8 驗收已收尾（#45），M6 完成後進入維運，沒有 milestone 的 issue 寫在「維運」小標（`issue-ship` 第 3 步）。
 
 ## 進度
 
@@ -15,7 +15,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 | M0 基礎建設 | 完成 |
 | M1 盤點與研究 | 完成 |
 | M2 資訊架構 | 完成 |
-| M3 設計系統 | 進行中 |
+| M3 設計系統 | 完成 |
 | M4 開發骨架 | 完成 |
 | M5 內容遷移 | 完成 |
 | M6 功能 | 進行中 |
@@ -67,6 +67,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - M3-05 產品頁高保真完成（#18，`design-approved`）：digiRunner 做成 `/products/digirunner`，結構照 `/wireframes/offering`，內容讀 offering collection（`node scripts/design/offering-content.mjs` 比對現站）；新元件 `Breadcrumb`、`InPageNav`、`Faq`、`SceneChapter`，`Card` 可以不帶 `href`；`Scene3D` 加上 `family`，窄螢幕依 `PageHero` 的視覺區取景、跨斷點時重建 tier（ADR 0003）；JSON-LD `SoftwareApplication`＋`BreadcrumbList`（M4-03 移到 `src/lib/seo/jsonld/offering.ts`）；header 選單一次只開一個，點選單外或按 Esc 收起
 - M3-06 M3 收尾完成（#19）：`design-system` skill 補上「Token 命名」（類別－用途－變體－狀態）與「新增元件」流程，元件表補 `LocaleSwitcher`；`node scripts/design/showcase.mjs` 改為也檢查 skill 的「基礎元件」表與 `src/components/ui/` 一致（漏列的元件、已刪除元件的列）。`CLAUDE.md` 拿掉「新元件必須同步加到 design-system 展示頁」的「（M3 後生效）」
 - M3-07 3D scroll 視覺方向原型完成（#54，`design-approved`）：選定方向 B Modular Stack，原型頁 `/prototypes/modular-stack`（three.js，`Scene3D` island），A Data Flow 已刪除；ADR 0003 載入策略；`node scripts/design/lighthouse-3d.mjs` 行動版 0.99、桌機 1，`a11y-smoke.mjs` 加上 3D 場景上的文字對比
+- M3-08 動態規範完成（#55）：`docs/design/motion.md` 列出全站的動態效果、適用頁面、減少動態時的呈現與 3D 的效能預算；`tokens.css` 加上 `--duration-loop`、`--delay-step`、`--reveal-stagger`（數值與原本寫在元件裡的相同，畫面不變）；`token-usage.mjs` 擋下 easing 關鍵字與省略 timing function 的 `transition`、`animation`；`npm run check` 加上 `scripts/design/scene-budget.mjs`，每頁初始 JS 6 KB、延後載入的 JS 140 KB（gzip，目前最大 3.0 KB、130.6 KB）；`design-system` skill 的「捲動動態」改寫成「動態」
 - M3-09 品牌素材與視覺資產完成（#56）：`docs/design/brand-assets.md` 列出 logo、衍生圖、品牌色、字體、設計影像與 3D 的來源與授權。logo 來自公司行銷部門（只有 AI 檔與 PNG），沒有 logo 使用規範、VI 手冊、色票與指定字體，新站以 `tokens.css` 與 Inter 為基準；不做立體 logo。`src/assets/design/` 的影像由 ChatGPT Enterprise 產生，合約允許使用，沿用不重做
 - `issues.yml` 與 GitHub issue 對齊完成（#88）：補 M3-07～09、M3-04/05 的依賴改為 M3-02、M3-07；`node scripts/bootstrap/diff.mjs` 比對兩邊，目前差異 0、重跑 bootstrap 不會新建 issue
 - `needs-design` 階段一改走 `/issue-ship` 完成（#84）：`CLAUDE.md`、`issue-start`、`checkpoint`、`workflow.md` 都連到 `issue-ship` 的「`needs-design` 的兩個階段」，`wip:` 合併只寫在 `issue-ship` 第 4 步。#16 留在 `main` 的 `wip:` commit（`1b3a5fe`、`a2508f8`）不改寫
@@ -128,7 +129,6 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
 - redirect 目標頁沒有建出的 12 列（#137）可以開始
 - 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
-- M3-08 動態規範（#55）可以開始
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落

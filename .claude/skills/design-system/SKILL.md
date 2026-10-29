@@ -1,11 +1,11 @@
 ---
 name: design-system
-description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 surface、光與景深、捲動動態、token 分層與命名、斷點、基礎元件與檢查方式。
+description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 surface、光與景深、動態、token 分層與命名、斷點、基礎元件與檢查方式。
 ---
 
 # Design system
 
-> tokens、基礎元件與 3D 方向 B Modular Stack 在 M3 定案（#15、#54），之後新增的元件都列在「基礎元件」。動態規範（M3-08，#55）完成後會改寫「捲動動態」。
+> tokens、基礎元件、3D 方向 B Modular Stack 與動態規範在 M3 定案（#15、#54、#55），之後新增的元件都列在「基礎元件」。
 
 ## 設計方向
 
@@ -111,12 +111,17 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 </style>
 ```
 
-## 捲動動態
+## 動態
 
-- 用 `animation-timeline: view()`、`scroll()` 或具名的 `view-timeline`，包在 `@supports (animation-timeline: view())` 與 `@media (prefers-reduced-motion: no-preference)` 裡；不支援或偏好減少動態時，畫面要停在完成狀態
+效果清單、各效果用在哪些頁面、減少動態時的呈現與 3D 的效能預算在 [`docs/design/motion.md`](../../../docs/design/motion.md)。新增或改動效果時，同步更新那份清單。
+
+- 時間、延遲與 easing 一律用 tokens：`--duration-*`（`fast`／`base`／`slow`，循環動畫的週期 `--duration-loop`）、`--delay-step`、`--ease-standard`（顏色、透明度、展開）、`--ease-out-expo`（位移）。`transition` 簡寫的每一段都寫 timing function，longhand 寫了 `transition-duration` 就要寫 `transition-timing-function`，不留給瀏覽器預設的 `ease`
+- 偏好減少動態時，`tokens.css` 把 `--duration-*`、`--delay-*`、`--tilt`、`--lift` 歸零。hover、focus、展開的狀態差異保留，過場消失；位移與傾斜用 `--tilt`、`--lift` 寫，才會跟著歸零
+- 捲動動態用 `animation-timeline: view()`、`scroll()` 或具名的 `view-timeline`，包在 `@supports (animation-timeline: view())` 與 `@media (prefers-reduced-motion: no-preference)` 裡；不支援或偏好減少動態時，畫面要停在完成狀態。timing function 寫 `linear`（進度就是捲動位置），錯開量用捲動距離（`Reveal` 的 `--reveal-stagger`），不用時間
 - **只寫 longhand**（`animation-name`、`animation-timing-function`、`animation-fill-mode`、`animation-timeline`、`animation-range`），不要寫 `animation` shorthand。Lightning CSS 會把 shorthand 和 `animation-timeline` 合併成 `animation: … view()`，瀏覽器不接受，整個動畫失效；`scripts/design/dist-css.mjs` 會擋
+- 循環動畫（`LayerStack` 的脈動）只放在 `@media (prefers-reduced-motion: no-preference)` 裡
 - 不要讓 LCP 元素（hero 標題、hero 靜態圖）用 `Reveal` 或任何從透明開始的動畫
-- 時間一律用 `--duration-*`，`prefers-reduced-motion: reduce` 時在 `tokens.css` 歸零，`--tilt`、`--lift` 也歸零
+- 真 3D（`Scene3D`）只用在首頁與 offering 模板中屬於 `SCENE_FAMILIES` 的頁面，只放 hero 與功能章節；其他地方用 CSS 偽 3D（`LayerStack`、`Card` 的傾斜）或格線。範圍與預算見 `motion.md`
 
 ## 基礎元件
 
@@ -211,7 +216,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 對比：文字 4.5:1、UI 元件與 focus ring 3:1（WCAG 2.2 AA），兩個 surface 都要過
 - focus：全站共用 `BaseLayout` 的 `:focus-visible`（`--color-focus`，`outline-offset` 讓外框落在周圍底色上）；卡片由整張卡畫外框
 - 點擊目標：按鈕、獨立連結、表單欄位最小高度 `--touch-target`（44px）
-- 動態：見「捲動動態」
+- 動態：見「動態」
 
 ## 檢查
 
@@ -219,9 +224,10 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 - `npm run check:design`
   - `scripts/design/contrast.mjs`：兩個 surface 各自檢查 `PAIRS` 每一組
-  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/layouts/`、`src/pages/` 所有 `.astro` 與 `src/styles/base.css` 的樣式不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），`var()` 不得引用未定義的 token
+  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/layouts/`、`src/pages/` 所有 `.astro` 與 `src/styles/base.css` 的樣式不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），不得有 easing 關鍵字與函式（`linear` 只能用在有 `animation-timeline` 的規則），`transition`、`animation` 不得省略 timing function，`var()` 不得引用未定義的 token
   - `scripts/design/css-structure.mjs`：「CSS 分層」的規則
   - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import，也要在本檔的「基礎元件」表有一列，表裡的元件都要有檔案；`tokens.css` 每個 token 都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；內部頁（`INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`
+- build 後的 `scripts/design/scene-budget.mjs`：每個公開頁面的初始 JS 與延後載入的 JS（gzip）不得超過 `motion.md`「效能預算」的預算
 - build 後的 `scripts/seo/headings.mjs`：每頁恰好一個 h1、heading 不跳級
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
 - build 後的 `scripts/design/font-subsets.mjs`：輸出的 `@font-face` 只能是 Inter 與 JetBrains Mono 的 latin、vietnamese、greek，範圍與套件的 `unicode.json` 相同；頁面文字不得有字型涵蓋、但這三個 subset 沒有的字元（例外在 `ALLOWED`）
