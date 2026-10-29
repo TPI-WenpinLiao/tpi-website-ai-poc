@@ -39,7 +39,7 @@ paths: ["**/*.ts", "**/*.astro", "**/*.mjs"]
 ## Astro 專屬
 
 - 元件 props 用 `interface Props` 宣告，在 frontmatter 以 `Astro.props` 解構；不要用 `any` 承接
-- 預設零 client JS：互動寫在元件內的 `<script>`，不用 `client:*`（沒有 UI framework），並在 PR 說明為什麼需要；不碰 DOM 的判斷放 `src/lib/<模組>/` 寫單元測試（`CLAUDE.md`「功能模組」）
+- 預設零 client JS：互動寫在元件內的 `<script>`，不用 `client:*`（沒有 UI framework），加 client JS 時在 PR 說明為什麼需要；不碰 DOM 的判斷放 `src/lib/<模組>/` 寫單元測試（`CLAUDE.md`「功能模組」）
 - `getStaticPaths` 回傳的 `params`／`props` 型別要明確；路由參數視為邊界輸入
 - 圖片用 `astro:assets` 的 `<Image>`／`<Picture>`，`alt` 與尺寸必填（見 `seo-checklist`）
 

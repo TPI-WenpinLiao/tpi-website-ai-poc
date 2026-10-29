@@ -11,7 +11,7 @@
 
 | 項目 | 選擇 |
 |---|---|
-| 框架 | Astro，`output: 'static'`，預設零 client-side JS，需要互動時才用 island |
+| 框架 | Astro，`output: 'static'`，預設零 client-side JS，需要互動時才加 client JS |
 | 語言 | TypeScript strict（`astro/tsconfigs/strict`） |
 | 樣式 | CSS custom properties 作為 design tokens；不使用 UI framework 或 utility CSS framework |
 | 套件管理 | npm，`package-lock.json` 入版控，CI 與雲端 session 用 `npm ci` |
@@ -31,6 +31,6 @@
 
 ## 影響
 
-- 互動元件需明確選擇 island 與 hydration 策略，並在 PR 中說明理由
+- 互動寫在元件內的 `<script>`（Astro 打包，不用 `client:*`），加 client JS 時在 PR 中說明理由。M6 定案的寫法見 `CLAUDE.md`「功能模組」
 - 不可被收錄的要求以 `_headers` + `robots.txt` 實作；Lighthouse 在本機 dist 副本上執行，需移除 `robots.txt` 才能驗證 SEO（見 `scripts/lhci-prepare.mjs`）
 - Node 升級時需同步更新 `.nvmrc` 與 Cloudflare Pages 的 `NODE_VERSION`
