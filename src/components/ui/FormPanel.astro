@@ -81,7 +81,7 @@ const siteKey = typeof key === 'string' && key ? key : TEST_SITE_KEY;
     errors.length > 0 ? (
       <div class="summary">
         <SectionHeading level={3} size="sm" index={pad(errors.length)} eyebrow="Errors" title={t.form.errorSummary} />
-        <ol class="rows">
+        <ol class="ruled-list">
           {errors.map((e, i) => (
             <li>
               <a class="row" href={`#${e.id}`}>
@@ -109,7 +109,7 @@ const siteKey = typeof key === 'string' && key ? key : TEST_SITE_KEY;
         <template data-form-summary>
           <div class="summary">
             <SectionHeading level={3} size="sm" index="00" eyebrow="Errors" title={t.form.errorSummary} />
-            <ol class="rows">
+            <ol class="ruled-list">
               <li>
                 <a class="row" href="#">
                   <span class="n" />
@@ -165,17 +165,6 @@ const siteKey = typeof key === 'string' && key ? key : TEST_SITE_KEY;
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-  }
-
-  .rows {
-    margin: 0;
-    padding: 0;
-    border-block-start: var(--border-width) solid var(--color-border);
-    list-style: none;
-  }
-
-  .rows li {
-    border-block-end: var(--border-width) solid var(--color-border);
   }
 
   .row {

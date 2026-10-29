@@ -79,6 +79,8 @@
   --color-bg-muted: var(--ink-100);
   --color-bg-brand-subtle: var(--purple-50);
   --color-bg-accent-subtle: var(--orange-50);
+  /* Dims the page behind a modal dialog (ConsentBanner's preferences) */
+  --color-bg-overlay: rgb(18 15 29 / 0.55);
 
   /* Color: lines. border is decorative; border-strong marks form controls (3:1). */
   --color-border: var(--ink-200);
@@ -267,6 +269,7 @@
   --color-bg-muted: var(--ink-850);
   --color-bg-brand-subtle: var(--purple-900);
   --color-bg-accent-subtle: var(--orange-950);
+  --color-bg-overlay: rgb(0 0 0 / 0.65);
 
   --color-border: var(--ink-700);
   --color-border-strong: var(--ink-400);

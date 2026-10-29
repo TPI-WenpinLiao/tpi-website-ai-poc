@@ -9,6 +9,9 @@
 // Pages passing `searchTrail` go into the Pagefind index (src/integrations/pagefind.ts): <main> gets
 // data-pagefind-body, and pages below a first-level page are labelled with their parent's name in
 // the search results (部落格, 新聞中心, a product family). Pages without it (home, listings, utility, internal pages) are left out.
+// Builds with PUBLIC_GTM_ID get the cookie consent banner after the footer, at body level, and the
+// footer's Cookie 設定 button (src/lib/consent/page.ts, ADR 0007), except on internal pages; without
+// it neither is rendered.
 import BaseLayout from './BaseLayout.astro';
 import SiteHeader from '../components/ui/SiteHeader.astro';
 import SiteFooter from '../components/ui/SiteFooter.astro';
@@ -16,6 +19,8 @@ import ScrollProgress from '../components/ui/ScrollProgress.astro';
 import type { Props as SeoProps } from '../components/seo/Seo.astro';
 import { pageLocales } from '../lib/i18n/routes';
 import { isInternal } from '../lib/seo/indexing';
+import { consentProps } from '../lib/consent/page';
+import { localeFromPath, normalizePath } from '../lib/i18n/paths';
 import type { TrailNode } from '../lib/ia/navigation';
 
 type Props = Omit<SeoProps, 'locales'> & {
@@ -33,6 +38,10 @@ const preview = isInternal(Astro.url.pathname);
 const indexed = searchTrail !== undefined && !preview;
 const section = indexed && searchTrail.length > 2 ? searchTrail.at(-2)?.title : undefined;
 const PREVIEW = '模板預覽';
+// Not on the template previews: their sample data must not reach the GTM container
+const consent = preview ? undefined : consentProps(localeFromPath(normalizePath(Astro.url.pathname)));
+// Imported only when the build has a GTM ID: a static import would add the banner's CSS to every page
+const ConsentBanner = import.meta.env.PUBLIC_GTM_ID ? (await import('../components/ui/ConsentBanner.astro')).default : undefined;
 ---
 
 <BaseLayout
@@ -50,7 +59,8 @@ const PREVIEW = '模板預覽';
   <main id="main" data-pagefind-body={indexed ? '' : undefined} data-pagefind-meta={section && `section:${section}`}>
     <slot />
   </main>
-  <SiteFooter />
+  <SiteFooter consentSettings={consent?.footer} />
+  {consent && ConsentBanner && <ConsentBanner id={consent.id} config={consent.config} categories={consent.categories} copy={consent.copy} />}
 </BaseLayout>
 
 <style>
