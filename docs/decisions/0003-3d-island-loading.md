@@ -35,6 +35,8 @@ three.js 是本站第一個大型 client 依賴。ADR 0001 定了「預設零 cl
    - `node scripts/design/scene-capture.mjs <dir>`：減少動態時沒有 canvas、沒有 3D chunk 請求；場景執行中切到減少動態時 canvas 被移除
    - `node scripts/design/scene-wait.mjs`（在 `npm run check` 裡）：fence 一直不完成、shader 一直不 ready 時，canvas 仍在上限內上頁（見「等待的上限」）
 
+效果清單、減少動態時的呈現與 JS 大小預算（`scripts/design/scene-budget.mjs`，在 `npm run check` 裡）見 [`docs/design/motion.md`](../design/motion.md)（M3-08，#55）。
+
 ## 與「預設零 client JS」的關係
 
 ADR 0001 的原則不變：頁面預設沒有 client JS。3D 場景是明確選擇的 island，條件是：

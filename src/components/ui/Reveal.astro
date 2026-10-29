@@ -24,7 +24,7 @@ const { delay = 0 } = Astro.props;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: view();
-        animation-range: entry calc(var(--reveal-step) * 8%) cover 30%;
+        animation-range: entry calc(var(--reveal-step) * var(--reveal-stagger)) cover 30%;
       }
     }
   }
