@@ -14,6 +14,7 @@ const md = [
   'src/lib/          i18n/（語系）、ia/（導覽）',
   'scripts/          design/（對比，含 `tokens/`）、lib/（共用）、multimedia/（影音）',
   'tests/visual/     Playwright',
+  'functions/        Pages Functions：api/contact.ts',
   '```',
   '',
   '## IA 與 URL',
@@ -39,6 +40,7 @@ test('accepts a full-path line or a name on the parent line', () => {
   assert.ok(isListed(block, 'src/lib', 'ia'));
   assert.ok(isListed(block, 'scripts', 'lib'));
   assert.ok(isListed(block, '', 'tests'));
+  assert.ok(isListed(block, 'functions', 'api'));
 });
 
 test('does not match a name inside another word or on another line', () => {

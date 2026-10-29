@@ -27,12 +27,12 @@ src/integrations/ sitemap.ts（build 時寫 dist/sitemap.xml）、pagefind.ts（
 functions/        Cloudflare Pages Functions：api/contact.ts（聯絡表單的送出，判斷在 src/lib/forms/handler.ts）
 src/assets/       brand/（logo，`import-brand.mjs` 產生）、design/（設計影像，`import-image.mjs` 匯入）、blog/、news/、case-study/、whitepaper/（內容圖，依語系與 slug 分目錄）
 src/styles/       tokens.css（design tokens）、media.css（斷點）、base.css（reset 與全域工具類）
-public/           靜態檔（_headers、robots.txt）
+public/           靜態檔：_headers、robots.txt、favicon、og/（預設 OG 圖，`og-image.mjs` 產生）、pdf/（產品下載檔，`offering-files.mjs` 下載）
 scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、Lighthouse 單次量測的時間上限 `lhci-run.mjs`、content/（日期檢查、tag 清單、blog、新聞、成功案例、解決方案與服務頁、ESG 顧問頁轉換 `migrate/`、產品下載檔 `offering-files.mjs`、公司頁對照 `page-content.mjs`、法務 PDF 轉換 `legal-pdf.mjs`）、design/（對比、token 使用、輸出 CSS 檢查、字型 subset 檢查 `font-subsets.mjs`、render-blocking CSS 量測 `css-blocking.mjs`、預設 OG 圖、圖片匯入、瀏覽器無障礙實測、頁面橫向溢出 `overflow.mjs`、全站 axe `axe.mjs`、影片 facade 檢查 `video-facade.mjs`、3D 初始化等待上限 `scene-wait.mjs`、offering 與 hub 內容對照 `offering-content.mjs`）、seo/（heading 檢查、每頁 head 與 sitemap 檢查、站內連結 `links.mjs`）、i18n/（語系路由檢查、翻譯詞彙表 `glossary.mjs`、測試語系 build `locale-fixture.mjs`）、forms/（表單規則與 Function 的單元測試、瀏覽器裡的表單檢查 `contact.mjs`）、search/（站內搜尋的索引、斷詞、載入範圍與無障礙檢查 `pagefind.mjs`）、consent/（同意狀態的單元測試、有 GTM ID 時的瀏覽器檢查 `gtm.mjs`）、lib/（共用的靜態伺服器）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應、build 後的轉址目標檢查 `redirect-targets.mjs`）、checkpoint/（進度推算）、bootstrap/（`issues.yml` 與 GitHub issue 的比對）、status/（`status.md` 檢查）、ci/（quality-gate 是否跳過 Lighthouse `lighthouse-scope.mjs`）、docs/（本檔目錄結構的檢查 `claude-md.mjs`）
 docs/             status.md、launch/（全站驗收 `audit.md`、上線準備 `launch-readiness.md`）、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）、content/（內容轉換的使用說明）、design/（品牌素材、影像提示詞、選單寬度實測）、i18n/（翻譯詞彙表 `glossary.csv`）
 tests/visual/      Playwright 視覺回歸與 baseline（`__screenshots__/`）
 .claude/skills/   issue-start、issue-ship、checkpoint、pr-review、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
-.github/          ISSUE_TEMPLATE、workflows、bootstrap（labels / milestones / issues）
+.github/          ISSUE_TEMPLATE/、workflows/、bootstrap/（labels / milestones / issues）、scripts/（workflow 呼叫的 bootstrap、issue launcher、Lighthouse summary）
 ```
 
 ## IA 與 URL
@@ -129,7 +129,7 @@ M2、M3 的關卡 issue 改用對應的 label（`ia-approved`、`wireframe-appro
 ## 文件維護
 
 - 架構決策記錄於 `docs/decisions/NNNN-<slug>.md`（ADR）
-- 每個 milestone 結束時更新本檔與 skills（各 milestone 最後一張 issue）。維運期間沒有收尾 issue，改了架構、目錄或流程的 PR 自己更新本檔與對應的 skill；頂層目錄與 `src/`、`src/lib/`、`scripts/`、`docs/` 的直接子目錄沒列進目錄結構時，`node scripts/docs/claude-md.mjs`（`npm run check`）會擋下，更深的目錄與各目錄的說明文字要自己對
+- 每個 milestone 結束時更新本檔與 skills（各 milestone 最後一張 issue）。維運期間沒有收尾 issue，改了架構、目錄或流程的 PR 自己更新本檔與對應的 skill；頂層目錄與 `src/`、`src/lib/`、`scripts/`、`docs/`、`public/`、`functions/`、`tests/`、`.github/` 的直接子目錄沒列進目錄結構時，`node scripts/docs/claude-md.mjs`（`npm run check`）會擋下，更深的目錄與各目錄的說明文字要自己對
 - 進度變動時更新 `docs/status.md`
 - 工作流程（skills、人工關卡）變動時更新 `docs/workflow.md`
 - 撰寫文件、PR 描述、commit message 依 `.claude/skills/writing-style/SKILL.md`
