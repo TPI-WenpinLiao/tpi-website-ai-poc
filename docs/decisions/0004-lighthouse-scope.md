@@ -78,7 +78,7 @@ quality-gate 的 `timeout-minutes` 從 20 調到 30。
 3. **quality-gate 用 cache**：`check:before-lighthouse` 之後算 key（`node scripts/lhci-pass.mjs --key`），`actions/cache/restore` 還原 key 相同的 `.lighthouseci/passed-dist.sha256`，`npm run lighthouse` 照常執行，命中時由 script 跳過；通過且沒有命中時 `actions/cache/save`。job summary 寫出跳過的原因與 key。只改文件的 PR 仍走上一節的 `DOCS_ONLY` 與 `--verify`
 4. **`issue-start` 的環境檢查不跑 Lighthouse**：改跑 `npm run check:before-lighthouse`。新 issue 從 `main` 開始，`main` 的每個 commit 都在 quality-gate 量過才合併。開 PR 前 `issue-ship` 仍跑完整的 `npm run check`
 
-**範圍**：PR 的 cache 只有同一個 PR 的後續 run 讀得到（GitHub 的 cache 依 ref 隔離，PR 可以讀 base 的 cache，但不能讀別的 PR 的）。quality-gate 只在 `pull_request` 執行，`main` 沒有 cache，所以「和 base 相同」的 `dist/`（例如只改 `scripts/` 的 PR 的第一次 run）仍要量。要涵蓋這種情況得在每次合併後於 `main` 再跑一次 Lighthouse，約 9 分鐘，沒有採用。
+**範圍**：PR 的 cache 只有同一個 PR 的後續 run 讀得到（GitHub 的 cache 依 ref 隔離，PR 可以讀 base 的 cache，但不能讀別的 PR 的）。quality-gate 只在 `pull_request` 執行，`main` 沒有 cache，所以「和 base 相同」的 `dist/`（例如只改 `scripts/` 的 PR 的第一次 run）仍要量。要涵蓋這種情況得在每次合併後於 `main` 再跑一次 Lighthouse，約 9 分鐘，沒有採用（使用者 2026-10-29 決定）：會命中的只有不改 `dist/`、又不屬於 `DOCS_ONLY` 的 PR（只改 `scripts/`、測試、workflow），而且 cache 7 天沒被讀取就會清掉。合併後觀察這類 PR 第一次 run 的耗時，常發生再另開 issue。
 
 **取捨**：key 不含執行的機器。本機的紀錄只在本機，CI 的 cache 只來自 CI，兩邊不互用。同一份 `dist/` 再量一次，差別只有量測的起伏，而起伏已由 3 次取最好處理（「取捨」），所以重量沒有新資訊。`numberOfRuns` 與 `PAGES` 不變。
 
