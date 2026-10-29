@@ -78,7 +78,7 @@ git push -u origin <工作 branch>
 
 用 `mcp__github__create_pull_request`，base 為 `main`，**一律開 draft**：審查迴圈跑完才轉 ready。工作 branch 已經有 OPEN PR 時（接續既有 PR），不另開，push 後依需要用 `mcp__github__update_pull_request` 更新 body。
 
-- **title**：issue 標題（含前綴：`[Mx-xx]`、`[chore]`、issue form 的 `[需求]`、`[Bug]`）
+- **title**：issue 標題，含它的前綴，例如 `[Mx-xx]`、`[chore]`、issue form 的 `[需求]`、`[Bug]`
 - **body** 必含以下段落：
 
 ```markdown
