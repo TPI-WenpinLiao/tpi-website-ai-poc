@@ -47,6 +47,20 @@ jobs:
       - run: echo "CHROME_PATH=$(node -p "require('playwright-core').chromium.executablePath()")" >> "$GITHUB_ENV"
       # npm run check without its last step, Lighthouse, which runs below unless the PR is docs-only
       - run: npm run check:before-lighthouse
+      # Pages that already passed on this PR are not measured again: the key covers .lhci-dist/ and
+      # how it is measured, and npm run lighthouse skips when the restored pass has the same key
+      # (scripts/lhci-pass.mjs, #149). PR caches are only shared within the same PR
+      - name: Lighthouse key
+        id: key
+        if: steps.scope.outputs.skip != 'true'
+        run: node scripts/lhci-prepare.mjs && node scripts/lhci-pass.mjs --key
+      - name: Restore Lighthouse pass
+        id: passed
+        if: steps.scope.outputs.skip != 'true'
+        uses: actions/cache/restore@v6
+        with:
+          path: .lighthouseci/passed-dist.sha256
+          key: lighthouse-passed-${{ steps.key.outputs.key }}
       # A stuck run fails after 3 minutes (scripts/lhci-run.mjs); this is the backstop. Normally
       # 8–9 minutes for 16 pages × 3 runs (#136, ADR 0004)
       - name: Lighthouse
@@ -54,6 +68,12 @@ jobs:
         if: steps.scope.outputs.skip != 'true'
         timeout-minutes: 15
         run: npm run lighthouse
+      - name: Save Lighthouse pass
+        if: steps.lighthouse.outcome == 'success' && steps.passed.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: .lighthouseci/passed-dist.sha256
+          key: lighthouse-passed-${{ steps.key.outputs.key }}
       - name: Verify DOCS_ONLY
         id: verify
         if: steps.scope.outputs.skip == 'true'

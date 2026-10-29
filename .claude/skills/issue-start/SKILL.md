@@ -93,11 +93,12 @@ git status -sb
 ```bash
 node -v && cat .nvmrc        # 主版號必須一致
 test -d node_modules && echo ok || echo missing
-npm run check                # 記錄 exit code；失敗時保留最後 30 行輸出
+npm run check:before-lighthouse   # 記錄 exit code；失敗時保留最後 30 行輸出
 ```
 
-- `node_modules` 不存在：先 `npm ci`，回報結果後再跑 `npm run check`
-- `npm run check` 會跑 Lighthouse，耗時數分鐘；用 Bash 的長 timeout（600000 ms），輸出導到 scratchpad 再看結尾
+- `node_modules` 不存在：先 `npm ci`，回報結果後再跑 `npm run check:before-lighthouse`
+- 不跑 Lighthouse（#149）：Lighthouse 只量 `dist/`，新 issue 從 `main` 開始，`main` 的每個 commit 都在 quality-gate 量過才合併，重量的結果相同。它約佔 `npm run check` 14.5 分鐘中的 9 分鐘。接續時 branch 上已有的變更，由 `issue-ship` 第 2 步開 PR 前的完整 `npm run check` 量
+- 用 Bash 的長 timeout（600000 ms），輸出導到 scratchpad 再看結尾
 - issue 需要連到現站（盤點、SEO、功能調查等）時，加測 `curl -sS -o /dev/null -w '%{http_code}\n' https://www.tpisoftware.com/` 與 `https://www.tpisoftware.vn/`；被 proxy 擋時依 `docs/onboarding.md` 的 Allowed domains 說明回報
 - 不要手動 export 環境變數讓檢查通過；SessionStart hook（`scripts/session-start.sh`）應該已設定好。需要手動設定才會過，就算失敗
 
@@ -110,7 +111,7 @@ npm run check                # 記錄 exit code；失敗時保留最後 30 行�
 | 項目 | 結果 |
 |---|---|
 | `node -v` | `vX.Y.Z`（`.nvmrc` = N）✅／❌ |
-| `npm run check` | exit 0 ✅／失敗原因 ❌ |
+| `npm run check:before-lighthouse` | exit 0 ✅／失敗原因 ❌ |
 | 依賴 | #N closed ✅ … |
 | 現站連線（需要時） | 200 ✅／… |
 | `status.md` 對照 | 一致 ✅／列出對不上的項目 |
