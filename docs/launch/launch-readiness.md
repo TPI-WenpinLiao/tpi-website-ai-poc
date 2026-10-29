@@ -30,11 +30,11 @@ M8-02（#44）整理新站上線前要做的事，讓決策者判斷能不能上
 | 3 | 表單：建立 Turnstile widget，網域加上正式網域，再設定 `PUBLIC_TURNSTILE_SITE_KEY`、`TURNSTILE_SECRET_KEY`（ADR 0005「設定」）。送出 adapter 依 D4 的決定換掉 `logAdapter`（ADR 0005「之後」），這部分要另開 issue | Cloudflare dashboard；repo | 在 preview 送出 `/contact-us` 一次，導到 `/thanks`，收件端有收到 |
 | 4 | 追蹤（要開才做）：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`，在 GTM 設定 tag 的同意條件，再設定 `PUBLIC_GTM_ID`（ADR 0007「設定」） | repo；GTM；Cloudflare Pages | `node scripts/consent/gtm.mjs`；在 preview 確認按下同意前沒有送往 `googletagmanager.com` 的請求 |
 | 5 | 轉址：照「`_redirects` 部署與否」產生並 commit `public/_redirects`。`.vn` 網域依 D2 的決定設定 Bulk Redirects，或在 `.vn` 那邊自己轉址（`docs/ia/redirects.md`「轉成 `_redirects`」） | repo；Cloudflare | `npm run check`（`redirects.mjs --check`、`redirect-targets.mjs`）；preview 上抽測 #139 列的 curl |
-| 6 | 開放收錄，用一個 PR 完成：<br>・刪掉 `public/_headers` 裡 `/*` 的 `X-Robots-Tag: noindex, nofollow`<br>・`public/robots.txt` 改成 `Allow: /`，加上 `Sitemap: <正式網域>/sitemap.xml`<br>・`CLAUDE.md`「專案目標」裡「不可被搜尋引擎收錄」與「只部署到 `*.pages.dev`」兩句，改成上線後的規則<br>・`Seo.astro`、`scripts/seo/meta.mjs`、`src/lib/seo/sitemap.ts` 的註解寫著網站靠 `_headers` 與 `robots.txt` 擋收錄，一起改。`scripts/lhci-prepare.mjs` 刪掉 `.lhci-dist/` 的這兩個檔案，檔案改了以後照樣能跑，不用改 | repo | `npm run check`；`curl -sI <正式網域>/` 沒有 `X-Robots-Tag`；`curl <正式網域>/robots.txt` |
+| 6 | 開放收錄，用一個 PR 完成：<br>・`public/_headers` 的 `X-Robots-Tag: noindex, nofollow` 從 `/*` 改成只套用在 `*.pages.dev`，例如 `https://:project.pages.dev/*` 與 preview 的 `https://:version.:project.pages.dev/*`。加上 custom domain 後，`tpi-website-ai-poc.pages.dev` 照樣提供服務，整條刪掉的話它會和正式網域一起被收錄。host 規則的寫法以 Cloudflare Pages 的 Headers 文件為準（雲端 session 連不到官方文件，本檔沒有查證）<br>・`public/robots.txt` 改成 `Allow: /`，加上 `Sitemap: <正式網域>/sitemap.xml`<br>・`CLAUDE.md`「專案目標」裡「不可被搜尋引擎收錄」與「只部署到 `*.pages.dev`」兩句，改成上線後的規則<br>・寫著「不可收錄」或「`_headers`、`robots.txt` 不得放寬」的規則與說明一起改：`.claude/skills/pr-review/SKILL.md` 的固定檢查（不改的話，這個 PR 會被審查迴圈判成違規）、`.claude/skills/seo-checklist/SKILL.md`、`README.md`、ADR 0001「影響」、`public/_headers` 開頭的註解<br>・`Seo.astro`、`scripts/seo/meta.mjs`、`src/lib/seo/sitemap.ts` 的註解寫著網站靠 `_headers` 與 `robots.txt` 擋收錄，一起改。`scripts/lhci-prepare.mjs` 刪掉 `.lhci-dist/` 的這兩個檔案，檔案改了以後照樣能跑，不用改 | repo | `npm run check`；`curl -sI <正式網域>/` 沒有 `X-Robots-Tag`；`curl -sI https://tpi-website-ai-poc.pages.dev/` 仍有 `X-Robots-Tag: noindex, nofollow`；`curl <正式網域>/robots.txt` |
 | 7 | 在 Pages 專案的 Custom domains 加上正式網域，DNS 指到 Pages。這一步做完就切換流量了，現站從此不再提供服務 | Cloudflare | 見「上線後檢查」 |
 | 8 | 在 Google Search Console 驗證網域並提交 `sitemap.xml` | Search Console | Search Console 顯示 sitemap 已讀取，網址數與 `dist/sitemap.xml` 相同（目前 457 個） |
 
-第 6 步的 PR 要和第 7 步一起執行。單獨合併第 6 步，`*.pages.dev` 就可能被搜尋引擎收錄，和現站形成重複內容。合併前先確認第 7 步可以馬上接著做。
+第 6 步的 PR 要和第 7 步一起執行。第 6 步合併後、第 7 步完成前，正式網域還指向現站，新站只能從 `*.pages.dev` 連到。這時 `*.pages.dev` 仍有 noindex，但 `robots.txt` 已經指向還沒切換的正式網域 sitemap。合併前先確認第 7 步可以馬上接著做。
 
 ### `_redirects` 部署與否
 
@@ -53,9 +53,9 @@ M8-02（#44）整理新站上線前要做的事，讓決策者判斷能不能上
 
 第 7 步完成後馬上執行。`<網域>` 是正式網域：
 
-1. `curl -sI <網域>/`：回 200，沒有 `X-Robots-Tag`
+1. `curl -sI <網域>/`：回 200，沒有 `X-Robots-Tag`。`curl -sI https://tpi-website-ai-poc.pages.dev/` 仍有 `X-Robots-Tag: noindex, nofollow`
 2. `curl -sI <網域>/products/gadoDIDO`：回 301，`Location` 是 `/products/gadodido`；`curl -sI <網域>/products/gadodido` 回 200
-3. 從 `redirects.csv` 隨機抽 20 列 keep 以外的來源各 curl 一次，都轉到 `to`
+3. 從 `redirects.csv` 中 `www.tpisoftware.com` 的 301 列隨機抽 20 列，各 curl 一次，都轉到 `to`。`www.tpisoftware.vn` 的 398 列不在 `_redirects` 裡，依 D2 的做法另外檢查
 4. `<網域>/sitemap.xml` 裡的網址都以正式網域開頭
 5. 三語首頁與 `/contact-us` 各開一次，表單送出一次
 6. 有設定 GTM 時，確認按下同意前沒有送往 `googletagmanager.com` 的請求，同意後才有
@@ -66,14 +66,14 @@ M8-02（#44）整理新站上線前要做的事，讓決策者判斷能不能上
 | # | 風險 | 影響 | 降低方式 | 相關 |
 |---|---|---|---|---|
 | R1 | 聯絡表單沒有接後端，送出的資料只寫進 Function log | 主要轉換「聯絡業務」（`docs/research/audience-and-goals.md`）的資料沒有人收到 | 上線前依 D4 換掉 `logAdapter` | ADR 0005、`docs/research/features.md`「待確認」1–3 |
-| R2 | 導覽連到的 12 頁沒有建出，另有 22 列 redirect 轉到這些頁 | 使用者從選單點到 404；舊網址轉到 404 | #138 補內容，或從導覽拿掉並改 `redirects.csv` | #138、`scripts/seo/links.mjs` 的 `PENDING` |
+| R2 | 導覽連到的 12 頁沒有建出，`redirects.csv` 另有 22 列舊網址的目標是這些頁（301 10 列、路徑不變的 200 12 列） | 使用者從選單點到 404；舊網址轉到 404 | #138 補內容，或從導覽拿掉並改 `redirects.csv` | #138、`scripts/seo/links.mjs` 的 `PENDING` |
 | R3 | 12 列 redirect 的目標沒建出：digiMars、digiRunner 的下載頁三語，5 篇遷移失敗的 blog，`/vi/privacy` | 這些舊網址轉到 404 | #137 補內容，或改轉到最接近的頁 | #137、`scripts/ia/redirect-targets.mjs` 的 `UNBUILT` |
 | R4 | Cloudflare 比對 `_redirects` 的方式沒有實測 | 只差大小寫的 5 條規則可能形成迴圈；`%` 編碼的 1 條可能比對不到 | 依 #139 的結果處理，見「`_redirects` 部署與否」 | #139、`docs/ia/redirects.md`「待確認」 |
 | R5 | 沒有 GA4、Search Console 的權限，也還沒決定新站的 GTM | 上線前後的自然搜尋流量沒辦法比較；成功指標無法量測 | 上線前取得 Search Console 權限，至少保留現站的基準數字（D6） | `docs/research/seo-baseline.md`、`audience-and-goals.md` |
 | R6 | 效能只在 headless Chrome 量過，沒有在 preview 用真機量測，也沒有現站 origin 層級的 field CWV | 實際使用者的 LCP、INP 可能和實驗室數字不同 | 上線後檢查第 7 項；有問題再開 issue | ADR 0004、`docs/status.md`「待辦備忘」 |
 | R7 | 內容的「待確認」還沒回覆：客戶名稱與 logo 的授權、圖片授權、en 法務頁的英譯、AI 草擬的 en、vi 譯文 | 授權有問題的內容需要下架；譯文錯誤 | 上線前回覆 D7–D9 | `audit.md`「內容待確認」 |
 | R8 | 換網域時 `SITE_URL` 沒設定或設錯 | canonical、hreflang、sitemap 全部指向 `*.pages.dev`，搜尋引擎把舊網域當成正式版本 | 上線步驟第 1 步驗證過再繼續 | `astro.config.mjs` |
-| R9 | 收錄設定的順序弄錯（見上線步驟第 6、7 步） | `*.pages.dev` 被收錄，和正式網域形成重複內容 | 第 6、7 步一起執行 | `public/_headers`、`public/robots.txt` |
+| R9 | 開放收錄時把 `*.pages.dev` 的 noindex 一起拿掉，或第 6、7 步的順序弄錯 | `*.pages.dev` 被收錄，和正式網域形成重複內容 | 第 6 步只對正式網域開放，`*.pages.dev` 保留 noindex；第 6、7 步一起執行，上線後檢查第 1 項確認 | `public/_headers`、`public/robots.txt` |
 | R10 | `www.tpisoftware.vn` 的舊網址沒有處理。`_redirects` 不支援網域層級的轉址，萬用規則還會把 `/vn/*` 轉到不存在的 `/vi/vn/*` | vi 的舊網址和外部連結失效 | D2 決定後設定 Bulk Redirects，先去掉 `/vn/` 前綴再轉 | `docs/ia/redirects.md`「待確認」第 3 項 |
 
 ## 待決事項
