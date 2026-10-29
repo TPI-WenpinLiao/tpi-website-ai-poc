@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-10-28
+最後更新：2026-10-29
 
 ## 目前 milestone
 
@@ -113,6 +113,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 ### M8 驗收
 
 - M8-01 全站驗收完成（#43）：`docs/launch/audit.md` 逐項記錄 `npm run check` 每個子檢查、redirect map、全站 Lighthouse 與內容待確認的結果。新增 `scripts/ia/redirect-targets.mjs`（`npm run check`）：`redirects.csv` 每一列的目標都要在 `dist/` 建出、沒有轉址鏈，已知沒建出的目標列在 `UNBUILT`（#137）。`npm run lighthouse:all` 485 頁中 483 頁達標，另外 2 頁重跑後 0.98；成功案例的客戶 logo 加上 2x（ADR 0004「M8-01 重跑」）。無法當場修的問題開 #137、#138、#139
+- M8-02 launch-readiness 報告完成（#44）：`docs/launch/launch-readiness.md` 的結論是目前不能上線，列出上線前要完成的 6 個條件、8 個上線步驟（`SITE_URL`、Turnstile、GTM、`_redirects`、開放收錄、切換網域）、上線後的 curl 檢查、10 項風險與 12 個待決事項，負責人都寫「待確認」。`_redirects` 推薦部署，前提是 #137、#138、#139 完成，#139 的實測結果決定能不能照現在的產出部署
 - logo 改用 AI 檔轉出的 SVG 完成（#122）：`node scripts/design/import-brand.mjs <AI 檔資料夾>` 用 `pdftocairo` 把行銷部門的 AI 檔轉成 SVG，刪掉反白版的預覽底色與空字形、裁掉留白，產生 `src/assets/brand/logo-*.svg`、favicon 與 apple-touch-icon；header、footer 與 `public/og/default.png` 改用 SVG，顯示高度不變；JSON-LD 的 organization `logo` 用 script 從 SVG 產生的 PNG。AI 原始檔不進 repo（`docs/design/brand-assets.md`）
 - `npm run check` 的 LHCI 涵蓋所有模板完成（#87）：`lighthouserc.cjs` 的 `PAGES` 是每個模板在全站量測中分數最低的一頁，加上三語首頁與 404，共 15 頁；`scripts/lhci-prepare.mjs` 在路徑不存在或有模板沒有代表頁時失敗（ADR 0004）。`npm run lighthouse:all` 測全部 485 頁，第一次 202 頁沒達標，修掉 vi 字型（多下載 `latin-ext` subset）、新聞內頁圖片（手機下載 1440w 封面與 1600px 內文原檔）與 `/en` 的「Learn More」連結文字後，剩下載入 3D 的 59 頁，交給 #127，這段期間 3D 頁的 performance 只 warn
 - 只改文件的 PR 在 quality-gate 跳過 Lighthouse 完成（#129）：變更的檔案全部在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY` 白名單內時，quality-gate 不跑 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify`：拿掉這些檔案重新 build，`dist/` 逐檔相同才通過，白名單失效時會在這裡失敗。job summary 寫明原因。`npm run check` 拆成 `check:before-lighthouse` 與 `lighthouse`，本機行為不變（ADR 0004「例外」）
@@ -122,7 +123,8 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 
 ## 下一步
 
-- M8-02 launch-readiness（#44）可以開始
+- M8-03 M8 收尾（#45）可以開始
+- 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
 - redirect 目標頁沒有建出的 12 列（#137）可以開始
 - 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
 - M3-08 動態規範（#55）可以開始
@@ -172,7 +174,7 @@ M3 設計系統已收尾（#19），還剩 M3-08 動態規範（#55），進行�
 - 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；文章已在 M5-05 遷移，改讀 content collections 並刪除這個檔案的工作在「下一步」。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
-- 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，列進 M8-02 launch-readiness（#44）
-- 正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。列進 M8-02 launch-readiness（#44）
-- 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），列進 M8-02 launch-readiness（#44）
+- 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，見 `docs/launch/launch-readiness.md`「上線步驟」第 3 步
+- 正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。見 `docs/launch/launch-readiness.md`「上線步驟」第 4 步
+- 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），見 `docs/launch/launch-readiness.md`「上線步驟」第 6 步
 - M8-01 的全站驗收在 #36（GTM／consent）、#101（最新文章改讀 collection）合併前執行，這兩處的結果標「待這兩張合併後重驗」。兩張都合併後在 `main` 重跑 `npm run check` 與 `npm run lighthouse:all`，結果補進 `docs/launch/audit.md`
