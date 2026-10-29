@@ -12,7 +12,7 @@ const md = [
   '```',
   'src/pages/        首頁',
   'src/lib/          i18n/（語系）、ia/（導覽）',
-  'scripts/          design/（對比）、lib/（共用）、multimedia/（影音）',
+  'scripts/          design/（對比，含 `tokens/`）、lib/（共用）、multimedia/（影音）',
   'tests/visual/     Playwright',
   '```',
   '',
@@ -43,8 +43,10 @@ test('accepts a full-path line or a name on the parent line', () => {
 
 test('does not match a name inside another word or on another line', () => {
   const block = structureBlock(md);
-  // `media/` must not count as `ia/`, and `src/lib/ia/` is not on the scripts line.
+  // `multimedia/` must not count as `ia/`, and `src/lib/ia/` is not on the scripts line.
   assert.equal(isListed(block, 'scripts', 'ia'), false);
+  // A name inside another directory's （…） note is not a listing of its own.
+  assert.equal(isListed(block, 'scripts', 'tokens'), false);
   assert.equal(isListed(block, 'src', 'assets'), false);
 });
 

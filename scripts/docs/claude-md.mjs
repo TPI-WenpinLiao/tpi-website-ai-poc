@@ -1,12 +1,12 @@
-// Checks that CLAUDE.md's 目錄結構 block lists every tracked directory the project is organised by:
+// Checks that CLAUDE.md's 目錄結構 block lists every directory the project is organised by (tracked, or new and not ignored):
 // top-level directories and the direct subdirectories of src/, src/lib/, scripts/ and docs/.
 // The block is hand-written and fell behind at every milestone wrap-up (M8-03 found src/assets
 // and docs/design missing), so drift fails `npm run check` instead of waiting for a review.
 // Run: node scripts/docs/claude-md.mjs
 
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 /** Parents whose direct subdirectories must each be listed. '' is the repo root. */
@@ -36,10 +36,20 @@ export function directories(files) {
 
 const escape = (/** @type {string} */ s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+/** Drops `（…）` notes, innermost first, so a name mentioned inside one does not count. @param {string} line */
+const withoutNotes = (line) => {
+  let previous;
+  do {
+    previous = line;
+    line = line.replace(/（[^（）]*）/g, '');
+  } while (line !== previous);
+  return line;
+};
+
 /**
  * A directory counts as listed when the block has a line starting with its full path
  * (`src/assets/`, `tests/visual/`), or the line for its parent (`scripts/  …`) names it as
- * `name/` after a space, `、`, `（` or `；`.
+ * `name/` after a space, `、` or `；`, outside the `（…）` notes.
  * @param {string} block @param {string} parent @param {string} name
  */
 export function isListed(block, parent, name) {
@@ -48,7 +58,7 @@ export function isListed(block, parent, name) {
   if (lines.some((line) => line.startsWith(path))) return true;
   if (!parent) return false;
   const parentLine = lines.find((line) => new RegExp(`^${escape(parent)}/\\s`).test(line));
-  return Boolean(parentLine && new RegExp(`[\\s、（；]${escape(name)}/`).test(parentLine));
+  return Boolean(parentLine && new RegExp(`[\\s、；]${escape(name)}/`).test(withoutNotes(parentLine)));
 }
 
 /** @param {string} md @param {string[]} files @returns {string[]} */
@@ -65,7 +75,11 @@ export function missing(md, files) {
 
 function main() {
   const root = resolve(import.meta.dirname, '../..');
-  const files = execFileSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean);
+  // Tracked and untracked files git does not ignore, as on disk: a new directory fails here
+  // before it is committed, not only in CI.
+  const files = execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' })
+    .split('\0')
+    .filter((f) => f && existsSync(join(root, f)));
   const problems = missing(readFileSync(resolve(root, 'CLAUDE.md'), 'utf8'), files);
   for (const dir of problems) console.error(`CLAUDE.md 目錄結構 does not list ${dir}`);
   if (problems.length) {
