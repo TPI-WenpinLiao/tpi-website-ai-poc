@@ -125,10 +125,14 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - quality-gate 的 Lighthouse 卡住時提早失敗完成（#136）：`npm run lighthouse` 經過 `scripts/lhci-run.mjs`，單次量測超過 3 分鐘就印出 URL、Chrome 的 process 與 DevTools targets 並 exit 1，job summary 寫出卡住的頁面，CI 的 Lighthouse step 另有 15 分鐘上限。卡住的位置推測是 Lighthouse 測 BFCache 時沒有上限的導頁（`BFCacheFailures`），依使用者決定跳過 weight 0 的 `bf-cache` audit。原本推測的 3D 等待已排除，仍各加 1 秒上限（`scripts/design/scene-wait.mjs` 接進 `npm run check`）。Chrome flags 的環境變數改名為 `LHCI_SETTINGS__CHROME_FLAGS`，舊名會蓋掉 `lighthouserc.cjs` 的 `settings`（ADR 0004「卡住的量測與時間上限」、ADR 0003「等待的上限」）
 - 剛好 0.95 的頁面在 Lighthouse 門檻留出餘裕完成（#143）：4 頁卡住的原因是首次繪製或 LCP 前下載的字型與圖片，不是 CSS。字型改由 `src/styles/base.css` 只宣告 Inter、JetBrains Mono 的 latin、vietnamese、greek subset，contact 頁不再為地址的「ō」下載 83 KB 的 `latin-ext`；`scripts/design/font-subsets.mjs`（`npm run check`）擋下這三個 subset 以外的字元，例外列在 `ALLOWED`。文章頁的「More」區塊加 `content-visibility: auto`，封面 `quality={70}`。本機行動版 `/en/contact-us`、`/vi/contact-us`、`/vi` 0.98，`/media-center/572` 0.97；`npm run lighthouse:all` 485 頁全部達標，performance 最低 0.97。quality-gate 在 Lighthouse 失敗時上傳 artifact `lighthouse-report`。CSS 全部 inline 只多 0.01–0.02 分，不採用（ADR 0004「剛好 0.95 的頁面」）
 
+### 維運
+
+- redirect 目標頁沒有建出的 12 列完成（#137）：`dropImagesFrom` 拿掉現站也是 404 的 Google 圖片縮圖後，vi 的 `nosql-la-gi`、`server-la-gi` 補上內容。其他 10 列沒有內容可補，寫在手寫的 `docs/ia/redirect-overrides.csv`，`redirects.mjs` 用它取代 `page-map.csv` 的目標：不在現站 blog API 的 3 篇轉到分類列表頁，digiMars、digiRunner 的下載頁三語轉到產品頁（現站下載走 API，沒有可搬的檔案），`/vi/privacy` 轉到 `/privacy`（vi PDF 不是網站的隱私權政策）。`redirect-targets.mjs` 刪掉 `UNBUILT`，`www.tpisoftware.com` 的 301 來源在 `dist/` 有建出時失敗（`docs/ia/redirects.md`「對照規則」）
+
 ## 下一步
 
 - 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
-- redirect 目標頁沒有建出的 12 列（#137）可以開始
+- 回覆 #137 PR 的「待確認」：`/vi/privacy` 轉到 zh-TW 的 `/privacy`、vi 兩篇 blog 縮短的 `seoTitle` 與 `description`
 - 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」

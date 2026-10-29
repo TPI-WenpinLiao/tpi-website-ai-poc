@@ -435,3 +435,15 @@ blog/vi/what-is-fintech-explained:
 blog/vi/hosting-la-gi:
   frontmatter:
     seoTitle: Web Hosting Là Gì? Shared, VPS Và Cloud Hosting
+
+# The Google image thumbnails in these two return 404 on the current site too (#137)
+blog/vi/nosql-la-gi:
+  frontmatter:
+    seoTitle: NoSQL Là Gì? Giải Pháp Lưu Trữ Cho Big Data 2026
+    description: NoSQL là gì? Khám phá 4 loại database phi quan hệ và lý do nó là nền tảng của Big Data. Tìm hiểu giải pháp giám sát digiMars của TPIsoftware.
+  dropImagesFrom: [encrypted-tbn0.gstatic.com]
+
+blog/vi/server-la-gi:
+  frontmatter:
+    seoTitle: Máy Chủ (Server) Là Gì? Physical, VPS & Cloud
+  dropImagesFrom: [encrypted-tbn0.gstatic.com]

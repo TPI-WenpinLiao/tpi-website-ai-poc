@@ -1,6 +1,6 @@
 // Old-site redirect map for M2-05 (#12).
 // Reads docs/research/inventory.csv, docs/ia/page-map.csv (scripts/ia/sitemap.mjs), docs/ia/nodes.csv and the
-// hand-written docs/ia/drop-targets.csv, maps every inventory URL to its new path (rules: docs/decisions/0002-url-and-locale.md)
+// hand-written docs/ia/drop-targets.csv and docs/ia/redirect-overrides.csv, maps every inventory URL to its new path (rules: docs/decisions/0002-url-and-locale.md)
 // and writes docs/ia/redirects.csv. Rows whose path doesn't change get status 200 and no redirect rule.
 // Re-run after editing any input or re-running scripts/ia/sitemap.mjs: node scripts/ia/redirects.mjs
 // With --check it validates the same way but only compares the output to the file on disk (npm run check:ia).
@@ -16,6 +16,7 @@ const INVENTORY = 'docs/research/inventory.csv';
 const PAGE_MAP = 'docs/ia/page-map.csv';
 const NODES = 'docs/ia/nodes.csv';
 const DROP_TARGETS = 'docs/ia/drop-targets.csv';
+const OVERRIDES = 'docs/ia/redirect-overrides.csv';
 const REDIRECTS = 'docs/ia/redirects.csv';
 
 // The host the new site replaces; _redirects can only match paths, so other hosts (www.tpisoftware.vn) need domain-level rules
@@ -44,11 +45,17 @@ function newPath(row, node) {
   return withPrefix(row.locale, path);
 }
 
-export function buildRedirects({ inventory, pageMap, nodes, dropTargets }) {
+export function buildRedirects({ inventory, pageMap, nodes, dropTargets, overrides = [] }) {
   const errors = [];
   const byId = new Map(nodes.map((n) => [n.id, n]));
   const mapped = new Map(pageMap.map((r) => [r.url, r]));
   const dropRoutes = new Map(dropTargets.map((d) => [d.route, d.node]));
+  // Kept rows whose page the build doesn't have (no content entry, no downloads): url → the page to send them to
+  const overrideTo = new Map();
+  for (const o of overrides) {
+    if (overrideTo.has(o.url)) errors.push(`${OVERRIDES}: duplicate url: ${o.url}`);
+    overrideTo.set(o.url, o.to);
+  }
 
   // Pass 1: keep / rewrite / merge rows; their targets are the pages the new site has in each locale
   const targets = new Map();
@@ -60,12 +67,22 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets }) {
       errors.push(`missing from ${PAGE_MAP}: ${row.url}`);
       continue;
     }
+    if (overrideTo.has(row.url)) {
+      // The node's page is not built, so it is not a target dropped rows may use either
+      targets.set(row.url, { to: overrideTo.get(row.url), note: `${row.disposition}：${node.id}（redirect-overrides.csv）` });
+      continue;
+    }
     const to = newPath(m, node);
     if (node.kind === 'page' || node.kind === 'collection') {
       if (!PATH_PATTERN.test(to)) errors.push(`new path "${to}" breaks the URL rule (ADR 0002): ${row.url}`);
       exists.add(to);
     }
     targets.set(row.url, { to, note: `${row.disposition}：${node.id}` });
+  }
+  const kept = new Set(inventory.filter((r) => r.disposition !== 'drop').map((r) => r.url));
+  for (const [url, to] of overrideTo) {
+    if (!kept.has(url)) errors.push(`${OVERRIDES}: not a keep / rewrite / merge row of ${INVENTORY}: ${url}`);
+    else if (!exists.has(to)) errors.push(`${OVERRIDES}: "${to}" is not a page of the new site: ${url}`);
   }
 
   // Pass 2: dropped rows go to the nearest parent page the new site has in the same locale
@@ -153,6 +170,7 @@ async function main() {
     pageMap: await readCsv(PAGE_MAP),
     nodes,
     dropTargets: await readCsv(DROP_TARGETS),
+    overrides: await readCsv(OVERRIDES),
   });
   const redirects = toRedirects(rows, nodes);
   errors.push(...redirects.errors);

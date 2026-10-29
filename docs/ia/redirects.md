@@ -3,7 +3,7 @@
 現站網址到新站路徑的對照，上線時轉成 Cloudflare Pages `_redirects`。路徑規則依 [ADR 0002](../decisions/0002-url-and-locale.md)，新路徑依 [`sitemap.md`](./sitemap.md) 的節點。
 
 - 對照表：[`redirects.csv`](./redirects.csv)，由 `node scripts/ia/redirects.mjs` 產生，不要手改
-- 輸入：[`inventory.csv`](../research/inventory.csv)、[`page-map.csv`](./page-map.csv)、[`nodes.csv`](./nodes.csv)、[`drop-targets.csv`](./drop-targets.csv)
+- 輸入：[`inventory.csv`](../research/inventory.csv)、[`page-map.csv`](./page-map.csv)、[`nodes.csv`](./nodes.csv)、[`drop-targets.csv`](./drop-targets.csv)、[`redirect-overrides.csv`](./redirect-overrides.csv)
 - 改了輸入或重跑 `sitemap.mjs` 後重跑本 script；`npm run check:ia` 會檢查 `redirects.csv` 是不是最新的
 
 ## 欄位
@@ -13,7 +13,7 @@
 | `from` | 現站網址，`inventory.csv` 的 `url` 原樣（含網域）；最後 3 列是含 `*` 的萬用規則 |
 | `to` | 新站路徑 |
 | `status` | `301`：要轉址；`200`：路徑不變，不需轉址，轉換時略過 |
-| `note` | 依據：`<disposition>：<節點 id>`，drop 列寫找到目標的方式 |
+| `note` | 依據：`<disposition>：<節點 id>`，drop 列寫找到目標的方式；目標由 `redirect-overrides.csv` 指定的列加上 `（redirect-overrides.csv）` |
 
 列數、`301` 與 `200` 的筆數，以及 `_redirects` 的規則數，看 `node scripts/ia/redirects.mjs` 的輸出。
 
@@ -26,6 +26,13 @@ keep、rewrite、merge 的列導到 `page-map.csv` 對應節點的路徑，en �
 - 新聞 `/media-center/{id}` 沿用現站 id；其他集合節點（ESG 顧問、成功案例、下載中繼頁）沿用現站最後一段，依 ADR 0002 正規化
 - vi：`www.tpisoftware.vn/*` 與 `www.tpisoftware.com/vn/*` 導到 `/vi/*`
 - 下載檔案（`kind` 為 `asset` 的節點）保留原檔路徑，不加語系前綴
+
+節點的頁面在某語系沒有建出時（沒有內容檔、offering 沒有 `downloads`），在 [`redirect-overrides.csv`](./redirect-overrides.csv) 指定目標（#137）：
+
+- `url` 是 `inventory.csv` 的 keep、rewrite、merge 列，`to` 是新站存在的頁面路徑（含語系前綴），`reason` 寫為什麼沒有建出
+- 被覆寫的原目標不算新站存在的頁面，drop 列找上層頁時不會找到它
+- `url` 重複、不是 keep、rewrite、merge 列，或 `to` 不是新站的頁面時 exit 1
+- 頁面之後建出了（例如補了內容檔），刪掉那一列重跑；沒刪的話，`redirect-targets.mjs` 會因為轉址蓋掉已建出的頁面而失敗
 
 drop 的列導到同語系最接近的上層頁：
 
@@ -43,7 +50,7 @@ script 另外檢查：
 - 產出的 `_redirects` 規則（含萬用規則）不會比對到新站的頁面。Cloudflare Pages 不論檔案是否存在都會套用轉址，比對到新頁面就會蓋掉該頁或形成迴圈
 - 數量與長度在 Cloudflare Pages 的上限內：靜態 2,000 筆、動態 100 筆、每行 1,000 字元
 
-`npm run check` 在 build 後另外執行 `node scripts/ia/redirect-targets.mjs`（M8-01）：每一列的 `to`（含 200 列）都要在 `dist/` 建出，也不能又是另一條規則的來源（轉址鏈）。上面的檢查只看節點，看不到某語系有沒有內容檔、offering 有沒有 `downloads`。外部節點、`scripts/seo/links.mjs` 的 `PENDING` 與 script 內的 `UNBUILT`（#137）不算錯誤，清單上的頁面建出後要從清單拿掉。
+`npm run check` 在 build 後另外執行 `node scripts/ia/redirect-targets.mjs`（M8-01）：每一列的 `to`（含 200 列）都要在 `dist/` 建出，也不能又是另一條規則的來源（轉址鏈）；`www.tpisoftware.com` 的 301 來源在 `dist/` 有建出時也失敗，因為轉址會蓋掉那一頁。上面的檢查只看節點，看不到某語系有沒有內容檔、offering 有沒有 `downloads`，沒建出的目標改寫在 `redirect-overrides.csv`。外部節點與 `scripts/seo/links.mjs` 的 `PENDING` 不算錯誤，`PENDING` 的頁面建出後要從清單拿掉。
 
 ## 轉成 `_redirects`
 

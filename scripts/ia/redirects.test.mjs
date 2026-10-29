@@ -79,6 +79,40 @@ test('buildRedirects rejects a dropped page without a parent or with an unknown 
   ]);
 });
 
+test('buildRedirects sends overridden rows to the given page, and their own page is no drop target', () => {
+  const { rows, errors } = buildRedirects({
+    inventory: [...inventory, row('https://www.tpisoftware.com/media-center/12/photo', 'zh-TW', 'drop')],
+    pageMap,
+    nodes,
+    dropTargets,
+    overrides: [{ url: 'https://www.tpisoftware.com/media-center/12', to: '/media-center', reason: 'no entry' }],
+  });
+  assert.deepEqual(errors, []);
+  const byFrom = Object.fromEntries(rows.map((r) => [r.from, `${r.to} ${r.status} ${r.note}`]));
+  assert.equal(byFrom['https://www.tpisoftware.com/media-center/12'], '/media-center 301 keep：news-article（redirect-overrides.csv）');
+  assert.equal(byFrom['https://www.tpisoftware.com/media-center/12/photo'], '/media-center 301 drop：上層頁');
+});
+
+test('buildRedirects rejects duplicate overrides, overrides of dropped rows and targets the new site lacks', () => {
+  const { errors } = buildRedirects({
+    inventory,
+    pageMap,
+    nodes,
+    dropTargets,
+    overrides: [
+      { url: 'https://www.tpisoftware.com/media-center/12', to: '/media-center' },
+      { url: 'https://www.tpisoftware.com/media-center/12', to: '/media-center' },
+      { url: 'https://www.tpisoftware.com/media-center/13', to: '/media-center' },
+      { url: 'https://www.tpisoftware.com/blog/ai/Chatbot-NLU', to: '/blog/chatbot-nlu' },
+    ],
+  });
+  assert.deepEqual(errors, [
+    'docs/ia/redirect-overrides.csv: duplicate url: https://www.tpisoftware.com/media-center/12',
+    'docs/ia/redirect-overrides.csv: not a keep / rewrite / merge row of docs/research/inventory.csv: https://www.tpisoftware.com/media-center/13',
+    'docs/ia/redirect-overrides.csv: "/blog/chatbot-nlu" is not a page of the new site: https://www.tpisoftware.com/blog/ai/Chatbot-NLU',
+  ]);
+});
+
 test('toRedirects writes main-host redirects, static before splats, and skips unchanged rows', () => {
   const { rows } = buildRedirects({ inventory, pageMap, nodes, dropTargets });
   const out = toRedirects(rows);
