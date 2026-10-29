@@ -45,7 +45,7 @@ Claude 會依序：
 2. 讀 issue、`CLAUDE.md`、`docs/status.md` 與前置 issue 的產出
 3. 檢查依賴是否關閉、關卡 label 是否齊全
 4. 拿 `docs/status.md` 對照 GitHub 上已關閉的 issue；對不上的列進計畫，在這張 issue 的 PR 一起修，不另開同步 PR。`status.md` 不列其他 open PR，進行中的 issue 用 `/next-issue` 看
-5. 執行環境檢查：Node 版本與 `.nvmrc` 一致、`node_modules` 存在、`npm run check:before-lighthouse` 通過（`main` 的 Lighthouse 已在 CI 量過，不重跑）；issue 需要時測試現站連線
+5. 執行環境檢查：Node 版本與 `.nvmrc` 一致、`node_modules` 存在、`npm run check:before-lighthouse` 通過（不跑 Lighthouse，理由見 [ADR 0004](decisions/0004-lighthouse-scope.md)「例外：量過且通過的 `dist/` 不重量」）；issue 需要時測試現站連線
 6. 回報環境檢查表，提出計畫。計畫會把實作拆成幾個階段，每個階段寫出完成條件
 
 接下來分兩種：
