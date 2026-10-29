@@ -4,9 +4,9 @@
 
 ## 目前 milestone
 
-**M6 功能**
+**維運**
 
-M3 設計系統已完成（收尾 #19，最後一張是 M3-08 動態規範 #55）。M4 開發骨架已收尾（#25）。M8 驗收已收尾（#45），M6 完成後進入維運，沒有 milestone 的 issue 寫在「維運」小標（`issue-ship` 第 3 步）。
+M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，不掛 milestone，寫在「Issue」的「維運」小標（`issue-ship` 第 3 步）。正式上線照 `docs/launch/launch-readiness.md`「上線步驟」。
 
 ## 進度
 
@@ -18,7 +18,7 @@ M3 設計系統已完成（收尾 #19，最後一張是 M3-08 動態規範 #55�
 | M3 設計系統 | 完成 |
 | M4 開發骨架 | 完成 |
 | M5 內容遷移 | 完成 |
-| M6 功能 | 進行中 |
+| M6 功能 | 完成 |
 | M7 多語系 | 完成 |
 | M8 驗收 | 完成 |
 
@@ -101,6 +101,7 @@ M3 設計系統已完成（收尾 #19，最後一張是 M3-08 動態規範 #55�
 - M6-02 Pagefind 站內搜尋完成（#34，`design-approved`）：`src/integrations/pagefind.ts` 在 `astro build` 時產生 `dist/pagefind/`（zh-tw 133、en 122、vi 146 頁，依 `<html lang>` 分開）；索引範圍由 `PageLayout` 的 `searchTrail` 決定（七個內容模板，首頁、listing、contact、utility 不進）。Pagefind 的中文字典是簡體，繁體會切成單字，zh-TW 頁改用 `Intl.Segmenter` 預先斷詞後建索引（`src/lib/search/segment.ts`，「企業」從 7 頁變 53 頁）。`/search` 的結果由新元件 `SearchResults` 畫，只有它載入 Pagefind；頁首搜尋框是送到 `/search` 的 GET 表單。`node scripts/search/pagefind.mjs` 接進 `npm run check`，`/search?q=企業` 加進 LHCI 的 `PAGES`（16 頁）（ADR 0006）
 - M6-03 影片延遲載入完成（#35）：新元件 `VideoFacade`。初始只有本機 poster 與原生按鈕，播放器（YouTube 用 `youtube-nocookie.com` 的 iframe，自架 MP4 用 `<video>`）放在 `<template>`，點擊後才換上並取得焦點；poster 不用 YouTube 縮圖，首次載入不連任何站外網域。`node scripts/design/video-facade.mjs` 接進 `npm run check`，對每個有 facade 的頁面檢查載入時沒有站外請求、鍵盤 Tab＋Enter 能換上有 `title` 的播放器並取得焦點。目前只有 `/design-system` 使用：現站影片在產品、服務、about 頁，offering schema 沒有影片欄位，M5 決定不搬
 - M6-04 GTM 與 consent 管理完成（#36，`design-approved`）：新元件 `ConsentBanner`（底部的深色橫幅，加上原生 `<dialog>` 的偏好設定）與頁尾的「Cookie 設定」，只在 build 有 `PUBLIC_GTM_ID` 時由 `PageLayout` 輸出。同意至少一個非必要類別前不載入 gtm.js，也沒有 `dataLayer`，不用 Consent Mode 的 advanced 模式；選擇存在 `localStorage` 的 `tpi-consent`，撤回時重新載入頁面。類別與三語文案在 `src/data/consent.ts`，目前是 `draft: true` 的佔位內容，有 ID 但還是 draft 時 build 失敗。`node scripts/consent/gtm.mjs` 接進 `npm run check`：用測試 ID 另外 build 一份，在瀏覽器檢查同意前沒有站外請求、拒絕、同意、撤回與鍵盤操作（ADR 0007）
+- M6-05 M6 收尾完成（#37）：`CLAUDE.md` 新增「功能模組」：互動寫在元件內的 `<script>`、不碰 DOM 的判斷放 `src/lib/<模組>/` 寫單元測試、頁面載入時不連站外網域、secret 只放環境變數，以及表單、站內搜尋、影片、cookie 同意與 GTM 各一條規則（細節連到 ADR 0005–0007 與 `design-system` 元件表）。「技術棧」、ADR 0001 與 `typescript-best-practices` 的「互動才用 island（`client:*`）」改成實際寫法（`src/` 沒有 `client:*`）。`pr-review` 固定檢查加上站外請求與 secret 一列
 - `dist/` 沒變時不重跑 Lighthouse 完成（#149）：`npm run lighthouse` 通過後把 `.lhci-dist/` 與量測設定（`scripts/lhci-pass.mjs` 的 `INPUTS` 與 `LHCI_*` 環境變數）的 key 寫到 `.lighthouseci/passed-dist.sha256`，下次 key 相同就跳過並印出 key，`LIGHTHOUSE_FORCE=1` 強制重量，`lighthouse:all` 不受影響。quality-gate 用同一個 key 做 cache，同一個 PR 量過且通過的 `dist/` 不重量，job summary 寫明。`issue-start` 的環境檢查改跑 `npm run check:before-lighthouse`（ADR 0004「例外：量過且通過的 `dist/` 不重量」）
 
 ### M7 多語系
@@ -138,7 +139,6 @@ M3 設計系統已完成（收尾 #19，最後一張是 M3-08 動態規範 #55�
 - 回覆 M5-06（#31）PR 的「待確認」：合作夥伴頁的翻譯、法務文件是否要法務審閱、資訊安全政策的生效日、en 法務頁的英譯、關於我們的圖片授權
 - 回覆 M5-03（#28）PR 的「待確認」：客戶名稱與 logo 的使用授權、內頁內容只有一段描述、獎項與年份、產業對應
 - 回覆 `docs/content/products.md`「待確認」（M5-01）：banner 圖庫照能否沿用、各頁未搬的段落要刪減或擴充 content model、feature 數量多的產品頁捲動長度、價格與認證等可能過時的說法
-- M6-05 M6 收尾（#37）可以開始
 - 回覆 M6-04（#36）PR 的「待確認」：cookie 同意要遵循的法規或公司政策、cookie 要分哪幾類（跟 GTM 放哪些 tag 有關）、三語文案由誰提供；提供後填進 `src/data/consent.ts` 並改成 `draft: false`
 - 回覆 M6-02（#34）PR 的「待確認」：en、vi 搜尋字串的譯文（`glossary.csv` 的 `draft`）、是否要加分類篩選
 - 回覆 M6-01（#33）PR 的「待確認」：錯誤訊息與「閱讀隱私權政策」的文案、en、vi 新字串的譯文；表單改送 `/tpi/api/*` 要等 `docs/research/features.md` 待確認 1、2
@@ -160,7 +160,7 @@ M3 設計系統已完成（收尾 #19，最後一張是 M3-08 動態規範 #55�
 - 現站 `/sitemap.xml` 與 `/ja` 回 500，盤點改以導覽與連結爬取為準（見 `docs/research/inventory.md`）
 - M1-02 稽核的 M2 待決事項（日文版、不在導覽的產品、主題重疊頁面、舊 `/solutions/*` 路由、blog 分類）已在 M2-01 依推薦決定，見 `docs/ia/sitemap.md`「決策紀錄」；不在導覽的 6 個產品／方案是否仍銷售，M5 前需內容負責人確認
 - 工作流程 skills：`/issue-start`、`/checkpoint`、`/issue-ship`、`/pr-review`、`/next-issue`，使用說明見 `docs/workflow.md`（#50、#62、#69、#71）。沒有 `needs-design`、`needs-input`，計畫也沒有待決事項的 issue 走自動模式，人工只負責啟動、回覆 `needs-decision`、看合併判斷摘要後合併。專案固定檢查只寫在 `.claude/skills/pr-review/SKILL.md`
-- 已從 pstack 導入 `typescript-best-practices`、`writing-style`、`CLAUDE.md` 工作原則、`/issue-ship` 自我 review（#50，#62 移到 `/pr-review`）。pstack 的 `create-verification-skill`（以 Playwright 實際操作網站並留存證據）M4-05（#24）沒有導入：M4-05 的檢查都是對 build 產出的靜態比對（axe、連結、截圖），互動流程的驗證留到 M6 的表單、搜尋需要時再評估
+- 已從 pstack 導入 `typescript-best-practices`、`writing-style`、`CLAUDE.md` 工作原則、`/issue-ship` 自我 review（#50，#62 移到 `/pr-review`）。pstack 的 `create-verification-skill`（以 Playwright 實際操作網站並留存證據）M4-05（#24）沒有導入：M4-05 的檢查都是對 build 產出的靜態比對（axe、連結、截圖），M6 的互動流程也沒有導入，改由各模組自己的 Playwright script 驗證（`scripts/forms/contact.mjs`、`scripts/search/pagefind.mjs`、`scripts/design/video-facade.mjs`、`scripts/consent/gtm.mjs`，都在 `npm run check`）
 - 日文版：M2-01 決定不支援，M2-05 將 `/ja/*` 301 到 `/en`（現站 `/ja`、`/ja/partners` 回 500）
 - M2-05：`www.tpisoftware.vn` 的轉址不能放進 `_redirects`（不支援網域層級），`.vn` 網域去留決定後改用 Bulk Redirects 等方式處理
 - M1-04：表單建議沿用現站 `/tpi/api/*` 後端，需後端開放新站網域的 CORS 並確認 reCAPTCHA 設定；GTM 等追蹤碼由新站重新規劃，不沿用現站 4 個容器；.com 站內搜尋 API 目前回 500（見 `docs/research/features.md`）
