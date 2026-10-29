@@ -24,7 +24,7 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 | `--tilt` | 卡片 hover 時的傾斜 | 歸零 |
 | `--lift` | 卡片、按鈕、影片按鈕 hover 時的上浮 | 歸零 |
 
-- scroll-driven animation 的 timing function 寫 `linear`：進度就是捲動位置，再加 easing 會讓捲動和畫面對不上。`token-usage.mjs` 只允許這一個關鍵字
+- scroll-driven animation 的 timing function 寫 `linear`：進度就是捲動位置，再加 easing 會讓捲動和畫面對不上。`token-usage.mjs` 只在同一條規則有 `animation-timeline` 時允許 `linear`
 - `Reveal` 的錯開量是捲動距離，不是時間，所以用 `--reveal-stagger`，不用 `--delay-step`
 - 3D 場景的運動（鏡頭路徑、方塊的拆解與漂浮、捲動進度的阻尼 `PROGRESS_DAMPING`）由捲動進度與經過時間算出，數值寫在 `src/lib/scene/`。這些不是 CSS 動畫，不用 tokens；偏好減少動態時整個場景不載入（見下方）
 
@@ -66,7 +66,7 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 | 3D 延後載入的 JS（gzip） | 140 KB | 130.6 KB（runtime 加 three.js 128.5 KB，場景 2.1 KB） | 同上 |
 | 3D 頁的 Lighthouse performance（行動版） | ≥ 0.95 | 見下方 | `npm run check` 的 LHCI（`lighthouserc.cjs`）、`node scripts/design/lighthouse-3d.mjs` |
 | 3D 初始化的每個 task（不節流） | 50 ms 以下 | 14–22 ms（ADR 0003「初始化的長任務」） | Chrome trace（headless Chromium，412×823、DPR 1.75）。`lighthouse-3d.mjs` 的「3D 長任務」欄是 Lighthouse 模擬節流後的時間（乘 4），會計入 TBT |
-| 3D 等待上限 | fence、shader 各 1 秒 | `WAIT_LIMIT_MS = 1000` | `node scripts/design/scene-wait.mjs`（`npm run check`） |
+| 3D 等待上限 | fence 與 shader 的等待各有上限，超過就照常上頁 | `src/lib/scene/runtime.ts` 的 `WAIT_LIMIT_MS`（ADR 0003「等待的上限」） | `node scripts/design/scene-wait.mjs`（`npm run check`） |
 | LCP 元素 | hero 靜態圖，3D chunk 在 LCP 與 `load` 之後才請求 | 符合 | `lighthouse-3d.mjs` 不符合時 exit 1 |
 
 - 「目前」的數字：main `f9ff8c1`、2026-10-29、`npm run build` 的輸出

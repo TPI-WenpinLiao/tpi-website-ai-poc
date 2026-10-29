@@ -18,10 +18,8 @@ import { isInternal } from '../../src/lib/seo/indexing.ts';
 import { urlPath } from '../i18n/routes.mjs';
 
 const KB = 1024;
-// Measured 2026-10-29 (main f9ff8c1): initial JS at most 3.0 KB (/search), 2.7 KB on Scene3D pages;
-// deferred 130.6 KB, all of it on Scene3D pages (runtime with three.js 128.5 KB, scene 2.1 KB).
-// The budgets leave room for small changes; raising one is a decision for the PR, with the reason
-// written in docs/design/motion.md.
+// Current sizes are in docs/design/motion.md「效能預算」. The budgets leave room for small changes;
+// raising one is a decision for the PR, with the reason written there.
 export const INITIAL_BUDGET = 6 * KB;
 export const DEFERRED_BUDGET = 140 * KB;
 

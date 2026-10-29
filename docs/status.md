@@ -145,7 +145,6 @@ M3 設計系統已完成（收尾 #19，最後一張是 M3-08 動態規範 #55�
 - 回覆 PR #98「待確認問題」：listing、utility、contact 頁的暫定描述（`src/data/strings/zh-TW.ts` 的 `pages`）、聯絡表單的諮詢產品選項、個資同意與 AI Playbook 欄位文案、`industry: other` 的顯示名稱
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
 - 在 preview 實測 `_redirects` 的大小寫與 `%` 編碼比對（#139）可以開始
-- `.nvmrc` 升到 Node 26（#147）可以開始
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」

@@ -224,7 +224,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 - `npm run check:design`
   - `scripts/design/contrast.mjs`：兩個 surface 各自檢查 `PAIRS` 每一組
-  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/layouts/`、`src/pages/` 所有 `.astro` 與 `src/styles/base.css` 的樣式不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），不得有 `linear` 以外的 easing 關鍵字與函式，`transition`、`animation` 不得省略 timing function，`var()` 不得引用未定義的 token
+  - `scripts/design/token-usage.mjs`：`src/components/ui/`、`src/layouts/`、`src/pages/` 所有 `.astro` 與 `src/styles/base.css` 的樣式不得有色碼、色彩函式、帶單位的長度、角度與時間（`0`、無單位數字、`%`、`fr` 可以），不得有 easing 關鍵字與函式（`linear` 只能用在有 `animation-timeline` 的規則），`transition`、`animation` 不得省略 timing function，`var()` 不得引用未定義的 token
   - `scripts/design/css-structure.mjs`：「CSS 分層」的規則
   - `scripts/design/showcase.mjs`：`src/components/ui/` 每個元件都要被 `/design-system` import，也要在本檔的「基礎元件」表有一列，表裡的元件都要有檔案；`tokens.css` 每個 token 都要歸進 `token-groups.mjs` 的某一組，pattern 不得失效，同一組不得混用 `value` 與其他 kind；內部頁（`INTERNAL_PATHS`）不得出現在 `docs/ia/nodes.csv`
 - build 後的 `scripts/design/scene-budget.mjs`：每個公開頁面的初始 JS 與延後載入的 JS（gzip）不得超過 `motion.md`「效能預算」的預算

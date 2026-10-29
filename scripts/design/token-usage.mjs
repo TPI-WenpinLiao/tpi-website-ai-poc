@@ -2,8 +2,8 @@
 // hex colors, color functions, or lengths and durations with a unit (12px, 1.5rem, 200ms).
 // Unitless numbers (line-height factors, flex, aspect-ratio), percentages, fr and 0 are allowed.
 // Breakpoints come from src/styles/media.css, so a literal in @media is caught by the same rule.
-// Easing comes from --ease-* as well: easing keywords and functions are reported, except `linear`,
-// the timing of scroll-driven animations (their progress is the scroll position). A `transition`
+// Easing comes from --ease-* as well: easing keywords and functions are reported, and `linear` is
+// allowed only in a rule that sets animation-timeline (scroll-driven: progress is the scroll position). A `transition`
 // or `animation` shorthand item without one, and a rule with `transition-duration` or
 // `animation-name` but no timing function, fall back to the browser's `ease` and are reported too.
 // Also fails when var(--x) names a custom property that neither tokens.css nor the same file
@@ -64,6 +64,14 @@ function implicitEasing(css) {
       const at = body.search(new RegExp(`(?<![\\w-])${longhand}\\s*:`));
       if (at !== -1 && !body.includes(`${timing}`) && !shorthand.test(body)) {
         found.push({ index: m.index + 1 + at, text: `${longhand} without ${timing}` });
+      }
+    }
+    // `linear` is only for scroll-driven animations: a rule that also sets animation-timeline
+    const scrollDriven = /(?<![\w-])animation-timeline\s*:/.test(body);
+    for (const d of body.matchAll(/(?<![\w-])(transition-timing-function|animation-timing-function|animation)\s*:\s*([^;]*)/g)) {
+      if (!/(?<![\w-])linear(?![\w(-])/.test(d[2])) continue;
+      if (d[1] === 'transition-timing-function' || !scrollDriven) {
+        found.push({ index: m.index + 1 + /** @type {number} */ (d.index), text: `${d[1]}: linear without animation-timeline` });
       }
     }
   }

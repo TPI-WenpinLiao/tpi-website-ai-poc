@@ -82,3 +82,21 @@ test('easing comes from --ease-* tokens; linear is allowed for scroll-driven ani
     ],
   );
 });
+
+test('linear only in a rule with animation-timeline', () => {
+  const source = `<style>
+  .scroll { animation-name: a; animation-timing-function: linear; animation-timeline: view(); }
+  .longhand { transition-property: color; transition-duration: var(--duration-fast); transition-timing-function: linear; }
+  .shorthand { animation: a var(--duration-slow) linear; }
+  .time { animation-name: a; animation-duration: var(--duration-slow); animation-timing-function: linear; }
+</style>`;
+  const tokens = declaredProperties(':root { --duration-fast: 1ms; --duration-slow: 1ms; }');
+  assert.deepEqual(
+    findViolations(source, tokens).map((v) => `${v.line} ${v.rule} ${v.text}`),
+    [
+      '3 implicit easing transition-timing-function: linear without animation-timeline',
+      '4 implicit easing animation: linear without animation-timeline',
+      '5 implicit easing animation-timing-function: linear without animation-timeline',
+    ],
+  );
+});
