@@ -45,7 +45,7 @@ Claude 會依序：
 2. 讀 issue、`CLAUDE.md`、`docs/status.md` 與前置 issue 的產出
 3. 檢查依賴是否關閉、關卡 label 是否齊全
 4. 拿 `docs/status.md` 對照 GitHub 上已關閉的 issue；對不上的列進計畫，在這張 issue 的 PR 一起修，不另開同步 PR。`status.md` 不列其他 open PR，進行中的 issue 用 `/next-issue` 看
-5. 執行環境檢查：Node 版本與 `.nvmrc` 一致、`node_modules` 存在、`npm run check` 通過；issue 需要時測試現站連線
+5. 執行環境檢查：Node 版本與 `.nvmrc` 一致、`node_modules` 存在、`npm run check:before-lighthouse` 通過（不跑 Lighthouse，理由見 [ADR 0004](decisions/0004-lighthouse-scope.md)「例外：量過且通過的 `dist/` 不重量」）；issue 需要時測試現站連線
 6. 回報環境檢查表，提出計畫。計畫會把實作拆成幾個階段，每個階段寫出完成條件
 
 接下來分兩種：
@@ -108,7 +108,9 @@ Claude 會依序：
 
 PR 開了之後 session 會持續監看，CI 失敗、review 留言都會自動喚醒 session 處理。
 
-quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY` 白名單內）跳過 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify` 確認這些檔案不影響 `dist/`，job summary 寫明原因。開 PR 前本機的 `npm run check` 照樣包含 Lighthouse。規則見 [ADR 0004](decisions/0004-lighthouse-scope.md)「例外」。
+quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY` 白名單內）跳過 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify` 確認這些檔案不影響 `dist/`，job summary 寫明原因。開 PR 前本機的 `npm run check` 照樣包含 Lighthouse。
+
+`npm run lighthouse` 通過後，把量過的頁面與量測設定的 key 記在 `.lighthouseci/passed-dist.sha256`。下次 key 相同就跳過並印出 key，例如審查迴圈裡只改 `scripts/` 或測試的修正。quality-gate 用同一個 key 做 cache，同一個 PR 量過且通過的 `dist/` 不重量，job summary 寫明。要強制重量時加 `LIGHTHOUSE_FORCE=1`。兩條規則都見 [ADR 0004](decisions/0004-lighthouse-scope.md)「例外」。
 
 ## 視覺回歸
 
@@ -157,7 +159,7 @@ baseline 只在 CI 產生、只在 CI 比對，兩者都在同版本的 Playwrig
 
 | 狀況 | 處理 |
 |---|---|
-| 環境檢查 `npm run check` 失敗 | 先看 Claude 回報的錯誤；SessionStart hook 問題見 `onboarding.md` 的「SessionStart hook 行為」 |
+| 環境檢查 `npm run check:before-lighthouse` 失敗 | 先看 Claude 回報的錯誤；SessionStart hook 問題見 `onboarding.md` 的「SessionStart hook 行為」 |
 | 沒有出現計畫確認畫面（session 重啟後常見） | Claude 會把計畫貼在對話中，直接回覆確認即可 |
 | 舊 issue 的「在 Claude Code 開啟」連結 | #50 以前（含）建立的 issue 帶的是舊 prompt，仍可使用；也可以改在新 session 輸入 `/issue-start N` |
 | 在 GitHub 上新增或修改 `[Mx-xx]` issue | 同步改 `.github/bootstrap/issues.yml`，再執行 `node scripts/bootstrap/diff.mjs`，確認「差異」與「重跑 bootstrap 會新建的 issue」都是 0。不需要 GitHub 權杖（repo 公開） |

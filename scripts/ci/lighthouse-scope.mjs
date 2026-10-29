@@ -46,7 +46,7 @@ export function changedFiles(cwd) {
 }
 
 /** sha256 of every file under dir, keyed by path relative to dir. @param {string} dir */
-function hashTree(dir) {
+export function hashTree(dir) {
   /** @type {Map<string, string>} */
   const hashes = new Map();
   const walk = (d) => {

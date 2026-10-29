@@ -5,6 +5,7 @@
 // URL, what Chrome was doing, kills LHCI with its Lighthouse and Chrome processes, and exits 1.
 // Every run start is written to PROGRESS, so .github/scripts/lighthouse-summary.mjs can name the
 // stuck page even when the job is cancelled first. Limit and reasons: ADR 0004.
+// Pages that already passed with the same key are skipped (scripts/lhci-pass.mjs, #149).
 // Run: node scripts/lhci-run.mjs <lhci args…>   (LHCI_RUN_TIMEOUT_SECONDS overrides the limit)
 
 import { execFileSync, spawn } from 'node:child_process';
@@ -12,6 +13,7 @@ import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { decide, PASSED, passKey, readPassed, recordPass } from './lhci-pass.mjs';
 
 export const PROGRESS = '.lhci-progress.json';
 // A run normally takes 11–13 s. Lighthouse's own limits (30 s for the FCP, 45 s for the load,
@@ -249,6 +251,20 @@ export function run({ command, args, timeoutMs, progress = PROGRESS, github = !!
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const seconds = Number(process.env.LHCI_RUN_TIMEOUT_SECONDS ?? DEFAULT_TIMEOUT_SECONDS);
   if (!(seconds > 0)) throw new Error(`LHCI_RUN_TIMEOUT_SECONDS must be a positive number, got "${process.env.LHCI_RUN_TIMEOUT_SECONDS}"`);
-  const lhci = join(import.meta.dirname, '../node_modules/.bin/lhci');
-  process.exitCode = await run({ command: lhci, args: process.argv.slice(2), timeoutMs: seconds * 1000 });
+  // Pages already measured with the same key are not measured again (scripts/lhci-pass.mjs, #149)
+  const key = process.env.LHCI_ALL === '1' ? undefined : passKey();
+  const action = decide(process.env, key, readPassed());
+  if (action === 'skip') {
+    writeFileSync(PROGRESS, `${JSON.stringify({ status: 'skipped', key }, null, 2)}\n`);
+    console.log(`Lighthouse skipped: these pages already passed with key ${key} (${PASSED}). LIGHTHOUSE_FORCE=1 runs it anyway.`);
+  } else {
+    // A failed run must not leave an older pass of the same key behind (LIGHTHOUSE_FORCE=1)
+    if (action === 'run') rmSync(PASSED, { force: true });
+    const lhci = join(import.meta.dirname, '../node_modules/.bin/lhci');
+    process.exitCode = await run({ command: lhci, args: process.argv.slice(2), timeoutMs: seconds * 1000 });
+    if (action === 'run' && key && process.exitCode === 0) {
+      recordPass(key);
+      console.log(`Lighthouse passed; recorded key ${key} in ${PASSED}.`);
+    }
+  }
 }

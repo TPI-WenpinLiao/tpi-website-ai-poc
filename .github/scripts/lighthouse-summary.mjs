@@ -35,6 +35,19 @@ if (process.env.LIGHTHOUSE_SKIP === 'true') {
 
 // Written by scripts/lhci-run.mjs at every run start (#136): names the page of a run that never ended
 const progress = existsSync(PROGRESS) ? JSON.parse(readFileSync(PROGRESS, 'utf8')) : undefined;
+// Same pages already passed on this PR: quality-gate restored their key from the cache (#149)
+if (progress?.status === 'skipped') {
+  console.log(
+    [
+      '## Lighthouse',
+      '',
+      '這些頁面在這個 PR 已經量過且通過，跳過 Lighthouse。',
+      '',
+      `- key：\`${progress.key}\`（\`.lhci-dist/\`、\`scripts/lhci-pass.mjs\` 的 \`INPUTS\` 與 \`LHCI_*\` 環境變數，見 ADR 0004「例外：量過且通過的 \`dist/\` 不重量」）`,
+    ].join('\n'),
+  );
+  process.exit(0);
+}
 const unfinished = progress && !['done', 'failed'].includes(progress.status);
 if (unfinished) {
   const where = progress.url ? `\`${new URL(progress.url).pathname}\` 第 ${progress.run}／${progress.runs} 次（${progress.startedAt} 開始）` : '第一次量測開始前';

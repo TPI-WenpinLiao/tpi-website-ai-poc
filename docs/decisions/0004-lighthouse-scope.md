@@ -67,6 +67,21 @@ quality-gate 的 `timeout-minutes` 從 20 調到 30。
 - job summary 寫明跳過的原因、白名單、`--verify` 的結果與變更的檔案
 - 本機與雲端 session 的 `npm run check` 不受影響，仍包含 Lighthouse。`npm run check` = `npm run check:before-lighthouse` 加 `npm run lighthouse`，quality-gate 把兩段分開執行
 
+### 例外：量過且通過的 `dist/` 不重量（#149）
+
+`npm run check` 約 14.5 分鐘，Lighthouse 佔約 9 分鐘（PR #148 的 quality-gate，run 40844614053：`lhci-prepare` 之前 08:47:33–08:52:26，Lighthouse 08:52:26–09:01:20）。Lighthouse 只量 `dist/`，但 `dist/` 沒變時也會重跑：`issue-start` 的環境檢查在 `main` 上跑完整 check，審查迴圈裡只改 `scripts/` 或測試的修正也一樣。#55 的 session 跑了 3 次完整 check，其中至少 2 次量的是同一份 `dist/`。
+
+**決策**：
+
+1. **記錄通過的 key**：`npm run lighthouse` 通過後，`scripts/lhci-run.mjs` 把 key 寫到 `.lighthouseci/passed-dist.sha256`（gitignore；LHCI 的 collect 只清 `lhr-*.json` 與 HTML 報告，這個檔案會留下）。key 是 `.lhci-dist/` 每個檔案依路徑排序的路徑與 sha256，加上 `scripts/lhci-pass.mjs` 的 `INPUTS`（`lighthouserc.cjs`、`package.json`、`package-lock.json` 與 Lighthouse 的三個 script）與每個 `LHCI_*` 環境變數（LHCI 把它們當設定讀，例如 `LHCI_SETTINGS__CHROME_FLAGS`），再算一次 sha256。量測設定、門檻、Chrome flags、LHCI／Lighthouse／Chromium（經 Playwright）的版本變了也會重量
+2. **key 相同就跳過**：下次 key 等於檔案內容時印出 key 並 exit 0，`.lhci-progress.json` 寫 `status: 'skipped'`。`LIGHTHOUSE_FORCE=1` 強制重量；重量前先刪掉檔案，失敗時不會留下舊的通過紀錄。`npm run lighthouse:all`（`LHCI_ALL=1`）不跳過也不記錄：它每頁 1 次、範圍不同
+3. **quality-gate 用 cache**：`check:before-lighthouse` 之後算 key（`node scripts/lhci-pass.mjs --key`），`actions/cache/restore` 還原 key 相同的 `.lighthouseci/passed-dist.sha256`，`npm run lighthouse` 照常執行，命中時由 script 跳過；通過且沒有命中時 `actions/cache/save`。job summary 寫出跳過的原因與 key。只改文件的 PR 仍走上一節的 `DOCS_ONLY` 與 `--verify`
+4. **`issue-start` 的環境檢查不跑 Lighthouse**：改跑 `npm run check:before-lighthouse`。這一步確認環境能跑檢查，不是驗收。`main` 上的變更都在各自的 PR 由 quality-gate 量過；幾個 PR 合併後的組合沒有單獨量，由開 PR 前 `issue-ship` 的完整 `npm run check` 量
+
+**範圍**：PR 的 cache 只有同一個 PR 的後續 run 讀得到（GitHub 的 cache 依 ref 隔離，PR 可以讀 base 的 cache，但不能讀別的 PR 的）。quality-gate 只在 `pull_request` 執行，`main` 沒有 cache，所以「和 base 相同」的 `dist/`（例如只改 `scripts/` 的 PR 的第一次 run）仍要量。要涵蓋這種情況得在每次合併後於 `main` 再跑一次 Lighthouse，約 9 分鐘，沒有採用（使用者 2026-10-29 決定）：會命中的只有不改 `dist/`、又不屬於 `DOCS_ONLY` 的 PR（只改 `scripts/`、測試、workflow），而且 cache 7 天沒被讀取就會清掉。合併後觀察這類 PR 第一次 run 的耗時，常發生再另開 issue。
+
+**取捨**：key 不含執行的機器。本機的紀錄只在本機，CI 的 cache 只來自 CI，兩邊不互用。同一份 `dist/` 再量一次，差別只有量測的起伏，而起伏已由 3 次取最好處理（「取捨」），所以重量沒有新資訊。`numberOfRuns` 與 `PAGES` 不變。
+
 ### 卡住的量測與時間上限（#136）
 
 10-27 起 quality-gate 有 3 次在單次量測卡住：log 停在某一次的 `Run #k...`，直到 job 的 `timeout-minutes: 30` 被取消，只留下 `context canceled`。3 次都是載入 3D 的頁面（`/products/systalk-chat` 兩次、`/en` 一次），同一個 commit 重跑都通過。
