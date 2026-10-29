@@ -21,7 +21,7 @@ function withRepo(fn) {
   }
 }
 
-const key = (root) => passKey({ root, inputs: ['lighthouserc.cjs'] });
+const key = (root, env = {}) => passKey({ root, inputs: ['lighthouserc.cjs'], env });
 
 test('passKey is the same for the same files, wherever they are', () => {
   withRepo((root) => {
@@ -67,6 +67,15 @@ test('passKey changes when an input changes, and fails when one is missing', () 
     writeFileSync(join(root, 'lighthouserc.cjs'), 'module.exports = { ci: {} };');
     assert.notEqual(key(root), before);
     assert.throws(() => passKey({ root, inputs: ['missing.cjs'] }), /ENOENT/);
+  });
+});
+
+test('passKey changes with LHCI_* variables and ignores other variables', () => {
+  withRepo((root) => {
+    const flags = { LHCI_SETTINGS__CHROME_FLAGS: '--no-sandbox --headless=new' };
+    assert.notEqual(key(root, flags), key(root));
+    assert.notEqual(key(root, flags), key(root, { LHCI_SETTINGS__CHROME_FLAGS: '--headless=new' }));
+    assert.equal(key(root, { ...flags, HOME: '/a' }), key(root, { HOME: '/b', ...flags }));
   });
 });
 

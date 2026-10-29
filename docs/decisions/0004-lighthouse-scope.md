@@ -73,7 +73,7 @@ quality-gate 的 `timeout-minutes` 從 20 調到 30。
 
 **決策**：
 
-1. **記錄通過的 key**：`npm run lighthouse` 通過後，`scripts/lhci-run.mjs` 把 key 寫到 `.lighthouseci/passed-dist.sha256`（gitignore；LHCI 的 collect 只清 `lhr-*.json` 與 HTML 報告，這個檔案會留下）。key 是 `.lhci-dist/` 每個檔案依路徑排序的路徑與 sha256，加上 `scripts/lhci-pass.mjs` 的 `INPUTS`（`lighthouserc.cjs`、`package-lock.json` 與 Lighthouse 的三個 script）再算一次 sha256。量測設定、門檻、LHCI／Lighthouse／Chromium（經 Playwright）的版本變了也會重量
+1. **記錄通過的 key**：`npm run lighthouse` 通過後，`scripts/lhci-run.mjs` 把 key 寫到 `.lighthouseci/passed-dist.sha256`（gitignore；LHCI 的 collect 只清 `lhr-*.json` 與 HTML 報告，這個檔案會留下）。key 是 `.lhci-dist/` 每個檔案依路徑排序的路徑與 sha256，加上 `scripts/lhci-pass.mjs` 的 `INPUTS`（`lighthouserc.cjs`、`package.json`、`package-lock.json` 與 Lighthouse 的三個 script）與每個 `LHCI_*` 環境變數（LHCI 把它們當設定讀，例如 `LHCI_SETTINGS__CHROME_FLAGS`），再算一次 sha256。量測設定、門檻、Chrome flags、LHCI／Lighthouse／Chromium（經 Playwright）的版本變了也會重量
 2. **key 相同就跳過**：下次 key 等於檔案內容時印出 key 並 exit 0，`.lhci-progress.json` 寫 `status: 'skipped'`。`LIGHTHOUSE_FORCE=1` 強制重量；重量前先刪掉檔案，失敗時不會留下舊的通過紀錄。`npm run lighthouse:all`（`LHCI_ALL=1`）不跳過也不記錄：它每頁 1 次、範圍不同
 3. **quality-gate 用 cache**：`check:before-lighthouse` 之後算 key（`node scripts/lhci-pass.mjs --key`），`actions/cache/restore` 還原 key 相同的 `.lighthouseci/passed-dist.sha256`，`npm run lighthouse` 照常執行，命中時由 script 跳過；通過且沒有命中時 `actions/cache/save`。job summary 寫出跳過的原因與 key。只改文件的 PR 仍走上一節的 `DOCS_ONLY` 與 `--verify`
 4. **`issue-start` 的環境檢查不跑 Lighthouse**：改跑 `npm run check:before-lighthouse`。新 issue 從 `main` 開始，`main` 的每個 commit 都在 quality-gate 量過才合併。開 PR 前 `issue-ship` 仍跑完整的 `npm run check`

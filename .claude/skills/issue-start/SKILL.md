@@ -97,7 +97,7 @@ npm run check:before-lighthouse   # 記錄 exit code；失敗時保留最後 30 
 ```
 
 - `node_modules` 不存在：先 `npm ci`，回報結果後再跑 `npm run check:before-lighthouse`
-- 不跑 Lighthouse（#149）：Lighthouse 只量 `dist/`，新 issue 從 `main` 開始，`main` 的每個 commit 都在 quality-gate 量過才合併，重量的結果相同。它約佔 `npm run check` 14.5 分鐘中的 9 分鐘。接續時 branch 上已有的變更，由 `issue-ship` 第 2 步開 PR 前的完整 `npm run check` 量
+- 不跑 Lighthouse：這一步確認環境能跑檢查，不是驗收。`main` 上的變更都在各自的 PR 由 quality-gate 量過；幾個 PR 合併後的組合沒有單獨量，接續時 branch 上已有的變更也一樣，兩者都由 `issue-ship` 第 2 步開 PR 前的完整 `npm run check` 量。理由與耗時見 [ADR 0004](../../../docs/decisions/0004-lighthouse-scope.md)「例外：量過且通過的 `dist/` 不重量」
 - 用 Bash 的長 timeout（600000 ms），輸出導到 scratchpad 再看結尾
 - issue 需要連到現站（盤點、SEO、功能調查等）時，加測 `curl -sS -o /dev/null -w '%{http_code}\n' https://www.tpisoftware.com/` 與 `https://www.tpisoftware.vn/`；被 proxy 擋時依 `docs/onboarding.md` 的 Allowed domains 說明回報
 - 不要手動 export 環境變數讓檢查通過；SessionStart hook（`scripts/session-start.sh`）應該已設定好。需要手動設定才會過，就算失敗
