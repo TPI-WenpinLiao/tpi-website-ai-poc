@@ -102,7 +102,7 @@ en、vi 的 description、`seoTitle`、內文圖 alt 與 zh-TW 一樣寫進上�
 
 ## 不搬移的內容
 
-- 追蹤碼、第三方嵌入 script：追蹤碼只經 GTM 與 cookie 同意載入（ADR 0007），影片用 `VideoFacade`（`design-system`）
+- 追蹤碼、第三方嵌入 script：追蹤碼只經 GTM 與 cookie 同意載入（ADR 0007）。現站影片不搬（offering schema 沒有影片欄位，`docs/status.md` 的 M6-03），之後要放影片時用 `VideoFacade`（`design-system`）
 - `disposition` 為 `drop` 的頁面（已失效的活動、過期新聞等，理由見 `disposition_reason`），舊網址由 [`redirects.csv`](../../../docs/ia/redirects.csv) 轉址
 - 現站的導覽、頁尾等共用區塊（由 layout 提供）
 
