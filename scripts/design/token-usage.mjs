@@ -50,7 +50,7 @@ function implicitEasing(css) {
   const found = [];
   for (const m of css.matchAll(/(?<![\w-])(transition|animation)\s*:\s*([^;{}]*)/g)) {
     for (const item of topLevelItems(m[2])) {
-      if (item && !/^(?:none|var\(--[\w-]+\))$/.test(item) && !(m[1] === 'transition' ? /var\(\s*--ease-/ : EASED).test(item)) {
+      if (item && item !== 'none' && !(m[1] === 'transition' ? /var\(\s*--ease-/ : EASED).test(item)) {
         found.push({ index: m.index, text: `${m[1]}: ${item}` });
       }
     }

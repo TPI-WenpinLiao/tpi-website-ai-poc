@@ -100,3 +100,15 @@ test('linear only in a rule with animation-timeline', () => {
     ],
   );
 });
+
+test('a shorthand that is a single var() still needs an easing', () => {
+  const source = `<style>
+  .a { transition: var(--duration-fast); }
+  .b { animation: var(--duration-fast); }
+</style>`;
+  const tokens = declaredProperties(':root { --duration-fast: 1ms; }');
+  assert.deepEqual(
+    findViolations(source, tokens).map((v) => `${v.line} ${v.rule} ${v.text}`),
+    ['2 implicit easing transition: var(--duration-fast)', '3 implicit easing animation: var(--duration-fast)'],
+  );
+});
