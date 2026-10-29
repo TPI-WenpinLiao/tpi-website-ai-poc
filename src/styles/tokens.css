@@ -195,7 +195,14 @@
   --duration-slow: 480ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Time between staggered siblings (LayerStack nodes), and the period of an ambient loop (their
+     pulse). Effect list and reduced-motion rules: docs/design/motion.md. */
+  --delay-step: 480ms;
+  --duration-loop: 2400ms;
   --reveal-distance: 2rem;
+  /* Reveal's stagger is a scroll offset, not a time: each `delay` step starts the scroll range
+     this much later. */
+  --reveal-stagger: 8%;
 
   /* Scene: the shared isometric viewing angle. The CSS 3D fallback in the hero uses it now; the
      three.js camera (M3-07) should match it so static and 3D versions line up. */
@@ -315,6 +322,8 @@
     --duration-fast: 0ms;
     --duration-base: 0ms;
     --duration-slow: 0ms;
+    --delay-step: 0ms;
+    --duration-loop: 0ms;
     --tilt: 0deg;
     --lift: 0;
   }

@@ -400,6 +400,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     transform: translateY(calc(var(--space-1) * -0.5)) rotate(calc(var(--quarter-turn) / 2));
     transition-property: transform;
     transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
   }
 
   details[open] .caret {

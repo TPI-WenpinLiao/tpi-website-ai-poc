@@ -88,8 +88,8 @@ const { layers = 4 } = Astro.props;
 
   @media (prefers-reduced-motion: no-preference) {
     .node {
-      animation: ui-pulse calc(var(--duration-slow) * 5) var(--ease-standard) infinite alternate;
-      animation-delay: calc(var(--i) * var(--duration-slow));
+      animation: ui-pulse var(--duration-loop) var(--ease-standard) infinite alternate;
+      animation-delay: calc(var(--i) * var(--delay-step));
     }
 
     @supports (animation-timeline: view()) {
