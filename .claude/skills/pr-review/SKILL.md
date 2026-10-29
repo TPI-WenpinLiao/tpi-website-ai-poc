@@ -54,6 +54,7 @@ description: 審查 PR 或目前 branch 的變更時使用（/pr-review [PR 編�
 | HTML 沒有 `noindex` meta | `grep -rn noindex src/` 沒有結果（不收錄只靠 `_headers` 與 `robots.txt`，Lighthouse 才能量 SEO 分數） |
 | 樣式只用 design tokens | 新增或修改的樣式沒有寫死色碼、字級、間距（`design-system`） |
 | CSS 分層 | 機械規則由 `npm run check:design` 的 `css-structure.mjs` 擋，看 CI 結果即可。人工看 lint 抓不到的（規則見 `design-system`「CSS 分層」）：(1) diff 新增的 `global-ok:`、`shared-ok:` 逐條判斷理由是否成立 (2) 新樣式放在能放的最上層：兩個以上模板或頁面會用的版面沒有寫在單一頁面裡 (3) 少於 4 條、lint 不會報的重複（例如同一段 `display: flex; gap` 在多處出現）是否該抽出 (4) `base.css` 新增的工具類真的跨元件、套在任何元素上都成立 |
+| 頁面載入時不連站外網域，repo 沒有 secret | diff 新增的站外 URL（script、iframe、`<video>`、字型、圖片）逐一看：影片要經 `VideoFacade`，追蹤碼只經 GTM，其他第三方資源要等訪客操作才載入（`CLAUDE.md`「功能模組」）。新增的金鑰、token 只能是 `PUBLIC_*` 的公開值或 Cloudflare 公開的測試 key，secret 從環境變數讀 |
 | 沒有捏造的內容 | 產品功能、數據、客戶名稱、認證、獎項都要能指到來源（`content-migration`） |
 | 依變更類型套用 skill | 頁面 → `seo-checklist`；搬移內容 → `content-migration`；`.ts`／`.astro`／`.mjs` → `typescript-best-practices`；文件、PR 描述、commit message → `writing-style` |
 | 產生檔與 script 一致 | diff 有 script 或它的產出檔時，重跑 script，`git diff --exit-code` 必須沒有差異；再跑一次結果相同 |

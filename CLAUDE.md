@@ -12,7 +12,7 @@
 
 ## 技術棧
 
-Astro（`output: 'static'`，預設零 client JS，互動才用 island）、TypeScript strict、CSS custom properties 作為 design tokens、不使用 UI framework、npm、Node 版本見 `.nvmrc`。決策理由見 `docs/decisions/`。
+Astro（`output: 'static'`，預設零 client JS，互動寫在元件內的 `<script>`，見「功能模組」）、TypeScript strict、CSS custom properties 作為 design tokens、不使用 UI framework、npm、Node 版本見 `.nvmrc`。決策理由見 `docs/decisions/`。
 
 ## 目錄結構
 
@@ -56,7 +56,17 @@ M4 定案的寫法：
 - 版型三層：`BaseLayout` 輸出 `<html>` 與 head，`PageLayout` 加上 header、footer 並決定這一頁有哪些語系版本，`src/layouts/templates/` 的模板只寫該類頁面的結構。頁面把 title、description、JSON-LD 等傳給 layout，head 只由 `Seo.astro` 輸出（`seo-checklist`「頁面怎麼寫」）
 - 新增或改模板：`/templates/<id>` 用範例資料預覽首頁以外的每個模板（`src/pages/templates/[template].astro`），`HomeTemplate` 直接看首頁。這些頁面與三語首頁是視覺回歸的對象，baseline 照 `docs/workflow.md`「視覺回歸」更新
 - 元件放 `src/components/ui/`，連結、導覽與語系一律用 `src/lib/ia/`、`src/lib/i18n/` 的函式；樣式規則與新增元件的步驟見 `design-system` skill
-- 站內搜尋（Pagefind）只索引把麵包屑 trail 傳給 `PageLayout` 的 `searchTrail` 的頁面；新增要能被搜尋到的模板時要傳，跟其他頁面重複的區塊標 `data-pagefind-ignore`。索引範圍、zh-TW 斷詞與載入時機見 ADR 0006
+
+## 功能模組
+
+M6 定案的寫法。元件的參數見 `design-system` skill 的元件表，理由與上線前的設定見各 ADR：
+
+- 互動寫在元件內的 `<script>`（Astro 打包，不用 `client:*`），不碰 DOM 的判斷（驗證規則、同意狀態、斷詞）放 `src/lib/<模組>/`，讓 `npm run test:scripts` 不開瀏覽器就能測
+- 頁面載入時不連站外網域：第三方 script、iframe 等到訪客操作（focus、點擊）或同意後才載入，每個模組各有一支 build 後的瀏覽器檢查確認這一點。secret 只放 Cloudflare 環境變數，`PUBLIC_*` 是 build 時讀的公開值
+- 表單：欄位規則只寫在 `src/lib/forms/rules.ts` 的 `FORMS`，頁面 script 與 Pages Function 呼叫同一個 `validate()`，伺服器為準；Function 只接線，判斷在 `src/lib/forms/handler.ts`。新表單加規則、加 `functions/api/` 的 Function、`FormPanel` 傳 `form`、`action`、`next`；改送到後端是換 adapter（ADR 0005「之後」）
+- 站內搜尋（Pagefind）只索引把麵包屑 trail 傳給 `PageLayout` 的 `searchTrail` 的頁面；新增要能被搜尋到的模板時要傳，跟其他頁面重複的區塊標 `data-pagefind-ignore`。只有 `SearchResults` 載入 Pagefind。索引範圍、zh-TW 斷詞與載入時機見 ADR 0006
+- 影片一律用 `VideoFacade`，不直接嵌 YouTube iframe 或 `<video>`；poster 用本機圖，不用 YouTube 縮圖
+- 追蹤碼只經 GTM 載入，不在頁面另放第三方 tag。`ConsentBanner` 只在 build 有 `PUBLIC_GTM_ID` 時由 `PageLayout` 輸出；同意前不載入 gtm.js，也沒有 `dataLayer`。cookie 類別或文案改版時，`src/data/consent.ts` 的 `version` 加 1（ADR 0007）
 
 ## 指令
 
