@@ -43,7 +43,7 @@ if (progress?.status === 'skipped') {
       '',
       '這些頁面在這個 PR 已經量過且通過，跳過 Lighthouse。',
       '',
-      `- key：\`${progress.key}\`（\`.lhci-dist/\` 與 \`scripts/lhci-pass.mjs\` 的 \`INPUTS\`，見 ADR 0004「例外」）`,
+      `- key：\`${progress.key}\`（\`.lhci-dist/\`、\`scripts/lhci-pass.mjs\` 的 \`INPUTS\` 與 \`LHCI_*\` 環境變數，見 ADR 0004「例外：量過且通過的 \`dist/\` 不重量」）`,
     ].join('\n'),
   );
   process.exit(0);
