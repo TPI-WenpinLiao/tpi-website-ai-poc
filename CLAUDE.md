@@ -129,7 +129,7 @@ M2、M3 的關卡 issue 改用對應的 label（`ia-approved`、`wireframe-appro
 ## 文件維護
 
 - 架構決策記錄於 `docs/decisions/NNNN-<slug>.md`（ADR）
-- 每個 milestone 結束時更新本檔與 skills（各 milestone 最後一張 issue）。維運期間沒有收尾 issue，改了架構、目錄或流程的 PR 自己更新本檔與對應的 skill；頂層目錄與 `src/`、`src/lib/`、`scripts/`、`docs/`、`public/`、`functions/`、`tests/`、`.github/` 的直接子目錄沒列進目錄結構時，`node scripts/docs/claude-md.mjs`（`npm run check`）會擋下，更深的目錄與各目錄的說明文字要自己對
+- 每個 milestone 結束時更新本檔與 skills（各 milestone 最後一張 issue）。維運期間沒有收尾 issue，改了架構、目錄或流程的 PR 自己更新本檔與對應的 skill；頂層目錄與 `scripts/docs/claude-md.mjs` 的 `PARENTS` 列出的目錄，它們的直接子目錄沒列進目錄結構時，`npm run check` 會擋下；更深的目錄與各目錄的說明文字要自己對
 - 進度變動時更新 `docs/status.md`
 - 工作流程（skills、人工關卡）變動時更新 `docs/workflow.md`
 - 撰寫文件、PR 描述、commit message 依 `.claude/skills/writing-style/SKILL.md`
