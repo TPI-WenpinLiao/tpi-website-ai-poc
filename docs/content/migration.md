@@ -70,6 +70,7 @@ blog API 沒列出、但現站頁面仍在的文章（#137），列表與欄位�
 - 副檔名依檔案內容判斷（現站部分圖片的 content-type 是 `application/octet-stream`）。不是 `astro:assets` 能讀的格式時，整篇記為 `failed`
 - 任何一張圖下載失敗，整篇都不寫入，既有的檔案也不動。`overrides.yaml` 的 `dropImagesFrom` 列出的主機例外，見「人工修正」
 - 資料夾裡不再使用的圖片會刪除
+- 封面是現站 CMS 的 placeholder 時（目前只有 loading spinner，vi 的 14 篇 blog，#101），不存封面，`coverImage` 改指向 `src/assets/design/` 的抽象封面，依 slug 固定挑一張；上一行的 `# <網址>` 註解保留原圖網址。報告的 notes 會寫 `placeholder cover`。已知的 placeholder 列在 `scripts/content/placeholder-covers.mjs` 的 `PLACEHOLDERS`：比對來源圖解碼後的像素（現站每張 placeholder 的檔案位元組都不同，像素相同），以及存成 WebP 後的檔案 hash。`npm run check` 執行同一支 script，`src/assets/` 的內容圖有已知 placeholder 就失敗，`--fix` 依同樣規則改寫。真正的封面由內容負責人提供，換掉 `coverImage` 即可；`coverImage` 指向 `assets/design/` 的文章就是還缺封面的
 - alt 沿用現站。現站大多是空的，報告會列出缺 alt 的張數，補法見「人工修正」
 
 ## 重跑

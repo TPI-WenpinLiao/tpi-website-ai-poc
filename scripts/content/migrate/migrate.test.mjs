@@ -97,6 +97,16 @@ test('convert: overrides, a second run is unchanged, a failed download writes no
   assert.doesNotMatch(await readFile('src/content/news/zh-TW/585.md', 'utf8'), /photo\.png/);
   assert.deepEqual(await readdir('src/assets/news/zh-TW/585'), ['cover.webp']);
   await assert.rejects(convert(args(ok, { dropImagesFrom: ['blog.tpisoftware.com'] })), /dropImagesFrom entries the entry has no images from: blog\.tpisoftware\.com/);
+
+  // A placeholder cover (its pixels are listed) is not stored; the entry gets a design cover
+  const { createHash } = await import('node:crypto');
+  const { fallbackRef } = await import('../placeholder-covers.mjs');
+  const pixels = createHash('sha256').update(await sharp(png).raw().toBuffer()).digest('hex');
+  const placeholder = await convert({ ...args(failing, { dropImagesFrom: ['www.tpisoftware.com'] }), placeholders: new Set([pixels]) });
+  assert.ok(placeholder.notes.includes('placeholder cover: design cover until the content owner supplies one'));
+  const withFallback = await readFile('src/content/news/zh-TW/585.md', 'utf8');
+  assert.ok(withFallback.includes(`# https://www.tpisoftware.com/file/images/news/585/c.jpg\ncoverImage: ${fallbackRef('585')}\n`));
+  assert.deepEqual(await readdir('src/assets/news/zh-TW/585'), []);
 });
 
 test('convert refuses empty required values unless overrides fill them', async (t) => {

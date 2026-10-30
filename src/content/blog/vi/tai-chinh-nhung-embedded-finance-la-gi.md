@@ -8,7 +8,7 @@ publishedAt: 2026-09-10
 author: kay
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1accf8-1606-6860-81f6-0b7fa23ee3a6.png
-coverImage: ../../../assets/blog/vi/tai-chinh-nhung-embedded-finance-la-gi/cover.webp
+coverImage: ../../../assets/design/cover-security.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/tai-chinh-nhung-embedded-finance-la-gi
 migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-10

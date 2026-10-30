@@ -8,7 +8,7 @@ publishedAt: 2026-03-17
 author: kay
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f121cdc-b951-6249-81f6-0b7fa23ee3a6.png
-coverImage: ../../../assets/blog/vi/cach-tinh-dau-chan-carbon/cover.webp
+coverImage: ../../../assets/design/cover-platform.webp
 sourceUrl: https://www.tpisoftware.vn/blog/green-transformation/cach-tinh-dau-chan-carbon
 migratedAt: 2026-10-23
 sourceUpdatedAt: 2026-03-17
