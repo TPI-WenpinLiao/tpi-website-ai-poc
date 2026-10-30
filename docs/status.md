@@ -134,7 +134,6 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 
 ## 下一步
 
-- Cloudflare Pages 的 `NODE_VERSION` 改成 `26`（#147 合併時同步，dashboard 設定）
 - 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
 - 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
 - 回覆 #137 後續 PR（en 知識邊界一文對應 zh-TW 版）的「待確認」：en 版多一段上線第一週的問卷數字（40 份有效回覆、90% 用過等），zh-TW 沒有；要不要補到 zh-TW、數字是否經客戶同意公開
