@@ -33,7 +33,7 @@ https://www.tpisoftware.com/blog/ai/systalk-ai-rpa,/blog/ai,301,drop：上層頁
 https://www.tpisoftware.com/blog/ai/systalkdetect,/blog/ai,301,drop：上層頁
 https://www.tpisoftware.com/blog/ai/voicebot,/blog/ai,301,drop：上層頁
 https://www.tpisoftware.com/blog/ai/what-is-agentic-ai-platform,/blog/what-is-agentic-ai-platform,301,keep：blog-post
-https://www.tpisoftware.com/blog/ai/what-is-ai-agent-management-platform,/blog/what-is-ai-agent-management-platform,301,keep：blog-post
+https://www.tpisoftware.com/blog/ai/what-is-ai-agent-management-platform,/blog/ai,301,keep：blog-post（redirect-overrides.csv）
 https://www.tpisoftware.com/blog/ai/why-companies-need-custom-ai-knowledge,/blog/why-companies-need-custom-ai-knowledge,301,keep：blog-post
 https://www.tpisoftware.com/blog/ai/why-enterprises-need-ai-appliance,/blog/why-enterprises-need-ai-appliance,301,keep：blog-post
 https://www.tpisoftware.com/blog/ai/whychatbotfail,/blog/ai,301,drop：上層頁
@@ -140,8 +140,8 @@ https://www.tpisoftware.com/carbon,/products/greenswift,301,merge：greenswift
 https://www.tpisoftware.com/chatgpt-enterprise,/chatgpt-enterprise,200,rewrite：chatgpt-enterprise（路徑不變）
 https://www.tpisoftware.com/cloudservice,/cloudservice,200,rewrite：cloudservice（路徑不變）
 https://www.tpisoftware.com/contact-us,/contact-us,200,rewrite：contact（路徑不變）
-https://www.tpisoftware.com/download/digimars,/download/digimars,200,rewrite：download（路徑不變）
-https://www.tpisoftware.com/download/digirunner,/download/digirunner,200,rewrite：download（路徑不變）
+https://www.tpisoftware.com/download/digimars,/products/digimars,301,rewrite：download（redirect-overrides.csv）
+https://www.tpisoftware.com/download/digirunner,/products/digirunner,301,rewrite：download（redirect-overrides.csv）
 https://www.tpisoftware.com/epaper/2018/04,/subscribe,301,drop：docs/ia/drop-targets.csv
 https://www.tpisoftware.com/epaper/2018/05,/subscribe,301,drop：docs/ia/drop-targets.csv
 https://www.tpisoftware.com/epaper/2018/06,/subscribe,301,drop：docs/ia/drop-targets.csv
@@ -476,9 +476,9 @@ https://www.tpisoftware.com/outsourcing/dropdown,/outsourcing,301,drop：上層�
 https://www.tpisoftware.com/partners,/partners,200,rewrite：partners（路徑不變）
 https://www.tpisoftware.com/pdf/%E8%B3%87%E8%A8%8A%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96.pdf,/security-policy,301,rewrite：security-policy
 https://www.tpisoftware.com/pdf/1-1PrivacyPolicy(tw).pdf,/privacy,301,rewrite：privacy
-https://www.tpisoftware.com/pdf/1-2PrivacyPolicy(en).pdf,/privacy,301,rewrite：privacy
+https://www.tpisoftware.com/pdf/1-2PrivacyPolicy(en).pdf,/en/privacy,301,rewrite：privacy（redirect-overrides.csv）
 https://www.tpisoftware.com/pdf/2-1Use(tw).pdf,/terms,301,rewrite：terms
-https://www.tpisoftware.com/pdf/2-2Use(en).pdf,/terms,301,rewrite：terms
+https://www.tpisoftware.com/pdf/2-2Use(en).pdf,/en/terms,301,rewrite：terms（redirect-overrides.csv）
 https://www.tpisoftware.com/pdf/3-1Disclaimer(tw).pdf,/disclaimer,301,rewrite：disclaimer
 https://www.tpisoftware.com/pdf/3-2Disclaimer(en).pdf,/disclaimer,301,rewrite：disclaimer
 https://www.tpisoftware.com/pdf/digiRunner%20on%20AWS%20Marketplace_%E8%B2%B7%E5%AE%B6%E6%8C%87%E5%8D%97_v1.4_TC.pdf,/pdf/digiRunner%20on%20AWS%20Marketplace_%E8%B2%B7%E5%AE%B6%E6%8C%87%E5%8D%97_v1.4_TC.pdf,200,keep：digirunner-aws-guide（路徑不變）
@@ -550,7 +550,7 @@ https://www.tpisoftware.com/en/blog/artifintell/enterprise-ai-agents-for-workflo
 https://www.tpisoftware.com/en/blog/artifintell/generativeai,/en/blog,301,drop：上層頁
 https://www.tpisoftware.com/en/blog/artifintell/implementationguide-en,/en/blog,301,drop：上層頁
 https://www.tpisoftware.com/en/blog/artifintell/retailchatbots,/en/blog,301,drop：上層頁
-https://www.tpisoftware.com/en/blog/artifintell/why-ai-needs-knowledge-boundary,/en/blog/why-ai-needs-knowledge-boundary,301,keep：blog-post
+https://www.tpisoftware.com/en/blog/artifintell/why-ai-needs-knowledge-boundary,/en/blog/ai,301,keep：blog-post（redirect-overrides.csv）
 https://www.tpisoftware.com/en/blog/artifintell/why-enterprise-needs-all-in-one-aI-solutions,/en/blog/why-enterprise-needs-all-in-one-ai-solutions,301,keep：blog-post
 https://www.tpisoftware.com/en/blog/businessscenario,/en/blog/use-cases,301,merge：blog-use-cases
 https://www.tpisoftware.com/en/blog/businessscenario/aisolutions,/en/blog/use-cases,301,merge：blog-use-cases
@@ -625,8 +625,8 @@ https://www.tpisoftware.com/en/blog/smartmgmt/soc,/en/blog,301,drop：上層頁
 https://www.tpisoftware.com/en/cancelrecord,/en/cancelrecord,200,rewrite：cancelrecord（路徑不變）
 https://www.tpisoftware.com/en/cloudservice,/en/cloudservice,200,rewrite：cloudservice（路徑不變）
 https://www.tpisoftware.com/en/contact-us,/en/contact-us,200,rewrite：contact（路徑不變）
-https://www.tpisoftware.com/en/download/digimars,/en/download/digimars,200,rewrite：download（路徑不變）
-https://www.tpisoftware.com/en/download/digirunner,/en/download/digirunner,200,rewrite：download（路徑不變）
+https://www.tpisoftware.com/en/download/digimars,/en/products/digimars,301,rewrite：download（redirect-overrides.csv）
+https://www.tpisoftware.com/en/download/digirunner,/en/products/digirunner,301,rewrite：download（redirect-overrides.csv）
 https://www.tpisoftware.com/en/esg-advisory,/en/esg-advisory,200,rewrite：esg-advisory（路徑不變）
 https://www.tpisoftware.com/en/esg-advisory/chen-zhengrui,/en/esg-advisory/chen-zhengrui,200,keep：esg-advisor（路徑不變）
 https://www.tpisoftware.com/en/esg-advisory/chuang-binyuan,/en/esg-advisory/chuang-binyuan,200,keep：esg-advisor（路徑不變）
@@ -1032,7 +1032,7 @@ https://www.tpisoftware.vn/blog/enterprise-management/fetch-api,/vi/blog/enterpr
 https://www.tpisoftware.vn/blog/enterprise-management/file-log-la-gi,/vi/blog/enterprise-management,301,drop：上層頁
 https://www.tpisoftware.vn/blog/enterprise-management/flask-api,/vi/blog/enterprise-management,301,drop：上層頁
 https://www.tpisoftware.vn/blog/enterprise-management/free-api,/vi/blog/enterprise-management,301,drop：上層頁
-https://www.tpisoftware.vn/blog/enterprise-management/gemini-api,/vi/blog/gemini-api,301,keep：blog-post
+https://www.tpisoftware.vn/blog/enterprise-management/gemini-api,/vi/blog/enterprise-management,301,keep：blog-post（redirect-overrides.csv）
 https://www.tpisoftware.vn/blog/enterprise-management/gemini-api-key,/vi/blog/enterprise-management,301,drop：上層頁
 https://www.tpisoftware.vn/blog/enterprise-management/giai-phap-luu-tru-log,/vi/blog/enterprise-management,301,drop：上層頁
 https://www.tpisoftware.vn/blog/enterprise-management/giai-phap-quan-ly-log,/vi/blog/enterprise-management,301,drop：上層頁
@@ -1177,8 +1177,8 @@ https://www.tpisoftware.com/vn/cloudservice,/vi/cloudservice,301,rewrite：cloud
 https://www.tpisoftware.com/vn/contact-us,/vi/contact-us,301,rewrite：contact
 https://www.tpisoftware.com/vn/digilogs-logs-management,/vi/products/digilogs,301,rewrite：digilogs
 https://www.tpisoftware.com/vn/digirunner-api-management,/vi/products/digirunner,301,rewrite：digirunner
-https://www.tpisoftware.com/vn/download/digimars,/vi/download/digimars,301,rewrite：download
-https://www.tpisoftware.com/vn/download/digirunner,/vi/download/digirunner,301,rewrite：download
+https://www.tpisoftware.com/vn/download/digimars,/vi/products/digimars,301,rewrite：download（redirect-overrides.csv）
+https://www.tpisoftware.com/vn/download/digirunner,/vi/products/digirunner,301,rewrite：download（redirect-overrides.csv）
 https://www.tpisoftware.com/vn/esg-advisory,/vi/esg-advisory,301,rewrite：esg-advisory
 https://www.tpisoftware.vn/esg-advisory/chen-zhengrui,/vi/esg-advisory/chen-zhengrui,301,keep：esg-advisor
 https://www.tpisoftware.vn/esg-advisory/chuang-binyuan,/vi/esg-advisory/chuang-binyuan,301,keep：esg-advisor
@@ -1265,7 +1265,7 @@ https://www.tpisoftware.vn/orient-aI,/vi/orient-ai,301,merge：orient-ai
 https://www.tpisoftware.com/vn/outsourcing,/vi/outsourcing,301,rewrite：outsourcing
 https://www.tpisoftware.com/vn/outsourcing/dropdown,/vi/outsourcing,301,drop：上層頁
 https://www.tpisoftware.com/vn/partners,/vi/partners,301,rewrite：partners
-https://www.tpisoftware.vn/pdf/1-2PrivacyPolicy(vn).pdf,/vi/privacy,301,rewrite：privacy
+https://www.tpisoftware.vn/pdf/1-2PrivacyPolicy(vn).pdf,/en/privacy,301,rewrite：privacy（redirect-overrides.csv）
 https://www.tpisoftware.vn/pdf/digiRunner%20on%20AWS%20Marketplace_Buyer%20Guide_v1.4_EN.pdf,/pdf/digiRunner%20on%20AWS%20Marketplace_Buyer%20Guide_v1.4_EN.pdf,301,merge：digirunner-aws-guide
 https://www.tpisoftware.com/vn/products,/vi/products,301,rewrite：products
 https://www.tpisoftware.com/vn/products/digiflexis,/vi/products/digiflexis,301,rewrite：digiflexis

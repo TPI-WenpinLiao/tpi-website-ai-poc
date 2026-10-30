@@ -21,16 +21,15 @@ test('targets resolve like Cloudflare Pages, percent-encoding decoded', () => {
   assert.deepEqual(chains, []);
 });
 
-test('an unbuilt target fails unless external, PENDING in any locale, or UNBUILT', () => {
+test('an unbuilt target fails unless external or PENDING in any locale', () => {
   const rows = [
     row('https://www.tpisoftware.com/a', '/gone'),
     row('https://www.tpisoftware.com/b', '/tpu'),
     row('https://www.tpisoftware.com/vn/c', '/vi/services'),
-    row('https://www.tpisoftware.com/d', '/vi/privacy'),
   ];
-  const { missing, known } = redirectProblems({ rows, kind, external: new Set(['/tpu']), pending: ['/services'], unbuilt: ['/vi/privacy'] });
+  const { missing, known } = redirectProblems({ rows, kind, external: new Set(['/tpu']), pending: ['/services'] });
   assert.deepEqual([...missing], [['/gone', ['https://www.tpisoftware.com/a']]]);
-  assert.deepEqual([...known.keys()], ['/tpu', '/vi/services', '/vi/privacy']);
+  assert.deepEqual([...known.keys()], ['/tpu', '/vi/services']);
 });
 
 test('a target that is another redirect source on the main host is a chain', () => {
@@ -45,9 +44,20 @@ test('a target that is another redirect source on the main host is a chain', () 
   assert.deepEqual(chains, ['https://www.tpisoftware.com/a → /about-us, which redirects again']);
 });
 
-test('catch-alls are skipped and listed pages that got built are stale', () => {
+test('an overridden page that got built is reported, whatever the source path', () => {
+  const overrides = [
+    { url: 'https://www.tpisoftware.vn/blog/x/media-center', unbuilt: '/media-center', to: '/' },
+    { url: 'https://www.tpisoftware.com/download/a', unbuilt: '/download/a', to: '/' },
+    // A built page in the wrong locale has no `unbuilt`
+    { url: 'https://www.tpisoftware.com/pdf/a(en).pdf', unbuilt: '', to: '/en' },
+  ];
+  const { builtOverrides } = redirectProblems({ rows: [], kind, overrides });
+  assert.deepEqual(builtOverrides, ['/media-center']);
+});
+
+test('catch-alls are skipped and PENDING pages that got built are stale', () => {
   const rows = [row('https://www.tpisoftware.com/ja/*', '/en')];
-  const { checked, stale } = redirectProblems({ rows, kind, pending: ['/about-us'], unbuilt: ['/en', '/gone'] });
+  const { checked, stale } = redirectProblems({ rows, kind, pending: ['/about-us', '/gone'] });
   assert.equal(checked, 0);
-  assert.deepEqual(stale, ['/about-us', '/en']);
+  assert.deepEqual(stale, ['/about-us']);
 });
