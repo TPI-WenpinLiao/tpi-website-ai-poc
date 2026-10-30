@@ -22,18 +22,17 @@ import SceneChapter from '../../components/ui/SceneChapter.astro';
 import CardGrid from '../../components/ui/CardGrid.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
 import { children, localeHref, localizedNav, localNode, node, nodeHref, type NavItem } from '../../lib/ia/navigation';
-import { latest } from '../../lib/latest-posts';
+import { entryLocale, isPublished } from '../../lib/content/entries';
+import { newsCard, postCard } from '../../lib/content/cards';
+import { newest } from '../../lib/content/listings';
 import { SCENE_FAMILIES } from '../../lib/scene/families';
 import { homeJsonLd } from '../../lib/seo/jsonld/home';
 import { siteName } from '../../lib/seo/meta';
 import type { Locale } from '../../lib/i18n/locales';
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import { home } from '../../data/home';
 import image from '../../assets/design/hero-modular-stack.webp';
 import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
-import coverData from '../../assets/design/cover-data.webp';
-import coverIntegration from '../../assets/design/cover-integration.webp';
-import coverPlatform from '../../assets/design/cover-platform.webp';
 
 interface Props {
   locale: Locale;
@@ -71,10 +70,13 @@ const industries = children('industries', locale).map((n) => ({ ...n, line: indu
 const services = children('services', locale);
 const successStories = localNode('success-stories', locale);
 const caseCards = cases.map((c) => ({ ...c, href: href(node(c.node)) }));
-// Wireframe: two blog posts and one news item. Covers are the abstract placeholders until M5
-// migrates the posts with their own images; decorative, so alt is empty.
-const COVERS = [coverData, coverIntegration, coverPlatform];
-const posts = [...latest('blog', 2, locale), ...latest('news', 1, locale)].map((p, i) => ({ ...p, cover: COVERS[i % COVERS.length] }));
+// Wireframe: the two newest blog posts and the newest news item of this locale, shown as on the
+// listing pages (src/lib/content/cards.ts)
+const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
+const posts = [
+  ...(await getCollection('blog', inLocale)).toSorted(newest).slice(0, 2).map(postCard),
+  ...(await getCollection('news', inLocale)).toSorted(newest).slice(0, 1).map(newsCard),
+];
 const blog = localNode('blog', locale);
 const news = localNode('media-center', locale);
 // Structured data from the organization data file of this page's locale
@@ -212,7 +214,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
         posts.map((p, i) => (
           <li>
             <Reveal delay={stagger(i)}>
-              <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }} date={p.published} />
+              <Card title={p.title} href={p.href} eyebrow={p.eyebrow} image={p.image} date={p.date} />
             </Reveal>
           </li>
         ))
