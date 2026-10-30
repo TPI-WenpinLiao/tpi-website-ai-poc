@@ -222,7 +222,7 @@ migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-09-11
 ```
 
-現站沒有的欄位：文章頁的 `keywords` meta 不搬（搜尋引擎不使用）；`views` 瀏覽數不搬；blog API 沒有跨語系對應，各語系的 `translationKey` 預設各自獨立。M7 沒有人工對應。目前只對應了一組：現站 en `why-ai-needs-knowledge-boundary` 是 zh-TW `why-companies-need-custom-ai-knowledge` 的 en 版（使用者確認，#137）。要對應其他文章時改 `docs/ia/blog-slugs.csv`，做法見 ADR 0002「路徑命名」（見「待確認」）。
+現站沒有的欄位：文章頁的 `keywords` meta 不搬（搜尋引擎不使用）；`views` 瀏覽數不搬；blog API 沒有跨語系對應，各語系的 `translationKey` 預設各自獨立。M7 沒有人工對應。已對應的文章與要對應時怎麼改，見 `docs/ia/blog-slugs.csv` 與 ADR 0002「路徑命名」（見「待確認」）。
 
 ### tag 清單
 
@@ -503,7 +503,7 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 |---|---|---|
 | blog `author` 的現站資料品質。M5-05 只遷移 2026 年的文章後剩下：vi 34 篇作者（API 的 `authorName`）為 `kay`，部分文章的後台帳號（`uidName`）是 `Kay Tăng Tấn Khôi`，`kay` 是否就是此人、要不要顯示全名 | 內容負責人 | `author` 與 `authorType` 怎麼填 |
 | `商業週刊`、`科技報橘` 為作者的 6 篇是否有轉載授權：M5-05 的保留門檻後 6 篇都在 2026 年以前、不遷移，不再需要確認 | — | — |
-| blog 三語版本的對應：API 沒有跨語系欄位，M7 沒有對應，各語系的文章之間沒有 hreflang（#137 對應了 1 組） | 內容負責人 | `docs/ia/blog-slugs.csv` 的 slug（`translationKey` 跟著 slug） |
+| blog 三語版本的對應：API 沒有跨語系欄位，M7 沒有對應，各語系的文章之間沒有 hreflang（已對應的見 `docs/ia/blog-slugs.csv`） | 內容負責人 | `docs/ia/blog-slugs.csv` 的 slug（`translationKey` 跟著 slug） |
 | 白皮書檔案的實際位置（現站在表單送出後提供） | 後端負責人 | `whitepaper.file` |
 | tag 清單（上表）的合併方式與顯示名稱。`src/content/tags.yaml` 目前的名稱取自現站，例如 `ai-solutions` 的 zh-TW 名稱是「人工智慧」 | 專案負責人 | 改上表後重跑 `node scripts/content/tags.mjs` |
 | 現站案例分類對應到 `case-study.industry` 的方式：M5-03 依使用者決定先照上表對應；群創光電（現站「科技」）、卓新工業（「其他」）是否改為 `manufacturing` | 內容負責人 | 產業頁列出的案例 |
