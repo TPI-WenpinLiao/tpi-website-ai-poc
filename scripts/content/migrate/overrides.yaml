@@ -70,6 +70,9 @@ blog/zh-TW/what-is-scope3:
 blog/zh-TW/why-companies-need-custom-ai-knowledge:
   frontmatter:
     description: 企業建立專屬 AI 知識庫的價值，不在於補足大型語言模型的知識，而是劃定「知識邊界」，讓 AI 在特定專業場景中依據最新、可信的企業資料精準回答。
+    # The current site spells the author "TPIsowftware"
+    author: TPIsoftware
+    authorType: Organization
 
 blog/zh-TW/why-enterprises-need-ai-appliance:
   frontmatter:
@@ -164,15 +167,15 @@ blog/en/sme-carbon-management-software:
   frontmatter:
     seoTitle: SME Carbon Management Software for GHG Inventory
 
+blog/en/why-companies-need-custom-ai-knowledge:
+  frontmatter:
+    seoTitle: Why Enterprises Still Need Their Own Knowledge Bases
+    description: A custom enterprise AI knowledge base is not about filling gaps in an LLM’s knowledge, but about a clear Knowledge Boundary for trusted organizational data.
+
 blog/en/why-enterprise-needs-all-in-one-ai-solutions:
   frontmatter:
     seoTitle: "Sovereign AI for Enterprise: All-in-One AI Solutions"
     description: How sovereign AI for enterprise keeps data, models and knowledge under your control with a private generative AI platform and on-premises deployment.
-
-blog/en/why-ai-needs-knowledge-boundary:
-  frontmatter:
-    seoTitle: Why Enterprises Still Need Their Own Knowledge Bases
-    description: A custom enterprise AI knowledge base is not about filling gaps in an LLM’s knowledge, but about a clear Knowledge Boundary for trusted organizational data.
 
 news/en/560:
   frontmatter:

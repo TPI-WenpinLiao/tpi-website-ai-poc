@@ -31,3 +31,5 @@ https://www.tpisoftware.vn/media-center/552,drop,發布日 2025-09-30（新聞 A
 https://www.tpisoftware.vn/media-center/554,drop,發布日 2025-10-03（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
 https://www.tpisoftware.vn/media-center/558,drop,發布日 2025-10-29（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
 https://www.tpisoftware.vn/blog/enterprise-management/gemini-api,drop,發布日 2025-02-13（文章頁 payload 的 atcDate），2026-01-01 前的 blog 文章不遷移；不在 blog API 清單，inventory 沒有日期（#137）,
+https://www.tpisoftware.com/blog/ai/what-is-ai-agent-management-platform,keep,內容為單篇 blog 文章（page_type 誤判為分類）；發布日 2026-05-13（文章頁 payload 的 atcDate），依使用者決定今年的文章發布,
+https://www.tpisoftware.com/en/blog/artifintell/why-ai-needs-knowledge-boundary,keep,內容為單篇 blog 文章（page_type 誤判為分類）；發布日 2026-09-02（文章頁 payload 的 atcDate），依使用者決定今年的文章發布,

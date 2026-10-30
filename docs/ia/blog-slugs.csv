@@ -1,0 +1,2 @@
+url,blog_slug,reason
+https://www.tpisoftware.com/en/blog/artifintell/why-ai-needs-knowledge-boundary,why-companies-need-custom-ai-knowledge,zh-TW why-companies-need-custom-ai-knowledge 的 en 版；slug 三語共用（ADR 0002），hreflang 才會互指（#137）

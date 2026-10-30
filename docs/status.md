@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-10-29
+最後更新：2026-10-30
 
 ## 目前 milestone
 
@@ -129,11 +129,13 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 
 - redirect 目標頁沒有建出的 12 列完成（#137）：`dropImagesFrom` 拿掉現站也是 404 的 Google 圖片縮圖（連同 Google 圖片貼上時帶進來的來源與「探索」兩段）後，vi 的 `nosql-la-gi`、`server-la-gi` 補上內容。其他 10 列沒有內容可補，寫在手寫的 `docs/ia/redirect-overrides.csv`，`redirects.mjs` 用它取代 `page-map.csv` 的目標：不在現站 blog API 的 3 篇轉到分類列表頁，digiMars、digiRunner 的下載頁三語轉到產品頁（現站下載走 API，沒有可搬的檔案），`/vi/privacy` 依使用者決定轉到 `/en/privacy`（vi PDF 不是網站的隱私權政策）；inventory 判為 zh-TW 的 en 隱私權政策與使用條款 PDF，也用同一份表轉到 `/en/privacy`、`/en/terms`。`redirect-targets.mjs` 刪掉 `UNBUILT`，覆寫表 `unbuilt` 欄的頁面在 `dist/` 建出時失敗（`docs/ia/redirects.md`「對照規則」）
 - 不在現站 blog API 的 3 篇 blog 處理完成：`migrate.mjs` 對 API 沒列出的文章改讀文章頁 Nuxt payload 的 `article`（標題、日期、作者、封面、分類，`blogSource`），tag 由 payload 的分類樹找出。`redirect-overrides.csv` 刪掉這 3 篇的列。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 轉出，舊網址改轉到文章頁。vi `gemini-api` 的發布日是 2025-02-13，依使用者決定照保留門檻不遷移：`audit-overrides.csv` 改為 drop，舊網址轉到 `/vi/blog/enterprise-management`。報告對早於門檻的這類文章加註
+- 不在 blog API 的 blog 是否發布已回答：使用者決定 2026 年前的文章不發布、今年的發布。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 在 `audit-overrides.csv` 定為 keep，`inventory.csv` 的「確認是否發布」清掉。`audit.mjs` 的規則對處置本身的提問（`ask`）在覆寫檔指定 `disposition` 後不再寫進 `to_confirm`（`content-audit.md`「重現方式」）。現站 en `why-ai-needs-knowledge-boundary` 依使用者確認是 zh-TW `why-companies-need-custom-ai-knowledge` 的 en 版：hreflang 只在同一個路徑之間互指，所以新增手寫的 `docs/ia/blog-slugs.csv`，en 改用 zh-TW 的 slug（`/en/blog/why-companies-need-custom-ai-knowledge`），現站 en 舊網址 301 到新路徑，兩頁互相輸出 hreflang（ADR 0002「路徑命名」）；zh-TW 這篇的作者現站拼成 `TPIsowftware`，在 `overrides.yaml` 改為 `TPIsoftware`、`Organization`
 
 ## 下一步
 
 - 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
 - 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
+- 回覆 #137 後續 PR（en 知識邊界一文對應 zh-TW 版）的「待確認」：en 版多一段上線第一週的問卷數字（40 份有效回覆、90% 用過等），zh-TW 沒有；要不要補到 zh-TW、數字是否經客戶同意公開
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落

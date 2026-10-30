@@ -46,11 +46,12 @@ function decide(row, ctx) {
   const key = routeKey(row.url);
   const type = row.page_type;
   const confirm = [];
-  const out = (disposition, reason) => {
+  // `ask`: a question about the disposition itself; an audit-overrides.csv disposition answers it
+  const out = (disposition, reason, ask) => {
     // Broken links only matter for pages that will be migrated
     const broken = ctx.brokenOn.get(row.url) ?? ctx.brokenOn.get(row.final_url);
     if (broken && disposition !== 'drop') confirm.push(`內文含失效連結 ${broken} 筆（見 broken-links.csv），遷移時修正或移除`);
-    return { disposition, disposition_reason: reason, to_confirm: confirm };
+    return { disposition, disposition_reason: reason, to_confirm: confirm, ask };
   };
 
   // Cross-cutting flags (do not decide disposition)
@@ -133,8 +134,11 @@ function decide(row, ctx) {
     case 'blog-category': {
       // Listing pages share the blog header as h1; anything else is a single article
       if (!/^Blog /.test(row.h1)) {
-        confirm.push('h1 為單篇文章標題但不在 blog API 清單，疑似未來排程或已下架的文章；確認是否發布');
-        return out('keep', '內容為單篇 blog 文章（page_type 誤判為分類），依 blog 文章規則保留');
+        return out(
+          'keep',
+          '內容為單篇 blog 文章（page_type 誤判為分類），依 blog 文章規則保留',
+          'h1 為單篇文章標題但不在 blog API 清單，疑似未來排程或已下架的文章；確認是否發布',
+        );
       }
       return out('merge', '分類列表頁，併入新 IA 的 blog 分類（M2 定案）');
     }
@@ -242,6 +246,7 @@ async function main() {
       if (o.disposition_reason) result.disposition_reason = o.disposition_reason;
       if (o.to_confirm) result.to_confirm.push(o.to_confirm);
     }
+    if (result.ask && !o?.disposition) result.to_confirm.push(result.ask);
     row.disposition = result.disposition;
     row.disposition_reason = result.disposition_reason;
     row.to_confirm = result.to_confirm.join('; ');

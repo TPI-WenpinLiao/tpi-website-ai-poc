@@ -48,6 +48,7 @@
 - 列表分頁：第一頁不帶頁碼；第 2 頁起為 `/{列表路徑}/page/{n}`，例如 `/blog/page/2`、`/blog/ai/page/2`
 - 篩選以分類頁的路徑呈現，不用 query string 產生要被收錄的頁面
 - `node scripts/ia/sitemap.mjs` 檢查 `nodes.csv` 的 `path` 欄，並依上述規則算出每篇 blog 文章的新 slug，寫到 `docs/ia/page-map.csv` 的 `blog_slug` 欄。格式不符、撞到保留字、同語系重複，或 merge 列在同語系找不到合併目標時 exit 1
+- 同一篇文章在各語系現站的 slug 不同時，在 `docs/ia/blog-slugs.csv` 指定共用的 slug（取 zh-TW 版的 slug），舊網址照常 301 到新路徑。hreflang 只在同一個路徑的語系版本之間互指，`translationKey` 相同但 slug 不同不會互指（#137）
 
 ### 尾斜線
 
