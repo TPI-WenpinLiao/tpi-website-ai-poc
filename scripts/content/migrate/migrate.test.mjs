@@ -183,5 +183,8 @@ test('a page payload runs without objects from this realm, and a payload that fa
   // Through a host object's constructor a payload could reach process; window is the context's own object
   const escape = '<script>window.__NUXT__={data:[{article:{title:window.constructor.constructor("return typeof process")()}}]};</script>';
   assert.equal(payloadArticle(escape).article.title, 'undefined');
+  // A replaced built-in never gets a function from this realm to call
+  const replaced = '<script>window.__NUXT__={data:[]};Array.prototype.find=function(f){return {article:{title:f.constructor("return typeof process")()}}};</script>';
+  assert.equal(payloadArticle(replaced), null);
   assert.throws(() => payloadArticle('<script>window.__NUXT__=(function(){ throw new Error("boom") }())</script>'), /page payload does not run: boom/);
 });
