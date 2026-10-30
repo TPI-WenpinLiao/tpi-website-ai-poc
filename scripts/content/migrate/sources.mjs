@@ -1,6 +1,6 @@
 // Reads blog posts and news from the current site's APIs, the same endpoints scripts/inventory/crawl.mjs
 // uses (docs/research/inventory.md). `get` is a cachedFetcher (./cache.mjs).
-import { payloadArticleBody } from '../../lib/nuxt-payload.mjs';
+import { payloadArticle, payloadArticleBody } from '../../lib/nuxt-payload.mjs';
 
 export const COM = 'https://www.tpisoftware.com';
 export const VN = 'https://www.tpisoftware.vn';
@@ -65,6 +65,23 @@ export async function blogBody(get, url) {
   const res = await get(url);
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
   return payloadArticleBody(res.body.toString('utf8'));
+}
+
+/**
+ * A post's API fields read from its page instead, for posts the blog API does not list (#137): the
+ * payload's `article` has the same fields, and its category tree gives the blog-categories.csv row
+ * (main and sub category paths) the API would have produced. null when the page has no article.
+ * @returns {Promise<{ article: object, categories: { main_category: string, sub_category: string } } | null>}
+ */
+export async function blogPageArticle(get, url) {
+  const res = await get(url);
+  if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+  const page = payloadArticle(res.body.toString('utf8'));
+  if (!page) return null;
+  const { mainCate, secCate } = page.article.multiCate?.[0] ?? {};
+  const main = page.categoryUrls.get(mainCate);
+  const categories = main ? { main_category: main, sub_category: page.categoryUrls.get(secCate) ?? '' } : undefined;
+  return { article: page.article, categories };
 }
 
 /**

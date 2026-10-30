@@ -128,6 +128,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 ### 維運
 
 - redirect 目標頁沒有建出的 12 列完成（#137）：`dropImagesFrom` 拿掉現站也是 404 的 Google 圖片縮圖（連同 Google 圖片貼上時帶進來的來源與「探索」兩段）後，vi 的 `nosql-la-gi`、`server-la-gi` 補上內容。其他 10 列沒有內容可補，寫在手寫的 `docs/ia/redirect-overrides.csv`，`redirects.mjs` 用它取代 `page-map.csv` 的目標：不在現站 blog API 的 3 篇轉到分類列表頁，digiMars、digiRunner 的下載頁三語轉到產品頁（現站下載走 API，沒有可搬的檔案），`/vi/privacy` 依使用者決定轉到 `/en/privacy`（vi PDF 不是網站的隱私權政策）；inventory 判為 zh-TW 的 en 隱私權政策與使用條款 PDF，也用同一份表轉到 `/en/privacy`、`/en/terms`。`redirect-targets.mjs` 刪掉 `UNBUILT`，覆寫表 `unbuilt` 欄的頁面在 `dist/` 建出時失敗（`docs/ia/redirects.md`「對照規則」）
+- 不在現站 blog API 的 3 篇 blog 處理完成：`migrate.mjs` 對 API 沒列出的文章改讀文章頁 Nuxt payload 的 `article`（標題、日期、作者、封面、分類，`blogSource`），tag 由 payload 的分類樹找出。`redirect-overrides.csv` 刪掉這 3 篇的列。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 轉出，舊網址改轉到文章頁。vi `gemini-api` 的發布日是 2025-02-13，依使用者決定照保留門檻不遷移：`audit-overrides.csv` 改為 drop，舊網址轉到 `/vi/blog/enterprise-management`。報告對早於門檻的這類文章加註
 
 ## 下一步
 
@@ -137,7 +138,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落
 - 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權
-- 回覆 M5-05（#30）PR 的「待確認」：圖片授權與人物、失敗的 5 篇、作者 `authorType`
+- 回覆 M5-05（#30）PR 的「待確認」：圖片授權與人物、作者 `authorType`
 - 首頁與產品頁的最新文章改讀 content collections（#101）可以開始
 - 回覆 M5-06（#31）PR 的「待確認」：合作夥伴頁的翻譯、法務文件是否要法務審閱、資訊安全政策的生效日、en 法務頁的英譯、關於我們的圖片授權
 - 回覆 M5-03（#28）PR 的「待確認」：客戶名稱與 logo 的使用授權、內頁內容只有一段描述、獎項與年份、產業對應

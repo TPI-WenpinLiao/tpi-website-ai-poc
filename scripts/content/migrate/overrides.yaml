@@ -57,6 +57,10 @@ blog/zh-TW/what-is-agentic-ai-platform:
   frontmatter:
     description: 本文解析代理式 AI、AI Agent 與 Agentic AI 平台的差異，說明多 Agent 協作、治理機制與平台架構，並介紹 OrientAI 如何落地。
 
+blog/zh-TW/what-is-ai-agent-management-platform:
+  frontmatter:
+    description: AI Agent 管理平台是什麼？本文解析企業導入原因、單一 AI Agent 與平台的差異，以及透過系統整合與治理機制落地的實務步驟。
+
 blog/zh-TW/what-is-scope3:
   frontmatter:
     description: 範疇三是什麼？本文拆解範疇一、二、三的分類與差異，說明中小企業面對供應鏈碳排放時常見的數據收集難題，以及有效執行範疇三碳盤查的實務做法。
@@ -164,6 +168,11 @@ blog/en/why-enterprise-needs-all-in-one-ai-solutions:
   frontmatter:
     seoTitle: "Sovereign AI for Enterprise: All-in-One AI Solutions"
     description: How sovereign AI for enterprise keeps data, models and knowledge under your control with a private generative AI platform and on-premises deployment.
+
+blog/en/why-ai-needs-knowledge-boundary:
+  frontmatter:
+    seoTitle: Why Enterprises Still Need Their Own Knowledge Bases
+    description: A custom enterprise AI knowledge base is not about filling gaps in an LLM’s knowledge, but about a clear Knowledge Boundary for trusted organizational data.
 
 news/en/560:
   frontmatter:

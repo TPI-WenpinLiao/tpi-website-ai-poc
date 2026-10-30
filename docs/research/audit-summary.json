@@ -4,9 +4,9 @@
   "blogCutoff": "2026-01-01",
   "byDisposition": {
     "rewrite": 164,
-    "drop": 947,
+    "drop": 948,
     "merge": 78,
-    "keep": 117
+    "keep": 116
   },
   "byDispositionLocale": {
     "rewrite": {
@@ -17,7 +17,7 @@
     "drop": {
       "zh-TW": 399,
       "en": 223,
-      "vi": 323,
+      "vi": 324,
       "ja": 2
     },
     "merge": {
@@ -28,7 +28,7 @@
     "keep": {
       "zh-TW": 36,
       "en": 27,
-      "vi": 54
+      "vi": 53
     }
   },
   "byPageTypeDisposition": {
@@ -55,7 +55,8 @@
     },
     "blog-category": {
       "merge": 52,
-      "keep": 3
+      "keep": 2,
+      "drop": 1
     },
     "blog-post": {
       "keep": 57,
@@ -112,7 +113,7 @@
     }
   },
   "toConfirm": 108,
-  "overrides": 31,
+  "overrides": 32,
   "localeGaps": [
     {
       "route": "/chatgpt-enterprise",

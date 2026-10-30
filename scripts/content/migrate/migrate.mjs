@@ -11,13 +11,14 @@ import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 import { parse as parseYaml } from 'yaml';
 import { readCsv, csvCell } from '../../inventory/csv.mjs';
+import { BLOG_CUTOFF } from '../../inventory/cutoffs.mjs';
 import { parseTagTable } from '../tags.mjs';
 import { cachedFetcher, writeAtomic } from './cache.mjs';
-import { applyOverrides, blogFrontmatter, Commented, Day, frontmatterNotes, newsFrontmatter, serializeFrontmatter, tagLookup } from './frontmatter.mjs';
+import { apiDay, applyOverrides, blogFrontmatter, Commented, Day, frontmatterNotes, newsFrontmatter, serializeFrontmatter, tagLookup } from './frontmatter.mjs';
 import { prepare, toMarkdown } from './html-to-markdown.mjs';
 import { dataUrlBytes, fileNames, imageExt, optimizeImage } from './images.mjs';
 import { linkResolver } from './links.mjs';
-import { blogArticles, blogBody, newsBody, newsImageUrl, newsItems } from './sources.mjs';
+import { blogArticles, blogBody, blogPageArticle, newsBody, newsImageUrl, newsItems } from './sources.mjs';
 
 const TYPES = ['blog', 'news'];
 const LOCALES = ['zh-TW', 'en', 'vi'];
@@ -207,6 +208,25 @@ async function pool(items, limit, fn) {
   await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
 }
 
+/**
+ * A blog post's API article and blog-categories.csv row. Posts the API does not list (the page still
+ * serves them, #137) are read from the post page's payload: page-map.csv keeps them, but their
+ * inventory row has no date, so the retention cutoff (BLOG_CUTOFF) was never applied.
+ * @param {{ get: Function, source: Map<string, object>, categories: Map<string, object>, urls: string[] }} p
+ *   urls: the page-map URL, then the final URL
+ */
+export async function blogSource({ get, source, categories, urls }) {
+  const listed = urls.map((u) => source.get(u)).find(Boolean);
+  const cats = urls.map((u) => categories.get(u)).find(Boolean);
+  if (listed) return { item: listed, categories: cats, notes: [] };
+  const page = await blogPageArticle(get, urls.at(-1));
+  if (!page) throw new Error('not in the blog API, and the page payload has no article');
+  const notes = ['not in the blog API: fields from the article page'];
+  const day = apiDay(page.article.atcDate).value;
+  if (day < BLOG_CUTOFF) notes.push(`publishedAt ${day} is before ${BLOG_CUTOFF}`);
+  return { item: page.article, categories: cats ?? page.categories, notes };
+}
+
 /** One entry (a keep row and its merge rows) → a report row. */
 async function migrateEntry({ get, type, locale, group, source, inventory, categories, tagOf, resolveLink, overrides, date }) {
   const { slug, rows } = group;
@@ -218,17 +238,18 @@ async function migrateEntry({ get, type, locale, group, source, inventory, categ
   const row = { type, locale, id, sourceUrl: sourceUrls.join(' ') };
   try {
     const primary = rows[0];
-    const item = source.get(primary.url) ?? source.get(sourceUrls[0]);
-    if (!item) throw new Error(`not in the ${type} API`);
     const sourceUpdatedAt = inv[0]?.last_updated ?? '';
     let coverUrl, html, frontmatter, notes;
     if (type === 'blog') {
+      const { item, categories: cats, notes: sourceNotes } = await blogSource({ get, source, categories, urls: [primary.url, sourceUrls[0]] });
       coverUrl = item.coverImage;
       html = await blogBody(get, sourceUrls[0]);
       if (html === null) throw new Error('no article body in the page payload');
-      const cats = categories.get(primary.url) ?? categories.get(sourceUrls[0]);
       ({ data: frontmatter, notes } = blogFrontmatter({ locale, slug, category: primary.blog_category, article: item, categories: cats, tagOf, sourceUrl, sourceUpdatedAt }));
+      notes.unshift(...sourceNotes);
     } else {
+      const item = source.get(primary.url) ?? source.get(sourceUrls[0]);
+      if (!item) throw new Error(`not in the ${type} API`);
       coverUrl = newsImageUrl(item.imagePath);
       html = await newsBody(get, item.htmlpath);
       ({ data: frontmatter, notes } = newsFrontmatter({ item, sourceUrl, sourceUpdatedAt }));

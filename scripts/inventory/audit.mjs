@@ -6,18 +6,13 @@
 
 import { writeFile } from 'node:fs/promises';
 import { readCsv, csvCell } from './csv.mjs';
+import { BLOG_CUTOFF, NEWS_CUTOFF } from './cutoffs.mjs';
 import { pathOf, routeKey, ROUTE_ALIASES } from './routes.mjs';
 
 const INVENTORY = 'docs/research/inventory.csv';
 const BROKEN = 'docs/research/broken-links.csv';
 const OVERRIDES = 'docs/research/audit-overrides.csv';
 const SUMMARY = 'docs/research/audit-summary.json';
-
-// Keep news and blog posts on or after this date; older ones are not migrated (M1-02 set 2024 for news,
-// M5-05 moved both to 2026, #30).
-// NEWS_REVIEW_BEFORE in scripts/content/migrate/frontmatter.mjs repeats NEWS_CUTOFF; change both together
-const NEWS_CUTOFF = '2026-01-01';
-const BLOG_CUTOFF = '2026-01-01';
 
 const CRAWL_COLUMNS = [
   'url', 'final_url', 'status', 'locale', 'page_type', 'title', 'h1', 'last_updated', 'last_updated_source',

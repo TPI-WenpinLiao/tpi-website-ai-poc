@@ -30,3 +30,4 @@ https://www.tpisoftware.vn/media-center/549,drop,發布日 2025-09-05（新聞 A
 https://www.tpisoftware.vn/media-center/552,drop,發布日 2025-09-30（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
 https://www.tpisoftware.vn/media-center/554,drop,發布日 2025-10-03（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
 https://www.tpisoftware.vn/media-center/558,drop,發布日 2025-10-29（新聞 API 的 showDate），2026-01-01 前的新聞不遷移；last_updated 是 2026 年的更新日（M5-05）,
+https://www.tpisoftware.vn/blog/enterprise-management/gemini-api,drop,發布日 2025-02-13（文章頁 payload 的 atcDate），2026-01-01 前的 blog 文章不遷移；不在 blog API 清單，inventory 沒有日期（#137）,
