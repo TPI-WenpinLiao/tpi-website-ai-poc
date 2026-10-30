@@ -37,6 +37,22 @@ function captionOf(node) {
 }
 
 /**
+ * An image pasted from Google Images (encrypted-tbn*.gstatic.com/licensed-image) brings two plain
+ * paragraphs along: the source site and "Explore" in the page language (「Shutterstock」「Khám phá」, #137).
+ */
+function googleImageCredit(img, url) {
+  if (!/^https:\/\/encrypted-tbn\d\.gstatic\.com\/licensed-image\b/.test(url)) return [];
+  const credit = [];
+  for (let next = img.nextSibling; next && credit.length < 2; next = next.nextSibling) {
+    if (next.nodeType === 3 && !next.text.trim()) continue;
+    const plain = next.rawTagName?.toLowerCase() === 'p' && next.childNodes.every((n) => n.nodeType === 3) && next.text.trim();
+    if (!plain) break;
+    credit.push(next);
+  }
+  return credit.length === 2 ? credit : [];
+}
+
+/**
  * Clean the HTML: drop scripts and embeds, unwrap spans, keep only the attributes Markdown can carry,
  * fix heading levels (the page h1 is the title, so the body starts at h2 and never skips a level),
  * resolve image URLs against `base`.
@@ -96,11 +112,12 @@ export function prepare(html, base, { drop = [] } = {}) {
       // WordPress wraps images in a link to the full-size file; that link and the caption go with the image
       const link = img.parentNode?.rawTagName?.toLowerCase() === 'a' && img.parentNode.childNodes.every((n) => n === img || !n.text.trim()) ? img.parentNode : null;
       const caption = captionOf(link ?? img);
+      const captions = caption ? [caption] : googleImageCredit(link ?? img, url);
       (link ?? img).remove();
-      caption?.remove();
+      for (const c of captions) c.remove();
       if (!dropped.includes(url)) {
         dropped.push(url);
-        notes.push(`image dropped (dropImagesFrom): ${url}${caption ? ` with caption "${caption.text.trim()}"` : ''}`);
+        notes.push(`image dropped (dropImagesFrom): ${url}${captions.length ? ` with caption "${captions.map((c) => c.text.trim()).join(' / ')}"` : ''}`);
       }
       continue;
     }

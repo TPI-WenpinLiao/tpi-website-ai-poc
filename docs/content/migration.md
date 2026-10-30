@@ -94,7 +94,7 @@ news/zh-TW/585:
 
 - `frontmatter` 的值取代 script 產生的值
 - `alt` 以 `src/assets/<type>/<locale>/<slug>/` 裡的檔名為 key，只用在內文圖。封面在文章模板裡是裝飾圖（`alt=""`），不用寫
-- `dropImagesFrom` 列出的主機或圖片網址，內文圖不下載，直接從內文移除，連同只包著這張圖的連結與圖說（緊接在圖後、整段斜體的段落，或 `figcaption`），報告會列出移除的圖說。用在源站壞掉、圖片拿不到，而且圖只是配圖的文章（M5-05 的 `blog.tpisoftware.com`），或不能直接使用的圖（帶浮水印，見 `content-migration`「圖片」，寫圖片網址）。源站恢復或換好圖後刪掉這一行再重跑，圖就會補回來
+- `dropImagesFrom` 列出的主機或圖片網址，內文圖不下載，直接從內文移除，連同只包著這張圖的連結與圖說（緊接在圖後、整段斜體的段落，或 `figcaption`；從 Google 圖片貼上的 `encrypted-tbn*.gstatic.com/licensed-image` 圖，則是緊接在後的兩段純文字，例如「Shutterstock」「Khám phá」），報告會列出移除的圖說。用在源站壞掉、圖片拿不到，而且圖只是配圖的文章（M5-05 的 `blog.tpisoftware.com`），或不能直接使用的圖（帶浮水印，見 `content-migration`「圖片」，寫圖片網址）。源站恢復或換好圖後刪掉這一行再重跑，圖就會補回來
 - 寫了不存在的 entry id、文章沒有的圖片檔名，或 `dropImagesFrom` 的項目在文章裡找不到對應的圖，該篇記為 `failed`。不帶參數的全量執行，也會檢查是否有沒用到的 entry id
 
 ## 報告

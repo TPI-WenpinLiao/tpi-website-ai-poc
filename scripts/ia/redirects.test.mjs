@@ -85,7 +85,7 @@ test('buildRedirects sends overridden rows to the given page, and their own page
     pageMap,
     nodes,
     dropTargets,
-    overrides: [{ url: 'https://www.tpisoftware.com/media-center/12', to: '/media-center', reason: 'no entry' }],
+    overrides: [{ url: 'https://www.tpisoftware.com/media-center/12', unbuilt: '/media-center/12', to: '/media-center', reason: 'no entry' }],
   });
   assert.deepEqual(errors, []);
   const byFrom = Object.fromEntries(rows.map((r) => [r.from, `${r.to} ${r.status} ${r.note}`]));
@@ -93,21 +93,25 @@ test('buildRedirects sends overridden rows to the given page, and their own page
   assert.equal(byFrom['https://www.tpisoftware.com/media-center/12/photo'], '/media-center 301 drop：上層頁');
 });
 
-test('buildRedirects rejects duplicate overrides, overrides of dropped rows and targets the new site lacks', () => {
+test('buildRedirects rejects bad overrides', () => {
+  const o = (url, unbuilt, to, reason = 'r') => ({ url, unbuilt, to, reason });
   const { errors } = buildRedirects({
     inventory,
     pageMap,
     nodes,
     dropTargets,
     overrides: [
-      { url: 'https://www.tpisoftware.com/media-center/12', to: '/media-center' },
-      { url: 'https://www.tpisoftware.com/media-center/12', to: '/media-center' },
-      { url: 'https://www.tpisoftware.com/media-center/13', to: '/media-center' },
-      { url: 'https://www.tpisoftware.com/blog/ai/Chatbot-NLU', to: '/blog/chatbot-nlu' },
+      o('https://www.tpisoftware.com/media-center/12', '/media-center/12', '/media-center'),
+      o('https://www.tpisoftware.com/media-center/12', '/media-center/12', '/media-center'),
+      o('https://www.tpisoftware.com/media-center/13', '', '/media-center'),
+      o('https://www.tpisoftware.com/blog/ai/Chatbot-NLU', '/blog/chatbot-nlu', '/blog/chatbot-nlu'),
+      o('https://www.tpisoftware.com/products/gadoDIDO', '/products/gadoDIDO', '/', ' '),
     ],
   });
   assert.deepEqual(errors, [
     'docs/ia/redirect-overrides.csv: duplicate url: https://www.tpisoftware.com/media-center/12',
+    'docs/ia/redirect-overrides.csv: no reason: https://www.tpisoftware.com/products/gadoDIDO',
+    'docs/ia/redirect-overrides.csv: unbuilt is "/products/gadoDIDO", the row maps to "/products/gadodido": https://www.tpisoftware.com/products/gadoDIDO',
     'docs/ia/redirect-overrides.csv: not a keep / rewrite / merge row of docs/research/inventory.csv: https://www.tpisoftware.com/media-center/13',
     'docs/ia/redirect-overrides.csv: "/blog/chatbot-nlu" is not a page of the new site: https://www.tpisoftware.com/blog/ai/Chatbot-NLU',
   ]);

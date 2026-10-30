@@ -35,10 +35,6 @@ Vậy cụ thể **Server là gì**? Có bao nhiêu loại? Và làm sao để �
 
 Mối quan hệ này gọi là **Mô hình Client-Server**.
 
-Shutterstock
-
-Khám phá
-
 **Ví dụ dễ hiểu:**
 
 -   **Client:** Bạn đang đói bụng và ngồi vào bàn ăn (Máy tính/Điện thoại của bạn).

@@ -29,10 +29,10 @@ keep、rewrite、merge 的列導到 `page-map.csv` 對應節點的路徑，en �
 
 節點的頁面在某語系沒有建出時（沒有內容檔、offering 沒有 `downloads`），在 [`redirect-overrides.csv`](./redirect-overrides.csv) 指定目標（#137）：
 
-- `url` 是 `inventory.csv` 的 keep、rewrite、merge 列，`to` 是新站存在的頁面路徑（含語系前綴），`reason` 寫為什麼沒有建出
+- `url` 是 `inventory.csv` 的 keep、rewrite、merge 列；`unbuilt` 是這一列原本的目標，也就是沒建出的頁面；`to` 是改轉過去的新站頁面路徑（含語系前綴）；`reason` 寫為什麼沒有建出
 - 被覆寫的原目標不算新站存在的頁面，drop 列找上層頁時不會找到它
-- `url` 重複、不是 keep、rewrite、merge 列，或 `to` 不是新站的頁面時 exit 1
-- 頁面之後建出了（例如補了內容檔），刪掉那一列重跑；沒刪的話，`redirect-targets.mjs` 會因為轉址蓋掉已建出的頁面而失敗
+- `url` 重複、不是 keep、rewrite、merge 列、`unbuilt` 不是這一列原本的目標、`to` 不是新站的頁面，或 `reason` 空白時 exit 1
+- 頁面之後建出了（例如補了內容檔），刪掉那一列重跑；沒刪的話，`redirect-targets.mjs` 發現 `unbuilt` 已在 `dist/` 建出就會失敗
 
 drop 的列導到同語系最接近的上層頁：
 
@@ -50,7 +50,7 @@ script 另外檢查：
 - 產出的 `_redirects` 規則（含萬用規則）不會比對到新站的頁面。Cloudflare Pages 不論檔案是否存在都會套用轉址，比對到新頁面就會蓋掉該頁或形成迴圈
 - 數量與長度在 Cloudflare Pages 的上限內：靜態 2,000 筆、動態 100 筆、每行 1,000 字元
 
-`npm run check` 在 build 後另外執行 `node scripts/ia/redirect-targets.mjs`（M8-01）：每一列的 `to`（含 200 列）都要在 `dist/` 建出，也不能又是另一條規則的來源（轉址鏈）；`www.tpisoftware.com` 的 301 來源在 `dist/` 有建出時也失敗，因為轉址會蓋掉那一頁。上面的檢查只看節點，看不到某語系有沒有內容檔、offering 有沒有 `downloads`，沒建出的目標改寫在 `redirect-overrides.csv`。外部節點與 `scripts/seo/links.mjs` 的 `PENDING` 不算錯誤，`PENDING` 的頁面建出後要從清單拿掉。
+`npm run check` 在 build 後另外執行 `node scripts/ia/redirect-targets.mjs`（M8-01）：每一列的 `to`（含 200 列）都要在 `dist/` 建出，也不能又是另一條規則的來源（轉址鏈）；`redirect-overrides.csv` 的 `unbuilt` 在 `dist/` 有建出時也失敗。上面的檢查只看節點，看不到某語系有沒有內容檔、offering 有沒有 `downloads`，沒建出的目標改寫在 `redirect-overrides.csv`。外部節點與 `scripts/seo/links.mjs` 的 `PENDING` 不算錯誤，`PENDING` 的頁面建出後要從清單拿掉。
 
 ## 轉成 `_redirects`
 

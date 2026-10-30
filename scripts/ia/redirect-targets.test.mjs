@@ -44,15 +44,13 @@ test('a target that is another redirect source on the main host is a chain', () 
   assert.deepEqual(chains, ['https://www.tpisoftware.com/a → /about-us, which redirects again']);
 });
 
-test('a built page that a main-host rule redirects is shadowed', () => {
-  const rows = [
-    row('https://www.tpisoftware.com/media-center', '/'),
-    row('https://www.tpisoftware.com/about-us', '/about-us', '200'),
-    // Only _redirects rules on the main host can hide a page
-    row('https://www.tpisoftware.vn/en', '/vi'),
+test('an overridden page that got built is reported, whatever the source path', () => {
+  const overrides = [
+    { url: 'https://www.tpisoftware.vn/blog/x/media-center', unbuilt: '/media-center', to: '/' },
+    { url: 'https://www.tpisoftware.com/download/a', unbuilt: '/download/a', to: '/' },
   ];
-  const { shadowed } = redirectProblems({ rows, kind });
-  assert.deepEqual(shadowed, ['/media-center']);
+  const { builtOverrides } = redirectProblems({ rows: [], kind, overrides });
+  assert.deepEqual(builtOverrides, ['/media-center']);
 });
 
 test('catch-alls are skipped and PENDING pages that got built are stale', () => {

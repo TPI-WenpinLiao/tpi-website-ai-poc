@@ -16,7 +16,7 @@ const INVENTORY = 'docs/research/inventory.csv';
 const PAGE_MAP = 'docs/ia/page-map.csv';
 const NODES = 'docs/ia/nodes.csv';
 const DROP_TARGETS = 'docs/ia/drop-targets.csv';
-const OVERRIDES = 'docs/ia/redirect-overrides.csv';
+export const OVERRIDES = 'docs/ia/redirect-overrides.csv';
 const REDIRECTS = 'docs/ia/redirects.csv';
 
 // The host the new site replaces; _redirects can only match paths, so other hosts (www.tpisoftware.vn) need domain-level rules
@@ -50,11 +50,12 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets, overrid
   const byId = new Map(nodes.map((n) => [n.id, n]));
   const mapped = new Map(pageMap.map((r) => [r.url, r]));
   const dropRoutes = new Map(dropTargets.map((d) => [d.route, d.node]));
-  // Kept rows whose page the build doesn't have (no content entry, no downloads): url → the page to send them to
-  const overrideTo = new Map();
+  // Kept rows whose page the build doesn't have (no content entry, no downloads): url → that page and the one to send them to
+  const overrideOf = new Map();
   for (const o of overrides) {
-    if (overrideTo.has(o.url)) errors.push(`${OVERRIDES}: duplicate url: ${o.url}`);
-    overrideTo.set(o.url, o.to);
+    if (overrideOf.has(o.url)) errors.push(`${OVERRIDES}: duplicate url: ${o.url}`);
+    if (!o.reason?.trim()) errors.push(`${OVERRIDES}: no reason: ${o.url}`);
+    overrideOf.set(o.url, o);
   }
 
   // Pass 1: keep / rewrite / merge rows; their targets are the pages the new site has in each locale
@@ -67,12 +68,15 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets, overrid
       errors.push(`missing from ${PAGE_MAP}: ${row.url}`);
       continue;
     }
-    if (overrideTo.has(row.url)) {
+    const to = newPath(m, node);
+    const override = overrideOf.get(row.url);
+    if (override) {
+      // scripts/ia/redirect-targets.mjs fails once `unbuilt` gets built, so it must be the page this row maps to
+      if (override.unbuilt !== to) errors.push(`${OVERRIDES}: unbuilt is "${override.unbuilt}", the row maps to "${to}": ${row.url}`);
       // The node's page is not built, so it is not a target dropped rows may use either
-      targets.set(row.url, { to: overrideTo.get(row.url), note: `${row.disposition}：${node.id}（redirect-overrides.csv）` });
+      targets.set(row.url, { to: override.to, note: `${row.disposition}：${node.id}（redirect-overrides.csv）` });
       continue;
     }
-    const to = newPath(m, node);
     if (node.kind === 'page' || node.kind === 'collection') {
       if (!PATH_PATTERN.test(to)) errors.push(`new path "${to}" breaks the URL rule (ADR 0002): ${row.url}`);
       exists.add(to);
@@ -80,7 +84,7 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets, overrid
     targets.set(row.url, { to, note: `${row.disposition}：${node.id}` });
   }
   const kept = new Set(inventory.filter((r) => r.disposition !== 'drop').map((r) => r.url));
-  for (const [url, to] of overrideTo) {
+  for (const { url, to } of overrideOf.values()) {
     if (!kept.has(url)) errors.push(`${OVERRIDES}: not a keep / rewrite / merge row of ${INVENTORY}: ${url}`);
     else if (!exists.has(to)) errors.push(`${OVERRIDES}: "${to}" is not a page of the new site: ${url}`);
   }

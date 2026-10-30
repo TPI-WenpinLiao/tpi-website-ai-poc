@@ -62,6 +62,14 @@ test('drop: images from those hosts (or with those URLs) are removed with their 
   const { markdown } = toMarkdown(p.html, { image: (url) => ({ path: `./${url.split('/').pop()}` }), link: (h) => h });
   assert.equal(markdown, '前文\n\n*斜體導言*\n\n![](./e.png)\n\n*保留的圖說*');
   assert.deepEqual(prepare(html, BASE).dropped, []);
+  // Google Images pastes come with the source and "Explore"; a third plain paragraph is body text
+  const g = 'https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:x';
+  const google = prepare(`<p>前文</p><img src="${g}"><p>Shutterstock</p><p>Khám phá</p><p>內文</p>`, BASE, { drop: ['encrypted-tbn0.gstatic.com'] });
+  assert.deepEqual(google.notes, [`image dropped (dropImagesFrom): ${g} with caption "Shutterstock / Khám phá"`]);
+  assert.equal(toMarkdown(google.html, { image: () => ({ path: '' }), link: (h) => h }).markdown, '前文\n\n內文');
+  // Only one plain paragraph after it: not the credit
+  const alone = prepare(`<img src="${g}"><p>內文</p><h2>標題</h2>`, BASE, { drop: ['encrypted-tbn0.gstatic.com'] });
+  assert.equal(toMarkdown(alone.html, { image: () => ({ path: '' }), link: (h) => h }).markdown, '內文\n\n## 標題');
   // A single image by URL; others from the same host stay
   const one = prepare('<p><img src="https://tpi.dev/a.jpg"></p><p><img src="https://tpi.dev/b.jpg"></p>', BASE, { drop: ['https://tpi.dev/a.jpg'] });
   assert.deepEqual([one.images, one.dropped], [['https://tpi.dev/b.jpg'], ['https://tpi.dev/a.jpg']]);
