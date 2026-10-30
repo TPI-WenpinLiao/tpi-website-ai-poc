@@ -38,6 +38,8 @@ node scripts/content/migrate/migrate.mjs --type blog --locale zh-TW --only custo
 | blog | `POST /cms/api/v1/f/article/home`（`X-Lang`：`ZH-TW`、`EN-US`、`VI-VN`） | 文章頁 SSR HTML 裡 Nuxt payload 的 `content` 字串 |
 | 新聞 | `GET /tpi/api/News?languages=tw\|en\|vn` | `/file{htmlpath}` |
 
+blog API 沒列出、但現站頁面仍在的文章（#137），列表與欄位改讀文章頁 Nuxt payload 的 `article`，欄位名稱與 API 相同；tag 用 payload 的分類樹找出子分類路徑，代替 `blog-categories.csv`。這類文章在 `inventory.csv` 沒有日期，`audit.mjs` 套不到保留門檻，報告會標出早於門檻的文章。
+
 只轉 `page-map.csv` 中 `node` 為 `blog-post`、`news-article`，且 `disposition` 為 `keep`、`rewrite`、`merge` 的列。`merge` 列併入同一個 slug 的 `keep` 列，`sourceUrl` 寫成陣列，主要來源在前。API 列出、但 `page-map.csv` 沒有的文章，報告記為 `skipped`。這些是 M1-02 判定 `drop` 的文章，或日期在未來的排程文章。
 
 ### frontmatter
@@ -115,6 +117,8 @@ news/zh-TW/585:
 | `embed removed: …` | 確認影片是否要放回（M6-03） |
 | `table kept as HTML …` | 檢查表格的顯示 |
 | `publishedAt … is before 2026-01-01` | 新聞發布日早於保留門檻（`audit.mjs`），在 `audit-overrides.csv` 改為 drop 後重跑 IA script |
+| `not in the blog API: fields from the article page` | 欄位取自文章頁（見「來源」）；確認文章在現站是否仍要發布 |
+| `publishedAt … is before 2026-01-01`（blog） | 不在 API 的文章早於保留門檻，在 `audit-overrides.csv` 改為 drop 後重跑 IA script |
 | `to_confirm: …` | `inventory.csv` 的待確認，照抄進 PR |
 | `not in blog-categories.csv: no tags` | 確認文章的子分類 |
 

@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Day } from './frontmatter.mjs';
-import { entryRows, entryText, latinPunctuation, parseOverrides } from './migrate.mjs';
+import { blogSource, entryRows, entryText, latinPunctuation, parseOverrides } from './migrate.mjs';
 
 test('entryText keeps migratedAt when nothing else changed, and updates it when something did', () => {
   const data = { title: 'A', publishedAt: new Day('2026-09-11'), migratedAt: undefined };
@@ -135,4 +135,45 @@ test('latinPunctuation turns full-width punctuation into ASCII, with the space a
   assert.deepEqual(latinPunctuation({ list: ['a：b'], migratedAt: day }), { list: ['a: b'], migratedAt: day });
   assert.match(entryText({ title: 'A：B' }, 'x＆y', null, '2026-10-20', 'en'), /title: "A: B"[\s\S]*x&y/);
   assert.match(entryText({ title: 'A：B' }, '', null, '2026-10-20'), /title: A：B/);
+});
+
+// A post page's payload as the current site writes it: values are IIFE arguments (#137)
+const postPage = (atcDate) => `<html><body><script>window.__NUXT__=(function(a,b,c,d){return {layout:"default",data:[{articleData:{},article:{atcNo:"1f14",authorName:"Fran Chen",atcDate:d,title:b,description:"摘要",coverImage:"https:\\u002F\\u002Ftpi.dev\\u002Fcover.jpg",coverAlt:b,content:"\\u003Cp\\u003E內文\\u003C\\u002Fp\\u003E",articleCustUrl:"what-is-ai-agent-management-platform",multiCate:[{mainCate:"020",secCate:c,mainCateName:"AI 人工智慧",secCateName:"AI 應用"}]}}],state:{categories:[{categoryNo:"01",custUrl:"\\u002Fblog",subcategories:[{categoryNo:"020",custUrl:"\\u002Fblog\\u002Fai",subcategories:[{categoryNo:c,custUrl:"\\u002Fblog\\u002Fai\\u002FAIapplication"}]}]}]}}}(null,"AI Agent 管理平台是什麼？","020031","${atcDate}"));</script></body></html>`;
+const pageGet = (html) => async () => ({ ok: true, status: 200, contentType: 'text/html', body: Buffer.from(html) });
+const POST = 'https://www.tpisoftware.com/blog/ai/what-is-ai-agent-management-platform';
+
+test('blogSource uses the blog API article when the API lists the post', async () => {
+  const article = { title: 'API' };
+  const cats = { main_category: '/blog/ai', sub_category: '/blog/ai/rpa' };
+  const get = async () => assert.fail('the page is not read for a listed post');
+  const out = await blogSource({ get, source: new Map([[POST, article]]), categories: new Map([[POST, cats]]), urls: [POST, POST] });
+  assert.deepEqual(out, { item: article, categories: cats, notes: [] });
+});
+
+test('blogSource reads a post the blog API does not list from its page payload', async () => {
+  const { blogFrontmatter } = await import('./frontmatter.mjs');
+  const out = await blogSource({ get: pageGet(postPage('2026/05/13 00:00:00')), source: new Map(), categories: new Map(), urls: [POST, POST] });
+  assert.deepEqual(out.notes, ['not in the blog API: fields from the article page']);
+  assert.deepEqual(out.categories, { main_category: '/blog/ai', sub_category: '/blog/ai/AIapplication' });
+  assert.equal(out.item.coverImage, 'https://tpi.dev/cover.jpg');
+  const { data } = blogFrontmatter({
+    locale: 'zh-TW',
+    slug: 'what-is-ai-agent-management-platform',
+    category: 'blog-ai',
+    article: out.item,
+    categories: out.categories,
+    tagOf: (locale, path) => (path === '/blog/ai/AIapplication' ? 'ai-application' : undefined),
+    sourceUrl: POST,
+    sourceUpdatedAt: '',
+  });
+  assert.equal(data.title, 'AI Agent 管理平台是什麼？');
+  assert.equal(data.publishedAt.value, '2026-05-13');
+  assert.equal(data.author, 'Fran Chen');
+  assert.deepEqual(data.tags, ['ai-application']);
+});
+
+test('blogSource notes an unlisted post older than the retention cutoff, and fails without an article', async () => {
+  const old = await blogSource({ get: pageGet(postPage('2025/02/13 15:39:54')), source: new Map(), categories: new Map(), urls: [POST, POST] });
+  assert.ok(old.notes.includes('publishedAt 2025-02-13 is before 2026-01-01'));
+  await assert.rejects(blogSource({ get: pageGet('<html><body>Blog by Thinker</body></html>'), source: new Map(), categories: new Map(), urls: [POST, POST] }), /not in the blog API, and the page payload has no article/);
 });

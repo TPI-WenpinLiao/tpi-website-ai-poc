@@ -14,6 +14,9 @@ export const NEWS_TYPES = { 1: 'press', 3: 'product', 7: 'newsletter', 4: 'press
 // content-audit.md「已知限制」: news published before this day were kept on updateDate and need a check.
 // Same date as NEWS_CUTOFF in scripts/inventory/audit.mjs; change both together
 export const NEWS_REVIEW_BEFORE = '2026-01-01';
+// Blog posts the blog API does not list have no date in inventory.csv, so audit.mjs could not drop the
+// old ones (#137). Same date as BLOG_CUTOFF in scripts/inventory/audit.mjs; change both together
+export const BLOG_REVIEW_BEFORE = '2026-01-01';
 
 // <title> is pageTitle(seoTitle ?? title, locale) from src/lib/seo/meta.ts, and html-validate's
 // long-title rule allows 70 characters. It counts the title as written in the HTML, where Astro

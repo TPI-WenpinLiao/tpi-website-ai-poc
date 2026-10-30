@@ -1,7 +1,7 @@
 {
-  "mappedRows": 359,
+  "mappedRows": 358,
   "byDisposition": {
-    "keep": 117,
+    "keep": 116,
     "rewrite": 164,
     "merge": 78
   },
@@ -9,7 +9,7 @@
   "templates": 11,
   "byTemplate": {
     "": 5,
-    "article": 88,
+    "article": 87,
     "contact": 3,
     "content": 14,
     "gated-download": 9,
@@ -255,7 +255,7 @@
     "blog-post": {
       "zh-TW": 14,
       "en": 9,
-      "vi": 37
+      "vi": 36
     },
     "whitepaper-digirunner": {
       "zh-TW": 1,

@@ -15,7 +15,7 @@ const SUMMARY = 'docs/research/audit-summary.json';
 
 // Keep news and blog posts on or after this date; older ones are not migrated (M1-02 set 2024 for news,
 // M5-05 moved both to 2026, #30).
-// NEWS_REVIEW_BEFORE in scripts/content/migrate/frontmatter.mjs repeats NEWS_CUTOFF; change both together
+// NEWS_REVIEW_BEFORE and BLOG_REVIEW_BEFORE in scripts/content/migrate/frontmatter.mjs repeat the two; change them together
 const NEWS_CUTOFF = '2026-01-01';
 const BLOG_CUTOFF = '2026-01-01';
 
