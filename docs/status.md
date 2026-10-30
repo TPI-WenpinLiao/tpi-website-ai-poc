@@ -129,6 +129,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 
 - redirect 目標頁沒有建出的 12 列完成（#137）：`dropImagesFrom` 拿掉現站也是 404 的 Google 圖片縮圖（連同 Google 圖片貼上時帶進來的來源與「探索」兩段）後，vi 的 `nosql-la-gi`、`server-la-gi` 補上內容。其他 10 列沒有內容可補，寫在手寫的 `docs/ia/redirect-overrides.csv`，`redirects.mjs` 用它取代 `page-map.csv` 的目標：不在現站 blog API 的 3 篇轉到分類列表頁，digiMars、digiRunner 的下載頁三語轉到產品頁（現站下載走 API，沒有可搬的檔案），`/vi/privacy` 依使用者決定轉到 `/en/privacy`（vi PDF 不是網站的隱私權政策）；inventory 判為 zh-TW 的 en 隱私權政策與使用條款 PDF，也用同一份表轉到 `/en/privacy`、`/en/terms`。`redirect-targets.mjs` 刪掉 `UNBUILT`，覆寫表 `unbuilt` 欄的頁面在 `dist/` 建出時失敗（`docs/ia/redirects.md`「對照規則」）
 - 不在現站 blog API 的 3 篇 blog 處理完成：`migrate.mjs` 對 API 沒列出的文章改讀文章頁 Nuxt payload 的 `article`（標題、日期、作者、封面、分類，`blogSource`），tag 由 payload 的分類樹找出。`redirect-overrides.csv` 刪掉這 3 篇的列。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 轉出，舊網址改轉到文章頁。vi `gemini-api` 的發布日是 2025-02-13，依使用者決定照保留門檻不遷移：`audit-overrides.csv` 改為 drop，舊網址轉到 `/vi/blog/enterprise-management`。報告對早於門檻的這類文章加註
+- 不在 blog API 的 blog 是否發布已回答：使用者決定 2026 年前的文章不發布、今年的發布。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 在 `audit-overrides.csv` 定為 keep，`inventory.csv` 的「確認是否發布」清掉。`audit.mjs` 的規則對處置本身的提問（`ask`）在覆寫檔指定 `disposition` 後不再寫進 `to_confirm`（`content-audit.md`「重現方式」）
 
 ## 下一步
 

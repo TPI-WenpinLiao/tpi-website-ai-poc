@@ -18,6 +18,7 @@ node scripts/inventory/audit.mjs
 - `crawl.mjs` 重爬會整檔覆寫 `inventory.csv`，重爬後須再執行本 script
 - 結果固定：同一份輸入重跑，輸出逐位元組相同
 - 每列都必須有合法的處置與理由，覆寫檔的 URL 必須存在於 inventory，否則 script 以 exit 1 結束
+- 覆寫檔的 `to_confirm` 會加在規則的待確認之後。規則對處置本身的提問（目前只有「疑似未發布的 blog 文章」的「確認是否發布」），在覆寫檔指定 `disposition` 後就算已回答，不再寫進 `to_confirm`；其他待確認照舊
 
 ## 處置定義
 
@@ -51,7 +52,7 @@ node scripts/inventory/audit.mjs
 | news | 28 | 0 | 0 | 503 |
 | blog-post | 57 | 0 | 0 | 412 |
 | product | 0 | 56 | 19 | 0 |
-| blog-category | 3 | 0 | 52 | 0 |
+| blog-category | 2 | 0 | 52 | 1 |
 | service | 25 | 16 | 5 | 3 |
 | newsletter | 0 | 0 | 0 | 25 |
 | solution | 0 | 21 | 0 | 0 |
@@ -64,7 +65,7 @@ node scripts/inventory/audit.mjs
 | blog-index、contact、events、news-index、product-index、resource、search、case-study | 0 | 各 3 | 0 | 0 |
 | subsite | 2 | 0 | 0 | 0 |
 
-`to_confirm` 非空：108 列。
+`to_confirm` 非空：105 列。
 
 ## 規則
 
@@ -84,7 +85,7 @@ node scripts/inventory/audit.mjs
 | `2023tpiday`、`2024tpiday` | drop | 已結束活動 |
 | `/carbon` | merge | GreenSwift 推廣頁，併入 GreenSwift 產品頁（M2-01 決定） |
 | blog 分類頁 | merge | 併入 M2 定案的新 blog 分類 |
-| blog 分類路由但 h1 為單篇文章（3 列） | keep + 待確認 | page_type 誤判；不在 blog API 清單 |
+| blog 分類路由但 h1 為單篇文章（3 列） | keep + 待確認 | page_type 誤判；不在 blog API 清單。3 列都已在 `audit-overrides.csv` 決定：2026 年的 2 篇 keep，2025 年的 vi `gemini-api` drop（#137） |
 | blog 文章（2026-01-01 起） | keep | 57 篇；同標題重複時較舊一篇 merge 至較新一篇（目前 0 列）。保留門檻 M5-05（#30）由使用者決定 |
 | blog 文章（2026-01-01 前） | drop | 412 篇 |
 | 新聞（2026-01-01 起） | keep | 28 篇（zh-TW 10、en 9、vi 9）。M1-02 的門檻是 2024-01-01，M5-05（#30）由使用者改為 2026-01-01 |
@@ -123,7 +124,7 @@ node scripts/inventory/audit.mjs
 5. **zh-TW `/partners`**：內容區幾乎為空（字數 1、無 h1），en／vi 有內容
 6. **title 錯誤**：`/products/open-government` 的 title 寫「開放銀行 Open Government」；`/products/open-banking` 拼成「Open Bankning」；en／vi 兩頁共用通用 title「TPIsoftware | API Management Platform」
 7. **疑似未翻譯**（9 列）：`/en/aiso`、`/en/products/gadoscout`、`/en/resource`、`/en/thanks`、vi `/aiso`、`/products/digilogs/log-detection`、`/products/gadoscout`、`/products/systalk-viki`、`/thanks`
-8. **疑似未發布的 blog 文章**（3 列）：`/blog/ai/what-is-ai-agent-management-platform`、`/en/blog/artifintell/why-ai-needs-knowledge-boundary`、vi `/blog/enterprise-management/gemini-api`（vi 另有 `gemini-api-key` 一篇已發布）
+8. **疑似未發布的 blog 文章**（3 列）：`/blog/ai/what-is-ai-agent-management-platform`、`/en/blog/artifintell/why-ai-needs-knowledge-boundary`、vi `/blog/enterprise-management/gemini-api`（vi 另有 `gemini-api-key` 一篇已發布）。已回答：使用者決定 2026 年前的文章不發布、今年的發布，2 篇 keep、vi `gemini-api`（2025-02-13）drop（#137）
 9. **重複內容**：M5-05 的保留門檻後已不適用，提到的 en blog 與 en 新聞 455、456 都不遷移
 10. **2022 年前的 blog 文章**：M5-05 起 2026 年前的 blog 不遷移，不再需要確認
 11. **新聞日期**：保留門檻依 API 的 `updateDate` 判斷，不是發布日（見「已知限制」）。M5-05 用發布日比對，`updateDate` 在 2026 年但發布日在 2025 年的 14 篇已在 `audit-overrides.csv` 改為 drop
