@@ -24,7 +24,9 @@ export function payloadArticleBody(html) {
  * lists it) and its category tree as categoryNo → custUrl; null when the page has none. Used for posts
  * the blog API does not list (#137). The payload's values are arguments of an IIFE, so it is run in a vm
  * context instead of matched with a regex. vm is not a security boundary: the page is the current
- * site's own, and the timeout only stops a payload that never finishes.
+ * site's own. The context gets no objects from this realm (`window` is declared inside the script), so
+ * the payload cannot reach `process` through their constructors, and the timeout stops a payload that
+ * never finishes. Throws when the payload does not run.
  * @param {string} html
  * @returns {{ article: Record<string, any>, categoryUrls: Map<string, string> } | null}
  */
@@ -32,11 +34,11 @@ export function payloadArticle(html) {
   const start = html.indexOf('window.__NUXT__');
   if (start < 0) return null;
   const end = html.indexOf('</script>', start);
-  const context = { window: {} };
+  const context = vm.createContext();
   try {
-    vm.runInNewContext(html.slice(start, end < 0 ? undefined : end), context, { timeout: 1000 });
-  } catch {
-    return null;
+    vm.runInContext(`var window = {};\n${html.slice(start, end < 0 ? undefined : end)}`, context, { timeout: 1000 });
+  } catch (error) {
+    throw new Error(`page payload does not run: ${error.message}`);
   }
   const nuxt = context.window.__NUXT__;
   const article = nuxt?.data?.find((d) => d?.article)?.article;

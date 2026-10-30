@@ -11,9 +11,10 @@ import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 import { parse as parseYaml } from 'yaml';
 import { readCsv, csvCell } from '../../inventory/csv.mjs';
+import { BLOG_CUTOFF } from '../../inventory/cutoffs.mjs';
 import { parseTagTable } from '../tags.mjs';
 import { cachedFetcher, writeAtomic } from './cache.mjs';
-import { apiDay, applyOverrides, BLOG_REVIEW_BEFORE, blogFrontmatter, Commented, Day, frontmatterNotes, newsFrontmatter, serializeFrontmatter, tagLookup } from './frontmatter.mjs';
+import { apiDay, applyOverrides, blogFrontmatter, Commented, Day, frontmatterNotes, newsFrontmatter, serializeFrontmatter, tagLookup } from './frontmatter.mjs';
 import { prepare, toMarkdown } from './html-to-markdown.mjs';
 import { dataUrlBytes, fileNames, imageExt, optimizeImage } from './images.mjs';
 import { linkResolver } from './links.mjs';
@@ -210,7 +211,7 @@ async function pool(items, limit, fn) {
 /**
  * A blog post's API article and blog-categories.csv row. Posts the API does not list (the page still
  * serves them, #137) are read from the post page's payload: page-map.csv keeps them, but their
- * inventory row has no date, so the retention cutoff (audit.mjs BLOG_CUTOFF) was never applied.
+ * inventory row has no date, so the retention cutoff (BLOG_CUTOFF) was never applied.
  * @param {{ get: Function, source: Map<string, object>, categories: Map<string, object>, urls: string[] }} p
  *   urls: the page-map URL, then the final URL
  */
@@ -222,7 +223,7 @@ export async function blogSource({ get, source, categories, urls }) {
   if (!page) throw new Error('not in the blog API, and the page payload has no article');
   const notes = ['not in the blog API: fields from the article page'];
   const day = apiDay(page.article.atcDate).value;
-  if (day < BLOG_REVIEW_BEFORE) notes.push(`publishedAt ${day} is before ${BLOG_REVIEW_BEFORE}`);
+  if (day < BLOG_CUTOFF) notes.push(`publishedAt ${day} is before ${BLOG_CUTOFF}`);
   return { item: page.article, categories: cats ?? page.categories, notes };
 }
 

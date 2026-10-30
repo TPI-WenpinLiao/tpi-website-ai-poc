@@ -177,3 +177,11 @@ test('blogSource notes an unlisted post older than the retention cutoff, and fai
   assert.ok(old.notes.includes('publishedAt 2025-02-13 is before 2026-01-01'));
   await assert.rejects(blogSource({ get: pageGet('<html><body>Blog by Thinker</body></html>'), source: new Map(), categories: new Map(), urls: [POST, POST] }), /not in the blog API, and the page payload has no article/);
 });
+
+test('a page payload runs without objects from this realm, and a payload that fails says why', async () => {
+  const { payloadArticle } = await import('../../lib/nuxt-payload.mjs');
+  // Through a host object's constructor a payload could reach process; window is the context's own object
+  const escape = '<script>window.__NUXT__={data:[{article:{title:window.constructor.constructor("return typeof process")()}}]};</script>';
+  assert.equal(payloadArticle(escape).article.title, 'undefined');
+  assert.throws(() => payloadArticle('<script>window.__NUXT__=(function(){ throw new Error("boom") }())</script>'), /page payload does not run: boom/);
+});
