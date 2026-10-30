@@ -26,7 +26,7 @@ M8-02（#44）整理新站上線前要做的事，讓決策者判斷能不能上
 | # | 步驟 | 在哪裡做 | 驗證 |
 |---|---|---|---|
 | 1 | 在 Pages 專案的 Environment variables 把 `SITE_URL` 設成正式網域（例如 `https://www.tpisoftware.com`），production 與 preview 都要設。canonical、hreflang、`og:url`、`sitemap.xml` 都從這個值產生（`astro.config.mjs`，ADR 0002「影響」） | Cloudflare Pages | 重新部署後，任一頁的 `<link rel="canonical">` 都是正式網域 |
-| 2 | 確認 Pages 的 `NODE_VERSION` 和 `.nvmrc` 一致（目前是 `24`，ADR 0001「影響」） | Cloudflare Pages | build log 印出的 Node 主版號 |
+| 2 | 確認 Pages 的 `NODE_VERSION` 和 `.nvmrc` 一致（目前是 `26`，ADR 0001「影響」） | Cloudflare Pages | build log 印出的 Node 主版號 |
 | 3 | 表單：建立 Turnstile widget，網域加上正式網域，再設定 `PUBLIC_TURNSTILE_SITE_KEY`、`TURNSTILE_SECRET_KEY`（ADR 0005「設定」）。送出 adapter 依 D4 的決定換掉 `logAdapter`（ADR 0005「之後」），這部分要另開 issue | Cloudflare dashboard；repo | 在 preview 送出 `/contact-us` 一次，導到 `/thanks`，收件端有收到 |
 | 4 | 追蹤（要開才做）：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`，在 GTM 設定 tag 的同意條件，再設定 `PUBLIC_GTM_ID`（ADR 0007「設定」） | repo；GTM；Cloudflare Pages | `node scripts/consent/gtm.mjs`；在 preview 確認按下同意前沒有送往 `googletagmanager.com` 的請求 |
 | 5 | 轉址：照「`_redirects` 部署與否」產生並 commit `public/_redirects`。`.vn` 網域依 D2 的決定設定 Bulk Redirects，或在 `.vn` 那邊自己轉址（`docs/ia/redirects.md`「轉成 `_redirects`」） | repo；Cloudflare | `npm run check`（`redirects.mjs --check`、`redirect-targets.mjs`）；preview 上抽測 #139 列的 curl |
