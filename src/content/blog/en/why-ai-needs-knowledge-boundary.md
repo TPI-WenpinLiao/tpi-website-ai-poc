@@ -1,7 +1,7 @@
 ---
 title: “You Can Ask AI Anything”. So Why Do Enterprises Still Need Their Own Knowledge Bases?
 description: A custom enterprise AI knowledge base is not about filling gaps in an LLM’s knowledge, but about a clear Knowledge Boundary for trusted organizational data.
-translationKey: why-ai-needs-knowledge-boundary
+translationKey: why-companies-need-custom-ai-knowledge
 category: ai
 tags: [ai-application]
 publishedAt: 2026-09-02

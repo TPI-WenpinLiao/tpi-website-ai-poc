@@ -70,6 +70,9 @@ blog/zh-TW/what-is-scope3:
 blog/zh-TW/why-companies-need-custom-ai-knowledge:
   frontmatter:
     description: 企業建立專屬 AI 知識庫的價值，不在於補足大型語言模型的知識，而是劃定「知識邊界」，讓 AI 在特定專業場景中依據最新、可信的企業資料精準回答。
+    # The current site spells the author "TPIsowftware"
+    author: TPIsoftware
+    authorType: Organization
 
 blog/zh-TW/why-enterprises-need-ai-appliance:
   frontmatter:
@@ -171,6 +174,8 @@ blog/en/why-enterprise-needs-all-in-one-ai-solutions:
 
 blog/en/why-ai-needs-knowledge-boundary:
   frontmatter:
+    # en version of zh-TW why-companies-need-custom-ai-knowledge (same sections; en adds the first-week survey)
+    translationKey: why-companies-need-custom-ai-knowledge
     seoTitle: Why Enterprises Still Need Their Own Knowledge Bases
     description: A custom enterprise AI knowledge base is not about filling gaps in an LLM’s knowledge, but about a clear Knowledge Boundary for trusted organizational data.
 

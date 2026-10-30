@@ -5,12 +5,12 @@ translationKey: why-companies-need-custom-ai-knowledge
 category: ai
 tags: [ai-application]
 publishedAt: 2026-09-02
-author: TPIsowftware
-authorType: Person
+author: TPIsoftware
+authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1be160-6dae-6549-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/zh-TW/why-companies-need-custom-ai-knowledge/cover.webp
 sourceUrl: https://www.tpisoftware.com/blog/ai/why-companies-need-custom-ai-knowledge
-migratedAt: 2026-10-23
+migratedAt: 2026-10-30
 sourceUpdatedAt: 2026-09-02
 ---
 
