@@ -48,6 +48,8 @@ test('an overridden page that got built is reported, whatever the source path', 
   const overrides = [
     { url: 'https://www.tpisoftware.vn/blog/x/media-center', unbuilt: '/media-center', to: '/' },
     { url: 'https://www.tpisoftware.com/download/a', unbuilt: '/download/a', to: '/' },
+    // A built page in the wrong locale has no `unbuilt`
+    { url: 'https://www.tpisoftware.com/pdf/a(en).pdf', unbuilt: '', to: '/en' },
   ];
   const { builtOverrides } = redirectProblems({ rows: [], kind, overrides });
   assert.deepEqual(builtOverrides, ['/media-center']);

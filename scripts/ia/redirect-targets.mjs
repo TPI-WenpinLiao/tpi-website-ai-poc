@@ -56,7 +56,7 @@ export function redirectProblems({ rows, kind, external = new Set(), pending = [
     else add(missing, r.to, r.from);
   }
   const stale = pending.filter((p) => built(p));
-  const builtOverrides = overrides.filter((o) => built(o.unbuilt)).map((o) => o.unbuilt);
+  const builtOverrides = overrides.filter((o) => o.unbuilt && built(o.unbuilt)).map((o) => o.unbuilt);
   return { checked, missing, known, chains, stale, builtOverrides };
 }
 

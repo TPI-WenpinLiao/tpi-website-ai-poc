@@ -9,3 +9,5 @@ https://www.tpisoftware.com/en/download/digirunner,/en/download/digirunner,/en/p
 https://www.tpisoftware.com/vn/download/digimars,/vi/download/digimars,/vi/products/digimars,offering 沒有 downloads：現站的下載走 API，沒有可搬的檔案（#137）
 https://www.tpisoftware.com/vn/download/digirunner,/vi/download/digirunner,/vi/products/digirunner,offering 沒有 downloads：現站的下載走 API，沒有可搬的檔案（#137）
 https://www.tpisoftware.vn/pdf/1-2PrivacyPolicy(vn).pdf,/vi/privacy,/en/privacy,vi 沒有法務頁：vi PDF 不是網站的隱私權政策（legal-pdf.mjs），依使用者決定轉到 en 版（#137）
+https://www.tpisoftware.com/pdf/1-2PrivacyPolicy(en).pdf,,/en/privacy,en 的 PDF 被 inventory 判為 zh-TW（網址沒有語系前綴），依使用者決定轉到 en 版（#137）
+https://www.tpisoftware.com/pdf/2-2Use(en).pdf,,/en/terms,en 的 PDF 被 inventory 判為 zh-TW（網址沒有語系前綴），依使用者決定轉到 en 版（#137）

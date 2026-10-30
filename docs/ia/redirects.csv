@@ -476,9 +476,9 @@ https://www.tpisoftware.com/outsourcing/dropdown,/outsourcing,301,drop：上層�
 https://www.tpisoftware.com/partners,/partners,200,rewrite：partners（路徑不變）
 https://www.tpisoftware.com/pdf/%E8%B3%87%E8%A8%8A%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96.pdf,/security-policy,301,rewrite：security-policy
 https://www.tpisoftware.com/pdf/1-1PrivacyPolicy(tw).pdf,/privacy,301,rewrite：privacy
-https://www.tpisoftware.com/pdf/1-2PrivacyPolicy(en).pdf,/privacy,301,rewrite：privacy
+https://www.tpisoftware.com/pdf/1-2PrivacyPolicy(en).pdf,/en/privacy,301,rewrite：privacy（redirect-overrides.csv）
 https://www.tpisoftware.com/pdf/2-1Use(tw).pdf,/terms,301,rewrite：terms
-https://www.tpisoftware.com/pdf/2-2Use(en).pdf,/terms,301,rewrite：terms
+https://www.tpisoftware.com/pdf/2-2Use(en).pdf,/en/terms,301,rewrite：terms（redirect-overrides.csv）
 https://www.tpisoftware.com/pdf/3-1Disclaimer(tw).pdf,/disclaimer,301,rewrite：disclaimer
 https://www.tpisoftware.com/pdf/3-2Disclaimer(en).pdf,/disclaimer,301,rewrite：disclaimer
 https://www.tpisoftware.com/pdf/digiRunner%20on%20AWS%20Marketplace_%E8%B2%B7%E5%AE%B6%E6%8C%87%E5%8D%97_v1.4_TC.pdf,/pdf/digiRunner%20on%20AWS%20Marketplace_%E8%B2%B7%E5%AE%B6%E6%8C%87%E5%8D%97_v1.4_TC.pdf,200,keep：digirunner-aws-guide（路徑不變）

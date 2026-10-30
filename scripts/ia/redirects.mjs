@@ -70,18 +70,20 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets, overrid
     }
     const to = newPath(m, node);
     const override = overrideOf.get(row.url);
-    if (override) {
+    const overridden = override && { to: override.to, note: `${row.disposition}：${node.id}（redirect-overrides.csv）` };
+    // An empty `unbuilt`: the page this row maps to is built, but in the wrong locale (en PDFs the inventory files under zh-TW)
+    if (override?.unbuilt) {
       // scripts/ia/redirect-targets.mjs fails once `unbuilt` gets built, so it must be the page this row maps to
       if (override.unbuilt !== to) errors.push(`${OVERRIDES}: unbuilt is "${override.unbuilt}", the row maps to "${to}": ${row.url}`);
       // The node's page is not built, so it is not a target dropped rows may use either
-      targets.set(row.url, { to: override.to, note: `${row.disposition}：${node.id}（redirect-overrides.csv）` });
+      targets.set(row.url, overridden);
       continue;
     }
     if (node.kind === 'page' || node.kind === 'collection') {
       if (!PATH_PATTERN.test(to)) errors.push(`new path "${to}" breaks the URL rule (ADR 0002): ${row.url}`);
       exists.add(to);
     }
-    targets.set(row.url, { to, note: `${row.disposition}：${node.id}` });
+    targets.set(row.url, overridden || { to, note: `${row.disposition}：${node.id}` });
   }
   const kept = new Set(inventory.filter((r) => r.disposition !== 'drop').map((r) => r.url));
   // An override may also send a row to a page node in any locale, such as another locale's legal page;

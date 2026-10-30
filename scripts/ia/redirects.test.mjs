@@ -97,6 +97,16 @@ test('buildRedirects sends overridden rows to the given page, and their own page
     overrides: [{ url: 'https://www.tpisoftware.vn/products/gadodido', unbuilt: '/vi/products/gadodido', to: '/en/subscribe', reason: 'r' }],
   });
   assert.deepEqual(en.errors, []);
+  // Without `unbuilt` the row's own page stays a page of the new site: the drop row below still finds it
+  const locale = buildRedirects({
+    inventory: [...inventory, row('https://www.tpisoftware.com/media-center/12/photo', 'zh-TW', 'drop')],
+    pageMap, nodes, dropTargets,
+    overrides: [{ url: 'https://www.tpisoftware.com/media-center/12', unbuilt: '', to: '/media-center', reason: 'r' }],
+  });
+  assert.deepEqual(locale.errors, []);
+  const byLocale = Object.fromEntries(locale.rows.map((r) => [r.from, r.to]));
+  assert.equal(byLocale['https://www.tpisoftware.com/media-center/12'], '/media-center');
+  assert.equal(byLocale['https://www.tpisoftware.com/media-center/12/photo'], '/media-center/12');
 });
 
 test('buildRedirects rejects bad overrides', () => {
