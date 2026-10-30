@@ -35,13 +35,13 @@ node scripts/inventory/audit.mjs
 
 | | zh-TW | en | vi | ja | 合計 |
 |---|--:|--:|--:|--:|--:|
-| keep | 36 | 27 | 54 | 0 | 117 |
+| keep | 36 | 27 | 53 | 0 | 116 |
 | rewrite | 64 | 51 | 49 | 0 | 164 |
 | merge | 36 | 23 | 19 | 0 | 78 |
-| drop | 399 | 223 | 323 | 2 | 947 |
+| drop | 399 | 223 | 324 | 2 | 948 |
 | **合計** | **535** | **324** | **445** | **2** | **1,306** |
 
-遷移量（keep + rewrite）：zh-TW 100、en 78、vi 103。zh-TW 實際需要重寫的是 64 頁；en／vi 的翻譯在 M7。
+遷移量（keep + rewrite）：zh-TW 100、en 78、vi 102。zh-TW 實際需要重寫的是 64 頁；en／vi 的翻譯在 M7。
 
 本節數字已反映 M2-01（#8）的決策：landing page、`/carbon`、開放銀行、開放政府、`/genai-solution` 改為 merge（見 [`docs/ia/sitemap.md`](../ia/sitemap.md)「決策紀錄」）；以及 M5-05（#30）的保留門檻：blog 與新聞只保留 2026-01-01 起的文章。數字來源是 `audit-summary.json`。
 
@@ -85,7 +85,7 @@ node scripts/inventory/audit.mjs
 | `2023tpiday`、`2024tpiday` | drop | 已結束活動 |
 | `/carbon` | merge | GreenSwift 推廣頁，併入 GreenSwift 產品頁（M2-01 決定） |
 | blog 分類頁 | merge | 併入 M2 定案的新 blog 分類 |
-| blog 分類路由但 h1 為單篇文章（3 列） | keep + 待確認 | page_type 誤判；不在 blog API 清單。3 列都已在 `audit-overrides.csv` 決定：2026 年的 2 篇 keep，2025 年的 vi `gemini-api` drop（#137） |
+| blog 分類路由但 h1 為單篇文章（3 列） | keep | page_type 誤判；不在 blog API 清單，規則會加上「確認是否發布」。3 列都已在 `audit-overrides.csv` 決定：2026 年的 2 篇 keep，2025 年的 vi `gemini-api` drop（#137） |
 | blog 文章（2026-01-01 起） | keep | 57 篇；同標題重複時較舊一篇 merge 至較新一篇（目前 0 列）。保留門檻 M5-05（#30）由使用者決定 |
 | blog 文章（2026-01-01 前） | drop | 412 篇 |
 | 新聞（2026-01-01 起） | keep | 28 篇（zh-TW 10、en 9、vi 9）。M1-02 的門檻是 2024-01-01，M5-05（#30）由使用者改為 2026-01-01 |

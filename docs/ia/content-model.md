@@ -501,7 +501,7 @@ schema 在 [`src/content.config.ts`](../../src/content.config.ts)。改本檔的
 
 | 項目 | 誰確認 | 影響 |
 |---|---|---|
-| blog `author` 的現站資料品質。M5-05 只遷移 2026 年的文章後剩下：zh-TW 1 篇 `TPIsowftware`（拼錯）；vi 34 篇作者（API 的 `authorName`）為 `kay`，部分文章的後台帳號（`uidName`）是 `Kay Tăng Tấn Khôi`，`kay` 是否就是此人、要不要顯示全名 | 內容負責人 | `author` 與 `authorType` 怎麼填 |
+| blog `author` 的現站資料品質。M5-05 只遷移 2026 年的文章後剩下：vi 34 篇作者（API 的 `authorName`）為 `kay`，部分文章的後台帳號（`uidName`）是 `Kay Tăng Tấn Khôi`，`kay` 是否就是此人、要不要顯示全名 | 內容負責人 | `author` 與 `authorType` 怎麼填 |
 | `商業週刊`、`科技報橘` 為作者的 6 篇是否有轉載授權：M5-05 的保留門檻後 6 篇都在 2026 年以前、不遷移，不再需要確認 | — | — |
 | blog 三語版本的對應：API 沒有跨語系欄位，M7 沒有對應，各語系的文章之間沒有 hreflang（#137 對應了 1 組） | 內容負責人 | blog 的 `translationKey` |
 | 白皮書檔案的實際位置（現站在表單送出後提供） | 後端負責人 | `whitepaper.file` |

@@ -89,7 +89,7 @@ zh-TW、en、vi 都已上線（M7）。頁面只對有字串檔（`src/data/stri
 
 - 產品名、頁面名稱、選單標籤與介面字串以 [`docs/i18n/glossary.csv`](../../../docs/i18n/glossary.csv) 為準，規則與確認流程見 [`glossary.md`](../../../docs/i18n/glossary.md)。詞彙表沒有的專有名詞，暫譯列進 `glossary.md` 的待確認表，不要每頁各自翻
 - 轉換 script 寫 en、vi 時用 `latinPunctuation`（`scripts/content/migrate/migrate.mjs`）把全形標點換成半形。`node scripts/i18n/routes.mjs` 擋下 en、vi 頁面上的漢字與全形標點，`lang="zh-TW"` 的元素除外
-- 同一份內容的各語系版本填相同的 `translationKey`，hreflang 與語系切換靠它對應，慣例見 [`content-model.md`「共用欄位」](../../../docs/ia/content-model.md#共用欄位)。blog 的現站 API 沒有跨語系對應，各語系目前各自獨立
+- 同一份內容的各語系版本填相同的 `translationKey`，hreflang 與語系切換靠它對應，慣例見 [`content-model.md`「共用欄位」](../../../docs/ia/content-model.md#共用欄位)。blog 的現站 API 沒有跨語系對應，各語系預設各自獨立。要把同一篇的各語系版本對應起來，在 `docs/ia/blog-slugs.csv` 把 slug 改成 zh-TW 版的 slug（`translationKey` 預設等於 slug）；只改 `translationKey`、slug 不同時不會產生 hreflang（ADR 0002「slug」）
 
 ### 修正寫在哪裡
 
