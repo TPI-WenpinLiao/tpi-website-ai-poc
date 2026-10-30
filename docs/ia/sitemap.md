@@ -23,6 +23,7 @@ node scripts/ia/sitemap.mjs           # 產生 page-map.csv、sitemap-summary.js
 | [`nodes.csv`](./nodes.csv) | sitemap 節點：`id`、`parent`、`title`、`template`、`kind`、`path`（zh-TW 路徑，格式依 ADR 0002）、`note`；列的順序就是同層的排序 | 手寫，階層的唯一來源 |
 | [`templates.csv`](./templates.csv) | 模板 id 與用途 | 手寫 |
 | [`route-map.csv`](./route-map.csv) | 現站路由 → 節點。路由取 `final_url`、去掉 `/en`、`/vn` 前綴、轉小寫；`/prefix/*` 表示整個路徑底下 | 手寫 |
+| [`blog-slugs.csv`](./blog-slugs.csv) | 不照現站網址算 slug 的 blog 文章：`url`、`blog_slug`、`reason`。用在各語系現站 slug 不同的同一篇文章，讓它們共用 slug，hreflang 才會互指 | 手寫 |
 | [`blog-categories.csv`](./blog-categories.csv) | 每篇 blog 文章在現站 blog API 的主分類與子分類 | `blog-categories.mjs` 產生 |
 | [`page-map.csv`](./page-map.csv) | inventory 每個 keep／rewrite／merge 列的節點、模板、新 blog 分類與 slug（`blog_slug`，規則見 ADR 0002） | `sitemap.mjs` 產生 |
 | [`sitemap-summary.json`](./sitemap-summary.json) | 各節點、各模板的列數 | `sitemap.mjs` 產生 |

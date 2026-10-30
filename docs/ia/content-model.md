@@ -222,7 +222,7 @@ migratedAt: 2026-11-03
 sourceUpdatedAt: 2026-09-11
 ```
 
-現站沒有的欄位：文章頁的 `keywords` meta 不搬（搜尋引擎不使用）；`views` 瀏覽數不搬；blog API 沒有跨語系對應，各語系的 `translationKey` 預設各自獨立。M7 沒有人工對應。目前只有 en `why-ai-needs-knowledge-boundary` 與 zh-TW `why-companies-need-custom-ai-knowledge` 一組共用 `translationKey`（使用者確認是同一篇，#137）；要對應其他文章時，同樣在 `overrides.yaml` 把同一篇的各語系版本改成相同值（見「待確認」）。
+現站沒有的欄位：文章頁的 `keywords` meta 不搬（搜尋引擎不使用）；`views` 瀏覽數不搬；blog API 沒有跨語系對應，各語系的 `translationKey` 預設各自獨立。M7 沒有人工對應。目前只對應了一組：現站 en `why-ai-needs-knowledge-boundary` 是 zh-TW `why-companies-need-custom-ai-knowledge` 的 en 版（使用者確認，#137）。要對應其他文章時，在 `docs/ia/blog-slugs.csv` 把各語系版本的 slug 改成 zh-TW 版的 slug，`translationKey` 預設等於 slug，就會一致；只在 `overrides.yaml` 改 `translationKey` 不會產生 hreflang（ADR 0002「slug」，見「待確認」）。
 
 ### tag 清單
 

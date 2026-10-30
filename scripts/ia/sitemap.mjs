@@ -1,6 +1,6 @@
 // New sitemap and template mapping for M2-01 (#8).
 // Reads docs/research/inventory.csv, docs/ia/blog-categories.csv (scripts/ia/blog-categories.mjs)
-// and the hand-written docs/ia/{nodes,templates,route-map}.csv,
+// and the hand-written docs/ia/{nodes,templates,route-map,blog-slugs}.csv,
 // maps every keep / rewrite / merge row to a sitemap node (and blog articles to their new slug), writes docs/ia/page-map.csv and
 // docs/ia/sitemap-summary.json, and regenerates the marked section of docs/ia/sitemap.md.
 // Re-run after editing any input or re-running scripts/inventory/audit.mjs: node scripts/ia/sitemap.mjs
@@ -16,6 +16,7 @@ const NODES = 'docs/ia/nodes.csv';
 const TEMPLATES = 'docs/ia/templates.csv';
 const ROUTE_MAP = 'docs/ia/route-map.csv';
 const BLOG_CATEGORIES = 'docs/ia/blog-categories.csv';
+const BLOG_SLUGS = 'docs/ia/blog-slugs.csv';
 const PAGE_MAP = 'docs/ia/page-map.csv';
 const SUMMARY = 'docs/ia/sitemap-summary.json';
 const DOC = 'docs/ia/sitemap.md';
@@ -90,7 +91,9 @@ function mapRow(row, ctx) {
 // Blog article slug under /blog (ADR 0002): the old slug lowercased, runs of "-" collapsed, edge "-" trimmed.
 // A slug equal to a category slug or "page" takes the old category segment as prefix.
 // Merge rows take the slug of their target, the first URL in disposition_reason (scripts/inventory/audit.mjs).
-function assignBlogSlugs(mapped, nodes) {
+// docs/ia/blog-slugs.csv gives a translated article the slug of its other locale versions (ADR 0002:
+// slugs are shared across locales, and hreflang pairs pages by path).
+function assignBlogSlugs(mapped, nodes, slugOverrides) {
   const reserved = new Set(['page', ...nodes.filter((n) => n.parent === 'blog' && n.kind === 'page').map((n) => n.path.split('/').pop())]);
   const articles = mapped.filter((r) => r.node === 'blog-post');
   const kept = new Map();
@@ -99,6 +102,11 @@ function assignBlogSlugs(mapped, nodes) {
     const segments = new URL(r.url).pathname.split('/').filter(Boolean);
     let slug = normalizeSlug(segments.at(-1));
     if (reserved.has(slug)) slug = normalizeSlug(`${segments.at(-2)}-${slug}`);
+    const override = slugOverrides.get(r.url);
+    if (override) {
+      slugOverrides.delete(r.url);
+      slug = override.blog_slug;
+    }
     if (reserved.has(slug) || !PATH_PATTERN.test(`/${slug}`)) errors.push(`blog slug "${slug}" breaks the URL rule (ADR 0002): ${r.url}`);
     const key = `${r.locale} ${slug}`;
     if (seen.has(key)) errors.push(`duplicate blog slug ${key}: ${seen.get(key)} and ${r.url}`);
@@ -111,6 +119,7 @@ function assignBlogSlugs(mapped, nodes) {
     if (!target || target.locale !== r.locale) errors.push(`blog merge row without a kept target in the same locale: ${r.url}`);
     else r.blog_slug = target.blog_slug;
   }
+  for (const url of slugOverrides.keys()) errors.push(`${BLOG_SLUGS}: not a kept blog article: ${url}`);
 }
 
 function mermaid(nodes) {
@@ -180,7 +189,9 @@ async function main() {
       const { node, blog_category = '' } = mapRow(r, { routes, byId, used, subCategory });
       return { url: r.url, locale: r.locale, page_type: r.page_type, disposition: r.disposition, disposition_reason: r.disposition_reason, node, template: byId.get(node)?.template ?? '', blog_category };
     });
-  assignBlogSlugs(mapped, nodes);
+  const slugOverrides = await readCsv(BLOG_SLUGS);
+  for (const o of slugOverrides) if (!o.reason) errors.push(`${BLOG_SLUGS}: reason is empty: ${o.url}`);
+  assignBlogSlugs(mapped, nodes, new Map(slugOverrides.map((o) => [o.url, o])));
   for (const route of routes.keys()) if (!used.has(route)) errors.push(`route-map entry not used by any inventory row: ${route}`);
 
   // Every node needs inventory rows or a note saying why it has none (new page, no detail pages yet)

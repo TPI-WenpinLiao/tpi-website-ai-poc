@@ -41,7 +41,7 @@ M2 定案的規則，細節以連結的文件為準：
 
 - 頁面階層只寫在 `docs/ia/nodes.csv`。新增頁面先加節點，路徑取節點的 `path`；麵包屑、子頁卡片由 `parent` 推出，不從 URL 推導
 - 導覽只讀 `docs/ia/navigation.csv`（`docs/ia/navigation.md`），不在元件裡另寫一份選單
-- URL：zh-TW 不加前綴，en、vi 加 `/en`、`/vi`；路徑只用小寫英文、數字與 `-`，不加尾斜線（`/` 除外），slug 三語共用。完整規則見 ADR 0002
+- URL：zh-TW 不加前綴，en、vi 加 `/en`、`/vi`；路徑只用小寫英文、數字與 `-`，不加尾斜線（`/` 除外），slug 三語共用（現站各語系 slug 不同的同一篇 blog，寫在 `docs/ia/blog-slugs.csv`）。完整規則見 ADR 0002
 - 語系前綴與路徑正規化一律用 `src/lib/i18n/` 的函式，不在元件裡手接 `/en`；未翻譯的頁面不產生（不設 `i18n.fallback`）
 - 有 `src/data/strings/<locale>.ts`、`src/data/home/<locale>.ts` 與 `src/content/organization/<locale>.yaml` 的語系才產生頁面。選單、footer、麵包屑的 en、vi 名稱讀 `docs/i18n/glossary.csv`，沒有譯名時 build 失敗；該語系沒有的頁面連到 zh-TW 版（`docs/ia/navigation.md`「語系」）
 - 現站頁面在新站的位置看 `docs/ia/page-map.csv`，舊網址的轉址看 `docs/ia/redirects.csv`
