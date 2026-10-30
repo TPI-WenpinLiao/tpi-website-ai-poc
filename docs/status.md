@@ -102,7 +102,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - M6-03 影片延遲載入完成（#35）：新元件 `VideoFacade`。初始只有本機 poster 與原生按鈕，播放器（YouTube 用 `youtube-nocookie.com` 的 iframe，自架 MP4 用 `<video>`）放在 `<template>`，點擊後才換上並取得焦點；poster 不用 YouTube 縮圖，首次載入不連任何站外網域。`node scripts/design/video-facade.mjs` 接進 `npm run check`，對每個有 facade 的頁面檢查載入時沒有站外請求、鍵盤 Tab＋Enter 能換上有 `title` 的播放器並取得焦點。目前只有 `/design-system` 使用：現站影片在產品、服務、about 頁，offering schema 沒有影片欄位，M5 決定不搬
 - M6-04 GTM 與 consent 管理完成（#36，`design-approved`）：新元件 `ConsentBanner`（底部的深色橫幅，加上原生 `<dialog>` 的偏好設定）與頁尾的「Cookie 設定」，只在 build 有 `PUBLIC_GTM_ID` 時由 `PageLayout` 輸出。同意至少一個非必要類別前不載入 gtm.js，也沒有 `dataLayer`，不用 Consent Mode 的 advanced 模式；選擇存在 `localStorage` 的 `tpi-consent`，撤回時重新載入頁面。類別與三語文案在 `src/data/consent.ts`，目前是 `draft: true` 的佔位內容，有 ID 但還是 draft 時 build 失敗。`node scripts/consent/gtm.mjs` 接進 `npm run check`：用測試 ID 另外 build 一份，在瀏覽器檢查同意前沒有站外請求、拒絕、同意、撤回與鍵盤操作（ADR 0007）
 - M6-05 M6 收尾完成（#37）：`CLAUDE.md` 新增「功能模組」：互動寫在元件內的 `<script>`、不碰 DOM 的判斷放 `src/lib/<模組>/` 寫單元測試、頁面載入時不連站外網域、secret 只放環境變數，以及表單、站內搜尋、影片、cookie 同意與 GTM 各一條規則（細節連到 ADR 0005–0007 與 `design-system` 元件表）。「技術棧」、ADR 0001 與 `typescript-best-practices` 的「互動才用 island（`client:*`）」改成實際寫法（`src/` 沒有 `client:*`）。`pr-review` 固定檢查加上站外請求與 secret 一列
-- `dist/` 沒變時不重跑 Lighthouse 完成（#149）：`npm run lighthouse` 通過後把 `.lhci-dist/` 與量測設定（`scripts/lhci-pass.mjs` 的 `INPUTS` 與 `LHCI_*` 環境變數）的 key 寫到 `.lighthouseci/passed-dist.sha256`，下次 key 相同就跳過並印出 key，`LIGHTHOUSE_FORCE=1` 強制重量，`lighthouse:all` 不受影響。quality-gate 用同一個 key 做 cache，同一個 PR 量過且通過的 `dist/` 不重量，job summary 寫明。`issue-start` 的環境檢查改跑 `npm run check:before-lighthouse`（ADR 0004「例外：量過且通過的 `dist/` 不重量」）
+- `dist/` 沒變時不重跑 Lighthouse 完成（#149）：`npm run lighthouse` 通過後把 `.lhci-dist/` 與量測設定（`scripts/lhci-pass.mjs` 的 `INPUTS` 與 `LHCI_*` 環境變數）的 key 寫到 `.lighthouseci/passed-dist.sha256`，下次 key 相同就跳過並印出 key，`LIGHTHOUSE_FORCE=1` 強制重量，`lighthouse:all` 不受影響。quality-gate 用同一個 key 做 cache，同一個 PR 量過且通過的 `dist/` 不重量，job summary 寫明。`issue-start` 的環境檢查改跑 `npm run check:before-lighthouse`（ADR 0004「例外：量過且通過的 `dist/` 不重量」）。#150 與它重複，已關閉
 
 ### M7 多語系
 
@@ -130,9 +130,11 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - redirect 目標頁沒有建出的 12 列完成（#137）：`dropImagesFrom` 拿掉現站也是 404 的 Google 圖片縮圖（連同 Google 圖片貼上時帶進來的來源與「探索」兩段）後，vi 的 `nosql-la-gi`、`server-la-gi` 補上內容。其他 10 列沒有內容可補，寫在手寫的 `docs/ia/redirect-overrides.csv`，`redirects.mjs` 用它取代 `page-map.csv` 的目標：不在現站 blog API 的 3 篇轉到分類列表頁，digiMars、digiRunner 的下載頁三語轉到產品頁（現站下載走 API，沒有可搬的檔案），`/vi/privacy` 依使用者決定轉到 `/en/privacy`（vi PDF 不是網站的隱私權政策）；inventory 判為 zh-TW 的 en 隱私權政策與使用條款 PDF，也用同一份表轉到 `/en/privacy`、`/en/terms`。`redirect-targets.mjs` 刪掉 `UNBUILT`，覆寫表 `unbuilt` 欄的頁面在 `dist/` 建出時失敗（`docs/ia/redirects.md`「對照規則」）
 - 不在現站 blog API 的 3 篇 blog 處理完成：`migrate.mjs` 對 API 沒列出的文章改讀文章頁 Nuxt payload 的 `article`（標題、日期、作者、封面、分類，`blogSource`），tag 由 payload 的分類樹找出。`redirect-overrides.csv` 刪掉這 3 篇的列。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 轉出，舊網址改轉到文章頁。vi `gemini-api` 的發布日是 2025-02-13，依使用者決定照保留門檻不遷移：`audit-overrides.csv` 改為 drop，舊網址轉到 `/vi/blog/enterprise-management`。報告對早於門檻的這類文章加註
 - 不在 blog API 的 blog 是否發布已回答：使用者決定 2026 年前的文章不發布、今年的發布。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 在 `audit-overrides.csv` 定為 keep，`inventory.csv` 的「確認是否發布」清掉。`audit.mjs` 的規則對處置本身的提問（`ask`）在覆寫檔指定 `disposition` 後不再寫進 `to_confirm`（`content-audit.md`「重現方式」）。現站 en `why-ai-needs-knowledge-boundary` 依使用者確認是 zh-TW `why-companies-need-custom-ai-knowledge` 的 en 版：hreflang 只在同一個路徑之間互指，所以新增手寫的 `docs/ia/blog-slugs.csv`，en 改用 zh-TW 的 slug（`/en/blog/why-companies-need-custom-ai-knowledge`），現站 en 舊網址 301 到新路徑，兩頁互相輸出 hreflang（ADR 0002「路徑命名」）；zh-TW 這篇的作者現站拼成 `TPIsowftware`，在 `overrides.yaml` 改為 `TPIsoftware`、`Organization`
+- `.nvmrc` 升到 Node 26 完成（#147）：Node 26 在 2026-10-28 進入 Active LTS（nodejs.org `dist/index.json` 的 `v26.13.0` 標 `lts: "Lithium"`），`.nvmrc` 改成 `26`，`package.json` 的 `engines` 改成 `>=26`（CI 與雲端 session 只測 `.nvmrc` 的版本）。ADR 0001 與 `launch-readiness.md` 上線步驟第 2 步的版本跟著改
 
 ## 下一步
 
+- Cloudflare Pages 的 `NODE_VERSION` 改成 `26`（#147 合併時同步，dashboard 設定）
 - 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
 - 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
 - 回覆 #137 後續 PR（en 知識邊界一文對應 zh-TW 版）的「待確認」：en 版多一段上線第一週的問卷數字（40 份有效回覆、90% 用過等），zh-TW 沒有；要不要補到 zh-TW、數字是否經客戶同意公開
@@ -162,7 +164,6 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 ## 待辦備忘
 
 - M1-03 沒有流量與外部連結資料（無 GA4／Search Console 權限），重要頁面無法依流量排序；M2 的 redirect 對照要涵蓋所有 `keep`／`rewrite`／`merge` 頁面，不能只做 P1／P2。.com origin 層級的 field CWV 尚未取得
-- Node 26 預計 2026-10-28 進入 Active LTS，屆時將 `.nvmrc` 升為 `26`（同步 Cloudflare Pages 的 `NODE_VERSION`）；雲端 session 的 SessionStart hook 會自動依 `.nvmrc` 切換
 - 現站 `/sitemap.xml` 與 `/ja` 回 500，盤點改以導覽與連結爬取為準（見 `docs/research/inventory.md`）
 - M1-02 稽核的 M2 待決事項（日文版、不在導覽的產品、主題重疊頁面、舊 `/solutions/*` 路由、blog 分類）已在 M2-01 依推薦決定，見 `docs/ia/sitemap.md`「決策紀錄」；不在導覽的 6 個產品／方案是否仍銷售，M5 前需內容負責人確認
 - 工作流程 skills：`/issue-start`、`/checkpoint`、`/issue-ship`、`/pr-review`、`/next-issue`，使用說明見 `docs/workflow.md`（#50、#62、#69、#71）。沒有 `needs-design`、`needs-input`，計畫也沒有待決事項的 issue 走自動模式，人工只負責啟動、回覆 `needs-decision`、看合併判斷摘要後合併。專案固定檢查只寫在 `.claude/skills/pr-review/SKILL.md`

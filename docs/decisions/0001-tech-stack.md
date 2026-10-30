@@ -15,7 +15,7 @@
 | 語言 | TypeScript strict（`astro/tsconfigs/strict`） |
 | 樣式 | CSS custom properties 作為 design tokens；不使用 UI framework 或 utility CSS framework |
 | 套件管理 | npm，`package-lock.json` 入版控，CI 與雲端 session 用 `npm ci` |
-| Node | `.nvmrc` 固定為目前的 LTS major（2026-10-20 為 24） |
+| Node | `.nvmrc` 固定為目前的 LTS major（2026-10-28 為 26） |
 | 部署 | Cloudflare Pages Git integration，只用 `*.pages.dev` 與 PR preview |
 | 動態功能 | Cloudflare Pages Functions（M6 表單） |
 | 品質關卡 | `astro check` → build → html-validate → Lighthouse CI |
