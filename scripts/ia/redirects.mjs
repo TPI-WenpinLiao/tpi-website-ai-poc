@@ -84,9 +84,12 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets, overrid
     targets.set(row.url, { to, note: `${row.disposition}：${node.id}` });
   }
   const kept = new Set(inventory.filter((r) => r.disposition !== 'drop').map((r) => r.url));
+  // An override may also send a row to a page node in any locale, such as another locale's legal page;
+  // scripts/ia/redirect-targets.mjs checks that it is built
+  const nodePages = new Set(nodes.filter((n) => n.kind === 'page' && n.path).flatMap((n) => Object.keys(PREFIX).map((l) => withPrefix(l, n.path))));
   for (const { url, to } of overrideOf.values()) {
     if (!kept.has(url)) errors.push(`${OVERRIDES}: not a keep / rewrite / merge row of ${INVENTORY}: ${url}`);
-    else if (!exists.has(to)) errors.push(`${OVERRIDES}: "${to}" is not a page of the new site: ${url}`);
+    else if (!exists.has(to) && !nodePages.has(to)) errors.push(`${OVERRIDES}: "${to}" is not a page of the new site: ${url}`);
   }
 
   // Pass 2: dropped rows go to the nearest parent page the new site has in the same locale

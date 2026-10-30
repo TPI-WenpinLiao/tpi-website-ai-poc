@@ -1265,7 +1265,7 @@ https://www.tpisoftware.vn/orient-aI,/vi/orient-ai,301,merge：orient-ai
 https://www.tpisoftware.com/vn/outsourcing,/vi/outsourcing,301,rewrite：outsourcing
 https://www.tpisoftware.com/vn/outsourcing/dropdown,/vi/outsourcing,301,drop：上層頁
 https://www.tpisoftware.com/vn/partners,/vi/partners,301,rewrite：partners
-https://www.tpisoftware.vn/pdf/1-2PrivacyPolicy(vn).pdf,/privacy,301,rewrite：privacy（redirect-overrides.csv）
+https://www.tpisoftware.vn/pdf/1-2PrivacyPolicy(vn).pdf,/en/privacy,301,rewrite：privacy（redirect-overrides.csv）
 https://www.tpisoftware.vn/pdf/digiRunner%20on%20AWS%20Marketplace_Buyer%20Guide_v1.4_EN.pdf,/pdf/digiRunner%20on%20AWS%20Marketplace_Buyer%20Guide_v1.4_EN.pdf,301,merge：digirunner-aws-guide
 https://www.tpisoftware.com/vn/products,/vi/products,301,rewrite：products
 https://www.tpisoftware.com/vn/products/digiflexis,/vi/products/digiflexis,301,rewrite：digiflexis

@@ -127,12 +127,11 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 
 ### 維運
 
-- redirect 目標頁沒有建出的 12 列完成（#137）：`dropImagesFrom` 拿掉現站也是 404 的 Google 圖片縮圖（連同 Google 圖片貼上時帶進來的來源與「探索」兩段）後，vi 的 `nosql-la-gi`、`server-la-gi` 補上內容。其他 10 列沒有內容可補，寫在手寫的 `docs/ia/redirect-overrides.csv`，`redirects.mjs` 用它取代 `page-map.csv` 的目標：不在現站 blog API 的 3 篇轉到分類列表頁，digiMars、digiRunner 的下載頁三語轉到產品頁（現站下載走 API，沒有可搬的檔案），`/vi/privacy` 轉到 `/privacy`（vi PDF 不是網站的隱私權政策）。`redirect-targets.mjs` 刪掉 `UNBUILT`，覆寫表 `unbuilt` 欄的頁面在 `dist/` 建出時失敗（`docs/ia/redirects.md`「對照規則」）
+- redirect 目標頁沒有建出的 12 列完成（#137）：`dropImagesFrom` 拿掉現站也是 404 的 Google 圖片縮圖（連同 Google 圖片貼上時帶進來的來源與「探索」兩段）後，vi 的 `nosql-la-gi`、`server-la-gi` 補上內容。其他 10 列沒有內容可補，寫在手寫的 `docs/ia/redirect-overrides.csv`，`redirects.mjs` 用它取代 `page-map.csv` 的目標：不在現站 blog API 的 3 篇轉到分類列表頁，digiMars、digiRunner 的下載頁三語轉到產品頁（現站下載走 API，沒有可搬的檔案），`/vi/privacy` 依使用者決定轉到 `/en/privacy`（vi PDF 不是網站的隱私權政策）。`redirect-targets.mjs` 刪掉 `UNBUILT`，覆寫表 `unbuilt` 欄的頁面在 `dist/` 建出時失敗（`docs/ia/redirects.md`「對照規則」）
 
 ## 下一步
 
 - 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
-- 回覆 #137 PR 的「待確認」：`/vi/privacy` 轉到 zh-TW 的 `/privacy`、vi 兩篇 blog 縮短的 `seoTitle` 與 `description`
 - 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」

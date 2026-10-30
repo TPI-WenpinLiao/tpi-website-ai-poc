@@ -29,7 +29,7 @@ keep、rewrite、merge 的列導到 `page-map.csv` 對應節點的路徑，en �
 
 節點的頁面在某語系沒有建出時（沒有內容檔、offering 沒有 `downloads`），在 [`redirect-overrides.csv`](./redirect-overrides.csv) 指定目標（#137）：
 
-- `url` 是 `inventory.csv` 的 keep、rewrite、merge 列；`unbuilt` 是這一列原本的目標，也就是沒建出的頁面；`to` 是改轉過去的新站頁面路徑（含語系前綴）；`reason` 寫為什麼沒有建出
+- `url` 是 `inventory.csv` 的 keep、rewrite、merge 列；`unbuilt` 是這一列原本的目標，也就是沒建出的頁面；`to` 是改轉過去的新站頁面路徑（含語系前綴），可以是其他語系的頁面節點，例如 `/en/privacy`，有沒有建出由 `redirect-targets.mjs` 檢查；`reason` 寫為什麼沒有建出
 - 被覆寫的原目標不算新站存在的頁面，drop 列找上層頁時不會找到它
 - `url` 重複、不是 keep、rewrite、merge 列、`unbuilt` 不是這一列原本的目標、`to` 不是新站的頁面，或 `reason` 空白時 exit 1
 - 頁面之後建出了（例如補了內容檔），刪掉那一列重跑；沒刪的話，`redirect-targets.mjs` 發現 `unbuilt` 已在 `dist/` 建出就會失敗

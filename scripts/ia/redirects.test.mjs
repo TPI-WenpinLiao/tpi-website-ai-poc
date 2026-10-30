@@ -91,6 +91,12 @@ test('buildRedirects sends overridden rows to the given page, and their own page
   const byFrom = Object.fromEntries(rows.map((r) => [r.from, `${r.to} ${r.status} ${r.note}`]));
   assert.equal(byFrom['https://www.tpisoftware.com/media-center/12'], '/media-center 301 keep：news-article（redirect-overrides.csv）');
   assert.equal(byFrom['https://www.tpisoftware.com/media-center/12/photo'], '/media-center 301 drop：上層頁');
+  // A page node in another locale is a valid target too, even if no old URL maps to it
+  const en = buildRedirects({
+    inventory, pageMap, nodes, dropTargets,
+    overrides: [{ url: 'https://www.tpisoftware.vn/products/gadodido', unbuilt: '/vi/products/gadodido', to: '/en/subscribe', reason: 'r' }],
+  });
+  assert.deepEqual(en.errors, []);
 });
 
 test('buildRedirects rejects bad overrides', () => {
