@@ -2832,7 +2832,8 @@
     url: https://www.tpisoftware.com/products/digirunner-cloud
     quote: digiRunner 可否達到 99.9% 的正常運行時間？ 可以。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: digirunner-aws-pod-limit
   type: feature
@@ -3531,7 +3532,8 @@
     url: https://www.tpisoftware.com/products/esgswift
     quote: 降低 30% 人力成本
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: esgswift-multi-site
   type: feature
@@ -3576,7 +3578,8 @@
     url: https://www.tpisoftware.com/products/esgswift
     quote: 平均節能 15%
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: esgswift-energy-efficiency
   type: metric
@@ -3585,7 +3588,8 @@
     url: https://www.tpisoftware.com/products/esgswift
     quote: 節能成效 15-25% 能源效率
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: esgswift-power-cost
   type: metric
@@ -3594,7 +3598,8 @@
     url: https://www.tpisoftware.com/products/esgswift
     quote: 降低 20-30% 電力成本
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: esgswift-re100
   type: feature
@@ -3915,7 +3920,8 @@
     url: https://www.tpisoftware.com/solutions/insurering
     quote: 新產品上架縮短時間達90%以上，迅速搶占市場商機。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: insurering-case-shin-kong-life
   type: case
@@ -4038,7 +4044,8 @@
     url: https://www.tpisoftware.com/solutions/smartclaim
     quote: 為保險從業人員簡化工作流程、降低人為誤差，透過系統讓人力成本節省達 80% 以上。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: smartclaim-end-to-end
   type: feature
@@ -4176,7 +4183,8 @@
     url: https://www.tpisoftware.com/solutions/textualanalysis
     quote: 簡化工作流程、降低人為誤差，快速解決 80% 之文書工作，提升企業營運效率。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: detect-applications
   type: feature
@@ -4622,7 +4630,8 @@
     url: https://www.tpisoftware.com/genai-solution
     quote: 讓 AI 訓練師事半功倍 以 2 成力氣達成高效訓練
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: genai-solution-60-percent
   type: metric
@@ -4631,7 +4640,8 @@
     url: https://www.tpisoftware.com/genai-solution
     quote: 透過 AI 大腦學習增強，減少 60% 訓練團隊人力。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 # --- SysTalk.Audit ---
 - id: systalk-audit-llm-context
@@ -4686,7 +4696,8 @@
     url: https://www.tpisoftware.com/products/systalk-audit
     quote: 高準確率轉錄：語音轉錄準確率達 95% 以上
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: systalk-audit-finance-compliance
   type: feature
@@ -4778,7 +4789,8 @@
     url: https://www.tpisoftware.com/products/systalk-coach
     quote: 縮短 70% 新人養成週期
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: systalk-coach-overview
   type: feature
@@ -4969,7 +4981,8 @@
     url: https://www.tpisoftware.com/products/systalk-icr
     quote: 提供消金、數金、信託業務等多管道前台進件，可批次進行 AI 文件辨識、無縫串接內部系統、持續精進 AI 模型，降低 40% 維運人力，提升工作效率。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: systalk-icr-medical-24h
   type: feature
@@ -5377,7 +5390,8 @@
     url: https://www.tpisoftware.com/products/systalk-ai-phison
     quote: PHISON 群聯電子運用 獨家專利 aiDAPTIV 技術， 與業界相比，同樣的運算效能、卻不用昂貴的運算成本。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
 - id: aiso-modules
   type: feature

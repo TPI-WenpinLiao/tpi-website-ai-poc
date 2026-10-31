@@ -618,7 +618,7 @@ groups:
       - { id: digirunner-tps, type: feature, quote: 常規 2 Core CPU / 4GB RAM 的 digiRunner 已足以應付企業一般用量。我們建議採用 4 Core CPU / 8GB RAM 的型號，每秒交易量的效能可達 300-1000 TPS。實際每秒交易量取決於不同環境的配置。 }
       - { id: digirunner-nginx-waf, type: feature, quote: digiRunner 透過 Nginx 將流量分配到各個伺服器端點，以確保 API 服務的穩定性。此外，也可整合現有的 WAF 廠商，如 F5 或 No Name Security。 }
       - { id: digirunner-auth-methods, type: feature, quote: digiRunner 支援 OAuth 2.0、API Key、X API Key、白名單（Whitelist）與 HTTP 基本認證。為確保數據完整性和保密性，可選擇使用 JWT 標準（RFC-7519）的JWS (RFC-7515) 或 JWE (RFC-7516) 對數據進行加密或解密。 }
-      - { id: digirunner-uptime-999, type: feature, url: 'https://www.tpisoftware.com/products/digirunner-cloud', quote: digiRunner 可否達到 99.9% 的正常運行時間？ 可以。 }
+      - { id: digirunner-uptime-999, type: feature, url: 'https://www.tpisoftware.com/products/digirunner-cloud', quote: digiRunner 可否達到 99.9% 的正常運行時間？ 可以。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: digirunner-aws-pod-limit, type: feature, url: 'https://www.tpisoftware.com/products/digirunner-cloud', quote: 能支援，但目前在 AWS Marketplace 上，我們設了一項 5 個 Pod 的限制。如您有意洽談需求，請主動聯繫我們。 }
       - { id: digirunner-trial-all-features, type: feature, quote: 在免費試用期間，各方案（digiRunner Enterprise High Availability/Standalone 及 digiRunner Lite High Availability/Standalone）所具備的功能皆可使用，且不會收取任何授權費。 }
 
@@ -733,14 +733,14 @@ groups:
     facts:
       - { id: esgswift-standards, type: certification, quote: ESG國際認證標準 溫室氣體盤查 ISO 14064 溫室氣體排放查證 碳足跡盤查 ISO 14067 碳足跡查證 CBAM 歐盟碳邊境機制 }
       - { id: esgswift-scope-2, type: feature, quote: 有效管控碳盤查 範疇二的電力使用 }
-      - { id: esgswift-labor-30, type: metric, quote: 降低 30% 人力成本 }
+      - { id: esgswift-labor-30, type: metric, quote: 降低 30% 人力成本, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: esgswift-multi-site, type: feature, quote: 內建國際係數庫，符合多國盤查規範 支援不限帳號與組織邊界的協作 }
       - { id: cert-esgswift-ares-aup, type: certification, quote: 通過 ARES 國際查驗機構 AUP 認證 }
       - { id: esgswift-iso27001, type: certification, quote: 符合 ISO 27001 國際資安標準 }
       - { id: esgswift-zero-trust, type: feature, quote: 採零信任架構，保障企業機敏數據安全 }
-      - { id: esgswift-energy-saving-15, type: metric, quote: 平均節能 15% }
-      - { id: esgswift-energy-efficiency, type: metric, quote: 節能成效 15-25% 能源效率 }
-      - { id: esgswift-power-cost, type: metric, quote: 降低 20-30% 電力成本 }
+      - { id: esgswift-energy-saving-15, type: metric, quote: 平均節能 15%, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: esgswift-energy-efficiency, type: metric, quote: 節能成效 15-25% 能源效率, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: esgswift-power-cost, type: metric, quote: 降低 20-30% 電力成本, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: esgswift-re100, type: feature, quote: 協助達成 RE100 綠電轉型 }
       - { id: esgswift-consulting-standards, type: feature, quote: 碳盤查輔導 依 ISO 14064-1、ISO 14067 標準導入 }
       - { id: esgswift-team-certified, type: certification, quote: 團隊成員具備國際 ISO 與 ESG 永續專業認證，實戰經驗覆蓋多產業 }
@@ -802,7 +802,7 @@ groups:
       - { id: insurering-rule-engine, type: feature, quote: 專屬保險產業的規則引擎 }
       - { id: insurering-three-modules, type: feature, quote: InsureRing 涵蓋公式、規則、檢核三大模組，可依客戶需求彈性組合模組 }
       - { id: insurering-one-week, type: feature, quote: 迅速完成保險產品測試及驗證 一周內迅速上市 }
-      - { id: insurering-90-percent, type: metric, quote: 新產品上架縮短時間達90%以上，迅速搶占市場商機。 }
+      - { id: insurering-90-percent, type: metric, quote: 新產品上架縮短時間達90%以上，迅速搶占市場商機。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - id: insurering-case-shin-kong-life
         type: case
         quote: 協助新光人壽建置集中化規則引擎，e化整合產品及計費資料，如：保險核心計算、公式、檢核模組等，整體降低50%作業成本。簡化商品上架流程，節省60%上架時間
@@ -841,7 +841,7 @@ groups:
       - { id: smartclaim-retraining, type: feature, quote: 各醫院收據、發票等格式不一且繁雜，透過 AI 再訓練機制，可維持高度準確率。 }
       - { id: smartclaim-rpa, type: feature, quote: 可全天候、跨系統自動化不間斷執行任務，同時減少人為操作錯誤。 }
       - { id: smartclaim-nlp, type: feature, quote: 以自主研發 NLP 自然語言技術為核心，對於自有演算法可高度掌握 }
-      - { id: smartclaim-80-percent, type: metric, quote: 為保險從業人員簡化工作流程、降低人為誤差，透過系統讓人力成本節省達 80% 以上。 }
+      - { id: smartclaim-80-percent, type: metric, quote: 為保險從業人員簡化工作流程、降低人為誤差，透過系統讓人力成本節省達 80% 以上。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: smartclaim-end-to-end, type: feature, quote: 跨系統運行具備彈性，可串接自動立案、自動理算、自動派件等功能 }
       - { id: smartclaim-case-medical-documents, type: case, quote: 藉由自然語言技術，分析診斷證明書、單據等文件，強化保險業智能理賠系統，解決傳統流程中大量人力需求，作業效率大幅的提升，並透過進化系統持續優化模型精準度，提供最佳化理賠給付計算結果。 }
 
@@ -866,7 +866,7 @@ groups:
       - { id: detect-three-keys, type: feature, quote: 以自主研發演算法、再訓練機制及在地全方位服務三大關鍵，實現新一代文本比對。 }
       - { id: detect-integration-service, type: feature, quote: 強大的軟體導入服務，為客戶完善內外部系統整合、串接及功能建置需求，滿足多元應用產業及場景。 }
       - { id: detect-no-code, type: feature, quote: 無須技術背景即可一鍵訓練模型，輕鬆處理文本，快速摘要重點並提供推薦回覆。 }
-      - { id: detect-80-percent, type: metric, quote: 簡化工作流程、降低人為誤差，快速解決 80% 之文書工作，提升企業營運效率。 }
+      - { id: detect-80-percent, type: metric, quote: 簡化工作流程、降低人為誤差，快速解決 80% 之文書工作，提升企業營運效率。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: detect-applications, type: feature, quote: AI 客服信箱 AI 智能核保 AI 智能理賠 AI 法條比對 AI 智能質檢 }
       - id: detect-case-archives
         type: case
@@ -972,8 +972,8 @@ groups:
     facts:
       - { id: genai-solution-bean-swan, type: feature, quote: 透過 SysTalk.VIKI 產生多元語料生成，搭配 SysTalk.Chat 應用管理模組 BEAN 及 SWAN 加強審查、健檢 }
       - { id: genai-solution-five-indicators, type: feature, quote: 從五大指標診斷 AI 大腦健康度 }
-      - { id: genai-solution-20-percent-effort, type: metric, quote: 讓 AI 訓練師事半功倍 以 2 成力氣達成高效訓練 }
-      - { id: genai-solution-60-percent, type: metric, quote: 透過 AI 大腦學習增強，減少 60% 訓練團隊人力。 }
+      - { id: genai-solution-20-percent-effort, type: metric, quote: 讓 AI 訓練師事半功倍 以 2 成力氣達成高效訓練, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: genai-solution-60-percent, type: metric, quote: 透過 AI 大腦學習增強，減少 60% 訓練團隊人力。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
 
   - group: SysTalk.Audit
     url: https://www.tpisoftware.com/products/systalk-audit
@@ -984,7 +984,7 @@ groups:
       - { id: systalk-audit-24-7, type: feature, quote: 全天候 24/7 自動分析：全天候自動分析，無需人工干預，即時完成通話紀錄分析與報告生成 }
       - { id: systalk-audit-no-rules, type: feature, quote: 多樣話術辨識：換產品名稱、調整話術，系統仍能自動適應，不需 IT 或 QA 重工 }
       - { id: systalk-audit-languages, type: feature, quote: 多語言支援：支援國語、台語、客語與英語等多語音交談場景，正確識別台灣常見的混語客服內容 }
-      - { id: systalk-audit-95-percent, type: metric, quote: 高準確率轉錄：語音轉錄準確率達 95% 以上 }
+      - { id: systalk-audit-95-percent, type: metric, quote: 高準確率轉錄：語音轉錄準確率達 95% 以上, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: systalk-audit-finance-compliance, type: feature, quote: 熟悉台灣在地語料與金融場域，內建關鍵詞庫與對話規則，即時比對金融法規用語 }
       - { id: systalk-audit-sensitive-words, type: feature, quote: 敏感詞檢測：自動偵測違規、敏感或高風險話術，防止不當用語 }
       - { id: systalk-audit-coverage, type: metric, quote: 24/7 全天候自動檢核 100 % 覆蓋率/檢核量 }
@@ -1003,7 +1003,7 @@ groups:
     url: https://www.tpisoftware.com/products/systalk-coach
     locale: zh-TW
     facts:
-      - { id: systalk-coach-70-percent, type: metric, quote: 縮短 70% 新人養成週期 }
+      - { id: systalk-coach-70-percent, type: metric, quote: 縮短 70% 新人養成週期, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: systalk-coach-overview, type: feature, quote: SysTalk.Coach 以生成式 AI 打造企業專屬的情境化陪練與智能考核系統 }
       - { id: systalk-coach-7x24, type: feature, quote: 7×24 不限次數自主訓練 }
       - { id: systalk-coach-stats, type: metric, quote: 70% 縮短新人養成週期 24/7 突破人力與 空間訓練限制 100% 數據化訓練 成效追蹤, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
@@ -1029,7 +1029,7 @@ groups:
       - { id: systalk-icr-custom-model, type: feature, quote: 打造專屬於企業客戶的模型 }
       - { id: systalk-icr-filling, type: feature, quote: 透過 SysTalk.ICR 與 SysTalk.PUZZLE，全面改造資料建檔流程，依客戶需求建構 AI 模型 }
       - { id: systalk-icr-claims, type: feature, quote: 結合 AI OCR 與 NLP 技術，聰明理解業務情境、智慧擷取辨識範圍 }
-      - { id: systalk-icr-account-opening-40, type: metric, quote: 提供消金、數金、信託業務等多管道前台進件，可批次進行 AI 文件辨識、無縫串接內部系統、持續精進 AI 模型，降低 40% 維運人力，提升工作效率。 }
+      - { id: systalk-icr-account-opening-40, type: metric, quote: 提供消金、數金、信託業務等多管道前台進件，可批次進行 AI 文件辨識、無縫串接內部系統、持續精進 AI 模型，降低 40% 維運人力，提升工作效率。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: systalk-icr-medical-24h, type: feature, quote: 以 AI 人機協作，有效解決 ICD 辨識一致性，打造全年 24 小時無休的智能理賠 AI 系統 }
       - { id: systalk-icr-plans, type: feature, quote: SysTalk.ICR Lite }
       - { id: systalk-icr-plan-features, type: feature, quote: 無限制的辨識張數 精準的Pre-Trained模型 支援 API 串接服務 支援模型 雲端/地端 部署 }
@@ -1115,7 +1115,7 @@ groups:
         note: 第三方（CIO）的調查數字，現站沒有寫調查年份
       - { id: aiso-no-token-limit, type: feature, quote: 地端AI不限Token流量，團隊無需顧慮用量成本，放心大量使用。 }
       - { id: aiso-bundled, type: feature, quote: 硬體內建軟體，省去分開詢價、規格對接與人工導入的繁瑣流程。 }
-      - { id: aiso-phison-patent, type: feature, quote: PHISON 群聯電子運用 獨家專利 aiDAPTIV 技術， 與業界相比，同樣的運算效能、卻不用昂貴的運算成本。 }
+      - { id: aiso-phison-patent, type: feature, quote: PHISON 群聯電子運用 獨家專利 aiDAPTIV 技術， 與業界相比，同樣的運算效能、卻不用昂貴的運算成本。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: aiso-modules, type: feature, quote: Rerank 模組 RAG 模組 向量/混合檢索模組 同義詞模組 FAQ 模組 網站 URL 爬取模組 OCR 視覺解析模組 Prompt 管理模組 LLM 設置模組 Guardrail 模組 STT/TTS 模組 虛擬人模組 Agent Flow 模組 意圖判斷模組 視窗記憶模組 }
       - { id: aiso-industries, type: feature, quote: 金融服務業 科技製造業 政府部門 醫療生技業 大型企業 }
       - id: aiso-finetune-benchmark
