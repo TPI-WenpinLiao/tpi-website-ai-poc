@@ -11,6 +11,9 @@
 - name: wireframe-approved
   color: "0e8a16"
   description: 低保真 wireframe 已確認
+- name: strategy-approved
+  color: "0e8a16"
+  description: messaging 與 content brief 已確認（分階段流程的策略關卡）
 
 # Type
 - name: type:feature

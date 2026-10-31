@@ -4,7 +4,7 @@ TPIsoftware（昕力資訊）官方網站的完整改版專案，素材來源為
 
 本專案同時是「AI 輔助開發工作流程」的實證：需求以 GitHub issue 管理，開發人員在 Claude Code 雲端 session 中讓 Claude 實作，人工負責設計確認與 review。GitHub Actions 只負責品質關卡與專案管理自動化。
 
-- 部署：Cloudflare Pages（僅 `*.pages.dev` 與 PR preview，不上正式網域）
+- 部署：Cloudflare Pages（僅 `*.pages.dev` 與 PR preview）。本專案驗證 AI 開發官網的品質，不上線，不設正式網域，不做 Search Console、GTM 的實際設定
 - 本站不可被搜尋引擎收錄（`X-Robots-Tag: noindex, nofollow` + `robots.txt` Disallow all）
 - 技術棧：Astro static、TypeScript strict、CSS custom properties，詳見 [ADR 0001](docs/decisions/0001-tech-stack.md)
 - 目前進度：[docs/status.md](docs/status.md)
@@ -37,7 +37,8 @@ flowchart TD
 ```
 
 - 雲端 session 不會監看 issue 的 label。加上 `design-approved` 後，要在 session 中告訴 Claude 才會進入階段二
-- M2、M3 的關卡 issue 流程相同，只是確認用的 label 依階段不同：`ia-approved`（M2）、`wireframe-approved`（M3-01）、`design-approved`（M3-02 起）
+- M2、M3 的關卡 issue 與分階段流程的策略 issue 流程相同，只是確認用的 label 依階段不同：`ia-approved`（M2）、`wireframe-approved`（M3-01）、`design-approved`（M3-02 起、設計概念）、`strategy-approved`（策略）
+- 新頁面、改版、內容大改走分階段流程（研究、策略、設計概念、製作、評審），每個階段由 `.claude/agents/` 的角色執行，見 [docs/workflow.md](docs/workflow.md)「分階段流程」
 - 每一步的操作與需要人工介入的時機見 [docs/workflow.md](docs/workflow.md)
 
 ## 如何開需求
@@ -57,6 +58,7 @@ flowchart TD
 | `design-approved` | 設計已確認，可進入階段二 |
 | `ia-approved` | 資訊架構（M2 sitemap / 導覽）已確認 |
 | `wireframe-approved` | 低保真 wireframe（M3）已確認 |
+| `strategy-approved` | messaging 與 content brief 已確認（分階段流程的策略關卡） |
 | `type:feature` | 新功能或頁面 |
 | `type:bug` | 錯誤修正 |
 | `type:content` | 內容盤點、撰寫或遷移 |

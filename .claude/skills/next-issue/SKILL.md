@@ -19,7 +19,7 @@ description: 找出下一張可以開始的 issue 並產生開場提示詞時使
 
 1. 解析 body 的 `## 依賴` 段落中的 `#N`；寫「無」代表沒有依賴
 2. 每個依賴都必須是 closed
-3. 依賴的 issue 有 `## 關卡` 段落時，還要帶對應的 approved label（`ia-approved`／`wireframe-approved`／`design-approved`）
+3. 依賴的 issue 有 `## 關卡` 段落時，還要帶對應的 approved label（`ia-approved`／`wireframe-approved`／`design-approved`／`strategy-approved`）。label 寫在依賴 issue 的「## 關卡」段落，例如分階段流程的策略 issue 寫 `strategy-approved`
 4. 排序：milestone（M1 → M8），再依 body 的 `<!-- bootstrap-id: Mx-yy -->`；沒有 bootstrap-id 的（例如 `[chore]`）排在同 milestone 最後，沒有 milestone 的排最前
 
 分類：
@@ -44,7 +44,7 @@ description: 找出下一張可以開始的 issue 並產生開場提示詞時使
 /issue-start <N>
 ```
 
-需要額外提醒時（例如要連現站、需要 API key、有 `needs-design`），在提示詞下方列出，並寫進提示詞第二行起的補充說明，例如：
+需要額外提醒時（例如要連現站、需要 API key、有 `needs-design`、本身有「## 關卡」段落而不進自動模式），在提示詞下方列出，並寫進提示詞第二行起的補充說明，例如：
 
 ```
 /issue-start 4

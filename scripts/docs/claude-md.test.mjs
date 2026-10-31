@@ -56,3 +56,9 @@ test('reports unlisted directories', () => {
   const files = ['src/assets/a.png', 'src/pages/index.astro', 'scripts/ci/x.mjs', 'docs/design/a.md', 'tests/visual/a.ts'];
   assert.deepEqual(missing(md, files), ['docs/', 'src/assets/', 'scripts/ci/', 'docs/design/']);
 });
+
+test('checks the subdirectories of .claude/', () => {
+  // .claude/agents/ was added without the check noticing (#162): `.claude/skills/` alone counted as `.claude/`.
+  const block = '## 目錄結構\n\n```\n.claude/skills/   skills\n```\n';
+  assert.deepEqual(missing(block, ['.claude/skills/a/SKILL.md', '.claude/agents/a.md']), ['.claude/agents/']);
+});

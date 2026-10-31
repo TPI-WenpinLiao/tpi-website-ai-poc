@@ -8,7 +8,8 @@
 - 本站是現站的改版複製品，**不可被搜尋引擎收錄**：`public/_headers` 與 `public/robots.txt` 不得移除或放寬
 - 語系：zh-TW、en、vi 三語上線（M7），zh-TW 優先。URL 與語系路徑規則見 `docs/decisions/0002-url-and-locale.md`，多語系內容的維護規則見 `content-migration` skill 的「多語系內容」
 - 目前 milestone、進度與下一步以 `docs/status.md` 為準
-- M0–M8 的規劃 milestone 結束後進入維運：新需求用 issue form 開，不掛 milestone，流程照「雲端 session 工作規則」。正式上線照 `docs/launch/launch-readiness.md`「上線步驟」；開放收錄的 PR 依第 6 步，同時改本節「不可被搜尋引擎收錄」「只部署到 `*.pages.dev`」兩句與列在那裡的規則（`pr-review` 的固定檢查、`seo-checklist`、`README.md` 等）
+- 本專案驗證 AI 能否依現站資訊做出內容豐富、符合 SEO 與行銷規劃的官網，品質由 `site-review` 的 rubric 評審。**不上線**：不設正式網域，不做 Google Search Console、GTM 的實際設定。`docs/launch/launch-readiness.md` 是範圍外的參考資料，保留不刪
+- M0–M8 的規劃 milestone 結束後進入維運：新需求用 issue form 開，不掛 milestone，流程照「雲端 session 工作規則」。新頁面、改版、內容大改走分階段流程（研究、策略、設計概念、製作、評審），角色、產出物與關卡見 `docs/workflow.md`「分階段流程」；本站專屬的設定（公司、現站網址、受眾、試點頁面）只寫在 `docs/strategy/site-profile.md`
 
 ## 技術棧
 
@@ -29,9 +30,11 @@ src/assets/       brand/（logo，`import-brand.mjs` 產生）、design/（設�
 src/styles/       tokens.css（design tokens）、media.css（斷點）、base.css（reset 與全域工具類）
 public/           靜態檔：_headers、robots.txt、favicon、og/（預設 OG 圖，`og-image.mjs` 產生）、pdf/（產品下載檔，`offering-files.mjs` 下載）
 scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、Lighthouse 單次量測的時間上限 `lhci-run.mjs`、量過的 `dist/` 不重量 `lhci-pass.mjs`、content/（日期檢查、tag 清單、blog、新聞、成功案例、解決方案與服務頁、ESG 顧問頁轉換 `migrate/`、現站 placeholder 封面的檢查與替換 `placeholder-covers.mjs`、產品下載檔 `offering-files.mjs`、公司頁對照 `page-content.mjs`、法務 PDF 轉換 `legal-pdf.mjs`）、design/（對比、token 使用、輸出 CSS 檢查、JS 大小預算 `scene-budget.mjs`、字型 subset 檢查 `font-subsets.mjs`、render-blocking CSS 量測 `css-blocking.mjs`、預設 OG 圖、圖片匯入、瀏覽器無障礙實測、頁面橫向溢出 `overflow.mjs`、全站 axe `axe.mjs`、影片 facade 檢查 `video-facade.mjs`、3D 初始化等待上限 `scene-wait.mjs`、offering 與 hub 內容對照 `offering-content.mjs`）、seo/（heading 檢查、每頁 head 與 sitemap 檢查、站內連結 `links.mjs`）、i18n/（語系路由檢查、翻譯詞彙表 `glossary.mjs`、測試語系 build `locale-fixture.mjs`）、forms/（表單規則與 Function 的單元測試、瀏覽器裡的表單檢查 `contact.mjs`）、search/（站內搜尋的索引、斷詞、載入範圍與無障礙檢查 `pagefind.mjs`）、consent/（同意狀態的單元測試、有 GTM ID 時的瀏覽器檢查 `gtm.mjs`）、lib/（共用的靜態伺服器）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應、build 後的轉址目標檢查 `redirect-targets.mjs`）、checkpoint/（進度推算）、bootstrap/（`issues.yml` 與 GitHub issue 的比對）、status/（`status.md` 檢查）、ci/（quality-gate 是否跳過 Lighthouse `lighthouse-scope.mjs`）、docs/（本檔目錄結構的檢查 `claude-md.mjs`）
-docs/             status.md、launch/（全站驗收 `audit.md`、上線準備 `launch-readiness.md`）、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）、content/（內容轉換的使用說明）、design/（品牌素材、影像提示詞、選單寬度實測、動態規範 `motion.md`）、i18n/（翻譯詞彙表 `glossary.csv`）
+docs/             status.md、strategy/（分階段流程的產出：本站設定 `site-profile.md`、事實庫、messaging、content brief、設計原則與原型、評審報告）、launch/（全站驗收 `audit.md`、上線準備 `launch-readiness.md`，不上線，範圍外）、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）、content/（內容轉換的使用說明）、design/（品牌素材、影像提示詞、選單寬度實測、動態規範 `motion.md`）、i18n/（翻譯詞彙表 `glossary.csv`）
 tests/visual/      Playwright 視覺回歸與 baseline（`__screenshots__/`）
-.claude/skills/   issue-start、issue-ship、checkpoint、pr-review、next-issue（工作流程）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
+.claude/skills/   issue-start、issue-ship、checkpoint、pr-review、next-issue（工作流程）；site-research、content-strategy、design-concept、site-review（分階段流程，rubric 在 `site-review/rubrics/`）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
+.claude/agents/   分階段流程的角色：researcher、content-strategist、seo-strategist、design-director、reviewer（由主 session 呼叫，做法引用上面的 skill）
+.claude/progress/ checkpoint 的進度檔（`<N>.md`，只在工作 branch，`/issue-ship` 時刪除）
 .github/          ISSUE_TEMPLATE/、workflows/、bootstrap/（labels / milestones / issues）、scripts/（workflow 呼叫的 bootstrap、issue launcher、Lighthouse summary）
 ```
 
@@ -85,7 +88,7 @@ Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）
 
 ## 雲端 session 工作規則
 
-1. 每個 session 對應一張 issue。以 `/issue-start <N>` 開始：讀 issue、本檔、`docs/status.md`，對照 `status.md` 與 GitHub 實際狀態，檢查依賴與環境，提出計畫。issue 沒有 `needs-design`、`needs-input`，計畫也沒有待使用者決定的事項時，計畫貼到 issue 留言後直接實作（自動模式）；否則以 Plan 模式等使用者確認。計畫拆成階段，每個階段完成時與停下等回覆前執行 `/checkpoint`（WIP commit 加進度檔）；session 中斷後再執行 `/issue-start <N>` 從進度檔接續。
+1. 每個 session 對應一張 issue。以 `/issue-start <N>` 開始：讀 issue、本檔、`docs/status.md`，對照 `status.md` 與 GitHub 實際狀態，檢查依賴與環境，提出計畫。issue 沒有 `needs-design`、`needs-input`、本身沒有「## 關卡」段落（分階段流程的策略 issue），計畫也沒有待使用者決定的事項時，計畫貼到 issue 留言後直接實作（自動模式）；否則以 Plan 模式等使用者確認。計畫拆成階段，每個階段完成時與停下等回覆前執行 `/checkpoint`（WIP commit 加進度檔）；session 中斷後再執行 `/issue-start <N>` 從進度檔接續。
 2. 若 `node_modules` 不存在或 SessionStart hook 回報安裝失敗，先執行 `npm ci` 並回報結果，不要直接開始實作。
 3. Branch：雲端 session 使用 session 指定的 branch，接續既有 PR 時用 PR 的 head branch（見 `issue-start` 第 1 步）；本機開發用 `<type>/<issue-number>-<slug>`，type 取 `feat` / `fix` / `content` / `docs` / `chore`。PR 標題沿用 issue 標題，含它的前綴，例如 `[Mx-xx]`、`[chore]`、`[content]`，issue form 開的是 `[需求]`、`[Bug]`。
 4. 最後一個階段完成後自動執行 `/issue-ship`（`needs-design` 階段一也是，見下方兩階段流程）：開 draft PR，跑審查迴圈直到符合完成條件，再轉 ready 並在 PR 貼合併判斷摘要。合併由使用者決定。PR body 必含：`Closes #N`、變更摘要、驗收方式、preview 檢查重點（要看哪些頁面、哪些斷點）。需要人決定時依 `checkpoint` skill 的「停下找人」處理。
@@ -116,7 +119,7 @@ Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）
 - 補齊 SEO、無障礙、內容完整度
 - 再執行一次 `/issue-ship`（不另開 PR，做法見同一節），跑審查迴圈，符合完成條件後將 PR 轉為 ready for review
 
-M2、M3 的關卡 issue 改用對應的 label（`ia-approved`、`wireframe-approved`、`design-approved`），流程相同。
+M2、M3 的關卡 issue 與分階段流程的策略 issue 改用對應的 label（`ia-approved`、`wireframe-approved`、`design-approved`、`strategy-approved`），流程相同。
 
 ## SEO 底線
 

@@ -10,7 +10,7 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 /** Parents whose direct subdirectories must each be listed. '' is the repo root. */
-export const PARENTS = ['', 'src', 'src/lib', 'scripts', 'docs', 'public', 'functions', 'tests', '.github'];
+export const PARENTS = ['', '.claude', 'src', 'src/lib', 'scripts', 'docs', 'public', 'functions', 'tests', '.github'];
 
 /** The fenced code block under `## 目錄結構`. @param {string} md @returns {string} */
 export function structureBlock(md) {
