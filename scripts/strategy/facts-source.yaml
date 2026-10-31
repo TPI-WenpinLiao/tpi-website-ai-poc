@@ -347,13 +347,13 @@ groups:
       - { id: digilism-ipaas, type: feature, quote: 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。 }
       - { id: digilism-patent-background-processing, type: feature, quote: 具備專利技術的背景服務運算處理，支援處理瞬間大量的數據或請求，達到零阻塞式運行。 }
       - { id: digilism-patent-resource-scheduling, type: feature, text: 專利技術的運算資源調度機制、靈活調配，以提高資訊系統可用性。, quote: '專利技術的運算資源調度機制、靈活調配，,以提高資訊系統可用性。' }
-      - { id: digilism-patent-sla, type: feature, quote: 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。 }
+      - { id: digilism-patent-sla, type: feature, quote: 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
       - { id: digilism-system-integration, type: feature, quote: 結合 DevOps 與 CI/CD 流程、整合 API 管理、BPM、日誌管理，支援地端、雲端、雲地混合與多雲架構，介接大型企業的傳統 ESB }
       - { id: digilism-microservice-framework, type: feature, quote: DigiLism 以 K8S 滿足系統高可用性，直接實踐微服務架構的 BFF （Backend for Frontend），並以自有自動擴容 （Auto-scaling）研發專利技術，讓系統具備佈署彈性。 }
       - { id: digilism-auth-module, type: feature, quote: 提供多元身分驗證、驗身機制及安控機制的整合，包含訪問控制、資料加密和單一登入（SSO）等，同時內建組織階層管理 }
       - { id: digilism-log-audit, type: feature, quote: 記錄分散於各系統或 AP 的所有日誌，透過集中控管、即時監控告警，提供第一線 IT 人員精確即時查找、分析系統問題來源 }
       - { id: digilism-protocol-integration, type: feature, quote: 以微服務架構的 DigiLism 專門協助處理核心銀行系統或過時大型機的資料轉換及通訊機制變更，可代替企業服務匯流排（ESB） }
-      - { id: digilism-sla-100, type: feature, quote: 100 % SLA 智慧快取、負載平衡、平行處理、容器延展四大原生內建機制，可確保每個 API、服務、通道和佈署皆擁有優異效能，讓系統服務穩定、運行不中斷，從而實現 100％ 的服務水平協定 （SLA）。 }
+      - { id: digilism-sla-100, type: feature, quote: 100 % SLA 智慧快取、負載平衡、平行處理、容器延展四大原生內建機制，可確保每個 API、服務、通道和佈署皆擁有優異效能，讓系統服務穩定、運行不中斷，從而實現 100％ 的服務水平協定 （SLA）。, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
       - { id: digilism-solution-areas, type: feature, quote: DigiLism 系列提供 API 管理、日誌管理及大數據管理三大面向解決方案 }
       - { id: digilism-family-digirunner, type: feature, quote: 整合 MCP 協定與 AI Gateway 架構，讓 AI 模型安全串接企業 API、資料與業務流程 }
       - id: digilism-family-digilogs
@@ -401,7 +401,7 @@ groups:
       - { id: digilogs-10-million-logs-a-day, type: feature, quote: 1日支援 1000 萬+ 筆日誌資料 存取 }
       - { id: digilogs-100-servers, type: feature, quote: 1次監管 100 + 系統伺服器 }
       - { id: digilogs-10000-events-per-second, type: feature, quote: '以每秒處理 10,000 事件數的優質效能，集中管理日誌資料滿足大量監控需求' }
-      - { id: digilogs-access-control, type: feature, quote: 1站控管 100 % 確保 組織權限 }
+      - { id: digilogs-access-control, type: feature, quote: 1站控管 100 % 確保 組織權限, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
       - { id: digilogs-iso27001-a815, type: certification, quote: 遵循 ISO 27001:2022 A.8.15 日誌存錄(控制) }
       - { id: digilogs-55-sources-edr-rca, type: feature, quote: 強大的主動偵錯(EDR)及根因分析(RCA)，迅速地提升系統效能並確定問題之源。同時支援超過55種以上資料來源格式 }
 
@@ -854,7 +854,7 @@ groups:
       - { id: smartfilling-preprocessing, type: feature, quote: 透過自研發前處理技術，自動校正文件影像瑕疵與色彩處理 }
       - { id: smartfilling-template-free, type: feature, quote: 以獨家自建 AI 演算法模型，改良 OCR 坐標定位之限制，無須依文件版型建立模板 }
       - { id: smartfilling-data-augmentation, type: feature, quote: 內建自動增加訓練資料機制，模擬不同情境影像 }
-      - { id: smartfilling-self-maintained, type: feature, quote: 透過導入再訓練機制，企業能夠自行訓練重要資料而無需仰賴第三方，達到 100% 自主維運目標。 }
+      - { id: smartfilling-self-maintained, type: feature, quote: 透過導入再訓練機制，企業能夠自行訓練重要資料而無需仰賴第三方，達到 100% 自主維運目標。, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
       - { id: smartfilling-text-analysis, type: feature, quote: 依客戶需求量身打造，同時也將 AI 文本分析技術用其中，精準且快速校正資料。 }
       - { id: smartfilling-case-bank, type: case, quote: 以 AI 取代傳統二登流程，節省將近 52% 委外成本，於三校時反饋系統再學習訓練模型，不但讓辨識資訊無縫介接內部系統，更有效降低維運人力約 45%。 }
       - { id: smartfilling-case-bank-title, type: case, quote: 金融業應用－傳統文件數位化管理第一步 }
@@ -912,7 +912,7 @@ groups:
       - { id: cloud-rpaaas, type: feature, quote: RPAaaS 以輕量級程式編輯、分散式部署架構，於雲端環境進行流程控管 }
       - { id: cloud-bnpl, type: feature, quote: 以雲端 BNPL 因應全球在地化效益加倍，我們分析各國特色，採用低耦合系統架構設計使系統具備高可用性，符合開放銀行法規標準 }
       - { id: cloud-mlops, type: feature, quote: MLOps 雲端協作平台 }
-      - { id: cloud-insurebrick, type: feature, quote: InsureBrick 為領先業界的保險數位平台解決方案，以雲端技術與微服務模組加乘，串接客戶既有系統或外部系統 }
+      - { id: cloud-insurebrick, type: feature, quote: InsureBrick 為領先業界的保險數位平台解決方案，以雲端技術與微服務模組加乘，串接客戶既有系統或外部系統, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
       - { id: cloud-case-pmd360-title, type: case, quote: PMD&360績效管理系統 }
       - { id: cloud-case-pmd360, type: case, quote: 整合集團旗下8間公司績效評核系統，透過部分資料上雲 }
 
@@ -1006,7 +1006,7 @@ groups:
       - { id: systalk-coach-70-percent, type: metric, quote: 縮短 70% 新人養成週期 }
       - { id: systalk-coach-overview, type: feature, quote: SysTalk.Coach 以生成式 AI 打造企業專屬的情境化陪練與智能考核系統 }
       - { id: systalk-coach-7x24, type: feature, quote: 7×24 不限次數自主訓練 }
-      - { id: systalk-coach-stats, type: metric, quote: 70% 縮短新人養成週期 24/7 突破人力與 空間訓練限制 100% 數據化訓練 成效追蹤 }
+      - { id: systalk-coach-stats, type: metric, quote: 70% 縮短新人養成週期 24/7 突破人力與 空間訓練限制 100% 數據化訓練 成效追蹤, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
       - { id: systalk-coach-dual-engine, type: feature, quote: SysTalk.Coach 採用模擬引擎與評測引擎雙核心架構 }
       - { id: systalk-coach-five-steps, type: feature, quote: 依企業產品、話術與合規要求設定貼近實務的客戶互動情境，不需依賴現有完整課程素材即可啟動。 }
       - { id: systalk-coach-ai-customer, type: feature, quote: 系統自動分析情境設定，生成符合企業業務邏輯的 AI 模擬客戶角色，難度可依員工資歷調整。 }

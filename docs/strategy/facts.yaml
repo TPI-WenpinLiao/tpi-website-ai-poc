@@ -1577,7 +1577,8 @@
     url: https://www.tpisoftware.com/products/digilism
     quote: 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）
 
 - id: digilism-system-integration
   type: feature
@@ -1631,7 +1632,8 @@
     url: https://www.tpisoftware.com/products/digilism
     quote: 100 % SLA 智慧快取、負載平衡、平行處理、容器延展四大原生內建機制，可確保每個 API、服務、通道和佈署皆擁有優異效能，讓系統服務穩定、運行不中斷，從而實現 100％ 的服務水平協定 （SLA）。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）
 
 - id: digilism-solution-areas
   type: feature
@@ -1852,7 +1854,8 @@
     url: https://www.tpisoftware.com/products/digilogs/iso27001logging
     quote: 1站控管 100 % 確保 組織權限
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）
 
 - id: digilogs-iso27001-a815
   type: certification
@@ -4108,7 +4111,8 @@
     url: https://www.tpisoftware.com/solutions/smartfilling
     quote: 透過導入再訓練機制，企業能夠自行訓練重要資料而無需仰賴第三方，達到 100% 自主維運目標。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）
 
 - id: smartfilling-text-analysis
   type: feature
@@ -4384,7 +4388,8 @@
     url: https://www.tpisoftware.com/cloudservice
     quote: InsureBrick 為領先業界的保險數位平台解決方案，以雲端技術與微服務模組加乘，串接客戶既有系統或外部系統
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）
 
 - id: cloud-case-pmd360-title
   type: case
@@ -4800,7 +4805,8 @@
     url: https://www.tpisoftware.com/products/systalk-coach
     quote: 70% 縮短新人養成週期 24/7 突破人力與 空間訓練限制 100% 數據化訓練 成效追蹤
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）
 
 - id: systalk-coach-dual-engine
   type: feature
