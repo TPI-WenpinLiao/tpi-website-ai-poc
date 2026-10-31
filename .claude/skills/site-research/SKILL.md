@@ -35,7 +35,7 @@ description: 分階段流程的研究階段使用：從現站擷取事實到事�
 1. 哪一句是事實要判斷，所以挑選的結果寫在輸入檔 `scripts/strategy/facts-source.yaml`（格式在檔頭），`node scripts/strategy/extract-facts.mjs` 產生 `facts.yaml`，不手改 `facts.yaml`（`CLAUDE.md`「工作原則」）。script 逐筆確認 quote 在來源頁上，有一筆不在就失敗、不寫檔；重跑結果相同。頁面已引用的 id 不能改，`node scripts/strategy/facts.mjs` 會擋下被引用但消失的 id
    - 頁面先由 `scripts/strategy/source-pages.mjs` 抓取並快取到 `.cache/facts`；`--offline` 只讀快取。quote 不在 HTML 時會找頁面載入的 Nuxt chunk（`/success-story` 的案例卡片只在 chunk 裡），`facts.mjs --sources` 用同一套
    - 某個語系的現站連不上時（例如 `www.tpisoftware.vn`），兩支都加 `--locales zh-TW,en`，只驗證這些語系，其他語系照原樣寫出並列為未驗證
-   - 漏收靠候選報告 `facts-candidates.md` 檢查：`inventory.csv` 中 zh-TW 的首頁、關於、產品、解決方案、服務、案例頁，每頁列出含數字、認證、獎項、客戶與產業名稱的文字區塊，標出收進哪些 id，或被 `facts-source.yaml` 的 `ignore` 規則略過（附原因）。完成條件是「未收」0 筆。報告只看 4 字以上的文字區塊，不看 `<script>` 裡的資料：一個字一個 tag 的表格（digiRunner v.s. Kong）、首頁 banner（Nuxt payload）要人工補看
+   - 漏收靠候選報告 `facts-candidates.md` 檢查：`inventory.csv` 中 zh-TW 的首頁、關於、產品、解決方案、服務、案例頁，每頁列出含數字、認證、獎項、客戶與產業名稱的文字區塊，標出收進哪些 id，或被 `facts-source.yaml` 的 `ignore` 規則略過（附原因）。完成條件是「未收」0 筆。標「（他頁）」的區塊只有別頁來源的事實文字相符（例如兩個產品寫同一句宣稱），要確認那筆事實是否就是這頁的意思，不是就在這頁另收一筆。另外，confirmed 事實的 text 不能含 to_confirm 的客戶名稱，`facts.mjs` 會擋下（頁面引用它就能繞過客戶授權）。報告只看 4 字以上的文字區塊，不看 `<script>` 裡的資料：一個字一個 tag 的表格（digiRunner v.s. Kong）、首頁 banner（Nuxt payload）要人工補看
 2. 每一筆都要有來源網址與原文（`source.url`、`source.quote`），原文逐字照抄現站；`text` 是頁面要顯示的字，可以加 U+200B 斷行點或截掉原文的前後文，數字與名稱不改（`facts.mjs` 擋下 `text` 有、`source.quote` 沒有的數字）。`--sources` 比對原文時忽略空白與 U+200B
 3. `status`：
    - `confirmed`：現站原文明確寫出，且不涉及授權

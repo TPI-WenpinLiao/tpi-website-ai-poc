@@ -90,22 +90,27 @@ const FACT_LIKE = /\d|ISO|CMMI|認證|專利|獎|榮獲|入選|殊榮|第一|唯
 
 /**
  * Candidate rows of one page: fact-like blocks (at least 4 characters, not on most pages), deduped,
- * each with the facts or ignore rule that covers it
+ * each with the facts or ignore rule that covers it. Facts from this page come first; a block only
+ * facts from other pages cover is marked `elsewhere`, since that fact may say something else
  * @param {string[]} blocks
- * @param {{ id: string, quote: string }[]} facts
+ * @param {{ id: string, quote: string, url: string }[]} facts
  * @param {{ match: RegExp, reason: string }[]} ignore
  * @param {Set<string>} common blocks on so many pages that they are site chrome
+ * @param {string} url the page the blocks are from
  */
-export function candidates(blocks, facts, ignore, common) {
+export function candidates(blocks, facts, ignore, common, url) {
   const seen = new Set();
   const rows = [];
   for (const b of blocks) {
     const key = squash(b);
     if (key.length < 4 || seen.has(key) || common.has(key) || !FACT_LIKE.test(b)) continue;
     seen.add(key);
-    const ids = facts.filter((f) => key.includes(squash(f.quote)) || squash(f.quote).includes(key)).map((f) => f.id);
+    const covering = facts.filter((f) => key.includes(squash(f.quote)) || squash(f.quote).includes(key));
+    const here = covering.filter((f) => f.url === url);
+    const ids = (here.length ? here : covering).map((f) => f.id);
+    const elsewhere = !here.length && covering.length > 0;
     const rule = ids.length ? undefined : ignore.find((r) => r.match.test(b));
-    rows.push({ block: b, ids, reason: rule?.reason });
+    rows.push({ block: b, ids, elsewhere, reason: rule?.reason });
   }
   return rows;
 }
@@ -139,15 +144,18 @@ async function main() {
   for (const p of pages) for (const k of new Set(p.blocks.map(squash))) counts.set(k, (counts.get(k) ?? 0) + 1);
   const common = new Set([...counts].filter(([, n]) => n >= Math.max(3, pages.length / 3)).map(([k]) => k));
   const ignore = (source.ignore ?? []).map((r) => ({ match: new RegExp(r.match), reason: r.reason }));
-  const zh = facts.filter((f) => f.locale === 'zh-TW').map((f) => ({ id: f.id, quote: f.source.quote }));
+  const zh = facts.filter((f) => f.locale === 'zh-TW').map((f) => ({ id: f.id, quote: f.source.quote, url: f.source.url }));
 
   let open = 0;
   let covered = 0;
   let skipped = 0;
+  let elsewhere = 0;
   const sections = pages.map((p) => {
-    const list = candidates(p.blocks, zh, ignore, common);
+    const list = candidates(p.blocks, zh, ignore, common, p.url);
     for (const r of list) r.ids.length ? covered++ : r.reason ? skipped++ : open++;
-    const table = list.map((r) => `| ${cell(r.block)} | ${r.ids.length ? r.ids.map((id) => `\`${id}\``).join(' ') : r.reason ? `略過：${r.reason}` : '**未收**'} |`);
+    elsewhere += list.filter((r) => r.elsewhere).length;
+    const ids = (r) => `${r.ids.map((id) => `\`${id}\``).join(' ')}${r.elsewhere ? '（他頁）' : ''}`;
+    const table = list.map((r) => `| ${cell(r.block)} | ${r.ids.length ? ids(r) : r.reason ? `略過：${r.reason}` : '**未收**'} |`);
     return [`## ${p.url}`, '', ...(table.length ? ['| 段落 | 狀態 |', '|---|---|', ...table] : ['沒有像事實的段落。']), ''].join('\n');
   });
   const report = [
@@ -155,9 +163,9 @@ async function main() {
     '',
     `由 \`scripts/strategy/extract-facts.mjs\` 產生，不要手改。範圍是 \`${INVENTORY}\` 中 zh-TW、HTTP 200、類型為 ${SCOPE_TYPES.map((t) => `\`${t}\``).join('、')} 的頁面（轉址的取最終網址），共 ${pages.length} 頁。`,
     '',
-    '每頁列出含數字、認證、獎項、客戶與產業名稱等字樣的文字區塊（出現在三分之一以上頁面的視為選單與 footer，不列），以及收進事實庫的 id，或 `facts-source.yaml` 的 `ignore` 規則寫的略過原因。「**未收**」是還沒判斷的區塊。',
+    '每頁列出含數字、認證、獎項、客戶與產業名稱等字樣的文字區塊（出現在三分之一以上頁面的視為選單與 footer，不列），以及收進事實庫的 id，或 `facts-source.yaml` 的 `ignore` 規則寫的略過原因。「（他頁）」表示這頁沒有涵蓋它的事實，只有別頁來源的事實文字相符，那筆事實講的可能是別的產品，要人工確認。「**未收**」是還沒判斷的區塊。',
     '',
-    `合計：已收 ${covered}、略過 ${skipped}、未收 ${open}。`,
+    `合計：已收 ${covered}（其中他頁 ${elsewhere}）、略過 ${skipped}、未收 ${open}。`,
     '',
     ...sections,
   ].join('\n');
@@ -166,7 +174,7 @@ async function main() {
   const byType = Object.entries(Object.groupBy(facts, (f) => `${f.locale} ${f.type}`)).map(([k, v]) => `${k}: ${v.length}`);
   console.log(`${FACTS_FILE}: ${facts.length} facts (${facts.filter((f) => f.status === 'confirmed').length} confirmed)\n  ${byType.join('\n  ')}`);
   if (unverified.length) console.log(`not verified (locale not in --locales): ${unverified.join(', ')}`);
-  console.log(`${REPORT_FILE}: ${pages.length} pages, ${covered} covered, ${skipped} ignored, ${open} open`);
+  console.log(`${REPORT_FILE}: ${pages.length} pages, ${covered} covered (${elsewhere} by other pages' facts), ${skipped} ignored, ${open} open`);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) await main();

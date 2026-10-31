@@ -20,7 +20,6 @@ import { pathToFileURL } from 'node:url';
 import { parse } from 'yaml';
 import { FACTS_FILE, factsSchema } from '../../src/data/facts.ts';
 import { LOCALES } from '../../src/lib/i18n/locales.ts';
-import { pageText, squash } from '../lib/page-text.mjs';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 
@@ -32,12 +31,20 @@ const ROOT = resolve(import.meta.dirname, '../..');
 export function validateFacts(data) {
   const result = factsSchema.safeParse(data);
   if (result.success) {
-    // `text` may trim the quote or add break points, but its numbers are the quote's
+    // A page may cite a confirmed fact whose text names a client; checkPage then accepts the name,
+    // so a client still to_confirm (license) must not appear in a confirmed fact's text
+    const pending = result.data.filter((c) => c.type === 'client' && c.status !== 'confirmed');
     return result.data.flatMap((f) => {
+      // `text` may trim the quote or add break points, but its numbers are the quote's
       const quoted = numbers(f.source.quote);
-      return numbers(f.text)
+      const extra = numbers(f.text)
         .filter((n) => !quoted.includes(n))
         .map((n) => `${FACTS_FILE} ${f.id}: ${n} in text is not in source.quote`);
+      const named =
+        f.status === 'confirmed'
+          ? pending.filter((c) => c.locale === f.locale && f.text.includes(c.text)).map((c) => `${FACTS_FILE} ${f.id}: confirmed text names client ${c.text}, which is ${c.status} (${c.id})`)
+          : [];
+      return [...extra, ...named];
     });
   }
   return result.error.issues.map((i) => {
@@ -152,13 +159,6 @@ export function markdownPage(name, source) {
  */
 export const factCalls = (source) =>
   [...source.replace(/\/\*[\s\S]*?\*\/|^\s*\/\/.*$/gm, '').matchAll(/\bfact\(\s*(['"])([^'"]+)\1\s*\)/g)].map((m) => m[2]);
-
-/**
- * Whether a quote is on a page's HTML, ignoring whitespace and U+200B
- * @param {string} html
- * @param {string} quote
- */
-export const quoteOnPage = (html, quote) => squash(pageText(html)).includes(squash(quote));
 
 function* walk(dir) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {

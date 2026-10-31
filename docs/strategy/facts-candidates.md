@@ -2,9 +2,9 @@
 
 由 `scripts/strategy/extract-facts.mjs` 產生，不要手改。範圍是 `docs/research/inventory.csv` 中 zh-TW、HTTP 200、類型為 `home`、`about`、`product-index`、`product`、`solution`、`service`、`case-study` 的頁面（轉址的取最終網址），共 59 頁。
 
-每頁列出含數字、認證、獎項、客戶與產業名稱等字樣的文字區塊（出現在三分之一以上頁面的視為選單與 footer，不列），以及收進事實庫的 id，或 `facts-source.yaml` 的 `ignore` 規則寫的略過原因。「**未收**」是還沒判斷的區塊。
+每頁列出含數字、認證、獎項、客戶與產業名稱等字樣的文字區塊（出現在三分之一以上頁面的視為選單與 footer，不列），以及收進事實庫的 id，或 `facts-source.yaml` 的 `ignore` 規則寫的略過原因。「（他頁）」表示這頁沒有涵蓋它的事實，只有別頁來源的事實文字相符，那筆事實講的可能是別的產品，要人工確認。「**未收**」是還沒判斷的區塊。
 
-合計：已收 490、略過 173、未收 0。
+合計：已收 490（其中他頁 60）、略過 173、未收 0。
 
 ## https://www.tpisoftware.com/
 
@@ -16,10 +16,10 @@
 | 更以客戶利益為導向，致力於提供創新技術及軟體解決方案，在安全面、執行面和可靠性皆贏得客戶信賴及各界的肯定。 | 略過：核心價值、產業背景或概念說明的敘述，沒有昕力可查證的事實 |
 | 客戶證言 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 昕力是台灣本土在 API 管理平台上，相較於國際來說，走得最前面，且是第一家開始投入相關技術的企業。昕力在 API 管理平台的技術和 Al 都提供很好的服務，在未來的開放銀行有很大的發揮效果，可擔任領頭羊，引領其他公司投入。 | `testimonial-nccu-fintech` |
-| ｜國泰金控數數發中心資深副總 | `testimonial-cathay-fhc-speaker` `client-cathay-fhc` |
+| ｜國泰金控數數發中心資深副總 | `testimonial-cathay-fhc-speaker` |
 | 此次與昕力的合作我們就像同一個團隊般合作無間，目前SysTalk已經涵蓋了我們旗下50％以上的用戶服務量，在滿意度回饋上也超過了真人客服，透過昕力的最佳技術與完整客戶體驗的合作，我們獲得了相當好的成果。 | `testimonial-cathay-fhc` |
 | 卓新是結構化綜合佈線領導廠商，客戶遍及全球各地，此次與昕力資訊合作，導入 RPA 流程自動化，不但改善了員工工作的效率，讓人才發揮最大的價值，在內部流程革新之下，促使企業營運朝數位轉型前進，以因應快速轉變的時代，為卓新發展帶來極大助益，並保持競爭力的關鍵！ | `testimonial-excellence-wire` |
-| ｜新光銀行數位資訊部資深經理 | `testimonial-shin-kong-bank-speaker` `client-shin-kong-bank` |
+| ｜新光銀行數位資訊部資深經理 | `testimonial-shin-kong-bank-speaker` |
 | 服務客戶 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 
 ## https://www.tpisoftware.com/about-us
@@ -39,7 +39,7 @@
 | 2020 - 2022 | 略過：時間軸的年份頁籤，內容見各年份的事實 |
 | 昕力資訊創立於 2005 年，透過扎實軟體技術提供企業客製化數位系統服務，創辦人 Ben Yao 的創業核心是以務實精神與優質服務，與企業客戶發展長遠的夥伴關係，並與其一同成長。同時，Ben 堅信台灣擁有足以與國際巨頭競爭之軟體人才、工作文化，因此將台灣軟體服務與人才帶領至國際舞台，是 Ben 始終堅持的目標。 | `company-founded` `company-founder` |
 | 為台灣易利信、台積電提供軟體品質管理與顧問服務，不斷累積經驗、汲取多方養分；2008 年首度跨足金融產業，為華南銀行建置 CRM 系統，同年也名列為傑出企業成就，專業服務受到多家知名客戶信任，優質的服務於業界不斷獲得好評。 | `company-milestone-2008-finance` `award-2008-outstanding-enterprise` `client-ericsson-taiwan` `client-tsmc` `client-hua-nan-bank` |
-| 透過豐富的軟體經驗實踐，逐步發展自有軟體產品，2011年開發第一個 產品 – TPRS 推薦系統；同時於金融業界獲得國泰世華、台新銀行、保誠人壽、澳盛銀行、法國巴黎人壽等指標性客戶信賴，成功為銀行客戶建置多項金融系統服務，推動銀行數位轉型成果斐然。 | `company-milestone-2011-tprs` `client-anz-short` `client-taishin-bank` `client-bnp-paribas-cardif` `client-prudential-uk-short` |
+| 透過豐富的軟體經驗實踐，逐步發展自有軟體產品，2011年開發第一個 產品 – TPRS 推薦系統；同時於金融業界獲得國泰世華、台新銀行、保誠人壽、澳盛銀行、法國巴黎人壽等指標性客戶信賴，成功為銀行客戶建置多項金融系統服務，推動銀行數位轉型成果斐然。 | `company-milestone-2011-tprs` `client-prudential-uk-short` |
 | 成為台灣金融科技解決方案領導廠商，累積超過 400個不同的專案成功經驗，分別在2017、2019年設立新加坡與越南子公司，前進東南亞市場；積極發展兩大產品系列 DigiLism 與 SysTalk.ai，而 AI Chatbot 產品於 2018 年更獲頒 Gartner 亞太地區 Cool Vendor 獎項。 | `company-projects-400` `company-subsidiaries-sg-vn` `company-product-families` |
 | 2020年以「TPIsoftware」 邁入國際，全球員工超過 630 名，成為台灣資訊軟體業領導廠商，不僅奠基海外金融科技服務供應商，更跨足零售產業，同時，無懼疫情逆勢成長，入選英國金融時報 (Financial Times) 2022 亞太地區快速成長 500 強企業。接連榮獲 2021 第一屆數位金融獎與 CX Asia Excellence Awards、2022 創新商務獎、2022 中小企業創新研究獎、2023 台灣精品獎等多項肯定。 | `company-milestone-2020-brand` `company-employees-630` `company-milestone-retail` `award-ft-high-growth-2022` |
 | digiRunner、digiLogs、SysTalk.Chat 獲得「2023 台灣精品獎」 | `award-taiwan-excellence-2023` |
@@ -130,28 +130,28 @@
 
 | 段落 | 狀態 |
 |---|---|
-| TAISE台灣企業永續獎見習評審 | `esg-consultant-chen-zhengrui-experience` `esg-consultant-chuang-binyuan-experience` |
-| ISO 14064-1:2018內稽人員授課講師 | `esg-consultant-chen-zhengrui-experience` `esg-consultant-chuang-binyuan-experience` |
-| ISO 14067:2018內稽人員授課講師 | `esg-consultant-chen-zhengrui-experience` `esg-consultant-chuang-binyuan-experience` |
-| 勞動部產業人才投資計畫政策性產業ISO14064-1、ISO14067、ISO14068、零碳建築學士學分班授課師資 | `esg-consultant-chen-zhengrui-experience` `esg-consultant-chuang-binyuan-experience` |
+| TAISE台灣企業永續獎見習評審 | `esg-consultant-chen-zhengrui-experience` |
+| ISO 14064-1:2018內稽人員授課講師 | `esg-consultant-chen-zhengrui-experience` |
+| ISO 14067:2018內稽人員授課講師 | `esg-consultant-chen-zhengrui-experience` |
+| 勞動部產業人才投資計畫政策性產業ISO14064-1、ISO14067、ISO14068、零碳建築學士學分班授課師資 | `esg-consultant-chen-zhengrui-experience` |
 | CQI/IRCA ISO 14001 環境管理主任稽核員 | `esg-consultant-chen-zhengrui-certifications` |
 | CQI&IRCA ISO 50001能源管理系統主任稽核員 | `esg-consultant-chen-zhengrui-certifications` |
-| ISO 14064-1:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` `esg-consultant-chuang-binyuan-certifications` `esg-consultant-li-shuhui-certifications` |
-| ISO 14064-2:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` `esg-consultant-chuang-binyuan-certifications` |
-| ISO 14067:2018 產品碳足跡標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` `esg-consultant-chuang-binyuan-certifications` `esg-consultant-li-shuhui-certifications` |
+| ISO 14064-1:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` |
+| ISO 14064-2:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` |
+| ISO 14067:2018 產品碳足跡標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` |
 | ISO 14068:2023 碳中和標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` |
 
 ## https://www.tpisoftware.com/esg-advisory/chuang-binyuan
 
 | 段落 | 狀態 |
 |---|---|
-| TAISE台灣企業永續獎見習評審 | `esg-consultant-chen-zhengrui-experience` `esg-consultant-chuang-binyuan-experience` |
-| ISO 14064-1:2018內稽人員授課講師 | `esg-consultant-chen-zhengrui-experience` `esg-consultant-chuang-binyuan-experience` |
-| ISO 14067:2018內稽人員授課講師 | `esg-consultant-chen-zhengrui-experience` `esg-consultant-chuang-binyuan-experience` |
-| 勞動部產業人才投資計畫政策性產業ISO14064-1、ISO14067、ISO14068、零碳建築學士學分班授課師資 | `esg-consultant-chen-zhengrui-experience` `esg-consultant-chuang-binyuan-experience` |
-| ISO 14064-1:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` `esg-consultant-chuang-binyuan-certifications` `esg-consultant-li-shuhui-certifications` |
-| ISO 14064-2:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` `esg-consultant-chuang-binyuan-certifications` |
-| ISO 14067:2018 產品碳足跡標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` `esg-consultant-chuang-binyuan-certifications` `esg-consultant-li-shuhui-certifications` |
+| TAISE台灣企業永續獎見習評審 | `esg-consultant-chuang-binyuan-experience` |
+| ISO 14064-1:2018內稽人員授課講師 | `esg-consultant-chuang-binyuan-experience` |
+| ISO 14067:2018內稽人員授課講師 | `esg-consultant-chuang-binyuan-experience` |
+| 勞動部產業人才投資計畫政策性產業ISO14064-1、ISO14067、ISO14068、零碳建築學士學分班授課師資 | `esg-consultant-chuang-binyuan-experience` |
+| ISO 14064-1:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-chuang-binyuan-certifications` |
+| ISO 14064-2:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-chuang-binyuan-certifications` |
+| ISO 14067:2018 產品碳足跡標準主導查證員 | `esg-consultant-chuang-binyuan-certifications` |
 
 ## https://www.tpisoftware.com/esg-advisory/huang-weineng
 
@@ -160,7 +160,7 @@
 | 經濟部創新育成中心-國立高雄第一科技大學 專案經理 | `esg-consultant-huang-weineng-experience` |
 | TUV NORD ISO 14067 產品碳足跡內稽人員授課講師 | `esg-consultant-huang-weineng-experience` |
 | ISO 14001 環境管理主任稽核員認證 | `esg-consultant-huang-weineng-certifications` |
-| ISO 27001 資訊安全認證 | `cert-iso27001-digirunner` `esg-consultant-huang-weineng-certifications` |
+| ISO 27001 資訊安全認證 | `esg-consultant-huang-weineng-certifications` |
 | ISO 27701 隱私資訊安全認證 | `esg-consultant-huang-weineng-certifications` |
 
 ## https://www.tpisoftware.com/esg-advisory/huang-weisheng
@@ -175,8 +175,8 @@
 
 | 段落 | 狀態 |
 |---|---|
-| ISO 14064-1:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` `esg-consultant-chuang-binyuan-certifications` `esg-consultant-li-shuhui-certifications` |
-| ISO 14067:2018 產品碳足跡標準主導查證員 | `esg-consultant-chen-zhengrui-certifications` `esg-consultant-chuang-binyuan-certifications` `esg-consultant-li-shuhui-certifications` |
+| ISO 14064-1:2018 溫室氣體盤查標準主導查證員 | `esg-consultant-li-shuhui-certifications` |
+| ISO 14067:2018 產品碳足跡標準主導查證員 | `esg-consultant-li-shuhui-certifications` |
 
 ## https://www.tpisoftware.com/esg-advisory/yang-zhengrong
 
@@ -215,17 +215,17 @@
 
 | 段落 | 狀態 |
 |---|---|
-| 40-60% | `orientai-benefits` |
-| 20-30% | `esgswift-power-cost` `orientai-benefits` |
-| 1-5人團隊 | `orientai-hardware-small` |
-| 5人以上 跨部門應用 | `orientai-hardware-large` |
+| 40-60% | `orientai-benefits`（他頁） |
+| 20-30% | `esgswift-power-cost` `orientai-benefits`（他頁） |
+| 1-5人團隊 | `orientai-hardware-small`（他頁） |
+| 5人以上 跨部門應用 | `orientai-hardware-large`（他頁） |
 
 ## https://www.tpisoftware.com/orient-ai
 
 | 段落 | 狀態 |
 |---|---|
 | 40-60% | `orientai-benefits` |
-| 20-30% | `esgswift-power-cost` `orientai-benefits` |
+| 20-30% | `orientai-benefits` |
 | 1-5人團隊 | `orientai-hardware-small` |
 | 5人以上 跨部門應用 | `orientai-hardware-large` |
 
@@ -235,20 +235,20 @@
 |---|---|
 | 我們的技術領域與客戶 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 「透過昕力的最佳技術與完整客戶體驗的合作，我們獲得了相當好的成果！」 | `testimonial-cathay-fhc-excerpt` |
-| ⏤ 國泰金控數數發中心 資深副總 姚旭杰 | `client-cathay-fhc` |
+| ⏤ 國泰金控數數發中心 資深副總 姚旭杰 | `client-cathay-fhc`（他頁） |
 | 昕力資訊擁有業界最頂尖的軟體研發團隊，公司成立多年來服務的客戶遍及海內外，屢獲客戶好評與肯定，其中不乏大型企業集團，產業橫跨金融、保險、科技業、醫療、交通以及政府單位等，累積的卓越技術實力與豐厚產業經驗能夠快速回應與解決客戶遇到的開發瓶頸、有效幫助客戶縮短開發時程，以達成客戶設定的成果目標，我們服務的內容包含：各類企業級客製化軟體與解決方案、企業網站建置、行動App開發、系統整合…等等。 | `outsourcing-industries` `outsourcing-scope` |
 | 常駐客戶端溝通無礙 | `outsourcing-benefits` |
 | 資料庫： Oracle, MySQL, MSSQL, PostgreSQL, NoSQL (MongoDB, Neo4j, Elasticsearch) | `outsourcing-tech-database` |
-| 開放銀行 | `testimonial-nccu-fintech` `digirunner-open-banking-3-stages` `digirunner-open-banking-fsc` `digirunner-open-banking-consulting` `cloud-bnpl` `outsourcing-domains` |
+| 開放銀行 | `outsourcing-domains` |
 | 保險3-in-1規則引擎 | `outsourcing-domains` |
-| 國泰金控 | `testimonial-cathay-fhc-speaker` `client-cathay-fhc` |
-| 渣打銀行 | `client-standard-chartered` |
-| 星展銀行 | `client-dbs` `client-dbs-bank` |
-| 澳盛銀行 | `client-anz` `client-anz-short` |
-| 法國巴黎人壽 | `client-bnp-paribas-cardif` |
-| 富邦人壽 | `client-fubon-life` `insurebrick-case-fubon-life` |
+| 國泰金控 | `testimonial-cathay-fhc-speaker` `client-cathay-fhc`（他頁） |
+| 渣打銀行 | `client-standard-chartered`（他頁） |
+| 星展銀行 | `client-dbs-bank` |
+| 澳盛銀行 | `client-anz-short` |
+| 法國巴黎人壽 | `client-bnp-paribas-cardif`（他頁） |
+| 富邦人壽 | `client-fubon-life` `insurebrick-case-fubon-life`（他頁） |
 | 台北市政府 | `client-taipei-city-alt` |
-| 英國保誠人壽 | `client-prudential-uk` `client-prudential-uk-short` |
+| 英國保誠人壽 | `client-prudential-uk` `client-prudential-uk-short`（他頁） |
 
 ## https://www.tpisoftware.com/partners
 
@@ -268,7 +268,7 @@
 | 段落 | 狀態 |
 |---|---|
 | 醫院轉型最常卡在兩件事：行政過載、資料不通。昕力資訊以「臺灣醫療資訊標準大平台」的標準為基礎，採 HL7 FHIR 作為核心架構，協助醫院把分散在 HIS、LIS、PACS、EMR 的資料整理成可互通的標準格式，讓照護流程真正以病人為中心。 | `digicare-fhir-core` |
-| 跟上政府推動的 FHIR 與 醫療 AI 治理方向 | `orientai-governance` |
+| 跟上政府推動的 FHIR 與 醫療 AI 治理方向 | `orientai-governance`（他頁） |
 | 醫院需符合政府推動電子病歷標準化的規範，並接軌國際醫學資料標準 FHIR規範趨勢 | `digicare-ehr-standard` |
 | 護理師照顧病人已經很忙，每班結束前還要花 1~2 小時「補寫」護理紀錄 | `digicare-nursing-burden` |
 | 360度醫囑紀錄 | `digicare-modules` |
@@ -316,7 +316,7 @@
 | 在日誌收集、傳輸的過程中，透過 SSL / mTLS、RSA 加密技術及私鑰解密驗證等機制，達到資料的來源不可否認性與資料完整性，不僅使系統具備可擴展性、高可用性，還確保了異常狀況下的災難復原能力，從而大幅提升資訊安全性，助力企業進一步通過 ISO 27001 稽核。 | `digilogs-iso27001-encryption` `digilogs-iso27001-audit` |
 | 我們協助企業面對多樣化的系統日誌挑戰，從前期的系統評估到後期的專案優化，我們堅持在每一個環節為客戶提供卓越與專業的後援。 | 略過：核心價值、產業背景或概念說明的敘述，沒有昕力可查證的事實 |
 | digiLogs 協助為某銀行蒐集系統資料，而後進行資料統合、解析及重新定義後於單一平台呈現，並透過交易路徑地圖，以不同權限層級的劃分，當系統發生問題時，快速標記出問題點，同步自動向維運人員提出示警，加快查找問題所在並進行修復。 | `digilogs-case-bank-path-map` |
-| 國泰人壽每月約需存取 6 TB 的 logs日誌數據，透過 digiLogs 快速的水平擴展機制（分片），能夠整合多台系統資料運作記錄，進一步整合及分析，並匯入同一平台輕鬆管理大量且每日增長的數據資料。 | `client-cathay-life` `digilogs-case-cathay-life` |
+| 國泰人壽每月約需存取 6 TB 的 logs日誌數據，透過 digiLogs 快速的水平擴展機制（分片），能夠整合多台系統資料運作記錄，進一步整合及分析，並匯入同一平台輕鬆管理大量且每日增長的數據資料。 | `digilogs-case-cathay-life` |
 | 網路銀行日誌管理 | `digilogs-case-online-banking-title` |
 | 銀行端系統客戶單日日誌收集數據量多達 50 GB（每月約1.5 TB），舊有系統維運能力有限且難應對日趨複雜的管理需求。導入昕力自有研發產品「 digiLogs 」後，因其單一介面跨平台 log 查詢、流量監控、視覺化報表統計、即時告警等特點，管理效率大增。 | `digilogs-case-online-banking` |
 
@@ -325,11 +325,11 @@
 | 段落 | 狀態 |
 |---|---|
 | ISO27001 日誌存錄 - digiLogs - 昕力資訊TPIsoftware | 略過：頁面的 title，沒有可查證的內容 |
-| ISO 27001 稽核 | `digilogs-iso27001-audit` |
+| ISO 27001 稽核 | `digilogs-iso27001-audit`（他頁） |
 | 不只強化ICT策略 日誌管理更是您邁向 ISO 27001合規的關鍵武器！ | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 日誌是 ICT 策略的關鍵角色，不僅詳實記錄事件、追蹤軌跡的來龍去脈，更可幫助組織以大局視角進行監控、分析，讓組織可以快速識別和回應潛在威脅，從而大幅提升資訊安全性，以進一步通過 ISO 27001 稽核。擁有可視式化、易於使用的日誌管理系統是企業組織維護系統安全不可或缺的利器。 | 略過：核心價值、產業背景或概念說明的敘述，沒有昕力可查證的事實 |
 | 1日支援 | `digilogs-10-million-logs-a-day` |
-| 1000 | `digilogs-10-million-logs-a-day` `digirunner-tps` |
+| 1000 | `digilogs-10-million-logs-a-day` |
 | 1次監管 | `digilogs-100-servers` |
 | 以每秒處理 10,000 事件數的優質效能，集中管理日誌資料滿足大量監控需求，因應稽查所需，不須逐台登入蒐集稽核資訊，大幅縮短時程，提高效率。 | `digilogs-10000-events-per-second` |
 | 1站控管 | `digilogs-access-control` |
@@ -356,7 +356,7 @@
 | 7 x 24 全天候技術支援 為企業管理把關 | `digimars-support-7x24` |
 | 一站式的流程服務及技術支援，確保企業客戶在使用社群版 MongoDB 時無後顧之憂，滿足了 IT 管理人員在使用 MongoDB 時的全方位管理需求。 | `digimars-one-stop-service` |
 | 原系統每日超過 4000 萬筆 CDR 通話紀錄，採用傳統 RDB 資料庫，無法有效進行資料處理與彙整，且耗費過多時間與人力監控龐大資料庫，每年需負擔高額 RDB(Oracle) 授權成本，改用 MongoDB Cluster 機制後，資料處理效能提高 5 倍，監控機制採用 digiMars 自動即時監控，優化管理效率。 | `digimars-case-cdr` |
-| 原採用傳統 RDB 資料庫，每日需處理海量的保險契約，資料庫不僅需即時同步，更需被安全地儲存。國泰人壽選擇 digiMars 來管理超過 20 台 MongoDB 伺服器，及進行高達 100 TB 的數據備份和監控，顯著提高了 MongoDB 監控效率，成功達到資料庫安全需求，贏得了客戶的信任。 | `client-cathay-life` `digimars-case-cathay-life` |
+| 原採用傳統 RDB 資料庫，每日需處理海量的保險契約，資料庫不僅需即時同步，更需被安全地儲存。國泰人壽選擇 digiMars 來管理超過 20 台 MongoDB 伺服器，及進行高達 100 TB 的數據備份和監控，顯著提高了 MongoDB 監控效率，成功達到資料庫安全需求，贏得了客戶的信任。 | `digimars-case-cathay-life` |
 
 ## https://www.tpisoftware.com/products/digirunner
 
@@ -368,8 +368,8 @@
 | 內建零信任的 API 存取防護機制，支援 OIDC /OAuth2 等技術標準，具備即時監控與告警，可防止 API 惡意攻擊與資料外洩，有效維持系統服務的安全性。 | `digirunner-zero-trust` |
 | 提供完整 API 生命周期管理，更遵循 Open API 規範，支援 OAuth2.0 及 OIDC（OpenID Connect）的安全規範，確保與國際標準一致，在擁有管理、分析和部署 API 的安全環境下，以適於開放銀行、政府，及企業跨系統管理應用，為企業實現 API 為核心的 API-First 策略。 | `digirunner-api-lifecycle` |
 | 支援地、雲端部署及 K8s 微服務架構 | `digirunner-deployment` |
-| 保險產業 | `insurering-rule-engine` `insurering-business-logic` |
-| 政府機關 | `systalk-chat-solutions` `systalk-rpa-government` |
+| 保險產業 | `insurering-rule-engine` `insurering-business-logic`（他頁） |
+| 政府機關 | `systalk-chat-solutions` `systalk-rpa-government`（他頁） |
 | 全面滿足前端體驗 提升客戶滿意度和互動性 | 略過：digiRunner、InsureRing 各產業頁籤的標語，沒有具體功能或數字 |
 | 遵循監管機關稽核 100 % 符合金融檢查規範 | `digirunner-finance-compliance-100` |
 | 開放銀行與上雲創新服務 構建金融生態系 | 略過：digiRunner、InsureRing 各產業頁籤的標語，沒有具體功能或數字 |
@@ -388,8 +388,8 @@
 | API Key 識別認證 | `digirunner-financial-inspection` |
 | 採用 OAuth 2.0 | `digirunner-financial-inspection` |
 | 深受企業客戶讚譽、信賴 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
-| 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。該平台獲全球金融雜誌 (Global Finance)頒發「The Innovators 2020 Cash Management」獎。 | `client-taishin-bank` `digirunner-case-taishin` `award-global-finance-2020` |
-| 為臺北市政府建置符合統一標準的API管理平台，使各機關的異質應用系統資料介接，讓市府推動資料開放政策，拓展創新應用之可行性，極大化開放資料加值應用與民眾參與公共政策。此外，昕力顧問團隊更協助市府建立API管理制度，並輔導各級機關一一導入上線。 | `client-taipei-city` `digirunner-case-taipei-city` |
+| 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。該平台獲全球金融雜誌 (Global Finance)頒發「The Innovators 2020 Cash Management」獎。 | `digirunner-case-taishin` `award-global-finance-2020` |
+| 為臺北市政府建置符合統一標準的API管理平台，使各機關的異質應用系統資料介接，讓市府推動資料開放政策，拓展創新應用之可行性，極大化開放資料加值應用與民眾參與公共政策。此外，昕力顧問團隊更協助市府建立API管理制度，並輔導各級機關一一導入上線。 | `digirunner-case-taipei-city` |
 | API管理（APIM）平台如何打造開放銀行，落地共享金融 | 略過：部落格文章連結的標題 |
 
 ## https://www.tpisoftware.com/products/digirunner-cloud
@@ -397,28 +397,28 @@
 | 段落 | 狀態 |
 |---|---|
 | 在我們支持的雲平台中選擇最適合您的環境，點擊“開始免費使用”，即可立即體驗 30天 digiRunner Cloud 的強大功能。 | `digirunner-cloud-trial` |
-| 0.49 | `digirunner-cloud-price-hourly` |
-| 3,999 | `digirunner-cloud-price-annual` |
-| < 50 million | `digirunner-cloud-api-calls` |
-| 500GB | `digirunner-cloud-throughput` |
-| 0.29 | `digirunner-cloud-price-hourly` |
-| 2,499 | `digirunner-cloud-price-annual` |
-| > 50 million | `digirunner-cloud-api-calls` |
-| > 500GB | `digirunner-cloud-throughput` |
-| 0.59 | `digirunner-cloud-price-hourly` |
-| 4,999 | `digirunner-cloud-price-annual` |
-| 0.35 | `digirunner-cloud-price-hourly` |
-| 2,999 | `digirunner-cloud-price-annual` |
-| 數據將以 RDB 格式保存在 Redis 資料庫。資料庫可根據客戶需求進行配置。 我們的金融產業合作夥伴多採用具高可用性的 Active/Standby 架構。若預算較高，可結合 Active/Active 架構與災難恢復，或採 Active/Active/Standby 三模式架構，以便能在故障發生後快速備份及復原。 | `digirunner-redis-storage` |
-| digiRunner 內建專利認證的獨家智慧快取技術（Smart Caching），可依據 API 負載情形動態式儲存多個節點的數據。 | `digirunner-smart-caching-patent` |
-| 安裝，免費試用 30 天。 | `digirunner-aws-regions` |
-| 每秒交易量（Transactions Per Second）係指系統每秒能處理的交易數量。 常規 2 Core CPU / 4GB RAM 的 digiRunner 已足以應付企業一般用量。我們建議採用 4 Core CPU / 8GB RAM 的型號，每秒交易量的效能可達 300-1000 TPS。實際每秒交易量取決於不同環境的配置。 | `digirunner-tps` |
-| digiRunner 透過 Nginx 將流量分配到各個伺服器端點，以確保 API 服務的穩定性。此外，也可整合現有的 WAF 廠商，如 F5 或 No Name Security。 | `digirunner-nginx-waf` |
-| digiRunner 支援 OAuth 2.0、API Key、X API Key、白名單（Whitelist）與 HTTP 基本認證。為確保數據完整性和保密性，可選擇使用 JWT 標準（RFC-7519）的JWS (RFC-7515) 或 JWE (RFC-7516) 對數據進行加密或解密。 | `digirunner-auth-methods` |
+| 0.49 | `digirunner-cloud-price-hourly`（他頁） |
+| 3,999 | `digirunner-cloud-price-annual`（他頁） |
+| < 50 million | `digirunner-cloud-api-calls`（他頁） |
+| 500GB | `digirunner-cloud-throughput`（他頁） |
+| 0.29 | `digirunner-cloud-price-hourly`（他頁） |
+| 2,499 | `digirunner-cloud-price-annual`（他頁） |
+| > 50 million | `digirunner-cloud-api-calls`（他頁） |
+| > 500GB | `digirunner-cloud-throughput`（他頁） |
+| 0.59 | `digirunner-cloud-price-hourly`（他頁） |
+| 4,999 | `digirunner-cloud-price-annual`（他頁） |
+| 0.35 | `digirunner-cloud-price-hourly`（他頁） |
+| 2,999 | `digirunner-cloud-price-annual`（他頁） |
+| 數據將以 RDB 格式保存在 Redis 資料庫。資料庫可根據客戶需求進行配置。 我們的金融產業合作夥伴多採用具高可用性的 Active/Standby 架構。若預算較高，可結合 Active/Active 架構與災難恢復，或採 Active/Active/Standby 三模式架構，以便能在故障發生後快速備份及復原。 | `digirunner-redis-storage`（他頁） |
+| digiRunner 內建專利認證的獨家智慧快取技術（Smart Caching），可依據 API 負載情形動態式儲存多個節點的數據。 | `digirunner-smart-caching-patent`（他頁） |
+| 安裝，免費試用 30 天。 | `digirunner-aws-regions`（他頁） |
+| 每秒交易量（Transactions Per Second）係指系統每秒能處理的交易數量。 常規 2 Core CPU / 4GB RAM 的 digiRunner 已足以應付企業一般用量。我們建議採用 4 Core CPU / 8GB RAM 的型號，每秒交易量的效能可達 300-1000 TPS。實際每秒交易量取決於不同環境的配置。 | `digirunner-tps`（他頁） |
+| digiRunner 透過 Nginx 將流量分配到各個伺服器端點，以確保 API 服務的穩定性。此外，也可整合現有的 WAF 廠商，如 F5 或 No Name Security。 | `digirunner-nginx-waf`（他頁） |
+| digiRunner 支援 OAuth 2.0、API Key、X API Key、白名單（Whitelist）與 HTTP 基本認證。為確保數據完整性和保密性，可選擇使用 JWT 標準（RFC-7519）的JWS (RFC-7515) 或 JWE (RFC-7516) 對數據進行加密或解密。 | `digirunner-auth-methods`（他頁） |
 | digiRunner 可否達到 99.9% 的正常運行時間？ | `digirunner-uptime-999` |
 | 針對系統的高可用性，digiRunner 能否支援 5 個以上的 Pod？ | 略過：FAQ 的問題句；可查證的內容在答案裡 |
 | 能支援，但目前在 AWS Marketplace 上，我們設了一項 5 個 Pod 的限制。如您有意洽談需求，請主動聯繫我們。 | `digirunner-aws-pod-limit` |
-| Amazon EC2 | `digirunner-cloud-infrastructure` |
+| Amazon EC2 | `digirunner-cloud-infrastructure`（他頁） |
 
 ## https://www.tpisoftware.com/products/digirunner/awsmarketplace
 
@@ -455,7 +455,7 @@
 | A：digiRunner 支援 OAuth 2.0、API Key、X API Key、白名單（Whitelist）與 HTTP 基本認證。為確保數據完整性和保密性，可選擇使用 JWT 標準（RFC-7519）的JWS (RFC-7515) 或 JWE (RFC-7516) 對數據進行加密或解密。 | `digirunner-auth-methods` |
 | Q8：digiRunner 可否達到 99.9% 的正常運行時間？ | 略過：FAQ 的問題句；可查證的內容在答案裡 |
 | Q9：針對系統的高可用性，digiRunner 能否支援 5 個以上的 Pod？ | 略過：FAQ 的問題句；可查證的內容在答案裡 |
-| A：能支援，但目前在 AWS Marketplace 上，我們設了一項 5 個 Pod 的限制。如您有意洽談需求，請主動聯繫我們。 | `digirunner-aws-pod-limit` |
+| A：能支援，但目前在 AWS Marketplace 上，我們設了一項 5 個 Pod 的限制。如您有意洽談需求，請主動聯繫我們。 | `digirunner-aws-pod-limit`（他頁） |
 | Q10：免費試用期間可使用哪些功能？ | 略過：FAQ 的問題句；可查證的內容在答案裡 |
 | Amazon EC2 | `digirunner-cloud-infrastructure` |
 | 1.基礎設施價格 | 略過：AWS Marketplace 注意事項的編號標題，內容已另收 |
@@ -497,23 +497,23 @@
 | 段落 | 狀態 |
 |---|---|
 | 實現零信任身份認證 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
-| FIDO2 | `gadodido-fido2-uaf` `gadodido-passwordless` `gadodido-mfa` `gadodido-standards` `gadodido-transactions` |
-| gadoDIDO 為通過 FIDO 認證的身份驗證應用，能強化身份驗證安全,有效防止帳號盜用和釣魚攻擊，而透過生物辨識登入與驗證能簡化登入流程,大幅提升用戶體驗。企業不僅可實現跨平台身份驗證,達到簡化IT管理,同時符合法規要求,為企業數位轉型奠定堅實基礎。 | `gadodido-fido-certified` |
-| 透過 FIDO 身分鑑別和身分認證以確認使用者身分，減少多組密碼登入、帳號盗用。 | `gadodido-account-takeover` |
-| FIDO2 無密碼 零信任身分驗證 | `gadodido-passwordless` |
-| gadoDIDO結合FIDO2和UAF的生物辨識驗證識別與多因子核身流程，協助各產業提供數位服務應用之時， 杜絕網路威脅並大幅降低資料外洩風險。 | `gadodido-mfa` |
-| 壽險產險業 | `gadodido-industries` |
-| gadoDIDO 為金融機構提供集團式的統一身分驗證管理，實現虛實整合的無縫體驗。用戶僅需註冊一次，即可在集團內各通路輕鬆驗證身份，享受24小時不間斷的金融服務。 | `gadodido-finance-group` |
-| 網路銀行/行動銀行 | `gadodido-finance-uses` |
-| 證券/期貨開戶 | `gadodido-finance-uses` |
-| gadoDIDO可實現集團統一管控，用戶只需驗證一次，即可使用於集團內所有應用，大幅簡化用戶申辦與投保流程。 | `gadodido-insurance` |
-| 支援包括FIDO2和UAF，提高解決方案的可擴展性和互通性。 | `gadodido-standards` |
-| gadoDIDO 運用國際 FIDO 認證的身份認證技術，為企業和用戶構建堅實的安全防線。在日益複雜的網路環境中，不僅保護數據安全，同時實踐數位創新和轉型。 | `gadodido-fido-technology` |
-| 為 OWASP Top 10 / CWE Top 25 | `gadodido-owasp` |
-| 有效的雙因子驗證/強認證 | `gadodido-2fa` |
-| 集團或全行集中授權後台管理 | `gadodido-central-admin` |
-| 授權認證費用統一管控 -通路與各應用平台成本分攤 | `gadodido-cost-control` |
-| gadoDIDO結合國際標準FIDO2、UAF，提供用戶在APP與網頁端都能以無密碼方式進行登入及身分驗證進行線上交易，可縮短交易時間並確保每筆交易的安全性。 | `gadodido-transactions` |
+| FIDO2 | `gadodido-fido2-uaf` `gadodido-passwordless` `gadodido-mfa` `gadodido-standards` `gadodido-transactions`（他頁） |
+| gadoDIDO 為通過 FIDO 認證的身份驗證應用，能強化身份驗證安全,有效防止帳號盜用和釣魚攻擊，而透過生物辨識登入與驗證能簡化登入流程,大幅提升用戶體驗。企業不僅可實現跨平台身份驗證,達到簡化IT管理,同時符合法規要求,為企業數位轉型奠定堅實基礎。 | `gadodido-fido-certified`（他頁） |
+| 透過 FIDO 身分鑑別和身分認證以確認使用者身分，減少多組密碼登入、帳號盗用。 | `gadodido-account-takeover`（他頁） |
+| FIDO2 無密碼 零信任身分驗證 | `gadodido-passwordless`（他頁） |
+| gadoDIDO結合FIDO2和UAF的生物辨識驗證識別與多因子核身流程，協助各產業提供數位服務應用之時， 杜絕網路威脅並大幅降低資料外洩風險。 | `gadodido-mfa`（他頁） |
+| 壽險產險業 | `gadodido-industries`（他頁） |
+| gadoDIDO 為金融機構提供集團式的統一身分驗證管理，實現虛實整合的無縫體驗。用戶僅需註冊一次，即可在集團內各通路輕鬆驗證身份，享受24小時不間斷的金融服務。 | `gadodido-finance-group`（他頁） |
+| 網路銀行/行動銀行 | `gadodido-finance-uses`（他頁） |
+| 證券/期貨開戶 | `gadodido-finance-uses`（他頁） |
+| gadoDIDO可實現集團統一管控，用戶只需驗證一次，即可使用於集團內所有應用，大幅簡化用戶申辦與投保流程。 | `gadodido-insurance`（他頁） |
+| 支援包括FIDO2和UAF，提高解決方案的可擴展性和互通性。 | `gadodido-standards`（他頁） |
+| gadoDIDO 運用國際 FIDO 認證的身份認證技術，為企業和用戶構建堅實的安全防線。在日益複雜的網路環境中，不僅保護數據安全，同時實踐數位創新和轉型。 | `gadodido-fido-technology`（他頁） |
+| 為 OWASP Top 10 / CWE Top 25 | `gadodido-owasp`（他頁） |
+| 有效的雙因子驗證/強認證 | `gadodido-2fa`（他頁） |
+| 集團或全行集中授權後台管理 | `gadodido-central-admin`（他頁） |
+| 授權認證費用統一管控 -通路與各應用平台成本分攤 | `gadodido-cost-control`（他頁） |
+| gadoDIDO結合國際標準FIDO2、UAF，提供用戶在APP與網頁端都能以無密碼方式進行登入及身分驗證進行線上交易，可縮短交易時間並確保每筆交易的安全性。 | `gadodido-transactions`（他頁） |
 
 ## https://www.tpisoftware.com/products/gadodido
 
@@ -544,7 +544,7 @@
 |---|---|
 | 24/7全天候監控 | `gadoscout-24-7` |
 | 設定層級警報，確保關鍵威脅第一時間被處理 | `gadoscout-tiered-alerts` |
-| 業界唯一主動識別科技 2分鐘定位問題 | `digilogs-claim-2-minutes` |
+| 業界唯一主動識別科技 2分鐘定位問題 | `digilogs-claim-2-minutes`（他頁） |
 
 ## https://www.tpisoftware.com/products/greenswift
 
@@ -583,7 +583,7 @@
 | 革新保險科技，引領數位轉型 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 創新保險微服務平台 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | InsureBrick是專為產壽險保險公司及保經代公司打造的保險科技平台，我們的系統採用了先進的微服務技術，每個功能都是獨立的模組，專為滿足不同客戶的需求而設計。這種模組化的統一串接格式，為您提供了多項無可比擬的優勢。 | `insurebrick-platform` |
-| 業界唯一 | `digilism-family-digilogs` `digilogs-claim-2-minutes` `insurebrick-claim-only` |
+| 業界唯一 | `insurebrick-claim-only` |
 | 具備輕量化、碎片化特性的保險模組平台 | `insurebrick-lightweight` |
 | 只需購買所需模組，也可串接客戶內外部系統 | `insurebrick-buy-modules` |
 | 為保險業提升服務效率加值 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
@@ -594,7 +594,7 @@
 | 保險電商中台 | `insurebrick-scenarios` |
 | 產險中台 | `insurebrick-scenarios` |
 | InsureBrick 為純網銀業者以微服務部屬建立網路投保平台，快速串接核心系統，模組化讓資訊功能易於擴充、彈性整合，更便於保險商品之上架，利於整體業務擴展，掌握市場商機。 | `insurebrick-case-online-insurance` |
-| 跨平台數位整合富邦人壽的行動投保網頁及App，導入昕力獨家4種系統模組，可彈性調整功能介面、快速上/下架商品。完善檢核機制模組，降低錯誤率及照會率。3分鐘快速成案，整合第三方支付平台，有效提高成交率，提供最速、最佳的保單購買體驗。 | `client-fubon-life` `insurebrick-case-fubon-life` |
+| 跨平台數位整合富邦人壽的行動投保網頁及App，導入昕力獨家4種系統模組，可彈性調整功能介面、快速上/下架商品。完善檢核機制模組，降低錯誤率及照會率。3分鐘快速成案，整合第三方支付平台，有效提高成交率，提供最速、最佳的保單購買體驗。 | `insurebrick-case-fubon-life` |
 | 更多保險科技成功案例 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 服務客戶 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 
@@ -603,14 +603,14 @@
 | 段落 | 狀態 |
 |---|---|
 | 開放銀行 Open Bankning - 昕力資訊TPIsoftware | 略過：頁面的 title，沒有可查證的內容 |
-| 開放銀行 | `testimonial-nccu-fintech` `digirunner-open-banking-3-stages` `digirunner-open-banking-fsc` `digirunner-open-banking-consulting` `cloud-bnpl` `outsourcing-domains` |
+| 開放銀行 | `digirunner-open-banking-3-stages` `digirunner-open-banking-fsc` `digirunner-open-banking-consulting` |
 | 在銀行客戶（消費者）的同意下，將資料開放給第三方平台（Third-Party Service Provider, TSP）使用，以開放應用程式介面（OpenAPI）共享相關數據資料，為客戶提供更多元及便利的服務。 | 略過：核心價值、產業背景或概念說明的敘述，沒有昕力可查證的事實 |
 | 什麼是開放銀行 (Open Banking)？ | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | Open Banking 起源於 2015 年歐盟的 The Revised Payment Services Directive (PSD2)，隔年（2016）八月，由英國率先要求其國內九家大型銀行要採用，並於 2018 年強制導入，之後各國政府如美國、澳洲、新加坡也紛紛定相關法令，鼓勵銀行加入 Open Banking 的行列。而這股風潮也從歐洲吹向台灣，2019 年，台灣金管會拍板定案，將台灣 Open Banking 導入分為三階段。 | `open-banking-history` `open-banking-taiwan-2019` |
 | 台灣開放銀行三階段 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
-| 2019 | `company-subsidiaries-sg-vn` `open-banking-taiwan-2019` `open-banking-stage-1` `digirunner-case-taipei-city-2019` `esg-consultant-zhao-boyuan-certifications` |
-| 第一階段 | `open-banking-stage-1` `esg-regulation-roadmap` |
-| 2020 | `company-milestone-2020-brand` `award-global-finance-2020` `open-banking-stage-2` |
+| 2019 | `open-banking-taiwan-2019` `open-banking-stage-1` |
+| 第一階段 | `open-banking-stage-1` |
+| 2020 | `open-banking-stage-2` |
 | 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。 | `open-banking-stage-2` |
 | 2021 Q1 | `open-banking-stage-3` |
 | 昕力資訊實現三階段開放銀行規範 | `digirunner-open-banking-3-stages` |
@@ -631,7 +631,7 @@
 | 銀行後台 系統服務 | 略過：開放銀行、開放政府流程圖的標籤與步驟編號 |
 | 客戶登入 | 略過：開放銀行、開放政府流程圖的標籤與步驟編號 |
 | 登入網路銀行 | 略過：開放銀行、開放政府流程圖的標籤與步驟編號 |
-| 網路銀行 | `digilogs-case-online-banking-title` `gadodido-finance-uses` |
+| 網路銀行 | `digilogs-case-online-banking-title` `gadodido-finance-uses`（他頁） |
 | 1. 核身畫面彈出 (外部URL) 2. User 輸入 ID/PWD | 略過：開放銀行、開放政府流程圖的標籤與步驟編號 |
 | 3. 驗證成功，取得 TSP Server (Client) 可取用Group List 4. 跳頁面供User勾選同意授權 | 略過：開放銀行、開放政府流程圖的標籤與步驟編號 |
 | 銀行回傳授權許可 | 略過：開放銀行、開放政府流程圖的標籤與步驟編號 |
@@ -652,8 +652,8 @@
 | 智慧政府 Open API 開放資料應用 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 落實服務型政策推動~台灣「智慧政府2.0」 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 我國為接軌世界先進國家推動數位服務轉型趨勢，並厚植我國數位競爭力，政府將推動「服務型智慧政府推動計畫」，因應行政院推動的推動智慧政府轉型趨勢，並厚植數位競爭力，配合智慧政府發展規劃，以「數位身分識別證New eID」、「資料交換骨幹網路 T-Road」及「數位服務個人化 MyData」為三大基礎架構，以資料為骨幹，應用微服務、API 服務平臺及區塊鏈等串連各機關間點對點政府資料流通服務，優化決策品質，建構下一階段智慧政府公私協力治理模式，落實智慧政府「以民為本數位政府」願景。 | 略過：核心價值、產業背景或概念說明的敘述，沒有昕力可查證的事實 |
-| 各縣市政府皆已逐一建置公部門內部的 API 管理平臺，包括2018年臺北市政府 API 平臺建置（昕力資訊建置已於2019年建置完成，預計三年內導入上百個 API 服務）、國發會於2020年二個大型API相關建置案(政府資料傳輸平臺( T-Road )建置委外服務案、智慧生活數位服務 MyData )、109年內政部資料交換整合管理平臺。 | `client-taipei-city` `digirunner-case-taipei-city-2019` |
-| 第一階段 | `open-banking-stage-1` `esg-regulation-roadmap` |
+| 各縣市政府皆已逐一建置公部門內部的 API 管理平臺，包括2018年臺北市政府 API 平臺建置（昕力資訊建置已於2019年建置完成，預計三年內導入上百個 API 服務）、國發會於2020年二個大型API相關建置案(政府資料傳輸平臺( T-Road )建置委外服務案、智慧生活數位服務 MyData )、109年內政部資料交換整合管理平臺。 | `digirunner-case-taipei-city-2019` |
+| 第一階段 | `open-banking-stage-1` `esg-regulation-roadmap`（他頁） |
 | digiRunner - 100% 合規、智慧政府的推手 | `digirunner-claim-gov-compliance-100` |
 
 ## https://www.tpisoftware.com/products/systalk-ai
@@ -670,13 +670,13 @@
 
 | 段落 | 狀態 |
 |---|---|
-| 100% | `digilism-patent-sla` `digilism-sla-100` `digilogs-access-control` `digirunner-finance-compliance-100` `digirunner-insurance-compliance-100` `digirunner-claim-gov-compliance-100` `smartfilling-self-maintained` `systalk-audit-coverage` `systalk-coach-stats` `aiso-100-percent-control` |
+| 100% | `aiso-100-percent-control` |
 | 超過 60% | `aiso-cio-survey` |
 | AISO 將世界級 AI 算力 安全地帶進企業內部， 讓 AI 不只是工具，而是企業長期可控的核心算力資產。 | 略過：核心價值、產業背景或概念說明的敘述，沒有昕力可查證的事實 |
 | AISO 整合企業所需的 AI 軟硬體 導入零困難 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | PHISON 群聯電子運用 | `aiso-phison-patent` |
 | 獨家專利 aiDAPTIV 技術， | `aiso-phison-patent` |
-| 政府部門 | `detect-case-petitions` `aiso-industries` |
+| 政府部門 | `aiso-industries` |
 | PHISON 獨家專利技術 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 別人跑不動的，PHISON 跑得動 + 跑得快 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 140 GB | `aiso-finetune-benchmark` |
@@ -714,7 +714,7 @@
 | 情緒感知：可精準分辨客戶的真實情緒，不會因片段字詞誤判 | `systalk-audit-emotion` |
 | 全天候 24/7 自動分析：全天候自動分析，無需人工干預，即時完成通話紀錄分析與報告生成，快速支援稽核需求 | `systalk-audit-24-7` |
 | 高準確率轉錄：語音轉錄準確率達 95% 以上 | `systalk-audit-95-percent` |
-| 24/7 | `gadoscout-24-7` `systalk-audit-24-7` `systalk-audit-coverage` `systalk-coach-stats` |
+| 24/7 | `systalk-audit-24-7` `systalk-audit-coverage` |
 | Q1 是否可以整合現有錄音系統？ | 略過：FAQ 的問題句；可查證的內容在答案裡 |
 | Q2 資料是否會外流？平台如何保護安全 | 略過：FAQ 的問題句；可查證的內容在答案裡 |
 | Q3 需要具備技術背景才能操作嗎？ | 略過：FAQ 的問題句；可查證的內容在答案裡 |
@@ -743,9 +743,9 @@
 | Step 2 | `systalk-chat-nlu-steps` |
 | Step 3 | `systalk-chat-nlu-steps` |
 | Step 4 | `systalk-chat-nlu-steps` |
-| 政府機關 | `systalk-chat-solutions` `systalk-rpa-government` |
+| 政府機關 | `systalk-chat-solutions` |
 | 醫療集團 | `systalk-chat-solutions` |
-| YouBike 小管家 AI 客服透過 SysTalk.Chat 在官方網站、官方App 等渠道建立完整且最擬人的客服問答機制，全天候輔助真人客服服務廣大的用戶群，包含了場站資訊、租借狀態、失物招領、通報協尋等項目，提供24小時不間斷的線上資訊服務。 | `client-youbike` `systalk-chat-case-youbike` |
+| YouBike 小管家 AI 客服透過 SysTalk.Chat 在官方網站、官方App 等渠道建立完整且最擬人的客服問答機制，全天候輔助真人客服服務廣大的用戶群，包含了場站資訊、租借狀態、失物招領、通報協尋等項目，提供24小時不間斷的線上資訊服務。 | `systalk-chat-case-youbike` |
 | 昕力團隊協助Wemo Scooter打造智能客服威威，於App提供24小時諮詢服務，可即時回答操作使用、保險車禍相關、騎乘注意事項，並提供方案介紹服務，讓使用者不論是否在客服上班時間，都能完整獲得資訊，輕鬆上手租用服務。 | `client-wemo` `systalk-chat-case-wemo` |
 | 編、派、執三大模組搭配獨家AI技術 昕力SysTalk.RPA 打造Intel RRK認證RPA解決方案 | `cert-systalk-rpa-intel-rrk` |
 | SysTalk.Chat 提供全通道 AI 智能客服，確保文字和語音客服進線不漏接。歡迎聯繫我們，讓客戶滿意度快速提升的客服系統！ | `systalk-chat-omnichannel` |
@@ -756,8 +756,8 @@
 |---|---|
 | SysTalk.Coach 以生成式 AI 打造企業專屬的情境化陪練與智能考核系統，讓業務、客服、金融理專等第一線人員在上線前完成足夠的實戰演練，縮短 70% 新人養成週期，主管從帶人瑣事中解放，幫助企業將經驗有效傳承。 | `systalk-coach-70-percent` `systalk-coach-overview` |
 | 7×24 不限次數自主訓練 | `systalk-coach-7x24` |
-| 24/7 | `gadoscout-24-7` `systalk-audit-24-7` `systalk-audit-coverage` `systalk-coach-stats` |
-| 100% | `digilism-patent-sla` `digilism-sla-100` `digilogs-access-control` `digirunner-finance-compliance-100` `digirunner-insurance-compliance-100` `digirunner-claim-gov-compliance-100` `smartfilling-self-maintained` `systalk-audit-coverage` `systalk-coach-stats` `aiso-100-percent-control` |
+| 24/7 | `systalk-coach-stats` |
+| 100% | `systalk-coach-stats` |
 | 直接上線面對客戶 | 略過：SysTalk.Coach 「傳統培訓」流程圖的標籤 |
 | # 練習量不足即上第一線 失誤風險高 | 略過：SysTalk.Coach 「傳統培訓」流程圖的標籤 |
 | 依企業產品、話術與合規要求設定貼近實務的客戶互動情境，不需依賴現有完整課程素材即可啟動。 | `systalk-coach-five-steps` |
@@ -813,13 +813,13 @@
 | 備註：1 為完全不會變動，5 為確定會變動。 | 略過：RPA 數位勞動力分析量表的選項與說明 |
 | 備註：1 為不需人為判斷，5 為完全需人為判斷。 | 略過：RPA 數位勞動力分析量表的選項與說明 |
 | 備註：1 為完全沒有，5 為有許多例外狀況。 | 略過：RPA 數位勞動力分析量表的選項與說明 |
-| 政府機關 | `systalk-chat-solutions` `systalk-rpa-government` |
+| 政府機關 | `systalk-rpa-government` |
 | SysTalk.RPA 協助政府機關與時俱進，應用自動化工具改善繁複報表處理、老舊系統串接和無紙化政策支援，從墨守成規的體制框架中跳脫，打造為民服務的創新思維，兼顧效率、創新與民眾滿意度的提升。 | `systalk-rpa-government` |
 | 精簡人力，客戶至上 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 從處理繁瑣流程到專注在客戶服務，RPA 可應用 e-KYC 數位識別身份認證、客戶關係管理、即時匯率更新和新聞輿情資料蒐集，安全合規的法規遵從，賦能銀行組織更好的彈性，成就非凡的金融服務體驗。 | `systalk-rpa-banking` |
 | 客戶驅動，奪得商機 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 | 翻轉保險思維，從保單銷售到即時回應客戶需求，應用 RPA 智慧業務助理報價自動化、續保作業自動化，結合 AI 智慧助理服務，加速理賠處理進度，搶先提供報價，及早取得商機。 | `systalk-rpa-insurance` |
-| 24/7 | `gadoscout-24-7` `systalk-audit-24-7` `systalk-audit-coverage` `systalk-coach-stats` |
+| 24/7 | `gadoscout-24-7` `systalk-audit-24-7` `systalk-audit-coverage` `systalk-coach-stats`（他頁） |
 | Q1： SysTalk.RPA 相較市面上的他牌 RPA 產品有甚麼優勢？ | 略過：FAQ 的問題句；可查證的內容在答案裡 |
 | A： 公司員工80%以上技術人員組成，與原廠技術合作偕同在地化開發，實現 RPA 落地至台灣各產業。自有 AI 研發團隊，結合客製化擴增模組，小至快速見效大至長期規模導入，均已獲得客戶實證。 | `company-engineers-80` `systalk-rpa-local-dev` |
 | Q2： SysTalk.RPA 的計價方式為何？ | 略過：FAQ 的問題句；可查證的內容在答案裡 |
@@ -833,7 +833,7 @@
 
 | 段落 | 狀態 |
 |---|---|
-| TCO 比業界低50% | `systalk-viki-tco-50` `vikibundle-tco-50` |
+| TCO 比業界低50% | `systalk-viki-tco-50` |
 | 內建雙專業評測之主流 LLM (如 Phi-4..) | `systalk-viki-bundle-llm` |
 | Server + L40S x2 | `systalk-viki-bundle-hardware` |
 | Server + H100 x1 | `systalk-viki-bundle-hardware` |
@@ -847,7 +847,7 @@
 | 企業 AI 即戰力！ AI 一體機 TCO 比業界低50% | `vikibundle-tco-50` |
 | 硬體*[1] (GPU) | `vikibundle-hardware` |
 | RTX PRO6000 x2 | `vikibundle-hardware` |
-| H100 x1 | `systalk-viki-bundle-hardware` `vikibundle-hardware` |
+| H100 x1 | `vikibundle-hardware` |
 | 6000Ada x6 | `vikibundle-hardware` |
 | 文件梳理 (30份檔案) | `vikibundle-services` |
 | 1個企業內部助理 (如：HR 助理) | `vikibundle-scenarios` |
@@ -889,11 +889,11 @@
 | 迅速完成保險產品測試及驗證 一周內迅速上市 | `insurering-one-week` |
 | 新產品上架縮短時間達90%以上，迅速搶占市場商機。 | `insurering-90-percent` |
 | 由驗證到保險產品上下架，皆能快速進行，提高營運效率。 | 略過：digiRunner、InsureRing 各產業頁籤的標語，沒有具體功能或數字 |
-| 純網路保險公司 | `insurebrick-scenarios` |
-| 保險電商中台 | `insurebrick-scenarios` |
-| 產險中台 | `insurebrick-scenarios` |
-| 跨平台數位整合富邦人壽的行動投保網頁及App，導入昕力獨家4種系統模組，可彈性調整功能介面、快速上/下架商品。完善檢核機制模組，降低錯誤率及照會率。3分鐘快速成案，整合第三方支付平台，有效提高成交率，提供最速、最佳的保單購買體驗。 | `client-fubon-life` `insurebrick-case-fubon-life` |
-| 協助新光人壽建置集中化規則引擎，e化整合產品及計費資料，如：保險核心計算、公式、檢核模組等，整體降低50%作業成本。簡化商品上架流程，節省60%上架時間，資料線上即時歸檔，資料一致且正確，全面優化團險內部資料統整流程。 | `client-shin-kong-life` `insurering-case-shin-kong-life` |
+| 純網路保險公司 | `insurebrick-scenarios`（他頁） |
+| 保險電商中台 | `insurebrick-scenarios`（他頁） |
+| 產險中台 | `insurebrick-scenarios`（他頁） |
+| 跨平台數位整合富邦人壽的行動投保網頁及App，導入昕力獨家4種系統模組，可彈性調整功能介面、快速上/下架商品。完善檢核機制模組，降低錯誤率及照會率。3分鐘快速成案，整合第三方支付平台，有效提高成交率，提供最速、最佳的保單購買體驗。 | `client-fubon-life` `insurebrick-case-fubon-life`（他頁） |
+| 協助新光人壽建置集中化規則引擎，e化整合產品及計費資料，如：保險核心計算、公式、檢核模組等，整體降低50%作業成本。簡化商品上架流程，節省60%上架時間，資料線上即時歸檔，資料一致且正確，全面優化團險內部資料統整流程。 | `insurering-case-shin-kong-life` |
 | 服務客戶 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 
 ## https://www.tpisoftware.com/solutions/interactivehealth
@@ -906,10 +906,10 @@
 | 醫院照護服務 | `interactivehealth-scenarios` |
 | 保險客戶互動 | `interactivehealth-scenarios` |
 | 政府健康宣導 | `interactivehealth-scenarios` |
-| 昕力協助永豐銀行以健康生活角度出發建置『汗水不白流』APP，透過整合跨系統串接及監管海量運動數據，建立高效體驗的同時，讓用戶運動燃燒卡路里能轉換為信用卡點數回饋。 | `client-sinopac` `interactivehealth-case-sinopac` |
-| 昕力協助好適康開發個人健康管理 APP，將使用者每日健康數據儲存於雲端，並以圖表方式呈現健康記錄及臨床數值，且建置就診預約、用藥提醒、疫苗接種日期記錄等功能，遇緊急狀況，可由 APP 啟動電話撥號，聯絡醫院醫師。 | `client-good-health` `interactivehealth-case-good-health` |
+| 昕力協助永豐銀行以健康生活角度出發建置『汗水不白流』APP，透過整合跨系統串接及監管海量運動數據，建立高效體驗的同時，讓用戶運動燃燒卡路里能轉換為信用卡點數回饋。 | `interactivehealth-case-sinopac` |
+| 昕力協助好適康開發個人健康管理 APP，將使用者每日健康數據儲存於雲端，並以圖表方式呈現健康記錄及臨床數值，且建置就診預約、用藥提醒、疫苗接種日期記錄等功能，遇緊急狀況，可由 APP 啟動電話撥號，聯絡醫院醫師。 | `interactivehealth-case-good-health` |
 | 醫院服務 APP | `interactivehealth-case-hospital-title` |
-| 為擁有良好醫療品質，減少民眾就醫等待時間，昕力協助輔大醫院建置全方位服務 APP，整合醫院現有系統，提供預約掛號、看診檢查進度查詢、行動繳費、住院申請、慢箋領藥等功能，也提供如家戶設定、衛教說明等即時健康資訊。 | `client-fu-jen-hospital` `interactivehealth-case-fu-jen` |
+| 為擁有良好醫療品質，減少民眾就醫等待時間，昕力協助輔大醫院建置全方位服務 APP，整合醫院現有系統，提供預約掛號、看診檢查進度查詢、行動繳費、住院申請、慢箋領藥等功能，也提供如家戶設定、衛教說明等即時健康資訊。 | `interactivehealth-case-fu-jen` |
 | 服務客戶 | 略過：區塊標題、標語或 CTA，沒有可查證的內容 |
 
 ## https://www.tpisoftware.com/solutions/smartclaim
@@ -944,14 +944,14 @@
 | 強大的軟體導入服務，為客戶完善內外部系統整合、串接及功能建置需求，滿足多元應用產業及場景。 | `detect-integration-service` |
 | 簡化工作流程、降低人為誤差，快速解決 80% 之文書工作，提升企業營運效率。 | `detect-80-percent` |
 | 建立推薦模型以分析民眾陳情來信，提供政府部門回覆文稿範本，以精準回應民眾之訴求，並減輕逐一撰稿回覆所耗費之人力與時間，案件處理更有效率。 | `detect-case-petitions` |
-| 藉由自然語言技術，分析診斷證明書、單據等文件，強化保險業智能理賠系統，解決傳統流程中大量人力需求，作業效率大幅的提升，並透過進化系統持續優化模型精準度，提供最佳化理賠給付計算結果。 | `smartclaim-case-medical-documents` |
+| 藉由自然語言技術，分析診斷證明書、單據等文件，強化保險業智能理賠系統，解決傳統流程中大量人力需求，作業效率大幅的提升，並透過進化系統持續優化模型精準度，提供最佳化理賠給付計算結果。 | `smartclaim-case-medical-documents`（他頁） |
 
 ## https://www.tpisoftware.com/solutions/uiux
 
 | 段落 | 狀態 |
 |---|---|
 | 以使用者中心的設計思維出發，從創意發想、原型打造、介面設計到實際導入數位產品服務，提升線上線下終端用戶體驗，掌握跨屏接觸點與客戶互動，聆聽客戶心聲，並從中啟發，共創顧客旅程。 | 略過：核心價值、產業背景或概念說明的敘述，沒有昕力可查證的事實 |
-| 政府單位 | `company-industries` `uiux-industries` `outsourcing-industries` |
+| 政府單位 | `uiux-industries` |
 | 透過使用者洞察，從當地使用者角度出發，除了傳承母集團企業形象，亦塑造在地化新元素，鮮明的視覺設計，情境式的描述產品，認真雕琢每一個設計細節，規劃契合企業形象與設計體驗一致性的形象網頁。 | `uiux-case-brand-site` |
 | 結合社群與支付，提供P2P轉帳、分帳，電支交易等服務，從日常交易到週期性帳單處理。介面設計遵循Line集團規範，適度引導與透過文字字級與字重區分資訊內容權重，讓使用者一眼掌握帳戶餘額與消費動態。 | `uiux-case-e-payment` |
 

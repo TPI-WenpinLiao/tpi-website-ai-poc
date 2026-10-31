@@ -3,7 +3,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse } from 'yaml';
 import { candidates, expand, render } from './extract-facts.mjs';
-import { chunkStrings, textBlocks } from './source-pages.mjs';
+import { chunkStrings, quoteOnPage, textBlocks } from './source-pages.mjs';
+import { validateFacts } from './facts.mjs';
 
 const source = {
   groups: [
@@ -55,12 +56,32 @@ test('chunkStrings decodes JS string literals', () => {
 
 test('candidates keeps fact-like blocks and marks what covers them', () => {
   const blocks = ['擁有 7 項發明專利', '擁有 7 項發明專利', '了解更多', '服務超過 100 家', '台新銀行', '© 2026', 'ab'];
-  const facts = [{ id: 'patents', quote: '7 項發明專利' }];
+  const facts = [
+    { id: 'patents', quote: '7 項發明專利', url: 'https://x.test/a' },
+    { id: 'patents-b', quote: '7 項發明專利', url: 'https://x.test/b' },
+    { id: 'bank', quote: '台新銀行', url: 'https://x.test/b' },
+  ];
   const ignore = [{ match: /^服務超過/, reason: 'test rule' }];
-  const rows = candidates(blocks, facts, ignore, new Set(['©2026']));
+  const rows = candidates(blocks, facts, ignore, new Set(['©2026']), 'https://x.test/a');
   assert.deepEqual(rows, [
-    { block: '擁有 7 項發明專利', ids: ['patents'], reason: undefined },
-    { block: '服務超過 100 家', ids: [], reason: 'test rule' },
-    { block: '台新銀行', ids: [], reason: undefined },
+    { block: '擁有 7 項發明專利', ids: ['patents'], elsewhere: false, reason: undefined },
+    { block: '服務超過 100 家', ids: [], elsewhere: false, reason: 'test rule' },
+    { block: '台新銀行', ids: ['bank'], elsewhere: true, reason: undefined },
   ]);
+});
+
+test('quoteOnPage ignores tags, whitespace and U+200B', () => {
+  const html = '<h3>AI</h3>\n<h3>智慧理賠</h3><p>節省逾<b>80%</b>人工</p>';
+  assert.ok(quoteOnPage(html, 'AI 智慧​理賠'));
+  assert.ok(quoteOnPage(html, '節省逾80%人工'));
+  assert.ok(!quoteOnPage(html, '節省逾90%人工'));
+});
+
+test('validateFacts rejects a confirmed fact that names a client still to_confirm', () => {
+  const src = (quote) => ({ url: 'https://www.tpisoftware.com/', quote });
+  const client = { id: 'client-x', type: 'client', text: '華南銀行', source: src('華南銀行'), locale: 'zh-TW', status: 'to_confirm', note: 'license' };
+  const milestone = { id: 'm', type: 'company', text: '為華南銀行建置 CRM', source: src('為華南銀行建置 CRM'), locale: 'zh-TW', status: 'confirmed' };
+  assert.match(validateFacts([client, milestone]).join('\n'), /m: confirmed text names client 華南銀行/);
+  assert.deepEqual(validateFacts([client, { ...milestone, status: 'to_confirm', note: 'names a client' }]), []);
+  assert.deepEqual(validateFacts([{ ...client, status: 'confirmed', note: undefined }, milestone].map((f) => JSON.parse(JSON.stringify(f)))), []);
 });

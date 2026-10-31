@@ -368,7 +368,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 2008 年首度跨足金融產業，為華南銀行建置 CRM 系統
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 寫出客戶名稱（華南銀行），對外使用要確認授權
 
 - id: award-2008-outstanding-enterprise
   type: award

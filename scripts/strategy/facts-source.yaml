@@ -123,7 +123,7 @@ groups:
         quote: '創辦人 Ben Yao'
         status: to_confirm
         note: 人物，對外使用姓名要確認
-      - { id: company-milestone-2008-finance, type: company, quote: '2008 年首度跨足金融產業，為華南銀行建置 CRM 系統' }
+      - { id: company-milestone-2008-finance, type: company, quote: '2008 年首度跨足金融產業，為華南銀行建置 CRM 系統', status: to_confirm, note: 寫出客戶名稱（華南銀行），對外使用要確認授權 }
       - id: award-2008-outstanding-enterprise
         type: award
         quote: '同年也名列為傑出企業成就'

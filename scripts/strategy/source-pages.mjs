@@ -21,6 +21,13 @@ export function chunkStrings(js) {
 }
 
 /**
+ * Whether a quote is on a page's HTML, ignoring tags, whitespace and U+200B
+ * @param {string} html
+ * @param {string} quote
+ */
+export const quoteOnPage = (html, quote) => squash(pageText(html)).includes(squash(quote));
+
+/**
  * Text blocks of a page: the text between tags, one block per text node, trimmed; scripts and styles dropped
  * @param {string} html
  */
@@ -72,9 +79,8 @@ export async function pageReader({ offline = false, refresh = false } = {}) {
     html,
     /** Whether a quote is on the page (HTML text first, then its chunks), ignoring whitespace and U+200B */
     async has(url, quote) {
-      const q = squash(quote);
-      if (squash(pageText(await html(url))).includes(q)) return true;
-      return squash(await chunkText(url)).includes(q);
+      if (quoteOnPage(await html(url), quote)) return true;
+      return squash(await chunkText(url)).includes(squash(quote));
     },
   };
 }
