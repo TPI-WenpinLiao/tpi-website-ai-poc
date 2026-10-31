@@ -85,7 +85,7 @@ M8-02（#44）整理新站上線前要做的事，讓決策者判斷能不能上
 | D6 | GA4、Search Console 權限 | 取得權限，並記錄現站的流量基準 | 上線前取得，保存上線前 3 個月的數字 | 待確認 | `docs/research/seo-baseline.md`、`docs/research/features.md`「待確認」6 |
 | D7 | 導覽中沒有內容的 12 頁 | 每頁的內容來源，或從導覽拿掉；白皮書檔案的位置 | 已決定（2026-10-31）：現站有對應頁的 4 頁照搬（#159），其他 8 頁先從導覽拿掉（#138），要做時另開 issue | 使用者 | #138、#159 |
 | D8 | 內容授權 | 客戶名稱與 logo、文章圖片與人物照、顧問照片的使用授權 | 上線前逐項確認，沒確認的先拿掉 | 待確認 | `docs/status.md`「下一步」中 M5-03、M5-05、#107 的「待確認」 |
-| D9 | 內容與譯文審稿 | M5 各內容類型的「待確認」、`glossary.csv` 還沒確認的 163 列、en 法務頁是否要法務審閱、越南文審稿 | 法務頁與產品頁優先，blog 可以上線後再修 | 待確認 | `audit.md`「內容待確認」、`docs/i18n/glossary.md` |
+| D9 | 內容與譯文審稿 | M5 各內容類型的「待確認」、`glossary.csv` 還沒確認的 162 列、en 法務頁是否要法務審閱、越南文審稿 | 法務頁與產品頁優先，blog 可以上線後再修 | 待確認 | `audit.md`「內容待確認」、`docs/i18n/glossary.md` |
 | D10 | 不在導覽的產品與方案 | 6 個產品或方案是否還在賣 | 不賣的改成 drop，舊網址轉到上一層 | 待確認 | `docs/ia/sitemap.md`「決策紀錄」、`docs/research/content-audit.md` |
 | D11 | 受眾與轉換目標的其餘問題 | `audience-and-goals.md`「尚未回答的問題」中還沒回答的 6 題 | 第 3 題（表單回覆時間與收件窗口）跟 D4 一起回答，其他題可以上線後再處理 | 待確認 | `docs/research/audience-and-goals.md` |
 | D12 | 現站第三方服務 | 評價 badge 是否保留；WOVN.io、Benchmark Email、MISA AMIS 的合約與帳號 | badge 改成靜態圖加連結，其他服務上線後停用前先確認合約 | 待確認 | `docs/research/features.md`「待確認」4、9、10 |
