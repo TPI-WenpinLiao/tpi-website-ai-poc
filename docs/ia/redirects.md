@@ -62,8 +62,21 @@ node scripts/ia/redirects.mjs --redirects public/_redirects
 - `www.tpisoftware.vn` 的列不輸出：`_redirects` 不支援網域層級轉址。`.vn` 網域上線後是否保留（ADR 0002「影響」）決定後，用 Cloudflare Bulk Redirects 或 `.vn` 網域自己的設定處理
 - 目前不寫進 `public/`。上線時是否部署由 M8-02 launch-readiness（#44）決定
 
+### Cloudflare 的比對方式
+
+#139 在 Cloudflare Pages 的 preview 上實測（2026-10-31，`public/_redirects` 是本 script 的完整產出）：
+
+| 請求 | 結果 | 結論 |
+|---|---|---|
+| `/products/gadodido`、`/orient-ai` | 200 | 比對區分大小寫，只差大小寫的規則不會比對到目標頁，沒有迴圈 |
+| `/products/gadoDIDO`、`/orient-aI` | 301 → 小寫路徑 | 大寫的來源比對得到 |
+| `/pdf/%E8%B3%87%E8%A8%8A%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96.pdf` | 301 → `/security-policy` | `%` 編碼的來源用編碼後的路徑比對 |
+| `/pdf/資訊安全政策.pdf`（curl 送出未編碼的 UTF-8） | 404 | 未編碼的請求比對不到。瀏覽器送出前會先編碼，實際流量不受影響 |
+
+沒有規則時，`/products/gadoDIDO`、`/orient-aI` 在 production 回 404（同一天實測），Cloudflare 找靜態檔也區分大小寫，所以只差大小寫的規則要保留。
+
+`toRedirects` 的檢查依這個結果寫：來源與新頁面路徑完全相同才算比對到。來源取自 `new URL().pathname`，未編碼的非 ASCII 字元會轉成大寫十六進位的 `%` 編碼；inventory 已編碼的網址保留原樣，目前只有 1 條，是大寫。小寫十六進位（`%e8`）的請求沒有實測。
+
 ## 待確認
 
-- Cloudflare Pages `_redirects` 比對來源路徑是否區分大小寫，官方文件沒有寫。不區分的話，`/products/gadoDIDO /products/gadodido 301` 這類規則會變成迴圈。在 preview 實測，見 #139
-- 含 `%` 編碼的來源（例如 `/pdf/%E8%B3%87%E8%A8%8A%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96.pdf`）在 `_redirects` 是用編碼前還是編碼後的路徑比對，同上一起實測（#139）
 - `www.tpisoftware.vn` 對 `/vn/*` 也回 200，內容與 `/*` 相同（`scripts/inventory/crawl.mjs`）。萬用規則 `www.tpisoftware.vn/*` → `/vi/:splat` 會把 `/vn/products/gadodido` 導到不存在的 `/vi/vn/products/gadodido`。`.vn` 網域的處理方式決定時，先把 `/vn/*` 去掉前綴再轉

@@ -132,6 +132,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 不在 blog API 的 blog 是否發布已回答：使用者決定 2026 年前的文章不發布、今年的發布。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 在 `audit-overrides.csv` 定為 keep，`inventory.csv` 的「確認是否發布」清掉。`audit.mjs` 的規則對處置本身的提問（`ask`）在覆寫檔指定 `disposition` 後不再寫進 `to_confirm`（`content-audit.md`「重現方式」）。現站 en `why-ai-needs-knowledge-boundary` 依使用者確認是 zh-TW `why-companies-need-custom-ai-knowledge` 的 en 版：hreflang 只在同一個路徑之間互指，所以新增手寫的 `docs/ia/blog-slugs.csv`，en 改用 zh-TW 的 slug（`/en/blog/why-companies-need-custom-ai-knowledge`），現站 en 舊網址 301 到新路徑，兩頁互相輸出 hreflang（ADR 0002「路徑命名」）；zh-TW 這篇的作者現站拼成 `TPIsowftware`，在 `overrides.yaml` 改為 `TPIsoftware`、`Organization`
 - `.nvmrc` 升到 Node 26 完成（#147）：Node 26 在 2026-10-28 進入 Active LTS（nodejs.org `dist/index.json` 的 `v26.13.0` 標 `lts: "Lithium"`），`.nvmrc` 改成 `26`，`package.json` 的 `engines` 改成 `>=26`（CI 與雲端 session 只測 `.nvmrc` 的版本）。ADR 0001 與 `launch-readiness.md` 上線步驟第 2 步的版本跟著改
 - 首頁與產品頁的最新文章改讀 content collections 完成（#101）：首頁讀 `blog`、`news` collection 的最新 2 篇 blog 與 1 則新聞，卡片用文章封面與發布日（`src/lib/content/cards.ts`）；產品頁的相關文章改讀 `blog.relatedOfferings`（使用者決定，不用標題關鍵字比對），目前沒有文章填這個欄位，所以產品頁不顯示相關文章；`src/lib/latest-posts.ts` 已刪除。vi 14 篇 blog 的封面是現站 CMS 的 loading spinner，遷移時改用抽象封面，`node scripts/content/placeholder-covers.mjs`（`npm run check`）擋下已知的 placeholder 圖
+- 在 preview 實測 `_redirects` 的大小寫與 `%` 編碼比對完成（#139）：Cloudflare Pages 比對來源路徑區分大小寫，只差大小寫的 5 條規則不會迴圈；`%` 編碼的來源用編碼後的路徑比對得到。現在的 `redirects.mjs` 產出可以照原樣部署，不用修改，`launch-readiness.md` 的 R4、D3 與「`_redirects` 部署與否」跟著改。實測結果見 `docs/ia/redirects.md`「Cloudflare 的比對方式」，curl 輸出在 PR。測試用的 `public/_redirects` 已移除，上線時照 `launch-readiness.md` 第 5 步產生
 
 ## 下一步
 
@@ -155,7 +156,6 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 回覆 M6-03（#35）PR 的「待確認」：現站產品、服務、about 頁的影片要不要放回新站（要在 offering schema 加影片欄位、改模板、下載自架 MP4）
 - 回覆 PR #98「待確認問題」：listing、utility、contact 頁的暫定描述（`src/data/strings/zh-TW.ts` 的 `pages`）、聯絡表單的諮詢產品選項、個資同意與 AI Playbook 欄位文案、`industry: other` 的顯示名稱
 - 回覆 `docs/ia/content-model.md` 文末「待確認」，特別是 tag 清單（`src/content/tags.yaml` 的名稱目前取自現站）
-- 在 preview 實測 `_redirects` 的大小寫與 `%` 編碼比對（#139）可以開始
 - Review M1-02 稽核結果，回覆 `docs/research/content-audit.md`「內容負責人要確認」
 - Review M1-03 SEO 基線（`docs/research/seo-baseline.md`）
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
