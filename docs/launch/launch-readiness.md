@@ -13,7 +13,7 @@ M8-02（#44）整理新站上線前要做的事，讓決策者判斷能不能上
 1. 決定正式網域，並決定 `www.tpisoftware.vn` 要不要保留（待決 D1、D2）
 2. 聯絡表單要能送到有人收的地方。目前的 `logAdapter` 只把送出的資料寫進 log，業務收不到（待決 D4、風險 R1）
 3. 導覽連到的 12 頁要補上內容，或從導覽拿掉（#138）。redirect 目標沒建出的 12 列已處理（#137）
-4. 在 preview 實測 `_redirects` 的比對方式（#139），再依結果部署 `_redirects`（見「`_redirects` 部署與否」）
+4. 部署 `_redirects`（見「`_redirects` 部署與否」）。比對方式已在 preview 實測（#139），現在的產出可以照原樣部署
 5. 內容負責人回覆各內容類型的「待確認」，至少要確認客戶名稱與 logo 的授權、圖片授權和法務頁（待決 D7–D9）
 6. #101 合併後，在 `main` 重跑 `npm run check` 與 `npm run lighthouse:all`，結果補進 `audit.md`（`audit.md`「待 #36、#101 合併後重驗」，#36 已合併）
 
@@ -40,12 +40,7 @@ M8-02（#44）整理新站上線前要做的事，讓決策者判斷能不能上
 
 推薦部署。現站有 1,306 個網址列在 `docs/ia/redirects.csv`，不部署的話，外部連結和搜尋結果裡的舊網址上線後都會變成 404，累積的 SEO 權重也會流失。數量在上限內：靜態 779 條（上限 2,000）、動態 2 條（上限 100），由 `redirects.mjs --check` 確認。
 
-部署的前提是 #138、#139 都已完成（#137 已完成）。#139 的實測結果還沒出來，依結果分兩種情況處理：
-
-| #139 結果 | 處理 |
-|---|---|
-| 比對區分大小寫，`%` 編碼的來源也比對得到 | 照現在的產出部署：`node scripts/ia/redirects.mjs --redirects public/_redirects` |
-| 不區分大小寫，或 `%` 編碼的來源比對不到 | #139 在 `redirects.mjs` 的 `toRedirects` 加上檢查並修改產生方式。修好、重新實測通過後才部署。只差大小寫的 5 條規則不能照原樣部署，會讓目標頁本身也符合規則而形成迴圈 |
+部署的前提是 #138 完成（#137、#139 已完成）。#139 在 preview 實測，Cloudflare 比對來源區分大小寫，`%` 編碼的來源也比對得到，所以照現在的產出部署：`node scripts/ia/redirects.mjs --redirects public/_redirects`。實測結果見 `docs/ia/redirects.md`「Cloudflare 的比對方式」。
 
 `_redirects` 只對 Pages 專案收到的請求生效，所以第 7 步把正式網域指過來以後，舊網址才會開始轉址。
 
@@ -68,7 +63,7 @@ M8-02（#44）整理新站上線前要做的事，讓決策者判斷能不能上
 | R1 | 聯絡表單沒有接後端，送出的資料只寫進 Function log | 主要轉換「聯絡業務」（`docs/research/audience-and-goals.md`）的資料沒有人收到 | 上線前依 D4 換掉 `logAdapter` | ADR 0005、`docs/research/features.md`「待確認」1–3 |
 | R2 | 導覽連到的 12 頁沒有建出，`redirects.csv` 另有 22 列舊網址的目標是這些頁（301 10 列、路徑不變的 200 12 列） | 使用者從選單點到 404；舊網址轉到 404 | #138 補內容，或從導覽拿掉並改 `redirects.csv` | #138、`scripts/seo/links.mjs` 的 `PENDING` |
 | R3 | 12 列 redirect 的目標沒建出：digiMars、digiRunner 的下載頁三語，5 篇遷移失敗的 blog，`/vi/privacy` | 這些舊網址轉到 404 | 已處理（#137）：vi 2 篇 blog 補上內容，其他 10 列改轉到產品頁、分類列表頁與 `/en/privacy`；之後不在 blog API 的 3 篇改讀文章頁，zh-TW、en 各 1 篇轉出，vi 1 篇早於保留門檻改為 drop | #137、`docs/ia/redirect-overrides.csv` |
-| R4 | Cloudflare 比對 `_redirects` 的方式沒有實測 | 只差大小寫的 5 條規則可能形成迴圈；`%` 編碼的 1 條可能比對不到 | 依 #139 的結果處理，見「`_redirects` 部署與否」 | #139、`docs/ia/redirects.md`「待確認」 |
+| R4 | Cloudflare 比對 `_redirects` 的方式和 #139 實測時不同 | 只差大小寫的 5 條規則形成迴圈；`%` 編碼的 1 條比對不到 | #139 已實測：區分大小寫、編碼的來源比對得到。上線後在正式網域再確認一次，見「上線後檢查」第 2 項 | #139、`docs/ia/redirects.md`「Cloudflare 的比對方式」 |
 | R5 | 沒有 GA4、Search Console 的權限，也還沒決定新站的 GTM | 上線前後的自然搜尋流量沒辦法比較；成功指標無法量測 | 上線前取得 Search Console 權限，至少保留現站的基準數字（D6） | `docs/research/seo-baseline.md`、`audience-and-goals.md` |
 | R6 | 效能只在 headless Chrome 量過，沒有在 preview 用真機量測，也沒有現站 origin 層級的 field CWV | 實際使用者的 LCP、INP 可能和實驗室數字不同 | 上線後檢查第 7 項；有問題再開 issue | ADR 0004、`docs/status.md`「待辦備忘」 |
 | R7 | 內容的「待確認」還沒回覆：客戶名稱與 logo 的授權、圖片授權、en 法務頁的英譯、AI 草擬的 en、vi 譯文 | 授權有問題的內容需要下架；譯文錯誤 | 上線前回覆 D7–D9 | `audit.md`「內容待確認」 |
@@ -84,7 +79,7 @@ M8-02（#44）整理新站上線前要做的事，讓決策者判斷能不能上
 |---|---|---|---|---|---|
 | D1 | 正式網域 | 上線用哪個網域；上線日期 | 沿用 `www.tpisoftware.com`，舊網址的權重可以透過 `_redirects` 接過來 | 待確認 | ADR 0002「影響」 |
 | D2 | `www.tpisoftware.vn` | 保留為轉址來源，或停用 | 保留並轉到 `/vi`，用 Bulk Redirects 設定，去掉 `/vn/` 前綴 | 待確認 | `docs/ia/redirects.md`「待確認」 |
-| D3 | `_redirects` | 上線時要不要部署 | 部署，前提是 #138、#139 都已完成（見「`_redirects` 部署與否」） | 待確認 | #139 |
+| D3 | `_redirects` | 上線時要不要部署 | 部署，前提是 #138 完成（見「`_redirects` 部署與否」） | 待確認 | #139 |
 | D4 | 表單送出到哪裡 | 沿用現站的 `/tpi/api/*`，或改用其他收件方式；收件信箱或 CRM | 沿用 `/tpi/api/*`。現站後端負責人要先回答 `features.md`「待確認」1–3（收件位置、CORS、reCAPTCHA） | 待確認 | ADR 0005「之後」、`docs/research/features.md` |
 | D5 | 追蹤與 consent | 要遵循的法規或公司政策、cookie 分類、三語文案由誰提供、上線時要不要開 GTM | 先上線不開 GTM，consent 文案確定後再開 | 待確認 | ADR 0007、`src/data/consent.ts` |
 | D6 | GA4、Search Console 權限 | 取得權限，並記錄現站的流量基準 | 上線前取得，保存上線前 3 個月的數字 | 待確認 | `docs/research/seo-baseline.md`、`docs/research/features.md`「待確認」6 |
