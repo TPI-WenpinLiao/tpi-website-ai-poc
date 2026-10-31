@@ -117,10 +117,10 @@ export interface TrailNode extends IaNode {
 }
 
 // Breadcrumb trail from home to `id` for a page in `locale`; group nodes and ancestors with no page
-// (hasPage) are skipped. `id` itself stays: the 404 page is built outside builtNodes
+// (hasPage) are skipped. A page `id` itself stays: the 404 page is built outside builtNodes
 export function breadcrumb(id: string, locale: Locale): TrailNode[] {
   const trail: IaNode[] = [];
-  for (let cur = byId.get(id); cur; cur = byId.get(cur.parent)) if (cur.id === id || (cur.kind !== 'group' && hasPage(cur))) trail.unshift(cur);
+  for (let cur = byId.get(id); cur; cur = byId.get(cur.parent)) if (cur.kind !== 'group' && (cur.id === id || hasPage(cur))) trail.unshift(cur);
   return trail.map((n) => ({ ...named(n, locale), href: localeHref(locale)(n) }));
 }
 
