@@ -1,6 +1,6 @@
 ---
 name: issue-ship
-description: issue 的最後一個階段完成時自動執行（needs-design 階段一也是，開 draft PR 後停下），或使用者輸入 /issue-ship。驗證 npm run check、更新 docs/status.md、commit、push 到工作 branch、開 draft PR，跑審查迴圈直到符合完成條件，再轉 ready 並貼合併判斷摘要。
+description: issue 的最後一個階段完成時自動執行（needs-design 或本身有「## 關卡」段落的 issue，階段一也是，開 draft PR 後停下），或使用者輸入 /issue-ship。驗證 npm run check、更新 docs/status.md、commit、push 到工作 branch、開 draft PR，跑審查迴圈直到符合完成條件，再轉 ready 並貼合併判斷摘要。
 ---
 
 # Issue ship
@@ -36,7 +36,7 @@ git diff --stat
 - 「Issue」段落一個 issue 一行，只列已關閉的 issue 與本 issue。放在所屬 milestone 的小標下，依 bootstrap-id（`M2-03`）排序；沒有 bootstrap-id 的排在該小標最後。沒有 milestone 的 issue（例如 `[chore]`）放在 issue 關閉當時「進度」表中編號最大的「進行中」milestone；M0–M8 都完成、沒有進行中的 milestone 時（維運），放在「M8 驗收」之後的「### 維運」小標，依關閉順序排列；本 issue 以寫入當下為準
 - 本 issue 寫成合併後的狀態：`M2-03 URL 規則與語系策略完成（#10）`
   - 不寫 PR 編號：開 PR 前還不知道編號，PR 可從 issue 的 `closed_by_pull_requests` 查到。既有條目的 PR 編號保留
-  - `needs-design` 階段一的 draft PR 合併前要先拿到 approved label，這時還不算完成，寫成 `M3-01 wireframe（#13），階段一，等待 wireframe-approved`；階段二的 PR 再改成完成
+  - `needs-design` 或本身有「## 關卡」段落的 issue，階段一的 draft PR 合併前要先拿到 approved label，這時還不算完成，寫成 `M3-01 wireframe（#13），階段一，等待 wireframe-approved`；階段二的 PR 再改成完成
 - 其他已關閉的 issue 寫完成。`main` 上缺的行（`/issue-start` 第 4 步找到的）在本 PR 補上
 - 其他 open PR 的 issue 不寫，也不寫「待合併」。那一行由那個 PR 自己寫成合併後的狀態，合併時帶進 `main`；哪些 issue 進行中由 `/next-issue` 從 GitHub 查。舊規則要求列出其他 open PR，平行的 session 每開一個 PR，其他 PR 的 `status.md` 就過時，每次 push 都多一輪審查與 CI（PR #90 連續兩輪被報 PR #91、#92、#93），各 PR 也互相衝突。`node scripts/status/check.mjs`（`npm run check` 的一部分）擋下含「待合併」的行
 - 本 PR 開了之後，其他 PR 合併、issue 關閉，都不用回頭改本 PR 的 `status.md`：那些行由各自的 PR 帶進 `main`。`/pr-review` 的固定檢查依此判斷
@@ -105,10 +105,10 @@ Closes #N
 
 ### `needs-design` 的兩個階段
 
-`needs-design` 的兩個階段各執行一次本 skill。`CLAUDE.md` 的兩階段流程、`issue-start` 的計畫、`checkpoint` 都連到這裡，做法不另外寫。
+`needs-design` 的兩個階段各執行一次本 skill。issue 本身有「## 關卡」段落時（分階段流程的策略 issue，關卡是 `strategy-approved`）也一樣，approved label 取該段落寫的。`CLAUDE.md` 的兩階段流程、`issue-start` 的計畫、`checkpoint` 都連到這裡，做法不另外寫。
 
 - 階段一：照第 1–6 步做，不跳步。第 4 步照常合併 `wip:` commit，第 5 步照常 `--force-with-lease`。body 另列「設計決策」與「待確認問題」。開完 draft PR 後**停下**，告知使用者等待設計確認，不進第 7 步的審查迴圈，不得進入階段二
-- 階段二：使用者告知已加上 approved label 後，補齊 SEO、無障礙、內容，再從第 1 步走到第 9 步。這時 PR 已經開了，所以第 4 步只照一般格式 commit、不做 `wip:` 合併（階段二的 checkpoint 不用 `wip:`，見 [`checkpoint` 第 3 步](../checkpoint/SKILL.md#3-commit-與-push)），第 5 步不 force push，第 6 步不另開 PR，只更新 body
+- 階段二：使用者告知已加上 approved label 後，補齊 SEO、無障礙、內容（「## 關卡」的 issue 改為依使用者確認時的意見修正產出物），再從第 1 步走到第 9 步。這時 PR 已經開了，所以第 4 步只照一般格式 commit、不做 `wip:` 合併（階段二的 checkpoint 不用 `wip:`，見 [`checkpoint` 第 3 步](../checkpoint/SKILL.md#3-commit-與-push)），第 5 步不 force push，第 6 步不另開 PR，只更新 body
 
 ## 7. 審查迴圈
 

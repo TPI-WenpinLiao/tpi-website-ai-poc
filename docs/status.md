@@ -6,7 +6,7 @@
 
 **維運**
 
-M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，不掛 milestone，寫在「Issue」的「維運」小標（`issue-ship` 第 3 步）。正式上線照 `docs/launch/launch-readiness.md`「上線步驟」。
+M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，不掛 milestone，寫在「Issue」的「維運」小標（`issue-ship` 第 3 步）。本專案驗證 AI 開發官網的品質，不上線；新頁面、改版、內容大改走分階段流程（`docs/workflow.md`「分階段流程」），`docs/launch/launch-readiness.md` 是範圍外的參考。
 
 ## 進度
 
@@ -135,10 +135,12 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 在 preview 實測 `_redirects` 的大小寫與 `%` 編碼比對完成（#139）：Cloudflare Pages 比對來源路徑區分大小寫，只差大小寫的 5 條規則不會迴圈；`%` 編碼的來源用編碼後的路徑比對得到。現在的 `redirects.mjs` 產出可以照原樣部署，不用修改，`launch-readiness.md` 的 R4、D3 與「`_redirects` 部署與否」跟著改。實測結果見 `docs/ia/redirects.md`「Cloudflare 的比對方式」，curl 輸出在 PR。測試用的 `public/_redirects` 已移除，上線時照 `launch-readiness.md` 第 5 步產生
 - 移除導覽連到但沒有內容的 8 頁完成（#138）：4 份白皮書、`/services`、`/industries`、`/industries/manufacturing`、`/products/gadosecurity` 依使用者決定先不上線，`navigation.csv` 改列「不進導覽」，header 的資安欄標題改成不可點的文字。`src/lib/ia/navigation.ts` 的 `hasPage()`：麵包屑、子頁卡片、首頁家族章節、404 的常用入口、產品頁的產業標籤，遇到沒建出的頁就不連，頁面建出後自動恢復。白皮書的 9 個舊網址在 `redirect-overrides.csv` 轉到產品頁，`toRedirects` 的迴圈檢查排除 override 的 `unbuilt`。`PENDING` 只剩 #159 的 4 頁。現站有內容的 4 頁拆到 #159
 - 搬移現站的雲端、委外、ChatGPT 企業服務與資源頁完成（#159）：`node scripts/content/migrate/offerings.mjs` 加上 `cloudservice`、`outsourcing`、`chatgpt-enterprise` 三個服務頁（offering，`kind: service`）與 `/resource`（hub）的轉換，建出 zh-TW 4 頁、en 與 vi 各 3 頁（`chatgpt-enterprise` 現站只有 zh-TW）。只填 schema 既有欄位，沒搬的段落（客戶見證與 logo、比較表、第三方數字、洽詢表單等）列在 `docs/content/migration.md`「服務頁」；超過上限或現站沒有的 description 寫在 `offering-overrides.yaml`。`scripts/seo/links.mjs` 的 `PENDING` 清空後連同 `redirect-targets.mjs` 的豁免一起刪除，連到沒建出的頁面一律失敗。`offering-content.mjs` 的 feature 內文改為也能拆成句子與清單項目比對，三語 2169/2169
+- 角色 agent 與分階段流程完成（#162）：`CLAUDE.md`「專案目標」改為驗證 AI 開發官網的品質、不上線，不做 Search Console、GTM 的實際設定，`launch-readiness.md` 標為範圍外。新增 5 個 agent（`.claude/agents/`：researcher、content-strategist、seo-strategist、design-director、reviewer）與 4 個 skill（site-research、content-strategy、design-concept、site-review，rubric 三份在 `site-review/rubrics/`，評分項目與門檻經使用者確認：每份平均 ≥ 4.0 且沒有一項 < 3）；本站專屬的設定集中在 `docs/strategy/site-profile.md`。`docs/workflow.md` 新增「分階段流程」：新頁面、改版、內容大改依序走研究、策略、設計概念、製作、評審。新 label `strategy-approved`；issue 本身有「## 關卡」段落時不進自動模式。`scripts/docs/claude-md.mjs` 的 `PARENTS` 加上 `.claude`
 
 ## 下一步
 
-- 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
+- 在 Actions 手動執行一次 `bootstrap` workflow，建立 `strategy-approved` label（#162 加進 `labels.yml`，雲端 session 沒有建 label 的工具）
+- #163（文案規則改為事實可追溯）可以開始，分階段流程的研究（#164）接在它之後
 - 回覆 #159 PR 的「待確認」：沒搬的段落、組成或刪減的 description、vi `/resource` 的標題是英文「Resource Center」
 - 回覆 #137 後續 PR（en 知識邊界一文對應 zh-TW 版）的「待確認」：en 版多一段上線第一週的問卷數字（40 份有效回覆、90% 用過等），zh-TW 沒有；要不要補到 zh-TW、數字是否經客戶同意公開
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
@@ -186,6 +188,6 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - `src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
-- 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，見 `docs/launch/launch-readiness.md`「上線步驟」第 3 步
-- 正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。見 `docs/launch/launch-readiness.md`「上線步驟」第 4 步
-- 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），見 `docs/launch/launch-readiness.md`「上線步驟」第 6 步
+- 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。範圍外（本專案不上線）：正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，見 `docs/launch/launch-readiness.md`「上線步驟」第 3 步
+- 範圍外（本專案不上線）：正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。見 `docs/launch/launch-readiness.md`「上線步驟」第 4 步
+- 範圍外（本專案不上線）：正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），見 `docs/launch/launch-readiness.md`「上線步驟」第 6 步

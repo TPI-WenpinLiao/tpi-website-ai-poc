@@ -19,7 +19,7 @@ flowchart LR
 /next-issue
 ```
 
-Claude 依 milestone 順序、每張 issue 的「## 依賴」與關卡 label，列出：
+Claude 依 milestone 順序、每張 issue 的「## 依賴」與關卡 label（`ia-approved`、`wireframe-approved`、`design-approved`、`strategy-approved`），列出：
 
 - **可開始**：依賴都已完成，可以平行開不同 session
 - **進行中**：已有 open PR；等你加 approved label 的（例如 `needs-design` 階段一）會註明。`docs/status.md` 不列這些 issue
@@ -50,7 +50,7 @@ Claude 會依序：
 
 接下來分兩種：
 
-- **自動模式**：issue 沒有 `needs-design`、`needs-input`，計畫也沒有「需使用者決定」時，Claude 把計畫貼到 issue 留言，直接開始實作，一路做到 PR 轉 ready。你不用做任何事，除非被通知要做決定
+- **自動模式**：issue 沒有 `needs-design`、`needs-input`，本身沒有「## 關卡」段落，計畫也沒有「需使用者決定」時，Claude 把計畫貼到 issue 留言，直接開始實作，一路做到 PR 轉 ready。你不用做任何事，除非被通知要做決定
 - **等你確認**：其他情況以 Plan 模式提出計畫。看環境檢查表與計畫，回覆確認或要修改的地方，「需使用者決定」要逐項回答
 
 輸入 `/issue-start N`（自動模式）或確認計畫，就等於同意這張 issue 的 checkpoint、commit、push、開 PR 與審查迴圈，範圍只限工作 branch 與本 issue 的 PR。合併一律由你決定。任一項檢查失敗時 Claude 會停下回報，不會開始實作。
@@ -68,7 +68,7 @@ Claude 會依序：
 
 | 情況 | Claude 的行為 | 你要做的事 |
 |---|---|---|
-| issue 帶 `needs-design`，階段一完成 | 執行 `/issue-ship` 到開 draft PR 為止（`wip:` commit 一樣先合併），列出設計決策與待確認問題，不跑審查迴圈 | 看 preview，確認後在 issue 加上 `design-approved`（M2、M3 的關卡用 `ia-approved`、`wireframe-approved`），再告訴 Claude 繼續 |
+| issue 帶 `needs-design` 或本身有「## 關卡」段落，階段一完成 | 執行 `/issue-ship` 到開 draft PR 為止（`wip:` commit 一樣先合併），列出設計決策與待確認問題，不跑審查迴圈 | 看 preview，確認後在 issue 加上 `design-approved`（M2、M3 的關卡用 `ia-approved`、`wireframe-approved`，分階段流程的策略用 `strategy-approved`），再告訴 Claude 繼續 |
 | issue 帶 `needs-input`、計畫外的取捨、審查跑滿輪數上限還沒過 | checkpoint，在 PR（還沒開 PR 時在 issue）留言寫問題與推薦，加上 `needs-decision`，推播通知 | 到 session 回覆。Claude 會拿掉 label 繼續 |
 
 ## 4. 收尾與審查迴圈
@@ -112,6 +112,42 @@ quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighth
 
 `npm run lighthouse` 通過後，把量過的頁面與量測設定的 key 記在 `.lighthouseci/passed-dist.sha256`。下次 key 相同就跳過並印出 key，例如審查迴圈裡只改 `scripts/` 或測試的修正。quality-gate 用同一個 key 做 cache，同一個 PR 量過且通過的 `dist/` 不重量，job summary 寫明。要強制重量時加 `LIGHTHOUSE_FORCE=1`。兩條規則都見 [ADR 0004](decisions/0004-lighthouse-scope.md)「例外」。
 
+## 分階段流程
+
+新頁面、改版、內容大改不直接實作，先依序走五個階段。每個階段是一張 issue，下一張的「## 依賴」寫上一張。每個階段由 `.claude/agents/` 的角色執行，做法寫在各自引用的 skill；本站專屬的設定（公司、現站網址、受眾、試點頁面）只在 [`strategy/site-profile.md`](strategy/site-profile.md)。
+
+| 階段 | 角色（agent） | 做法（skill） | 產出物 | 關卡 |
+|---|---|---|---|---|
+| 研究 | `researcher` | `site-research` | 事實庫、未搬內容盤點、競品分析、搜尋意圖 | script 檢查事實庫 |
+| 策略 | `content-strategist`、`seo-strategist` | `content-strategy` | messaging framework、每頁的 content brief | 人工加 `strategy-approved` |
+| 設計概念 | `design-director` | `design-concept` | 設計原則、三個 HTML 原型 | `reviewer` 依 rubric 評分，人工選方向後加 `design-approved` |
+| 製作 | `content-strategist`（文案）、主 session（前端） | `content-strategy`、`design-system`、`seo-checklist` | 頁面文案與實作 | `npm run check` |
+| 評審 | `reviewer` | `site-review` | 設計、文案與行銷、SEO 三份 rubric 的評分 | 低於門檻退回製作 |
+
+產出物都放在 `docs/strategy/`，路徑寫在各 skill 的「產出物」。
+
+### 哪些 issue 走這條流程
+
+| 走分階段流程 | 照舊走前面的流程 |
+|---|---|
+| 新頁面、頁面改版、內容大改（要重新決定一頁說什麼、放什麼） | bug、重構、從現站遷移內容、工具與設定、文件 |
+
+判斷不了時，在 issue 寫明，`/issue-start` 的計畫會列為待決。
+
+### 呼叫角色
+
+主 session 用 Agent tool 呼叫 agent，prompt 寫目標、這張 issue 的範圍與要讀的輸入檔。子代理不能再開子代理，所以兩個角色要合作時（策略階段的 `content-strategist` 與 `seo-strategist`），由主 session 依序呼叫，把前一個的產出路徑交給下一個。
+
+`reviewer` 每評一組（一個方向、一頁、一個競品）就開一個新的，prompt 只給產出物、評審依據與 rubric，不給 PR 對話、進度檔與製作者的說明，也不帶其他組的分數（`site-review`「輸入」）。
+
+### 關卡
+
+- 研究：事實庫的檢查 script 接進 `npm run check`，沒過就不能開 PR
+- 策略：issue 帶「## 關卡」段落寫 `strategy-approved`，不進自動模式，走兩階段流程：階段一開 draft PR 後停下，你看完 messaging 與 brief，在 issue 加上 `strategy-approved` 再告訴 Claude 繼續
+- 設計概念：issue 帶 `needs-design`，同樣走兩階段流程。PR 附 `reviewer` 對三個方向的評分，你選定方向後加 `design-approved`
+- 製作：照一般的 `/issue-ship` 與審查迴圈
+- 評審：rubric 的門檻寫在 `site-review`。沒過時，「要改的地方」回到製作，修正後由新的 `reviewer` 重評
+
 ## 視覺回歸
 
 quality-gate 的 `npm run check:before-lighthouse`（`npm run check` 去掉最後的 Lighthouse）會用 `npm run test:visual` 把下列頁面的 full-page 截圖，和 `tests/visual/__screenshots__/` 的 baseline 比對。不同的像素超過 300 個就算失敗（理由寫在 `playwright.config.ts`）：
@@ -153,6 +189,8 @@ baseline 只在 CI 產生、只在 CI 比對，兩者都在同版本的 Playwrig
 | `typescript-best-practices` | 編輯 `.ts`、`.astro`、`.mjs` | 型別設計、邊界驗證、Astro 慣例 |
 | `writing-style` | 寫文件、PR、commit、網站文案 | 正體中文去 AI 腔規則與文件結構 |
 
+分階段流程的 `site-research`、`content-strategy`、`design-concept`、`site-review` 由各自的 agent 讀取，見「分階段流程」。
+
 想強制套用時，直接輸入 `/<skill 名稱>`。
 
 ## 常見狀況
@@ -166,9 +204,9 @@ baseline 只在 CI 產生、只在 CI 比對，兩者都在同版本的 Playwrig
 | 個人設定的 stop hook 要求 commit | 這是個人層級的 `~/.claude` 設定，不屬於本 repo；需要時自行調整 |
 | session 中斷、容器被回收，或 context 被摘要後不確定進度 | 開新 session 輸入 `/issue-start N`。找到進度檔就接續，上次 checkpoint 之後沒 push 的工作會遺失。找不到進度檔但 branch 上有未合併的 commit 時，Claude 會停下問你要接續還是重開 |
 | PR 的「待確認」列出待刪除的舊 branch | 接續時留下的舊 branch。雲端 session 刪除 remote branch 會被 403 擋下，請在 GitHub 上手動刪除。issue 已關閉或 PR 已結束時，`/issue-start` 會停下，列出帶進度檔的 branch、各自最後 commit 時間與 PR 關閉時間；比 PR 關閉時間早的通常已經過時，選重做即可 |
-| 開 milestone 以外的新需求 | 用 issue form 開，不掛 milestone，流程與前面相同。`status.md` 把它寫在當時編號最大的進行中 milestone，M0–M8 都完成後寫在「維運」小標（[`issue-ship` 第 3 步](../.claude/skills/issue-ship/SKILL.md#3-更新-docsstatusmd)）。正式上線的步驟見 [`launch/launch-readiness.md`](launch/launch-readiness.md) |
+| 開 milestone 以外的新需求 | 用 issue form 開，不掛 milestone，流程與前面相同。`status.md` 把它寫在當時編號最大的進行中 milestone，M0–M8 都完成後寫在「維運」小標（[`issue-ship` 第 3 步](../.claude/skills/issue-ship/SKILL.md#3-更新-docsstatusmd)）。新頁面、改版、內容大改走「分階段流程」。本專案不上線，[`launch/launch-readiness.md`](launch/launch-readiness.md) 是範圍外的參考 |
 | 上一張 PR 已合併，session 想沿用同一個 branch | `/issue-start` 會從最新的 `main` 重開 branch，不會帶入已合併的 commit |
 
 ## 修改流程
 
-流程定義在 `.claude/skills/issue-start/`、`checkpoint/`、`issue-ship/`、`pr-review/`、`next-issue/` 的 `SKILL.md`。專案固定檢查只寫在 `pr-review/SKILL.md`。修改 skill 時同步更新本文件、`CLAUDE.md` 的「雲端 session 工作規則」；新增或移除 skill 時，另外更新 `README.md` 的流程圖與「如何開需求」、`CLAUDE.md` 的目錄結構。
+流程定義在 `.claude/skills/issue-start/`、`checkpoint/`、`issue-ship/`、`pr-review/`、`next-issue/` 的 `SKILL.md`。專案固定檢查只寫在 `pr-review/SKILL.md`。分階段流程的角色在 `.claude/agents/`，做法在 `site-research/`、`content-strategy/`、`design-concept/`、`site-review/`；改階段、角色或關卡時同步改本文件「分階段流程」與對應的 agent。修改 skill 時同步更新本文件、`CLAUDE.md` 的「雲端 session 工作規則」；新增或移除 skill 時，另外更新 `README.md` 的流程圖與「如何開需求」、`CLAUDE.md` 的目錄結構。

@@ -10,7 +10,7 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 /** Parents whose direct subdirectories must each be listed. '' is the repo root. */
-export const PARENTS = ['', 'src', 'src/lib', 'scripts', 'docs', 'public', 'functions', 'tests', '.github'];
+export const PARENTS = ['', '.claude', 'src', 'src/lib', 'scripts', 'docs', 'public', 'functions', 'tests', '.github'];
 
 /** The fenced code block under `## 目錄結構`. @param {string} md @returns {string} */
 export function structureBlock(md) {
@@ -82,7 +82,10 @@ function main() {
   // Untracked files count too, so a new directory fails here before it is committed, not only in CI.
   // Only inside the listed parents: untracked top-level directories are local editor state
   // (.vscode/, .idea/), not project structure.
-  const insideParent = (/** @type {string} */ f) => PARENTS.some((p) => p && f.startsWith(`${p}/`));
+  // Not .claude/: Claude Code keeps local, unignored state there (worktrees/, settings.local.json), so
+  // only its tracked directories count.
+  const insideParent = (/** @type {string} */ f) =>
+    PARENTS.some((p) => p && p !== '.claude' && f.startsWith(`${p}/`));
   const files = [...ls(['--cached']), ...ls(['--others', '--exclude-standard']).filter(insideParent)];
   const problems = missing(readFileSync(resolve(root, 'CLAUDE.md'), 'utf8'), files);
   for (const dir of problems) console.error(`CLAUDE.md 目錄結構 does not list ${dir}`);

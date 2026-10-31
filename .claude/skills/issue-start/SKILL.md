@@ -70,9 +70,10 @@ git status -sb
 | 檢查 | 方式 | 不通過時 |
 |---|---|---|
 | 依賴 | issue「## 依賴」列出的每個 `#N` 都要是 closed（用 `issue_read` 逐一確認） | 停下，列出未完成的依賴 |
-| 關卡 | 依賴的 issue 有「## 關卡」段落時，除了 closed，還要帶對應的 approved label（`ia-approved`／`wireframe-approved`／`design-approved`） | 停下，說明缺哪個 label |
+| 關卡 | 依賴的 issue 有「## 關卡」段落時，除了 closed，還要帶對應的 approved label（`ia-approved`／`wireframe-approved`／`design-approved`／`strategy-approved`） | 停下，說明缺哪個 label |
 | `needs-input` | 有此 label 時，內容必須由人工提供 | 不停下，但計畫只能整理與提問，不得自行補內容 |
 | `needs-design` | 有此 label 時適用 `CLAUDE.md` 的兩階段流程 | 不停下；計畫只涵蓋階段一，除非已有 `design-approved` |
+| 本身的「## 關卡」 | 本 issue 有「## 關卡」段落時（分階段流程的策略 issue，例如 `strategy-approved`），也走兩階段流程，關卡 label 取代 `design-approved` | 不停下；計畫只涵蓋階段一，除非已有該 label |
 
 ## 4. 對照 `docs/status.md`
 
@@ -132,6 +133,7 @@ npm run check:before-lighthouse   # 記錄 exit code；失敗時保留最後 30 
 同時符合以下條件時，不等確認：
 
 - issue 沒有 `needs-design`、`needs-input` label
+- issue 本身沒有「## 關卡」段落。分階段流程的策略與設計概念 issue 分別帶「## 關卡」與 `needs-design`，所以都不進自動模式（`docs/workflow.md`「分階段流程」）
 - 計畫的「需使用者決定」是空的。有推薦選項、不需要使用者選的，直接寫進「做法」，不要列進待決
 
 做法：

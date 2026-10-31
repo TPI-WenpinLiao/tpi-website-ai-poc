@@ -25,7 +25,7 @@ description: 實作中途保存進度時使用（/checkpoint）。把目前的�
 - `needs-input` 的內容要由使用者提供
 - `/issue-ship` 的審查迴圈跑滿 3 輪，最新一輪的結論行仍不是全部 0
 
-`needs-design` 階段一出貨後的停下不走這裡，照 [`issue-ship` 的「`needs-design` 的兩個階段」](../issue-ship/SKILL.md#needs-design-的兩個階段)。
+`needs-design` 或本身有「## 關卡」段落的 issue，階段一出貨後的停下不走這裡，照 [`issue-ship` 的「`needs-design` 的兩個階段」](../issue-ship/SKILL.md#needs-design-的兩個階段)。
 
 做法：
 
