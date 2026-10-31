@@ -188,6 +188,6 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - `src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
-- 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，見 `docs/launch/launch-readiness.md`「上線步驟」第 3 步
-- 正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。見 `docs/launch/launch-readiness.md`「上線步驟」第 4 步
-- 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），見 `docs/launch/launch-readiness.md`「上線步驟」第 6 步
+- 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。範圍外（本專案不上線）：正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，見 `docs/launch/launch-readiness.md`「上線步驟」第 3 步
+- 範圍外（本專案不上線）：正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。見 `docs/launch/launch-readiness.md`「上線步驟」第 4 步
+- 範圍外（本專案不上線）：正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），見 `docs/launch/launch-readiness.md`「上線步驟」第 6 步

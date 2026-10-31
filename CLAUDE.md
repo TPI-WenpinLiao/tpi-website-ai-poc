@@ -107,7 +107,7 @@ Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）
 - **小步可驗證**：多步驟工作拆成各自能驗證的小單位，前一步通過才做下一步
 - **最小變更**：用最小的 diff 解決問題；同一個決定只放在一個地方，不預先抽象
 
-## 設計確認兩階段流程（issue 帶 `needs-design` 時適用）
+## 設計確認兩階段流程（issue 帶 `needs-design`，或本身有「## 關卡」段落時適用）
 
 **階段一：視覺與結構**
 - 只做版面、視覺與元件結構
@@ -115,8 +115,8 @@ Lighthouse 對 `.lhci-dist/`（移除 robots.txt 與 _headers 的 dist 副本）
 - 告知使用者等待設計確認。**不得自行進入階段二**
 
 **階段二：完成度**
-- 使用者告知已加上 `design-approved` 後才繼續
-- 補齊 SEO、無障礙、內容完整度
+- 使用者告知已加上 `design-approved`（「## 關卡」的 issue 是該段落寫的 label）後才繼續
+- 補齊 SEO、無障礙、內容完整度。「## 關卡」的 issue（例如分階段流程的策略 issue）沒有頁面，改為依使用者確認時的意見修正產出物
 - 再執行一次 `/issue-ship`（不另開 PR，做法見同一節），跑審查迴圈，符合完成條件後將 PR 轉為 ready for review
 
 M2、M3 的關卡 issue 與分階段流程的策略 issue 改用對應的 label（`ia-approved`、`wireframe-approved`、`design-approved`、`strategy-approved`），流程相同。

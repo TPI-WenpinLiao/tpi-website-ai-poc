@@ -18,12 +18,12 @@ flowchart TD
   B --> C[開發人員開啟雲端 session<br/>/issue-start N]
   L -.->|/issue-start 讀取 label| D
   C --> D[Claude 檢查依賴與環境<br/>提出計畫]
-  D --> F{有 needs-design、needs-input<br/>或需使用者決定?}
+  D --> F{有 needs-design、needs-input、<br/>本身有「## 關卡」或需使用者決定?}
   F -->|否：自動模式<br/>計畫貼到 issue| G[實作，每個階段 /checkpoint<br/>→ /issue-ship 開 draft PR<br/>→ 審查迴圈<br/>→ 轉 ready、貼合併判斷摘要]
   F -->|是| E{開發人員確認計畫}
   E -->|調整| D
-  E -->|確認，非 needs-design| G
-  E -->|確認，needs-design| H
+  E -->|確認，其他| G
+  E -->|確認，needs-design 或「## 關卡」| H
   H[階段一：視覺與結構<br/>/issue-ship 開 draft PR<br/>列出設計決策與待確認問題]
   H --> P[Claude 停下等待<br/>人工看 Cloudflare preview]
   P -->|要修改：在 session 告訴 Claude| H
