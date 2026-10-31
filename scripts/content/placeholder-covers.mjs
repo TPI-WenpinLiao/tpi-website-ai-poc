@@ -5,7 +5,7 @@
 // script finds under src/assets/.
 // An entry whose cover is a placeholder gets one of the abstract design covers instead, chosen by its
 // slug; the source URL stays as the coverImage comment until the content owner supplies the real one
-// (docs/content/migration.md「封面」).
+// (docs/content/migration.md「圖片」).
 // Run: node scripts/content/placeholder-covers.mjs [--fix] (part of npm run check, without --fix)
 
 import { createHash } from 'node:crypto';

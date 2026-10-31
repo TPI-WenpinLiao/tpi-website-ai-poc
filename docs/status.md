@@ -187,4 +187,3 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，見 `docs/launch/launch-readiness.md`「上線步驟」第 3 步
 - 正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。見 `docs/launch/launch-readiness.md`「上線步驟」第 4 步
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），見 `docs/launch/launch-readiness.md`「上線步驟」第 6 步
-- M8-01 的全站驗收在 #36（GTM／consent）、#101（最新文章改讀 collection）合併前執行，這兩處的結果標「待這兩張合併後重驗」。兩張都合併後在 `main` 重跑 `npm run check` 與 `npm run lighthouse:all`，結果補進 `docs/launch/audit.md`
