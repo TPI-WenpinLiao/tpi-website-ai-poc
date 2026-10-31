@@ -74,7 +74,7 @@ const jsonLd = pageJsonLd({
 ---
 
 <PageLayout title={entry?.data.seoTitle ?? title} description={description} jsonLd={jsonLd} translations={translations}>
-  <PageHero eyebrow="Contact" title={title} description={contactCta.description.text}>
+  <PageHero eyebrow="Contact" title={title} description={contactCta.description}>
     <Breadcrumb slot="breadcrumb" node="contact" />
   </PageHero>
 

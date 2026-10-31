@@ -1,0 +1,239 @@
+# Fact library (#163). Every fact on a page (number, client, certification, award, product
+# feature, case result, company data) is one entry here, traced to the current site.
+# Pages use a fact with `fact('<id>')` (src/data/*.ts) or `facts: [<id>]` (Markdown frontmatter);
+# everything else on a page is wording and may be original. Format and checks:
+# `node scripts/strategy/facts.mjs` (offline, in `npm run check`) and
+# `node scripts/strategy/facts.mjs --sources` (fetches every source.url, finds source.quote).
+#
+#   id      unique, lowercase letters, digits and `-`; en and vi entries end in `-en`, `-vi`
+#   type    metric | client | certification | award | feature | case | company
+#   text    the wording a page shows; may add U+200B break points or trim the quote
+#   source  url: the current-site page; quote: the verbatim excerpt on that page
+#   locale  zh-TW | en | vi (a page only uses facts in its own locale)
+#   status  confirmed | to_confirm (pages only use confirmed facts)
+#   note    optional; required for to_confirm: why (license, possibly outdated, locales disagree)
+#
+# These are the facts the home page and the footer use; the full library is built in #164.
+
+# --- Company (src/data/site.ts, every locale's footer) ---
+
+- id: company-email
+  type: company
+  text: service@tpisoftware.com
+  source: { url: 'https://www.tpisoftware.com/', quote: service@tpisoftware.com }
+  locale: zh-TW
+  status: confirmed
+
+- id: company-copyright
+  type: company
+  text: ©2026 TPIsoftware All rights reserved
+  source: { url: 'https://www.tpisoftware.com/', quote: ©2026 TPIsoftware All rights reserved }
+  locale: zh-TW
+  status: confirmed
+
+# --- OrientAI features (home page) ---
+
+- id: orientai-multi-agent
+  type: feature
+  text: 多 Agent 協作
+  source: { url: 'https://www.tpisoftware.com/', quote: 多 Agent 協作 }
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-governance
+  type: feature
+  text: AI 治理
+  source: { url: 'https://www.tpisoftware.com/', quote: AI 治理 }
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-token-cost
+  type: feature
+  text: Token 成本控管
+  source: { url: 'https://www.tpisoftware.com/', quote: Token 成本控管 }
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-multi-agent-en
+  type: feature
+  text: Agent Collaboration
+  source: { url: 'https://www.tpisoftware.com/en', quote: Agent Collaboration }
+  locale: en
+  status: confirmed
+
+- id: orientai-governance-en
+  type: feature
+  text: AI Governance
+  source: { url: 'https://www.tpisoftware.com/en', quote: AI Governance }
+  locale: en
+  status: confirmed
+
+# The en and vi pages put ROI where zh-TW has Token 成本控管
+- id: orientai-roi-en
+  type: feature
+  text: Maximized ROI
+  source: { url: 'https://www.tpisoftware.com/en', quote: Maximized ROI }
+  locale: en
+  status: confirmed
+
+- id: orientai-multi-agent-vi
+  type: feature
+  text: Phối hợp đa tác nhân
+  source: { url: 'https://www.tpisoftware.vn/', quote: Phối hợp đa tác nhân }
+  locale: vi
+  status: confirmed
+
+- id: orientai-governance-vi
+  type: feature
+  text: Quản trị AI
+  source: { url: 'https://www.tpisoftware.vn/', quote: Quản trị AI }
+  locale: vi
+  status: confirmed
+
+- id: orientai-roi-vi
+  type: feature
+  text: Tối đa hóa ROI
+  source: { url: 'https://www.tpisoftware.vn/', quote: Tối đa hóa ROI }
+  locale: vi
+  status: confirmed
+
+# --- Case highlights (home page); they name no client ---
+
+- id: smartclaim-title
+  type: case
+  text: AI 智慧理賠
+  source: { url: 'https://www.tpisoftware.com/', quote: AI 智慧理賠 }
+  locale: zh-TW
+  status: confirmed
+
+- id: smartclaim-result
+  type: case
+  text: "全自動執行理賠立案到派件，精確解析診斷書，節省逾80%​人工作業時間"
+  source: { url: 'https://www.tpisoftware.com/', quote: 全自動執行理賠立案到派件，精確解析診斷書，節省逾80%人工作業時間 }
+  locale: zh-TW
+  status: confirmed
+
+- id: smartfilling-title
+  type: case
+  text: AI 智慧建檔
+  source: { url: 'https://www.tpisoftware.com/', quote: AI 智慧建檔 }
+  locale: zh-TW
+  status: confirmed
+
+- id: smartfilling-result
+  type: case
+  text: "透過免模板辨識醫療單據​解決格式變動痛點，提升辨識率並降低40%維護人力"
+  source: { url: 'https://www.tpisoftware.com/', quote: 透過免模板辨識醫療單據解決格式變動痛點，提升辨識率並降低40%維護人力 }
+  locale: zh-TW
+  status: confirmed
+
+- id: fraud-platform-title
+  type: case
+  text: 金融聯防阻詐平台
+  source: { url: 'https://www.tpisoftware.com/', quote: 金融聯防阻詐平台 }
+  locale: zh-TW
+  status: confirmed
+
+- id: fraud-platform-result
+  type: case
+  text: 標準化聯防流程，詐騙事件即時共享，提升跨行交換的效率與透明度
+  source: { url: 'https://www.tpisoftware.com/', quote: 標準化聯防流程，詐騙事件即時共享，提升跨行交換的效率與透明度 }
+  locale: zh-TW
+  status: confirmed
+
+- id: smartclaim-title-en
+  type: case
+  text: AI-Enhanced Insurance Claims Process
+  source: { url: 'https://www.tpisoftware.com/en', quote: AI-Enhanced Insurance Claims Process }
+  locale: en
+  status: confirmed
+
+- id: smartclaim-result-en
+  type: case
+  text: Automate the insurance claims process with enhanced analysis and efficient claims management, reducing manual effort by 80%
+  source:
+    url: 'https://www.tpisoftware.com/en'
+    quote: Automate the insurance claims process with enhanced analysis and efficient claims management, reducing manual effort by 80%
+  locale: en
+  status: confirmed
+
+- id: smartfilling-title-en
+  type: case
+  text: AI Optical Character Recognition
+  source: { url: 'https://www.tpisoftware.com/en', quote: AI Optical Character Recognition }
+  locale: en
+  status: confirmed
+
+- id: smartfilling-result-en
+  type: case
+  text: Reduce 40% of maintenance effort with recognition accuracy using an adaptive approach to varying layouts and formatting
+  source:
+    url: 'https://www.tpisoftware.com/en'
+    quote: Reduce 40% of maintenance effort with recognition accuracy using an adaptive approach to varying layouts and formatting
+  locale: en
+  status: confirmed
+
+- id: fraud-platform-title-en
+  type: case
+  text: Fraud Prevention
+  source: { url: 'https://www.tpisoftware.com/en', quote: Fraud Prevention }
+  locale: en
+  status: confirmed
+
+- id: fraud-platform-result-en
+  type: case
+  text: Enhance interoperability and transparency with standardized fraud prevention measures and shared intelligence of identified patterns and anomalies
+  source:
+    url: 'https://www.tpisoftware.com/en'
+    quote: Enhance interoperability and transparency with standardized fraud prevention measures and shared intelligence of identified patterns and anomalies
+  locale: en
+  status: confirmed
+
+# The vi titles span two lines on the page
+- id: smartclaim-title-vi
+  type: case
+  text: Quy trình Bồi thường Bảo hiểm AI
+  source: { url: 'https://www.tpisoftware.vn/', quote: Quy trình Bồi thường Bảo hiểm AI }
+  locale: vi
+  status: confirmed
+
+- id: smartclaim-result-vi
+  type: case
+  text: Tự động hóa quy trình giải quyết bồi thường với khả năng phân tích nâng cao và quản lý hiệu quả, giúp giảm thiểu 80% thao tác thủ công.
+  source:
+    url: 'https://www.tpisoftware.vn/'
+    quote: Tự động hóa quy trình giải quyết bồi thường với khả năng phân tích nâng cao và quản lý hiệu quả, giúp giảm thiểu 80% thao tác thủ công.
+  locale: vi
+  status: confirmed
+
+- id: smartfilling-title-vi
+  type: case
+  text: Nhận dạng Ký tự Quang học (AI OCR)
+  source: { url: 'https://www.tpisoftware.vn/', quote: Nhận dạng Ký tự Quang học (AI OCR) }
+  locale: vi
+  status: confirmed
+
+- id: smartfilling-result-vi
+  type: case
+  text: Giảm 40% công sức bảo trì nhờ độ chính xác nhận dạng cao, sử dụng phương pháp thích ứng linh hoạt với các loại bố cục và định dạng khác nhau.
+  source:
+    url: 'https://www.tpisoftware.vn/'
+    quote: Giảm 40% công sức bảo trì nhờ độ chính xác nhận dạng cao, sử dụng phương pháp thích ứng linh hoạt với các loại bố cục và định dạng khác nhau.
+  locale: vi
+  status: confirmed
+
+- id: fraud-platform-title-vi
+  type: case
+  text: Phòng chống Gian lận
+  source: { url: 'https://www.tpisoftware.vn/', quote: Phòng chống Gian lận }
+  locale: vi
+  status: confirmed
+
+- id: fraud-platform-result-vi
+  type: case
+  text: Tăng cường khả năng liên thông và tính minh bạch thông qua các biện pháp phòng chống gian lận được tiêu chuẩn hóa.
+  source:
+    url: 'https://www.tpisoftware.vn/'
+    quote: Tăng cường khả năng liên thông và tính minh bạch thông qua các biện pháp phòng chống gian lận được tiêu chuẩn hóa
+  locale: vi
+  status: confirmed

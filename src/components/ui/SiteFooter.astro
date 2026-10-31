@@ -47,7 +47,7 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
           </div>
           <div>
             <dt>{t.email}</dt>
-            <dd><a href={`mailto:${company.email.text}`}>{company.email.text}</a></dd>
+            <dd><a href={`mailto:${company.email}`}>{company.email}</a></dd>
           </div>
         </dl>
         <Button href={nodeHref('contact', locale)} variant="secondary" size="sm">{contact.title}</Button>
@@ -75,7 +75,7 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
     </div>
 
     <div class="bottom">
-      <p class="copyright">{company.copyright.text}</p>
+      <p class="copyright">{company.copyright}</p>
       <ul class="legal" aria-label={t.legal}>
         {
           footerBottom.map((l) => (

@@ -83,14 +83,14 @@ export function stringsSource(zhStrings, names, locale) {
 }
 
 /**
- * src/data/home/<locale>.ts: `[<locale>] <path>` for every line, the zh-TW sources and node ids kept
+ * src/data/home/<locale>.ts: `[<locale>] <path>` for every line, node ids kept
  * @param {object} zhHome the zh-TW `home`
  * @param {string} locale
  */
 export function homeSource(zhHome, locale) {
   const body = toSource(zhHome, (path, value) => {
-    // Sourced lines keep their source and node ids stay ids; only the text is a placeholder
-    if (/\.source\.(url|quote)$|(^|\.)node$/.test(path)) return JSON.stringify(value);
+    // Node ids stay ids; every line of copy is a placeholder
+    if (/(^|\.)node$/.test(path)) return JSON.stringify(value);
     if (typeof value === 'string') return JSON.stringify(`[${locale}] ${path}`);
     return `(...args: string[]) => ${JSON.stringify(`[${locale}] ${path} `)} + args.join(' ')`;
   });

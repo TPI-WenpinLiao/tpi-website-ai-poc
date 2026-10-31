@@ -22,15 +22,15 @@ src/pages/        首頁（index.astro、[locale]/）、404、內容與節點頁
 src/layouts/      BaseLayout（head）、PageLayout（header、footer）、templates/（11 個模板）
 src/components/   ui/（元件，列在 design-system skill 的元件表）、seo/Seo.astro（head 的 SEO 標籤）
 src/content/      content collections 的內容檔（schema 在 src/content.config.ts）
-src/data/         site.ts、strings/<locale>.ts（介面字串）、home/<locale>.ts（首頁文案）、consent.ts（cookie 類別與三語文案，draft）
+src/data/         site.ts、facts.ts（事實庫的 schema 與 `fact()`）、strings/<locale>.ts（介面字串）、home/<locale>.ts（首頁文案）、consent.ts（cookie 類別與三語文案，draft）
 src/lib/          i18n/（語系與路徑）、ia/（nodes.csv、導覽、已產生的頁面）、content/（entry、列表、網址）、seo/（meta、hreflang、JSON-LD、sitemap、排除收錄的頁面）、scene/（3D 場景）、forms/（表單規則、Function 的處理、Turnstile、adapter、頁面 script，ADR 0005）、search/（站內搜尋索引的 zh-TW 斷詞與結果顯示，ADR 0006）、consent/（cookie 同意的儲存、GTM 載入、PageLayout 用的設定，ADR 0007）
 src/integrations/ sitemap.ts（build 時寫 dist/sitemap.xml）、pagefind.ts（build 時寫 dist/pagefind/ 站內搜尋索引）
 functions/        Cloudflare Pages Functions：api/contact.ts（聯絡表單的送出，判斷在 src/lib/forms/handler.ts）
 src/assets/       brand/（logo，`import-brand.mjs` 產生）、design/（設計影像，`import-image.mjs` 匯入）、blog/、news/、case-study/、whitepaper/（內容圖，依語系與 slug 分目錄）
 src/styles/       tokens.css（design tokens）、media.css（斷點）、base.css（reset 與全域工具類）
 public/           靜態檔：_headers、robots.txt、favicon、og/（預設 OG 圖，`og-image.mjs` 產生）、pdf/（產品下載檔，`offering-files.mjs` 下載）
-scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、Lighthouse 單次量測的時間上限 `lhci-run.mjs`、量過的 `dist/` 不重量 `lhci-pass.mjs`、content/（日期檢查、tag 清單、blog、新聞、成功案例、解決方案與服務頁、ESG 顧問頁轉換 `migrate/`、現站 placeholder 封面的檢查與替換 `placeholder-covers.mjs`、產品下載檔 `offering-files.mjs`、公司頁對照 `page-content.mjs`、法務 PDF 轉換 `legal-pdf.mjs`）、design/（對比、token 使用、輸出 CSS 檢查、JS 大小預算 `scene-budget.mjs`、字型 subset 檢查 `font-subsets.mjs`、render-blocking CSS 量測 `css-blocking.mjs`、預設 OG 圖、圖片匯入、瀏覽器無障礙實測、頁面橫向溢出 `overflow.mjs`、全站 axe `axe.mjs`、影片 facade 檢查 `video-facade.mjs`、3D 初始化等待上限 `scene-wait.mjs`、offering 與 hub 內容對照 `offering-content.mjs`）、seo/（heading 檢查、每頁 head 與 sitemap 檢查、站內連結 `links.mjs`）、i18n/（語系路由檢查、翻譯詞彙表 `glossary.mjs`、測試語系 build `locale-fixture.mjs`）、forms/（表單規則與 Function 的單元測試、瀏覽器裡的表單檢查 `contact.mjs`）、search/（站內搜尋的索引、斷詞、載入範圍與無障礙檢查 `pagefind.mjs`）、consent/（同意狀態的單元測試、有 GTM ID 時的瀏覽器檢查 `gtm.mjs`）、lib/（共用的靜態伺服器）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應、build 後的轉址目標檢查 `redirect-targets.mjs`）、checkpoint/（進度推算）、bootstrap/（`issues.yml` 與 GitHub issue 的比對）、status/（`status.md` 檢查）、ci/（quality-gate 是否跳過 Lighthouse `lighthouse-scope.mjs`）、docs/（本檔目錄結構的檢查 `claude-md.mjs`）
-docs/             status.md、strategy/（分階段流程的產出：本站設定 `site-profile.md`、事實庫、messaging、content brief、設計原則與原型、評審報告）、launch/（全站驗收 `audit.md`、上線準備 `launch-readiness.md`，不上線，範圍外）、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）、content/（內容轉換的使用說明）、design/（品牌素材、影像提示詞、選單寬度實測、動態規範 `motion.md`）、i18n/（翻譯詞彙表 `glossary.csv`）
+scripts/          session-start.sh（SessionStart hook）、lhci-prepare.mjs、Lighthouse 單次量測的時間上限 `lhci-run.mjs`、量過的 `dist/` 不重量 `lhci-pass.mjs`、content/（日期檢查、tag 清單、blog、新聞、成功案例、解決方案與服務頁、ESG 顧問頁轉換 `migrate/`、現站 placeholder 封面的檢查與替換 `placeholder-covers.mjs`、產品下載檔 `offering-files.mjs`、公司頁對照 `page-content.mjs`、法務 PDF 轉換 `legal-pdf.mjs`）、design/（對比、token 使用、輸出 CSS 檢查、JS 大小預算 `scene-budget.mjs`、字型 subset 檢查 `font-subsets.mjs`、render-blocking CSS 量測 `css-blocking.mjs`、預設 OG 圖、圖片匯入、瀏覽器無障礙實測、頁面橫向溢出 `overflow.mjs`、全站 axe `axe.mjs`、影片 facade 檢查 `video-facade.mjs`、3D 初始化等待上限 `scene-wait.mjs`、offering 與 hub 內容對照 `offering-content.mjs`）、seo/（heading 檢查、每頁 head 與 sitemap 檢查、站內連結 `links.mjs`）、i18n/（語系路由檢查、翻譯詞彙表 `glossary.mjs`、測試語系 build `locale-fixture.mjs`）、forms/（表單規則與 Function 的單元測試、瀏覽器裡的表單檢查 `contact.mjs`）、search/（站內搜尋的索引、斷詞、載入範圍與無障礙檢查 `pagefind.mjs`）、consent/（同意狀態的單元測試、有 GTM ID 時的瀏覽器檢查 `gtm.mjs`）、lib/（共用的靜態伺服器）、inventory/（現站盤點與稽核）、ia/（sitemap、導覽、轉址對應、build 後的轉址目標檢查 `redirect-targets.mjs`）、checkpoint/（進度推算）、bootstrap/（`issues.yml` 與 GitHub issue 的比對）、status/（`status.md` 檢查）、ci/（quality-gate 是否跳過 Lighthouse `lighthouse-scope.mjs`）、docs/（本檔目錄結構的檢查 `claude-md.mjs`）、strategy/（事實庫與文案的事實檢查 `facts.mjs`）
+docs/             status.md、strategy/（分階段流程的產出：本站設定 `site-profile.md`、事實庫 `facts.yaml`、messaging、content brief、設計原則與原型、評審報告）、launch/（全站驗收 `audit.md`、上線準備 `launch-readiness.md`，不上線，範圍外）、decisions/（ADR）、onboarding.md、workflow.md（工作流程使用說明）、research/、ia/（資訊架構，見「IA 與 URL」）、content/（內容轉換的使用說明）、design/（品牌素材、影像提示詞、選單寬度實測、動態規範 `motion.md`）、i18n/（翻譯詞彙表 `glossary.csv`）
 tests/visual/      Playwright 視覺回歸與 baseline（`__screenshots__/`）
 .claude/skills/   issue-start、issue-ship、checkpoint、pr-review、next-issue（工作流程）；site-research、content-strategy、design-concept、site-review（分階段流程，rubric 在 `site-review/rubrics/`）；seo-checklist、design-system、content-migration、typescript-best-practices、writing-style
 .claude/agents/   分階段流程的角色：researcher、content-strategist、seo-strategist、design-director、reviewer（由主 session 呼叫，做法引用上面的 skill）
@@ -77,7 +77,7 @@ M6 定案的寫法。元件的參數見 `design-system` skill 的元件表，理
 |---|---|
 | `npm run dev` | 本機開發 |
 | `npm run build` | 產生 `dist/` |
-| `npm run check` | IA 資料檢查 → 翻譯詞彙表檢查 → `status.md` 檢查 → 本檔目錄結構檢查 → design 檢查 → scripts 測試 → placeholder 封面 → astro check → build → 輸出 CSS、JS 大小預算、字型 subset、heading、語系路由、head 與 sitemap、站內連結、轉址目標、水平捲動、axe、影片 facade、3D 等待上限、站內搜尋、表單、consent 與 GTM 檢查 → 視覺回歸（只在 CI 比對）→ html-validate → Lighthouse CI（推送前必跑） |
+| `npm run check` | IA 資料檢查 → 翻譯詞彙表檢查 → 事實庫與文案的事實檢查 → `status.md` 檢查 → 本檔目錄結構檢查 → design 檢查 → scripts 測試 → placeholder 封面 → astro check → build → 輸出 CSS、JS 大小預算、字型 subset、heading、語系路由、head 與 sitemap、站內連結、轉址目標、水平捲動、axe、影片 facade、3D 等待上限、站內搜尋、表單、consent 與 GTM 檢查 → 視覺回歸（只在 CI 比對）→ html-validate → Lighthouse CI（推送前必跑） |
 | `npm run check:before-lighthouse` | `npm run check` 去掉最後的 Lighthouse。quality-gate 分兩段執行，只改文件的 PR 跳過 Lighthouse（`scripts/ci/lighthouse-scope.mjs`，ADR 0004「例外」） |
 | `npm run test:visual:update` | 重新產生視覺回歸的 baseline。只在 CI 執行（PR 加上 `update-visual-baseline` label），時機與流程見 `docs/workflow.md`「視覺回歸」 |
 | `npm run check:design` | tokens 的 WCAG 對比、元件樣式沒有寫死的數值、CSS 分層（全域樣式、`:global`、重複宣告）、每個元件都在 `/design-system` 展示頁與 `design-system` skill 的元件表上 |
@@ -134,7 +134,11 @@ M2、M3 的關卡 issue 與分階段流程的策略 issue 改用對應的 label�
 
 ## 內容規則
 
-- 不得捏造產品功能、數據、客戶名稱、認證或獎項
+頁面文案分兩種，用不同規則管：
+
+- **事實**：數字、百分比、客戶名、認證、獎項、產品功能、案例成果、公司資料。每一條都取自事實庫 `docs/strategy/facts.yaml`，事實庫的每一筆有現站來源網址與原文，頁面只用 `status: confirmed` 的。TS 資料檔用 `fact('<id>')`（`src/data/facts.ts`），Markdown 內容在 frontmatter 寫 `facts: [<id>]`。事實庫沒有的事實不寫，不得捏造或加強
+- **表述**：標題、價值主張、段落敘事、CTA。可以原創，依 messaging framework（`docs/strategy/messaging.md`）與 `writing-style` 撰寫，由人審。表述不得夾帶事實：「服務超過 500 家企業」的數字、客戶名稱都屬於事實
+- `npm run check` 的 `node scripts/strategy/facts.mjs` 擋下捏造：`src/data/home/*.ts`、`src/data/site.ts`，以及 `sourceUrl: []` 或有 `facts` 欄位的內容檔，文案出現阿拉伯數字或事實庫 `client` 類型的名稱時，這一頁引用的事實裡要有它，否則失敗。這個檢查只確認數字或名稱出現在引用的事實裡，不看上下文（引用了「節省 80% 人力」的頁面寫「服務 80 家企業」也會通過），數字用得對不對仍由人審。`--sources` 連現站確認每筆原文還在（不在 `npm run check` 裡，改了事實庫就跑）
 - 不確定的內容在 PR 中列為「待確認」，不要自行補上
 - 從現站搬移內容時依 `.claude/skills/content-migration/SKILL.md`：各內容類型的轉換或對照 script、schema 沒有欄位的段落不搬；en、vi 內容的來源、用語與修正位置依同一個 skill 的「多語系內容」
 - 現站每一頁的處置（`disposition`）與待確認（`to_confirm`）看 `docs/research/inventory.csv`，依據見 `docs/research/content-audit.md`

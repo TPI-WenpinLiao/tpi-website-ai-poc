@@ -47,6 +47,7 @@
 | `translationKey` | `string` | 是 | 同一份內容的各語系版本填相同值，M7 用來輸出 hreflang。慣例：有 `node` 欄位的類型（offering、hub、page、whitepaper）填節點 id；case-study、blog、person 填 zh-TW 版的 slug；新聞用 zh-TW 版的新聞 id，沒有 zh-TW 版時用該語系自己的 id |
 | `ogImage` | `image` | 否 | 沒填時依序用類型自己的主圖（`coverImage` 等），再用全站預設圖 |
 | `draft` | `boolean` | 否，預設 `false` | `true` 時不輸出頁面 |
+| `facts` | `string[]` | 否 | 這一頁用到的事實庫 id（`docs/strategy/facts.yaml`）。依 messaging 改寫的頁面要寫，沒有事實也寫 `[]`；有這個欄位或 `sourceUrl: []` 的內容檔，文案的數字與客戶名稱要在列出的事實裡（`CLAUDE.md`「內容規則」，`node scripts/strategy/facts.mjs`）。從現站逐字搬移的不寫 |
 | 語系 | — | 推出 | 由檔案路徑推出（`zh-TW`、`en`、`vi`），不寫在 frontmatter |
 | slug | — | 推出 | 不寫在 frontmatter。有 `node` 欄位的類型，URL 取 `nodes.csv` 的 `path`，檔名不影響 URL；case-study、blog、news、person 由檔名推出。URL 組法見 ADR 0002；blog 文章的 slug 取 `page-map.csv` 的 `blog_slug` |
 
