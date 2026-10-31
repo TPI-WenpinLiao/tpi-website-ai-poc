@@ -1,0 +1,1397 @@
+# Input of scripts/strategy/extract-facts.mjs (#164): the facts picked from the current site.
+# The script checks every quote against its page and writes docs/strategy/facts.yaml; edit this file,
+# never facts.yaml. Format and rules: .claude/skills/site-research/SKILL.md「事實庫」.
+#
+#   groups[]   group: heading written as a comment; url, locale: defaults for its facts;
+#              comment: optional line written under the heading
+#     facts[]  id, type, quote (verbatim from the page); optional: text (defaults to quote), url,
+#              locale, status (defaults to confirmed), note (required for to_confirm), comment
+#   ignore[]   match: a regex over a text block of docs/strategy/facts-candidates.md;
+#              reason: why blocks it matches are not facts (shown in the report)
+#
+# Ids already used by pages must not change (node scripts/strategy/facts.mjs fails on a missing one).
+
+groups:
+  - group: Company (src/data/site.ts, every locale's footer)
+    url: https://www.tpisoftware.com/
+    locale: zh-TW
+    facts:
+      - { id: company-email, type: company, quote: service@tpisoftware.com }
+      - { id: company-copyright, type: company, quote: ©2026 TPIsoftware All rights reserved }
+
+  - group: OrientAI features (home page)
+    url: https://www.tpisoftware.com/
+    locale: zh-TW
+    facts:
+      - { id: orientai-multi-agent, type: feature, quote: 多 Agent 協作 }
+      - { id: orientai-governance, type: feature, quote: AI 治理 }
+      - { id: orientai-token-cost, type: feature, quote: Token 成本控管 }
+      - { id: orientai-multi-agent-en, type: feature, quote: Agent Collaboration, url: 'https://www.tpisoftware.com/en', locale: en }
+      - { id: orientai-governance-en, type: feature, quote: AI Governance, url: 'https://www.tpisoftware.com/en', locale: en }
+      - id: orientai-roi-en
+        type: feature
+        quote: Maximized ROI
+        url: https://www.tpisoftware.com/en
+        locale: en
+        comment: The en and vi pages put ROI where zh-TW has Token 成本控管
+      - { id: orientai-multi-agent-vi, type: feature, quote: Phối hợp đa tác nhân, url: 'https://www.tpisoftware.vn/', locale: vi }
+      - { id: orientai-governance-vi, type: feature, quote: Quản trị AI, url: 'https://www.tpisoftware.vn/', locale: vi }
+      - { id: orientai-roi-vi, type: feature, quote: Tối đa hóa ROI, url: 'https://www.tpisoftware.vn/', locale: vi }
+
+  - group: Case highlights (home page); they name no client
+    url: https://www.tpisoftware.com/
+    locale: zh-TW
+    facts:
+      - { id: smartclaim-title, type: case, quote: AI 智慧理賠 }
+      - id: smartclaim-result
+        type: case
+        text: "全自動執行理賠立案到派件，精確解析診斷書，節省逾80%​人工作業時間"
+        quote: 全自動執行理賠立案到派件，精確解析診斷書，節省逾80%人工作業時間
+      - { id: smartfilling-title, type: case, quote: AI 智慧建檔 }
+      - id: smartfilling-result
+        type: case
+        text: "透過免模板辨識醫療單據​解決格式變動痛點，提升辨識率並降低40%維護人力"
+        quote: 透過免模板辨識醫療單據解決格式變動痛點，提升辨識率並降低40%維護人力
+      - { id: fraud-platform-title, type: case, quote: 金融聯防阻詐平台 }
+      - { id: fraud-platform-result, type: case, quote: 標準化聯防流程，詐騙事件即時共享，提升跨行交換的效率與透明度 }
+
+  - group: Case highlights (home page, en)
+    url: https://www.tpisoftware.com/en
+    locale: en
+    facts:
+      - { id: smartclaim-title-en, type: case, quote: AI-Enhanced Insurance Claims Process }
+      - id: smartclaim-result-en
+        type: case
+        quote: Automate the insurance claims process with enhanced analysis and efficient claims management, reducing manual effort by 80%
+      - { id: smartfilling-title-en, type: case, quote: AI Optical Character Recognition }
+      - id: smartfilling-result-en
+        type: case
+        quote: Reduce 40% of maintenance effort with recognition accuracy using an adaptive approach to varying layouts and formatting
+      - { id: fraud-platform-title-en, type: case, quote: Fraud Prevention }
+      - id: fraud-platform-result-en
+        type: case
+        quote: Enhance interoperability and transparency with standardized fraud prevention measures and shared intelligence of identified patterns and anomalies
+
+  - group: Case highlights (home page, vi)
+    url: https://www.tpisoftware.vn/
+    locale: vi
+    comment: The vi titles span two lines on the page
+    facts:
+      - { id: smartclaim-title-vi, type: case, quote: Quy trình Bồi thường Bảo hiểm AI }
+      - id: smartclaim-result-vi
+        type: case
+        quote: Tự động hóa quy trình giải quyết bồi thường với khả năng phân tích nâng cao và quản lý hiệu quả, giúp giảm thiểu 80% thao tác thủ công.
+      - { id: smartfilling-title-vi, type: case, quote: Nhận dạng Ký tự Quang học (AI OCR) }
+      - id: smartfilling-result-vi
+        type: case
+        quote: Giảm 40% công sức bảo trì nhờ độ chính xác nhận dạng cao, sử dụng phương pháp thích ứng linh hoạt với các loại bố cục và định dạng khác nhau.
+      - { id: fraud-platform-title-vi, type: case, quote: Phòng chống Gian lận }
+      - id: fraud-platform-result-vi
+        type: case
+        text: Tăng cường khả năng liên thông và tính minh bạch thông qua các biện pháp phòng chống gian lận được tiêu chuẩn hóa.
+        quote: Tăng cường khả năng liên thông và tính minh bạch thông qua các biện pháp phòng chống gian lận được tiêu chuẩn hóa
+
+  - group: Company profile (about us)
+    url: https://www.tpisoftware.com/about-us
+    locale: zh-TW
+    facts:
+      - { id: company-offerings, type: company, quote: '由企業服務中台、交談式 AI 產品、雲服務，再到全方位軟體解決方案' }
+      - { id: company-industries, type: company, quote: '服務產業遍及金融保險、政府單位、零售電商、製造生產、醫療照護等產業' }
+      - id: company-product-lines
+        type: company
+        quote: '以榮獲台灣精品獎肯定之兩大自有研發軟體產品系列及八大數位轉型領域'
+        status: to_confirm
+        note: 產品系列頁現在分四個系列（DigiLism、SysTalk.ai、ESGswift、GadoSecurity），與「兩大」不一致
+      - id: company-claim-taiwan-first
+        type: company
+        quote: '台灣第一的企業軟體與解決方案提供商'
+        status: to_confirm
+        note: 最高級的自我宣稱，現站沒有寫出排名的依據
+      - id: company-offices-overseas
+        type: company
+        quote: '總公司 | 台灣台北 分公司 | 新加坡 分公司 | 越南胡志明 分公司 | 日本東京 分公司 | 泰國曼谷'
+        status: to_confirm
+        note: 「昕力據點」的地址清單沒有泰國，兩處說法不一致
+      - id: company-asia-presence
+        type: company
+        quote: '亦於新加坡、越南、日本與泰國皆設立據點，在東南亞與東北亞各地擁有合作夥伴'
+        status: to_confirm
+        note: 「昕力據點」的地址清單沒有泰國，兩處說法不一致
+      - { id: company-founded, type: company, quote: '昕力資訊創立於 2005 年' }
+      - id: company-founder
+        type: company
+        quote: '創辦人 Ben Yao'
+        status: to_confirm
+        note: 人物，對外使用姓名要確認
+      - { id: company-milestone-2008-finance, type: company, quote: '2008 年首度跨足金融產業，為華南銀行建置 CRM 系統', status: to_confirm, note: 寫出客戶名稱（華南銀行），對外使用要確認授權 }
+      - id: award-2008-outstanding-enterprise
+        type: award
+        quote: '同年也名列為傑出企業成就'
+        status: to_confirm
+        note: 現站沒有寫出獎項或名單的正式名稱，年份久遠
+      - { id: company-milestone-2011-tprs, type: company, quote: '2011年開發第一個 產品 – TPRS 推薦系統' }
+      - id: company-projects-400
+        type: metric
+        quote: '累積超過 400個不同的專案成功經驗'
+        status: to_confirm
+        note: 2016 - 2019 里程碑的累計數字，可能過時
+      - { id: company-subsidiaries-sg-vn, type: company, quote: '分別在2017、2019年設立新加坡與越南子公司' }
+      - id: company-product-families
+        type: company
+        quote: '積極發展兩大產品系列 DigiLism 與 SysTalk.ai'
+        status: to_confirm
+        note: 2016 - 2019 里程碑的說法；產品系列頁現在分四個系列
+      - { id: company-milestone-2020-brand, type: company, quote: '2020年以「TPIsoftware」 邁入國際' }
+      - id: company-employees-630
+        type: metric
+        quote: '全球員工超過 630 名'
+        status: to_confirm
+        note: 2020 - 2022 里程碑的人數，可能過時
+      - { id: company-milestone-retail, type: company, quote: '跨足零售產業' }
+      - id: award-ft-high-growth-2022
+        type: award
+        quote: '入選英國金融時報 (Financial Times) 2022 亞太地區快速成長 500 強企業'
+        status: to_confirm
+        note: 有年份的獎項，可能過時
+
+  - group: Awards and recognition (about us)
+    url: https://www.tpisoftware.com/about-us
+    locale: zh-TW
+    facts:
+      - { id: award-taiwan-excellence-2023, type: award, quote: 'digiRunner、digiLogs、SysTalk.Chat 獲得「2023 台灣精品獎」', status: to_confirm, note: 有年份的獎項，可能過時 }
+      - { id: award-taiwan-excellence-2024, type: award, quote: 'digiRunner、digiLogs、SysTalk.ai 獲得「2024 台灣精品獎」', status: to_confirm, note: 有年份的獎項，可能過時 }
+      - id: award-sbir-29
+        type: award
+        quote: 'DigiLism 企業服務中台獲 「第29屆中小企業創新研究獎」'
+        status: to_confirm
+        note: 屆次對應年份（里程碑寫 2022），可能過時
+      - { id: award-innovative-business-2022, type: award, quote: '2022 創新商務獎 digiRunner 獲得「最佳技術創新獎」； SysTalk.Chat 獲得「最佳產品創新獎」', status: to_confirm, note: 有年份的獎項，可能過時 }
+      - { id: company-talent-in-taiwan, type: company, quote: '正式加入「TALENT, in Taiwan， 台灣人才永續行動聯盟」' }
+      - id: award-digital-finance-1st
+        type: award
+        quote: '獲「第一屆數位金融獎」 金融科技新創公司推薦獎'
+        status: to_confirm
+        note: 里程碑寫 2021，可能過時
+      - { id: award-cx-asia-2021, type: award, quote: '獲新加坡 「2021 CX Asia Excellence Awards」- 卓越供應商金獎', status: to_confirm, note: 有年份的獎項，可能過時 }
+      - id: award-best-in-singapore
+        type: award
+        quote: '獲 Best in Singapore 肯定， 入選「最佳軟體服務開發商」'
+        status: to_confirm
+        note: 現站沒有寫年份，是否仍有效要確認
+      - { id: cert-iso27001-product-platform, type: certification, quote: '企業產品中台之開發流程 獲ISO27001 認證' }
+      - { id: company-google-cloud-partner, type: company, quote: '正式成為 Google Cloud 合作夥伴' }
+      - id: award-gartner-cool-vendor-2018
+        type: award
+        quote: '獲頒 Gartner 亞太地區 2018 年 Cool Vendor 獎項'
+        status: to_confirm
+        note: 有年份的獎項，可能過時；里程碑寫得獎的是 AI Chatbot 產品
+      - id: award-goodfirms-software
+        type: award
+        quote: '獲 GoodFirms 最佳軟體開發供應商認可'
+        status: to_confirm
+        note: 現站沒有寫年份，是否仍有效要確認
+      - id: award-goodfirms-mobile
+        type: award
+        quote: '獲 GoodFirms 最佳手機應用程式開發供應商認可'
+        status: to_confirm
+        note: 現站沒有寫年份，是否仍有效要確認
+      - { id: award-104-employer-2024, type: award, quote: '獲104人力銀行「雇主品牌大賞」評選 2024年科技業組【104 最佳吸引力獎】', status: to_confirm, note: 有年份的獎項，可能過時 }
+
+  - group: Offices (about us)
+    url: https://www.tpisoftware.com/about-us
+    locale: zh-TW
+    facts:
+      - { id: office-taipei-address, type: company, quote: '114台北市內湖區瑞光路335號12樓' }
+      - { id: office-taipei-phone, type: company, quote: '+886 2 2658 0508' }
+      - { id: office-singapore-address, type: company, quote: '7 Straits View, Marina One East Tower, #05-01, Singapore 018936' }
+      - { id: office-singapore-phone, type: company, quote: '+65 8737 4703' }
+      - { id: office-vietnam-address, type: company, quote: 'Lầu 7, phòng 706-707-708, Tòa nhà Văn phòng Safomec, số 7/1 Thành Thái, Phường 14, Quận 10, TpHCM' }
+      - { id: office-vietnam-phone, type: company, quote: '+84 28 2250 8332' }
+      - { id: office-japan-address, type: company, quote: '〒107-0052 東京都港区赤坂二丁目8番14-504号' }
+      - { id: office-hsinchu-address, type: company, quote: '新竹市公道五路二段158號2樓之3、之5（C、D戶）（中壽大樓）' }
+      - { id: office-hsinchu-phone, type: company, quote: '+886 3 516 6290' }
+      - { id: office-taichung-address, type: company, quote: '台中市南屯區五權西路二段131號7樓' }
+      - { id: office-taichung-phone, type: company, quote: '+886 4 2472 0050' }
+      - { id: office-tainan-address, type: company, quote: '台南市中西區公園路56號5樓A室（窩空間）' }
+      - { id: office-tainan-phone, type: company, quote: '+886 6 221 0525' }
+      - { id: office-kaohsiung-address, type: company, quote: '高雄市苓雅區輔仁路155號15樓之1' }
+      - { id: office-kaohsiung-phone, type: company, quote: '+886 7 722 0462' }
+      - { id: office-names, type: company, quote: '台北總部 新加坡 越南 日本 新竹專案管理中心 台中專案管理中心 台南開發中心 高雄開發中心' }
+
+  - group: Case highlights (home page, the rest of the carousel)
+    url: https://www.tpisoftware.com/
+    locale: zh-TW
+    comment: The titles span two lines on the page; text joins them
+    facts:
+      - { id: remote-insurance-title, type: case, text: 遠距投保平台, quote: 遠距 投保平台 }
+      - { id: remote-insurance-result, type: case, quote: 強化線上互動體驗，提高線上服務解決率，轉化客戶滿意度 }
+      - { id: smart-health-title, type: case, text: 智慧健康管理平台, quote: 智慧健康 管理平台 }
+      - { id: smart-health-result, type: case, quote: 提供個人化定價，提升保戶活躍度與互動頻率，降低理賠成本與風險比率 }
+      - { id: e-points-title, type: case, text: 電子點數兌換平台, quote: 電子點數 兌換平台 }
+      - { id: e-points-result, type: case, quote: 集中管理跨區域一致化服務，快速滿足用戶需求，提升會員體驗與品牌互動 }
+      - { id: italent-title, type: case, text: iTalent 職能管理平台, quote: iTalent 職能管理平台 }
+      - { id: italent-result, type: case, quote: 以多種回饋模式管理建立人才盤點機制，確保企業實現立即與長期的人才目標 }
+      - { id: sales-performance-title, type: case, text: 業務績效管理平台, quote: 業務績效 管理平台 }
+      - { id: sales-performance-result, type: case, quote: 結合 KPI、能力與發展計畫，即時掌握績效數據，打造持續成長的高效團隊 }
+      - { id: web-cms-title, type: case, text: 網站內容管理平台, quote: 網站內容 管理平台 }
+      - { id: web-cms-result, type: case, quote: 輕鬆建立、管理和發佈數位內容，縮短網站更新時間，加快市場反應速度 }
+      - { id: mobile-banking-title, type: case, text: 行動網銀整合平台, quote: 行動網銀 整合平台 }
+      - { id: mobile-banking-result, type: case, quote: 整合多渠道服務於單一平台，強化用戶體驗流程，降低開發營運成本 }
+
+  - group: Testimonials (home page)
+    url: https://www.tpisoftware.com/
+    locale: zh-TW
+    comment: Each testimonial is the statement and its speaker; names, titles and quotes need the client's consent
+    facts:
+      - id: testimonial-nccu-fintech
+        type: case
+        quote: 昕力是台灣本土在 API 管理平台上，相較於國際來說，走得最前面，且是第一家開始投入相關技術的企業。昕力在 API 管理平台的技術和 Al 都提供很好的服務，在未來的開放銀行有很大的發揮效果，可擔任領頭羊，引領其他公司投入。
+        status: to_confirm
+        note: 證言，對外使用要取得說話人同意；「第一家」是證言中的說法
+      - { id: testimonial-nccu-fintech-speaker, type: case, quote: 王儷玲 教授 ｜政大金融科技研究中心主任, status: to_confirm, note: 人物與職稱，對外使用要取得同意，職稱可能已變 }
+      - id: testimonial-cathay-fhc
+        type: case
+        quote: 此次與昕力的合作我們就像同一個團隊般合作無間，目前SysTalk已經涵蓋了我們旗下50％以上的用戶服務量，在滿意度回饋上也超過了真人客服，透過昕力的最佳技術與完整客戶體驗的合作，我們獲得了相當好的成果。
+        status: to_confirm
+        note: 客戶證言，對外使用要取得客戶同意；50％ 是當時的數字，可能過時
+      - id: testimonial-cathay-fhc-speaker
+        type: case
+        quote: 姚旭杰 ｜國泰金控數數發中心資深副總
+        status: to_confirm
+        note: 人物與職稱，對外使用要取得同意，職稱可能已變；委外服務頁也引用這則證言
+      - id: testimonial-excellence-wire
+        type: case
+        quote: 卓新是結構化綜合佈線領導廠商，客戶遍及全球各地，此次與昕力資訊合作，導入 RPA 流程自動化，不但改善了員工工作的效率，讓人才發揮最大的價值，在內部流程革新之下，促使企業營運朝數位轉型前進，以因應快速轉變的時代，為卓新發展帶來極大助益，並保持競爭力的關鍵！
+        status: to_confirm
+        note: 客戶證言，對外使用要取得客戶同意
+      - { id: testimonial-excellence-wire-speaker, type: case, quote: 楊秀鳳 ｜卓新工業業務副總, status: to_confirm, note: 人物與職稱，對外使用要取得同意，職稱可能已變 }
+      - id: testimonial-youbike
+        type: case
+        quote: 一直以來我們都希望讓 YouBike 公共自行車不只是交通工具，而是能直接融入大眾生活，為民眾帶來便利的服務，而本次與昕力資訊合作的 AI 智能客服，導入之後，我們挖掘了一塊新的服務市場，我覺得這是我們最大的收穫；我們已經規劃第二階段的開發計畫，希望能夠持續跟昕力資訊一起合作，把我們的 YouBike 客服小管家智能客服精進，讓它整個服務面更廣闊。
+        status: to_confirm
+        note: 客戶證言，對外使用要取得客戶同意
+      - { id: testimonial-youbike-speaker, type: case, quote: 莊博欽 ｜微笑單車股份有限公司 企劃經理兼中營處長, status: to_confirm, note: 人物與職稱，對外使用要取得同意，職稱可能已變 }
+      - id: testimonial-shin-kong-bank
+        type: case
+        quote: 在這個平台上它提供IT人員可以做後台管理也考慮到很多安控，昕力在這個產品上已經蠻替IT人員想到蠻多; 昕力在一些新進的技術上面其實一直都走得蠻前面的，也很願意分享給我們，那整個團隊的服務都非常棒，我們一定會再繼續跟他們合作。
+        status: to_confirm
+        note: 客戶證言，對外使用要取得客戶同意
+      - { id: testimonial-shin-kong-bank-speaker, type: case, quote: Dora 徐靜婷 ｜新光銀行數位資訊部資深經理, status: to_confirm, note: 人物與職稱，對外使用要取得同意，職稱可能已變 }
+
+  - group: Clients
+    locale: zh-TW
+    comment: One entry per client name as the site spells it (facts.mjs matches page copy against text); variants are separate entries
+    facts:
+      - { id: client-anz, type: client, quote: 'ANZ澳盛銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-anz-short, type: client, quote: '澳盛銀行', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-youbike, type: client, quote: 'YouBike', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-ipass, type: client, quote: '一卡通', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-china-life, type: client, quote: '中國人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-prudential-taiwan, type: client, quote: '保德信人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-excellence-wire, type: client, quote: '卓新工業', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-taishin-bank, type: client, quote: '台新銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-taiwan-life, type: client, quote: '台灣人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-taiwan-mobile, type: client, quote: '台灣大哥大', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-hotai, type: client, quote: '和泰汽車', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-cathay-united-bank, type: client, quote: '國泰世華銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-cathay-life, type: client, quote: '國泰人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-cathay-century, type: client, quote: '國泰產險', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-cathay-fhc, type: client, quote: '國泰金控', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-good-health, type: client, quote: '好適康', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-entie-bank, type: client, quote: '安泰銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-fubon-life, type: client, quote: '富邦人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-chang-hwa-bank, type: client, quote: '彰化銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-dunqian, type: client, quote: '敦謙國際', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-shin-kong-life, type: client, quote: '新光人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-shin-kong-bank, type: client, quote: '新光銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-tokio-marine-newa, type: client, quote: '新安東京海上產險', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-union-insurance, type: client, quote: '旺旺友聯', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-dbs, type: client, quote: '星展', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-dbs-bank, type: client, quote: '星展銀行', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-sinopac, type: client, quote: '永豐銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-bnp-paribas-cardif, type: client, quote: '法國巴黎人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-bnp-paribas-cardif-short, type: client, quote: '法巴人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-standard-chartered, type: client, quote: '渣打銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-innolux, type: client, quote: '群創光電', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-taipei-city, type: client, quote: '臺北市政府', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-taipei-city-alt, type: client, quote: '台北市政府', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-bank-of-taiwan, type: client, quote: '臺灣銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-prudential-uk, type: client, quote: '英國保誠人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-prudential-uk-short, type: client, quote: '保誠人壽', url: 'https://www.tpisoftware.com/about-us', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-ministry-of-finance, type: client, quote: '財政部', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-fu-jen-hospital, type: client, quote: '輔大醫院', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-far-eastern-bank, type: client, quote: '遠東商業銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-line-pay, type: client, quote: 'LINE Pay', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-chunghwa-telecom, type: client, quote: '中華電信', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-icash, type: client, quote: '愛金卡', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-thsr, type: client, quote: '台灣高鐵', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-chailease, type: client, quote: '中租', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-ericsson-taiwan, type: client, quote: '台灣易利信', url: 'https://www.tpisoftware.com/about-us', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-tsmc, type: client, quote: '台積電', url: 'https://www.tpisoftware.com/about-us', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-hua-nan-bank, type: client, quote: '華南銀行', url: 'https://www.tpisoftware.com/about-us', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-pharmacity, type: client, quote: 'Pharmacity', url: 'https://www.tpisoftware.com/products/digirunner', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-wemo, type: client, quote: 'Wemo Scooter', url: 'https://www.tpisoftware.com/products/systalk-chat', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-taichung-vgh, type: client, quote: '台中榮總', url: 'https://www.tpisoftware.com/products/digicare', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-ncku-hospital, type: client, quote: '成大醫院', url: 'https://www.tpisoftware.com/products/digicare', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-wanfang-hospital, type: client, quote: '萬芳醫院', url: 'https://www.tpisoftware.com/products/digicare', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-youbike-operator, type: client, quote: '微笑單車股份有限公司', url: 'https://www.tpisoftware.com/', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-sinyi, type: client, quote: '信義房屋', url: 'https://www.tpisoftware.com/products/digimars', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-kaohsiung-city, type: client, quote: '高市府', url: 'https://www.tpisoftware.com/products/digiflexis', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-shin-kong-insurance-agency, type: client, quote: '新光金保代', url: 'https://www.tpisoftware.com/products/insurebrick', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-archives, type: client, quote: '檔管局', url: 'https://www.tpisoftware.com/solutions/textualanalysis', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+
+  - group: DigiLism
+    url: https://www.tpisoftware.com/products/digilism
+    locale: zh-TW
+    facts:
+      - { id: digilism-ipaas, type: feature, quote: 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。 }
+      - { id: digilism-patent-background-processing, type: feature, quote: 具備專利技術的背景服務運算處理，支援處理瞬間大量的數據或請求，達到零阻塞式運行。 }
+      - { id: digilism-patent-resource-scheduling, type: feature, text: 專利技術的運算資源調度機制、靈活調配，以提高資訊系統可用性。, quote: '專利技術的運算資源調度機制、靈活調配，,以提高資訊系統可用性。' }
+      - { id: digilism-patent-sla, type: feature, quote: 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
+      - { id: digilism-system-integration, type: feature, quote: 結合 DevOps 與 CI/CD 流程、整合 API 管理、BPM、日誌管理，支援地端、雲端、雲地混合與多雲架構，介接大型企業的傳統 ESB }
+      - { id: digilism-microservice-framework, type: feature, quote: DigiLism 以 K8S 滿足系統高可用性，直接實踐微服務架構的 BFF （Backend for Frontend），並以自有自動擴容 （Auto-scaling）研發專利技術，讓系統具備佈署彈性。 }
+      - { id: digilism-auth-module, type: feature, quote: 提供多元身分驗證、驗身機制及安控機制的整合，包含訪問控制、資料加密和單一登入（SSO）等，同時內建組織階層管理 }
+      - { id: digilism-log-audit, type: feature, quote: 記錄分散於各系統或 AP 的所有日誌，透過集中控管、即時監控告警，提供第一線 IT 人員精確即時查找、分析系統問題來源 }
+      - { id: digilism-protocol-integration, type: feature, quote: 以微服務架構的 DigiLism 專門協助處理核心銀行系統或過時大型機的資料轉換及通訊機制變更，可代替企業服務匯流排（ESB） }
+      - { id: digilism-sla-100, type: feature, quote: 100 % SLA 智慧快取、負載平衡、平行處理、容器延展四大原生內建機制，可確保每個 API、服務、通道和佈署皆擁有優異效能，讓系統服務穩定、運行不中斷，從而實現 100％ 的服務水平協定 （SLA）。, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
+      - { id: digilism-solution-areas, type: feature, quote: DigiLism 系列提供 API 管理、日誌管理及大數據管理三大面向解決方案 }
+      - { id: digilism-family-digirunner, type: feature, quote: 整合 MCP 協定與 AI Gateway 架構，讓 AI 模型安全串接企業 API、資料與業務流程 }
+      - id: digilism-family-digilogs
+        type: feature
+        quote: 以業界唯一鏈路追蹤技術集中管理系統日誌，整合可視化拓樸、EDR、RCA 與智慧告警，協助企業即時除錯、高效維運。
+        status: to_confirm
+        note: 「業界唯一」是最高級宣稱，現站沒有寫出依據
+      - { id: digilism-family-digimars, type: feature, quote: 將 MongoDB 社群版升級至商用等級，提供效能監控、告警與備份還原，降低資料庫管理成本，並附 7×24 技術支援。 }
+      - { id: digilism-family-digiflexis, type: feature, quote: 以零代碼設計快速建立數位表單與自動化流程，搭配智能報表即時洞察營運數據 }
+      - { id: digilism-family-digicare, type: feature, quote: 以 HL7 FHIR 為核心架構，將異質系統的分散資料整併為可互通的標準格式，實現跨系統、跨院交換，並遵循衛福部 FHIR 實作指引。 }
+
+  - group: digiLogs
+    url: https://www.tpisoftware.com/products/digilogs
+    locale: zh-TW
+    facts:
+      - id: digilogs-claim-2-minutes
+        type: feature
+        quote: 業界唯一主動識別科技 2分鐘定位問題
+        status: to_confirm
+        note: 「業界唯一」是最高級宣稱，現站沒有寫出依據；2 分鐘沒有寫出量測條件
+      - { id: digilogs-rca-2-minutes, type: feature, quote: RCA 根因分析 輕鬆掌握、迅速應對異常 2分鐘除錯 高效復歸 }
+      - { id: digilogs-55-formats, type: feature, quote: digiLogs 集中化日誌管理平台，支援超過 55 種系統資料格式的無差別蒐集，提供解析邏輯、日誌資料萃取保存，以及多元的查詢機制—全文檢索、關鍵字查詢、和鏈路式關聯查詢。 }
+      - { id: digilogs-collectors, type: feature, quote: Agent-based 即時、無間斷收集系統完整日誌，確保每一項記錄都被精確保存。 Agentless 捕捉系統主機的效能關鍵指標，輕鬆掌握系統狀態。 API Collector 記錄和監視 API 的調用情況 }
+      - { id: digilogs-distributed-tracing, type: feature, quote: digiLogs 利用分散式跟蹤（Distributed Tracing）提升排查效率，進而透過根因分析（Root Cause Analysis）精準定位問題所在 }
+      - { id: digilogs-edr, type: feature, quote: EDR 端點監控 全視系統監控圖 }
+      - { id: digilogs-siem, type: feature, quote: digiLogs 分析資料可作為 SIEM 資安控管的一環。 }
+      - { id: digilogs-10000-eps, type: feature, quote: '支援 10,000 EPS，整合多條件的複合告警設定。' }
+      - { id: digilogs-iso27001-encryption, type: feature, quote: 在日誌收集、傳輸的過程中，透過 SSL / mTLS、RSA 加密技術及私鑰解密驗證等機制，達到資料的來源不可否認性與資料完整性 }
+      - { id: digilogs-iso27001-audit, type: feature, quote: 助力企業進一步通過 ISO 27001 稽核。 }
+      - { id: digilogs-case-bank-path-map, type: case, quote: digiLogs 協助為某銀行蒐集系統資料，而後進行資料統合、解析及重新定義後於單一平台呈現，並透過交易路徑地圖，以不同權限層級的劃分，當系統發生問題時，快速標記出問題點，同步自動向維運人員提出示警，加快查找問題所在並進行修復。 }
+      - id: digilogs-case-cathay-life
+        type: case
+        quote: 國泰人壽每月約需存取 6 TB 的 logs日誌數據，透過 digiLogs 快速的水平擴展機制（分片），能夠整合多台系統資料運作記錄，進一步整合及分析，並匯入同一平台輕鬆管理大量且每日增長的數據資料。
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權；數據量是當時的數字
+      - id: digilogs-case-online-banking
+        type: case
+        quote: 銀行端系統客戶單日日誌收集數據量多達 50 GB（每月約1.5 TB），舊有系統維運能力有限且難應對日趨複雜的管理需求。導入昕力自有研發產品「 digiLogs 」後，因其單一介面跨平台 log 查詢、流量監控、視覺化報表統計、即時告警等特點，管理效率大增。
+      - { id: digilogs-case-online-banking-title, type: case, quote: 網路銀行日誌管理 }
+
+  - group: digiLogs ISO 27001 logging
+    url: https://www.tpisoftware.com/products/digilogs/iso27001logging
+    locale: zh-TW
+    facts:
+      - { id: digilogs-10-million-logs-a-day, type: feature, quote: 1日支援 1000 萬+ 筆日誌資料 存取 }
+      - { id: digilogs-100-servers, type: feature, quote: 1次監管 100 + 系統伺服器 }
+      - { id: digilogs-10000-events-per-second, type: feature, quote: '以每秒處理 10,000 事件數的優質效能，集中管理日誌資料滿足大量監控需求' }
+      - { id: digilogs-access-control, type: feature, quote: 1站控管 100 % 確保 組織權限, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
+      - { id: digilogs-iso27001-a815, type: certification, quote: 遵循 ISO 27001:2022 A.8.15 日誌存錄(控制) }
+      - { id: digilogs-55-sources-edr-rca, type: feature, quote: 強大的主動偵錯(EDR)及根因分析(RCA)，迅速地提升系統效能並確定問題之源。同時支援超過55種以上資料來源格式 }
+
+  - group: digiMars
+    url: https://www.tpisoftware.com/products/digimars
+    locale: zh-TW
+    facts:
+      - { id: digimars-commercial-grade, type: feature, quote: 讓企業用戶的 MongoDB 社群版達到商用管理等級，且提供全天候7*24的 技術支援服務 }
+      - { id: digimars-os-support, type: feature, quote: Windows RedHat Linux v7 RedHat Linux v8 作業系統 (支援至 MongoDB 6.0) }
+      - { id: digimars-ldap, type: feature, quote: 透過與 LDAP 無縫整合，落實身分核實與存取管理 }
+      - { id: digimars-agentless, type: feature, quote: 無需安裝代理程式，即可在不影響系統運行下，進行 MongoDB 監控。 }
+      - { id: digimars-auto-discovery, type: feature, quote: 自動發現並納管 MongoDB 新資源，不須額外操作。 }
+      - { id: digimars-50-metrics, type: feature, quote: 內建 50 多個常用監控指標，自動顯示適合閱覽的圖表。 }
+      - { id: digimars-alerts, type: feature, quote: 完整監控功能可彈性自訂告警對象、規則及設定觸發動作。 }
+      - { id: digimars-backup, type: feature, quote: 支援異地備援、差異備份與還原，更提供備份叢集、資料庫和集合等選擇。 }
+      - { id: digimars-change-tracking, type: feature, quote: 單筆資料異動軌跡查詢，加強稽核力度與追蹤能力。 }
+      - { id: digimars-support-7x24, type: feature, quote: 7 x 24 全天候技術支援 為企業管理把關 }
+      - { id: digimars-one-stop-service, type: feature, quote: 一站式的流程服務及技術支援，確保企業客戶在使用社群版 MongoDB 時無後顧之憂 }
+      - id: digimars-mongodb-market-share
+        type: metric
+        quote: MongoDB 是市佔第一的 NoSQL 資料庫
+        status: to_confirm
+        note: 第三方產品的市佔排名，現站沒有寫出處，可能過時
+      - { id: digimars-mongodb-use-cases, type: feature, quote: 彈性的資料結構、分散式水平擴充能力及高可用性、跨區域部署之三大特點 }
+      - { id: digimars-case-cdr, type: case, quote: 原系統每日超過 4000 萬筆 CDR 通話紀錄，採用傳統 RDB 資料庫，無法有效進行資料處理與彙整，且耗費過多時間與人力監控龐大資料庫，每年需負擔高額 RDB(Oracle) 授權成本，改用 MongoDB Cluster 機制後，資料處理效能提高 5 倍 }
+      - id: digimars-case-cathay-life
+        type: case
+        quote: 國泰人壽選擇 digiMars 來管理超過 20 台 MongoDB 伺服器，及進行高達 100 TB 的數據備份和監控，顯著提高了 MongoDB 監控效率，成功達到資料庫安全需求
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: digimars-case-sinyi
+        type: case
+        quote: 專業顧問協助 MongoDB 進行版本升級及順利遷移至雲端環境，讓原已採用 MongoDB 的信義房屋進行系統調校、優化
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+
+  - group: digiFlexis
+    url: https://www.tpisoftware.com/products/digiflexis
+    locale: zh-TW
+    facts:
+      - { id: digiflexis-bpmn, type: feature, quote: digiFlexis 為輕量化流程管理平台，遵循世界標準 BPMN 2.0 規範，並透過開放式API整合，可彈性擴展系統延展性 }
+      - { id: digiflexis-no-code, type: feature, quote: 提供零代碼平台，無需編寫代碼即可完成表單與流程設計 }
+      - { id: digiflexis-widget, type: feature, quote: 模組化設計可根據用戶需求拖拉操作，自由擺放和排版各種小工具 }
+      - { id: digiflexis-paperless, type: feature, quote: 推動無紙化辦公，透過線上表單和電子簽核流程，提高審批效率和透明度 }
+      - { id: digiflexis-open-api, type: feature, quote: 支持開放式APl，可以與其他系統無縫集成，例如 ERP、CRM、HRM等 }
+      - { id: digiflexis-cloud, type: feature, quote: 系統提供雲端部署和資訊安全的服務 }
+      - { id: digiflexis-dynamic-form, type: feature, quote: BPM 系統内建簡易操作的表單介面 }
+      - { id: digiflexis-dynamic-flow, type: feature, quote: 動態流程設計 協辦機制與跳關流程 }
+      - { id: digiflexis-rwd, type: feature, quote: 系統支援響應式設計（RWD），讓手機版簽核操作更加便捷流暢 }
+      - { id: digiflexis-case-vpm, type: case, quote: Tribis-BPM 為影音平台建立完整排片流程，滿足個人化設計、權責彈性定義，全面監看所有影片執行狀態 }
+      - { id: digiflexis-case-policy-image, type: case, quote: 協助打造全新保單影像流程平台，透過大數據解決方案儲存巨量保單影像檔，並重構流程引擎，取代昂貴流程產品授權 }
+      - id: digiflexis-case-kaohsiung
+        type: case
+        quote: 協助高市府導入流程引擎，提供動態表單、流程供管理人員設定，可快速新增各式便民的表單流程
+        status: to_confirm
+        note: 寫出客戶名稱（高市府），對外使用要確認授權
+
+  - group: digiCare
+    url: https://www.tpisoftware.com/products/digicare
+    locale: zh-TW
+    facts:
+      - { id: digicare-fhir-core, type: feature, quote: 昕力資訊以「臺灣醫療資訊標準大平台」的標準為基礎，採 HL7 FHIR 作為核心架構，協助醫院把分散在 HIS、LIS、PACS、EMR 的資料整理成可互通的標準格式 }
+      - { id: digicare-smart-on-fhir, type: feature, quote: Smart on FHIR 合規可落地 }
+      - { id: digicare-modules, type: feature, quote: FHIR 資料平台 生成式護理紀錄 360度醫囑紀錄 }
+      - { id: digicare-mohw-guide, type: feature, quote: 時時更新遵循衛福部發布的FHIR實作指引公告 }
+      - { id: digicare-ai-nursing-record, type: feature, quote: 護理紀錄範本＋AI 初稿，讓「補寫」變成「校稿」 }
+      - { id: digicare-nursing-burden, type: metric, quote: 護理師照顧病人已經很忙，每班結束前還要花 1~2 小時「補寫」護理紀錄 }
+      - { id: digicare-ehr-standard, type: metric, quote: 醫院需符合政府推動電子病歷標準化的規範，並接軌國際醫學資料標準 FHIR規範趨勢 }
+      - id: digicare-hospitals
+        type: case
+        quote: 協助台灣台中榮總、成大醫院、萬芳醫院等醫療院所，除醫學中心外，也協助區域醫院或地區醫院建置 FHIR 標準平台於院內實際上線應用
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: digicare-mou-taipei-medical-alliance
+        type: company
+        quote: 與社團法人台北醫療聯盟協會簽署「公益交流合作備忘錄」（MOU）
+        status: to_confirm
+        note: 合作單位名稱，對外使用要確認授權；現站沒有寫簽署年份
+      - id: digicare-mou-long-term-care
+        type: company
+        quote: 與社團法人台北醫療聯盟協會和國立空中大學，跨產官學醫合作備忘錄簽署，以AI技術為核心的長照 3.0 人才培育與場域實證合作
+        status: to_confirm
+        note: 合作單位名稱，對外使用要確認授權；現站沒有寫簽署年份
+      - { id: digicare-fhir-definition, type: feature, quote: A：FHIR 是 HL7 制定的醫療資料交換標準，目標是讓不同系統用一致的資料模型與介面交換資料。台灣也有對應的在地實作指引（TW Core IG）協助落地。 }
+
+  - group: digiRunner
+    url: https://www.tpisoftware.com/products/digirunner
+    locale: zh-TW
+    facts:
+      - { id: digirunner-trial-30-days, type: feature, quote: 30 天免費試用 }
+      - id: digilism-patents-7
+        type: metric
+        quote: DigiLism 產品系列擁有7項發明專利
+        status: to_confirm
+        note: 專利數會隨時間增加，要確認是否仍是 7 項
+      - { id: cert-iso27001-digirunner, type: certification, quote: 通過 ISO27001 資訊安全認證 }
+      - { id: digirunner-ai-gateway, type: feature, quote: AI Gateway 智能負載平衡與安全防護，全面監控AI運作 }
+      - { id: digirunner-ai-model-config, type: feature, quote: 根據需求調配不同類型的AI模型，靈活平衡效能與成本 }
+      - { id: digirunner-ai-usage-log, type: feature, quote: 完整錄所有AI使用歷程，確保業務流程和數據使用符合監管要求 }
+      - { id: digirunner-ai-governance, type: feature, quote: AI Governance 確保AI應用合規，強化企業風險控管 }
+      - { id: digirunner-ai-content-review, type: feature, quote: 在輸入內容時與產生輸出前，皆可自動檢測，防止不適當內容產生 }
+      - { id: digirunner-ai-traffic, type: feature, quote: 快速整合企業內部AI應用，實時監控AI流量，強化服務穩定性 }
+      - { id: digirunner-zero-downtime, type: feature, quote: 雲原生容器化佈署架構，支援橫向擴展叢集機制，可建構高可用性系統架構 }
+      - { id: digirunner-low-code, type: feature, quote: 以低代碼開發方式輕鬆完成 API 組合、轉換、加值開發或異質資料整合等彈性應用，並具備即時監控API運行與異常告警 }
+      - { id: digirunner-zero-blocking, type: feature, quote: 支援 API 動態流量分流、零阻塞API運行機制與API智慧快取等功能 }
+      - { id: digirunner-zero-trust, type: feature, quote: 內建零信任的 API 存取防護機制，支援 OIDC /OAuth2 等技術標準，具備即時監控與告警，可防止 API 惡意攻擊與資料外洩，有效維持系統服務的安全性。 }
+      - { id: digirunner-api-lifecycle, type: feature, quote: 提供完整 API 生命周期管理，更遵循 Open API 規範，支援 OAuth2.0 及 OIDC（OpenID Connect）的安全規範 }
+      - { id: digirunner-deployment, type: feature, quote: 支援地、雲端部署及 K8s 微服務架構 }
+      - { id: digirunner-multi-cloud, type: feature, quote: digiRunner提供高效的雲端 API 管理解決方案，支援多雲和混合雲環境，並整合 Kubernetes 微服務架構。 }
+      - id: digirunner-finance-compliance-100
+        type: feature
+        quote: 遵循監管機關稽核 100 % 符合金融檢查規範
+        status: to_confirm
+        note: 宣稱 100% 合規，現站沒有寫出依據
+      - id: digirunner-insurance-compliance-100
+        type: feature
+        quote: 全面遵循主管機關監管 100 % 合規金融檢查
+        status: to_confirm
+        note: 宣稱 100% 合規，現站沒有寫出依據
+      - { id: digirunner-fhir, type: feature, quote: 實現國際 FHIR 格式轉換 促進電子病歷資料共享 }
+      - { id: digirunner-five-applications, type: feature, quote: API Gateway 一站式的 API 管理，確保資料交換的速度與安全。 既有系統重構 透過API化、微服務化，提升系統效能並確保長期維護的彈性。 企業中台建構 }
+      - { id: digirunner-smart-caching, type: feature, quote: 有效評估後端系統的運行狀態，判斷後端運行狀況再進行執行快取 }
+      - { id: digirunner-load-balancing, type: feature, quote: 內建原生負載平衡機制，透過平台介面直接設定、即時啟動 }
+      - { id: digirunner-parallel-processing, type: feature, quote: 零阻塞式運行模式增強 API 處理的效率和速度，讓多支 API 之間的運行互不干擾 }
+      - { id: digirunner-container-scaling, type: feature, quote: 彈性動態橫向延展，可因應系統尖、離峰時段，進行擴充或縮減 }
+      - { id: digirunner-api-composer, type: feature, quote: 使用 API 組合與設計（API Composer）功能，支援多種 API 格式轉換，拖拉即可輕鬆組合打造出新的 API }
+      - { id: digirunner-sandbox, type: feature, quote: 在不影響現行服務運作下，讓開發人員在安全環境中自訂模擬資料，快速進行測試，同時支持前後端平行開發。 }
+      - { id: digirunner-console, type: feature, quote: 即時主控台完整保留 API 活動與軌跡 }
+      - { id: digirunner-security, type: feature, quote: digiRunner 支援 OAuth 2.0 認證、OIDC (OpenID Connect) 與 API Key 授權方式，資安機制包含 mTLS 憑證安全、 JWT 金鑰加密，提供企業對外 Domain URL 設定、支援硬體加密模組 (HSM) 介接。 }
+      - id: digirunner-claim-fsc-only
+        type: feature
+        quote: 國內唯一符合遵循金管會法令
+        status: to_confirm
+        note: 「國內唯一」是最高級宣稱，現站沒有寫出依據
+      - { id: digirunner-financial-inspection, type: feature, quote: 針對金融檢查，完善 API 管理： API 生命週期作業 訂定交易限制 訂定連線識別名稱產製方式 定期盤點作業及風險評估 進行資源與服務監控作業 完善之服務憑證管理規範 進行分類分級管理 API Key 識別認證 採用 OAuth 2.0 }
+      - id: digirunner-case-taishin
+        type: case
+        quote: 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: award-global-finance-2020
+        type: award
+        quote: 該平台獲全球金融雜誌 (Global Finance)頒發「The Innovators 2020 Cash Management」獎。
+        status: to_confirm
+        note: 客戶專案的獎項，有年份，可能過時；與台新銀行的案例相連，對外使用要確認授權
+      - id: digirunner-case-taipei-city
+        type: case
+        quote: 為臺北市政府建置符合統一標準的API管理平台，使各機關的異質應用系統資料介接，讓市府推動資料開放政策，拓展創新應用之可行性，極大化開放資料加值應用與民眾參與公共政策。此外，昕力顧問團隊更協助市府建立API管理制度，並輔導各級機關一一導入上線。
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: digirunner-case-pharmacity
+        type: case
+        quote: digiRunner 為 Pharmacity 於雲端建構 API 管理平台，透過 API 策略推動電子商務模式，在平台上整合第三方 API 並進行管理、監控
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: digirunner-vs-kong-integration
+        type: feature
+        comment: The v.s. Kong table puts each character of the digiRunner column in its own tag, so facts-candidates.md does not list it; the quotes match once whitespace is ignored
+        text: 整合性：digiRunner 一站式平台，開箱即用；Kong 需額外串接多工具
+        quote: 整合性 一站式平台，開箱即用 需額外串接多工具
+        status: to_confirm
+        note: 與競品的比較宣稱，現站沒有依據或比較日期，對外使用前要確認
+      - id: digirunner-vs-kong-adoption
+        type: feature
+        text: 導入效率：digiRunner 低代碼開發，友善介面，學習成本低；Kong 需寫 Lua 擴充功能
+        quote: 導入效率 低代碼開發，友善介面，學習成本低 需寫 Lua 擴充功能
+        status: to_confirm
+        note: 與競品的比較宣稱，現站沒有依據或比較日期，對外使用前要確認
+      - id: digirunner-vs-kong-visibility
+        type: feature
+        text: 可視化管理：digiRunner 內建圖表亦可整合 ELK；Kong 需額外佈署 ELK
+        quote: 可視化管理 內建圖表亦可整合ELK 需額外佈署 ELK
+        status: to_confirm
+        note: 與競品的比較宣稱，現站沒有依據或比較日期，對外使用前要確認
+      - id: digirunner-vs-kong-compliance
+        type: feature
+        text: 合規性：digiRunner 符合台灣金融規範；Kong 無在地合規設計
+        quote: 合規性 符合台灣金融規範 無在地合規設計
+        status: to_confirm
+        note: 與競品的比較宣稱，現站沒有依據或比較日期，對外使用前要確認
+      - id: digirunner-vs-kong-operations
+        type: feature
+        text: 維運負擔：digiRunner 完整記錄 API Log 內容；Kong 需自行整合與排錯
+        quote: 維運負擔 完整記錄APILog內容 需自行整合與排錯
+        status: to_confirm
+        note: 與競品的比較宣稱，現站沒有依據或比較日期，對外使用前要確認
+
+  - group: digiRunner Cloud and AWS Marketplace
+    url: https://www.tpisoftware.com/products/digirunner/awsmarketplace
+    locale: zh-TW
+    comment: Prices and plan limits as the AWS Marketplace page lists them, column by column (Lite Standalone, Lite HA, Enterprise Standalone, Enterprise HA)
+    facts:
+      - { id: digirunner-cloud-trial, type: feature, url: 'https://www.tpisoftware.com/products/digirunner-cloud', quote: 即可立即體驗 30天 digiRunner Cloud 的強大功能 }
+      - { id: digirunner-cloud-platforms, type: feature, url: 'https://www.tpisoftware.com/products/digirunner-cloud', quote: AWS GCP Azure }
+      - { id: digirunner-cloud-opensearch, type: feature, url: 'https://www.tpisoftware.com/products/digirunner-cloud', quote: 可視化的 OpenSearch 圖表，有助於掌控系統狀態且降低維運成本。 }
+      - { id: digirunner-cloud-20-minutes, type: feature, quote: 雲上啟動 20分鐘無縫整合 }
+      - { id: cert-digirunner-aws, type: certification, quote: AWS 認證雲原生 API 管理平台 }
+      - { id: digirunner-cloud-trial-full, type: feature, quote: 完整功能30天 無需任何費用 }
+      - { id: digirunner-cloud-plans, type: feature, quote: Lite (Standalone) Lite (High Availability) Enterprise (Standalone) Enterprise (High Availability) }
+      - { id: digirunner-cloud-api-calls, type: feature, quote: 每月API呼叫次數 < 50 million > 50 million < 50 million > 50 million, status: to_confirm, note: 方案限制可能調整；digiRunner Cloud 頁的同一張表欄位排列不同 }
+      - { id: digirunner-cloud-throughput, type: feature, quote: 每月使用量 500GB > 500GB 500GB > 500GB, status: to_confirm, note: 方案限制可能調整；digiRunner Cloud 頁的同一張表欄位排列不同 }
+      - { id: digirunner-cloud-apis-unlimited, type: feature, quote: API數量管理 無限制 }
+      - { id: digirunner-cloud-pods, type: feature, quote: pod 1 2~5 1 2~5, status: to_confirm, note: 方案限制可能調整；digiRunner Cloud 頁寫 2-5 }
+      - { id: digirunner-cloud-price-hourly, type: metric, quote: 小時計費 0.49 USD / pod 0.29 USD / pod 0.59 USD / pod 0.35 USD / pod, status: to_confirm, note: 價格，可能過時 }
+      - { id: digirunner-cloud-price-annual, type: metric, quote: '年度訂閱計費 3,999 USD / pod 2,499 USD / pod 4,999 USD / pod 2,999 USD / pod', status: to_confirm, note: 價格，可能過時 }
+      - { id: digirunner-cloud-infrastructure, type: feature, quote: 需要 Amazon EC2 或 AWS Fargate。 }
+      - { id: digirunner-cloud-trial-terms, type: feature, quote: 每項產品試用 30 天，試用期間不會收取任何軟體費用，但 AWS仍會收取基礎設施費用。 免費試用期到期後將自動轉換為付費訂閱 }
+      - { id: digirunner-cloud-containers, type: feature, quote: 透過容器化架構可快速簡便完成部署與管理、確保應用環境一致性 }
+      - { id: digirunner-cloud-billing, type: feature, quote: 雲端環境根據實際使用量支付費用，搭配API使用分析報表 }
+      - { id: digirunner-failover, type: feature, quote: 在高可用性的架構下，如果其中一個 API 伺服器（指 digiRunner）出現故障，所有請求都會自動分流至另一個伺服器，全程無需人為操作。 }
+      - { id: digirunner-redis-storage, type: feature, quote: 數據將以 RDB 格式保存在 Redis 資料庫。資料庫可根據客戶需求進行配置。 我們的金融產業合作夥伴多採用具高可用性的 Active/Standby 架構。若預算較高，可結合 Active/Active 架構與災難恢復，或採 Active/Active/Standby 三模式架構，以便能在故障發生後快速備份及復原。 }
+      - { id: digirunner-smart-caching-patent, type: feature, quote: digiRunner 內建專利認證的獨家智慧快取技術（Smart Caching），可依據 API 負載情形動態式儲存多個節點的數據。 }
+      - { id: digirunner-aws-regions, type: feature, quote: digiRunner 現已上架於所有 AWS 區域及網站。現在 點擊 安裝，免費試用 30 天。 }
+      - { id: digirunner-tps, type: feature, quote: 常規 2 Core CPU / 4GB RAM 的 digiRunner 已足以應付企業一般用量。我們建議採用 4 Core CPU / 8GB RAM 的型號，每秒交易量的效能可達 300-1000 TPS。實際每秒交易量取決於不同環境的配置。 }
+      - { id: digirunner-nginx-waf, type: feature, quote: digiRunner 透過 Nginx 將流量分配到各個伺服器端點，以確保 API 服務的穩定性。此外，也可整合現有的 WAF 廠商，如 F5 或 No Name Security。 }
+      - { id: digirunner-auth-methods, type: feature, quote: digiRunner 支援 OAuth 2.0、API Key、X API Key、白名單（Whitelist）與 HTTP 基本認證。為確保數據完整性和保密性，可選擇使用 JWT 標準（RFC-7519）的JWS (RFC-7515) 或 JWE (RFC-7516) 對數據進行加密或解密。 }
+      - { id: digirunner-uptime-999, type: feature, url: 'https://www.tpisoftware.com/products/digirunner-cloud', quote: digiRunner 可否達到 99.9% 的正常運行時間？ 可以。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: digirunner-aws-pod-limit, type: feature, url: 'https://www.tpisoftware.com/products/digirunner-cloud', quote: 能支援，但目前在 AWS Marketplace 上，我們設了一項 5 個 Pod 的限制。如您有意洽談需求，請主動聯繫我們。 }
+      - { id: digirunner-trial-all-features, type: feature, quote: 在免費試用期間，各方案（digiRunner Enterprise High Availability/Standalone 及 digiRunner Lite High Availability/Standalone）所具備的功能皆可使用，且不會收取任何授權費。 }
+
+  - group: Open Banking (digiRunner)
+    url: https://www.tpisoftware.com/products/open-banking
+    locale: zh-TW
+    facts:
+      - { id: open-banking-history, type: metric, quote: Open Banking 起源於 2015 年歐盟的 The Revised Payment Services Directive (PSD2)，隔年（2016）八月，由英國率先要求其國內九家大型銀行要採用，並於 2018 年強制導入 }
+      - { id: open-banking-taiwan-2019, type: metric, quote: 2019 年，台灣金管會拍板定案，將台灣 Open Banking 導入分為三階段。, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - { id: open-banking-stage-1, type: metric, quote: 2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - { id: open-banking-stage-2, type: metric, quote: 2020 第二階段 個人資訊開放 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - { id: open-banking-stage-3, type: metric, quote: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - { id: digirunner-open-banking-3-stages, type: feature, quote: 昕力資訊實現三階段開放銀行規範 }
+      - { id: digirunner-open-banking-fsc, type: feature, quote: 昕力資訊 digiRunner API 管理平台反應台灣開放銀行金管會法規要求 }
+      - { id: digirunner-hot-deploy-50, type: feature, quote: digiRunner API 管理平台擁有專利的服務不中斷熱部署特點，在跨平台開發速度以及與下游應用系統的對接效率提升高達 50%, status: to_confirm, note: 成效數字（提升高達 50%）與「專利」都沒有依據或比較基準，與 TCO 低 40% 等同類宣稱一致處理 }
+      - { id: digirunner-open-banking-security, type: feature, quote: 從資料傳輸層「隱密性、完整性、訊息來源、不可重覆」、資料層（資料完整性驗證、機敏個資加密、防駭攻擊）、行為層（OAuth2認證機制及授權時效、Client 授權及 IP Check）全方位防堵資安風險 }
+      - { id: digirunner-open-banking-consulting, type: feature, quote: 昕力資訊專業顧問團隊，協助規劃建立符合各國開放銀行規範之技術架構。 }
+      - { id: digirunner-oauth2, type: feature, quote: 符合 Oauth2 規範的身份驗證及 API 授權機制，介接格式統一，資料加密。 }
+
+  - group: Open Government (digiRunner)
+    url: https://www.tpisoftware.com/products/open-government
+    locale: zh-TW
+    facts:
+      - id: digirunner-case-taipei-city-2019
+        type: case
+        quote: 2018年臺北市政府 API 平臺建置（昕力資訊建置已於2019年建置完成，預計三年內導入上百個 API 服務）
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權；「預計三年內」是 2019 年的說法，已過時
+      - id: digirunner-claim-gov-compliance-100
+        type: feature
+        quote: digiRunner - 100% 合規、智慧政府的推手
+        status: to_confirm
+        note: 宣稱 100% 合規，現站沒有寫出依據
+      - { id: digirunner-gov-five-stages, type: feature, quote: API 生命週期管理及五階段導入 }
+      - { id: digirunner-ndc-spec, type: feature, quote: 符合國家發展委員會【共通性應用程式介面規範】。 }
+      - { id: digirunner-oas, type: feature, quote: 符合國際 Open API Initiative 組織之 OpenAPI Specification（以下簡稱 OAS）標準來定義 RESTful APIs。 }
+      - { id: digirunner-gov-auth, type: feature, quote: API 授權方式支援 OAuth、API KEY、Public。 }
+      - { id: digirunner-gov-threat-protection, type: feature, quote: 具備惡意行為防護功能，可以識別程式碼注入、跨站台腳本攻擊、SQL 攻擊語法與 XML、JSON 結構語法威脅；並能搭配防毒軟體偵測病毒攻擊。 }
+      - { id: digirunner-gov-sso, type: feature, quote: 機關單一登錄 SSO 整合。 }
+      - { id: digirunner-gov-protocols, type: feature, quote: 圖形化管理介面可快速便利開發，以流程視覺化方式串接各種 Protocol（如 DB、FTP），並支援各種格式轉換（如 JSON、XML、SOAP）。 }
+      - { id: digirunner-gov-portal, type: feature, quote: 支援使用者自助註冊與登入。 }
+
+  - group: gadoDIDO
+    url: https://www.tpisoftware.com/products/gadodido
+    locale: zh-TW
+    comment: /products/gadoDIDO serves the same page
+    facts:
+      - { id: gadodido-fido2-uaf, type: certification, quote: FIDO2 UAF 認證 }
+      - { id: gadodido-fido-certified, type: certification, quote: gadoDIDO 為通過 FIDO 認證的身份驗證應用 }
+      - { id: gadodido-account-takeover, type: feature, quote: 透過 FIDO 身分鑑別和身分認證以確認使用者身分，減少多組密碼登入、帳號盗用。 }
+      - { id: gadodido-public-key, type: feature, quote: FIDO 以公鑰加密、私鑰存於使用者硬體端 }
+      - { id: gadodido-biometrics, type: feature, quote: '生物辨識登入簡化驗證流程,無需記憶複雜密碼' }
+      - { id: gadodido-passwordless, type: feature, quote: FIDO2 無密碼 零信任身分驗證 }
+      - { id: gadodido-webauthn, type: feature, quote: 網站呼叫 WebAuthn API }
+      - { id: gadodido-device-only-data, type: feature, quote: 個人驗證資料只存放於用戶裝置 }
+      - { id: gadodido-mfa, type: feature, quote: gadoDIDO結合FIDO2和UAF的生物辨識驗證識別與多因子核身流程 }
+      - { id: gadodido-industries, type: feature, quote: 金融業應用FIDO 壽險產險業 健康照護 企業安全 電子商務 }
+      - { id: gadodido-finance-group, type: feature, quote: gadoDIDO 為金融機構提供集團式的統一身分驗證管理，實現虛實整合的無縫體驗。用戶僅需註冊一次，即可在集團內各通路輕鬆驗證身份，享受24小時不間斷的金融服務。 }
+      - { id: gadodido-finance-uses, type: feature, quote: 網路銀行/行動銀行 數位帳戶/數位信用卡 證券/期貨開戶 線上數位申辨 投信交易 }
+      - { id: gadodido-insurance, type: feature, quote: gadoDIDO可實現集團統一管控，用戶只需驗證一次，即可使用於集團內所有應用，大幅簡化用戶申辦與投保流程。 }
+      - { id: gadodido-standards, type: feature, quote: 支援包括FIDO2和UAF，提高解決方案的可擴展性和互通性。 }
+      - { id: gadodido-owasp, type: feature, quote: 為 OWASP Top 10 / CWE Top 25 }
+      - { id: gadodido-2fa, type: feature, quote: 有效的雙因子驗證/強認證 }
+      - { id: gadodido-central-admin, type: feature, quote: 集團或全行集中授權後台管理 }
+      - { id: gadodido-replace-otp, type: feature, quote: 取代簡訊OTP 驗證 取代一般密碼驗證 }
+      - { id: gadodido-cost-control, type: feature, quote: 授權認證費用統一管控 -通路與各應用平台成本分攤 }
+      - { id: gadodido-transactions, type: feature, quote: gadoDIDO結合國際標準FIDO2、UAF，提供用戶在APP與網頁端都能以無密碼方式進行登入及身分驗證進行線上交易 }
+
+  - group: gadoScout
+    url: https://www.tpisoftware.com/products/gadoscout
+    locale: zh-TW
+    facts:
+      - { id: gadoscout-ml-detection, type: feature, quote: 利用機器學習模型分析日誌並檢測異常，能快速識別入侵與攻擊 }
+      - { id: gadoscout-24-7, type: feature, quote: 24/7全天候監控 持續監控系統運行狀態，不錯過任何可疑活動 }
+      - { id: gadoscout-behavior, type: feature, quote: 建立正常行為基準，快速發現不符常態的可疑活動 }
+      - { id: gadoscout-prediction, type: feature, quote: 運用ML預測模型，快速識別問題並減緩威脅造成的傷害 }
+      - { id: gadoscout-tiered-alerts, type: feature, quote: 設定層級警報，確保關鍵威脅第一時間被處理 }
+      - { id: gadoscout-custom-model, type: feature, quote: 根據專屬的業務場景，訓練異常檢測模型 }
+
+  - group: GreenSwift
+    url: https://www.tpisoftware.com/products/greenswift
+    locale: zh-TW
+    facts:
+      - { id: cert-greenswift-aup, type: certification, quote: 通過國際查證機構核發AUP認證 }
+      - { id: greenswift-scope, type: feature, quote: 碳盤查 盤查企業自身碳排放 包括跨地區/廠區/設備/系統 CBAM 自動文件資訊化碳排 並產出申報清冊 碳足跡 計算企業產品碳足跡 計算相關供應鏈碳足跡 }
+      - { id: greenswift-six-steps, type: feature, quote: 盤查計畫 組織邊界 排放源鑑別 排放量計算 盤查報告 查證作業 }
+      - { id: greenswift-ai-report, type: feature, quote: AI 協力 一鍵生成溫室氣體報告 }
+      - { id: greenswift-seven-ghg, type: feature, quote: 可整合七大溫室氣體排放 }
+      - { id: greenswift-epa-format, type: feature, quote: 系統內建碳排計算公式 ，自動計算完整碳排放量，並可一鍵下載為符合環保署登錄平台之表單格式(3.0.0) }
+      - { id: greenswift-standards, type: feature, quote: 系統內建最新的碳盤查標準和國際係數，可自由切換使用 GHG Protocol 及 ISO 14064-1:2018 標準，並定期更新 IPCC 的最新係數 }
+      - { id: greenswift-cloud-collaboration, type: feature, quote: 企業內部人員、及外部顧問團隊皆可在雲端上，共同編輯各項指標文稿 }
+      - { id: greenswift-plans, type: feature, quote: 碳盤查會員 CBAM會員 }
+      - { id: greenswift-carbon-plan, type: feature, quote: 支援ISO14064-1標準的碳盤查流程 提供碳排放清單編制工具 AI生成碳盤查報告 數據進度即時追蹤功能 無組織邊界數量限制 無帳號數量限制 }
+      - { id: greenswift-cbam-plan, type: feature, quote: CBAM（碳邊境調整機制）報表格式下載 提供進出口供應鏈符合CBAM要求的數據支持 }
+      - { id: greenswift-footprint-plan, type: feature, quote: 專注於產品碳足跡計算 提供產品生命周期碳排放報告 支援國際及地方排放係數的自動更新 無產品碳足跡盤查報告數量限制 }
+      - { id: greenswift-categories, type: feature, quote: 以六大步驟系統化管理類別一至類別四溫室氣體排放源盤查流程 }
+      - { id: greenswift-trial-30-days, type: feature, quote: 審核通過後即開始30天試用，試用到期將自動關閉帳號權限。 }
+      - { id: greenswift-review-one-day, type: feature, quote: 註冊成功後，您的申請將於一個工作日進行審核。 }
+      - { id: greenswift-inventory-output, type: feature, quote: 在完成全廠活動數據的收集與計算後，我們將得到年度總排放量，單位為每公噸二氧化碳當量（tCO2e）。此外，我們會整理所有活動數據，形成活動數據總表，並將計算結果以盤查清冊的形式呈現。 }
+      - { id: greenswift-sla-99, type: feature, quote: GreenSwift 碳盤查平台採用雲端SaaS服務，基於 Amazon SLA 服務水準之下，GreenSwift保證所提供之雲端服務系統可用性可達到 99% 以上之服務水準。 }
+      - { id: greenswift-zero-trust-iso27001, type: certification, quote: GreenSwift採用零信任架構並且所有研發過程均符合 ISO 27001 安全標準 }
+      - { id: greenswift-languages, type: feature, quote: 系統支援繁體中文與英文兩種語言。系統導入後，如有操作上的問題，我們提供英文支援服務。 }
+      - { id: greenswift-consulting-partners, type: feature, quote: GreenSwift 提供操作教學影片，專業的碳盤查輔導則由合作的顧問公司執行。GreenSwift 與多家顧問機構合作 }
+      - { id: greenswift-roadmap-iso14067, type: feature, quote: 針對 ISO 14064-1 標準進行碳盤查的同時，未來還將整合 ISO 14067 和 ISO 14068 等標準, status: to_confirm, note: 「未來還將整合」是規劃中的功能，要確認現況 }
+      - { id: greenswift-gwp-switch, type: feature, quote: 平台具備快速切換不同全球暖化潛勢（GWP）的功能 }
+      - { id: greenswift-consultant-accounts, type: feature, quote: 是的，GreenSwift 支援顧問公司使用。顧問可以登入系統，針對所輔導的客戶進行線上盤點和協助。 }
+      - { id: greenswift-no-erp-integration, type: feature, quote: 雖然目前不支援直接與 ERP、HR 系統或其他模組的整合，但如果貴公司已經整理好相關資料，可以直接透過 GreenSwift 的介面進行資料匯入並上傳佐證資料 }
+
+  - group: ESGswift
+    url: https://www.tpisoftware.com/products/esgswift
+    locale: zh-TW
+    facts:
+      - { id: esgswift-standards, type: certification, quote: ESG國際認證標準 溫室氣體盤查 ISO 14064 溫室氣體排放查證 碳足跡盤查 ISO 14067 碳足跡查證 CBAM 歐盟碳邊境機制 }
+      - { id: esgswift-scope-2, type: feature, quote: 有效管控碳盤查 範疇二的電力使用 }
+      - { id: esgswift-labor-30, type: metric, quote: 降低 30% 人力成本, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: esgswift-multi-site, type: feature, quote: 內建國際係數庫，符合多國盤查規範 支援不限帳號與組織邊界的協作 }
+      - { id: cert-esgswift-ares-aup, type: certification, quote: 通過 ARES 國際查驗機構 AUP 認證 }
+      - { id: esgswift-iso27001, type: certification, quote: 符合 ISO 27001 國際資安標準 }
+      - { id: esgswift-zero-trust, type: feature, quote: 採零信任架構，保障企業機敏數據安全 }
+      - { id: esgswift-energy-saving-15, type: metric, quote: 平均節能 15%, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: esgswift-energy-efficiency, type: metric, quote: 節能成效 15-25% 能源效率, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: esgswift-power-cost, type: metric, quote: 降低 20-30% 電力成本, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: esgswift-re100, type: feature, quote: 協助達成 RE100 綠電轉型 }
+      - { id: esgswift-consulting-standards, type: feature, quote: 碳盤查輔導 依 ISO 14064-1、ISO 14067 標準導入 }
+      - { id: esgswift-team-certified, type: certification, quote: 團隊成員具備國際 ISO 與 ESG 永續專業認證，實戰經驗覆蓋多產業 }
+
+  - group: ElectriSwift
+    url: https://www.tpisoftware.com/products/electriswift
+    locale: zh-TW
+    facts:
+      - { id: electriswift-environment-data, type: feature, quote: '建物的內外環境資訊(溫度,濕度,CO2...)' }
+      - { id: electriswift-no-replacement, type: feature, quote: 依建物類型逐步導入 AI 自動化節能系統，無需汰換基礎設備及變動空間格局。 }
+      - { id: electriswift-24h-monitoring, type: feature, quote: 透過 AI 24 小時監控設備運行狀態，建立用電異常告警機制 }
+      - { id: electriswift-reports, type: feature, quote: 用電量、溫濕度、二氧化碳等數據圖表以每日 / 週 / 月清晰呈現 }
+      - { id: electriswift-alerts, type: feature, quote: 當用電量超過契約容量，即可透過 Email、LINE 等方式傳送告警訊息通知 }
+      - { id: electriswift-green-power, type: feature, quote: 整合自有案場發電數據與盤點建物用電趨勢，精確計算最適配的綠電轉供容量模型。 }
+      - { id: electriswift-tariff, type: feature, quote: 定期自動更新台電電價表，透過電費最佳化試算模組，調整契約容量進行節費。 }
+      - { id: energy-management-act-800kw, type: metric, quote: 根據「能源管理法」，800 瓩以上的能源用戶需向中央主管機關申報前一年度節電措施執行情形。 }
+      - { id: electriswift-factory, type: feature, quote: 透過 AI 智慧能源管理系統可遠端監控，即時掌握設備運行狀態，也可依戶外溫度進行節能控制，並於非上班時間自動進入節電狀態 }
+      - { id: electriswift-office, type: feature, quote: ElectriSwift 結合空氣品質（AQI）感測、溫濕度監測與人流偵測 }
+
+  - group: InsureBrick
+    url: https://www.tpisoftware.com/products/insurebrick
+    locale: zh-TW
+    facts:
+      - { id: insurebrick-platform, type: feature, quote: InsureBrick是專為產壽險保險公司及保經代公司打造的保險科技平台，我們的系統採用了先進的微服務技術，每個功能都是獨立的模組 }
+      - id: insurebrick-claim-only
+        type: feature
+        quote: 業界唯一 微服務設計的基礎架構
+        status: to_confirm
+        note: 「業界唯一」是最高級宣稱，現站沒有寫出依據
+      - { id: insurebrick-lightweight, type: feature, quote: 具備輕量化、碎片化特性的保險模組平台 }
+      - { id: insurebrick-buy-modules, type: feature, quote: 只需購買所需模組，也可串接客戶內外部系統 }
+      - { id: insurebrick-28-modules, type: feature, quote: 28個多元且彈性的模組 }
+      - { id: insurebrick-module-scope, type: feature, quote: 涵蓋核心業務、客戶管理、報表分析等模組。 }
+      - { id: insurebrick-standard-interface, type: feature, quote: 不同模組間具備標準化串接設計，降低功能新增與更替所需之技術負擔和時間成本 }
+      - { id: insurebrick-kyc-aml, type: feature, quote: KYC和AML防禦機制 }
+      - { id: insurebrick-encryption, type: feature, quote: 端到端加密和多層次的數據加密措施，有效防止未經授權的存取。 }
+      - { id: insurebrick-access-control, type: feature, quote: 權限設置和審計追蹤功能，確保只有授權用戶才能訪問敏感資料。 }
+      - { id: insurebrick-scenarios, type: feature, quote: 純網路保險公司 保險電商中台 產險中台 壽險中台 保經代平台 保代核心系統 }
+      - { id: insurebrick-case-online-insurance, type: case, quote: InsureBrick 為純網銀業者以微服務部屬建立網路投保平台，快速串接核心系統，模組化讓資訊功能易於擴充、彈性整合，更便於保險商品之上架，利於整體業務擴展，掌握市場商機。 }
+      - id: insurebrick-case-fubon-life
+        type: case
+        quote: 跨平台數位整合富邦人壽的行動投保網頁及App，導入昕力獨家4種系統模組，可彈性調整功能介面、快速上/下架商品。完善檢核機制模組，降低錯誤率及照會率。3分鐘快速成案，整合第三方支付平台，有效提高成交率，提供最速、最佳的保單購買體驗。
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權；InsureRing 頁也用同一個案例
+      - id: insurebrick-case-shin-kong
+        type: case
+        quote: 新光金保代核心系統應用 InsureBrick 模組規劃設計，透過多元且彈性的模組，整合內部各項業務流程，縮短進件作業時間
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+
+  - group: InsureRing
+    url: https://www.tpisoftware.com/solutions/insurering
+    locale: zh-TW
+    facts:
+      - { id: insurering-automated-rules, type: feature, quote: 以建立新型態自動化檢核，滿足保險商品上下架彈性、核保規則調整及法令規範因應等需求 }
+      - { id: insurering-stateless-api, type: feature, quote: 輕量無狀態 API 服務 }
+      - { id: insurering-scalability, type: feature, quote: 提高伺服器可擴展性，並加強客戶端的擴充能力 }
+      - { id: insurering-central-formulas, type: feature, quote: 保險計算公式集中管理 }
+      - { id: insurering-rule-engine, type: feature, quote: 專屬保險產業的規則引擎 }
+      - { id: insurering-three-modules, type: feature, quote: InsureRing 涵蓋公式、規則、檢核三大模組，可依客戶需求彈性組合模組 }
+      - { id: insurering-one-week, type: feature, quote: 迅速完成保險產品測試及驗證 一周內迅速上市 }
+      - { id: insurering-90-percent, type: metric, quote: 新產品上架縮短時間達90%以上，迅速搶占市場商機。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - id: insurering-case-shin-kong-life
+        type: case
+        quote: 協助新光人壽建置集中化規則引擎，e化整合產品及計費資料，如：保險核心計算、公式、檢核模組等，整體降低50%作業成本。簡化商品上架流程，節省60%上架時間
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+
+  - group: Interactive health
+    url: https://www.tpisoftware.com/solutions/interactivehealth
+    locale: zh-TW
+    facts:
+      - { id: interactivehealth-iot, type: feature, quote: 整合智慧型手機及 IoT 量測裝置，搭配遊戲設計、行銷活動及獎勵機制讓用戶參與管理及邁向健康生活。 }
+      - { id: interactivehealth-scenarios, type: feature, quote: 醫院照護服務 保險客戶互動 職場健康管理 政府健康宣導 社區關懷衛教 }
+      - id: interactivehealth-case-sinopac
+        type: case
+        quote: 昕力協助永豐銀行以健康生活角度出發建置『汗水不白流』APP，透過整合跨系統串接及監管海量運動數據，建立高效體驗的同時，讓用戶運動燃燒卡路里能轉換為信用卡點數回饋。
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: interactivehealth-case-good-health
+        type: case
+        quote: 昕力協助好適康開發個人健康管理 APP，將使用者每日健康數據儲存於雲端，並以圖表方式呈現健康記錄及臨床數值，且建置就診預約、用藥提醒、疫苗接種日期記錄等功能
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: interactivehealth-case-fu-jen
+        type: case
+        quote: 昕力協助輔大醫院建置全方位服務 APP，整合醫院現有系統，提供預約掛號、看診檢查進度查詢、行動繳費、住院申請、慢箋領藥等功能
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - { id: interactivehealth-case-hospital-title, type: case, quote: 醫院服務 APP }
+
+  - group: AI smart claim
+    url: https://www.tpisoftware.com/solutions/smartclaim
+    locale: zh-TW
+    facts:
+      - { id: smartclaim-technologies, type: feature, quote: 結合 NLP、AI OCR、RPA技術 讓保險理賠流程自動化 }
+      - { id: smartclaim-auto-filing, type: feature, quote: 可自動統整保戶診斷書及單據格式，即使各醫院格式大不相同也能迅速輸入對應欄位 }
+      - { id: smartclaim-retraining, type: feature, quote: 各醫院收據、發票等格式不一且繁雜，透過 AI 再訓練機制，可維持高度準確率。 }
+      - { id: smartclaim-rpa, type: feature, quote: 可全天候、跨系統自動化不間斷執行任務，同時減少人為操作錯誤。 }
+      - { id: smartclaim-nlp, type: feature, quote: 以自主研發 NLP 自然語言技術為核心，對於自有演算法可高度掌握 }
+      - { id: smartclaim-80-percent, type: metric, quote: 為保險從業人員簡化工作流程、降低人為誤差，透過系統讓人力成本節省達 80% 以上。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: smartclaim-end-to-end, type: feature, quote: 跨系統運行具備彈性，可串接自動立案、自動理算、自動派件等功能 }
+      - { id: smartclaim-case-medical-documents, type: case, quote: 藉由自然語言技術，分析診斷證明書、單據等文件，強化保險業智能理賠系統，解決傳統流程中大量人力需求，作業效率大幅的提升，並透過進化系統持續優化模型精準度，提供最佳化理賠給付計算結果。 }
+
+  - group: AI smart filling
+    url: https://www.tpisoftware.com/solutions/smartfilling
+    locale: zh-TW
+    facts:
+      - { id: smartfilling-icr-puzzle, type: feature, quote: 獨家自建 AI 演算法模型，建構 SysTalk.ICR 智慧光學字元辨識和 SysTalk.PUZZLE 模型再訓練機制 }
+      - { id: smartfilling-custom-model, type: feature, quote: 從企業需求角度出發，為客戶建構獨家 AI 模型，改善傳統 OCR 辨識困難，最大化資料再利用與維運 }
+      - { id: smartfilling-preprocessing, type: feature, quote: 透過自研發前處理技術，自動校正文件影像瑕疵與色彩處理 }
+      - { id: smartfilling-template-free, type: feature, quote: 以獨家自建 AI 演算法模型，改良 OCR 坐標定位之限制，無須依文件版型建立模板 }
+      - { id: smartfilling-data-augmentation, type: feature, quote: 內建自動增加訓練資料機制，模擬不同情境影像 }
+      - { id: smartfilling-self-maintained, type: feature, quote: 透過導入再訓練機制，企業能夠自行訓練重要資料而無需仰賴第三方，達到 100% 自主維運目標。, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
+      - { id: smartfilling-text-analysis, type: feature, quote: 依客戶需求量身打造，同時也將 AI 文本分析技術用其中，精準且快速校正資料。 }
+      - { id: smartfilling-case-bank, type: case, quote: 以 AI 取代傳統二登流程，節省將近 52% 委外成本，於三校時反饋系統再學習訓練模型，不但讓辨識資訊無縫介接內部系統，更有效降低維運人力約 45%。 }
+      - { id: smartfilling-case-bank-title, type: case, quote: 金融業應用－傳統文件數位化管理第一步 }
+
+  - group: SysTalk.Detect text analysis
+    url: https://www.tpisoftware.com/solutions/textualanalysis
+    locale: zh-TW
+    facts:
+      - { id: detect-three-keys, type: feature, quote: 以自主研發演算法、再訓練機制及在地全方位服務三大關鍵，實現新一代文本比對。 }
+      - { id: detect-integration-service, type: feature, quote: 強大的軟體導入服務，為客戶完善內外部系統整合、串接及功能建置需求，滿足多元應用產業及場景。 }
+      - { id: detect-no-code, type: feature, quote: 無須技術背景即可一鍵訓練模型，輕鬆處理文本，快速摘要重點並提供推薦回覆。 }
+      - { id: detect-80-percent, type: metric, quote: 簡化工作流程、降低人為誤差，快速解決 80% 之文書工作，提升企業營運效率。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: detect-applications, type: feature, quote: AI 客服信箱 AI 智能核保 AI 智能理賠 AI 法條比對 AI 智能質檢 }
+      - id: detect-case-archives
+        type: case
+        quote: 透過文本分析技術，建立「銷毀檔案目錄」與「檔案分類及保存年限區分表」兩大智能審查模型，協助檔管局線上批註審查意見及統計功能
+        status: to_confirm
+        note: 寫出客戶名稱（檔管局），對外使用要確認授權
+      - { id: detect-case-petitions, type: case, quote: 建立推薦模型以分析民眾陳情來信，提供政府部門回覆文稿範本，以精準回應民眾之訴求，並減輕逐一撰稿回覆所耗費之人力與時間，案件處理更有效率。 }
+
+  - group: UI/UX
+    url: https://www.tpisoftware.com/solutions/uiux
+    locale: zh-TW
+    facts:
+      - { id: uiux-process, type: feature, quote: 專業顧問團隊協助您從需求梳理分析、架構規劃、介面設計至網頁切版、測試上線，滿足您所有 UI/UX 設計需求。 }
+      - { id: uiux-industries, type: feature, quote: 金融機構 保險業 零售業 製造業 政府單位 }
+      - { id: uiux-case-brand-site, type: case, quote: 透過使用者洞察，從當地使用者角度出發，除了傳承母集團企業形象，亦塑造在地化新元素 }
+      - { id: uiux-case-global-fis, type: case, quote: 協助國際型航空企業重塑全球飛航資訊系統，整合網頁及行動平台介面設計與操作一致性 }
+      - id: uiux-case-e-payment
+        type: case
+        quote: 結合社群與支付，提供P2P轉帳、分帳，電支交易等服務，從日常交易到週期性帳單處理。介面設計遵循Line集團規範
+        status: to_confirm
+        note: 寫出客戶集團名稱（Line集團），對外使用要確認授權
+
+  - group: GIS
+    url: https://www.tpisoftware.com/solutions/gis
+    locale: zh-TW
+    facts:
+      - { id: gis-2d-3d, type: feature, quote: 2D、3D與虛實整合平台建立可視化圖形介面，連結虛擬與實際空間，滿足各式場景使用。 }
+      - { id: gis-alerts, type: feature, quote: 預先警報與主動通知，以Email、Line等通知將訊息交付給對的人，也可與保全或警消單位串連。 }
+      - { id: gis-engine-cloud, type: feature, quote: 協助企業集團建立 GIS Engine 公/私有雲架構，並提供GIS策略規劃、系統整合與架構設計。 }
+      - { id: gis-case-fleet, type: case, quote: 透過 GIS 技術及電子圍籬設定，進行駕駛行為數據蒐集，提供完整監控後台及軌跡資料 }
+      - { id: gis-case-insurance-map, type: case, quote: 核保前，提供保險標的物週遭的地理環境資訊，協助行員判斷。以登入機制進行權限卡控，利用公式將經緯度轉換為麥卡托投影，並透過 ArcGIS 的客製化圖層 }
+      - { id: gis-case-insurance-map-title, type: case, quote: 保險標的圖資系統 }
+      - { id: gis-case-asset-management, type: case, quote: 依據金融業資產管理需求導入GIS技術與物聯網，協助企業樓層管理、智慧監測 }
+
+  - group: Cloud service
+    url: https://www.tpisoftware.com/cloudservice
+    locale: zh-TW
+    facts:
+      - { id: cloud-one-stop, type: feature, quote: 昕力資訊提供一站式的雲端導入服務，涵蓋雲端搬遷、系統整合、機器學習、維運管理、雲端託管服務 }
+      - { id: cloud-services-scope, type: feature, quote: 透過為您的組織進行部署策略、系統整合、上雲顧問 }
+      - { id: cloud-digilism, type: feature, quote: DigiLism 完善企業雲端服務中台及數據交換中台，以微服務與 PaaS 架構為企業導入 API 管理、BPM 流程管理、集中 Log 管理、FIDO認證等 }
+      - { id: cloud-anthos, type: feature, quote: Anthos 多雲管理平台 }
+      - { id: cloud-rpaaas, type: feature, quote: RPAaaS 以輕量級程式編輯、分散式部署架構，於雲端環境進行流程控管 }
+      - { id: cloud-bnpl, type: feature, quote: 以雲端 BNPL 因應全球在地化效益加倍，我們分析各國特色，採用低耦合系統架構設計使系統具備高可用性，符合開放銀行法規標準 }
+      - { id: cloud-mlops, type: feature, quote: MLOps 雲端協作平台 }
+      - { id: cloud-insurebrick, type: feature, quote: InsureBrick 為領先業界的保險數位平台解決方案，以雲端技術與微服務模組加乘，串接客戶既有系統或外部系統, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
+      - { id: cloud-case-pmd360-title, type: case, quote: PMD&360績效管理系統 }
+      - { id: cloud-case-pmd360, type: case, quote: 整合集團旗下8間公司績效評核系統，透過部分資料上雲 }
+
+  - group: SysTalk.ai
+    url: https://www.tpisoftware.com/products/systalk-ai
+    locale: zh-TW
+    facts:
+      - id: systalk-ai-140-million-users
+        type: metric
+        quote: 已為全球超過 1.4億用戶 協助企業推進 AI 化營運
+        status: to_confirm
+        note: 累計用戶數，現站沒有寫統計時間，可能過時
+      - { id: systalk-ai-products, type: feature, quote: SysTalk.Coach 洽談兩組客戶 快速模擬銷售情境，熟悉產品與話術 SysTalk.ICR 停車費報支自動辨識 醫療理賠資料自動建檔 智能理賠專利 }
+      - { id: systalk-ai-claim-patent, type: feature, quote: 醫療理賠資料自動建檔 智能理賠專利 }
+      - { id: systalk-ai-chat-patent, type: feature, quote: SysTalk.Chat 7/24 智能語音、文字客服機器人 兩腦一流程專利 }
+      - { id: systalk-ai-service, type: feature, quote: 打造企業 雲/地端 AI 完整解決方案 }
+      - { id: systalk-ai-onboarding, type: feature, quote: 導入前 AI應用規劃與導入 AI 導入情境分析 解決方案搭配建議 效益評估 AI 服務導入 導入中 模型評估、微調 }
+      - { id: systalk-ai-quote-email, type: company, quote: 取得報價：aiagent@tpisoftware.com }
+
+  - group: SysTalk.Chat
+    url: https://www.tpisoftware.com/products/systalk-chat
+    locale: zh-TW
+    facts:
+      - { id: systalk-chat-five-modules, type: feature, quote: 五大管理應用功能，文字真人客服平台、管理報表、服務管理、權限管理、專案管理 }
+      - { id: systalk-chat-brain-tools, type: feature, quote: 提供大腦優化工具與標準步驟，從聽不懂語料分類、衝突審核、到鑑定模型準確度 }
+      - { id: systalk-chat-on-prem-llm, type: feature, quote: 支援地端部署的大語言模型技術+繁體中文強化的獨家演算法 }
+      - { id: systalk-chat-two-brains, type: feature, quote: 雙腦 + 一流程：核心模組運行模式 }
+      - { id: systalk-chat-flow, type: feature, quote: 串接雙腦與系統API建立交談流程，並有「多輪對話」及「多輪轉多輪對話」設計 }
+      - { id: systalk-chat-nlu-steps, type: feature, quote: Step 1 N-gram 模型向量化 Step 2 語言 實體特徵萃取 Step 3 高維度語言 向量空間定位 Step 4 分類 確認向量空間劃分 }
+      - { id: systalk-chat-eight-steps, type: feature, quote: 八大流程完整導入 }
+      - { id: systalk-chat-solutions, type: feature, quote: 電話機器人 解決方案 政府機關 公眾服務 客服專線 掛號機器人 解決方案 醫療集團 健診中心 醫療診所 }
+      - { id: systalk-chat-omnichannel, type: feature, quote: SysTalk.Chat 提供全通道 AI 智能客服，確保文字和語音客服進線不漏接。 }
+      - id: systalk-chat-case-youbike
+        type: case
+        quote: YouBike 小管家 AI 客服透過 SysTalk.Chat 在官方網站、官方App 等渠道建立完整且最擬人的客服問答機制，全天候輔助真人客服服務廣大的用戶群，包含了場站資訊、租借狀態、失物招領、通報協尋等項目，提供24小時不間斷的線上資訊服務。
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: systalk-chat-case-sinyi
+        type: case
+        quote: 昕力團隊協助信義房屋建置找房助理，使用手機內建Google助理即可喚醒，運用NLU自然語言理解技術
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: systalk-chat-case-wemo
+        type: case
+        quote: 昕力團隊協助Wemo Scooter打造智能客服威威，於App提供24小時諮詢服務，可即時回答操作使用、保險車禍相關、騎乘注意事項，並提供方案介紹服務
+        status: to_confirm
+        note: 寫出客戶名稱，對外使用要確認授權
+      - id: cert-systalk-rpa-intel-rrk
+        type: certification
+        quote: 昕力SysTalk.RPA 打造Intel RRK認證RPA解決方案
+        status: to_confirm
+        note: 出自部落格文章的標題，產品頁沒有寫認證的內容與年份
+
+  - group: GenAI customer-service service (SysTalk.Chat x SysTalk.VIKI)
+    url: https://www.tpisoftware.com/genai-solution
+    locale: zh-TW
+    facts:
+      - { id: genai-solution-bean-swan, type: feature, quote: 透過 SysTalk.VIKI 產生多元語料生成，搭配 SysTalk.Chat 應用管理模組 BEAN 及 SWAN 加強審查、健檢 }
+      - { id: genai-solution-five-indicators, type: feature, quote: 從五大指標診斷 AI 大腦健康度 }
+      - { id: genai-solution-20-percent-effort, type: metric, quote: 讓 AI 訓練師事半功倍 以 2 成力氣達成高效訓練, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: genai-solution-60-percent, type: metric, quote: 透過 AI 大腦學習增強，減少 60% 訓練團隊人力。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+
+  - group: SysTalk.Audit
+    url: https://www.tpisoftware.com/products/systalk-audit
+    locale: zh-TW
+    facts:
+      - { id: systalk-audit-llm-context, type: feature, quote: 上下文語境掌握：採用大型語言模型，理解通話語意脈絡，判斷合規性與語氣適切，並提供改善建議 }
+      - { id: systalk-audit-emotion, type: feature, quote: 情緒感知：可精準分辨客戶的真實情緒，不會因片段字詞誤判 }
+      - { id: systalk-audit-24-7, type: feature, quote: 全天候 24/7 自動分析：全天候自動分析，無需人工干預，即時完成通話紀錄分析與報告生成 }
+      - { id: systalk-audit-no-rules, type: feature, quote: 多樣話術辨識：換產品名稱、調整話術，系統仍能自動適應，不需 IT 或 QA 重工 }
+      - { id: systalk-audit-languages, type: feature, quote: 多語言支援：支援國語、台語、客語與英語等多語音交談場景，正確識別台灣常見的混語客服內容 }
+      - { id: systalk-audit-95-percent, type: metric, quote: 高準確率轉錄：語音轉錄準確率達 95% 以上, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: systalk-audit-finance-compliance, type: feature, quote: 熟悉台灣在地語料與金融場域，內建關鍵詞庫與對話規則，即時比對金融法規用語 }
+      - { id: systalk-audit-sensitive-words, type: feature, quote: 敏感詞檢測：自動偵測違規、敏感或高風險話術，防止不當用語 }
+      - { id: systalk-audit-coverage, type: metric, quote: 24/7 全天候自動檢核 100 % 覆蓋率/檢核量 }
+      - id: systalk-audit-tco-40
+        type: metric
+        quote: 40 % 低於業界/TCO
+        status: to_confirm
+        note: 與業界比較的數字，現站沒有寫出比較基準
+      - { id: systalk-audit-api, type: feature, quote: 可以， 提供開放式 API 與錄音格式支援。 }
+      - { id: systalk-audit-on-prem, type: feature, quote: 支援地端/私有雲部署，資料完全在企業內網中運行，具備完整權限控管與加密。 }
+      - { id: systalk-audit-stt, type: feature, quote: 支援國語、台語、客語、中英混合、台灣國語等，正確識別台灣常見的混語客服內容。 }
+      - { id: systalk-audit-sampling-2-percent, type: metric, url: 'https://www.tpisoftware.com/products/systalk-audit/quality-analysis', quote: 僅靠 2% 的人工抽樣已不足以防禦風險 }
+      - { id: systalk-audit-3-minute-assessment, type: feature, url: 'https://www.tpisoftware.com/products/systalk-audit/quality-analysis', quote: 完成 3 分鐘評估，即可獲得： }
+
+  - group: SysTalk.Coach
+    url: https://www.tpisoftware.com/products/systalk-coach
+    locale: zh-TW
+    facts:
+      - { id: systalk-coach-70-percent, type: metric, quote: 縮短 70% 新人養成週期, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: systalk-coach-overview, type: feature, quote: SysTalk.Coach 以生成式 AI 打造企業專屬的情境化陪練與智能考核系統 }
+      - { id: systalk-coach-7x24, type: feature, quote: 7×24 不限次數自主訓練 }
+      - { id: systalk-coach-stats, type: metric, quote: 70% 縮短新人養成週期 24/7 突破人力與 空間訓練限制 100% 數據化訓練 成效追蹤, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
+      - { id: systalk-coach-dual-engine, type: feature, quote: SysTalk.Coach 採用模擬引擎與評測引擎雙核心架構 }
+      - { id: systalk-coach-five-steps, type: feature, quote: 依企業產品、話術與合規要求設定貼近實務的客戶互動情境，不需依賴現有完整課程素材即可啟動。 }
+      - { id: systalk-coach-ai-customer, type: feature, quote: 系統自動分析情境設定，生成符合企業業務邏輯的 AI 模擬客戶角色，難度可依員工資歷調整。 }
+      - { id: systalk-coach-practice, type: feature, quote: 員工與 AI 客戶進行真實對話練習，不限次數，所有記錄完整留存可供複盤，不影響任何真實客戶。 }
+      - { id: systalk-coach-scoring, type: feature, quote: AI 依企業自訂評分標準和合規規範進行多維度評分 }
+      - { id: systalk-coach-persona, type: feature, quote: 三點人設建模技術 打造 AI 虛擬客戶，每一位都有個性、有立場、有反應慣性。提供 文字、語音與 AI 真人實境三種模式 }
+      - { id: systalk-coach-six-modules, type: feature, quote: 智能陪練模組 讓員工像跟真客戶練習一樣練到熟 主管不用一對一帶練 情境化模擬訓練 可設定不同客戶角色與情境模板，打造貼近真實業務或客服的互動對話場景 }
+      - { id: systalk-coach-realtime, type: feature, quote: AI 即時互動回應 模擬真實客戶對話，提升臨場應對能力 }
+      - { id: systalk-coach-onboarding, type: feature, quote: 以 AI 模擬演練取代純課堂學習，新人上手時間縮短，第一線表現更穩定 }
+      - { id: systalk-coach-industries, type: feature, quote: 特別是金融業（銀行財管、保險業務、帳戶顧問）、客服中心（電話客服、線上客服、品質管理）、高客單值業務（企業軟體、不動產）等情境 }
+      - { id: systalk-coach-on-prem, type: feature, quote: 針對金融、醫療等高度監管產業，我們能提供完整地端部署，符合資安與法規要求。 }
+
+  - group: SysTalk.ICR
+    url: https://www.tpisoftware.com/products/systalk-icr
+    locale: zh-TW
+    facts:
+      - { id: systalk-icr-template-free, type: feature, quote: SysTalk.ICR (Intelligent Character Recognition) 可改善傳統 OCR 的技術限制，不須建立模版即可辨識多版型的文件，搭配自適應 AI (Adaptive AI) }
+      - { id: systalk-icr-three-technologies, type: feature, quote: 影像前處理 針對文件歪斜、翻轉、陰影覆蓋等品質參差不齊的影像進行校正 }
+      - { id: systalk-icr-puzzle, type: feature, quote: 以 SysTalk.PUZZLE 的即時優化機制，提升 SysTalk.ICR 的模型辨識效能 }
+      - { id: systalk-icr-custom-model, type: feature, quote: 打造專屬於企業客戶的模型 }
+      - { id: systalk-icr-filling, type: feature, quote: 透過 SysTalk.ICR 與 SysTalk.PUZZLE，全面改造資料建檔流程，依客戶需求建構 AI 模型 }
+      - { id: systalk-icr-claims, type: feature, quote: 結合 AI OCR 與 NLP 技術，聰明理解業務情境、智慧擷取辨識範圍 }
+      - { id: systalk-icr-account-opening-40, type: metric, quote: 提供消金、數金、信託業務等多管道前台進件，可批次進行 AI 文件辨識、無縫串接內部系統、持續精進 AI 模型，降低 40% 維運人力，提升工作效率。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: systalk-icr-medical-24h, type: feature, quote: 以 AI 人機協作，有效解決 ICD 辨識一致性，打造全年 24 小時無休的智能理賠 AI 系統 }
+      - { id: systalk-icr-plans, type: feature, quote: SysTalk.ICR Lite }
+      - { id: systalk-icr-plan-features, type: feature, quote: 無限制的辨識張數 精準的Pre-Trained模型 支援 API 串接服務 支援模型 雲端/地端 部署 }
+
+  - group: SysTalk.RPA
+    url: https://www.tpisoftware.com/products/systalk-rpa
+    locale: zh-TW
+    facts:
+      - { id: systalk-rpa-architecture, type: feature, quote: Center管理中心 Studio流程開發工具 Agent端點執行機器人 }
+      - { id: systalk-rpa-gcp, type: feature, quote: Center可安裝於企業Server 或選擇雲端方案部署於GCP }
+      - { id: systalk-rpa-ha, type: feature, quote: 可配置高可用(HA)架構 }
+      - { id: systalk-rpa-studio, type: feature, quote: 正體中文介面 加速開發者上手速度 拖拉式介面輕鬆設計流程 內建30種以上操作類別 透過250種以上的模擬動作建立流程 }
+      - { id: systalk-rpa-agent, type: feature, quote: 開機後自動運行 鎖定/螢幕保護也可正常運行 }
+      - { id: systalk-rpa-ai-kits, type: feature, quote: 驗證碼自動辨識通關 OCR辨識模組 數位助理解決方案 }
+      - { id: systalk-rpa-six-steps, type: feature, quote: 企業導入自動化六大步驟 }
+      - id: systalk-rpa-validated
+        type: feature
+        quote: 無論雲端地端方案，已通過各中小企業、公部門及多家金融機構驗證，穩定運行，安全有保障。
+        status: to_confirm
+        note: 「已通過驗證」沒有寫出客戶或驗證方式
+      - { id: systalk-rpa-response-time, type: company, quote: 我們會於1-2工作天請專人與您聯絡。 }
+      - id: company-engineers-80
+        type: metric
+        url: https://www.tpisoftware.com/products/systalk-rpa/enterp-diagnosis
+        quote: 公司員工80%以上技術人員組成
+        status: to_confirm
+        note: 人員組成的比例，現站沒有寫統計時間，可能過時
+      - { id: systalk-rpa-local-dev, type: feature, url: 'https://www.tpisoftware.com/products/systalk-rpa/enterp-diagnosis', quote: 與原廠技術合作偕同在地化開發，實現 RPA 落地至台灣各產業。自有 AI 研發團隊 }
+      - { id: systalk-rpa-subscription, type: feature, url: 'https://www.tpisoftware.com/products/systalk-rpa/enterp-diagnosis', quote: 軟體採年訂閱制 }
+      - { id: systalk-rpa-government, type: feature, url: 'https://www.tpisoftware.com/products/systalk-rpa/enterp-diagnosis', quote: SysTalk.RPA 協助政府機關與時俱進，應用自動化工具改善繁複報表處理、老舊系統串接和無紙化政策支援 }
+      - { id: systalk-rpa-banking, type: feature, url: 'https://www.tpisoftware.com/products/systalk-rpa/enterp-diagnosis', quote: RPA 可應用 e-KYC 數位識別身份認證、客戶關係管理、即時匯率更新和新聞輿情資料蒐集 }
+      - { id: systalk-rpa-insurance, type: feature, url: 'https://www.tpisoftware.com/products/systalk-rpa/enterp-diagnosis', quote: 應用 RPA 智慧業務助理報價自動化、續保作業自動化 }
+
+  - group: SysTalk.VIKI
+    url: https://www.tpisoftware.com/products/systalk-viki
+    locale: zh-TW
+    facts:
+      - { id: systalk-viki-rag, type: feature, quote: SysTalk.VIKI 結合生成式AI與企業知識庫，以 RAG (檢索擴增生成)架構，提供即時、有根據的答案 }
+      - { id: systalk-viki-on-prem, type: feature, quote: SysTalk.VIKI 透過地端部署確保企業資料不外洩，所有查詢與回應過程都在企業內部進行 }
+      - { id: systalk-viki-no-token-limit, type: feature, quote: 支援地端佈署 沒有 Token 限制、吃到飽的生成式 AI 平台。 }
+      - { id: systalk-viki-knowledge-graph, type: feature, quote: 結合RAG與知識圖譜，提供結構性知識架構 }
+      - { id: systalk-viki-permissions, type: feature, quote: 具備權限控管與審核機制 }
+      - { id: systalk-viki-annual-license, type: feature, quote: 軟體 年授權制 }
+      - { id: systalk-viki-framework, type: feature, quote: 預設地端大型語言模型 (LLM) 擴增生成 (RAG) 檢索架構 常見問題 (FAQ) 檢索架構 提示詞引擎 (Prompt) 資訊護欄 (Guardrail) 系統使用者權限管理 日誌 - AI 助理訪問紀錄 }
+      - id: systalk-viki-tco-50
+        type: metric
+        quote: 企業 AI 應用 一體機方案 TCO 比業界低50%
+        status: to_confirm
+        note: 與業界比較的數字，現站沒有寫出比較基準
+      - { id: systalk-viki-bundle-llm, type: feature, quote: 內建雙專業評測之主流 LLM (如 Phi-4..) }
+      - { id: systalk-viki-bundle-hardware, type: feature, quote: 硬體 Server + L40S x2 Server + H100 x1 Server + H100 x2, status: to_confirm, note: 方案規格，vikibundle 頁寫的 GPU 不同（RTX PRO6000 x2、H100 x1、6000Ada x6） }
+
+  - group: SysTalk.VIKI AI bundle
+    url: https://www.tpisoftware.com/products/systalk-viki/vikibundle
+    locale: zh-TW
+    facts:
+      - { id: vikibundle-hardware, type: feature, quote: '硬體*[1] (GPU) RTX PRO6000 x2 H100 x1 6000Ada x6', status: to_confirm, note: 方案規格，systalk-viki 頁寫的 GPU 不同（L40S x2、H100 x1、H100 x2） }
+      - { id: vikibundle-license, type: feature, quote: SyTalk.VIKI (搭載主流 LLM ) 授權 一年授權 }
+      - { id: vikibundle-services, type: feature, quote: 導入服務 基本安裝 文件梳理 (30份檔案) }
+      - { id: vikibundle-scenarios, type: feature, quote: 1個企業內部助理 (如：HR 助理) 立即申請 2個企業內部助理 (如：HR 助理 + MIS 助理) }
+      - { id: vikibundle-heavy, type: feature, quote: '2個企業內部助理 (如：HR 助理 + MIS 助理) + LLM Fine-tune*[2] 或 1個企業智能客服 + LLM Fine-tune*[2]' }
+      - { id: vikibundle-notes, type: feature, quote: '[1]將視應用需求建議硬體規格 [2]依實際需求另行報價' }
+      - { id: vikibundle-hr, type: feature, quote: 1. 即時查詢與答覆企業政策 → 自動解析人資制度、內規，降低 HR 被問爆的壓力 2. 訓練教材 / 報到流程說明 / 員工問答機器人 }
+      - { id: vikibundle-mis, type: feature, quote: 1. 系統使用問題第一線應答 → 減少 MIS 一線支援工時，提高處理效率 2. IT SOP 說明 / 系統教學文件 / 員工問答機器人 }
+      - { id: vikibundle-local, type: feature, quote: 完全本地部署，資料不上雲端，確保安全合規。 }
+      - { id: vikibundle-api, type: feature, quote: SysTalk.VIKI 提供 API，可與企業 CRM、ERP、內部知識庫整合。 }
+      - { id: vikibundle-standard-product, type: feature, quote: VIKI：SysTalk.VIKI 係以標準軟體產品的架構進行開發，可依據客戶需求快速完成進行安裝、佈署 }
+
+  - group: SysTalk.ai with PHISON aiDAPTIV (AISO)
+    url: https://www.tpisoftware.com/products/systalk-ai-phison
+    locale: zh-TW
+    comment: The benchmarks are PHISON's (aiDAPTIV); the survey numbers are CIO's
+    facts:
+      - id: aiso-100-percent-control
+        type: feature
+        quote: 100% AI 主控權｜資料不出門｜成本與效能全面可控
+        status: to_confirm
+        note: 口號式的 100%，沒有量測依據
+      - id: aiso-cio-survey
+        type: metric
+        quote: 超過 60% 企業 % 預期增加 AI 算力預算 80% 企業 % 將擴大生成式 AI 的應用 或部署規模 24% 企業 % 已部分或廣泛運用於 業務流程 source by CIO
+        status: to_confirm
+        note: 第三方（CIO）的調查數字，現站沒有寫調查年份
+      - { id: aiso-no-token-limit, type: feature, quote: 地端AI不限Token流量，團隊無需顧慮用量成本，放心大量使用。 }
+      - { id: aiso-bundled, type: feature, quote: 硬體內建軟體，省去分開詢價、規格對接與人工導入的繁瑣流程。 }
+      - { id: aiso-phison-patent, type: feature, quote: PHISON 群聯電子運用 獨家專利 aiDAPTIV 技術， 與業界相比，同樣的運算效能、卻不用昂貴的運算成本。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
+      - { id: aiso-modules, type: feature, quote: Rerank 模組 RAG 模組 向量/混合檢索模組 同義詞模組 FAQ 模組 網站 URL 爬取模組 OCR 視覺解析模組 Prompt 管理模組 LLM 設置模組 Guardrail 模組 STT/TTS 模組 虛擬人模組 Agent Flow 模組 意圖判斷模組 視窗記憶模組 }
+      - { id: aiso-industries, type: feature, quote: 金融服務業 科技製造業 政府部門 醫療生技業 大型企業 }
+      - id: aiso-finetune-benchmark
+        type: metric
+        quote: 'Training Set Size 140 GB 260 GB 1400 GB Minimum GPU Count 4 / 4 4 / 6 4 / 30 Single node 4x GPU configuration comparing GPU only and GPU with NOTE: Scaling is linear based on GPU count and model size Training is based on 10M tokens'
+        status: to_confirm
+        note: 合作夥伴群聯提供的效能比較，要確認對外使用的授權與量測條件
+      - id: aiso-70b-on-4-gpus
+        type: metric
+        quote: 同樣 4 張 GPU 的配置下，競品無法順利運行 70B 等級的模型， 而搭載 aiDAPTIV 的 SysTalk.ai 順利運行！
+        status: to_confirm
+        note: 與競品的比較，現站沒有寫出量測條件以外的出處
+      - id: aiso-10x-dell-hpe
+        type: metric
+        quote: 能支援的模型大小，是同級 Dell、HPE 的 10 倍以上，速度更快上 4 倍！
+        status: to_confirm
+        note: 點名競品的比較，現站沒有寫出量測出處
+      - id: aiso-25x-response
+        type: metric
+        quote: 'PHISON 獨家 aiDAPTIV 技術 讓 AI 回應變快 25 倍 Token Length System: RAM: 64 GB GPU: RTX 4060Ti GDDR: 16GB aiDAPTIVCache: 320 GB NOTE: Estimated figures are based on Llama 3.1-70B-AWQ'
+        status: to_confirm
+        note: 合作夥伴群聯提供的估算數字（Estimated figures）
+      - id: aiso-52-to-2-seconds
+        type: metric
+        quote: 當資料量一變大，一般 AI 回應時間急遽拉長， 但搭載 aiDAPTIV 的 SysTalk.ai，能超高速給答案。 在相同設備、不增加任何硬體的情況下，回應時間從原本的 52 秒， 大幅縮短到 2 秒內完成。
+        status: to_confirm
+        note: 合作夥伴群聯提供的估算數字
+      - { id: aiso-servers, type: feature, quote: 品名 aiDAPTIV 4-GPU Server aiDAPTIV 8-GPU Server VRAM 192GB 384GB 特性 中型知識庫 / 支援 100B 級別 LLM 超大型知識庫 / 支援 200B 級別 LLM }
+      - { id: aiso-memory-optimization, type: feature, quote: 關鍵在 PHISON 的 aiDAPTIV 專利技術。透過記憶體管理與資料調度優化，在相同 GPU 條件下，可支援更大模型規模並顯著提升推論速度 }
+      - { id: aiso-llm-support, type: feature, quote: SysTalk.ai 支援主流開源與企業級 LLM（如 70B 模型），企業可依場景選擇最合適的模型 }
+      - { id: aiso-onboarding, type: feature, quote: 昕力資訊提供完整的導入規劃、模型設定、建置與應用模組設計服務 }
+
+  - group: OrientAI
+    url: https://www.tpisoftware.com/orient-ai
+    locale: zh-TW
+    comment: /orient-aI serves the same page
+    facts:
+      - { id: orientai-five-features, type: feature, quote: 多代理協作 協調專業 Agent 自主執行任務，順暢運行在多個系統間 Agent 統一納管 滿足存取權控管、影子 AI 與 AI 模型監控需求，降低資安風險 Token 用量透明化 }
+      - { id: orientai-mcp, type: feature, quote: MCP 擴充應用 標準化整合功能模組，彈性擴展業務，持續優化流程 }
+      - id: orientai-benefits
+        type: metric
+        quote: 作業效率 40-60% 營運成本 20-30% 治理風險 90%
+        status: to_confirm
+        note: 現站沒有寫出這組數字的量測方式與基準
+      - { id: orientai-execution-layer, type: feature, quote: RAG 知識問答與文件解析 AI Agent 跨系統任務自動化 彈性整合多種大語言模型 支援雲地靈活部署架構 }
+      - { id: orientai-governance-layer, type: feature, quote: AI Agent 統一管控與授權標準化 Token 用量監控與資源配置最佳化 消除影子 AI，防止機敏資料外洩 跨部門統一權限管理與資料治理 }
+      - { id: orientai-aidaptiv, type: feature, quote: 結合群聯 aiDAPTIV 獨家記憶體擴充技術，突破算力與容量限制，地端架構確保離線仍可穩定運行 }
+      - { id: orientai-hardware-small, type: feature, quote: 1-5人團隊 輕量級運算 首選 AI PC Workstation }
+      - { id: orientai-hardware-large, type: feature, quote: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server }
+      - { id: orientai-on-prem-data, type: feature, quote: 不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。 }
+
+  - group: ChatGPT Enterprise (reseller service)
+    url: https://www.tpisoftware.com/chatgpt-enterprise
+    locale: zh-TW
+    facts:
+      - { id: chatgpt-enterprise-security, type: feature, quote: 不使用企業資料進行模型訓練 企業級加密機制 }
+      - { id: chatgpt-enterprise-fast-track, type: feature, quote: 直通原廠快速通道 大幅縮短申請時程， 並提供明確的資格評估。 }
+      - { id: chatgpt-enterprise-governance, type: feature, quote: 協助建立資料安全政策、使用規範與內部推動機制 }
+      - { id: chatgpt-enterprise-training, type: feature, quote: 從新人訓練、主管培訓到 AI 種子教練認證，協助企業建立 AI 應用發展。 }
+      - { id: chatgpt-enterprise-4-6-months, type: metric, quote: 依企業需求而定，一般約需4-6個月，導入後流程：治理對焦、系統設定與帳號開通、顧問導入與流程落地。 }
+      - { id: chatgpt-enterprise-comparison, type: feature, quote: ChatGPT Enterprise 偏向企業 AI 平台，可跨部門使用並整合各種系統，而 Microsoft 365 Copilot 主要強化 Word、Excel、PowerPoint 等 Microsoft 365 工作流程、Gemini 則多與 Google Workspace整合 }
+      - { id: chatgpt-enterprise-free-consultation, type: feature, quote: 與昕力資訊預約免費 30 分鐘諮詢 }
+
+  - group: ESG consultants (ESG advisory page)
+    url: https://www.tpisoftware.com/esg-advisory
+    locale: zh-TW
+    comment: Name, title and affiliation as the team list shows them
+    facts:
+      - { id: "esg-consultant-chen-zhengrui", type: "company", quote: "陳政叡 顧問 國立高雄科技大學生態工程科技中心", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-chuang-binyuan", type: "company", quote: "莊秉元 顧問 國立高雄科技大學生態工程科技中心", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-li-shuhui", type: "company", quote: "李淑慧 顧問 國立高雄科技大學生態工程科技中心", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-huang-weisheng", type: "company", quote: "黃煒盛 專任助理教授 嘉南藥理大學多媒體與遊戲發展系", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-huang-weineng", type: "company", quote: "黃煒能 執行長 ESG 永續發展產學研合作平台", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-ye-jiamao", type: "company", quote: "葉家茂 兼任講師 嘉南藥理大學", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-yang-zhengrong", type: "company", quote: "楊政融 副教授 國立中山大學人文暨 科技跨領域學士學位學程", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-zhao-boyuan", type: "company", quote: "趙伯元 專案經理 國立高雄科技大學ESG與數位科技應用中心", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-zheng-jiasheng", type: "company", quote: "鄭迦聲 講師 逢甲大學產學經營與人才培育中心 ESG講師", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-lai-jungu", type: "company", quote: "賴俊谷 總監 華法國際有限公司 客戶服務處", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-xue-peimin", type: "company", quote: "薛珮旻 顧問 璟睿永續有限公司", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-lin-ruiqi", type: "company", quote: "林芮淇 顧問 康宇永續管理顧問有限公司 RBA/HRDD 企業人權輔導", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+
+  - group: ESG consultant chen-zhengrui
+    url: https://www.tpisoftware.com/esg-advisory/chen-zhengrui
+    locale: zh-TW
+    facts:
+      - { id: "esg-consultant-chen-zhengrui-experience", type: "company", quote: "叡至資訊科技有限公司 執行長 TAISE台灣企業永續獎見習評審 ISO 14064-1:2018內稽人員授課講師 ISO 14067:2018內稽人員授課講師 勞動部產業人才投資計畫政策性產業ISO14064-1、ISO14067、ISO14068、零碳建築學士學分班授課師資 勞動部充電起飛計畫溫室氣體排放量暨產品碳足跡盤查學士學分班授課講師", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-chen-zhengrui-certifications", type: "certification", quote: "CQI/IRCA ISO 14001 環境管理主任稽核員 CQI&IRCA ISO 50001能源管理系統主任稽核員 ISO 14064-1:2018 溫室氣體盤查標準主導查證員 ISO 14064-2:2018 溫室氣體盤查標準主導查證員 ISO 14067:2018 產品碳足跡標準主導查證員 ISO 14068:2023 碳中和標準主導查證員 DQS 高階主管供應商道德與社會責任 荷蘭IPOE ESGP永續經營規劃師 荷蘭IPOE ESGL永續經營素養", status: "to_confirm", note: "人物的證照，對外使用要取得本人同意，可能已過期" }
+
+  - group: ESG consultant chuang-binyuan
+    url: https://www.tpisoftware.com/esg-advisory/chuang-binyuan
+    locale: zh-TW
+    facts:
+      - { id: "esg-consultant-chuang-binyuan-experience", type: "company", quote: "華麒工程實業有限公司 總經理 TAISE台灣企業永續獎見習評審 ISO 14064-1:2018內稽人員授課講師 ISO 14067:2018內稽人員授課講師 勞動部產業人才投資計畫政策性產業ISO14064-1、ISO14067、ISO14068、零碳建築學士學分班授課師資 勞動部充電起飛計畫度溫室氣體排放量暨產品碳足跡盤查學士學分班", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-chuang-binyuan-certifications", type: "certification", quote: "ISO 14064-1:2018 溫室氣體盤查標準主導查證員 ISO 14064-2:2018 溫室氣體盤查標準主導查證員 ISO 14067:2018 產品碳足跡標準主導查證員 DQS 高階主管供應商道德與社會責任 荷蘭IPOE ESGP永續經營規劃師 荷蘭IPOE ESGL永續經營素養", status: "to_confirm", note: "人物的證照，對外使用要取得本人同意，可能已過期" }
+
+  - group: ESG consultant huang-weineng
+    url: https://www.tpisoftware.com/esg-advisory/huang-weineng
+    locale: zh-TW
+    facts:
+      - { id: "esg-consultant-huang-weineng-experience", type: "company", quote: "經濟部創新育成中心-國立高雄第一科技大學 專案經理 嘉南藥理大學 助理教授 ESG 永續發展產學研合作平台執行長 環境部國家環境研究院溫室氣體盤查人員 TUV NORD ISO 14067 產品碳足跡內稽人員授課講師", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-huang-weineng-certifications", type: "certification", quote: "ISO 14001 環境管理主任稽核員認證 ISO 27001 資訊安全認證 ISO 27701 隱私資訊安全認證", status: "to_confirm", note: "人物的證照，對外使用要取得本人同意，可能已過期" }
+
+  - group: ESG consultant huang-weisheng
+    url: https://www.tpisoftware.com/esg-advisory/huang-weisheng
+    locale: zh-TW
+    facts:
+      - { id: "esg-consultant-huang-weisheng-experience", type: "company", quote: "政府研發補助計畫審查委員 第一科技技術有限公司總經理、技術長 國際發明展評審", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-huang-weisheng-education", type: "company", quote: "國立高雄第一科技大學工程科技研究所博士", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-huang-weisheng-certification", type: "certification", quote: "德國TUV-NORD CSR&ESG 查證稽核員", status: "to_confirm", note: "人物的證照，對外使用要取得本人同意，可能已過期" }
+
+  - group: ESG consultant li-shuhui
+    url: https://www.tpisoftware.com/esg-advisory/li-shuhui
+    locale: zh-TW
+    facts:
+      - { id: "esg-consultant-li-shuhui-experience", type: "company", quote: "大公記帳及報稅代理人事務所 所長", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-li-shuhui-certifications", type: "certification", quote: "ISO 14064-1:2018 溫室氣體盤查標準主導查證員 ISO 14067:2018 產品碳足跡標準主導查證員", status: "to_confirm", note: "人物的證照，對外使用要取得本人同意，可能已過期" }
+
+  - group: ESG consultant yang-zhengrong
+    url: https://www.tpisoftware.com/esg-advisory/yang-zhengrong
+    locale: zh-TW
+    facts:
+      - { id: "esg-consultant-yang-zhengrong-experience", type: "company", quote: "財團法人農業科技研究院委員碳足跡查驗機構公正性委員 經濟部工業局綠色工廠標章與清潔生產技術審查小組委員 屏東農業生物科技園區輔導專家 TUV NORD ISO 14067 碳產品足跡內部查證員訓練班講師", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-yang-zhengrong-certifications", type: "certification", quote: "ISO 14064-1 主任稽核證明 ISO 45001 主任稽查證明 (CQI / IRCA)", status: "to_confirm", note: "人物的證照，對外使用要取得本人同意，可能已過期" }
+
+  - group: ESG consultant ye-jiamao
+    url: https://www.tpisoftware.com/esg-advisory/ye-jiamao
+    locale: zh-TW
+    facts:
+      - { id: "esg-consultant-ye-jiamao-experience", type: "company", quote: "ESG 永續發展產學研合作平台溫室氣體盤查顧問師 金屬工業研究發展中心實習工程師", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-ye-jiamao-certifications", type: "certification", quote: "APMP 國際專案管理師(Level C) 一般專案經理 ISO 27001主導稽核員 ISO 14064-1主任稽核員 ISO 14064-2內部查證員 ISO 14067主任查證員 行政院環境保護署溫室氣體盤查作業查證人員", status: "to_confirm", note: "人物的證照，對外使用要取得本人同意，可能已過期" }
+
+  - group: ESG consultant zhao-boyuan
+    url: https://www.tpisoftware.com/esg-advisory/zhao-boyuan
+    locale: zh-TW
+    facts:
+      - { id: "esg-consultant-zhao-boyuan-experience", type: "company", quote: "TUV-NORD GRI 外部稽核員 國立高雄科技大學ESG與數位發展應用中心專案經理 社團法人台灣數位經濟發展學會理事 社團法人台灣產學研合作發展策進會理事 第一資通科技股份有限公司專案經理", status: "to_confirm", note: "人物的姓名、職稱與經歷，對外使用要取得本人同意，可能已變" }
+      - { id: "esg-consultant-zhao-boyuan-certifications", type: "certification", quote: "TUV-NORD, ISO27001:2013 Lead Auditor Training course TUV-NORD, ISO27701:2019 PIMS Lead Auditor Training course TUV-NORD, 14064-1:2018 Lead Verifier Training Course TUV-NORD, GRI Standards Sustainability Reporting Assurance Workshop", status: "to_confirm", note: "人物的證照，對外使用要取得本人同意，可能已過期" }
+
+  - group: ESG advisory
+    url: https://www.tpisoftware.com/esg-advisory
+    locale: zh-TW
+    facts:
+      - id: esg-3-years
+        type: metric
+        quote: 3年內需完成 ESG 評鑑與數位化
+        status: to_confirm
+        note: 現站沒有寫出「3年內」的起算時間與法規依據
+      - { id: esg-regulation-2023, type: metric, quote: 2023 年通過《氣候變遷因應法》和金管會發布《上市櫃公司永續發展行動方案》等相關法政, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - { id: esg-regulation-2024, type: metric, quote: 2024 年開放國內碳權交易，資本額百億元的上市櫃公司為第一波碳盤查對象, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - { id: esg-regulation-2025-carbon-fee, type: metric, quote: 2025 年國內碳費開徵且企業需編制永續報告書, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - { id: esg-regulation-2025-second-wave, type: metric, quote: 2025 年資本額50~100億的上市櫃公司為第二波碳盤查對象, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - id: esg-regulation-2027
+        type: metric
+        quote: 2027 年全體上市櫃公司完成溫室氣體盤查
+        status: to_confirm
+        note: 法規時程，現站的說法，要對照主管機關公告；同頁 FAQ 寫所有企業 2029 年完成查驗
+      - { id: esg-regulation-2030, type: metric, quote: 2030 年達成台灣減碳24%±1目標, status: to_confirm, note: 政策目標，現站的說法，要對照主管機關公告 }
+      - { id: esg-regulation-2050, type: metric, quote: 2050 年實現淨零轉型計畫, status: to_confirm, note: 政策目標，現站的說法，要對照主管機關公告 }
+      - id: esg-regulation-roadmap
+        type: metric
+        quote: 第一階段針對資本額百億元的上市櫃公司、鋼鐵、水泥和金融業進行盤查，並於 2024 年完成查驗。未來所有企業須於 2029 年完成查驗，並公開經過驗證的盤查結果。
+        status: to_confirm
+        note: 法規時程，現站的說法，要對照主管機關公告；同頁時間軸寫全體上市櫃公司 2027 年完成盤查
+      - { id: esg-advisory-three-stages, type: feature, quote: 訂立目標 永續承諾 }
+      - { id: esg-advisory-net-zero-strategy, type: feature, quote: 以台灣 2050 淨零排放路徑及策略為主軸，整合企業資源進行內部人員 ESG 培訓和外部溝通，擬定數據搜集與佐證策略，督導企業建置數據平台。 }
+      - { id: esg-advisory-iso14064, type: feature, quote: 透過獨家 GreenSwift 永續管理平台，輔導您依照 ISO 14064-1 標準進行碳盤查，建立有效的碳數據監控機制，並撰寫盤查清冊與公開報告書。 }
+      - id: esg-advisory-team-iso
+        type: certification
+        quote: 開發團隊全面通過專業永續人才培訓，並成功取得國際 ISO 證書。
+        status: to_confirm
+        note: 現站沒有寫出是哪一張 ISO 證書
+      - id: esg-advisory-verifiers
+        type: company
+        quote: 同時透過國際知名第三方外部單位-德國TUV NORD Taiwan、德國DQS Taiwan Inc.進行查證與稽核
+        status: to_confirm
+        note: 合作單位名稱，對外使用要確認授權
+      - { id: esg-advisory-team-origin, type: company, quote: 昕力顧問團隊由大專院校與法人機構之專家所組成 }
+      - { id: esg-advisory-report-standards, type: feature, quote: 撰寫永續報告書必須依照 GRI、SASB 和 TCFD 3 種國際通用準則之規範與架構來編寫。我們的顧問團隊可以協助您完成報告書之撰寫 }
+      - id: esg-advisory-claim-most-complete
+        type: feature
+        url: https://www.tpisoftware.com/products/greenswift
+        quote: 台灣最完整的顧問服務，匯聚淨零產學界專家，合乎國際標準
+        status: to_confirm
+        note: 「台灣最完整」是最高級宣稱，現站沒有寫出依據
+
+  - group: Outsourcing
+    url: https://www.tpisoftware.com/outsourcing
+    locale: zh-TW
+    facts:
+      - { id: outsourcing-industries, type: company, quote: 產業橫跨金融、保險、科技業、醫療、交通以及政府單位等 }
+      - { id: outsourcing-scope, type: feature, quote: 我們服務的內容包含：各類企業級客製化軟體與解決方案、企業網站建置、行動App開發、系統整合 }
+      - { id: outsourcing-benefits, type: feature, quote: 節省工時與人力成本 最短時間獲得即戰力 常駐客戶端溝通無礙 }
+      - { id: outsourcing-services, type: feature, quote: 網站開發 應用程式App開發 API 建置與整合 系統整合與開發 系統導入與佈署 基礎架構 開發與支援 AIoT 應用與開發 UI/UX 設計 QA & QC 驗證 行動裝置 自動化測試 MongoDB 管理與顧問服務 AWS/GCP/Azure 雲端建置託管服務 }
+      - { id: outsourcing-on-site, type: feature, quote: 人力駐點、遠端開發 }
+      - { id: outsourcing-tech-frontend, type: feature, quote: 'HTML, CSS, SASS, JavaScript 框架：React.js, Vue.js, Angular 響應式網頁設計 (RWD)' }
+      - { id: outsourcing-tech-backend, type: feature, quote: 'Java, C#, Node.js, PHP, Python 框架： Spring, Spring boot, Spring cloud, Spring MVC, Spring Data JPA, Spring Security, Maven, Gradle, .NET Core, .NET Framework' }
+      - { id: outsourcing-tech-database, type: feature, quote: '資料庫： Oracle, MySQL, MSSQL, PostgreSQL, NoSQL (MongoDB, Neo4j, Elasticsearch)' }
+      - { id: outsourcing-tech-devops, type: feature, quote: '其他： GitLab, Jenkins, CI/CD, DevOps, Docker, Kubernetes' }
+      - { id: outsourcing-tech-mobile, type: feature, quote: '原生 iOS： Swift, Objective-C 原生 Android： Java, Kotlin 混合框架： Cordova with React.js, Vue.js, or Angular, React Native, Xamarin' }
+      - { id: outsourcing-tech-qa, type: feature, quote: 煙霧測試 Smoke Test SIT & UAT 回歸測試 Regression test }
+      - { id: outsourcing-mobile-test-tool, type: feature, quote: '由昕力自行研發，協助您的原生應用程式降低測試成本且易維護。 平台：iOS native, Android native, React Native 支援BDD：Cucumber, Gherkin' }
+      - { id: outsourcing-domains, type: feature, quote: 微服務 區塊鏈 數據中台 開放銀行 圖形資料庫平台 DevOps BPM & eForms 保險3-in-1規則引擎 APP自動化測試 敏捷開發顧問服務 大數據平台 }
+
+  - group: Product index
+    url: https://www.tpisoftware.com/products
+    locale: zh-TW
+    facts:
+      - { id: products-families, type: company, quote: 全部 DigiLism SysTalk.ai ESGswift GadoSecurity }
+      - id: digiflexis-claim-only
+        type: feature
+        quote: 市面唯一整合人、文件、流程，彈性自動化企業作業，提升協作效率與流程彈性
+        status: to_confirm
+        note: 「市面唯一」是最高級宣稱，現站沒有寫出依據
+      - { id: systalk-chat-7x24, type: feature, quote: 採用仿人化設計的智能客服，7x24 即時互動，有效提高服務完成率與客戶滿意度 }
+      - { id: greenswift-one-stop, type: feature, quote: 整合碳排數據鏈，一站式完成盤查、認證與報告，協助企業達成 ESG 目標 }
+      - { id: gadodido-fido-standard, type: feature, quote: 可跨平台使用、簡化並提升登入體驗，符合國際 FIDO 資安認證標準，保障身份安全 }
+
+  - group: More product facts
+    locale: zh-TW
+    facts:
+      - { id: digilogs-iso-2-minutes, type: feature, url: 'https://www.tpisoftware.com/products/digilogs/iso27001logging', quote: 可視化系統地圖一眼看穿問題所在 2分鐘除錯 迅速解決問題！ }
+      - { id: digirunner-open-banking-no-credentials, type: feature, url: 'https://www.tpisoftware.com/products/open-banking', quote: 用戶在授權TSP處理相關銀行資訊時，不會留下或儲存用戶帳密紀錄，而是透過用戶授權才能整合相關資訊 }
+      - { id: gadodido-fido-technology, type: feature, url: 'https://www.tpisoftware.com/products/gadodido', quote: gadoDIDO 運用國際 FIDO 認證的身份認證技術 }
+      - { id: insurering-business-logic, type: feature, url: 'https://www.tpisoftware.com/solutions/insurering', quote: 符合保險產業商業邏輯，可降低長期維運成本 }
+      - { id: interactivehealth-omo, type: feature, url: 'https://www.tpisoftware.com/solutions/interactivehealth', quote: 結合線上線下行銷、獎勵回饋、衛教等多面向體驗，提升員工與會員自我健康管理能力。 }
+      - { id: smartclaim-case-medical-documents-title, type: case, url: 'https://www.tpisoftware.com/solutions/smartclaim', quote: 保險業 - 醫療文件解析 }
+      - { id: systalk-coach-seniority, type: feature, url: 'https://www.tpisoftware.com/products/systalk-coach', quote: 主管可依員工資歷與職能指派不同的練習與考核內容 }
+      - id: systalk-rpa-proven
+        type: feature
+        url: https://www.tpisoftware.com/products/systalk-rpa
+        quote: 經多家客戶實例導入並取得驗證，兼顧效率、質量與成本控制
+        status: to_confirm
+        note: 「多家客戶實例」沒有寫出客戶或數量
+      - id: vikibundle-tco-50
+        type: metric
+        url: https://www.tpisoftware.com/products/systalk-viki/vikibundle
+        quote: AI 一體機 TCO 比業界低50%
+        status: to_confirm
+        note: 與業界比較的數字，現站沒有寫出比較基準
+      - id: vikibundle-cost-50
+        type: metric
+        url: https://www.tpisoftware.com/products/systalk-viki/vikibundle
+        quote: 企業 AI 解決方案平台｜降低成本 50%，快速導入、安全穩定
+        status: to_confirm
+        note: 頁面標題的說法，現站沒有寫出比較基準
+      - id: testimonial-cathay-fhc-excerpt
+        type: case
+        url: https://www.tpisoftware.com/outsourcing
+        quote: 透過昕力的最佳技術與完整客戶體驗的合作，我們獲得了相當好的成果！
+        status: to_confirm
+        note: 首頁證言（testimonial-cathay-fhc）的摘錄，對外使用要取得客戶同意
+
+ignore:
+  - match: "- 昕力資訊TPIsoftware$|^昕力資訊｜SysTalk\\.RPA｜"
+    reason: 頁面的 title，沒有可查證的內容
+  - match: "^Q\\d*[\\s：:]|^針對系統的高可用性，digiRunner 能否支援 5 個以上的 Pod？$"
+    reason: FAQ 的問題句；可查證的內容在答案裡
+  - match: "^\\d{4}\\s*[-~]\\s*\\d{4}$|^2021 Q1$"
+    reason: 時間軸的年份頁籤，內容見各年份的事實
+  - match: "^(?:客戶證言|服務客戶|深受企業客戶讚譽、信賴|我們的技術領域與客戶|更多保險科技成功案例|客戶成就\\ ⬝\\ 共同喝采|碳盤查輔導認證服務|國際認證信任|實現零信任身份認證|掌握保險業數位轉型核心|ISO\\ 27001合規的\\ 關鍵武器！|保險科技模組化平台|革新保險科技，引領數位轉型|創新保險微服務平台|為保險業提升服務效率加值|協助保險產業領域完整導入\\ 進一步掌握市場利基|保險自動化規則檢核解決方案|新型態管理\\ 解決保險產業當前潛在挑戰|提升保險商品管理效率|從建立保險自動化規則檢核開始|建立完善保險管理之公式|全球保險業的轉型新未來|AI\\ 保險智能理賠解決方案|引領保險業趨勢|優化客戶體驗\\ 加速創新打造新商模|雲端服務加值\\ 保險商品走向電商化|RPA流程自動化：\\ 企業數位轉型的第一哩路|精簡人力，客戶至上|客戶驅動，奪得商機|PHISON\\ 獨家專利技術|別人跑不動的，PHISON\\ 跑得動\\ \\+\\ 跑得快|AISO\\ 打造\\ —\\ All\\-in\\-one\\ 訓練一體機方案|AISO\\ 整合企業所需的\\ AI\\ 軟硬體\\ 導入零困難|開放銀行|開放政府|什麼是開放銀行\\ \\(Open\\ Banking\\)？|台灣開放銀行三階段|傳統銀行\\ VS\\ 開放銀行|傳統銀行|第一階段\\-公開資訊開放|TPI\\ digiRunner\\ 協助打造\\ API\\ 平台戰略，讓銀行更靈活|智慧政府\\ Open\\ API\\ 開放資料應用|落實服務型政策推動\\~台灣「智慧政府2\\.0」|不只強化ICT策略\\ 日誌管理更是您邁向\\ ISO\\ 27001合規的關鍵武器！|準備好確認你的客服品質了嗎？\\ 實現你的客戶體驗優勢|保持人才與技術領先\\ :\\ 我們掌握雲、地最新關鍵人才與技術，協助企業突破實體與虛擬疆界，迎接雲端經濟之無限商機。我們協助客戶創新轉型，提升核心實力，進而強化產業競爭力。)$"
+    reason: 區塊標題、標語或 CTA，沒有可查證的內容
+  - match: "^(?:全面滿足前端體驗\\ 提升客戶滿意度和互動性|開放銀行與上雲創新服務\\ 構建金融生態系|一站整合\\ 驅動保險數位轉型|全通路擴展\\ 擴大保險產品覆蓋範圍|加快保險商品上架流程及管理效率|內外通達\\ 實現政府數位治理|達到跨平台資訊交換\\ 加速落實政府資料開放|提升企業、公眾與政府三方之溝通效率|政府服務個人化、民眾資料自主運用|多元認證與授權\\ 成為安全之數位政府服務|符合政府資安規範\\ 保障公眾資料安全|由驗證到保險產品上下架，皆能快速進行，提高營運效率。|依需求彈性調整、擴增\\ API\\ 應用，賦能銀行金融產業靈活運用金融資訊與開放\\ API。)$"
+    reason: digiRunner、InsureRing 各產業頁籤的標語，沒有具體功能或數字
+  - match: "^(?:更以客戶利益為導向，致力於提供創新技術及軟體解決方案|我們傾聽客戶需求，量身打造專屬的解決方案|卓越的專業團隊、豐富的實戰經驗攜手客戶達成完美交付|因應國際減碳協議與國內淨零政策，ESG\\ 不再只是口號|自2020年以來，在混合辦公、居家辦公等多元工作模式下|隨著時代更迭，銀行、保險產業現階段都遇到新舊服務串接|我們協助企業面對多樣化的系統日誌挑戰|日誌是\\ ICT\\ 策略的關鍵角色|在銀行客戶（消費者）的同意下，將資料開放給第三方平台|藉由全方位\\ digiRunner\\ API\\ 管理平台架構實現開放銀行最終目的|選擇一個對的\\ API\\ 管理平台|我國為接軌世界先進國家推動數位服務轉型趨勢|AISO\\ 將世界級\\ AI\\ 算力\\ 安全地帶進企業內部|智慧科技不斷發展，傳統醫療系統持續數位轉型|過去在受理理賠案件時，保險業者需投注大量人力成本|以使用者中心的設計思維出發，從創意發想、原型打造)"
+    reason: 核心價值、產業背景或概念說明的敘述，沒有昕力可查證的事實
+  - match: "^(?:銀行或外部驗身|會員\\ 啟用銀行服務|回傳銀行授權|傳送\\ Authorization\\ Code\\ 至銀行端|取得銀行提供之服務|\\(支援第三方或銀行驗證Sever\\)|銀行後台\\ 系統服務|客戶登入|登入網路銀行|網路銀行|1\\.\\ 核身畫面彈出\\ \\(外部URL\\)\\ 2\\.\\ User\\ 輸入\\ ID/PWD|3\\.\\ 驗證成功，取得\\ TSP\\ Server\\ \\(Client\\)\\ 可取用Group\\ List\\ 4\\.\\ 跳頁面供User勾選同意授權|銀行回傳授權許可|5\\.取得Authorization\\ Code|第一階段)$"
+    reason: 開放銀行、開放政府流程圖的標籤與步驟編號
+  - match: "^(?:直接上線面對客戶|\\#\\ 練習量不足即上第一線\\ 失誤風險高)$"
+    reason: SysTalk.Coach 「傳統培訓」流程圖的標籤
+  - match: "^(?:2小時以內|2~8小時|8~16小時|16小時以上)$|^備註：1 ?為"
+    reason: RPA 數位勞動力分析量表的選項與說明
+  - match: "^偵查員您好，請輸入第一道憑證"
+    reason: 互動測驗的提示文字
+  - match: "^API管理（APIM）平台如何打造開放銀行，落地共享金融$"
+    reason: 部落格文章連結的標題
+  - match: "^1\\.基礎設施價格$|^2\\.免費試用$"
+    reason: AWS Marketplace 注意事項的編號標題，內容已另收
+  - match: "^客服質檢還在抽查 2%？"
+    reason: 標題重述同頁 2% 抽樣的說法（systalk-audit-sampling-2-percent）
