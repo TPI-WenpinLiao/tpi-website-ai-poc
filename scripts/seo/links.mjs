@@ -4,11 +4,10 @@
 // #fragment points at an id (or a[name]) on the target page. Internal means relative, root-relative
 // or on the origin of the page's canonical URL; external URLs are not fetched (the cloud proxy and
 // the old site make that flaky).
-// Two kinds of target are listed separately and do not fail: the external nodes in
-// docs/ia/nodes.csv (sub-sites such as /tpu, served by other apps; the same rule as
-// scripts/i18n/routes.mjs, which checks the locale side of these links) and the PENDING pages
-// below. Any other page that is linked but not built fails, so a page dropping out of the build is
-// caught. A PENDING page that gets built fails too, until it is taken off the list.
+// Links to the external nodes in docs/ia/nodes.csv (sub-sites such as /tpu, served by other apps;
+// the same rule as scripts/i18n/routes.mjs, which checks the locale side of these links) are listed
+// separately and do not fail. Any other page that is linked but not built fails, so a page dropping
+// out of the build is caught.
 // Part of `npm run check`, after the build: node scripts/seo/links.mjs [dist]
 
 import { readFileSync, readdirSync } from 'node:fs';
@@ -19,16 +18,6 @@ import { fileKind, servedFile } from '../lib/static-server.mjs';
 import { externalPaths, urlPath } from '../i18n/routes.mjs';
 
 const SHOWN = 5;
-
-// Page nodes in docs/ia/nodes.csv that the navigation links to but that have no content entry yet
-// (src/content), so no page is built for them; scripts/ia/redirect-targets.mjs exempts the redirects
-// to them too. Tracked in #159. Remove a path once its page is built.
-export const PENDING = [
-  '/chatgpt-enterprise',
-  '/cloudservice',
-  '/outsourcing',
-  '/resource',
-];
 
 /** decodeURIComponent, or undefined for malformed percent-encoding @param {string} s */
 const decode = (s) => {
@@ -106,12 +95,6 @@ export function linkProblems({ pages, kind, planned = new Set() }) {
   return { broken, planned: plannedHits, checked };
 }
 
-/**
- * PENDING paths that have a page now, and so must come off the list.
- * @param {readonly string[]} pending @param {(file: string) => 'file' | 'dir' | undefined} kind
- */
-export const builtPending = (pending, kind) => pending.filter((path) => servedFile(path, kind));
-
 /** @param {string[]} pages */
 const sample = (pages) => `${pages.slice(0, SHOWN).join(', ')}${pages.length > SHOWN ? `, … (${pages.length - SHOWN} more)` : ''}`;
 
@@ -122,9 +105,7 @@ function main([dist = resolve(import.meta.dirname, '../../dist')]) {
     .map((d) => relative(dist, join(d.parentPath, d.name)).split('\\').join('/'));
   const pages = new Map(files.map((f) => [f, readFileSync(join(dist, f), 'utf8')]));
   const kind = fileKind(dist);
-  const planned = new Set([...externalPaths(), ...PENDING]);
-  const { broken, planned: plannedHits, checked } = linkProblems({ pages, kind, planned });
-  const stale = builtPending(PENDING, kind);
+  const { broken, planned: plannedHits, checked } = linkProblems({ pages, kind, planned: externalPaths() });
   const byTarget = (map) => [...map].map(([target, from]) => [target, [...from].sort()]).sort(([a], [b]) => a.localeCompare(b));
   if (broken.size) {
     console.log(`Broken internal links: ${broken.size} targets`);
@@ -132,11 +113,10 @@ function main([dist = resolve(import.meta.dirname, '../../dist')]) {
   }
   if (plannedHits.size) {
     const targets = byTarget(plannedHits);
-    console.log(`External nodes and PENDING pages, not an error: ${targets.map(([t, from]) => `${t} (${from.length})`).join(', ')}`);
+    console.log(`External nodes, not an error: ${targets.map(([t, from]) => `${t} (${from.length})`).join(', ')}`);
   }
-  for (const path of stale) console.log(`${path} is built now: remove it from PENDING in scripts/seo/links.mjs`);
   console.log(`${pages.size} pages, ${checked} internal references checked, ${broken.size} broken targets`);
-  if (broken.size || stale.length) process.exitCode = 1;
+  if (broken.size) process.exitCode = 1;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) main(process.argv.slice(2));

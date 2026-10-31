@@ -50,7 +50,7 @@ script 另外檢查：
 - 產出的 `_redirects` 規則（含萬用規則）不會比對到新站的頁面。Cloudflare Pages 不論檔案是否存在都會套用轉址，比對到新頁面就會蓋掉該頁或形成迴圈
 - 數量與長度在 Cloudflare Pages 的上限內：靜態 2,000 筆、動態 100 筆、每行 1,000 字元
 
-`npm run check` 在 build 後另外執行 `node scripts/ia/redirect-targets.mjs`（M8-01）：每一列的 `to`（含 200 列）都要在 `dist/` 建出，也不能又是另一條規則的來源（轉址鏈）；`redirect-overrides.csv` 的 `unbuilt` 在 `dist/` 有建出時也失敗。上面的檢查只看節點，看不到某語系有沒有內容檔、offering 有沒有 `downloads`，沒建出的目標改寫在 `redirect-overrides.csv`。外部節點與 `scripts/seo/links.mjs` 的 `PENDING` 不算錯誤，`PENDING` 的頁面建出後要從清單拿掉。
+`npm run check` 在 build 後另外執行 `node scripts/ia/redirect-targets.mjs`（M8-01）：每一列的 `to`（含 200 列）都要在 `dist/` 建出，也不能又是另一條規則的來源（轉址鏈）；`redirect-overrides.csv` 的 `unbuilt` 在 `dist/` 有建出時也失敗。上面的檢查只看節點，看不到某語系有沒有內容檔、offering 有沒有 `downloads`，沒建出的目標改寫在 `redirect-overrides.csv`。目標是外部節點（`/tpu` 等）的列不算錯誤。
 
 ## 轉成 `_redirects`
 

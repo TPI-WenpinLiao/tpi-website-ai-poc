@@ -5,8 +5,7 @@
 // or an offering has downloads, shows only in the build: a page that isn't built gets a row in
 // docs/ia/redirect-overrides.csv (#137). An `unbuilt` page of that file that gets built fails, until
 // its row is taken out, so the old URL goes to the page again.
-// Not an error: targets on external nodes (sub-sites such as /tpu) and the PENDING pages of
-// scripts/seo/links.mjs in any locale. A PENDING page that gets built fails, until it is taken off the list.
+// Not an error: targets on external nodes (sub-sites such as /tpu).
 // Part of `npm run check`, after the build: node scripts/ia/redirect-targets.mjs [dist]
 
 import { resolve } from 'node:path';
@@ -14,21 +13,16 @@ import { pathToFileURL } from 'node:url';
 import { readCsv } from '../inventory/csv.mjs';
 import { fileKind, servedFile } from '../lib/static-server.mjs';
 import { externalPaths } from '../i18n/routes.mjs';
-import { PENDING } from '../seo/links.mjs';
 import { MAIN_HOST, OVERRIDES } from './redirects.mjs';
-
-/** The target path without its locale prefix @param {string} path */
-const unprefixed = (path) => path.replace(/^\/(en|vi)(?=\/|$)/, '') || '/';
 
 /**
  * @param {object} site
  * @param {Record<string, string>[]} site.rows docs/ia/redirects.csv
  * @param {(file: string) => 'file' | 'dir' | undefined} site.kind what a dist-relative path is
  * @param {ReadonlySet<string>} [site.external] paths of external nodes
- * @param {string[]} [site.pending] PENDING pages, without locale prefix
  * @param {Record<string, string>[]} [site.overrides] docs/ia/redirect-overrides.csv
  */
-export function redirectProblems({ rows, kind, external = new Set(), pending = [], overrides = [] }) {
+export function redirectProblems({ rows, kind, external = new Set(), overrides = [] }) {
   /** @type {Map<string, string[]>} target → sources */
   const missing = new Map();
   /** @type {Map<string, string[]>} */
@@ -52,31 +46,28 @@ export function redirectProblems({ rows, kind, external = new Set(), pending = [
     checked += 1;
     if (sources.has(r.to)) chains.push(`${r.from} → ${r.to}, which redirects again`);
     if (built(r.to)) continue;
-    if (external.has(r.to) || pending.includes(unprefixed(r.to))) add(known, r.to, r.from);
+    if (external.has(r.to)) add(known, r.to, r.from);
     else add(missing, r.to, r.from);
   }
-  const stale = pending.filter((p) => built(p));
   const builtOverrides = overrides.filter((o) => o.unbuilt && built(o.unbuilt)).map((o) => o.unbuilt);
-  return { checked, missing, known, chains, stale, builtOverrides };
+  return { checked, missing, known, chains, builtOverrides };
 }
 
 /** @param {string[]} args */
 async function main([dist = resolve(import.meta.dirname, '../../dist')]) {
   const rows = await readCsv(resolve(import.meta.dirname, '../../docs/ia/redirects.csv'));
-  const { checked, missing, known, chains, stale, builtOverrides } = redirectProblems({
+  const { checked, missing, known, chains, builtOverrides } = redirectProblems({
     rows,
     kind: fileKind(dist),
     external: externalPaths(),
-    pending: PENDING,
     overrides: await readCsv(resolve(import.meta.dirname, '../..', OVERRIDES)),
   });
   for (const [to, from] of missing) console.log(`not built: ${to} ← ${from.join(', ')}`);
   for (const line of chains) console.log(`chain: ${line}`);
   for (const path of builtOverrides) console.log(`${path} is built now: remove its row from ${OVERRIDES} and re-run node scripts/ia/redirects.mjs`);
-  for (const path of stale) console.log(`${path} is built now: remove it from PENDING in scripts/seo/links.mjs`);
   const knownRows = [...known.values()].reduce((n, from) => n + from.length, 0);
-  console.log(`${checked} redirect rows checked: ${missing.size} targets not built, ${chains.length} chains, ${builtOverrides.length} overridden pages built; ${knownRows} rows to external nodes or PENDING targets (${known.size} targets), not an error`);
-  if (missing.size || chains.length || stale.length || builtOverrides.length) process.exitCode = 1;
+  console.log(`${checked} redirect rows checked: ${missing.size} targets not built, ${chains.length} chains, ${builtOverrides.length} overridden pages built; ${knownRows} rows to external nodes (${known.size} targets), not an error`);
+  if (missing.size || chains.length || builtOverrides.length) process.exitCode = 1;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) await main(process.argv.slice(2));

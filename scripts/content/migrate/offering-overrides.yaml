@@ -124,3 +124,43 @@ vi/textualanalysis:
 vi/uiux:
   frontmatter:
     description: Thiết kế giao diện bắt mắt và trải nghiệm người dùng tốt là chìa khóa để thu hút khách truy cập, tạo hình ảnh trực quan và trải nghiệm tổng thể trên trang web.
+
+# #159: the meta descriptions of cloudservice and outsourcing are over the limit in all three locales,
+# shortened without adding facts. 「台灣唯一具備研發量能的軟體廠商」 in the outsourcing meta is left out
+# (listed in the PR for the content owner)
+zh-TW/cloudservice:
+  frontmatter:
+    description: 昕力資訊提供一站式的雲端導入服務，涵蓋雲端搬遷、系統整合、機器學習、維運管理、雲端託管服務，協助企業實現靈活的系統轉換，開創全新商業價值。
+
+en/cloudservice:
+  frontmatter:
+    description: TPIsoftware provides one-stop cloud implementation services, including cloud migration, system integration, machine learning and maintenance management.
+
+vi/cloudservice:
+  frontmatter:
+    description: TPIsoftware cung cấp các dịch vụ triển khai cloud một cửa, bao gồm di chuyển dữ liệu lên cloud, tích hợp hệ thống, máy học, quản lý bảo trì.
+
+zh-TW/outsourcing:
+  frontmatter:
+    description: 昕力資訊的 IT 技術團隊可提供企業專業資訊顧問、人力駐點、遠端程式開發，解決您資訊人才不足的痛點，最短時間內，建構最完整的服務。
+
+en/outsourcing:
+  frontmatter:
+    description: With a highly experienced IT technical team, TPIsoftware provides professional information consulting, on-site manpower support and remote software development.
+
+vi/outsourcing:
+  frontmatter:
+    description: Với đội ngũ kỹ thuật IT giàu kinh nghiệm, TPIsoftware tư vấn chuyên môn, hỗ trợ nhân lực tại chỗ, phát triển phần mềm từ xa.
+
+# The /resource pages have no meta description: the line under the name and the blog block's text
+zh-TW/resources:
+  frontmatter:
+    description: 好資源 不只分享 更有價值。昕力部落格—科技昕力量，為您掌握數位科技最新趨勢，解鎖科技為企業帶來的關鍵推動力。
+
+en/resources:
+  frontmatter:
+    description: Share good resources. Share valuable insights. The Blog by Thinker will keep you up to date with the latest trends in digital technology.
+
+vi/resources:
+  frontmatter:
+    description: Chia sẻ những tài nguyên hữu ích. Chia sẻ những hiểu biết quý giá. Blog của Thinker sẽ giúp bạn cập nhật các xu hướng mới nhất về công nghệ kỹ thuật số.
