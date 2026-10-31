@@ -71,6 +71,10 @@ export const localeHref =
 
 export const pageHref = localeHref(DEFAULT_LOCALE);
 
+// Whether page node `n` has a page in any locale; zh-TW has every built page (ADR 0002). Nodes with no
+// page yet (docs/ia/navigation.csv area none, #138) stay out of breadcrumbs and child cards
+export const hasPage = (n: IaNode) => n.kind !== 'page' || !!builtNodes.get(DEFAULT_LOCALE)?.has(n.id);
+
 // The URL of node `id`'s page in `locale`
 export function nodeHref(id: string, locale: Locale): string {
   const href = localeHref(locale)(node(id));
@@ -112,10 +116,11 @@ export interface TrailNode extends IaNode {
   href: string | undefined;
 }
 
-// Breadcrumb trail from home to `id` for a page in `locale`; group nodes have no page and are skipped
+// Breadcrumb trail from home to `id` for a page in `locale`; group nodes and ancestors with no page
+// (hasPage) are skipped. `id` itself stays: the 404 page is built outside builtNodes
 export function breadcrumb(id: string, locale: Locale): TrailNode[] {
   const trail: IaNode[] = [];
-  for (let cur = byId.get(id); cur; cur = byId.get(cur.parent)) if (cur.kind !== 'group') trail.unshift(cur);
+  for (let cur = byId.get(id); cur; cur = byId.get(cur.parent)) if (cur.id === id || (cur.kind !== 'group' && hasPage(cur))) trail.unshift(cur);
   return trail.map((n) => ({ ...named(n, locale), href: localeHref(locale)(n) }));
 }
 
@@ -126,5 +131,6 @@ export function entryTrail(id: string, current: { title: string; path: string },
   return [...breadcrumb(node(id).parent, locale), { ...node(id), title: current.title, path, href: localizePath(path, locale) }];
 }
 
-// Child nodes of `id`, named in `locale`
-export const children = (id: string, locale: Locale) => nodes.filter((n) => n.parent === id && n.kind !== 'asset').map((n) => named(n, locale));
+// Child nodes of `id` that have a page (hasPage), named in `locale`
+export const children = (id: string, locale: Locale) =>
+  nodes.filter((n) => n.parent === id && n.kind !== 'asset' && hasPage(n)).map((n) => named(n, locale));

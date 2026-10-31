@@ -93,9 +93,13 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                       <ul class="columns" style={`--mega-columns: ${groups(item).length}`}>
                         {groups(item).map((g) => (
                           <li>
-                            <a class="menu-link group" href={g.href} aria-current={current(g.href)}>
-                              {g.label}
-                            </a>
+                            {g.href ? (
+                              <a class="menu-link group" href={g.href} aria-current={current(g.href)}>
+                                {g.label}
+                              </a>
+                            ) : (
+                              <span class="menu-link group">{g.label}</span>
+                            )}
                             <ul>
                               {g.children.map((p) => (
                                 <li>
@@ -177,7 +181,8 @@ const isMega = (item: NavItem) => groups(item).length > 0;
               <div>
                 <p class="sheet-title">{item.label}</p>
                 <ul>
-                  {item.children.map((c) => (
+                  {/* A column heading with no page (#138) lists its links in its place */}
+                  {item.children.flatMap((c) => (c.href ? [c] : c.children)).map((c) => (
                     <li>
                       <a class="menu-link" href={c.href} aria-current={current(c.href)}>
                         {c.label}
@@ -456,7 +461,8 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     text-decoration: none;
   }
 
-  .menu-link:hover {
+  /* Only links: a column heading with no page (#138) is a span */
+  a.menu-link:hover {
     background: var(--color-bg-muted);
     color: var(--color-text);
   }

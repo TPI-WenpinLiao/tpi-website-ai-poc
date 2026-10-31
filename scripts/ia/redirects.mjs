@@ -139,12 +139,16 @@ export function buildRedirects({ inventory, pageMap, nodes, dropTargets, overrid
     if (sources.has(r.from)) errors.push(`duplicate redirect source: ${r.from}`);
     sources.add(r.from);
   }
-  return { rows, errors };
+  // Pages redirect-overrides.csv says are not built, so a rule may start from them (toRedirects)
+  const unbuilt = new Set(overrides.map((o) => o.unbuilt).filter(Boolean));
+  return { rows, errors, unbuilt };
 }
 
 // Cloudflare Pages _redirects: static rules first, then splats; only paths on the main host.
-// `nodes` (docs/ia/nodes.csv) adds the new pages no redirect points to, in every locale, to the loop check.
-export function toRedirects(rows, nodes = []) {
+// `nodes` (docs/ia/nodes.csv) adds the new pages no redirect points to, in every locale, to the loop check;
+// `unbuilt` (buildRedirects) takes out the node paths redirect-overrides.csv says are not built, which
+// scripts/ia/redirect-targets.mjs fails on once they are.
+export function toRedirects(rows, nodes = [], unbuilt = new Set()) {
   const errors = [];
   const rules = rows
     .filter((r) => r.status !== '200' && new URL(r.from).host === MAIN_HOST)
@@ -158,6 +162,7 @@ export function toRedirects(rows, nodes = []) {
   for (const n of nodes.filter((x) => (x.kind === 'page' || x.kind === 'collection') && x.path)) {
     for (const locale of Object.keys(PREFIX)) pages.add(withPrefix(locale, n.path));
   }
+  for (const path of unbuilt) pages.delete(path);
   for (const { source, line, dynamic } of rules) {
     const hit = dynamic ? [...pages].find((p) => p.startsWith(source.slice(0, -1))) : pages.has(source) && source;
     if (hit) errors.push(`redirect matches the new page ${hit} (loop or shadowed page): ${line}`);
@@ -174,14 +179,14 @@ export function toRedirects(rows, nodes = []) {
 async function main() {
   const inventory = await readCsv(INVENTORY);
   const nodes = await readCsv(NODES);
-  const { rows, errors } = buildRedirects({
+  const { rows, errors, unbuilt } = buildRedirects({
     inventory,
     pageMap: await readCsv(PAGE_MAP),
     nodes,
     dropTargets: await readCsv(DROP_TARGETS),
     overrides: await readCsv(OVERRIDES),
   });
-  const redirects = toRedirects(rows, nodes);
+  const redirects = toRedirects(rows, nodes, unbuilt);
   errors.push(...redirects.errors);
   if (errors.length) {
     console.error(errors.join('\n'));

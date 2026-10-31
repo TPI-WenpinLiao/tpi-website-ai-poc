@@ -24,7 +24,7 @@ import InPageNav from '../../components/ui/InPageNav.astro';
 import Faq from '../../components/ui/Faq.astro';
 import SceneChapter from '../../components/ui/SceneChapter.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
-import { breadcrumb, children, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumb, children, hasPage, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { COLLECTION_NODES, entryPath } from '../../lib/content/urls';
 import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
@@ -164,7 +164,7 @@ const blog = localNode('blog', locale);
               <Reveal delay={stagger(i)}>
                 <Card title={u.title} index={String(i + 1).padStart(2, '0')} description={u.body}>
                   {u.hub && (
-                    <Tag slot="meta" href={href(u.hub)} tone="brand">
+                    <Tag slot="meta" href={hasPage(u.hub) ? href(u.hub) : undefined} tone="brand">
                       {u.hub.title}
                     </Tag>
                   )}

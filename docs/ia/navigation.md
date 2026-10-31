@@ -38,7 +38,7 @@ footer 有 5 欄：產品、產業方案、服務、資源、公司。欄的下�
 
 - 有下拉的第一層項目是按鈕，不是連結。總覽頁（產品總覽、產業方案總覽等）放在選單第一項
 - 點擊或按 Enter／Space 展開，不只靠 hover。同一時間只展開一個選單
-- 產品選單的欄標題是產品家族名稱，可以點到家族頁
+- 產品選單的欄標題是產品家族名稱，可以點到家族頁。家族頁還沒建出時（資安，#138），`navigation.csv` 寫成只有 `label` 的欄標題，顯示為不可點的文字，手機選單直接列出它底下的產品
 - OrientAI 在 AI 家族第一項，加「Agentic AI」標記
 - 第四層（`digirunner-cloud`、`digilogs-iso27001`、`digilogs-detection`）不進 header，從上一層產品頁連結。現站 vi header 有放 digiRunner on Cloud 與 ISO 27001，新站統一不放
 
@@ -216,7 +216,7 @@ flowchart LR
   n12 --> n16
   n17["digiCare 智慧醫療服務"]
   n12 --> n17
-  n18["資安（GadoSecurity）"]
+  n18{{"資安（GadoSecurity）"}}
   n0 --> n18
   n19["gadoDIDO 無密碼身分驗證"]
   n18 --> n19
@@ -230,73 +230,58 @@ flowchart LR
   n21 --> n23
   n24{{"產業方案"}}
   root --> n24
-  n25["產業方案總覽"]
+  n25["金融"]
   n24 --> n25
-  n26["金融"]
+  n26["政府與公部門"]
   n24 --> n26
-  n27["政府與公部門"]
-  n24 --> n27
-  n28["製造業"]
-  n24 --> n28
-  n29{{"服務"}}
-  root --> n29
-  n30["服務總覽"]
-  n29 --> n30
-  n31["AISO 主權 AI"]
-  n29 --> n31
-  n32["委外服務"]
-  n29 --> n32
-  n33["雲端整合服務"]
-  n29 --> n33
-  n34["ChatGPT 企業服務"]
-  n29 --> n34
-  n35["UI/UX 數位產品設計"]
-  n29 --> n35
-  n36["ESG 永續發展與顧問服務"]
-  n29 --> n36
-  n37{{"資源"}}
-  root --> n37
-  n38["資源總覽"]
-  n37 --> n38
-  n39["成功案例"]
-  n37 --> n39
-  n40["部落格"]
-  n37 --> n40
-  n41["digiRunner 白皮書"]
-  n37 --> n41
-  n42["digiLogs 白皮書"]
-  n37 --> n42
-  n43["GreenSwift 碳盤指南"]
-  n37 --> n43
-  n44["SysTalk.ai AI Playbook"]
-  n37 --> n44
-  n45["活動"]
-  n37 --> n45
-  n46["昕力大學"]
-  n37 --> n46
-  n47{{"公司"}}
-  root --> n47
-  n48["關於我們"]
-  n47 --> n48
-  n49["合作夥伴"]
-  n47 --> n49
-  n50["媒體中心"]
-  n47 --> n50
-  n51["人才招募"]
-  n47 --> n51
+  n27{{"服務"}}
+  root --> n27
+  n28["AISO 主權 AI"]
+  n27 --> n28
+  n29["委外服務"]
+  n27 --> n29
+  n30["雲端整合服務"]
+  n27 --> n30
+  n31["ChatGPT 企業服務"]
+  n27 --> n31
+  n32["UI/UX 數位產品設計"]
+  n27 --> n32
+  n33["ESG 永續發展與顧問服務"]
+  n27 --> n33
+  n34{{"資源"}}
+  root --> n34
+  n35["資源總覽"]
+  n34 --> n35
+  n36["成功案例"]
+  n34 --> n36
+  n37["部落格"]
+  n34 --> n37
+  n38["活動"]
+  n34 --> n38
+  n39["昕力大學"]
+  n34 --> n39
+  n40{{"公司"}}
+  root --> n40
+  n41["關於我們"]
+  n40 --> n41
+  n42["合作夥伴"]
+  n40 --> n42
+  n43["媒體中心"]
+  n40 --> n43
+  n44["人才招募"]
+  n40 --> n44
 ```
 
 ### footer
 
 | 產品 | 產業方案 | 服務 | 資源 | 公司 |
 |---|---|---|---|---|
-| 產品總覽 | 金融 | 服務總覽 | 成功案例 | 關於我們 |
-| AI（SysTalk.ai） | 政府與公部門 | AISO 主權 AI | 部落格 | 合作夥伴 |
-| 數位轉型（DigiLism） | 製造業 | 委外服務 | 活動 | 媒體中心 |
-| 資安（GadoSecurity） |  | 雲端整合服務 | 昕力大學 | 人才招募 |
-| ESG 與能源（ESGswift） |  | ChatGPT 企業服務 |  | 聯絡我們 |
-|  |  | UI/UX 數位產品設計 |  | 訂閱電子報 |
-|  |  | ESG 永續發展與顧問服務 |  |  |
+| 產品總覽 | 金融 | AISO 主權 AI | 成功案例 | 關於我們 |
+| AI（SysTalk.ai） | 政府與公部門 | 委外服務 | 部落格 | 合作夥伴 |
+| 數位轉型（DigiLism） |  | 雲端整合服務 | 活動 | 媒體中心 |
+| ESG 與能源（ESGswift） |  | ChatGPT 企業服務 | 昕力大學 | 人才招募 |
+|  |  | UI/UX 數位產品設計 |  | 聯絡我們 |
+|  |  | ESG 永續發展與顧問服務 |  | 訂閱電子報 |
 
 最底列：
 
@@ -331,20 +316,20 @@ sitemap 中所有頁面與外部連結（不含功能頁群組）都要出現在
 | 　　　digiFlexis 企業流程管理平台（`digiflexis`） | header：產品 > 數位轉型（DigiLism） > digiFlexis 企業流程管理平台 |
 | 　　　digiCare 智慧醫療服務（`digicare`） | header：產品 > 數位轉型（DigiLism） > digiCare 智慧醫療服務 |
 | 　　　互動式健康管理服務平台（`interactivehealth`） | 不進導覽：待確認是否仍銷售；從所屬家族頁或產業頁內文連結 |
-| 　　資安（GadoSecurity）（`family-security`） | header：產品 > 資安（GadoSecurity）<br/>footer：產品 > 資安（GadoSecurity） |
+| 　　資安（GadoSecurity）（`family-security`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |
 | 　　　gadoDIDO 無密碼身分驗證（`gadodido`） | header：產品 > 資安（GadoSecurity） > gadoDIDO 無密碼身分驗證 |
 | 　　　gadoScout AI 異常偵測系統（`gadoscout`） | header：產品 > 資安（GadoSecurity） > gadoScout AI 異常偵測系統 |
 | 　　ESG 與能源（ESGswift）（`family-esg`） | header：產品 > ESG 與能源（ESGswift）<br/>footer：產品 > ESG 與能源（ESGswift） |
 | 　　　GreenSwift 智慧碳管理平台（`greenswift`） | header：產品 > ESG 與能源（ESGswift） > GreenSwift 智慧碳管理平台 |
 | 　　　ElectriSwift 智慧能源管理系統（`electriswift`） | header：產品 > ESG 與能源（ESGswift） > ElectriSwift 智慧能源管理系統 |
-| 　產業方案（`industries`） | header：產業方案 > 產業方案總覽 |
+| 　產業方案（`industries`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |
 | 　　金融（`industry-finance`） | header：產業方案 > 金融<br/>footer：產業方案 > 金融 |
 | 　　　InsureBrick 保險科技模組化平台（`insurebrick`） | 不進導覽：待確認是否仍銷售；從所屬家族頁或產業頁內文連結 |
 | 　　　InsureRing 保險自動化規則檢核（`insurering`） | 不進導覽：待確認是否仍銷售；從所屬家族頁或產業頁內文連結 |
 | 　　政府與公部門（`industry-government`） | header：產業方案 > 政府與公部門<br/>footer：產業方案 > 政府與公部門 |
 | 　　　GIS 空間數據解決方案（`gis`） | 不進導覽：待確認是否仍銷售；從所屬家族頁或產業頁內文連結 |
-| 　　製造業（`industry-manufacturing`） | header：產業方案 > 製造業<br/>footer：產業方案 > 製造業 |
-| 　服務總覽（`services`） | header：服務 > 服務總覽<br/>footer：服務 > 服務總覽 |
+| 　　製造業（`industry-manufacturing`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |
+| 　服務總覽（`services`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |
 | 　　AISO 主權 AI（`aiso`） | header：服務 > AISO 主權 AI<br/>footer：服務 > AISO 主權 AI |
 | 　　委外服務（`outsourcing`） | header：服務 > 委外服務<br/>footer：服務 > 委外服務 |
 | 　　雲端整合服務（`cloudservice`） | header：服務 > 雲端整合服務<br/>footer：服務 > 雲端整合服務 |
@@ -359,10 +344,10 @@ sitemap 中所有頁面與外部連結（不含功能頁群組）都要出現在
 | 　　　企業管理（`blog-enterprise-management`） | 不進導覽：部落格頁內的分類篩選 |
 | 　　　ESG 與綠色轉型（`blog-esg`） | 不進導覽：部落格頁內的分類篩選 |
 | 　　　應用情境（`blog-use-cases`） | 不進導覽：部落格頁內的分類篩選 |
-| 　　digiRunner 白皮書（`whitepaper-digirunner`） | header：資源 > digiRunner 白皮書 |
-| 　　digiLogs 白皮書（`whitepaper-digilogs`） | header：資源 > digiLogs 白皮書 |
-| 　　GreenSwift 碳盤指南（`whitepaper-greenswift`） | header：資源 > GreenSwift 碳盤指南 |
-| 　　SysTalk.ai AI Playbook（`whitepaper-systalk-ai`） | header：資源 > SysTalk.ai AI Playbook |
+| 　　digiRunner 白皮書（`whitepaper-digirunner`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |
+| 　　digiLogs 白皮書（`whitepaper-digilogs`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |
+| 　　GreenSwift 碳盤指南（`whitepaper-greenswift`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |
+| 　　SysTalk.ai AI Playbook（`whitepaper-systalk-ai`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |
 | 　　活動（`events`） | header：資源 > 活動<br/>footer：資源 > 活動 |
 | 　　昕力大學（`tpu`） | header：資源 > 昕力大學<br/>footer：資源 > 昕力大學 |
 | 　關於我們（`about`） | header：公司 > 關於我們<br/>footer：公司 > 關於我們 |
@@ -381,6 +366,6 @@ sitemap 中所有頁面與外部連結（不含功能頁群組）都要出現在
 
 | header 第一層 | header 項目 | footer 欄 | footer 項目 | footer 最底列 | 不進導覽 |
 |--:|--:|--:|--:|--:|--:|
-| 5 | 52 | 5 | 25 | 4 | 13 |
+| 5 | 45 | 5 | 22 | 4 | 21 |
 
 <!-- generated by scripts/ia/navigation.mjs: end -->

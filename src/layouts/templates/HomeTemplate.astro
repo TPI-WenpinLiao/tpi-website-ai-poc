@@ -21,7 +21,7 @@ import Reveal from '../../components/ui/Reveal.astro';
 import SceneChapter from '../../components/ui/SceneChapter.astro';
 import CardGrid from '../../components/ui/CardGrid.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
-import { children, localeHref, localizedNav, localNode, node, nodeHref, type NavItem } from '../../lib/ia/navigation';
+import { children, hasPage, localeHref, localizedNav, localNode, node, nodeHref, type NavItem } from '../../lib/ia/navigation';
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { newsCard, postCard } from '../../lib/content/cards';
 import { newest } from '../../lib/content/listings';
@@ -55,7 +55,8 @@ const families = SCENE_FAMILIES.map((id) => {
     id,
     heading: family.title.replace(/（[^）]*）$/, ''),
     brand: /（([^）]*)）$/.exec(family.title)?.[1],
-    href: nodeHref(id, locale),
+    // A family hub with no page yet (#138) gets no link; its products still do
+    href: hasPage(family) ? nodeHref(id, locale) : undefined,
     line: familyLines[id]?.text,
     products: children(id, locale)
       .filter((p) => navOrder.includes(p.id))
@@ -124,7 +125,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
                 </li>
               ))}
             </ul>
-            <Link href={f.href}>{labels.familyLink(f.heading)}</Link>
+            {f.href && <Link href={f.href}>{labels.familyLink(f.heading)}</Link>}
           </SceneChapter>
         ))
       }

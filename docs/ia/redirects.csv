@@ -530,10 +530,10 @@ https://www.tpisoftware.com/success-story,/success-story,200,rewrite：success-s
 https://www.tpisoftware.com/thanks,/thanks,200,rewrite：thanks（路徑不變）
 https://www.tpisoftware.com/tpu,/tpu,200,keep：tpu（路徑不變）
 https://www.tpisoftware.com/unsubscribe,/unsubscribe,200,rewrite：unsubscribe（路徑不變）
-https://www.tpisoftware.com/whitepaper/api-strategies,/whitepaper/api-strategies,200,rewrite：whitepaper-digirunner（路徑不變）
-https://www.tpisoftware.com/whitepaper/digiLogs,/whitepaper/digilogs,301,rewrite：whitepaper-digilogs
-https://www.tpisoftware.com/whitepaper/greenswift,/whitepaper/greenswift,200,rewrite：whitepaper-greenswift（路徑不變）
-https://www.tpisoftware.com/whitepaper/systalk-ai,/whitepaper/systalk-ai,200,rewrite：whitepaper-systalk-ai（路徑不變）
+https://www.tpisoftware.com/whitepaper/api-strategies,/products/digirunner,301,rewrite：whitepaper-digirunner（redirect-overrides.csv）
+https://www.tpisoftware.com/whitepaper/digiLogs,/products/digilogs,301,rewrite：whitepaper-digilogs（redirect-overrides.csv）
+https://www.tpisoftware.com/whitepaper/greenswift,/products/greenswift,301,rewrite：whitepaper-greenswift（redirect-overrides.csv）
+https://www.tpisoftware.com/whitepaper/systalk-ai,/products/systalk-ai,301,rewrite：whitepaper-systalk-ai（redirect-overrides.csv）
 https://www.tpisoftware.com/en/solutions,/en,301,rewrite：home
 https://www.tpisoftware.com/en/about-us,/en/about-us,200,rewrite：about（路徑不變）
 https://www.tpisoftware.com/en/aiso,/en/aiso,200,rewrite：aiso（路徑不變）
@@ -855,9 +855,9 @@ https://www.tpisoftware.com/en/subscribe/result,/en/subscribe/result,200,rewrite
 https://www.tpisoftware.com/en/success-story,/en/success-story,200,rewrite：success-stories（路徑不變）
 https://www.tpisoftware.com/en/thanks,/en/thanks,200,rewrite：thanks（路徑不變）
 https://www.tpisoftware.com/en/unsubscribe,/en/unsubscribe,200,rewrite：unsubscribe（路徑不變）
-https://www.tpisoftware.com/en/whitepaper/api-strategies,/en/whitepaper/api-strategies,200,rewrite：whitepaper-digirunner（路徑不變）
-https://www.tpisoftware.com/en/whitepaper/digiLogs,/en/whitepaper/digilogs,301,rewrite：whitepaper-digilogs
-https://www.tpisoftware.com/en/whitepaper/systalk-ai,/en/whitepaper/systalk-ai,200,rewrite：whitepaper-systalk-ai（路徑不變）
+https://www.tpisoftware.com/en/whitepaper/api-strategies,/en/products/digirunner,301,rewrite：whitepaper-digirunner（redirect-overrides.csv）
+https://www.tpisoftware.com/en/whitepaper/digiLogs,/en/products/digilogs,301,rewrite：whitepaper-digilogs（redirect-overrides.csv）
+https://www.tpisoftware.com/en/whitepaper/systalk-ai,/en/products/systalk-ai,301,rewrite：whitepaper-systalk-ai（redirect-overrides.csv）
 https://www.tpisoftware.com/vn,/vi,301,rewrite：home
 https://www.tpisoftware.com/vn/about-us,/vi/about-us,301,rewrite：about
 https://www.tpisoftware.vn/aiso,/vi/aiso,301,rewrite：aiso
@@ -1301,8 +1301,8 @@ https://www.tpisoftware.com/vn/subscribe/result,/vi/subscribe/result,301,rewrite
 https://www.tpisoftware.com/vn/success-story,/vi/success-story,301,rewrite：success-stories
 https://www.tpisoftware.com/vn/thanks,/vi/thanks,301,rewrite：thanks
 https://www.tpisoftware.com/vn/unsubscribe,/vi/unsubscribe,301,rewrite：unsubscribe
-https://www.tpisoftware.com/vn/whitepaper/api-strategies,/vi/whitepaper/api-strategies,301,rewrite：whitepaper-digirunner
-https://www.tpisoftware.com/vn/whitepaper/digiLogs,/vi/whitepaper/digilogs,301,rewrite：whitepaper-digilogs
+https://www.tpisoftware.com/vn/whitepaper/api-strategies,/vi/products/digirunner,301,rewrite：whitepaper-digirunner（redirect-overrides.csv）
+https://www.tpisoftware.com/vn/whitepaper/digiLogs,/vi/products/digilogs,301,rewrite：whitepaper-digilogs（redirect-overrides.csv）
 https://www.tpisoftware.com/ja,/en,301,drop：日文版不支援（ADR 0002）
 https://www.tpisoftware.com/ja/partners,/en,301,drop：日文版不支援（ADR 0002）
 https://www.tpisoftware.com/ja/*,/en,301,日文版不支援（ADR 0002）
