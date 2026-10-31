@@ -7,8 +7,9 @@
 //     - every fact a page uses exists, is confirmed and is in the page's locale
 //     - a page whose copy has an Arabic number (80%, 1,200, 3.5) or the name of a `client` fact
 //       uses a fact whose text has it; otherwise the number or name is not traceable and fails
-//   node scripts/strategy/facts.mjs --sources   fetches every source.url and fails when its
-//     source.quote is no longer on the page (needs www.tpisoftware.com and .vn, not in `npm run check`)
+//   node scripts/strategy/facts.mjs --sources [--locales zh-TW,en]   fetches every source.url and fails when its
+//     source.quote is no longer on the page, nor in the Nuxt chunks it loads (needs www.tpisoftware.com
+//     and .vn, not in `npm run check`); always fetches, the cache of extract-facts.mjs is only written
 //
 // Pages checked: src/data/home/<locale>.ts and src/data/site.ts (every exported string; facts used
 // via fact('<id>') in the source), and the Markdown entries of src/content that are not verbatim
@@ -191,20 +192,16 @@ function contentPages() {
 }
 
 async function checkSources(facts) {
-  const { request } = await import('../inventory/http.mjs');
-  const pages = new Map();
+  // Same reader as extract-facts.mjs: a quote may be in the Nuxt chunks of a client-rendered page
+  const { pageReader } = await import('./source-pages.mjs');
+  const reader = await pageReader({ refresh: true });
   let failed = 0;
-  for (const url of new Set(facts.map((f) => f.source.url))) {
-    const res = await request(url);
-    if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-    pages.set(url, await res.text());
-  }
   for (const f of facts) {
-    const ok = quoteOnPage(pages.get(f.source.url), f.source.quote);
+    const ok = await reader.has(f.source.url, f.source.quote);
     if (!ok) failed += 1;
     console.log(`${ok ? 'ok  ' : 'MISS'} ${f.id}: ${f.source.quote} (${f.source.url})`);
   }
-  console.log(`${facts.length - failed}/${facts.length} quotes found on ${pages.size} pages`);
+  console.log(`${facts.length - failed}/${facts.length} quotes found on ${new Set(facts.map((f) => f.source.url)).size} pages`);
   return failed;
 }
 
@@ -215,7 +212,14 @@ async function main() {
     for (const e of formatErrors) console.error(e);
     process.exit(1);
   }
-  if (process.argv.includes('--sources')) process.exit((await checkSources(data)) ? 1 : 0);
+  if (process.argv.includes('--sources')) {
+    // --locales zh-TW,en: only those locales' facts, e.g. while www.tpisoftware.vn is unreachable
+    const i = process.argv.indexOf('--locales');
+    const only = i > 0 ? new Set(process.argv[i + 1].split(',')) : undefined;
+    const checked = only ? data.filter((f) => only.has(f.locale)) : data;
+    if (only) console.log(`not checked (locale not in --locales): ${data.length - checked.length} facts`);
+    process.exit((await checkSources(checked)) ? 1 : 0);
+  }
 
   const facts = new Map(data.map((f) => [f.id, f]));
   const pages = [...(await dataPages()), ...contentPages()];
