@@ -1,5 +1,5 @@
 // Visible text of a current-site page, for checking that copy taken from it is still there
-// (scripts/design/home-content.mjs, scripts/design/offering-content.mjs).
+// (scripts/strategy/facts.mjs --sources, scripts/design/offering-content.mjs).
 
 // Whitespace and U+200B don't count: the new site adds U+200B break points, and the current site
 // splits some headings over two elements

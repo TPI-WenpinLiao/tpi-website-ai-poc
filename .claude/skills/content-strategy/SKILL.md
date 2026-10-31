@@ -61,7 +61,7 @@ description: 分階段流程的策略與製作階段使用：messaging framework
 ## 3. 頁面文案（製作階段）
 
 - 文案分兩種：
-  - 事實（數字、客戶名、認證、獎項、功能、成果）：只能引用事實庫，寫法照 `CLAUDE.md`「內容規則」
+  - 事實（數字、客戶名、認證、獎項、功能、成果）：只能引用事實庫，寫法照 `CLAUDE.md`「內容規則」：TS 資料檔用 `fact('<id>')`，內容檔在 frontmatter 寫 `facts: [<id>]`（沒有事實也寫 `[]`，見 `content-migration`「搬移與改寫」）。`node scripts/strategy/facts.mjs` 擋下沒有引用事實的數字與客戶名稱
   - 表述（標題、價值主張、段落敘事、CTA）：可以原創，依 messaging 與 `writing-style` 寫
 - 每段文案對應到 brief 的一段；brief 沒有的段落不寫
 - 先寫 zh-TW；en、vi 照 `content-migration` 的「多語系內容」另做，不在同一步

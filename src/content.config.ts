@@ -46,6 +46,9 @@ const common = (image: ImageFn) => ({
   translationKey: text,
   ogImage: image().optional(),
   draft: z.boolean().default(false),
+  // Fact library ids this entry states (docs/strategy/facts.yaml); scripts/strategy/facts.mjs checks
+  // that they exist and that every number and client name in the copy comes from one of them
+  facts: z.array(text).optional(),
   sourceUrl: z.union([httpUrl, z.array(httpUrl)]),
   migratedAt: date.optional(),
   sourceUpdatedAt: date.optional(),

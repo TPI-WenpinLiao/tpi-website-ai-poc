@@ -17,13 +17,13 @@ description: 分階段流程的研究階段使用：從現站擷取事實到事�
 | 現站頁面清單與處置 | `docs/research/inventory.csv`、`docs/research/content-audit.md` |
 | 新站已有的內容 | `src/content/`、`src/data/`；沒搬的段落記在 `docs/content/*.md` 的「待確認」 |
 | 受眾與轉換 | `site-profile.md` 連到的受眾文件 |
-| 事實庫格式與檢查 | `docs/strategy/facts.yaml` 的格式與 `scripts/strategy/facts.mjs`（#163 定義；還沒有時停下，不自己定格式） |
+| 事實庫格式與檢查 | `docs/strategy/facts.yaml` 開頭的欄位說明；schema 在 `src/data/facts.ts`，檢查是 `scripts/strategy/facts.mjs`（#163） |
 
 ## 產出物
 
 | 產出物 | 位置 | 關卡 |
 |---|---|---|
-| 事實庫 | `docs/strategy/facts.yaml`，由擷取 script 產生 | `node scripts/strategy/facts.mjs` 通過 |
+| 事實庫 | `docs/strategy/facts.yaml`，由擷取 script 產生 | `node scripts/strategy/facts.mjs` 與 `node scripts/strategy/facts.mjs --sources` 通過 |
 | 未搬內容盤點 | `docs/strategy/unmigrated.md` | 涵蓋 `site-profile.md` 的每個試點頁面 |
 | 競品分析 | `docs/strategy/competitors.md`，截圖放 `docs/strategy/competitors/` | 每項觀察附來源網址 |
 | 搜尋意圖 | `docs/strategy/search-intent.md` | 每組查詢附觀察日期與來源 |
@@ -32,13 +32,14 @@ description: 分階段流程的研究階段使用：從現站擷取事實到事�
 
 事實是可以查證的陳述：數字、百分比、客戶名、認證、獎項、產品功能、案例成果。標題、口號、形容詞不是事實，不收。
 
-1. 擷取寫成 script（放 `scripts/strategy/`），可以重跑，結果相同（`CLAUDE.md`「工作原則」）。不手改 `facts.yaml`；要修正的寫進 script 讀的覆寫檔
-2. 每一筆都要有來源網址與原文（`source.url`、`source.quote`），原文逐字照抄現站
+1. 擷取寫成 script（放 `scripts/strategy/`），可以重跑，結果相同（`CLAUDE.md`「工作原則」）。不手改 `facts.yaml`；要修正的寫進 script 讀的覆寫檔。#163 手寫了首頁與 footer 用到的 29 筆，頁面以 id 引用它們：script 接手後要產生同樣的 id 與內容，`node scripts/strategy/facts.mjs` 會擋下被引用但消失的 id
+2. 每一筆都要有來源網址與原文（`source.url`、`source.quote`），原文逐字照抄現站；`text` 是頁面要顯示的字，可以加 U+200B 斷行點或截掉原文的前後文，數字與名稱不改。`--sources` 比對原文時忽略空白與 U+200B
 3. `status`：
    - `confirmed`：現站原文明確寫出，且不涉及授權
-   - `to_confirm`：授權不明（人物照片、客戶 logo、客戶名稱用於行銷）、可能過時（年份、數字、價格）、或現站各語系說法不一致。理由寫在該筆的備註欄
-4. 同一個事實在多頁出現時只收一筆，來源取最完整的一頁
-5. 數字只收現站寫出的，不換算、不四捨五入、不合併
+   - `to_confirm`：授權不明（人物照片、客戶 logo、客戶名稱用於行銷）、可能過時（年份、數字、價格）、或現站各語系說法不一致。理由寫在該筆的 `note`（schema 要求）
+4. en、vi 的事實是各自的一筆（`locale` 不同，id 加 `-en`、`-vi`），來源取該語系的現站頁面；頁面只能用自己語系的事實
+5. 同一個事實在多頁出現時只收一筆，來源取最完整的一頁
+6. 數字只收現站寫出的，不換算、不四捨五入、不合併
 
 ## 2. 未搬內容盤點
 

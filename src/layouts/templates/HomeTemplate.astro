@@ -57,7 +57,7 @@ const families = SCENE_FAMILIES.map((id) => {
     brand: /（([^）]*)）$/.exec(family.title)?.[1],
     // A family hub with no page yet (#138) gets no link; its products still do
     href: hasPage(family) ? nodeHref(id, locale) : undefined,
-    line: familyLines[id]?.text,
+    line: familyLines[id],
     products: children(id, locale)
       .filter((p) => navOrder.includes(p.id))
       .toSorted((a, b) => navOrder.indexOf(a.id) - navOrder.indexOf(b.id)),
@@ -67,7 +67,7 @@ const contact = localNode('contact', locale);
 const products = localNode('products', locale);
 
 const orient = node(orientAi.node);
-const industries = children('industries', locale).map((n) => ({ ...n, line: industryLines[n.id]?.text }));
+const industries = children('industries', locale).map((n) => ({ ...n, line: industryLines[n.id] }));
 const services = children('services', locale);
 const successStories = localNode('success-stories', locale);
 const caseCards = cases.map((c) => ({ ...c, href: href(node(c.node)) }));
@@ -97,7 +97,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
 <PageLayout title={meta.title} titleSuffix={false} description={meta.description} jsonLd={jsonLd}>
   <div class="track" data-scene-track>
-    <PageHero eyebrow={siteName(locale)} title={hero.title.text} description={hero.description.text}>
+    <PageHero eyebrow={siteName(locale)} title={hero.title} description={hero.description}>
       <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
       <Scene3D slot="backdrop" direction="modular-stack" />
       <Fragment slot="actions">
@@ -135,17 +135,17 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   <Surface tone="dark" pattern="grid">
     <div class="spotlight">
       <div class="spotlight-copy">
-        <SectionHeading eyebrow={orientAi.eyebrow.text} title={orientAi.title.text} />
+        <SectionHeading eyebrow={orientAi.eyebrow} title={orientAi.title} />
         <ul class="features" aria-label={labels.orientFeatures}>
           {
             orientAi.features.map((f) => (
               <li>
-                <Tag tone="node">{f.text}</Tag>
+                <Tag tone="node">{f}</Tag>
               </li>
             ))
           }
         </ul>
-        <Button href={href(orient)} size="lg">{orientAi.action.text}</Button>
+        <Button href={href(orient)} size="lg">{orientAi.action}</Button>
       </div>
       <LayerStack layers={5} />
     </div>
@@ -193,7 +193,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
             caseCards.map((c, i) => (
               <li>
                 <Reveal delay={stagger(i)}>
-                  <Card title={c.title.text} href={c.href} eyebrow={successStories.title} description={c.summary.text} />
+                  <Card title={c.title} href={c.href} eyebrow={successStories.title} description={c.summary} />
                 </Reveal>
               </li>
             ))

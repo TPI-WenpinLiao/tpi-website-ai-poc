@@ -4,7 +4,7 @@
 // the name, job title, affiliation and lists of every person entry. A line counts as found
 // when it is on any of the entry's sourceUrl pages (merged pages list several), after correcting the
 // typos in CORRECTIONS; en and vi pages are read with ASCII punctuation, as the converters write
-// it (latinPunctuation). Same matching as scripts/design/home-content.mjs, except that a FAQ answer
+// it (latinPunctuation). Same matching as scripts/strategy/facts.mjs --sources, except that a FAQ answer
 // that isn't on the page as a whole is checked sentence by sentence: offerings.mjs joins an answer's
 // paragraph and list items (#106), and so is a feature body, split at the list separators too:
 // offerings.mjs joins a card's description and list (outsourcing) or bullets (chatgpt-enterprise)

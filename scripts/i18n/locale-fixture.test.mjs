@@ -12,10 +12,10 @@ test('strings take glossary values and turn {n} into the function parameter', ()
   assert.match(src, /"blog": "\[en\] pages.blog"/);
 });
 
-test('home copy keeps sources and node ids', () => {
-  const src = homeSource({ hero: { title: { text: '標題', source: { url: 'https://x' } } }, cases: [{ node: 'smartclaim' }] }, 'vi');
-  assert.match(src, /"text": "\[vi\] hero.title.text"/);
-  assert.match(src, /"url": "https:\/\/x"/);
+test('home copy keeps node ids', () => {
+  const src = homeSource({ hero: { title: '標題' }, cases: [{ node: 'smartclaim', title: 'AI 智慧理賠' }] }, 'vi');
+  assert.match(src, /"title": "\[vi\] hero.title"/);
+  assert.match(src, /"title": "\[vi\] cases.0.title"/);
   assert.match(src, /"node": "smartclaim"/);
 });
 

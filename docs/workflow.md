@@ -142,7 +142,7 @@ quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighth
 
 ### 關卡
 
-- 研究：事實庫的檢查 script 接進 `npm run check`，沒過就不能開 PR
+- 研究：事實庫的檢查 `node scripts/strategy/facts.mjs` 在 `npm run check` 裡，沒過就不能開 PR；`--sources` 要連現站，不在 `npm run check`，結果寫進 PR
 - 策略：issue 帶「## 關卡」段落寫 `strategy-approved`，不進自動模式，走兩階段流程：階段一開 draft PR 後停下，你看完 messaging 與 brief，在 issue 加上 `strategy-approved` 再告訴 Claude 繼續
 - 設計概念：issue 帶 `needs-design`，同樣走兩階段流程。PR 附 `reviewer` 對三個方向的評分，你選定方向後加 `design-approved`
 - 製作：照一般的 `/issue-ship` 與審查迴圈

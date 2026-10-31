@@ -7,7 +7,7 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 
 ## 原則
 
-1. **保留事實**：產品名稱、功能、數據、客戶名稱、認證、獎項、日期只能取自現站或使用者提供的資料。不得新增、推測或「潤飾」成更強的說法。
+1. **保留事實**：產品名稱、功能、數據、客戶名稱、認證、獎項、日期只能取自現站或使用者提供的資料。不得新增、推測或「潤飾」成更強的說法。事實與表述的分別見 `CLAUDE.md`「內容規則」。
 2. **依新 IA 重寫結構**：依 M2 的 sitemap 與內容模型重新組織段落與 heading，不照搬現站版面；文字可改寫以提升可讀性，但語意不可改變。
 3. **無法確認就標記**：現站內容疑似過時、互相矛盾或來源不明時，保留原文並在 PR 中列為「待確認」，不要自行判斷。
 4. **一頁一來源**：每個內容檔記錄來源 URL，方便 review 時對照。
@@ -47,6 +47,17 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 - 該頁在 `inventory.csv` 的 `to_confirm` 有值時（未翻譯、title 錯誤、授權未確認等），照抄進 PR 的待確認，處理方式見 [`content-audit.md`「內容負責人要確認」](../../../docs/research/content-audit.md#內容負責人要確認)
 - blog 文章與新聞的內文在 client 端渲染，不在 SSR 的 DOM 裡：blog 內文取自 SSR HTML 中 Nuxt payload（`window.__NUXT__`）的 `content` 字串，新聞內文取自新聞 API 的 `htmlpath` 對應的 `/file{htmlpath}`，見 [`inventory.md`「已知限制」](../../../docs/research/inventory.md#已知限制)
 - 新聞的 `publishedAt` 來源見 [`content-model.md`](../../../docs/ia/content-model.md) 的新聞欄位表。blog 與新聞只遷移 2026-01-01 起的文章（M5-05 由使用者決定，規則在 `scripts/inventory/audit.mjs`）。新聞依 `inventory.csv` 的 `last_updated`（API 的 `updateDate`，是後台編輯時間）判斷，發布日早於門檻的在 `audit-overrides.csv` 改為 drop，`migrate.mjs` 的報告也會標出，見 [`content-audit.md`「已知限制」](../../../docs/research/content-audit.md#已知限制)
+
+## 搬移與改寫
+
+本 skill 管「搬移」：內容照現站，用上方表格的 script 轉換或對照現站。逐字搬移的內容檔（`sourceUrl` 有值、沒有 `facts`）不經事實庫，`node scripts/strategy/facts.mjs` 不檢查。
+
+不照現站、依 messaging 與 brief 重寫的頁面（分階段流程的製作階段，`content-strategy`）是「改寫」：
+
+- frontmatter 加 `facts: [<id>]`，列出這一頁用到的事實庫 id；沒有用到事實也寫 `facts: []`。加了這個欄位，`facts.mjs` 就檢查這一頁：文案裡的阿拉伯數字與客戶名稱都要在列出的事實裡
+- `sourceUrl`、`migratedAt` 保留，記錄這頁原本從哪裡來
+- 對照現站的 script（`offering-content.mjs`、`page-content.mjs` 等）不再適用於改寫過的段落；改寫過的頁面從該 script 的對照範圍移除，寫進 PR
+- 新頁（`sourceUrl: []`）一律受 `facts.mjs` 檢查，不用另加 `facts` 也會檢查，但用到事實時要列出
 
 ## Frontmatter
 
@@ -98,6 +109,7 @@ en、vi 的 description、`seoTitle`、內文圖 alt 與 zh-TW 一樣寫進上�
 ### 改了 zh-TW 之後
 
 - 改了內容檔的事實（產品功能、數字、聯絡資訊等）時，同一個 `translationKey` 的 en、vi 檔一起改；不確定譯法時照改事實，譯文列進 PR 的待確認
+- 改了事實庫 `docs/strategy/facts.yaml` 的 zh-TW 事實時，同一事實的 `-en`、`-vi` 筆一起檢查；現站該語系沒改的，留著並列進 PR 的待確認，不從 zh-TW 翻譯
 - 改了 `docs/ia/nodes.csv`、`navigation.csv` 或 `src/data/strings/zh-TW.ts` 時重跑 `node scripts/i18n/glossary.mjs`，新列與 zh-TW 改過的列是 `to-confirm`，補上 en、vi 後照抄進 `en.ts`、`vi.ts`（`glossary.mjs` 檢查兩邊一致）。節點與選單標籤沒有 en、vi 譯名時 build 失敗
 
 ## 不搬移的內容
