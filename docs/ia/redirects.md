@@ -75,7 +75,7 @@ node scripts/ia/redirects.mjs --redirects public/_redirects
 
 沒有規則時，`/products/gadoDIDO`、`/orient-aI` 在 production 回 404（同一天實測），Cloudflare 找靜態檔也區分大小寫，所以只差大小寫的規則要保留。
 
-`toRedirects` 的檢查依這個結果寫：來源與新頁面路徑完全相同才算比對到。來源取自 `new URL().pathname`，未編碼的非 ASCII 字元會轉成大寫十六進位的 `%` 編碼；inventory 已編碼的網址保留原樣，目前只有 1 條，是大寫。小寫十六進位（`%e8`）的請求沒有實測。
+`toRedirects` 現有的檢查符合這個結果，不用修改：來源與新頁面路徑完全相同才算比對到。來源取自 `new URL().pathname`，未編碼的非 ASCII 字元會轉成大寫十六進位的 `%` 編碼；inventory 已編碼的網址保留原樣，目前只有 1 條，是大寫。小寫十六進位（`%e8`）的請求沒有實測。
 
 ## 待確認
 
