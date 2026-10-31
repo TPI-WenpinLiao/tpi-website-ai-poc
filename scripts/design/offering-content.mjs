@@ -6,7 +6,9 @@
 // typos in CORRECTIONS; en and vi pages are read with ASCII punctuation, as the converters write
 // it (latinPunctuation). Same matching as scripts/design/home-content.mjs, except that a FAQ answer
 // that isn't on the page as a whole is checked sentence by sentence: offerings.mjs joins an answer's
-// paragraph and list items (#106). Entries in TRANSLATED are skipped (#40).
+// paragraph and list items (#106), and so is a feature body, split at the list separators too:
+// offerings.mjs joins a card's description and list (outsourcing) or bullets (chatgpt-enterprise)
+// (#159). Entries in TRANSLATED are skipped (#40).
 // Needs network access to www.tpisoftware.com, so it is not part of `npm run check`.
 //
 //   node scripts/design/offering-content.mjs
@@ -46,6 +48,8 @@ const frontmatter = (md) => parse(/^---\n([\s\S]*?)\n---/.exec(md)?.[1] ?? '');
 const pairs = (items, key, fields) => (items ?? []).flatMap((item, i) => fields.map((f) => [`${key}.${i}.${f}`, item[f]]));
 // Sentences and 「title：description」 parts, without the punctuation that joined them
 const pieces = (text) => text.split(/[。.!?！？：:]\s+|[。！？：]/).map((p) => p.replace(/[。.]$/, '')).filter((p) => squash(p));
+// A feature body's sentences, and the list items offerings.mjs joined with 「；」, 「; 」 or 「、」
+const listPieces = (text) => pieces(text).flatMap((p) => p.split(/[；、]|;\s+/)).filter((p) => squash(p));
 const lines = (items, key) => (items ?? []).map((item, i) => [`${key}.${i}`, item]);
 // person entries: the title is the advisor's name; string fields and lists as on the page
 const PERSON_FIELDS = ['title', 'jobTitle', 'affiliation'];
@@ -86,7 +90,10 @@ for (const url of new Set(checks.flatMap((c) => c.urls))) {
 let failed = 0;
 for (const c of checks) {
   const found = (parts) => c.urls.some((url) => parts.every((p) => pages.get(url).includes(squash(p))));
-  const ok = found([c.text]) || (/^faq\.\d+\.answer$/.test(c.path) && found(pieces(c.text)));
+  const ok =
+    found([c.text]) ||
+    (/^faq\.\d+\.answer$/.test(c.path) && found(pieces(c.text))) ||
+    (/^features\.\d+\.body$/.test(c.path) && found(listPieces(c.text)));
   if (!ok) failed += 1;
   console.log(`${ok ? 'ok  ' : 'MISS'} ${c.file} ${c.path}: ${c.text}`);
 }

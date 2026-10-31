@@ -3,7 +3,19 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { serializeFrontmatter } from './frontmatter.mjs';
-import { extractAiso, extractOrientAi, extractSolution, groupEntries, offeringFrontmatter, parseOverrides } from './offerings.mjs';
+import {
+  extractAiso,
+  extractChatGptEnterprise,
+  extractCloudService,
+  extractOrientAi,
+  extractOutsourcing,
+  extractResource,
+  extractSolution,
+  groupEntries,
+  hubFrontmatter,
+  offeringFrontmatter,
+  parseOverrides,
+} from './offerings.mjs';
 
 // https://www.tpisoftware.com/solutions/smartclaim, trimmed to one item per list (data-v-* attributes dropped)
 const PAGE = `<html><head><meta data-n-head="ssr" name="description" content="過去在受理理賠案件時，
@@ -165,4 +177,95 @@ test('offeringFrontmatter writes kind, faq and cta for the orient-ai and aiso pa
   assert.equal(data.kind, 'product');
   assert.equal(data.faq.length, 2);
   assert.equal(data.cta, 'demo');
+});
+
+// https://www.tpisoftware.com/cloudservice, trimmed to one card per list (data-v-* attributes dropped)
+const CLOUD = `<html><head><title>Cloud Service 雲端服務 - 昕力資訊TPIsoftware</title>
+<meta name="description" content="雲端服務（Cloud Service）為企業實現靈活的系統轉換。"></head><body>
+<h1 class="top-banner-title"><span class="title">Cloud Service</span> <span class="subtitle">雲端整合服務</span></h1>
+<div class="top-banner-info"><h3 class="slogan">全域整合 ⬝ 靈活佈署</h3></div>
+<div class="solutions__card-container"><div class="solutions__card-item"><img alt="雲端企業應用中台" class="card-img">
+<h3 class="card-title">雲端企業應用中台</h3> <h4 class="card-subtitle">優化客戶體驗 加速創新打造新商模</h4>
+<p class="card-text">DigiLism 完善企業雲端服務中台。</p></div><div class="solutions__card-item solutions__card-item--empty"></div></div>
+<div class="applications__card-container"><div class="applications__card-item"><h3 class="card-title">BNPL 一站式雲端方案</h3>
+<div class="card-text--md-container"><p class="card-text--md-container__text">以雲端 BNPL 因應全球在地化。</p></div></div>
+<div class="applications__card-item applications__card-item--empty"></div></div></body></html>`;
+
+test('extractCloudService reads the solution and industry cards and skips the empty grid cells', () => {
+  assert.deepEqual(extractCloudService(CLOUD), {
+    title: 'Cloud Service 雲端服務',
+    tagline: '全域整合 ⬝ 靈活佈署',
+    description: '雲端服務（Cloud Service）為企業實現靈活的系統轉換。',
+    features: [{ title: '雲端企業應用中台', body: 'DigiLism 完善企業雲端服務中台。' }],
+    useCases: [{ title: 'BNPL 一站式雲端方案', body: '以雲端 BNPL 因應全球在地化。' }],
+  });
+  assert.throws(() => extractCloudService(CLOUD.replaceAll('applications__card-item', 'item')), /useCases/);
+});
+
+// https://www.tpisoftware.com/outsourcing, trimmed to one expertise card
+const OUTSOURCING = (slogan) => `<html><head><title>IT Outsourcing - TPIsoftware</title><meta name="description" content="TPIsoftware outsourcing."></head><body>
+<h1 class="top-banner-title"><span class="title">OUTSOURCING</span> <span class="subtitle">Empower Your Business with Top Tech Talents</span></h1>
+<div class="top-banner-info"><h3 class="slogan">${slogan}</h3></div>
+<div class="expertise-cards"><div class="card-item"><div class="card-header purple">
+  Back-End Development
+  <a href="#expBackend" class="collapse-plus collapsed"></a></div><div class="card-content collapse"><p class="card-description">
+  We build scalable and secure web and app:
+</p> <ul class="card-list"><li>Java, C#</li> <li>
+  Framework:<br>
+  Spring, .NET
+</li></ul></div></div></div></body></html>`;
+
+test('extractOutsourcing joins each card description and list, and takes the h1 line when the slogan is empty', () => {
+  assert.deepEqual(extractOutsourcing(OUTSOURCING('')), {
+    title: 'IT Outsourcing',
+    tagline: 'Empower Your Business with Top Tech Talents',
+    description: 'TPIsoftware outsourcing.',
+    features: [{ title: 'Back-End Development', body: 'We build scalable and secure web and app: Java, C#; Framework: Spring, .NET.' }],
+  });
+  assert.equal(extractOutsourcing(OUTSOURCING('專業團隊 ⬝ 量身打造')).tagline, '專業團隊 ⬝ 量身打造');
+  const zh = OUTSOURCING('').replace('We build scalable and secure web and app:', '開發網頁與應用程式：').replace('Framework:', '框架：');
+  assert.equal(extractOutsourcing(zh).features[0].body, '開發網頁與應用程式：Java, C#；框架：Spring, .NET。');
+});
+
+// https://www.tpisoftware.com/chatgpt-enterprise, trimmed to one item per section
+const CHATGPT = `<html><head><title>ChatGPT Enterprise - 昕力資訊TPIsoftware</title></head><body>
+<div class="banner"><h2 class="h2">ChatGPT Enterprise</h2> <h1 class="h1">企業AI升級 一站到位</h1></div>
+<div class="section01"><h5 class="h5 desktop">ChatGPT Enterprise 專為企業設計，提供安全的 AI 能力</h5><h5 class="h5 mobile">ChatGPT Enterprise 專為企業設計 提供安全的 AI 能力</h5>
+<div class="card"><h3 class="h3">企業級資安架構</h3><ul class="ul"><li class="li">不使用企業資料進行模型訓練</li><li class="li">企業級加密機制</li></ul></div></div>
+<div class="section03"><ul class="ul"><li class="li"><div class="li-content"><h3 class="h3">直通原廠快速通道</h3><p class="p">大幅縮短申請時程，
+並提供明確的資格評估。</p></div></li></ul></div>
+<div class="section05"><ul class="ul"><li class="li"><h3 class="h3">是否有最低採購數量？</h3><p class="p">可依企業需求進行規劃與報價。</p></li></ul></div></body></html>`;
+
+test('extractChatGptEnterprise reads the capability cards, the services and the FAQ', () => {
+  assert.deepEqual(extractChatGptEnterprise(CHATGPT), {
+    title: 'ChatGPT Enterprise',
+    tagline: '企業AI升級 一站到位',
+    description: 'ChatGPT Enterprise 專為企業設計，提供安全的 AI 能力',
+    features: [
+      { title: '企業級資安架構', body: '不使用企業資料進行模型訓練、企業級加密機制。' },
+      { title: '直通原廠快速通道', body: '大幅縮短申請時程，並提供明確的資格評估。' },
+    ],
+    faq: [{ question: '是否有最低採購數量？', answer: '可依企業需求進行規劃與報價。' }],
+  });
+  assert.throws(() => extractChatGptEnterprise(CHATGPT.replace('section05', 'section06')), /faq/);
+});
+
+test('extractResource reads the name and line of /resource, and hubFrontmatter writes a hub entry', () => {
+  const html = (title) => `<html><head><title>${title}</title></head><body><div class="resource-banner"><h6>Share good resources.</h6></div></body></html>`;
+  const page = extractResource(html('TPIsoftware | Resource Center'));
+  assert.deepEqual(page, { title: 'Resource Center', tagline: 'Share good resources.', description: 'Share good resources.' });
+  assert.equal(extractResource(html('資源中心 - 昕力資訊 TPIsoftware')).title, '資源中心');
+  assert.throws(() => extractResource(html('x').replace('resource-banner', 'banner')), /tagline/);
+
+  const data = hubFrontmatter({ node: 'resources', sourceUrl: 'https://x', page, override: { frontmatter: { description: 'Rewritten' } } });
+  assert.deepEqual(Object.entries(data), [
+    ['title', 'Resource Center'],
+    ['description', 'Rewritten'],
+    ['translationKey', 'resources'],
+    ['node', 'resources'],
+    ['tagline', 'Share good resources.'],
+    ['sourceUrl', 'https://x'],
+  ]);
+  assert.throws(() => hubFrontmatter({ node: 'resources', sourceUrl: 'https://x', page, override: { useCaseIndustry: { 0: 'finance' } } }), /no use cases/);
+  assert.throws(() => hubFrontmatter({ node: 'resources', sourceUrl: 'https://x', page, override: { frontmatter: { kind: 'x' } } }), /unknown frontmatter keys kind/);
 });

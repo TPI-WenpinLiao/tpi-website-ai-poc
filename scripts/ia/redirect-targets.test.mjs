@@ -21,15 +21,14 @@ test('targets resolve like Cloudflare Pages, percent-encoding decoded', () => {
   assert.deepEqual(chains, []);
 });
 
-test('an unbuilt target fails unless external or PENDING in any locale', () => {
+test('an unbuilt target fails unless it is an external node', () => {
   const rows = [
     row('https://www.tpisoftware.com/a', '/gone'),
     row('https://www.tpisoftware.com/b', '/tpu'),
-    row('https://www.tpisoftware.com/vn/c', '/vi/services'),
   ];
-  const { missing, known } = redirectProblems({ rows, kind, external: new Set(['/tpu']), pending: ['/services'] });
+  const { missing, known } = redirectProblems({ rows, kind, external: new Set(['/tpu']) });
   assert.deepEqual([...missing], [['/gone', ['https://www.tpisoftware.com/a']]]);
-  assert.deepEqual([...known.keys()], ['/tpu', '/vi/services']);
+  assert.deepEqual([...known.keys()], ['/tpu']);
 });
 
 test('a target that is another redirect source on the main host is a chain', () => {
@@ -55,9 +54,9 @@ test('an overridden page that got built is reported, whatever the source path', 
   assert.deepEqual(builtOverrides, ['/media-center']);
 });
 
-test('catch-alls are skipped and PENDING pages that got built are stale', () => {
+test('catch-alls are skipped', () => {
   const rows = [row('https://www.tpisoftware.com/ja/*', '/en')];
-  const { checked, stale } = redirectProblems({ rows, kind, pending: ['/about-us', '/gone'] });
+  const { checked, missing } = redirectProblems({ rows, kind });
   assert.equal(checked, 0);
-  assert.deepEqual(stale, ['/about-us']);
+  assert.equal(missing.size, 0);
 });

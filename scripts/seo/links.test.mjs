@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { builtPending, linkProblems } from './links.mjs';
+import { linkProblems } from './links.mjs';
 
 const ORIGIN = 'https://example.pages.dev';
 const head = (path) => `<head><link rel="canonical" href="${ORIGIN}${path}"></head>`;
@@ -60,8 +60,4 @@ test('lists links to planned nodes separately instead of failing', () => {
 test('reports malformed percent-encoding as broken instead of throwing', () => {
   const { broken } = site({ 'index.html': '<a href="/a%zz">a</a><a href="/about#%E0">b</a>' });
   assert.deepEqual(broken, { '/a%zz (malformed percent-encoding)': ['/'], '/about#%E0 (malformed percent-encoding)': ['/'] });
-});
-
-test('builtPending names the pending paths that have a page now', () => {
-  assert.deepEqual(builtPending(['/about', '/services', '/blog'], kind), ['/about', '/blog']);
 });

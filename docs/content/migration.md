@@ -170,7 +170,7 @@ node scripts/content/migrate/case-studies.mjs --dry-run   # 不寫檔，只看�
 
 ## 解決方案頁
 
-`scripts/content/migrate/offerings.mjs` 把 `page-map.csv` 中 `page_type` 為 `solution` 的頁面（7 個節點 × 3 語系）轉成 `src/content/offering/<locale>/<node>.md`（M5-02，#27），另外轉 `orient-ai`、`aiso` 兩個服務頁（#106，見「服務頁」）。`/solutions/greenswift`、`/solutions/insurebrick` 的 `page_type` 是 product，不在這裡。
+`scripts/content/migrate/offerings.mjs` 把 `page-map.csv` 中 `page_type` 為 `solution` 的頁面（7 個節點 × 3 語系）轉成 `src/content/offering/<locale>/<node>.md`（M5-02，#27），另外轉 `orient-ai`、`aiso`（#106）、`cloudservice`、`outsourcing`、`chatgpt-enterprise` 五個服務頁與 `/resource` 的 hub（#159），見「服務頁」。`/solutions/greenswift`、`/solutions/insurebrick` 的 `page_type` 是 product，不在這裡。
 
 `page-map.csv` 的 merge 列（例如大小寫不同的 `/orient-aI`）不另外抓，網址接在合併目標的 `sourceUrl` 後面。
 
@@ -220,12 +220,30 @@ hero 背景圖（現站 `/images/solution/<node>/banner.png`）也不搬。offer
 - `orient-ai`：作業效率 40-60% 等三個數字、執行層與治理層兩張卡片（含應用場景）、「實現人與 AI Agent 的協作」三組條列與截圖、「OrientAI + AI 硬體」（群聯 aiDAPTIV、AI PC／Workstation／AI Server）、白皮書與 blog 的連結
 - `aiso`：方案卡片的領域標籤（法務、人力資源等）與連到 `aisoportal.com` 的「了解更多」
 
+#159 的三個服務頁 `kind` 是 `service`，`cta` 是 `contact`；`title` 都取 `<title>` 去掉站名（en `cloudservice` 的 `h1` 是標語，不是頁名）。卡片的第二行標題（`h4`）不搬：
+
+| 欄位 | `cloudservice` | `outsourcing` | `chatgpt-enterprise`（只有 zh-TW） |
+|---|---|---|---|
+| `tagline` | hero 的 `.slogan` | hero 的 `.slogan`，空的時候（en）用 `h1` 第二行 | `h1`（企業AI升級 一站到位） |
+| `description` | `<meta name="description">`，三語都超過上限，在 overrides 刪減 | 同左 | 現站沒有，用「為什麼企業需要 ChatGPT Enterprise」下的一句 |
+| `features` | 「雲端服務解決方案」5 張卡片 | 「專業技術」5 張卡片：說明接上技術清單，清單以「；」（en、vi 為 `; `）分隔 | 「為什麼需要」3 張卡片（條列以「、」接成一句）＋「昕力資訊如何協助」3 步 |
+| `useCases` | 「產業雲應用」5 張卡片 | 無 | 無 |
+| `faq` | 無 | 無 | 6 題 |
+
+沒有欄位的段落不搬：
+
+- `cloudservice`：介紹段、四項優勢、影片、服務流程圖、兩則成功案例（沒有客戶名稱）、頁尾的「BFSI 服務應用中台」導流與聯絡連結
+- `outsourcing`：客戶見證（具名）、「我們的服務」12 項（只有名稱）、「為什麼選擇我們」、據點的三個數字（SSR 是動畫開始前的 0）、技術領域與客戶 logo、洽詢表單（新站的聯絡表單在 `/contact-us`）
+- `chatgpt-enterprise`：與 Microsoft 365 Copilot、Google Gemini 的比較表，來源是 chatgpt.com 的數字與引言
+
+`/resource` 是 hub（`TEMPLATES` 的 `collection: 'hub'`，寫到 `src/content/hub/`）：`title` 取 `<title>` 去掉站名（en、vi 是「TPIsoftware | Resource Center」），`tagline` 是名稱下的一句。現站沒有 meta description，`description` 寫在 overrides，由這一句加上部落格區塊的說明組成。部落格與產品文件兩個區塊不搬：部落格由 hub 的子頁卡片連過去，產品文件（API 管理應用場景、開放銀行常見問答等）新站沒有對應頁。
+
 ### 人工修正
 
 寫在 `scripts/content/migrate/offering-overrides.yaml`，key 是 `<locale>/<node>`：
 
-- `frontmatter`：同 blog 的 `overrides.yaml`，取代產生的值，`null` 拿掉欄位。zh-TW 的 `description` 超過 80 字時在這裡改寫，只刪減，不加現站沒有的事實
-- `useCaseIndustry`：`{ <useCases 的索引>: finance|government|manufacturing }`，把應用情境連到產業頁，不用複製整段文字
+- `frontmatter`：同 blog 的 `overrides.yaml`，取代產生的值，`null` 拿掉欄位。`description` 超過上限（zh-TW 80 字，en、vi 160 字）時在這裡改寫，只刪減，不加現站沒有的事實
+- `useCaseIndustry`：`{ <useCases 的索引>: finance|government|manufacturing }`，把應用情境連到產業頁，不用複製整段文字。hub 沒有 `useCases`，寫了會失敗
 
 ### 比對現站
 

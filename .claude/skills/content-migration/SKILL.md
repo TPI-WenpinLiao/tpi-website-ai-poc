@@ -30,7 +30,7 @@ description: 從現站 https://www.tpisoftware.com 擷取、改寫或搬移內�
 |---|---|---|---|
 | blog、新聞 | `node scripts/content/migrate/migrate.mjs` | `scripts/content/migrate/overrides.yaml`（alt、description、`authorType`、`dropImagesFrom`） | [`migration.md`](../../../docs/content/migration.md) |
 | 成功案例 | `node scripts/content/migrate/case-studies.mjs` | `scripts/content/migrate/case-studies.yaml`（客戶名稱、各語系的 description、`seoTitle`） | [`migration.md`「成功案例」](../../../docs/content/migration.md#成功案例) |
-| 解決方案頁（`page_type` 為 `solution`）、`orient-ai`、`aiso` | `node scripts/content/migrate/offerings.mjs` | `scripts/content/migrate/offering-overrides.yaml` | [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁) |
+| 解決方案頁（`page_type` 為 `solution`）、`orient-ai`、`aiso`、`cloudservice`、`outsourcing`、`chatgpt-enterprise` 服務頁、`/resource` hub | `node scripts/content/migrate/offerings.mjs` | `scripts/content/migrate/offering-overrides.yaml` | [`migration.md`「解決方案頁」](../../../docs/content/migration.md#解決方案頁) |
 | ESG 顧問服務頁與顧問頁 | `node scripts/content/migrate/esg-advisory.mjs` | `scripts/content/migrate/esg-advisory-overrides.yaml` | [`migration.md`「ESG 顧問服務」](../../../docs/content/migration.md#esg-顧問服務) |
 | 產品頁、產品 hub | 手寫，`node scripts/design/offering-content.mjs` 對照現站；下載檔用 `node scripts/content/offering-files.mjs` | 內容檔本身；有意修正的現站錯字登記在 `offering-content.mjs` 的 `CORRECTIONS` | [`products.md`](../../../docs/content/products.md) |
 | 關於我們、聯絡我們、合作夥伴 | 手寫，`node scripts/content/page-content.mjs` 對照現站 | 內容檔本身；改寫句登記在 `page-content.mjs` 的 `REWRITTEN`，翻譯頁登記在 `TRANSLATED` | [`company-pages.md`](../../../docs/content/company-pages.md) |
