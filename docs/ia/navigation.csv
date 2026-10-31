@@ -21,19 +21,16 @@ header,family-dx,digilogs,,
 header,family-dx,digimars,,
 header,family-dx,digiflexis,,
 header,family-dx,digicare,,
-header,產品,family-security,,欄標題，可點到家族頁
-header,family-security,gadodido,,
-header,family-security,gadoscout,,
+header,產品,,資安（GadoSecurity）,欄標題，家族頁未上線（#138），不加連結
+header,資安（GadoSecurity）,gadodido,,
+header,資安（GadoSecurity）,gadoscout,,
 header,產品,family-esg,,欄標題，可點到家族頁
 header,family-esg,greenswift,,
 header,family-esg,electriswift,,
 header,,,產業方案,下拉選單
-header,產業方案,industries,產業方案總覽,
 header,產業方案,industry-finance,,
 header,產業方案,industry-government,,
-header,產業方案,industry-manufacturing,,
 header,,,服務,下拉選單
-header,服務,services,服務總覽,
 header,服務,aiso,,
 header,服務,outsourcing,,
 header,服務,cloudservice,,
@@ -44,10 +41,6 @@ header,,,資源,下拉選單
 header,資源,resources,資源總覽,
 header,資源,success-stories,,M3-01 從第一層移入（en、vi 在 1280px 放不下）；現站的產業篩選改在列表頁內
 header,資源,blog,,
-header,資源,whitepaper-digirunner,,
-header,資源,whitepaper-digilogs,,
-header,資源,whitepaper-greenswift,,
-header,資源,whitepaper-systalk-ai,,
 header,資源,events,,
 header,資源,tpu,,
 header,,,公司,下拉選單，沿用現站名稱
@@ -59,14 +52,11 @@ footer,,,產品,
 footer,產品,products,,
 footer,產品,family-ai,,
 footer,產品,family-dx,,
-footer,產品,family-security,,
 footer,產品,family-esg,,
 footer,,,產業方案,
 footer,產業方案,industry-finance,,
 footer,產業方案,industry-government,,
-footer,產業方案,industry-manufacturing,,
 footer,,,服務,
-footer,服務,services,服務總覽,
 footer,服務,aiso,,
 footer,服務,outsourcing,,
 footer,服務,cloudservice,,
@@ -102,3 +92,11 @@ none,,blog-digital-transformation,,部落格頁內的分類篩選
 none,,blog-enterprise-management,,部落格頁內的分類篩選
 none,,blog-esg,,部落格頁內的分類篩選
 none,,blog-use-cases,,部落格頁內的分類篩選
+none,,family-security,,未上線（#138）：沒有內容來源，之後要做時另開 issue
+none,,industries,,未上線（#138）：沒有內容來源，之後要做時另開 issue
+none,,industry-manufacturing,,未上線（#138）：沒有內容來源，之後要做時另開 issue
+none,,services,,未上線（#138）：沒有內容來源，之後要做時另開 issue
+none,,whitepaper-digirunner,,未上線（#138）：沒有內容來源，之後要做時另開 issue
+none,,whitepaper-digilogs,,未上線（#138）：沒有內容來源，之後要做時另開 issue
+none,,whitepaper-greenswift,,未上線（#138）：沒有內容來源，之後要做時另開 issue
+none,,whitepaper-systalk-ai,,未上線（#138）：沒有內容來源，之後要做時另開 issue

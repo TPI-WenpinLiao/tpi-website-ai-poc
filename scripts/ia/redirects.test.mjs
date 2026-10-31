@@ -167,6 +167,19 @@ test('toRedirects rejects rules that match a new page', () => {
   assert.deepEqual(toRedirects(unlinked, nodes).errors, [
     'redirect matches the new page /en/subscribe (loop or shadowed page): /en/subscribe /en 301',
   ]);
+  // A node page redirect-overrides.csv lists as not built may be a source
+  assert.deepEqual(toRedirects(unlinked, nodes, new Set(['/en/subscribe'])).errors, []);
+});
+
+test('buildRedirects returns the unbuilt pages of redirect-overrides.csv', () => {
+  const { unbuilt } = buildRedirects({
+    inventory, pageMap, nodes, dropTargets,
+    overrides: [
+      { url: 'https://www.tpisoftware.com/media-center/12', unbuilt: '/media-center/12', to: '/media-center', reason: 'r' },
+      { url: 'https://www.tpisoftware.com/subscribe', unbuilt: '', to: '/media-center', reason: 'r' },
+    ],
+  });
+  assert.deepEqual([...unbuilt], ['/media-center/12']);
 });
 
 test('toRedirects enforces the Cloudflare Pages limits', () => {

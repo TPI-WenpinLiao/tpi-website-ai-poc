@@ -22,20 +22,12 @@ const SHOWN = 5;
 
 // Page nodes in docs/ia/nodes.csv that the navigation links to but that have no content entry yet
 // (src/content), so no page is built for them; scripts/ia/redirect-targets.mjs exempts the redirects
-// to them too. Tracked in #138. Remove a path once its page is built.
+// to them too. Tracked in #159. Remove a path once its page is built.
 export const PENDING = [
   '/chatgpt-enterprise',
   '/cloudservice',
-  '/industries',
-  '/industries/manufacturing',
   '/outsourcing',
-  '/products/gadosecurity',
   '/resource',
-  '/services',
-  '/whitepaper/api-strategies',
-  '/whitepaper/digilogs',
-  '/whitepaper/greenswift',
-  '/whitepaper/systalk-ai',
 ];
 
 /** decodeURIComponent, or undefined for malformed percent-encoding @param {string} s */

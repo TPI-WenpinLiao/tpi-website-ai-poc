@@ -133,11 +133,12 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - `.nvmrc` 升到 Node 26 完成（#147）：Node 26 在 2026-10-28 進入 Active LTS（nodejs.org `dist/index.json` 的 `v26.13.0` 標 `lts: "Lithium"`），`.nvmrc` 改成 `26`，`package.json` 的 `engines` 改成 `>=26`（CI 與雲端 session 只測 `.nvmrc` 的版本）。ADR 0001 與 `launch-readiness.md` 上線步驟第 2 步的版本跟著改
 - 首頁與產品頁的最新文章改讀 content collections 完成（#101）：首頁讀 `blog`、`news` collection 的最新 2 篇 blog 與 1 則新聞，卡片用文章封面與發布日（`src/lib/content/cards.ts`）；產品頁的相關文章改讀 `blog.relatedOfferings`（使用者決定，不用標題關鍵字比對），目前沒有文章填這個欄位，所以產品頁不顯示相關文章；`src/lib/latest-posts.ts` 已刪除。vi 14 篇 blog 的封面是現站 CMS 的 loading spinner，遷移時改用抽象封面，`node scripts/content/placeholder-covers.mjs`（`npm run check`）擋下已知的 placeholder 圖
 - 在 preview 實測 `_redirects` 的大小寫與 `%` 編碼比對完成（#139）：Cloudflare Pages 比對來源路徑區分大小寫，只差大小寫的 5 條規則不會迴圈；`%` 編碼的來源用編碼後的路徑比對得到。現在的 `redirects.mjs` 產出可以照原樣部署，不用修改，`launch-readiness.md` 的 R4、D3 與「`_redirects` 部署與否」跟著改。實測結果見 `docs/ia/redirects.md`「Cloudflare 的比對方式」，curl 輸出在 PR。測試用的 `public/_redirects` 已移除，上線時照 `launch-readiness.md` 第 5 步產生
+- 移除導覽連到但沒有內容的 8 頁完成（#138）：4 份白皮書、`/services`、`/industries`、`/industries/manufacturing`、`/products/gadosecurity` 依使用者決定先不上線，`navigation.csv` 改列「不進導覽」，header 的資安欄標題改成不可點的文字。`src/lib/ia/navigation.ts` 的 `hasPage()`：麵包屑、子頁卡片、首頁家族章節、404 的常用入口、產品頁的產業標籤，遇到沒建出的頁就不連，頁面建出後自動恢復。白皮書的 9 個舊網址在 `redirect-overrides.csv` 轉到產品頁，`toRedirects` 的迴圈檢查排除 override 的 `unbuilt`。`PENDING` 只剩 #159 的 4 頁。現站有內容的 4 頁拆到 #159
 
 ## 下一步
 
 - 指派 `docs/launch/launch-readiness.md`「待決事項」D1–D12 的負責人並回覆，其中正式網域（D1）與表單送出到哪裡（D4）會卡住上線
-- 提供導覽連到但沒有建出的 12 頁的內容（#138，needs-input）
+- 從現站搬移雲端、委外、ChatGPT 企業服務與資源頁（#159）可以開始
 - 回覆 #137 後續 PR（en 知識邊界一文對應 zh-TW 版）的「待確認」：en 版多一段上線第一週的問卷數字（40 份有效回覆、90% 用過等），zh-TW 沒有；要不要補到 zh-TW、數字是否經客戶同意公開
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話
 - 回覆 #106 PR 的「待確認」：未搬的段落（數字、AI 硬體方案）、en、vi aiso 現站 `<title>` 是「昕力資訊」
