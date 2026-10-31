@@ -8,7 +8,7 @@ publishedAt: 2026-03-17
 author: kay
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f121ca6-3d46-6e67-81f6-0b7fa23ee3a6.png
-coverImage: ../../../assets/blog/vi/co-che-cbam-la-gi/cover.webp
+coverImage: ../../../assets/design/cover-platform.webp
 sourceUrl: https://www.tpisoftware.vn/blog/green-transformation/co-che-cbam-la-gi
 migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-17

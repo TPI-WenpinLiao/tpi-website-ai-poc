@@ -18,6 +18,7 @@ import { apiDay, applyOverrides, blogFrontmatter, Commented, Day, frontmatterNot
 import { prepare, toMarkdown } from './html-to-markdown.mjs';
 import { dataUrlBytes, fileNames, imageExt, optimizeImage } from './images.mjs';
 import { linkResolver } from './links.mjs';
+import { fallbackRef, isPlaceholderSource } from '../placeholder-covers.mjs';
 import { blogArticles, blogBody, blogPageArticle, newsBody, newsImageUrl, newsItems } from './sources.mjs';
 
 const TYPES = ['blog', 'news'];
@@ -84,10 +85,13 @@ export function parseOverrides(text) {
   return all;
 }
 
-/** Download every image (cover first), downscaled and re-encoded; throws on the first one that fails. */
-async function fetchImages(get, urls) {
+/**
+ * Download every image (cover first), downscaled and re-encoded; throws on the first one that fails.
+ * The cover is flagged when it is a known placeholder (scripts/content/placeholder-covers.mjs).
+ */
+async function fetchImages(get, urls, placeholders) {
   const images = [];
-  for (const url of urls) {
+  for (const [i, url] of urls.entries()) {
     let bytes;
     if (url.startsWith('data:')) bytes = dataUrlBytes(url);
     else {
@@ -99,7 +103,8 @@ async function fetchImages(get, urls) {
     }
     const ext = imageExt(bytes);
     if (!ext) throw new Error(`image ${url.slice(0, 120)}: not a format astro:assets reads`);
-    images.push({ url, ...(await optimizeImage(bytes, ext)) });
+    const placeholder = i === 0 && (await isPlaceholderSource(bytes, placeholders));
+    images.push({ url, placeholder, ...(await optimizeImage(bytes, ext)) });
   }
   return images;
 }
@@ -121,14 +126,14 @@ export async function syncImages(dir, images, names) {
  * Convert one entry: images, body, frontmatter. Nothing is written when any step fails.
  * @returns {Promise<{ status: 'written' | 'unchanged', notes: string[] }>}
  */
-export async function convert({ get, type, id, slug, coverUrl, html, base, frontmatter, override, resolveLink, date }) {
+export async function convert({ get, type, id, slug, coverUrl, html, base, frontmatter, override, resolveLink, date, placeholders }) {
   const notes = [];
   const drop = override?.dropImagesFrom ?? [];
   const prepared = prepare(html, base, { drop });
   const unusedDrop = drop.filter((d) => !prepared.dropped.some((url) => url === d || new URL(url).hostname === d));
   if (unusedDrop.length) throw new Error(`${OVERRIDES}: dropImagesFrom entries the entry has no images from: ${unusedDrop.join(', ')}`);
   notes.push(...prepared.notes);
-  const images = await fetchImages(get, [coverUrl, ...prepared.images]);
+  const images = await fetchImages(get, [coverUrl, ...prepared.images], placeholders);
   const names = fileNames(images);
   const altFor = override?.alt ?? {};
   const files = new Set(names.values());
@@ -152,7 +157,10 @@ export async function convert({ get, type, id, slug, coverUrl, html, base, front
   for (const m of markdown.matchAll(/!\[\]\(([^)]+)\)/g)) missingAlt.push(m[1].split('/').pop());
   if (missingAlt.length) notes.push(`images without alt: ${missingAlt.length}`);
 
-  const cover = new Commented(assetRef(type, id, names.get(coverUrl)), coverUrl);
+  // A placeholder cover is not stored: the entry gets a design cover, the comment keeps the source
+  const placeholder = images[0]?.placeholder && !prepared.images.includes(coverUrl);
+  if (placeholder) notes.push('placeholder cover: design cover until the content owner supplies one');
+  const cover = new Commented(placeholder ? fallbackRef(slug) : assetRef(type, id, names.get(coverUrl)), coverUrl);
   const data = applyOverrides({ ...frontmatter, coverImage: cover }, override?.frontmatter);
   // The site has posts without an author; the schema requires one and it cannot be made up
   const empty = ['title', 'description', 'author'].filter((k) => k in data && !data[k]);
@@ -163,7 +171,7 @@ export async function convert({ get, type, id, slug, coverUrl, html, base, front
   const path = contentFile(type, id);
   const existing = existsSync(path) ? await readFile(path, 'utf8') : null;
   const text = entryText(data, markdown, existing, date, locale);
-  await syncImages(assetDir(type, id), images, names);
+  await syncImages(assetDir(type, id), placeholder ? images.slice(1) : images, names);
   const unique = [...new Set(notes)];
   if (text === existing) return { status: 'unchanged', notes: unique };
   await mkdir(dirname(path), { recursive: true });

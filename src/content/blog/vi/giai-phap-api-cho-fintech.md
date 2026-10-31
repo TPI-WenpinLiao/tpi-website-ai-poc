@@ -8,7 +8,7 @@ publishedAt: 2026-09-10
 author: kay
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1acc67-023a-66fe-81f6-0b7fa23ee3a6.png
-coverImage: ../../../assets/blog/vi/giai-phap-api-cho-fintech/cover.webp
+coverImage: ../../../assets/design/cover-security.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/giai-phap-api-cho-fintech
 migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-10

@@ -8,7 +8,7 @@ publishedAt: 2026-09-30
 author: kay
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1bcb0a-798d-63f6-81f6-0b7fa23ee3a6.png
-coverImage: ../../../assets/blog/vi/what-is-an-api-explained/cover.webp
+coverImage: ../../../assets/design/cover-platform.webp
 sourceUrl: https://www.tpisoftware.vn/blog/enterprise-management/what-is-an-api-explained
 migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-09-30

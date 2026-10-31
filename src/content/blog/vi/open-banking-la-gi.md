@@ -8,7 +8,7 @@ publishedAt: 2026-08-24
 author: kay
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f19f6a5-0e3c-6f2a-81f6-0b7fa23ee3a6.png
-coverImage: ../../../assets/blog/vi/open-banking-la-gi/cover.webp
+coverImage: ../../../assets/design/cover-data.webp
 sourceUrl: https://www.tpisoftware.vn/blog/enterprise-management/open-banking-la-gi
 migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-08-24

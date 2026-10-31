@@ -30,14 +30,12 @@ import { COLLECTION_NODES, entryPath } from '../../lib/content/urls';
 import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
 import { canonicalUrl, titleSeparator } from '../../lib/seo/meta';
 import { defaultOgImage } from '../../lib/seo/og';
-import { about } from '../../lib/latest-posts';
+import { postCard } from '../../lib/content/cards';
+import { newest } from '../../lib/content/listings';
 import { SCENE_FAMILIES, sceneFamily } from '../../lib/scene/families';
 import { strings } from '../../data/strings';
 import image from '../../assets/design/hero-modular-stack.webp';
 import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
-import coverData from '../../assets/design/cover-data.webp';
-import coverIntegration from '../../assets/design/cover-integration.webp';
-import coverPlatform from '../../assets/design/cover-platform.webp';
 
 interface Props {
   entry: CollectionEntry<'offering'>;
@@ -78,10 +76,17 @@ const team =
         .sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity) || a.data.title.localeCompare(b.data.title))
         .map((p) => ({ title: p.data.title, role: [p.data.jobTitle, p.data.affiliation].filter(Boolean).join(titleSeparator(locale)), href: entryPath('person', p) }))
     : [];
-// Until M5 fills relatedPosts: current-site posts that name the offering (the first word of its
-// title, e.g. digiRunner)
-const COVERS = [coverData, coverIntegration, coverPlatform];
-const posts = about('blog', self.title.split(' ')[0] ?? self.title, 3, locale).map((p, i) => ({ ...p, cover: COVERS[i % COVERS.length] }));
+// Blog posts whose relatedOfferings name this offering; relatedPosts, when set, picks and orders
+// them, else newest first (content-model.md「offering」: relatedPosts only lists linked posts, so
+// another post fails the build). None filled yet, so the block stays out until the content owner
+// fills them (overrides.yaml)
+const linked = await getCollection('blog', (b) => entryLocale(b.id) === locale && !!b.data.relatedOfferings?.some((r) => r.id === entry.id));
+const unlinked = (data.relatedPosts ?? []).filter((r) => !linked.some((b) => b.id === r.id)).map((r) => r.id);
+if (unlinked.length) throw new Error(`${entry.id}: relatedPosts lists posts whose relatedOfferings don't name it: ${unlinked.join(', ')}`);
+const posts = (data.relatedPosts?.length ? data.relatedPosts.flatMap((r) => linked.filter((b) => b.id === r.id)) : linked.toSorted(newest))
+  .filter(isPublished)
+  .slice(0, 3)
+  .map(postCard);
 const faq = data.faq ?? [];
 const hasDownloads = whitepapers.length + downloads.length > 0;
 // Related offerings and downloads share a row on wide screens when both are there; alone, related
@@ -250,7 +255,7 @@ const blog = localNode('blog', locale);
           {posts.map((p, i) => (
             <li>
               <Reveal delay={stagger(i)}>
-                <Card title={p.title} href={p.href} eyebrow={p.label} image={{ src: p.cover, alt: '' }} date={p.published} />
+                <Card title={p.title} href={p.href} eyebrow={p.eyebrow} image={p.image} date={p.date} />
               </Reveal>
             </li>
           ))}

@@ -8,7 +8,7 @@ publishedAt: 2026-03-27
 author: kay
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f129b88-3a62-6b93-81f6-0b7fa23ee3a6.png
-coverImage: ../../../assets/blog/vi/rate-limiting/cover.webp
+coverImage: ../../../assets/design/cover-security.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/rate-limiting
 migratedAt: 2026-10-24
 sourceUpdatedAt: 2026-03-27

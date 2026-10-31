@@ -8,7 +8,7 @@ publishedAt: 2026-03-27
 author: kay
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f129b98-25f3-6735-81f6-0b7fa23ee3a6.png
-coverImage: ../../../assets/blog/vi/zero-downtime/cover.webp
+coverImage: ../../../assets/design/cover-platform.webp
 sourceUrl: https://www.tpisoftware.vn/blog/digital-transformation/zero-downtime
 migratedAt: 2026-10-23
 sourceUpdatedAt: 2026-03-27

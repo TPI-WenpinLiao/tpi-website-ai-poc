@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-10-30
+最後更新：2026-10-31
 
 ## 目前 milestone
 
@@ -131,6 +131,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 不在現站 blog API 的 3 篇 blog 處理完成：`migrate.mjs` 對 API 沒列出的文章改讀文章頁 Nuxt payload 的 `article`（標題、日期、作者、封面、分類，`blogSource`），tag 由 payload 的分類樹找出。`redirect-overrides.csv` 刪掉這 3 篇的列。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 轉出，舊網址改轉到文章頁。vi `gemini-api` 的發布日是 2025-02-13，依使用者決定照保留門檻不遷移：`audit-overrides.csv` 改為 drop，舊網址轉到 `/vi/blog/enterprise-management`。報告對早於門檻的這類文章加註
 - 不在 blog API 的 blog 是否發布已回答：使用者決定 2026 年前的文章不發布、今年的發布。zh-TW `what-is-ai-agent-management-platform`、en `why-ai-needs-knowledge-boundary` 在 `audit-overrides.csv` 定為 keep，`inventory.csv` 的「確認是否發布」清掉。`audit.mjs` 的規則對處置本身的提問（`ask`）在覆寫檔指定 `disposition` 後不再寫進 `to_confirm`（`content-audit.md`「重現方式」）。現站 en `why-ai-needs-knowledge-boundary` 依使用者確認是 zh-TW `why-companies-need-custom-ai-knowledge` 的 en 版：hreflang 只在同一個路徑之間互指，所以新增手寫的 `docs/ia/blog-slugs.csv`，en 改用 zh-TW 的 slug（`/en/blog/why-companies-need-custom-ai-knowledge`），現站 en 舊網址 301 到新路徑，兩頁互相輸出 hreflang（ADR 0002「路徑命名」）；zh-TW 這篇的作者現站拼成 `TPIsowftware`，在 `overrides.yaml` 改為 `TPIsoftware`、`Organization`
 - `.nvmrc` 升到 Node 26 完成（#147）：Node 26 在 2026-10-28 進入 Active LTS（nodejs.org `dist/index.json` 的 `v26.13.0` 標 `lts: "Lithium"`），`.nvmrc` 改成 `26`，`package.json` 的 `engines` 改成 `>=26`（CI 與雲端 session 只測 `.nvmrc` 的版本）。ADR 0001 與 `launch-readiness.md` 上線步驟第 2 步的版本跟著改
+- 首頁與產品頁的最新文章改讀 content collections 完成（#101）：首頁讀 `blog`、`news` collection 的最新 2 篇 blog 與 1 則新聞，卡片用文章封面與發布日（`src/lib/content/cards.ts`）；產品頁的相關文章改讀 `blog.relatedOfferings`（使用者決定，不用標題關鍵字比對），目前沒有文章填這個欄位，所以產品頁不顯示相關文章；`src/lib/latest-posts.ts` 已刪除。vi 14 篇 blog 的封面是現站 CMS 的 loading spinner，遷移時改用抽象封面，`node scripts/content/placeholder-covers.mjs`（`npm run check`）擋下已知的 placeholder 圖
 
 ## 下一步
 
@@ -142,7 +143,9 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 回覆 #107 PR 的「待確認」：顧問是否仍合作中、照片授權、三語顧問名單的差異（zh-TW 沒有 huang-zhijun、vi 的 li-shuhui 連結拼錯）、zh-TW 服務頁 4 位沒有個人頁的顧問、黃煒盛兩處單位不同、服務頁沒搬的段落
 - 回覆 M5-02（#27）PR 的「待確認」：不在導覽的方案是否仍銷售、`uiux` 等的 `kind`、略過的段落要不要擴充 content model、案例中客戶名稱的授權
 - 回覆 M5-05（#30）PR 的「待確認」：圖片授權與人物、作者 `authorType`
-- 首頁與產品頁的最新文章改讀 content collections（#101）可以開始
+- 在 `main` 重跑 `npm run check` 與 `npm run lighthouse:all`（約 97 分鐘），結果補進 `docs/launch/audit.md`「待 #36、#101 合併後重驗」（`launch-readiness.md`「結論：目前不能上線」第 6 項）
+- 提供 vi 14 篇 blog 的封面：現站 CMS 的封面是 loading spinner，#101 先換成抽象封面；`coverImage` 指向 `assets/design/` 的就是缺封面的文章，註解是原圖網址（`docs/content/migration.md`「圖片」）
+- 決定 2026 年 blog 各篇對應哪些產品，填進 `blog.relatedOfferings`（`scripts/content/migrate/overrides.yaml`）；填了之後產品頁才顯示相關文章
 - 回覆 M5-06（#31）PR 的「待確認」：合作夥伴頁的翻譯、法務文件是否要法務審閱、資訊安全政策的生效日、en 法務頁的英譯、關於我們的圖片授權
 - 回覆 M5-03（#28）PR 的「待確認」：客戶名稱與 logo 的使用授權、內頁內容只有一段描述、獎項與年份、產業對應
 - 回覆 `docs/content/products.md`「待確認」（M5-01）：banner 圖庫照能否沿用、各頁未搬的段落要刪減或擴充 content model、feature 數量多的產品頁捲動長度、價格與認證等可能過時的說法
@@ -178,10 +181,9 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - M3-02 改為深色場景＋亮色閱讀頁的雙 surface，3D 共用視角寫在 `tokens.css` 的 `--scene-angle-*`、`--perspective`；M3-07（#54）的 three.js 相機已從這兩個值換算（`src/lib/scene/runtime.ts`），方向 B 的方塊材質在 M3-04 寫成 `--scene-block-*`、`--scene-rim-*`
 - `SiteHeader`、`SiteFooter` 在 `PageLayout`；選單的鍵盤操作依 `docs/ia/navigation.md`「無障礙」完成（M4-04），axe 檢查由 M4-05（#24）接手。正式 header 的 en、vi 寬度已實測（`node scripts/design/header-fit.mjs`，`docs/design/nav-fit.md`「正式 header」），`en-long` 在 1024px 只剩 2px。logo 是行銷部門 AI 檔轉出的 SVG（`node scripts/design/import-brand.mjs <AI 檔資料夾>` 匯入 `src/assets/brand/`、favicon，OG 圖由 `og-image.mjs` 產生），沒有使用規範（`docs/design/brand-assets.md`）
 - 首頁行動版 Lighthouse performance 中位數 0.94（`node scripts/design/lighthouse-3d.mjs /`，2026-10-23，各跑 3 次），單次在 0.91–0.96 之間浮動；#127 後是 0.99（2026-10-26，量測的 server 加上 gzip 後）。M4-04 比較了三種 CSS 載入方式：現狀（3 個 CSS 檔）、`build.inlineStylesheets: 'always'`、小檔 inline，分數都是 0.94；全部 inline 讓 FCP 快約 450 ms、LCP 快約 150 ms，但每頁 HTML 從 23 KB 變 89 KB、換頁沒有 CSS 快取，所以維持現狀。#143 在 contact 頁重比，全部 inline 只多 0.01–0.02 分，同樣不採用；剛好 0.95 的頁面卡在首次繪製前下載的字型與圖片，不是 CSS（ADR 0004「剛好 0.95 的頁面」）。preview 上的真機量測還沒做
-- 首頁的最新文章與新聞由 `src/lib/latest-posts.ts` 從 `inventory.csv` 選出，卡片封面暫用抽象圖；文章已在 M5-05 遷移，改讀 content collections 並刪除這個檔案的工作在「下一步」。`src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
+- `src/lib/ia/navigation.ts` 是正式頁面用的導覽讀取（節點讀 `src/lib/ia/nodes.ts`，與 #91 的同名檔相同），刪 wireframe 時保留
 - OfferingTemplate、ContentTemplate、HubTemplate 直接拿 `heroImage`（或 `ogImage`）當 `og:image`，不裁成 seo-checklist 要的 1200×630。M5-02 因此沒有把現站 banner（寬高比約 3:1）寫進解決方案頁的 `heroImage`；模板裁切後再補，banner 位置見 `docs/content/migration.md`「解決方案頁」
 - M3-05、M5-01：現站產品頁有 content-model 沒有欄位的段落（digiRunner 的 AI Gateway、五大應用等，其他產品的方案表、導入流程、數字等），M5-01 依使用者決定只填既有欄位，逐頁列在 `docs/content/products.md`「待確認」；要擴充 content model 時另開 issue。`useCases.industry` 沒有保險、醫療、物聯網，這些情境沒有產業連結
 - 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 preview 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，見 `docs/launch/launch-readiness.md`「上線步驟」第 3 步
 - 正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。見 `docs/launch/launch-readiness.md`「上線步驟」第 4 步
 - 正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），見 `docs/launch/launch-readiness.md`「上線步驟」第 6 步
-- M8-01 的全站驗收在 #36（GTM／consent）、#101（最新文章改讀 collection）合併前執行，這兩處的結果標「待這兩張合併後重驗」。兩張都合併後在 `main` 重跑 `npm run check` 與 `npm run lighthouse:all`，結果補進 `docs/launch/audit.md`
