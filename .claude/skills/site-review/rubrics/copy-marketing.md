@@ -1,4 +1,4 @@
-# 文案與行銷 rubric（草案，待使用者確認）
+# 文案與行銷 rubric
 
 評文字說了什麼、能不能推動轉換。依據：`docs/strategy/messaging.md`、`docs/strategy/briefs/<page>.md`、`docs/strategy/facts.yaml`、`site-profile.md` 的受眾與轉換。
 

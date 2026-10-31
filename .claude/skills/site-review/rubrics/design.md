@@ -1,4 +1,4 @@
-# 設計 rubric（草案，待使用者確認）
+# 設計 rubric
 
 評畫面傳達了什麼，不評程式。依據：`docs/strategy/design-principles.md`、`docs/strategy/messaging.md`、截圖（375、1280 寬）。
 

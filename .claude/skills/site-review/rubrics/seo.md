@@ -1,4 +1,4 @@
-# SEO rubric（草案，待使用者確認）
+# SEO rubric
 
 評頁面能不能承接它該承接的搜尋，只評上線後的頁面（原型不評）。技術底線（canonical、hreflang、JSON-LD 格式等）由 `seo-checklist` 與 `npm run check` 負責，這裡只看內容與結構的品質。依據：`docs/strategy/search-intent.md`、`docs/strategy/briefs/<page>.md`、`dist/` 的 HTML。
 
