@@ -138,7 +138,7 @@ M2、M3 的關卡 issue 與分階段流程的策略 issue 改用對應的 label�
 
 - **事實**：數字、百分比、客戶名、認證、獎項、產品功能、案例成果、公司資料。每一條都取自事實庫 `docs/strategy/facts.yaml`，事實庫的每一筆有現站來源網址與原文，頁面只用 `status: confirmed` 的。TS 資料檔用 `fact('<id>')`（`src/data/facts.ts`），Markdown 內容在 frontmatter 寫 `facts: [<id>]`。事實庫沒有的事實不寫，不得捏造或加強
 - **表述**：標題、價值主張、段落敘事、CTA。可以原創，依 messaging framework（`docs/strategy/messaging.md`）與 `writing-style` 撰寫，由人審。表述不得夾帶事實：「服務超過 500 家企業」的數字、客戶名稱都屬於事實
-- `npm run check` 的 `node scripts/strategy/facts.mjs` 擋下捏造：`src/data/home/*.ts`、`src/data/site.ts`，以及 `sourceUrl: []` 或有 `facts` 欄位的內容檔，文案出現阿拉伯數字或事實庫 `client` 類型的名稱時，這一頁引用的事實裡要有它，否則失敗。`--sources` 連現站確認每筆原文還在（不在 `npm run check` 裡，改了事實庫就跑）
+- `npm run check` 的 `node scripts/strategy/facts.mjs` 擋下捏造：`src/data/home/*.ts`、`src/data/site.ts`，以及 `sourceUrl: []` 或有 `facts` 欄位的內容檔，文案出現阿拉伯數字或事實庫 `client` 類型的名稱時，這一頁引用的事實裡要有它，否則失敗。這個檢查只確認數字或名稱出現在引用的事實裡，不看上下文（引用了「節省 80% 人力」的頁面寫「服務 80 家企業」也會通過），數字用得對不對仍由人審。`--sources` 連現站確認每筆原文還在（不在 `npm run check` 裡，改了事實庫就跑）
 - 不確定的內容在 PR 中列為「待確認」，不要自行補上
 - 從現站搬移內容時依 `.claude/skills/content-migration/SKILL.md`：各內容類型的轉換或對照 script、schema 沒有欄位的段落不搬；en、vi 內容的來源、用語與修正位置依同一個 skill 的「多語系內容」
 - 現站每一頁的處置（`disposition`）與待確認（`to_confirm`）看 `docs/research/inventory.csv`，依據見 `docs/research/content-audit.md`

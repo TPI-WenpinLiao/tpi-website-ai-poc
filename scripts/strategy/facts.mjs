@@ -30,7 +30,15 @@ const ROOT = resolve(import.meta.dirname, '../..');
  */
 export function validateFacts(data) {
   const result = factsSchema.safeParse(data);
-  if (result.success) return [];
+  if (result.success) {
+    // `text` may trim the quote or add break points, but its numbers are the quote's
+    return result.data.flatMap((f) => {
+      const quoted = numbers(f.source.quote);
+      return numbers(f.text)
+        .filter((n) => !quoted.includes(n))
+        .map((n) => `${FACTS_FILE} ${f.id}: ${n} in text is not in source.quote`);
+    });
+  }
   return result.error.issues.map((i) => {
     const entry = typeof i.path[0] === 'number' ? data[i.path[0]] : undefined;
     const where = typeof i.path[0] === 'number' ? `entry ${i.path[0] + 1}${typeof entry?.id === 'string' ? ` (${entry.id})` : ''}` : 'file';
@@ -105,7 +113,7 @@ export function copyStrings(value) {
 }
 
 /**
- * Markdown body as copy: code, HTML tags, link and image targets dropped
+ * Markdown body as copy: code, HTML tags, link and image targets, ordered-list markers dropped
  * @param {string} body
  */
 export const bodyCopy = (body) =>
@@ -113,7 +121,9 @@ export const bodyCopy = (body) =>
     .replace(/```[\s\S]*?```|`[^`\n]*`/g, '')
     .replace(/<[^>]+>/g, ' ')
     .replace(/\]\([^)]*\)/g, ']')
-    .replace(/^\[[^\]]+\]:.*$/gm, '');
+    .replace(/^\[[^\]]+\]:.*$/gm, '')
+    // Ordered-list markers (1. 2.) are formatting, not numbers
+    .replace(/^\s*\d+[.)]\s+/gm, '');
 
 /**
  * The page of a Markdown entry, or null when it is a verbatim migration (sourceUrl set, no `facts`)

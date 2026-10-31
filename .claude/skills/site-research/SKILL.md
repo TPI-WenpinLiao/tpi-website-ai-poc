@@ -33,7 +33,7 @@ description: 分階段流程的研究階段使用：從現站擷取事實到事�
 事實是可以查證的陳述：數字、百分比、客戶名、認證、獎項、產品功能、案例成果。標題、口號、形容詞不是事實，不收。
 
 1. 擷取寫成 script（放 `scripts/strategy/`），可以重跑，結果相同（`CLAUDE.md`「工作原則」）。不手改 `facts.yaml`；要修正的寫進 script 讀的覆寫檔。#163 手寫了首頁與 footer 用到的 29 筆，頁面以 id 引用它們：script 接手後要產生同樣的 id 與內容，`node scripts/strategy/facts.mjs` 會擋下被引用但消失的 id
-2. 每一筆都要有來源網址與原文（`source.url`、`source.quote`），原文逐字照抄現站；`text` 是頁面要顯示的字，可以加 U+200B 斷行點或截掉原文的前後文，數字與名稱不改。`--sources` 比對原文時忽略空白與 U+200B
+2. 每一筆都要有來源網址與原文（`source.url`、`source.quote`），原文逐字照抄現站；`text` 是頁面要顯示的字，可以加 U+200B 斷行點或截掉原文的前後文，數字與名稱不改（`facts.mjs` 擋下 `text` 有、`source.quote` 沒有的數字）。`--sources` 比對原文時忽略空白與 U+200B
 3. `status`：
    - `confirmed`：現站原文明確寫出，且不涉及授權
    - `to_confirm`：授權不明（人物照片、客戶 logo、客戶名稱用於行銷）、可能過時（年份、數字、價格）、或現站各語系說法不一致。理由寫在該筆的 `note`（schema 要求）

@@ -35,6 +35,8 @@ test('validateFacts accepts a valid library and names the entry and field of eac
   // Duplicates are reported once every entry is valid
   assert.match(validateFacts([entry(), entry()])[0], /entry 2 \(smartclaim-result\) id: duplicate id smartclaim-result/);
   assert.notDeepEqual(validateFacts({}), []);
+  // text may trim the quote but not change its numbers
+  assert.match(validateFacts([entry({ text: '節省逾90%人工作業時間' })])[0], /smartclaim-result: 90% in text is not in source.quote/);
 });
 
 test('numbers folds full-width digits and drops thousands separators', () => {
@@ -93,7 +95,10 @@ test('markdownPage checks original entries and entries with facts, not verbatim 
   assert.deepEqual(checkPage(rewritten, facts), []);
 });
 
-test('bodyCopy drops code, tags and link targets', () => {
+test('bodyCopy drops code, tags, link targets and ordered-list markers', () => {
+  assert.equal(bodyCopy('導入步驟：\n\n1. 盤點需求\n2) 建置平台\n  10. 上線').replace(/\s+/g, ' ').trim(), '導入步驟： 盤點需求 建置平台 上線');
+  const page = markdownPage('src/content/hub/zh-TW/x.md', '---\ntitle: 測試\nsourceUrl: []\nfacts: []\n---\n\n1. 盤點需求\n2. 建置平台\n');
+  assert.deepEqual(checkPage(page, facts), []);
   assert.equal(bodyCopy('見[案例](/case/2024)與 `v2` <img src="a1.png"> 文字').replace(/\s+/g, ' '), '見[案例]與 文字');
 });
 
