@@ -76,15 +76,17 @@ const team =
         .sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity) || a.data.title.localeCompare(b.data.title))
         .map((p) => ({ title: p.data.title, role: [p.data.jobTitle, p.data.affiliation].filter(Boolean).join(titleSeparator(locale)), href: entryPath('person', p) }))
     : [];
-// Blog posts whose relatedOfferings name this offering; relatedPosts picks and orders them, else
-// newest first (content-model.md「offering」). None filled yet, so the block stays out until the
-// content owner fills them (overrides.yaml)
-const linked = await getCollection(
-  'blog',
-  (b) => entryLocale(b.id) === locale && isPublished(b) && !!b.data.relatedOfferings?.some((r) => r.id === entry.id),
-);
-const picked = (data.relatedPosts ?? []).flatMap((r) => linked.filter((b) => b.id === r.id));
-const posts = (picked.length ? picked : linked.toSorted(newest)).slice(0, 3).map(postCard);
+// Blog posts whose relatedOfferings name this offering; relatedPosts, when set, picks and orders
+// them, else newest first (content-model.md「offering」: relatedPosts only lists linked posts, so
+// another post fails the build). None filled yet, so the block stays out until the content owner
+// fills them (overrides.yaml)
+const linked = await getCollection('blog', (b) => entryLocale(b.id) === locale && !!b.data.relatedOfferings?.some((r) => r.id === entry.id));
+const unlinked = (data.relatedPosts ?? []).filter((r) => !linked.some((b) => b.id === r.id)).map((r) => r.id);
+if (unlinked.length) throw new Error(`${entry.id}: relatedPosts lists posts whose relatedOfferings don't name it: ${unlinked.join(', ')}`);
+const posts = (data.relatedPosts?.length ? data.relatedPosts.flatMap((r) => linked.filter((b) => b.id === r.id)) : linked.toSorted(newest))
+  .filter(isPublished)
+  .slice(0, 3)
+  .map(postCard);
 const faq = data.faq ?? [];
 const hasDownloads = whitepapers.length + downloads.length > 0;
 // Related offerings and downloads share a row on wide screens when both are there; alone, related
