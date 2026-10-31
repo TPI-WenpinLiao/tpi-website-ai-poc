@@ -633,7 +633,7 @@ groups:
       - { id: open-banking-stage-3, type: metric, quote: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
       - { id: digirunner-open-banking-3-stages, type: feature, quote: 昕力資訊實現三階段開放銀行規範 }
       - { id: digirunner-open-banking-fsc, type: feature, quote: 昕力資訊 digiRunner API 管理平台反應台灣開放銀行金管會法規要求 }
-      - { id: digirunner-hot-deploy-50, type: feature, quote: digiRunner API 管理平台擁有專利的服務不中斷熱部署特點，在跨平台開發速度以及與下游應用系統的對接效率提升高達 50% }
+      - { id: digirunner-hot-deploy-50, type: feature, quote: digiRunner API 管理平台擁有專利的服務不中斷熱部署特點，在跨平台開發速度以及與下游應用系統的對接效率提升高達 50%, status: to_confirm, note: 成效數字（提升高達 50%）與「專利」都沒有依據或比較基準，與 TCO 低 40% 等同類宣稱一致處理 }
       - { id: digirunner-open-banking-security, type: feature, quote: 從資料傳輸層「隱密性、完整性、訊息來源、不可重覆」、資料層（資料完整性驗證、機敏個資加密、防駭攻擊）、行為層（OAuth2認證機制及授權時效、Client 授權及 IP Check）全方位防堵資安風險 }
       - { id: digirunner-open-banking-consulting, type: feature, quote: 昕力資訊專業顧問團隊，協助規劃建立符合各國開放銀行規範之技術架構。 }
       - { id: digirunner-oauth2, type: feature, quote: 符合 Oauth2 規範的身份驗證及 API 授權機制，介接格式統一，資料加密。 }
