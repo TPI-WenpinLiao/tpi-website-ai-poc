@@ -877,7 +877,7 @@
     quote: 昕力是台灣本土在 API 管理平台上，相較於國際來說，走得最前面，且是第一家開始投入相關技術的企業。昕力在 API 管理平台的技術和 Al 都提供很好的服務，在未來的開放銀行有很大的發揮效果，可擔任領頭羊，引領其他公司投入。
   locale: zh-TW
   status: to_confirm
-  note: 證言，對外使用要取得說話人同意；「第一家」是證言中的說法
+  note: 「第一家」是證言中的說法
 
 - id: testimonial-nccu-fintech-speaker
   type: case
@@ -886,8 +886,7 @@
     url: https://www.tpisoftware.com/
     quote: 王儷玲 教授 ｜政大金融科技研究中心主任
   locale: zh-TW
-  status: to_confirm
-  note: 人物與職稱，對外使用要取得同意，職稱可能已變
+  status: confirmed
 
 - id: testimonial-cathay-fhc
   type: case
@@ -897,7 +896,7 @@
     quote: 此次與昕力的合作我們就像同一個團隊般合作無間，目前SysTalk已經涵蓋了我們旗下50％以上的用戶服務量，在滿意度回饋上也超過了真人客服，透過昕力的最佳技術與完整客戶體驗的合作，我們獲得了相當好的成果。
   locale: zh-TW
   status: to_confirm
-  note: 客戶證言，對外使用要取得客戶同意；50％ 是當時的數字，可能過時
+  note: 50％ 是當時的數字，可能過時
 
 - id: testimonial-cathay-fhc-speaker
   type: case
@@ -906,8 +905,7 @@
     url: https://www.tpisoftware.com/
     quote: 姚旭杰 ｜國泰金控數數發中心資深副總
   locale: zh-TW
-  status: to_confirm
-  note: 人物與職稱，對外使用要取得同意，職稱可能已變；委外服務頁也引用這則證言
+  status: confirmed
 
 - id: testimonial-excellence-wire
   type: case
@@ -916,8 +914,7 @@
     url: https://www.tpisoftware.com/
     quote: 卓新是結構化綜合佈線領導廠商，客戶遍及全球各地，此次與昕力資訊合作，導入 RPA 流程自動化，不但改善了員工工作的效率，讓人才發揮最大的價值，在內部流程革新之下，促使企業營運朝數位轉型前進，以因應快速轉變的時代，為卓新發展帶來極大助益，並保持競爭力的關鍵！
   locale: zh-TW
-  status: to_confirm
-  note: 客戶證言，對外使用要取得客戶同意
+  status: confirmed
 
 - id: testimonial-excellence-wire-speaker
   type: case
@@ -926,8 +923,7 @@
     url: https://www.tpisoftware.com/
     quote: 楊秀鳳 ｜卓新工業業務副總
   locale: zh-TW
-  status: to_confirm
-  note: 人物與職稱，對外使用要取得同意，職稱可能已變
+  status: confirmed
 
 - id: testimonial-youbike
   type: case
@@ -936,8 +932,7 @@
     url: https://www.tpisoftware.com/
     quote: 一直以來我們都希望讓 YouBike 公共自行車不只是交通工具，而是能直接融入大眾生活，為民眾帶來便利的服務，而本次與昕力資訊合作的 AI 智能客服，導入之後，我們挖掘了一塊新的服務市場，我覺得這是我們最大的收穫；我們已經規劃第二階段的開發計畫，希望能夠持續跟昕力資訊一起合作，把我們的 YouBike 客服小管家智能客服精進，讓它整個服務面更廣闊。
   locale: zh-TW
-  status: to_confirm
-  note: 客戶證言，對外使用要取得客戶同意
+  status: confirmed
 
 - id: testimonial-youbike-speaker
   type: case
@@ -946,8 +941,7 @@
     url: https://www.tpisoftware.com/
     quote: 莊博欽 ｜微笑單車股份有限公司 企劃經理兼中營處長
   locale: zh-TW
-  status: to_confirm
-  note: 人物與職稱，對外使用要取得同意，職稱可能已變
+  status: confirmed
 
 - id: testimonial-shin-kong-bank
   type: case
@@ -956,8 +950,7 @@
     url: https://www.tpisoftware.com/
     quote: 在這個平台上它提供IT人員可以做後台管理也考慮到很多安控，昕力在這個產品上已經蠻替IT人員想到蠻多; 昕力在一些新進的技術上面其實一直都走得蠻前面的，也很願意分享給我們，那整個團隊的服務都非常棒，我們一定會再繼續跟他們合作。
   locale: zh-TW
-  status: to_confirm
-  note: 客戶證言，對外使用要取得客戶同意
+  status: confirmed
 
 - id: testimonial-shin-kong-bank-speaker
   type: case
@@ -966,8 +959,7 @@
     url: https://www.tpisoftware.com/
     quote: Dora 徐靜婷 ｜新光銀行數位資訊部資深經理
   locale: zh-TW
-  status: to_confirm
-  note: 人物與職稱，對外使用要取得同意，職稱可能已變
+  status: confirmed
 
 # --- Clients ---
 # One entry per client name as the site spells it (facts.mjs matches page copy against text); variants are separate entries
@@ -6302,5 +6294,4 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: 透過昕力的最佳技術與完整客戶體驗的合作，我們獲得了相當好的成果！
   locale: zh-TW
-  status: to_confirm
-  note: 首頁證言（testimonial-cathay-fhc）的摘錄，對外使用要取得客戶同意
+  status: confirmed

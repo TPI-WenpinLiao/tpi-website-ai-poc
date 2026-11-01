@@ -80,7 +80,7 @@
 | 5 | 金融通路的身分驗證 | gadoDIDO 給金融集團統一的身分驗證，一次註冊、跨通路使用；列出適用的金融業務（網銀、數位帳戶、證券開戶等）與保險投保流程。這是證券業唯一有具體事實的段落 | 決策者任務「了解產品與方案」（銀行、證券、保險通路）；`IT-2` | `金融科技 解決方案 台灣`：身分驗證 | `fact:gadodido-finance-group`、`fact:gadodido-finance-uses`、`fact:gadodido-insurance`、`fact:gadodido-fido-certified`、`fact:gadodido-passwordless` | 80–130 字 |
 | 6 | 保險業務的專用模組 | InsureBrick 依保險業務拆成模組、只買需要的模組；InsureRing 是保險產業的規則引擎，因應商品上下架、核保規則與法令調整。各帶一則具名案例（新光金保代、新光人壽），案例數字照事實原文。這段與子頁卡片合併 | 決策者任務「了解產品與方案」（保險）、「找成功案例」；`DM-5`、`IT-4` | — | `fact:insurebrick-platform`、`fact:insurebrick-28-modules`、`fact:insurebrick-scenarios`、`fact:insurebrick-buy-modules`、`fact:insurebrick-case-online-insurance`、`fact:insurebrick-case-shin-kong`、`fact:insurering-rule-engine`、`fact:insurering-automated-rules`、`fact:insurering-case-shin-kong-life` | 150–220 字，加子頁卡片 |
 | 7 | 規劃與導入由同一家負責 | 昕力的顧問協助規劃符合各國開放銀行規範的架構，AI 導入有情境分析、效益評估與模型微調；產品與導入不必分兩家找。作為聯絡前的最後一段 | 決策者任務「決定要不要聯絡業務」；`DM-4` | — | `fact:digirunner-open-banking-consulting`、`fact:systalk-ai-onboarding`、`fact:company-offerings` | 60–100 字 |
-| 8 | 金融業成功案例 | 精選 3–6 則與第 2–6 段對應的具名金融案例（`featuredCaseStudies`），連到成功案例列表（錨點「看所有成功案例」）。不列出全部。客戶名稱已可用（使用者決定，#165）；引言可帶昕力進入金融業的年份。建議的挑選見「待確認」第 1 項 | 決策者任務「找成功案例」；`DM-1`、`IT-4`、`DM-6` | `昕力資訊 金融`：昕力在金融業的實績 | `fact:digirunner-case-taishin`、`fact:client-taishin-bank`、`fact:client-entie-bank`、`fact:company-milestone-2008-finance` | 引言 20–40 字；卡片 3–6 則 |
+| 8 | 金融業成功案例 | 精選 4 則具名金融案例（`featuredCaseStudies`，使用者確認，#165），依段落對應：第 2、3 段對應台新銀行現金業務 API 管理平台（`taishin-cash-sales-api-management-platform`）、安泰銀行 API 管理平台（`entie-bank-api-management-platform`）；第 4 段對應國泰世華 AI 智能客服（`cathay-united-bank-ai-intelligent-customer-service-system`）、臺灣銀行 RPA（`bank-of-taiwan-robotic-process-automation-rpa`）。第 6 段的保險案例已在段落文字裡，卡片不重複。連到成功案例列表（錨點「看所有成功案例」），不列出全部；引言可帶昕力進入金融業的年份 | 決策者任務「找成功案例」；`DM-1`、`IT-4`、`DM-6` | `昕力資訊 金融`：昕力在金融業的實績 | `fact:digirunner-case-taishin`、`fact:client-taishin-bank`、`fact:client-entie-bank`、`fact:client-cathay-united-bank`、`fact:client-bank-of-taiwan`、`fact:company-milestone-2008-finance` | 引言 20–40 字；卡片 3–6 則 |
 | 9 | 聯絡業務 | 頁尾的主要轉換 | 主要轉換：聯絡業務 | — | 無 | 沿用模板的 `ContactCta` |
 
 ### 與現有頁面的差異
@@ -126,7 +126,7 @@
 | 4、8 | `/success-story` | 看所有成功案例 | 列表頁沒有產業篩選，錨點不能寫「金融業案例」，見「取捨」第 9 項 |
 | 5 | `/products/gadodido` | gadoDIDO 無密碼身分驗證 | |
 | 6 | `/products/insurebrick`、`/solutions/insurering` | 節點名稱 | 子頁卡片由模板產生 |
-| 8 | 精選案例內頁（`/success-story/{slug}`） | 案例標題（含客戶名稱） | `featuredCaseStudies` 挑選見「待確認」第 1 項 |
+| 8 | 精選案例內頁（`/success-story/{slug}`） | 案例標題（含客戶名稱） | `featuredCaseStudies` 照段落結構第 8 段的 4 則 |
 | 9 | `/contact-us` | 聯絡業務，談金融業的需求 | 主要轉換 |
 
 ### 連入
@@ -204,7 +204,7 @@ hub schema（`src/content.config.ts`）現有 `tagline`、`heroImage`、`industr
 
 | # | 事項 | 卡在哪 | 影響的段落 |
 |---|---|---|---|
-| 1 | 第 8 段精選哪幾則。客戶名稱已可用（使用者決定，#165），`client.disclosed: true` 照現站顯示即可，剩下的是挑選。建議依段落對應挑：第 2、3 段對應 `taishin-cash-sales-api-management-platform`、`entie-bank-api-management-platform`（兩者 `offerings` 都是 digiRunner）；第 4 段對應 `cathay-united-bank-ai-intelligent-customer-service-system`、`bank-of-taiwan-robotic-process-automation-rpa`；第 6 段的保險案例已在段落文字裡，卡片可以不重複 | 內容負責人決定最後的挑選與排序 | 8 |
+| 1 | 第 8 段的精選案例：已決定（使用者確認，#165），照建議的 4 則，見段落結構第 8 段。排序與卡片文字在製作階段定 | 無 | 8 |
 | 2 | 台灣開放銀行時程：`fact:open-banking-taiwan-2019`、`fact:open-banking-stage-1`、`fact:open-banking-stage-2`、`fact:open-banking-stage-3` | 要對照主管機關公告 | 2（目前只用「三階段規範」） |
 | 3 | 「國內唯一符合金管會法令」「100% 符合金融檢查規範」：`fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100` | 最高級與 100% 沒有依據 | 2 |
 | 4 | `nodes.csv` 寫「其餘介紹需人工提供」。本 brief 用事實庫既有的事實補了第 3–8 段；內容負責人若有其他想放的主題（例如證券業的專屬方案、金融業的客戶數），要先收進事實庫 | 事實庫沒有 | 新段落 |

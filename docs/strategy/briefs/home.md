@@ -179,7 +179,7 @@ hero 的次要按鈕從「產品總覽」改成「依產業看方案」：決策
 
 | # | 事項 | 卡在哪 | 影響的段落 |
 |---|---|---|---|
-| 1 | 獎項與客戶證言能不能放首頁。最直接的第三方證據是台灣精品獎（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`）、Gartner Cool Vendor（`fact:award-gartner-cool-vendor-2018`）與客戶證言（`fact:testimonial-cathay-fhc`、`fact:testimonial-shin-kong-bank`）。客戶名稱本身已可用（使用者決定，#165），不在此列 | 獎項有年份可能過時；證言含說話人姓名與職稱，仍要確認授權。確認前第 7 段只用已確認的公司資料 | 7（確認後可加獎項或證言） |
+| 1 | 獎項能不能放首頁：台灣精品獎（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`）、Gartner Cool Vendor（`fact:award-gartner-cool-vendor-2018`）。客戶名稱與證言已視為已授權（使用者決定，#165），例如 `fact:testimonial-shin-kong-bank`、`fact:testimonial-cathay-fhc-excerpt`；要不要在第 7 段加一則證言，交設計概念與製作階段決定 | 獎項有年份，可能過時。確認前第 7 段只用已確認的公司資料 | 7（確認後可加獎項；證言可直接加） |
 | 2 | 規模數字：`fact:company-employees-630`、`fact:company-projects-400` | 統計時間不明 | 7 |
 | 3 | 製造業之後要不要回到首頁。目前已決定 hero 與產業入口不點名製造業（使用者決定，#165）；製造業頁（`src/content/hub/zh-TW/industry-manufacturing.md`）有內容並產生頁面後，再決定要不要加回產業入口 | `nodes.csv` 寫「現站沒有製造業內容，需人工提供」；messaging 缺少證據第 13 項 | 2（之後） |
 | 4 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答；messaging 缺少證據第 14 項 | 8 |
