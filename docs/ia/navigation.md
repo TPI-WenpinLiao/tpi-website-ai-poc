@@ -82,8 +82,8 @@ M4-04 實作、M4-05 axe 檢查時對照下列項目。
 | 節點 | 原因 | 從哪裡連到 |
 |---|---|---|
 | `textualanalysis`、`interactivehealth`、`gis` | sitemap 標為「待確認是否仍銷售」，現站也不在導覽 | 所屬產品家族頁或產業頁內文 |
-| `insurebrick`、`insurering` | 仍在銷售（#165 使用者確認），現站不在導覽 | 金融產業頁內文與子頁卡片 |
 | `digilogs-detection` | 同上，且為第四層 | digiLogs 產品頁 |
+| `insurebrick`、`insurering` | 仍在銷售（#165 使用者確認），現站不在導覽 | 金融產業頁內文與子頁卡片 |
 | `digirunner-cloud`、`digilogs-iso27001` | 第四層 | 上一層產品頁（digiRunner、digiLogs） |
 | 部落格 5 個分類（`blog-ai`、`blog-digital-transformation`、`blog-enterprise-management`、`blog-esg`、`blog-use-cases`） | 部落格頁內的分類篩選 | 部落格列表頁 |
 | `utilities` 群組（搜尋結果、訂閱流程、感謝頁、404 等） | 功能頁；script 豁免，不列在 `navigation.csv` 的 `none` | 搜尋按鈕、表單送出後；電子報訂閱另放在 footer |

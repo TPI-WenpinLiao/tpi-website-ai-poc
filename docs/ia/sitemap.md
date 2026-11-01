@@ -66,7 +66,7 @@ node scripts/ia/sitemap.mjs           # 產生 page-map.csv、sitemap-summary.js
 | # | 項目 | 採用 |
 |---|---|---|
 | 1 | 日文版 | 不支援。`/ja`、`/ja/partners` 都回 500，日文不在受眾語系（zh-TW、en、vi）。M2-05 將 `/ja/*` 301 到 `/en` |
-| 2 | 不在導覽的產品／方案 | 保留節點，但不進主導覽，`note` 標「待確認」：`textualanalysis`、`digilogs-detection`、`interactivehealth`、`insurebrick`、`insurering`、`gis`。M5 遷移前內容負責人沒有確認仍在銷售的，改 merge 到所屬產品或產業頁。開放銀行、開放政府見第 3 項 |
+| 2 | 不在導覽的產品／方案 | 保留節點，但不進主導覽，`note` 標「待確認」：`textualanalysis`、`digilogs-detection`、`interactivehealth`、`insurebrick`、`insurering`、`gis`（#165 確認 `insurebrick`、`insurering` 仍在銷售）。M5 遷移前內容負責人沒有確認仍在銷售的，改 merge 到所屬產品或產業頁。開放銀行、開放政府見第 3 項 |
 | 3 | 主題重疊的頁面 | `/genai-solution` 併入 `/products/systalk-chat` 的導入服務段落；`/products/open-banking` 併入「金融」產業頁、`/products/open-government` 併入「政府與公部門」產業頁，digiRunner 頁連到這兩頁；`/products/esgswift` 改為 ESGswift 家族頁，GreenSwift、ElectriSwift 為子頁；`/carbon` 併入 GreenSwift（原為 drop） |
 | 4 | 舊 `/solutions/*` 路由 | `bnpl`、`devops`、`ibmb`、`smartbuilding`、`smartpushnotifications` 不建對應頁。M2-05 將它們 301 到最相關的產業頁或產品總覽，不再導到首頁（導到首頁容易被搜尋引擎視為 soft 404）。其他仍有內容的 `/solutions/*` 已放進產品家族、產業方案或服務 |
 | 5 | blog 分類 | 三語共用一套單層分類，見下表。現站子分類與 `Featured` 改為 tag（M2-04 定欄位）；52 個分類頁 merge 到對應的新分類 |
