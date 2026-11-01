@@ -70,6 +70,7 @@ description: 分階段流程的設計概念階段使用：從 messaging 推出�
 | house rule 禁用紫／靛（`palette-purple`） | 品牌色（紫、品紅、橘）完整使用，可以當 accent 標接點、狀態與重點；inspector 加 `--allow palette-purple` |
 | 其他 house rules（等寬字、eyebrow、編號、細線、漸層、玻璃）與設計原則不同 | 以 house rules 為準，`design-principles.md` 的「會怎麼呈現」跟著改 |
 | 圖片：每頁至少 4 張真實圖片 | 不用開放圖庫的照片。影像是 HTML 做的產品介面片段（根元素加 `data-ui`，標「示意」，文字只用事實庫原文）與 SVG 架構圖解，可沿用 `src/assets/design/` 的抽象渲染；inspector 的圖片數量由介面片段滿足 |
+| 第四輪（使用者 2026-11-01 決定）：要像品牌形象網站、有驚豔感 | 首頁縮成 4–5 個全螢幕段落，每段一句大標題＋最多一句說明或一則事實，細節移到產品、產業頁；原型可用 three.js（WebGL）與 GSAP 做沉浸式場景與捲動敘事，README 寫出 JS 大小與 Lighthouse 代價；大標題用中文 webfont（只取用到的字）；方向數 2 個 |
 | scroll scene 從 CDN 載 GSAP、Lenis | 原型要能離線開（`concept-shots.mjs` 擋外部請求）：用 `npm pack` 下載到 `/tmp`、複製到方向目錄，附授權檔，不改 `package.json` |
 
 雲端 session 的執行方式：
