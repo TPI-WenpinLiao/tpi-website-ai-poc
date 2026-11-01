@@ -29,6 +29,10 @@ description: 分階段流程的策略與製作階段使用：messaging framework
 
 策略階段的關卡是人工加上 `strategy-approved`，之後才進設計概念階段。
 
+### 引用事實的寫法
+
+messaging 與 brief 引用事實一律寫成 `` `fact:<id>` ``（對應 TS 資料檔的 `fact('<id>')`），跟路徑、節點 id 等反引號字串分開。`node scripts/strategy/facts.mjs`（在 `npm run check` 裡）檢查 `docs/strategy/messaging.md` 與 `docs/strategy/briefs/*.md` 的每個引用：事實要存在、是 zh-TW、`status: confirmed`。`to_confirm` 的事實只能寫在標題含「缺少證據」或「待確認」的段落（含其子段落），寫在其他地方就失敗。
+
 ## 1. Messaging framework
 
 `messaging.md` 依序寫：

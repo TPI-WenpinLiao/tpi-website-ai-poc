@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-10-31
+最後更新：2026-11-01
 
 ## 目前 milestone
 
@@ -103,6 +103,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - M6-04 GTM 與 consent 管理完成（#36，`design-approved`）：新元件 `ConsentBanner`（底部的深色橫幅，加上原生 `<dialog>` 的偏好設定）與頁尾的「Cookie 設定」，只在 build 有 `PUBLIC_GTM_ID` 時由 `PageLayout` 輸出。同意至少一個非必要類別前不載入 gtm.js，也沒有 `dataLayer`，不用 Consent Mode 的 advanced 模式；選擇存在 `localStorage` 的 `tpi-consent`，撤回時重新載入頁面。類別與三語文案在 `src/data/consent.ts`，目前是 `draft: true` 的佔位內容，有 ID 但還是 draft 時 build 失敗。`node scripts/consent/gtm.mjs` 接進 `npm run check`：用測試 ID 另外 build 一份，在瀏覽器檢查同意前沒有站外請求、拒絕、同意、撤回與鍵盤操作（ADR 0007）
 - M6-05 M6 收尾完成（#37）：`CLAUDE.md` 新增「功能模組」：互動寫在元件內的 `<script>`、不碰 DOM 的判斷放 `src/lib/<模組>/` 寫單元測試、頁面載入時不連站外網域、secret 只放環境變數，以及表單、站內搜尋、影片、cookie 同意與 GTM 各一條規則（細節連到 ADR 0005–0007 與 `design-system` 元件表）。「技術棧」、ADR 0001 與 `typescript-best-practices` 的「互動才用 island（`client:*`）」改成實際寫法（`src/` 沒有 `client:*`）。`pr-review` 固定檢查加上站外請求與 secret 一列
 - `dist/` 沒變時不重跑 Lighthouse 完成（#149）：`npm run lighthouse` 通過後把 `.lhci-dist/` 與量測設定（`scripts/lhci-pass.mjs` 的 `INPUTS` 與 `LHCI_*` 環境變數）的 key 寫到 `.lighthouseci/passed-dist.sha256`，下次 key 相同就跳過並印出 key，`LIGHTHOUSE_FORCE=1` 強制重量，`lighthouse:all` 不受影響。quality-gate 用同一個 key 做 cache，同一個 PR 量過且通過的 `dist/` 不重量，job summary 寫明。`issue-start` 的環境檢查改跑 `npm run check:before-lighthouse`（ADR 0004「例外：量過且通過的 `dist/` 不重量」）。#150 與它重複，已關閉
+- `dist/` 沒變時 `npm run check` 跳過 Lighthouse（#150）：與 #149 重複，已關閉，沒有另外的變更
 
 ### M7 多語系
 
@@ -138,11 +139,12 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 角色 agent 與分階段流程完成（#162）：`CLAUDE.md`「專案目標」改為驗證 AI 開發官網的品質、不上線，不做 Search Console、GTM 的實際設定，`launch-readiness.md` 標為範圍外。新增 5 個 agent（`.claude/agents/`：researcher、content-strategist、seo-strategist、design-director、reviewer）與 4 個 skill（site-research、content-strategy、design-concept、site-review，rubric 三份在 `site-review/rubrics/`，評分項目與門檻經使用者確認：每份平均 ≥ 4.0 且沒有一項 < 3）；本站專屬的設定集中在 `docs/strategy/site-profile.md`。`docs/workflow.md` 新增「分階段流程」：新頁面、改版、內容大改依序走研究、策略、設計概念、製作、評審。新 label `strategy-approved`；issue 本身有「## 關卡」段落時不進自動模式。`scripts/docs/claude-md.mjs` 的 `PARENTS` 加上 `.claude`
 - 文案規則改為事實可追溯、表述可原創（#163）：`CLAUDE.md`「內容規則」把文案分成事實與表述。事實庫 `docs/strategy/facts.yaml`（schema 與 `fact()` 在 `src/data/facts.ts`）先收首頁與 footer 用到的 29 筆，完整的事實庫在 #164 建立。`node scripts/strategy/facts.mjs` 接進 `npm run check`：檢查事實庫格式、頁面引用的事實存在且 `confirmed`，以及首頁、`site.ts` 與 `sourceUrl: []` 或有 `facts` 欄位的內容檔，文案的數字與客戶名稱要在引用的事實裡；`--sources` 連現站比對原文（29/29），取代刪除的 `scripts/design/home-content.mjs`。首頁三語的事實改用 `fact()`、表述改成字串，文字不變（build 出的 `dist/` 逐檔相同）。content schema 共用欄位加 `facts`
 - 分階段流程的研究完成（#164）：事實庫改由 `node scripts/strategy/extract-facts.mjs` 從 `scripts/strategy/facts-source.yaml` 產生，675 筆（zh-TW 657、en 9、vi 9；confirmed 456、to_confirm 219），候選報告 `docs/strategy/facts-candidates.md` 59 頁未收 0。`facts.mjs --sources` 也找頁面載入的 Nuxt chunk，加上 `--locales`（`www.tpisoftware.vn` 在雲端 session 連不上）。另有試點三頁的未搬內容盤點 `unmigrated.md`、4 家競品分析與截圖 `competitors.md`（`competitor-shots.mjs`）、三頁各 8 組查詢的 `search-intent.md`；Bing 台灣在雲端 session 回傳無關結果，搜尋意圖改用 WebSearch（US）
+- 分階段流程的策略（#165），階段一，等待 strategy-approved：`docs/strategy/messaging.md`（定位、決策者 DM-1～DM-7 與 IT 主管 IT-1～IT-8 的主張，每個主張至少 3 個 confirmed 事實，14 項缺少證據的主張）與試點三頁的 content brief `docs/strategy/briefs/`（home、digirunner、finance），由 `content-strategist` 與 `seo-strategist` 依序寫，衝突寫在各 brief 的「取捨」。`node scripts/strategy/facts.mjs` 也檢查這些文件的 `` `fact:<id>` `` 引用：要存在、zh-TW、confirmed，`to_confirm` 只能在「缺少證據」「待確認」標題下
 
 ## 下一步
 
 - 在 Actions 手動執行一次 `bootstrap` workflow，建立 `strategy-approved` label（#162 加進 `labels.yml`，雲端 session 沒有建 label 的工具）
-- 分階段流程的策略（#165）可以開始：研究產出在 `docs/strategy/`（事實庫、`unmigrated.md`、`competitors.md`、`search-intent.md`）
+- 看 #165 的 messaging 與三份 brief（`docs/strategy/messaging.md`、`docs/strategy/briefs/`），回覆 PR 的「待確認」，確認後在 #165 加上 `strategy-approved`；之後 #165 階段二依意見修正，合併後設計概念（#166）才能開始
 - 回覆 #164 PR 的「待確認」：219 筆 `to_confirm` 事實（客戶名稱與證言的授權、獎項年份、沒有依據的成效數字與最高級宣稱、現站各頁說法不一致）；`www.tpisoftware.vn` 恢復後跑一次 `node scripts/strategy/facts.mjs --sources`
 - 回覆 #159 PR 的「待確認」：沒搬的段落、組成或刪減的 description、vi `/resource` 的標題是英文「Resource Center」
 - 回覆 #137 後續 PR（en 知識邊界一文對應 zh-TW 版）的「待確認」：en 版多一段上線第一週的問卷數字（40 份有效回覆、90% 用過等），zh-TW 沒有；要不要補到 zh-TW、數字是否經客戶同意公開

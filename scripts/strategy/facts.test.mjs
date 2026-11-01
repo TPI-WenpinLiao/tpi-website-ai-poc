@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { bodyCopy, checkPage, copyStrings, factCalls, markdownPage, numbers, validateFacts } from './facts.mjs';
+import { bodyCopy, checkPage, checkStrategyDoc, copyStrings, factCalls, markdownPage, numbers, validateFacts } from './facts.mjs';
 
 const entry = (over = {}) => ({
   id: 'smartclaim-result',
@@ -100,4 +100,20 @@ test('bodyCopy drops code, tags, link targets and ordered-list markers', () => {
   const page = markdownPage('src/content/hub/zh-TW/x.md', '---\ntitle: 測試\nsourceUrl: []\nfacts: []\n---\n\n1. 盤點需求\n2. 建置平台\n');
   assert.deepEqual(checkPage(page, facts), []);
   assert.equal(bodyCopy('見[案例](/case/2024)與 `v2` <img src="a1.png"> 文字').replace(/\s+/g, ' '), '見[案例]與 文字');
+});
+
+test('a strategy document cites confirmed zh-TW facts, and pending ones only under a missing-evidence heading', () => {
+  const doc = (md) => checkStrategyDoc('messaging.md', md, facts).errors;
+  assert.deepEqual(doc('## 價值主張\n\n- 省人力：`fact:smartclaim-result`'), []);
+  assert.match(doc('## 價值主張\n\n- `fact:nope`')[0], /messaging\.md:3: fact nope is not in/);
+  assert.match(doc('- `fact:smartclaim-result-en`')[0], /is en, the document is zh-TW/);
+  assert.match(doc('## 價值主張\n\n- `fact:pending-award`')[0], /to_confirm; cite it only under/);
+  // Allowed under a 缺少證據 or 待確認 heading, including its subsections, until a sibling heading ends it
+  assert.deepEqual(doc('## 缺少證據的主張\n\n### 得獎\n\n- `fact:pending-award`'), []);
+  assert.deepEqual(doc('## 待確認\n\n- `fact:pending-award`'), []);
+  assert.equal(doc('## 缺少證據的主張\n\n## 證據對照\n\n- `fact:pending-award`').length, 1);
+  // Headings and citations inside code fences are not read as such
+  assert.equal(doc('## 缺少證據\n\n```\n## x\n```\n- `fact:pending-award`').length, 0);
+  // Plain backticked ids (paths, nodes, labels) are not citations
+  assert.deepEqual(checkStrategyDoc('b.md', '`industry-finance` `pending-award`', facts).cited, []);
 });

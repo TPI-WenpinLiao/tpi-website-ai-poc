@@ -14,7 +14,10 @@
 // Pages checked: src/data/home/<locale>.ts and src/data/site.ts (every exported string; facts used
 // via fact('<id>') in the source), and the Markdown entries of src/content that are not verbatim
 // migrations: `sourceUrl: []` or a `facts` field (frontmatter strings and body; facts listed in `facts`).
-import { readdirSync, readFileSync } from 'node:fs';
+// Strategy documents (#165): docs/strategy/messaging.md and docs/strategy/briefs/*.md cite facts as
+// `fact:<id>`; each must exist and be zh-TW, and confirmed unless it sits under a heading that names
+// it as missing evidence (缺少證據) or to confirm (待確認).
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'yaml';
@@ -160,6 +163,52 @@ export function markdownPage(name, source) {
 export const factCalls = (source) =>
   [...source.replace(/\/\*[\s\S]*?\*\/|^\s*\/\/.*$/gm, '').matchAll(/\bfact\(\s*(['"])([^'"]+)\1\s*\)/g)].map((m) => m[2]);
 
+// Headings under which a strategy document may cite facts that are not confirmed yet
+const PENDING_HEADING = /缺少證據|待確認/;
+
+/**
+ * Problems of a strategy document (messaging or content brief): every `fact:<id>` it cites must exist and be in
+ * its locale, and be confirmed unless a heading above it (any level) is a missing-evidence or to-confirm section
+ * @param {string} name
+ * @param {string} md
+ * @param {Map<string, { locale: string, status: string }>} facts
+ * @param {string} [locale]
+ * @returns {{ errors: string[], cited: string[] }}
+ */
+export function checkStrategyDoc(name, md, facts, locale = 'zh-TW') {
+  const errors = [];
+  const cited = [];
+  /** @type {string[]} heading text by level - 1 */
+  const headings = [];
+  let fenced = false;
+  md.split('\n').forEach((line, i) => {
+    if (/^\s*```/.test(line)) fenced = !fenced;
+    const h = fenced ? null : /^(#{1,6})\s+(.*)$/.exec(line);
+    if (h) {
+      headings.length = h[1].length - 1;
+      headings[h[1].length - 1] = h[2];
+      return;
+    }
+    const pendingAllowed = headings.some((t) => t && PENDING_HEADING.test(t));
+    for (const m of line.matchAll(/`fact:([^`\s]+)`/g)) {
+      const id = m[1];
+      const f = facts.get(id);
+      const at = `${name}:${i + 1}`;
+      cited.push(id);
+      if (!f) errors.push(`${at}: fact ${id} is not in ${FACTS_FILE}`);
+      else if (f.locale !== locale) errors.push(`${at}: fact ${id} is ${f.locale}, the document is ${locale}`);
+      else if (f.status !== 'confirmed' && !pendingAllowed) errors.push(`${at}: fact ${id} is ${f.status}; cite it only under a 缺少證據 or 待確認 heading`);
+    }
+  });
+  return { errors, cited };
+}
+
+function strategyDocs() {
+  const briefs = join(ROOT, 'docs/strategy/briefs');
+  const files = [join(ROOT, 'docs/strategy/messaging.md'), ...(existsSync(briefs) ? readdirSync(briefs).filter((f) => f.endsWith('.md')).map((f) => join(briefs, f)) : [])];
+  return files.filter((p) => existsSync(p)).map((p) => ({ name: relative(ROOT, p).split('\\').join('/'), md: readFileSync(p, 'utf8') }));
+}
+
 function* walk(dir) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
@@ -223,10 +272,12 @@ async function main() {
 
   const facts = new Map(data.map((f) => [f.id, f]));
   const pages = [...(await dataPages()), ...contentPages()];
-  const errors = pages.flatMap((p) => checkPage(p, facts));
+  const docs = strategyDocs().map((d) => ({ name: d.name, ...checkStrategyDoc(d.name, d.md, facts) }));
+  const errors = [...pages.flatMap((p) => checkPage(p, facts)), ...docs.flatMap((d) => d.errors)];
   for (const e of errors) console.error(e);
   const used = new Set(pages.flatMap((p) => p.uses));
-  console.log(`${facts.size} facts, ${pages.length} pages checked (${used.size} facts used), ${errors.length} problems`);
+  const cited = new Set(docs.flatMap((d) => d.cited));
+  console.log(`${facts.size} facts, ${pages.length} pages checked (${used.size} facts used), ${docs.length} strategy documents (${cited.size} facts cited), ${errors.length} problems`);
   process.exit(errors.length ? 1 : 0);
 }
 
