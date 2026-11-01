@@ -6,9 +6,11 @@
 //      with prefers-reduced-motion: reduce, so scroll and entrance animations show their end state
 //   2. a request to anything but a file:// URL, a console error or an uncaught exception fails the
 //      direction: a prototype must open offline, with its fonts and images in its own directory
-//   3. after the web fonts finish loading, two images are saved per width in the direction's directory:
+//   3. a page without <meta name="robots" content="noindex, ..."> fails: prototypes are shared through
+//      third-party renderers of the public repo, out of reach of public/_headers and robots.txt
+//   4. after the web fonts finish loading, two images are saved per width in the direction's directory:
 //      shot-<width>.png (full page) and shot-<width>-first.png (first screen, for rubric item D1)
-//   4. an image over 1 MB is saved as JPEG quality 80 instead (.jpg), so the repo stays small
+//   5. an image over 1 MB is saved as JPEG quality 80 instead (.jpg), so the repo stays small
 //
 // Re-running overwrites the same files. Exits 1 when any direction failed.
 //
@@ -56,6 +58,10 @@ async function shoot(browser, dir, viewport) {
       await save(page, join(dir, `shot-${viewport.width}`), { fullPage: true }),
       await save(page, join(dir, `shot-${viewport.width}-first`), {}),
     ];
+    // Prototypes are opened through third-party renderers of the public repo, out of reach of
+    // public/_headers and robots.txt, so each one has to ask not to be indexed itself (#166).
+    const robots = await page.evaluate(() => document.querySelector('meta[name="robots"]')?.content ?? '');
+    if (!/noindex/.test(robots)) problems.push('missing <meta name="robots" content="noindex, nofollow">');
     const scroll = await page.evaluate(() => document.documentElement.scrollWidth);
     if (scroll > viewport.width) problems.push(`horizontal overflow: scrollWidth ${scroll} > ${viewport.width}`);
     for (const file of files) console.log(`${file}\t${Math.round((await stat(file)).size / 1024)} KB`);
