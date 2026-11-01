@@ -39,6 +39,8 @@ description: 分階段流程的設計概念階段使用：從 messaging 推出�
 
 原則要能用來否決設計。「簡潔現代」否決不了任何東西，不算原則。
 
+文件提到事實時照 `content-strategy` 的寫法用 `` `fact:<id>` ``，`node scripts/strategy/facts.mjs`（`npm run check`）也檢查 `design-principles.md`，規則同 messaging。
+
 ## 2. 參考對照
 
 - 引用 `competitors.md` 的觀察，不重做競品分析
