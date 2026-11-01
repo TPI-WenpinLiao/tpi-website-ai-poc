@@ -2,11 +2,11 @@
 
 這一版依 `taste-skill` 的 house rules 改過（2026-11-01，使用者決定）：原則本身與依據不變，「會怎麼呈現」「不會怎麼呈現」與「原則與現有限制」改成不違反 house rules 的做法，衝突時的處理見 `.claude/skills/design-concept/SKILL.md`「用 `taste-skill` 檢查原型」。第三輪再改一次（2026-11-01，使用者決定）：品牌色（紫、品紅、橘）完整使用，影像改成 HTML 產品介面片段與 SVG 架構圖解，不用開放圖庫的照片；三個方向由 `design-director` 以軟體、技術公司的網站為參考定義，寫在 `docs/strategy/concepts/directions.md`。
 
-本檔是分階段流程設計概念階段的第一份產出（`.claude/skills/design-concept/SKILL.md`「1. 設計原則」「2. 參考對照」）。它決定試點頁（`docs/strategy/site-profile.md`「試點頁面」）在畫面上要傳達什麼，用來否決不符合的設計。第 2 階段五個方向的首頁原型（`docs/strategy/concepts/<direction>/`），每個主要視覺決定都要指到這裡的一條原則（P1…P5）；`reviewer` 的設計 rubric D2「與設計原則一致」也拿本檔評分。五個方向共用的論點與文案在 `docs/strategy/concepts/argument.md`、`docs/strategy/concepts/copy-deck.md`。
+本檔是分階段流程設計概念階段的第一份產出（`.claude/skills/design-concept/SKILL.md`「1. 設計原則」「2. 參考對照」）。它決定試點頁（`docs/strategy/site-profile.md`「試點頁面」）在畫面上要傳達什麼，用來否決不符合的設計。各方向的首頁原型（`docs/strategy/concepts/<direction>/`），每個主要視覺決定都要指到這裡的一條原則（P1…P5）；`reviewer` 的設計 rubric D2「與設計原則一致」也拿本檔評分。各方向共用的論點與文案在 `docs/strategy/concepts/argument.md`、`docs/strategy/concepts/copy-deck.md`。
 
 - 輸入：`docs/strategy/messaging.md`（#165，`strategy-approved`）的定位句、`DM-1`～`DM-7`、`IT-1`～`IT-8` 與「語氣與用詞」；`docs/strategy/briefs/home.md` 的段落結構與 CTA，另兩份 brief（`digirunner.md`、`finance.md`）；`docs/strategy/competitors.md` 與 `docs/strategy/competitors/*.png`；現有設計系統（`design-system` skill、`src/styles/tokens.css`、`docs/design/motion.md`、ADR 0003、`docs/design/brand-assets.md`）
-- 原則限制「傳達什麼」，不規定唯一的樣式。每條原則最後一列寫五個方向可以在哪裡不同；亮色或深色、有沒有 3D、用不用插圖，都不是原則決定的事
-- 「會怎麼呈現」寫的是原則在 house rules 之內的做法；版面、字體與配色的實際數值照各方向的 direction sheet（`docs/strategy/concepts/<direction>/sheet.md`）
+- 原則限制「傳達什麼」，不規定唯一的樣式。每條原則最後一列寫各方向可以在哪裡不同；亮色或深色、有沒有 3D、用不用插圖，都不是原則決定的事
+- 「會怎麼呈現」寫的是原則在 house rules 之內的做法；版面、字體與配色的實際數值照 `docs/strategy/concepts/directions.md` 的方向定義
 - 事實寫成反引號包住的 `fact:` 加事實 id，只用 `docs/strategy/facts.yaml` 裡 `locale: zh-TW`、`status: confirmed` 的條目。本檔不寫文案；原型的文字照 brief 與 messaging，缺的標為待補
 
 ## 原則一覽
@@ -41,7 +41,7 @@
 - h1 上方的 eyebrow、膠囊標籤、「New」小標，或用大寫小字加字距的標籤（house rules）
 - 第一屏出現「數位轉型」「頂尖」「賦能」等 messaging「本站不用的字」當主視覺文字
 
-五個方向可以不同的地方：hero 的構圖（文字左右分欄、句子被畫面拆開、文字壓在平塗色塊上、文字加下方的介面片段）、影像的種類、深色或亮色的底色。
+各方向可以不同的地方：hero 的構圖（文字左右分欄、句子被畫面拆開、文字壓在平塗色塊上、文字加下方的介面片段）、影像的種類、深色或亮色的底色。
 
 ## P2 證據長得像紀錄：事實原文、條件與出處擺在一起，跟表述分開
 
@@ -65,7 +65,7 @@
 - 等寬字的資料標籤、eyebrow 小標、01／02／03 的編號、細線框起來的卡片、一排同樣大小的證據卡（house rules）。有順序時用真正的 `<ol>` 或位置表示
 - 把 `to_confirm` 的獎項、員工數、專案數放進畫面（messaging「缺少證據的主張」第 2、3 項）；原型裡也不放假數字、範例客戶或範例證言佔位，缺的寫「待補」
 
-五個方向可以不同的地方：紀錄格式的長相（表格、時間軸、整段文字裡的標示、頁邊註記）、證據段在頁面上的位置與面積。
+各方向可以不同的地方：紀錄格式的長相（表格、時間軸、整段文字裡的標示、頁邊註記）、證據段在頁面上的位置與面積。
 
 ## P3 畫的是「接進既有系統」，不是「全新的未來」
 
@@ -89,7 +89,7 @@
 - 把產品家族做成同一種卡片加 icon 的格子，讀不出各自解決什麼問題（house rule：no icon-topped feature cards）
 - 灰色長條拼成的假儀表板、裝進筆電或瀏覽器外框的截圖、發光或玻璃質感的接點（house rules）
 
-五個方向可以不同的地方：用介面片段或 SVG 架構圖解表達接點；接點畫在 hero、案例段還是產品家族段。
+各方向可以不同的地方：用介面片段或 SVG 架構圖解表達接點；接點畫在 hero、案例段還是產品家族段。
 
 ## P4 克制與可預期：光與動態只標示資料、狀態與下一步
 
@@ -113,7 +113,7 @@
 - 浮動聊天視窗、會遮住內容的彈出層（`competitors.md`「不適合本站」）
 - 需要猜的互動：只有 hover 才看得到的關鍵資訊、沒有文字標籤的 icon 按鈕
 
-五個方向可以不同的地方：底色的深淺（深色場景、亮色紙面或整片的色塊）、平塗色塊的多寡、固定聯絡入口的形式（header 按鈕或段落裡的入口）。
+各方向可以不同的地方：底色的深淺（深色場景、亮色紙面或整片的色塊）、平塗色塊的多寡、固定聯絡入口的形式（header 按鈕或段落裡的入口）。
 
 ## P5 版面照讀者的判斷順序分輕重，每段回答一個問題
 
@@ -136,7 +136,7 @@
 - 超過半個螢幕高的空白，或一段的文字擠在一側、另一半螢幕空著（house rules）
 - 375 寬時把桌機的多欄直接堆成一長串，產業入口被推到第四、五屏之後
 
-五個方向可以不同的地方：段落的分組方式、各段的版型（全寬、雙欄、索引表、整片色塊）、頁面總長度。
+各方向可以不同的地方：段落的分組方式、各段的版型（全寬、雙欄、索引表、整片色塊）、頁面總長度。
 
 ## 原則與現有限制
 
@@ -150,7 +150,7 @@
 | 色彩只用 `tokens.css` 的 token，品牌三色沿用現站，橘 500 只當裝飾 | `design-system`「規則」「Token 分層」、`docs/design/brand-assets.md`「品牌色」 | P2、P4：事實與接點的配色要在每一種底色上都過對比 |
 | 影像只用抽象 3D 渲染，不放文字、數字、人物、真實產品 | `design-system`「影像」 | P3：用介面片段、SVG 架構圖解表達接點時要放寬 |
 
-`taste-skill` 的 house rules 另外帶來下面的限制（使用者 2026-11-01 決定以 house rules 為準）。它們和上表的現有規則有幾處衝突，五個方向的原型照這張表做，選定方向後由製作階段改 `design-system` skill 與 `tokens.css`。
+`taste-skill` 的 house rules 另外帶來下面的限制（使用者 2026-11-01 決定以 house rules 為準）。它們和上表的現有規則有幾處衝突，各方向的原型照這張表做，選定方向後由製作階段改 `design-system` skill 與 `tokens.css`。
 
 | house rules 帶來的限制 | 和現有規則的關係 | 碰到的原則 |
 |---|---|---|
