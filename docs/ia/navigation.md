@@ -81,8 +81,9 @@ M4-04 實作、M4-05 axe 檢查時對照下列項目。
 
 | 節點 | 原因 | 從哪裡連到 |
 |---|---|---|
-| `textualanalysis`、`interactivehealth`、`insurebrick`、`insurering`、`gis` | sitemap 標為「待確認是否仍銷售」，現站也不在導覽 | 所屬產品家族頁或產業頁內文 |
+| `textualanalysis`、`interactivehealth`、`gis` | sitemap 標為「待確認是否仍銷售」，現站也不在導覽 | 所屬產品家族頁或產業頁內文 |
 | `digilogs-detection` | 同上，且為第四層 | digiLogs 產品頁 |
+| `insurebrick`、`insurering` | 仍在銷售（#165 使用者確認），現站不在導覽 | 金融產業頁內文與子頁卡片 |
 | `digirunner-cloud`、`digilogs-iso27001` | 第四層 | 上一層產品頁（digiRunner、digiLogs） |
 | 部落格 5 個分類（`blog-ai`、`blog-digital-transformation`、`blog-enterprise-management`、`blog-esg`、`blog-use-cases`） | 部落格頁內的分類篩選 | 部落格列表頁 |
 | `utilities` 群組（搜尋結果、訂閱流程、感謝頁、404 等） | 功能頁；script 豁免，不列在 `navigation.csv` 的 `none` | 搜尋按鈕、表單送出後；電子報訂閱另放在 footer |
@@ -324,8 +325,8 @@ sitemap 中所有頁面與外部連結（不含功能頁群組）都要出現在
 | 　　　ElectriSwift 智慧能源管理系統（`electriswift`） | header：產品 > ESG 與能源（ESGswift） > ElectriSwift 智慧能源管理系統 |
 | 　產業方案（`industries`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |
 | 　　金融（`industry-finance`） | header：產業方案 > 金融<br/>footer：產業方案 > 金融 |
-| 　　　InsureBrick 保險科技模組化平台（`insurebrick`） | 不進導覽：待確認是否仍銷售；從所屬家族頁或產業頁內文連結 |
-| 　　　InsureRing 保險自動化規則檢核（`insurering`） | 不進導覽：待確認是否仍銷售；從所屬家族頁或產業頁內文連結 |
+| 　　　InsureBrick 保險科技模組化平台（`insurebrick`） | 不進導覽：仍在銷售（#165），現站不在導覽；從所屬家族頁或產業頁內文連結 |
+| 　　　InsureRing 保險自動化規則檢核（`insurering`） | 不進導覽：仍在銷售（#165），現站不在導覽；從所屬家族頁或產業頁內文連結 |
 | 　　政府與公部門（`industry-government`） | header：產業方案 > 政府與公部門<br/>footer：產業方案 > 政府與公部門 |
 | 　　　GIS 空間數據解決方案（`gis`） | 不進導覽：待確認是否仍銷售；從所屬家族頁或產業頁內文連結 |
 | 　　製造業（`industry-manufacturing`） | 不進導覽：未上線（#138）：沒有內容來源，之後要做時另開 issue |

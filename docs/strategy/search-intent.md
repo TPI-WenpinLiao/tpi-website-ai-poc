@@ -291,7 +291,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 | 企業數位轉型 軟體公司 | `/`，次要 `/products/digilism` | 類別詞，首頁列出產品線；數位轉型產品線的 hub |
 | 台灣 AI 解決方案 公司 | `/`，次要 `/products/systalk-ai` | 類別詞；AI 產品線的 hub |
 | 企業 AI 導入 | `/blog/{slug}`（文章） | 前幾名是指南與教學，產品頁或首頁不符合資訊型意圖；現站同主題文章是 `drop`，要不要寫新文章由策略決定 |
-| 系統整合 廠商 推薦 | `/services`，次要 `/outsourcing` | 比較型，結果是列表文；新站沒有對應的比較頁，`/services` 是最接近的頁面 |
+| 系統整合 廠商 推薦 | `/cloudservice`（次要承接） | 比較型，結果是列表文；新站沒有對應的比較頁。原本建議的 `/services` 依 #138 不產生頁面，策略階段改交 `/cloudservice`，`/services` 建出後再改回（`briefs/home.md`「取捨」第 6 項） |
 | 企業主權 AI 地端部署 方案 | `/aiso` | `nodes.csv` 有 AISO 主權 AI 節點 |
 | digiRunner | `/products/digirunner` | 品牌導航 |
 | digiRunner API 管理平台 | `/products/digirunner`，次要 `/products/digirunner-cloud` | 前幾名有 AWS Marketplace，雲端版是 `digirunner-cloud` 節點 |

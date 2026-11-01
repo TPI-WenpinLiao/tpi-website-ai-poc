@@ -66,7 +66,7 @@ node scripts/ia/sitemap.mjs           # 產生 page-map.csv、sitemap-summary.js
 | # | 項目 | 採用 |
 |---|---|---|
 | 1 | 日文版 | 不支援。`/ja`、`/ja/partners` 都回 500，日文不在受眾語系（zh-TW、en、vi）。M2-05 將 `/ja/*` 301 到 `/en` |
-| 2 | 不在導覽的產品／方案 | 保留節點，但不進主導覽，`note` 標「待確認」：`textualanalysis`、`digilogs-detection`、`interactivehealth`、`insurebrick`、`insurering`、`gis`。M5 遷移前內容負責人沒有確認仍在銷售的，改 merge 到所屬產品或產業頁。開放銀行、開放政府見第 3 項 |
+| 2 | 不在導覽的產品／方案 | 保留節點，但不進主導覽，`note` 標「待確認」：`textualanalysis`、`digilogs-detection`、`interactivehealth`、`insurebrick`、`insurering`、`gis`（#165 確認 `insurebrick`、`insurering` 仍在銷售）。M5 遷移前內容負責人沒有確認仍在銷售的，改 merge 到所屬產品或產業頁。開放銀行、開放政府見第 3 項 |
 | 3 | 主題重疊的頁面 | `/genai-solution` 併入 `/products/systalk-chat` 的導入服務段落；`/products/open-banking` 併入「金融」產業頁、`/products/open-government` 併入「政府與公部門」產業頁，digiRunner 頁連到這兩頁；`/products/esgswift` 改為 ESGswift 家族頁，GreenSwift、ElectriSwift 為子頁；`/carbon` 併入 GreenSwift（原為 drop） |
 | 4 | 舊 `/solutions/*` 路由 | `bnpl`、`devops`、`ibmb`、`smartbuilding`、`smartpushnotifications` 不建對應頁。M2-05 將它們 301 到最相關的產業頁或產品總覽，不再導到首頁（導到首頁容易被搜尋引擎視為 soft 404）。其他仍有內容的 `/solutions/*` 已放進產品家族、產業方案或服務 |
 | 5 | blog 分類 | 三語共用一套單層分類，見下表。現站子分類與 `Featured` 改為 tag（M2-04 定欄位）；52 個分類頁 merge 到對應的新分類 |
@@ -339,8 +339,8 @@ flowchart LR
 | 　　　ElectriSwift 智慧能源管理系統（`electriswift`） | `offering` | `/products/electriswift` | 1 | 1 | 1 |  |
 | 　產業方案（`industries`） | `hub` | `/industries` | 0 | 0 | 0 | 新頁：介紹文字需人工提供；子頁順序待確認（audience-and-goals.md 問題 2） |
 | 　　金融（`industry-finance`） | `hub` | `/industries/finance` | 1 | 1 | 1 | 新頁：承接 /products/open-banking 內容，其餘介紹需人工提供 |
-| 　　　InsureBrick 保險科技模組化平台（`insurebrick`） | `offering` | `/products/insurebrick` | 1 | 1 | 1 | 待確認：不在導覽，是否仍銷售 |
-| 　　　InsureRing 保險自動化規則檢核（`insurering`） | `offering` | `/solutions/insurering` | 1 | 1 | 1 | 待確認：不在導覽，是否仍銷售 |
+| 　　　InsureBrick 保險科技模組化平台（`insurebrick`） | `offering` | `/products/insurebrick` | 1 | 1 | 1 | 不在導覽；仍在銷售（#165 使用者確認） |
+| 　　　InsureRing 保險自動化規則檢核（`insurering`） | `offering` | `/solutions/insurering` | 1 | 1 | 1 | 不在導覽；仍在銷售（#165 使用者確認） |
 | 　　政府與公部門（`industry-government`） | `hub` | `/industries/government` | 1 | 1 | 1 | 新頁：承接 /products/open-government 內容，其餘介紹需人工提供 |
 | 　　　GIS 空間數據解決方案（`gis`） | `offering` | `/solutions/gis` | 1 | 1 | 1 | 待確認：不在導覽，是否仍銷售 |
 | 　　製造業（`industry-manufacturing`） | `hub` | `/industries/manufacturing` | 0 | 0 | 0 | 新頁：現站沒有製造業內容，需人工提供 |
