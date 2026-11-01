@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>昕力資訊 TPIsoftware｜金融與政府的 API 與 AI 軟體</title>
+<meta name="description" content="昕力資訊（TPIsoftware）研發並導入自有軟體，替金融與政府把 API、資料與 AI 安全接進既有系統，產品家族涵蓋 AI、數位轉型（DigiLism）、資安與 ESG。">
+<script>
+// Decides the tier before anything paints. The 3D scenes load only on a wide screen without a coarse pointer (src/lib/scene/tiers.ts LOW_POWER),
+// motion allowed and no data saver; everything else (and a failed script) shows the static pictures.
+(() => {
+  const h = document.documentElement;
+  h.classList.add('js');
+  const m = (q) => matchMedia(q).matches;
+  const save = navigator.connection && navigator.connection.saveData;
+  if (m('(prefers-reduced-motion: no-preference)') && m('(min-width: 64rem)') && !m('(pointer: coarse)') && !save) {
+    h.classList.add('want-3d');
+    const s = document.createElement('script');
+    s.src = 'assets/scene.js';
+    s.async = true;
+    s.onerror = () => { h.classList.remove('want-3d'); document.querySelectorAll('.scene').forEach((x) => x.classList.add('is-rest')); };
+    document.head.appendChild(s);
+  }
+})();
+</script>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+/* ---------------------------------------------------------------- tokens (src/styles/tokens.css values) */
+:root {
+  --ink-0: #ffffff; --ink-50: #f6f5fa; --ink-100: #ecebf3; --ink-200: #dcdae6; --ink-600: #534e69; --ink-900: #120f1d;
+  --purple-500: #7d45a3; --purple-700: #662e8d; --purple-800: #4f2370; --purple-900: #381850; --purple-200: #d9c4f2;
+  --magenta-500: #b824d1; --orange-500: #ff6329; --orange-700: #b83a0b;
+
+  --ground: var(--ink-0);
+  --ink: var(--ink-900);
+  --muted: var(--ink-600);
+  --accent: var(--purple-700);
+
+  --font-display: "Ribbon Serif", "Ribbon Serif Fallback", "Noto Serif TC", "Songti TC", serif;
+  --font-text: "Ribbon Inter", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+
+  --margin: clamp(1.75rem, 3.75vw, 3.5rem);
+  --gutter: clamp(1rem, 2.5vw, 2rem);
+  --header: 4.5rem;
+  --section: clamp(7rem, 12vw, 10rem);
+
+  /* the display size fits the longest one-line title (ten wide characters) inside the margins */
+  --step-display: min(7rem, calc((100vw - 2 * var(--margin)) / 10.4));
+  --step-display-2: min(6rem, calc((100vw - 2 * var(--margin)) / 12.1));
+  --step-head: clamp(1.25rem, 0.9rem + 1.8vw, 2.5rem);
+  --step-lead: clamp(1.1875rem, 1rem + 0.5vw, 1.5rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.15vw, 1.125rem);
+  --step-small: 0.875rem;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-exit: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  --t-press: 140ms; --t-hover: 180ms; --t-ui: 240ms; --t-reveal: 800ms;
+}
+@media (max-width: 47.99rem) { :root { --header: 3.75rem; } }
+
+/* ---------------------------------------------------------------- base */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--header); }
+body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--font-text); font-size: var(--step-body); line-height: 1.6; overflow-x: clip; }
+img { display: block; max-width: 100%; height: auto; }
+h1, h2, p, ul, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--orange-500); outline-offset: 3px; }
+.skip { position: absolute; left: var(--margin); top: -4rem; z-index: 50; background: var(--ink); color: var(--ink-0); padding: 0.5rem 1rem; }
+.skip:focus { top: 0.5rem; }
+.wrap { padding-inline: var(--margin); }
+
+.display, .display-2 { font-family: var(--font-display); font-weight: 700; line-height: 1.1; letter-spacing: 0; font-size: var(--step-display); }
+.display-2 { font-size: var(--step-display-2); }
+.lead { font-size: var(--step-lead); line-height: 1.5; }
+
+.button {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 3.25rem; padding: 0 1.75rem;
+  background: var(--accent); color: var(--ink-0); font-weight: 600; font-size: 1.0625rem; text-decoration: none; border-radius: 0;
+  transition: background-color var(--t-hover) ease, color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+}
+.button:hover { background: var(--purple-800); }
+.button:active { transform: translateY(1px) scale(0.98); }
+.button--small { min-height: 2.75rem; padding: 0 1.25rem; font-size: 1rem; }
+.link { display: inline-flex; gap: 0.5em; align-items: baseline; color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 0.3em; text-decoration-thickness: 2px; }
+.link::after { content: "→"; text-decoration: none; display: inline-block; transition: transform var(--t-ui) var(--ease-out); }
+.link:hover::after, .link:focus-visible::after { transform: translateX(0.3em); }
+
+/* ---------------------------------------------------------------- header */
+.site-header {
+  position: fixed; inset: 0 0 auto 0; z-index: 30; height: var(--header);
+  display: flex; align-items: center; gap: var(--gutter); padding-inline: var(--margin);
+  background: var(--ground); color: var(--ink);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+.brand { display: block; position: relative; width: clamp(8.5rem, 12vw, 10.5rem); }
+.brand img { width: 100%; height: auto; transition: opacity 300ms ease; }
+.brand .brand__white { position: absolute; inset: 0; opacity: 0; }
+.site-nav { margin-left: auto; }
+.site-nav ul { display: flex; gap: clamp(1rem, 2.4vw, 2.25rem); }
+.site-nav a { text-decoration: none; font-weight: 500; padding-block: 0.5rem; border-bottom: 2px solid transparent; transition: border-color var(--t-hover) ease; }
+.site-nav a:hover { border-bottom-color: currentColor; }
+.site-header.is-dark { background: var(--purple-700); color: var(--ink-0); }
+.site-header.is-dark .brand__white { opacity: 1; }
+.site-header.is-dark .brand img:first-child { opacity: 0; }
+.site-header.is-dark .button { background: var(--ink-0); color: var(--purple-700); }
+@media (max-width: 47.99rem) { .site-nav { display: none; } .site-header .button { margin-left: auto; } }
+
+/* ---------------------------------------------------------------- 1 hero */
+.hero { position: relative; background: var(--ground); padding-top: var(--header); }
+.hero__copy { position: relative; z-index: 2; padding: clamp(2rem, 6.5vh, 4.5rem) var(--margin) 0; }
+.hero__aside { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem clamp(2rem, 4vw, 3.5rem); margin-top: clamp(1.75rem, 4vh, 2.5rem); }
+.hero__aside .lead { max-width: 25em; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2rem; }
+.hero__map { position: relative; margin-top: clamp(1.5rem, 4vh, 3rem); overflow: clip; }
+.hero__map img { width: 100%; }
+.hero__tall { display: none; }
+@media (max-width: 47.99rem) { .hero__wide { display: none; } .hero__tall { display: block; aspect-ratio: 900 / 820; object-fit: cover; object-position: 50% 100%; } }
+.map-label {
+  position: absolute; z-index: 2; left: 0; top: 0; padding: 0.25rem 0.625rem; background: var(--ink-900); color: var(--ink-0);
+  font-size: var(--step-small); font-weight: 600; line-height: 1.5; white-space: nowrap; pointer-events: none;
+}
+.hero__map .map-label { left: var(--x); top: var(--y); transform: translate(-50%, calc(-100% - 0.5rem)); }
+.hero .gl-slot, .hero .map-label--live, .hero__map .map-label--tall { display: none; }
+@media (max-width: 47.99rem) { .hero__map .map-label--wide { display: none; } .hero__map .map-label--tall { display: block; } }
+
+/* ---------------------------------------------------------------- the phone's ribbon: a band down the left margin */
+.rail { display: none; }
+@media (max-width: 63.99rem) {
+  .rail { display: block; position: absolute; left: calc(var(--margin) / 2 - 6px); top: 0; width: 12px; height: 100%; z-index: 1; overflow: visible; pointer-events: none; }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .rail { transform-origin: 50% 0; animation: rail-draw linear both; animation-timeline: view(); animation-range: entry 0% cover 55%; }
+      .hero .rail { animation-range: cover 0% cover 40%; }
+    }
+  }
+}
+@media (max-width: 63.99rem) { .rail--contact { top: calc(-1 * var(--section)); height: calc(100% + var(--section) - 11.1rem); } }
+@keyframes rail-draw { from { transform: scaleY(0); } to { transform: none; } }
+
+/* ---------------------------------------------------------------- 2 industries */
+.industries { position: relative; background: var(--ground); padding-block: clamp(6rem, 9vw, 8rem) var(--section); }
+.industries__grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto clamp(3.5rem, 8vh, 6rem) auto; column-gap: var(--gutter); }
+.industries h2 { grid-column: 1; grid-row: 1; position: relative; z-index: 1; }
+.fork { grid-column: 1 / -1; grid-row: 1 / 3; width: 100%; height: 100%; min-height: 0; contain: size; overflow: visible; }
+.fork path { fill: none; stroke: var(--purple-500); stroke-width: 28; vector-effect: non-scaling-stroke; }
+.industry { grid-row: 3; display: flex; flex-direction: column; gap: 1.25rem; text-decoration: none; color: inherit; padding-top: 0.5rem; }
+.industry__name { font-family: var(--font-display); font-weight: 700; font-size: var(--step-display); line-height: 1; transition: color var(--t-hover) ease; }
+.industry__fact { max-width: 24em; }
+.industry__go { align-self: flex-start; }
+.industry:hover .industry__name { color: var(--accent); }
+.industry:hover .link::after { transform: translateX(0.3em); }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .js .fork { animation: fork-open linear both; animation-timeline: view(); animation-range: entry 30% cover 50%; }
+  }
+}
+@keyframes fork-open { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+@media (max-width: 63.99rem) {
+  .industries { min-height: 0; }
+  .industries__grid { grid-template-columns: 1fr; grid-template-rows: auto; row-gap: 6.5rem; }
+  .fork { display: none; }
+  .industry { grid-row: auto; }
+  .industry__name { font-size: 4.5rem; }
+}
+
+/* ---------------------------------------------------------------- 3 cases (a scroll scene) */
+.cases { position: relative; background: var(--ink-50); padding-block: var(--section); }
+.cases__head { padding-inline: var(--margin); display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+.cases__count { display: none; }
+.cases__panels { display: grid; gap: clamp(4rem, 8vw, 7rem); margin-top: clamp(3rem, 6vw, 5rem); padding-inline: var(--margin); }
+.case { display: grid; grid-template-columns: 7fr 5fr; gap: var(--gutter) clamp(2rem, 4vw, 4rem); align-items: center; }
+.case__img { width: 100%; background: var(--ink-100); }
+.case__text { display: flex; flex-direction: column; gap: 1rem; }
+.case__name { font-weight: 700; font-size: var(--step-body); }
+.case__result strong { font-weight: 800; }
+.cases .gl-slot { display: none; }
+@media (max-width: 63.99rem) { .case { grid-template-columns: 1fr; } }
+
+/* ---------------------------------------------------------------- the live scenes (desktop, motion, WebGL) */
+html.want-3d .hero.scene { height: 200svh; padding-top: 0; }
+html.want-3d .cases.scene { height: 400svh; padding-block: 0; }
+html.want-3d .scene > .scene-stage { position: sticky; top: 0; height: 100svh; overflow: clip; }
+html.want-3d .scene .gl-slot { display: block; position: absolute; inset: 0; z-index: 0; }
+html.want-3d .gl { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity 500ms ease; }
+html.want-3d.gl-ready .gl { opacity: 1; }
+html.want-3d .hero__copy { padding-top: calc(var(--header) + clamp(2rem, 6.5vh, 4.5rem)); }
+html.want-3d .hero__map { display: none; }
+html.want-3d .hero .map-label--live { display: block; transform: translate(-50%, calc(-100% - 0.5rem)); }
+html.want-3d .cases__head { position: absolute; z-index: 2; top: calc(var(--header) + clamp(1.5rem, 5vh, 3.5rem)); left: var(--margin); padding: 0 1.5rem 1.25rem 0; background: var(--ink-50); }
+html.want-3d .cases__panels { position: absolute; z-index: 2; right: var(--margin); top: 50%; width: min(31rem, 36vw); margin: 0; padding: 0; transform: translateY(-38%); display: block; }
+html.want-3d .cases__count { display: block; margin-bottom: 0.75rem; font-size: var(--step-small); font-weight: 600; color: var(--ink); }
+html.want-3d .case { display: block; position: absolute; inset: auto 0 auto 0; top: 2.25rem; padding: clamp(1.75rem, 2.6vw, 2.5rem); background: var(--ink-0); }
+html.want-3d .case__img { display: none; }
+html.want-3d .case__text { gap: 1.25rem; }
+html.want-3d .case__text[data-reveal] { opacity: 1; transform: none; } /* the scene brings each panel in */
+
+/* ---------------------------------------------------------------- 4 products */
+.products { position: relative; background: var(--ground); padding-top: var(--section); }
+.products__intro { padding-inline: var(--margin); }
+.index { margin-top: clamp(2.5rem, 5vw, 4rem); padding-inline: var(--margin); }
+.index__row {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--gutter); padding-block: 0.875rem;
+  text-decoration: none; color: inherit; transition: opacity var(--t-hover) ease;
+}
+.index__name { font-family: var(--font-display); font-weight: 700; font-size: var(--step-head); line-height: 1.2; transition: transform var(--t-ui) var(--ease-out), color var(--t-hover) ease; }
+.index__thumb { width: 12rem; aspect-ratio: 16 / 9; object-fit: cover; background: var(--ink-100); }
+.index__row:hover .index__name, .index__row:focus-visible .index__name { color: var(--accent); transform: translateX(0.75rem); }
+@media (hover: hover) and (pointer: fine) {
+  .index:has(.index__row:hover, .index__row:focus-visible) .index__row:not(:hover, :focus-visible) { opacity: 0.4; }
+}
+.products__all { padding: clamp(1.5rem, 3vw, 2.5rem) var(--margin) clamp(4rem, 8vw, 7rem); }
+@media (max-width: 47.99rem) {
+  .index__row { grid-template-columns: 6rem 1fr; }
+  .index__thumb { width: 6rem; order: -1; }
+}
+
+/* OrientAI: a sheet over a held picture */
+.orient { position: relative; background: var(--purple-900); }
+.orient__picture { position: sticky; top: 0; height: 100svh; margin: 0; overflow: clip; }
+.orient__picture img { width: 100%; height: 100%; object-fit: cover; }
+.orient__sheet {
+  position: relative; z-index: 1; margin-top: -42svh; min-height: 42svh; background: var(--purple-900); color: var(--ink-0);
+  display: grid; grid-template-columns: 7fr 5fr; align-items: end; gap: var(--gutter); padding: clamp(3rem, 6vw, 5rem) var(--margin);
+}
+.orient__line { font-family: var(--font-display); font-weight: 700; font-size: var(--step-head); line-height: 1.3; }
+.orient__sheet .link { color: var(--ink-0); }
+@media (max-width: 63.99rem) {
+  .orient__picture { height: 70svh; }
+  .orient__sheet { grid-template-columns: 1fr; margin-top: -18svh; min-height: 0; }
+}
+
+/* ---------------------------------------------------------------- 5 contact */
+.contact { position: relative; z-index: 1; background: var(--purple-700); color: var(--ink-0); padding-block: var(--section) clamp(5rem, 9vw, 8rem); }
+.contact__body { position: relative; padding-inline: var(--margin); }
+.records { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gutter) clamp(2rem, 4vw, 4rem); margin-top: clamp(3rem, 6vw, 5rem); }
+.records li { display: flex; flex-direction: column; gap: 0.75rem; }
+.records__key { font-family: var(--font-display); font-weight: 700; font-size: var(--step-head); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.contact__act { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem clamp(2rem, 4vw, 3.5rem); margin-top: clamp(4rem, 8vw, 6.5rem); }
+.band { display: block; flex: 0 0 auto; width: clamp(5rem, 16vw, 16rem); height: 2.25rem; margin-left: calc(-1 * var(--margin)); margin-right: calc(-1 * clamp(1.25rem, 2.5vw, 2rem)); }
+.band span { display: block; height: 100%; background: var(--orange-500); clip-path: polygon(0 0, 100% 0, calc(100% - 1.6rem) 100%, 0 100%); }
+.button--light { background: var(--ink-0); color: var(--purple-700); min-height: 4rem; padding: 0 2.5rem; font-size: 1.25rem; }
+.button--light:hover { background: var(--purple-200); }
+.contact__direct { font-size: var(--step-lead); line-height: 1.5; }
+.contact__direct a { text-decoration: none; border-bottom: 2px solid rgb(255 255 255 / 0.5); transition: border-color var(--t-hover) ease; }
+.contact__direct a:hover { border-bottom-color: var(--ink-0); }
+.contact__about { margin-top: clamp(3rem, 6vw, 4.5rem); }
+.contact .link { color: var(--ink-0); }
+@media (prefers-reduced-motion: no-preference) {
+  .js .band { clip-path: inset(0 100% 0 0); transition: clip-path var(--t-reveal) var(--ease-in-out); }
+  .js .contact__act.is-in .band { clip-path: inset(0); }
+}
+@media (max-width: 63.99rem) {
+  .records { grid-template-columns: 1fr; }
+  .band { width: calc(var(--margin) / 2 + 6px); height: 0.75rem; margin-left: calc(-1 * var(--margin) / 2 - 6px); margin-right: 0; }
+  .band span { clip-path: polygon(0 0, 100% 0, calc(100% - 0.5rem) 100%, 0 100%); }
+  .contact__act { column-gap: 0; }
+  .contact__direct { flex-basis: 100%; }
+}
+
+/* ---------------------------------------------------------------- footer */
+.site-footer { position: relative; background: var(--purple-900); color: var(--ink-0); padding: clamp(3.5rem, 7vw, 6rem) var(--margin) 2rem; }
+.footer__grid { display: grid; grid-template-columns: 5fr 7fr; gap: 3rem var(--gutter); }
+.footer__logo { width: min(26rem, 100%); }
+.footer__cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem var(--gutter); }
+.footer__cols p { font-weight: 700; margin-bottom: 0.75rem; }
+.footer__cols li + li { margin-top: 0.375rem; }
+.footer__cols a, .footer__end a { text-decoration: none; }
+.footer__cols a:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+.footer__end { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem var(--gutter); margin-top: clamp(3rem, 6vw, 5rem); font-size: var(--step-small); }
+@media (max-width: 47.99rem) { .footer__grid, .footer__cols { grid-template-columns: 1fr; } }
+
+/* ---------------------------------------------------------------- entrances: once, below the fold, never hiding content without script */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out); transition-delay: var(--d, 0ms); }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+  .js .hero__map[data-open] { clip-path: inset(0 0 100% 0); animation: open 1100ms var(--ease-in-out) 150ms forwards; }
+  .js .hero__map[data-open] img { transform: scale(1.06); animation: settle 1200ms var(--ease-expo) 100ms forwards; }
+}
+@keyframes open { to { clip-path: inset(0); } }
+@keyframes settle { to { transform: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<header class="site-header">
+  <a class="brand" href="/" aria-label="昕力資訊 TPIsoftware 首頁">
+    <img src="assets/logo-horizontal-color.svg" width="449" height="109" alt="">
+    <img class="brand__white" src="assets/logo-horizontal-white.svg" width="448" height="109" alt="">
+  </a>
+  <nav class="site-nav" aria-label="主要導覽">
+    <ul>
+      <li><a href="#industries">產業</a></li>
+      <li><a href="#cases">案例</a></li>
+      <li><a href="#products">產品</a></li>
+      <li><a href="/about-us">關於昕力</a></li>
+    </ul>
+  </nav>
+  <a class="button button--small" href="/contact-us">聯絡業務</a>
+</header>
+
+<main id="main">
+  <!-- 1 Hero: the map at 30°, the ribbon drawn from the core system to the new services -->
+  <section class="scene hero" id="top" data-scene="ribbon-map" aria-labelledby="hero-title">
+    <div class="scene-stage">
+      <div class="hero__copy">
+        <h1 id="hero-title" class="display">金融與政府的既有系統<br>原地接上 API 與 AI</h1>
+        <div class="hero__aside">
+          <p class="lead">昕力資訊（TPIsoftware）自行研發產品，也負責導入規劃與建置。</p>
+          <div class="actions">
+            <a class="button" href="/contact-us">聯絡業務</a>
+            <a class="link" href="#products">看產品</a>
+          </div>
+        </div>
+      </div>
+      <figure class="hero__map" data-open>
+        <img class="hero__wide" src="assets/img/hero-wide.webp" width="2560" height="1120" fetchpriority="high" alt="白色方塊排成的系統地圖，一條由紫轉品紅再轉橘的緞帶，從深灰色的核心系統出發，在方塊之間分成兩支，接到頂面塗成橘色的新服務。">
+        <img class="hero__tall" src="assets/img/hero-tall.webp" width="900" height="1080" alt="同一張系統地圖的直式構圖：緞帶從深灰色的核心系統出發，在白色方塊之間分成兩支。">
+        <span class="map-label map-label--wide" aria-hidden="true" style="--x: 6.4%; --y: 48.6%">核心系統</span>
+        <span class="map-label map-label--tall" aria-hidden="true" style="--x: 14.8%; --y: 19.3%">核心系統</span>
+      </figure>
+      <div class="gl-slot" aria-hidden="true"></div>
+      <span class="map-label map-label--live" aria-hidden="true">核心系統</span>
+      <svg class="rail" aria-hidden="true" viewBox="0 0 12 100" preserveAspectRatio="none"><rect width="12" height="100" fill="#7d45a3"/></svg>
+    </div>
+  </section>
+
+  <!-- 2 Industries: a quiet section; the ribbon comes down and forks to the two industries -->
+  <section class="industries" id="industries" aria-labelledby="industries-title">
+    <div class="industries__grid wrap">
+      <h2 id="industries-title" class="display" data-reveal>規範要求，<br>已做進產品</h2>
+      <svg class="fork" aria-hidden="true" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        <path d="M770 -330 L770 640"/>
+        <path d="M770 640 C770 840 700 905 560 905 L170 905 C64 905 16 935 16 1000"/>
+        <path d="M770 640 C770 830 529 860 529 1000"/>
+      </svg>
+      <a class="industry" href="/industries/finance" data-reveal>
+        <span class="industry__name">金融</span>
+        <span class="industry__fact">昕力資訊 digiRunner API 管理平台反應台灣開放銀行金管會法規要求</span>
+        <span class="industry__go link">看金融業方案</span>
+      </a>
+      <a class="industry" href="/industries/government" data-reveal style="--d: 90ms">
+        <span class="industry__name">政府</span>
+        <span class="industry__fact">符合國家發展委員會【共通性應用程式介面規範】。</span>
+        <span class="industry__go link">看政府與公部門方案</span>
+      </a>
+    </div>
+    <svg class="rail" aria-hidden="true" viewBox="0 0 12 100" preserveAspectRatio="none">
+      <path d="M6 0 L6 30 C6 38 1 40 1 48 L1 62 C1 70 6 72 6 80 L6 100" fill="none" stroke="#7d45a3" stroke-width="5" vector-effect="non-scaling-stroke"/>
+      <path d="M6 0 L6 30 C6 38 11 40 11 48 L11 62 C11 70 6 72 6 80 L6 100" fill="none" stroke="#7d45a3" stroke-width="5" vector-effect="non-scaling-stroke"/>
+    </svg>
+  </section>
+
+  <!-- 3 AI results: the camera walks the magenta stretch; one result at a time -->
+  <section class="scene cases" id="cases" data-scene="ribbon-cases" aria-labelledby="cases-title">
+    <div class="scene-stage">
+      <div class="gl-slot" aria-hidden="true"></div>
+      <div class="cases__head">
+        <h2 id="cases-title" class="display" data-reveal>AI 已接手<br>每天的作業</h2>
+        <a class="link" href="/success-story" data-reveal style="--d: 90ms">看所有成功案例</a>
+      </div>
+      <div class="cases__panels">
+        <p class="cases__count" aria-hidden="true">第 1 則，共 3 則</p>
+        <article class="case" aria-label="AI 智慧理賠">
+          <img class="case__img" src="assets/img/case-1.webp" width="1600" height="1000" alt="系統地圖的近景：品紅色的緞帶經過第一個亮起品紅頂面的方塊。">
+          <div class="case__text" data-reveal>
+            <p class="case__name">AI 智慧理賠</p>
+            <p class="case__result lead">全自動執行理賠立案到派件，精確解析診斷書，節省逾<strong>80%</strong>&#8203;人工作業時間</p>
+          </div>
+        </article>
+        <article class="case" aria-label="AI 智慧建檔">
+          <img class="case__img" src="assets/img/case-2.webp" width="1600" height="1000" alt="系統地圖的近景：緞帶往前走，第二個方塊的頂面亮起品紅。">
+          <div class="case__text" data-reveal>
+            <p class="case__name">AI 智慧建檔</p>
+            <p class="case__result lead">透過免模板辨識醫療單據&#8203;解決格式變動痛點，提升辨識率並降低<strong>40%</strong>維護人力</p>
+          </div>
+        </article>
+        <article class="case" aria-label="金融聯防阻詐平台">
+          <img class="case__img" src="assets/img/case-3.webp" width="1600" height="1000" alt="系統地圖的近景：緞帶由品紅轉橘，三個方塊的頂面都已亮起品紅。">
+          <div class="case__text" data-reveal>
+            <p class="case__name">金融聯防阻詐平台</p>
+            <p class="case__result lead">標準化聯防流程，詐騙事件即時共享，提升跨行交換的效率與透明度</p>
+          </div>
+        </article>
+      </div>
+    </div>
+    <svg class="rail" aria-hidden="true" viewBox="0 0 12 100" preserveAspectRatio="none">
+      <defs><linearGradient id="rail-ai" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d45a3"/><stop offset="0.12" stop-color="#b824d1"/></linearGradient></defs>
+      <rect width="12" height="100" fill="url(#rail-ai)"/>
+    </svg>
+  </section>
+
+  <!-- 4 Products: an index set large, each row with its own corner of the map; OrientAI on a sheet -->
+  <section class="products" id="products" aria-labelledby="products-title">
+    <div class="products__intro">
+      <h2 id="products-title" class="display-2" data-reveal>API、AI、資安與碳管理，<br>各有產品</h2>
+    </div>
+    <ul class="index">
+      <li data-reveal><a class="index__row" href="/products/digirunner"><span class="index__name">digiRunner API 管理平台</span><img class="index__thumb" src="assets/img/prod-digirunner.webp" width="768" height="432" alt=""></a></li>
+      <li data-reveal style="--d: 70ms"><a class="index__row" href="/products/systalk-viki"><span class="index__name">SysTalk.VIKI 企業生成式 AI 應用平台</span><img class="index__thumb" src="assets/img/prod-viki.webp" width="768" height="432" alt=""></a></li>
+      <li data-reveal style="--d: 140ms"><a class="index__row" href="/products/gadodido"><span class="index__name">gadoDIDO 無密碼身分驗證</span><img class="index__thumb" src="assets/img/prod-gadodido.webp" width="768" height="432" alt=""></a></li>
+      <li data-reveal style="--d: 210ms"><a class="index__row" href="/products/greenswift"><span class="index__name">GreenSwift 智慧碳管理平台</span><img class="index__thumb" src="assets/img/prod-greenswift.webp" width="768" height="432" alt=""></a></li>
+    </ul>
+    <div class="products__all"><a class="link" href="/products">產品總覽</a></div>
+    <svg class="rail" aria-hidden="true" viewBox="0 0 12 100" preserveAspectRatio="none">
+      <defs><linearGradient id="rail-out" x1="0" y1="0" x2="0" y2="1"><stop offset="0.1" stop-color="#b824d1"/><stop offset="0.9" stop-color="#ff6329"/></linearGradient></defs>
+      <rect width="12" height="100" fill="url(#rail-out)"/>
+    </svg>
+  </section>
+
+  <section class="orient" aria-labelledby="orient-title">
+    <figure class="orient__picture">
+      <img src="assets/img/orientai.webp" width="2560" height="1440" alt="一圈高的灰色方塊圍住中間一個品紅色的方塊：AI 模型留在企業自己的系統之間。">
+    </figure>
+    <div class="orient__sheet">
+      <h2 id="orient-title" class="orient__line" data-reveal>企業要用 AI，資料留在企業端。</h2>
+      <a class="link" href="/orient-ai" data-reveal style="--d: 90ms">認識 OrientAI 企業級 Agentic AI 平台</a>
+    </div>
+    <svg class="rail" aria-hidden="true" viewBox="0 0 12 100" preserveAspectRatio="none"><rect width="12" height="100" fill="#ff6329"/></svg>
+  </section>
+
+  <!-- 5 Trust and contact: the whole field turns purple; the ribbon ends at the button, in orange -->
+  <section class="contact" id="contact" aria-labelledby="contact-title" data-dark>
+    <div class="contact__body">
+      <h2 id="contact-title" class="display" data-reveal>合作得久，有紀錄可查</h2>
+      <ul class="records">
+        <li data-reveal><span class="records__key">2005</span><span>昕力資訊創立於 2005 年</span></li>
+        <li data-reveal style="--d: 80ms"><span class="records__key">2008</span><span>2008 年首度跨足金融產業，為華南銀行建置 CRM 系統</span></li>
+        <li data-reveal style="--d: 160ms"><span class="records__key">資安認證</span><span>企業產品中台之開發流程 獲ISO27001 認證</span></li>
+      </ul>
+      <div class="contact__act">
+        <span class="band" aria-hidden="true"><span></span></span>
+        <a class="button button--light" href="/contact-us">聯絡業務</a>
+        <p class="contact__direct"><a href="mailto:service@tpisoftware.com">service@tpisoftware.com</a><br><a href="tel:+886226580508">+886 2 2658 0508</a></p>
+      </div>
+      <p class="contact__about"><a class="link" href="/about-us">關於昕力</a></p>
+      <svg class="rail rail--contact" aria-hidden="true" viewBox="0 0 12 100" preserveAspectRatio="none"><rect width="12" height="100" fill="#ff6329"/></svg>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" data-dark>
+  <div class="footer__grid">
+    <img class="footer__logo" src="assets/logo-horizontal-white.svg" width="448" height="109" alt="昕力資訊 TPIsoftware">
+    <nav class="footer__cols" aria-label="頁尾導覽">
+      <div><p>產業</p><ul><li><a href="/industries/finance">金融</a></li><li><a href="/industries/government">政府與公部門</a></li></ul></div>
+      <div><p>產品</p><ul><li><a href="/products">產品總覽</a></li><li><a href="/products/systalk-ai">AI（SysTalk.ai）</a></li><li><a href="/products/digilism">數位轉型（DigiLism）</a></li><li><a href="/products/esgswift">ESG 與能源（ESGswift）</a></li></ul></div>
+      <div><p>公司</p><ul><li><a href="/about-us">關於我們</a></li><li><a href="/success-story">成功案例</a></li><li><a href="/contact-us">聯絡我們</a></li></ul></div>
+    </nav>
+  </div>
+  <div class="footer__end">
+    <p>台北總部：114台北市內湖區瑞光路335號12樓</p>
+    <p>©2026 TPIsoftware All rights reserved</p>
+  </div>
+</footer>
+
+<script>
+// Shared by every tier: entrances once, the header following the purple chapters, the contact band.
+(() => {
+  const html = document.documentElement;
+  if (!html.classList.contains('want-3d')) document.querySelectorAll('.scene').forEach((s) => s.classList.add('is-rest'));
+  const show = (el) => el.classList.add('is-in');
+  const items = document.querySelectorAll('[data-reveal], .contact__act');
+  if (!('IntersectionObserver' in window)) { items.forEach(show); return; }
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
+  items.forEach((el) => io.observe(el));
+
+  // the header takes the purple of the chapter under it (a hard cut, colour only)
+  const header = document.querySelector('.site-header');
+  const darks = [...document.querySelectorAll('[data-dark]')];
+  let ticking = false;
+  const paint = () => {
+    ticking = false;
+    const y = header.offsetHeight - 1;
+    header.classList.toggle('is-dark', darks.some((el) => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom > y; }));
+  };
+  const queue = () => { if (!ticking) { ticking = true; requestAnimationFrame(paint); } };
+  addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', queue);
+  paint();
+})();
+</script>
+</body>
+</html>
