@@ -1,10 +1,13 @@
 // Home page copy in en (M7-02, #39), written like the zh-TW file (see its header): facts through
 // fact('<id>'), the rest is wording, still the current en site's. `meta.title` is the current en
 // home page's <title> with this site's separator; `meta.description` translates the zh-TW one, cut
-// to 160 characters; `labels` are this site's own wording.
+// to 160 characters.
+// #167 rebuilt the home page in five sections (src/data/home/types.ts) for zh-TW only: this file
+// keeps its earlier copy where a section has a place for it, and the sections and headings it has no
+// copy for are left out or named after their node, until the en copy is written (#167 follow-up).
 
 import { fact } from '../facts.ts';
-import type { Home } from './zh-TW.ts';
+import type { Home } from './types.ts';
 
 const hero = {
   // The en about page's hero, where the zh-TW title comes from too
@@ -12,18 +15,9 @@ const hero = {
   description: 'We strive to provide innovative technologies and software solutions.',
 };
 
-// The taglines of the en family pages (src/content/hub/en)
-const familyLines: Record<string, string> = {
-  'family-ai': 'AI-Driven Business Innovations',
-  'family-dx': 'An API-first digital middle platform for mission critical systems',
-  'family-esg': 'Smart Carbon and Energy Management Toward Greener Future',
-};
-
 const orientAi = {
   node: 'orient-ai',
-  eyebrow: 'Enterprise Agentic AI Platform',
   title: 'Operationalizing AI for Value',
-  features: [fact('orientai-multi-agent-en'), fact('orientai-governance-en'), fact('orientai-roi-en')],
   // The current page's "Learn More" fails Lighthouse's link-text audit; worded like the zh-TW「探索 OrientAI」
   action: 'Explore OrientAI',
 };
@@ -53,17 +47,13 @@ export const home: Home = {
     description:
       'TPIsoftware provides innovative technologies and software solutions: AI, digital transformation, security, and ESG and energy product families, plus services.',
   },
-  hero,
-  familyLines,
-  orientAi,
-  industryLines,
-  cases,
-  contactCta,
-  labels: {
-    families: 'Product families',
-    familyLink: (family: string) => `See the ${family} product family`,
-    orientFeatures: 'OrientAI features',
-    all: (listing: string) => `All ${listing}`,
-    latest: 'Latest articles and news',
+  hero: { title: hero.title, lead: hero.description },
+  industries: {
+    entries: Object.fromEntries(Object.entries(industryLines).map(([node, text]) => [node, { text }])),
   },
+  cases: { items: cases.map((c) => ({ node: c.node, name: c.title, result: c.summary })) },
+  products: { nodes: ['digirunner', 'systalk-viki', 'gadodido', 'greenswift'] },
+  orientAi: { node: orientAi.node, title: orientAi.title, link: orientAi.action },
+  contactCta,
+  contact: { title: contactCta.title, description: contactCta.description },
 };

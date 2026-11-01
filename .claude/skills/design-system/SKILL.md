@@ -11,23 +11,13 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 ### 選定方向：`ribbon-route`（#166，2026-11-01 `design-approved`）
 
-原型、方向說明與評分在 `docs/strategy/concepts/ribbon-route/`（`README.md` 的「主要視覺決定」逐條指到原則），原則在 `docs/strategy/design-principles.md`。製作階段（#167）依它改 tokens、元件、檢查與 ADR。改完之前 `src/` 仍是下方的「目前實作」，本 skill 其他各節寫的也是目前實作。
+原型、方向說明與評分在 `docs/strategy/concepts/ribbon-route/`（`README.md` 的「主要視覺決定」逐條指到原則），原則在 `docs/strategy/design-principles.md`。#167 把它做進 production：
 
-- 亮底的白色等角系統地圖：白色方塊是既有系統，深色方塊是核心系統，頂面上色的是昕力的產品（紫）、AI 模型（品紅）、新的服務（橘），標籤寫系統類別，在 HTML 層
-- 一條紫→品紅→橘的緞帶從核心系統出發，串起各接點。捲動時鏡頭從斜角升到俯視，同一條緞帶延伸進第二段，分叉到「金融」「政府與公部門」兩個入口。漸層只用在緞帶，文字、按鈕、底色平塗
-- 標題用中文襯線 webfont（原型是 Noto Serif TC 700，只取用到的字），拉丁字與內文用 Inter；全頁 4 種字級，只有 hero h1 是超大字
-- 首頁 5 段：hero、產業入口、AI 成果、產品與 OrientAI、紀錄與聯絡。每段一句標題，最多再加一句說明或一則事實；全頁一套 12 欄格線
-- 桌機（≥ 64rem、非觸控、未要求減少動態、未開省流量）延後載入 WebGL（three.js＋GSAP）；手機與減少動態用同一個世界渲染的靜態圖，接縫對齊成同一條緞帶
-- hero 文字不壓在地圖與標籤上：鏡頭依文字底緣拉遠，文字底下墊一層地面色
-
-#167 要決定的：JS 預算（原型桌機延後載入 181 KB gzip，`scene-budget.mjs` 現行 140 KB）、中文字型的取字與 `font-subsets.mjs`、ADR 0003 的 3D 方向、OrientAI 引文、首頁 brief 改成 5 段後移出的內容放哪一頁。原型評審留下的問題列在 `ribbon-route/review.md` 與 PR #175。
-
-### 目前實作（M3 定案，#167 替換）
-
-網站是有景深的場景：敘事頁（首頁、產品、方案）放在深色 surface 上，底下是 3D 捲動場景（方向 B Modular Stack：等角視角的方塊隨捲動拆解、翻轉，再重組成各產品家族的模組），內容是浮在場景上的玻璃圖層；閱讀頁（blog、法務、長文）用亮色 surface。
-
-- 光標示資料與互動：紫、品紅、橘的能量漸層與光點只用在線條、外框、焦點、hover，不當文字的底色
-- 動態跟著捲動：進場、圖層分離、進度條都用 CSS scroll-driven animation，不加 client JS
+- 全站亮底（白紙），平塗，沒有陰影、光暈與圓角（`--radius-*`、`--shadow-*`、`--glow-*` 都是 0 或 none）。`data-surface="dark"` 是紫色品牌帶（聯絡段、OrientAI 段、footer），不是深色場景
+- 標題（h1–h3 與 `.serif`）用 Noto Serif TC 700，只取全站標題用到的字（`scripts/design/serif-subset.mjs`，見「Token 分層」的字型）；拉丁字與內文用 Inter
+- 首頁：亮底的白色等角系統地圖，一條紫→品紅→橘的緞帶從核心系統出發串起各接點，捲動時鏡頭從斜角升到俯視，同一條緞帶延伸進產業段、分叉到兩個入口（`HomeTemplate`，見「3D 場景」）。漸層只在緞帶的 three.js 頂點色，CSS 不寫漸層（`--gradient-energy` 是平塗的品牌色）
+- 首頁 5 段（hero、產業入口、AI 成果、產品與 OrientAI、紀錄與聯絡），每段一句標題、最多再一句說明或一則事實；一套 12 欄格線（`--grid-*`）；字級 4 種：`--font-size-display`（只有首頁 h1）、`--font-size-h2`、`--font-size-text`、`--font-size-base`
+- 內頁 hero 與縮圖用同一個世界渲染的靜態圖（`src/assets/design/ribbon/`），不載 3D
 
 ## 規則
 
@@ -78,13 +68,13 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | 層 | 命名 | 誰能用 |
 |---|---|---|
 | primitive | `--purple-*`、`--magenta-*`、`--orange-*`、`--ink-*`、`--red-*`、`--green-*` | 只在 `tokens.css` 內被引用 |
-| semantic | `--color-*`、`--glass-*`、`--glow-*`、`--gradient-energy`、`--shadow-*` | 元件 |
+| semantic | `--color-*`、`--glass-*`、`--glow-*`、`--gradient-energy`、`--shadow-*`、`--ribbon-*`、`--map-*` | 元件；`--ribbon-*`、`--map-*` 只給 three.js 的世界讀 |
 | scale | `--font-size-*`、`--space-*`、`--radius-*`、`--duration-*`、`--scene-*` 等 | 元件直接用 |
 
 - 品牌色沿用現站（2026-10-21 審核確認）：紫 `--purple-700`（`#662e8d`）、品紅 `--magenta-500`（`#b824d1`）、橘 `--orange-500`（`#ff6329`）。橘 500 對白只有 2.97:1，只當裝飾（`--color-accent`）
 - glass（`--glass-bg`）是半透明面板，背後可能是 3D 場景最亮的地方。對比以 `--scene-worst`（該 surface 最不利的背景）合成後計算
-- 字型：`--font-sans` 是 Inter＋系統中文字；`--font-mono`（JetBrains Mono）只用在編號、eyebrow、資料標籤。兩者的 `@font-face` 只寫在 `base.css` 開頭，只宣告 latin、vietnamese、greek 三個 subset，不 import fontsource 的整包 CSS，不載中文 webfont。頁面文字碰到哪個 subset，首次繪製前就下載哪個檔，contact 頁曾因一個「ō」多下載 83 KB（#143）。`npm run check` 的 `font-subsets.mjs` 在頁面出現這三個 subset 以外的字元、或範圍與套件的 `unicode.json` 不一致時失敗，例外列在它的 `ALLOWED`
-- 3D：`--scene-angle-x`、`--scene-angle-z` 是共用的等角視角，`--perspective` 是共用透視距離。`Scene3D` 的 three.js 相機從這些值換算（`src/lib/scene/runtime.ts`），靜態版與 3D 版才會重疊；顏色從 `--gradient-energy`、`--color-bg`、`--color-border-brand` 讀，方塊材質從 `--scene-block-*`、`--scene-rim-*` 讀（`SceneContext.readNumber`），TS 不寫色碼
+- 字型：`--font-sans` 是 Inter＋系統中文字；`--font-mono`（JetBrains Mono）只用在編號、eyebrow、資料標籤。兩者的 `@font-face` 只寫在 `base.css` 開頭，只宣告 latin、vietnamese、greek 三個 subset，不 import fontsource 的整包 CSS。中文 webfont 只有標題的 `--font-serif`（Noto Serif TC 700），每頁只載自己的字：`src/integrations/serif-fonts.ts` 在 build 後替每頁從來源檔 `src/assets/fonts/noto-serif-tc-700.woff2` 切出該頁 h1–h3 與 `.serif` 用到的字（10–40 KB），在 head 插入 inline `@font-face`；`base.css` 沒有這個字型的 `@font-face`。全站共用一個 200 KB 的檔會讓 Lighthouse performance 掉到 0.83–0.93（#167）。來源檔由 `node scripts/design/serif-subset.mjs` 從 `dist/` 收集全站的標題字合成，新標題用到新字時 `font-subsets.mjs` 失敗，要 build → 重跑這支 script → 再 build（需要 fonttools，用法寫在 script 開頭）；build 本身只用 npm 套件 `subset-font`，不需要 Python。頁面文字碰到哪個 subset，首次繪製前就下載哪個檔，contact 頁曾因一個「ō」多下載 83 KB（#143）。`npm run check` 的 `font-subsets.mjs` 在頁面出現這三個 subset 以外的字元、或範圍與套件的 `unicode.json` 不一致時失敗，例外列在它的 `ALLOWED`
+- 3D：緞帶世界的顏色只從 `--map-*`（地面、方塊、既有系統、核心系統）與 `--ribbon-*`（緞帶的三色）讀，live 版由 `src/lib/scene/ribbon/runtime.ts` 讀 computed style，靜態圖由 `scripts/design/ribbon-capture.mjs` 讀 `tokens.css`；TS 不寫色碼
 
 ## Token 命名
 
@@ -95,13 +85,13 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | 類別 | primitive 用色名；semantic 用 `color`、`glass`、`glow`、`shadow`、`gradient`；scale 用屬性名 | `--purple-700`、`--color-*`、`--font-size-*`、`--radius-*` |
 | 用途 | 色彩的角色：`text`、`bg`、`border`、`action`、`link`、`brand`、`accent`、`focus`、`success`、`error`、`disabled`、`grid` | `--color-text`、`--color-bg`、`--color-error` |
 | 變體 | 強弱用 `subtle`、`muted`、`soft`、`strong`；指定色系用 `brand`、`accent`；配對的前景或背景用 `text`、`bg` | `--color-bg-brand-subtle`、`--color-border-strong`、`--color-error-bg` |
-| 狀態 | `hover`、`active`，放在最後 | `--color-action-hover`、`--color-action-subtle-hover`、`--scene-rim-glow-active` |
+| 狀態 | `hover`、`active`，放在最後 | `--color-action-hover`、`--color-action-subtle-hover` |
 
 - 頁面底色的層次用 `--color-bg-<變體>`（`--color-bg-subtle`）。狀態色與互動色的配對用 `--color-<用途>-<text 或 bg>`：`--color-action-text` 是 `--color-action` 上的文字，`--color-error-bg` 是 `--color-error` 的底色。新增 warning 時照狀態色寫成 `--color-warning`、`--color-warning-bg`
 - primitive 色階用數字，`0`（白）到 `950`，數字越大越深；級數之間需要中間值時取中間的數字（`--ink-850`）。只加實際用到的級數，不預先補滿
 - 尺寸級距：字級用 `xs`、`sm`、`base`、`lg`、`xl` 與 `h1`–`h4`、`display`；間距用 4px 的倍數（`--space-4` 是 `1rem`）；圓角、陰影用 `sm`／`md`／`lg`（圓角另有 `xl`、`pill`），時間用 `fast`／`base`／`slow`。版面專用的間距用名稱說明用途（`--space-gutter`、`--space-section`）
-- 只屬於一塊版面的值，以那塊版面命名：`--hero-*`（hero 的版面，`PageHero`、`Backdrop`、`Breadcrumb`、`SceneChapter` 共用）、`--scene-*`（3D 視角、方塊材質，以及玻璃面板對比用的背景 `--scene-worst`）、`--logo-height*`、`--header-height`、`--progress-height`。`LayerStack` 的 `--layer-gap`、`--node-size` 是早期沒有前綴的例外，新 token 不要照這樣取。先找能不能用既有的 scale 表達，不行才加；加了也要在 `tokens.css` 的註解寫出誰讀它
-- 3D 場景的 TS 也讀 token：`src/lib/scene/runtime.ts` 讀 `--scene-angle-*` 的角度，`SceneContext.readNumber` 讀 `--scene-block-*`、`--scene-rim-*` 的無單位數字。新增給 TS 讀的 token 時，在 `tokens.css` 的註解寫出讀它的檔案
+- 只屬於一塊版面的值，以那塊版面命名：`--hero-*`（hero 的版面，`PageHero`、`Backdrop`、`Breadcrumb` 共用）、`--home-*`（首頁）、`--grid-*`（12 欄格線）、`--scene-*`（預設 OG 圖的視角，以及玻璃面板對比用的背景 `--scene-worst`）、`--logo-height*`、`--header-height`、`--progress-height`。先找能不能用既有的 scale 表達，不行才加；加了也要在 `tokens.css` 的註解寫出誰讀它
+- 3D 場景的 TS 也讀 token：`src/lib/scene/ribbon/world.ts` 的 `PALETTE_TOKENS` 列出它讀的 `--map-*`、`--ribbon-*`。新增給 TS 讀的 token 時，在 `tokens.css` 的註解寫出讀它的檔案
 - 新 token 要能歸進 `scripts/design/token-groups.mjs` 的某一組（見「展示頁」），否則 `showcase.mjs` 會失敗
 
 ## 斷點
@@ -130,13 +120,13 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 效果清單、各效果用在哪些頁面、減少動態時的呈現與 3D 的效能預算在 [`docs/design/motion.md`](../../../docs/design/motion.md)。新增或改動效果時，同步更新那份清單。
 
-- 時間、延遲與 easing 一律用 tokens：`--duration-*`（`fast`／`base`／`slow`，循環動畫的週期 `--duration-loop`）、`--delay-step`、`--ease-standard`（顏色、透明度、展開）、`--ease-out-expo`（位移）。`transition` 簡寫的每一段都寫 timing function，longhand 寫了 `transition-duration` 就要寫 `transition-timing-function`，不留給瀏覽器預設的 `ease`
-- 偏好減少動態時，`tokens.css` 把 `--duration-*`、`--delay-*`、`--tilt`、`--lift` 歸零。hover、focus、展開的狀態差異保留，過場消失；位移與傾斜用 `--tilt`、`--lift` 寫，才會跟著歸零
+- 時間、延遲與 easing 一律用 tokens：`--duration-*`（`fast`／`base`／`slow`）、`--ease-standard`（顏色、透明度、展開）、`--ease-out-expo`（位移）。`transition` 簡寫的每一段都寫 timing function，longhand 寫了 `transition-duration` 就要寫 `transition-timing-function`，不留給瀏覽器預設的 `ease`
+- 偏好減少動態時，`tokens.css` 把 `--duration-*`、`--tilt`、`--lift` 歸零。hover、focus、展開的狀態差異保留，過場消失；位移與傾斜用 `--tilt`、`--lift` 寫，才會跟著歸零
 - 捲動動態用 `animation-timeline: view()`、`scroll()` 或具名的 `view-timeline`，包在 `@supports (animation-timeline: view())` 與 `@media (prefers-reduced-motion: no-preference)` 裡；不支援或偏好減少動態時，畫面要停在完成狀態。timing function 寫 `linear`（進度就是捲動位置），錯開量用捲動距離（`Reveal` 的 `--reveal-stagger`），不用時間
 - **只寫 longhand**（`animation-name`、`animation-timing-function`、`animation-fill-mode`、`animation-timeline`、`animation-range`），不要寫 `animation` shorthand。Lightning CSS 會把 shorthand 和 `animation-timeline` 合併成 `animation: … view()`，瀏覽器不接受，整個動畫失效；`scripts/design/dist-css.mjs` 會擋
-- 循環動畫（`LayerStack` 的脈動）只放在 `@media (prefers-reduced-motion: no-preference)` 裡
+- 循環動畫只放在 `@media (prefers-reduced-motion: no-preference)` 裡
 - 不要讓 LCP 元素（hero 標題、hero 靜態圖）用 `Reveal` 或任何從透明開始的動畫
-- 真 3D（`Scene3D`）只用在首頁與 offering 模板中屬於 `SCENE_FAMILIES` 的頁面，只放 hero 與功能章節；其他地方用 CSS 偽 3D（`LayerStack`、`Card` 的傾斜）或格線。範圍與預算見 `motion.md`
+- 真 3D 只用在首頁桌機版（緞帶場景）；其他地方用同一個世界渲染的靜態圖或格線。範圍與預算見 `motion.md`
 
 ## 基礎元件
 
@@ -146,7 +136,6 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 |---|---|---|
 | `Surface` | 頁面區塊 | `tone` 切換亮暗；`pattern="grid"` 畫由上往下淡出的座標格線；`width="reading"` 收窄到閱讀寬度；同 tone 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
 | `PageHero` | 頁面開場 | 預設深色＋格線；輸出該頁唯一的 h1（display 字級）；`visual` slot 放 3D 場景或其靜態版本；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」） |
-| `LayerStack` | 3D 場景的靜態版本 | CSS 3D 玻璃圖層＋能量光束，捲出畫面時分開；裝飾用，`aria-hidden` |
 | `SectionHeading` | 區塊標題 | `index`（`01`）＋mono eyebrow＋漸層線；`level` 由呼叫端指定，避免跳級；`size="display"` 每頁最多一次，`size="sm"` 用在面板裡的標題（表單的錯誤摘要）；`action` slot 放整區的連結（同一列靠右） |
 | `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；小圓角（`--radius-md`）；primary 發光上浮、secondary 漸層外框、text；`disabled` 只存在於 `<button>` |
 | `Link` | 內文連結、獨立連結 | 內文連結一律底線；`external` 加 ↗ 與「（外部網站）」螢幕閱讀器文字 |
@@ -157,12 +146,12 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
-| `Scene3D` | three.js 3D 捲動場景 | 見下方「3D 場景」 |
 | `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的深色玻璃列；寬度小於 64rem 收進「選單」 |
 | `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入） |
 | `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴 |
 | `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動 |
 | `Faq` | 常見問題 | 原生 `<details>`，零 JS |
+| `FactRow` | 論點與撐住它的事實 | 左邊 `SectionHeading`（`level`、`index`、`description`）加選填的 `link`，右邊是 default slot 的 `<li>` 事實清單，64rem 以上照 12 欄並排；offering 的功能與 hub 的 `sections` 用它（#167） |
 | `CardGrid` | 卡片列表 | 手機一欄、`--bp-sm-up` 兩欄、`--bp-lg-up` 三欄（`cols`）；同一列等高；`compact` 讓手機也一列兩張短卡 |
 | `ContactCta` | 每頁最後的聯絡區塊 | 文案取自現站；按鈕連到目前語系的聯絡我們，`label` 可換成「預約演示」 |
 | `Prose` | 長文 | Markdown 內文的排版，`:global()` 只作用在自己內部 |
@@ -172,7 +161,6 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `SearchResults` | `/search` 的搜尋結果 | Pagefind 的 island：`form` 是頁面 GET 搜尋表單的 id（欄位 `q`），第一次 focus 或網址有 `?q=` 才載入 `/pagefind/pagefind.js`，其他頁面不用。狀態 idle／loading／results／none／error 由 `data-state` 切換，每次顯示 10 筆加「顯示更多」；`level` 是結果標題與狀態標題的層級；`preview` 只給 `/design-system` 畫靜態狀態。索引範圍見 `PageLayout` 的 `searchTrail` |
 | `FormPanel` | 頁面唯一的表單 | 有標題的面板，表單以標題命名；送出按鈕放 `actions` slot。標題下方是送出後的狀態區（`role="alert"`、`tabindex="-1"`）：`errors` 是錯誤摘要（`SectionHeading size="sm"` 的編號 eyebrow，下面每個錯誤一列、連到欄位，錯誤色只用在編號，不用淡紅底與左側粗線），`message` 是整張表單的訊息（送出失敗、安全驗證未通過）；`challenge` 在按鈕上方預留 Turnstile 的高度（窄螢幕 compact、`--bp-sm-up` 起 flexible，`--challenge-height*`），`preview` 在展示頁畫出預留框；`busy` 加 `aria-busy`。要送出的表單傳 `form`（`src/lib/forms/rules.ts` 的 id）、`action`、`next`：script 用同一套規則驗證、填入錯誤、第一次 focus 時載入 Turnstile、成功後導到 `next`（ADR 0005）；錯誤元素預先 render，script 才不會失去 scoped 樣式 |
 | `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
-| `SceneChapter` | 3D 場景上的章節 | 見「3D 場景」 |
 | `VideoFacade` | 影片 | `video` 是 `{ kind: 'youtube', id }` 或 `{ kind: 'file', src }`（自架 MP4）；初始只有本機 `poster` 與原生 `<button>`，播放器在 `<template>` 裡，點擊後才換上並取得焦點，首次載入不請求第三方資源；`poster` 不用 YouTube 縮圖；`title` 是圖說、按鈕的 accessible name 與播放器的 `title`；`node scripts/design/video-facade.mjs` 檢查（`npm run check`） |
 | `ConsentBanner` | cookie 同意 | 固定在視窗底部、不擋操作的深色橫幅，加上原生 `<dialog>` 的偏好設定（`showModal()` 鎖住焦點、Esc 關閉，關閉後焦點回到打開它的按鈕）；接受與拒絕同一個視覺層級；必要類別固定開啟，其他類別是 `role="switch"` 的 checkbox。只由 `PageLayout` 在 build 有 `PUBLIC_GTM_ID` 時放在 `body` 層級（放進有 transform 或 stacking context 的容器會被蓋住），內部頁不放；顯示時以 `scroll-padding-block-end` 與頁尾後的 spacer 留出橫幅高度，焦點不會被蓋住（WCAG 2.4.11），類別與文案來自 `src/data/consent.ts`，`config` 交給 script 儲存選擇與載入 GTM（ADR 0007）；任何帶 `data-consent-open="<id>-dialog"` 的按鈕都能打開對話框。`preview` 只給 `/design-system`，不儲存也不載入 |
 | `LocaleSwitcher` | 語系切換 | 純連結，零 JS；連到同一頁的其他語系版本，沒有翻譯時連到該語系首頁，連首頁都沒有的語系不列，只剩目前語系時不輸出（ADR 0002）；語系名稱用各自的語言並加上 `lang`；同一頁有多個時用 `label` 給不同的 landmark 名稱 |
@@ -192,15 +180,13 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 ## 3D 場景
 
-`Scene3D` 是 three.js 的 island，載入策略與理由見 [ADR 0003](../../../docs/decisions/0003-3d-island-loading.md)。
+首頁的緞帶場景是 three.js 的 island，載入策略與理由見 [ADR 0003](../../../docs/decisions/0003-3d-island-loading.md)「ribbon-route」。
 
-- 放在 `PageHero` 的 `backdrop` slot、靜態 `Backdrop`（`priority`）之後；靜態圖是 LCP，也是減少動態、Save-Data、不支援 WebGL 時的完整版本
-- hero 與要讓場景透出的區塊包在同一個 `data-scene-track` 元素裡，捲動進度以它計算。hero 之後的章節用 `SceneChapter`（每章佔滿一個 viewport、文字在玻璃面板上、場景 ready 後背景透明並疊在 hero 之上），不要自己寫透明背景
-- 窄螢幕的取景由 runtime 量 `PageHero` 的 `data-hero-visual` 決定（中心與鏡頭距離 `fitDistance()`），不要在場景裡寫 header、頁內導覽列的高度；改到 hero 的版面後跑 `scene-capture.mjs`，它也檢查跨斷點 resize 後的 tier（ADR 0003「窄螢幕的取景」）
-- 產品頁用 `Scene3D` 的 `family`（`sceneFamily()`，`src/lib/scene/families.ts`），只畫該家族的模組，每一章點亮一組方塊，組數取 track 裡 `SceneChapter` 的數量（M3-05）
-- 場景上的文字放在玻璃面板（`--glass-bg`）或 scrim 那一側，不直接壓在方塊上
-- 新場景寫成 `src/lib/scene/<名稱>.ts`，default export 一個 `SceneFactory`，加進 `Scene3D` 的 `LOADERS`；數量依 `tier.density` 減少，讓行動版降級生效（降級的數值只寫在 `tiers.ts` 的 `TIERS`）。factory 與 `update` 不做大量計算：`mount` 把初始化拆成多個 task，但 factory 本身是一個 task，Lighthouse 行動版把它的時間乘 4 計入 TBT（ADR 0003「初始化的長任務」）
-- 改到 `Scene3D`、`src/lib/scene/` 或用到它的頁面後，跑 ADR 0003「量測」的三個 script
+- 世界只寫在 `src/lib/scene/ribbon/world.ts`：live 版（`runtime.ts`）與靜態圖（`capture.ts`，`node scripts/design/ribbon-capture.mjs`）畫的是同一個世界，靜態圖與 3D 才會重疊。改了世界、視角或 `--map-*`、`--ribbon-*` 就重跑 capture，commit 新的 `src/assets/design/ribbon/*.webp` 與 `pictures.json`
+- 只有桌機載入（`src/lib/scene/tiers.ts` 的 `LIVE`）。`HomeTemplate` 的 inline script 在第一次繪製前用同一個條件加上 `html.want-3d`，改條件時兩處一起改
+- 首頁的段落與 runtime 之間靠 `data-ribbon-*` 屬性連接（`runtime.ts` 開頭的 DOM contract）；地圖標籤是 HTML，靜態圖上的位置讀 `pictures.json`，不手抄座標
+- 不用 GSAP 或其他動畫函式庫：固定用 CSS sticky，捲動驅動寫在 runtime（延後載入的 JS 預算 140 KB）
+- 改到 `src/lib/scene/` 或首頁的 3D 段落後，跑 ADR 0003「量測」的 script
 
 ## 展示頁
 
@@ -251,4 +237,4 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - build 後的 `scripts/design/video-facade.mjs`：每個有 `VideoFacade` 的頁面，載入時不得有站外的請求；用鍵盤 Tab 到 facade 按鈕、按 Enter 後，要換上有 `title` 的播放器，焦點落在播放器上
 - build 後的 `npm run test:visual`：首頁與各模板預覽頁在 375、768、1280px 的截圖和 baseline 比對，只在 CI 執行（雲端 session 會 skip）。改樣式、token 或元件後預期會失敗，確認差異符合意圖後照 `docs/workflow.md`「視覺回歸」由 CI 更新 baseline
 
-不在 `npm run check` 裡、依環境字型與 Chromium 的：`node scripts/design/a11y-smoke.mjs [path]`（圖上與 3D 場景上的文字對比、水平捲動、鍵盤 focus、reduced motion），改到 hero、`Backdrop`、`Surface`、`Scene3D` 或 focus 樣式後要跑。
+不在 `npm run check` 裡、依環境字型與 Chromium 的：`node scripts/design/a11y-smoke.mjs [path]`（圖上與 3D 場景上的文字對比、水平捲動、鍵盤 focus、reduced motion），改到 hero、`Backdrop`、`Surface`、首頁的 3D 段落或 focus 樣式後要跑。

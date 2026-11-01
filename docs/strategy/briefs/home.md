@@ -4,6 +4,29 @@
 - 主張 id 指 `docs/strategy/messaging.md`；事實的寫法見 `content-strategy` skill「引用事實的寫法」，只用 `docs/strategy/facts.yaml` 裡 zh-TW、`status: confirmed` 的條目
 - 狀態：已確認（#165 加上 `strategy-approved`）
 
+## 製作階段的版本（#167）
+
+#166 使用者決定首頁精簡成 5 段（`docs/strategy/concepts/copy-deck.md`「第四輪：偏離 brief 的地方」），#167 照選定的 `ribbon-route` 原型做進 production（`src/layouts/templates/HomeTemplate.astro`、`src/data/home/zh-TW.ts`）。下面的段落結構保留 #165 的版本，當作 5 段的依據；兩者的對照：
+
+| 首頁的段 | 對應 brief 的段 | 差異 |
+|---|---|---|
+| 1 Hero | 1 | h1「金融與政府的既有系統／原地接上 API 與 AI」，說明句帶到 `DM-4`（自行研發、也負責導入）；次要動作「依產業看方案」 |
+| 2 產業入口 | 2 | 金融、政府與公部門各一則事實原文；沒有段落引言，h2 直接說結論 |
+| 3 AI 成果 | 3 | 三則成果原文，每則一個連結（理賠、建檔各連解決方案頁，阻詐連成功案例） |
+| 4 產品與 OrientAI | 4、5 | 4 個產品名稱（帶類別詞）＋縮圖，不放家族說明；OrientAI 一句主張加 `fact:orientai-on-prem-data` 原文，前面加一句問句承接原文的「不會。」 |
+| 5 紀錄與聯絡 | 7、8 | 6 項穩定度取 3 項（成立年份、跨足金融、ISO27001）；一個動作「聯絡業務」 |
+
+移出首頁的內容不新增頁面，由已有的頁面承接：
+
+| 移出的內容 | 承接的頁面 |
+|---|---|
+| 第 4 段四個家族各一句說明與事實 | `/products` 與各家族頁 |
+| 第 5 段 OrientAI 的權限、Token、離線等特色 | `/orient-ai` |
+| 第 6 段產品與導入、服務卡片 | 說明句的「也負責導入規劃與建置」；服務在 header 的「服務」選單 |
+| 第 7 段子公司、國際品牌、Google Cloud 合作夥伴 | `/about-us` |
+
+en、vi 首頁還是 #167 之前的文案，新版面沒有對應文字的段落不輸出（`src/data/home/types.ts`），列為 #167 的後續事項。
+
 ## 受眾與任務
 
 依 `docs/research/audience-and-goals.md`「受眾分群」：

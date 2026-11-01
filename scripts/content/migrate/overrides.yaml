@@ -17,10 +17,14 @@ news/zh-TW/585:
 
 blog/zh-TW/ai-gateway-for-enterprise-ai-security:
   frontmatter:
+    # Both posts are about digiRunner's AI Gateway (docs/strategy/briefs/digirunner.md「取捨」第 9 項, #167)
+    relatedOfferings: [zh-TW/digirunner]
     description: 生成式 AI 帶來權限失控與資料外洩風險。本文說明 digiRunner AI Gateway 如何以 RBAC、Guardrail 與行為稽核治理企業 AI。
 
 blog/zh-TW/ai-infrastructure-operations-governance:
   frontmatter:
+    # Both posts are about digiRunner's AI Gateway (docs/strategy/briefs/digirunner.md「取捨」第 9 項, #167)
+    relatedOfferings: [zh-TW/digirunner]
     description: 探討企業如何透過 AI Gateway 與 digiRunner 管理生成式 AI、LLM 及 AI 模型整合，降低維運成本，並提升 AI 基礎建設與治理能力。
 
 blog/zh-TW/ai-token-cost-management:

@@ -9,6 +9,7 @@ author: Fran Chen
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f14def5-4aed-661d-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/zh-TW/ai-infrastructure-operations-governance/cover.webp
+relatedOfferings: [zh-TW/digirunner]
 sourceUrl: https://www.tpisoftware.com/blog/ai/ai-infrastructure-operations-governance
 migratedAt: 2026-10-23
 sourceUpdatedAt: 2026-05-12

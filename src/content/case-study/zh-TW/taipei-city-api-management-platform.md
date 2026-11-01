@@ -5,6 +5,7 @@ description: 為臺北市府建置符合統一標準的API管理平臺，增進�
 translationKey: taipei-city-api-management-platform
 client: { name: 臺北市政府, disclosed: true, logo: ../../../assets/case-study/zh-TW/taipei-city-api-management-platform/logo.webp }
 industry: government
+offerings: [zh-TW/digirunner]
 order: 2
 sourceUrl: https://www.tpisoftware.com/success-story
 migratedAt: 2026-10-23

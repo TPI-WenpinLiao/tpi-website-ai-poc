@@ -1,0 +1,83 @@
+---
+// A claim and the facts that back it (#167): the heading, a short answer and an optional link on
+// the start side, the facts as a ruled list on the end side, side by side on the 12-column grid
+// from --bp-lg-up, stacked below. The offering template's features and the hub template's sections
+// use it. Put the facts in the default slot as <li> elements, in the order to read them; a fact is
+// plain text, or a heading and a line (hub sections, which link each to its page).
+import SectionHeading from './SectionHeading.astro';
+import Link from './Link.astro';
+
+interface Props {
+  title: string;
+  level?: 2 | 3;
+  // "01" for numbered rows
+  index?: string;
+  description?: string | undefined;
+  link?: { label: string; href: string } | undefined;
+}
+
+const { title, level = 2, index, description, link } = Astro.props;
+---
+
+<div class="fact-row">
+  <div class="claim">
+    <SectionHeading level={level} index={index} title={title} description={description} />
+    {
+      link && (
+        <Link href={link.href} variant="standalone">
+          {link.label}
+        </Link>
+      )
+    }
+  </div>
+  {
+    Astro.slots.has('default') && (
+      <ul class="facts">
+        <slot />
+      </ul>
+    )
+  }
+</div>
+
+<style>
+  @import '../../styles/media.css';
+
+  .fact-row {
+    display: grid;
+    gap: var(--space-6) var(--grid-gutter);
+    padding-block-start: var(--space-8);
+    border-block-start: var(--border-width) solid var(--color-border);
+  }
+
+  .claim {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .facts {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .facts > :global(li) {
+    padding-block: var(--space-3);
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  @media (--bp-lg-up) {
+    .fact-row {
+      grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    }
+
+    .claim {
+      grid-column: 1 / 6;
+    }
+
+    .facts {
+      grid-column: 7 / -1;
+    }
+  }
+</style>

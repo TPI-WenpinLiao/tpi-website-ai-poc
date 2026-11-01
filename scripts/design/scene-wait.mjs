@@ -11,13 +11,15 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import { serve } from '../lib/static-server.mjs';
-import { LAUNCH_ARGS } from './scene-capture.mjs';
+
+// Headless Chromium renders WebGL with SwiftShader (software)
+export const LAUNCH_ARGS = ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'];
 
 const DIST = resolve(import.meta.dirname, '../../dist');
-// The offering page with the scene in lighthouserc.cjs
-const PATH = '/products/systalk-chat';
+// The home page is the only page with the scene (ADR 0003「ribbon-route」, #167)
+const PATH = '/';
 // Read from the runtime, so the limit is written in one place
-const RUNTIME = resolve(import.meta.dirname, '../../src/lib/scene/runtime.ts');
+const RUNTIME = resolve(import.meta.dirname, '../../src/lib/scene/ribbon/runtime.ts');
 const WAIT_LIMIT_MS = Number(/const WAIT_LIMIT_MS = (\d+);/.exec(readFileSync(RUNTIME, 'utf8'))?.[1]);
 if (!WAIT_LIMIT_MS) throw new Error(`no "const WAIT_LIMIT_MS = <ms>;" in ${RUNTIME}`);
 // SwiftShader timings vary between loads
@@ -59,7 +61,7 @@ const MARK_READY = `new MutationObserver((records, observer) => {
 async function timeToReady(browser, url, patch) {
   const page = await browser.newPage();
   try {
-    await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+    await page.setViewport({ width: 1280, height: 800 });
     await page.evaluateOnNewDocument(MARK_READY);
     if (patch) await page.evaluateOnNewDocument(patch);
     await page.goto(url, { waitUntil: 'load' });

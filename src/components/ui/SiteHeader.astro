@@ -1,7 +1,8 @@
 ---
 // Site header (M3-04, #17): brand, the first-level menu, search, locale and the 聯絡我們 button,
-// all from docs/ia/navigation.csv (src/lib/ia/navigation.ts). Sticky on a dark glass bar, so it
-// reads the same over the hero, the 3D scene and the light sections below.
+// all from docs/ia/navigation.csv (src/lib/ia/navigation.ts). Sticky on the white paper of the page
+// (ribbon-route, #167), a hairline below it. The symbol logo keeps the bar's measured widths
+// (docs/design/nav-fit.md); the footer shows the full logo.
 // Menus are native <details> disclosures sharing one `name`, so opening one closes the others
 // without client JS. A small script closes the open menu on a click outside it, and on Esc (focus
 // goes back to its summary). The rest of the keyboard model is M4-04's.
@@ -27,7 +28,7 @@ import { strings } from '../../data/strings';
 import Button from './Button.astro';
 import FormField from './FormField.astro';
 import { Image } from 'astro:assets';
-import logo from '../../assets/brand/logo-symbol-white.svg';
+import logo from '../../assets/brand/logo-symbol-color.svg';
 
 interface Props {
   // Accessible name of the <nav>; must be unique when several headers share a page
@@ -59,7 +60,7 @@ const groups = (item: NavItem) => item.children.filter((c) => c.children.length 
 const isMega = (item: NavItem) => groups(item).length > 0;
 ---
 
-<header class="site-header" data-surface="dark">
+<header class="site-header">
   {skipTo && <a class="skip" href={skipTo}>{t.skipToMain}</a>}
   <div class="bar">
     <a class="brand" href={nodeHref('home', currentLocale)}>
@@ -293,9 +294,13 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     position: sticky;
     inset-block-start: 0;
     z-index: var(--z-overlay);
-    border-block-end: var(--border-width) solid var(--glass-border);
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
+    border-block-end: var(--border-width) solid var(--color-border);
+    background: var(--color-bg);
+    /* Makes the header the containing block of fixed descendants (the mobile sheet) */
+    contain: layout;
+    /* Closed menus still have boxes; at the edge of a phone screen they would widen the page.
+       Clip, not hidden: no scroll container, and the menus still open downwards. */
+    overflow-x: clip;
   }
 
   /* Off screen until focused, then shown over the bar's start */
@@ -540,7 +545,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     display: none;
   }
 
-  /* The header's backdrop-filter makes it the containing block of fixed descendants, so the sheet
+  /* The header's layout containment makes it the containing block of fixed descendants, so the sheet
      hangs from the header's bottom edge and fills the rest of the viewport */
   .sheet {
     position: fixed;

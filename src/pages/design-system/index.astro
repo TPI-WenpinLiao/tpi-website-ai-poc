@@ -9,8 +9,6 @@ import Surface from '../../components/ui/Surface.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Reveal from '../../components/ui/Reveal.astro';
 import ScrollProgress from '../../components/ui/ScrollProgress.astro';
-import LayerStack from '../../components/ui/LayerStack.astro';
-import Scene3D from '../../components/ui/Scene3D.astro';
 import Button from '../../components/ui/Button.astro';
 import Link from '../../components/ui/Link.astro';
 import Tag from '../../components/ui/Tag.astro';
@@ -32,9 +30,9 @@ import Backdrop from '../../components/ui/Backdrop.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import InPageNav from '../../components/ui/InPageNav.astro';
 import Faq from '../../components/ui/Faq.astro';
+import FactRow from '../../components/ui/FactRow.astro';
 import VideoFacade from '../../components/ui/VideoFacade.astro';
 import SearchResults from '../../components/ui/SearchResults.astro';
-import SceneChapter from '../../components/ui/SceneChapter.astro';
 import ConsentBanner, { type ConsentCategory, type ConsentCopy } from '../../components/ui/ConsentBanner.astro';
 import { Image } from 'astro:assets';
 import tokensCss from '../../styles/tokens.css?raw';
@@ -43,8 +41,8 @@ import { groupTokens, tokenNames, type Group } from '../../../scripts/design/tok
 import TokenGroup, { type Row } from './_TokenGroup.astro';
 import heroDataFlow from '../../assets/design/hero-data-flow.webp';
 import heroDataFlowMobile from '../../assets/design/hero-data-flow-mobile.webp';
-import heroModularStack from '../../assets/design/hero-modular-stack.webp';
-import heroModularStackMobile from '../../assets/design/hero-modular-stack-mobile.webp';
+import ribbonHeroWide from '../../assets/design/ribbon/hero-wide.webp';
+import ribbonHeroTall from '../../assets/design/ribbon/hero-tall.webp';
 import ambientGlow from '../../assets/design/ambient-glow-1.webp';
 import readingHeader from '../../assets/design/reading-header.webp';
 import coverPlatform from '../../assets/design/cover-platform.webp';
@@ -490,6 +488,12 @@ const description =
             <Button slot="action" href={`#components-${tone}`} variant="text">看全部</Button>
           </SectionHeading>
 
+          <h3>FactRow</h3>
+          <FactRow level={3} index="01" title="一個論點" description="一句回答。右邊是撐住它的事實原文，64rem 以上並排。" link={{ label: '接著看的頁面', href: `#components-${tone}` }}>
+            <li>第一則事實原文</li>
+            <li>第二則事實原文</li>
+          </FactRow>
+
           <h3>CardGrid compact</h3>
           <CardGrid compact>
             {['短卡一', '短卡二', '短卡三'].map((title) => (
@@ -753,18 +757,20 @@ const description =
         <code>--space-section</code> ＋ <code>--hero-narrow-offset</code>，靜態圖的主體和 3D 方塊都放在它的中央；3D 依
         <code>data-hero-visual</code> 量出來的位置取景。有麵包屑的範例見<Link href="/products/digirunner">產品頁</Link>，沒有的見<Link href="/">首頁</Link>。
       </p>
-      <h3>主視覺：兩個 3D 方向的靜態版本</h3>
+      <h3>主視覺：緞帶世界的靜態圖</h3>
+      <p class="note">
+        首頁 hero 的桌機與直式構圖，跟 3D 場景是同一個 three.js 世界渲染的（<code>node scripts/design/ribbon-capture.mjs</code>）。手機、減少動態與 3D 載入前都顯示這張；地圖上的標籤是 HTML，位置讀 <code>src/lib/scene/ribbon/pictures.json</code>。
+      </p>
       <div class="directions">
         {
           [
-            { title: '方向 A：Data Flow', image: heroDataFlow, mobile: heroDataFlowMobile, alt: '紫色與橘色光束連成的資料網路，光點沿著光束流向幾個發光節點' },
-            { title: '方向 B：Modular Stack', image: heroModularStack, mobile: heroModularStackMobile, alt: '四片帶格線的霧面玻璃板上下堆疊，一道紫到橘的光束垂直穿過中心' },
+            { title: 'hero-wide', image: ribbonHeroWide, alt: '白色方塊排成的系統地圖，一條紫到品紅到橘的緞帶穿過' },
+            { title: 'hero-tall', image: ribbonHeroTall, alt: '同一張系統地圖的直式構圖' },
           ].map((d) => (
             <figure class="direction">
               <Image src={d.image} alt={d.alt} widths={[640, 960, 1280]} sizes="(width >= 64rem) 36rem, 100vw" />
               <figcaption>
                 <strong>{d.title}</strong>
-                <span>桌機 16:9，手機改用 4:5 構圖（主體在上半部）。M3-07 選定方向後，這張圖是 3D 場景的 LCP 與減少動態時的版本。</span>
               </figcaption>
             </figure>
           ))
@@ -787,21 +793,6 @@ const description =
         }
       </ul>
       <p class="note">封面是抽象意象，不代表特定產品功能，當作卡片沒有真實素材時的預設圖；裝飾用，alt 留空。</p>
-      <h3>CSS 3D 圖層（LayerStack）</h3>
-      <p class="note">同一個等角視角的 CSS 版本，不需要圖片，捲出畫面時圖層分開。用在不值得放一張大圖的區塊。</p>
-      <LayerStack />
-      <h3>3D 捲動場景（Scene3D）</h3>
-      <p class="note">
-        three.js 的場景，放在 PageHero 的 backdrop slot、靜態主視覺之後，並包在 <code>data-scene-track</code> 裡；首屏載入完、瀏覽器閒置後才載入，減少動態、省流量或不支援 WebGL 時只顯示靜態圖。
-        本頁沒有 track，所以不會啟動；實際效果見<Link href="/">首頁</Link>與<Link href="/products/digirunner">產品頁</Link>（<code>family</code>：只畫一個產品家族的模組）。
-      </p>
-      <Scene3D direction="modular-stack" />
-      <h3>場景上的章節（SceneChapter）</h3>
-      <p class="note">放在 track 裡 hero 之後，每章佔滿一個 viewport，文字放在玻璃面板上；場景畫出第一格後章節背景變透明，讓場景透出來。手機上面板靠下，上半部留給場景。</p>
-      <SceneChapter>
-        <h4>章節面板</h4>
-        <p>首頁的產品家族與產品頁的四個「零」都用這個元件。</p>
-      </SceneChapter>
     </Surface>
 
     <Surface tone="light" width="reading" id="reading">

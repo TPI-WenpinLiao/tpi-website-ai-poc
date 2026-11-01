@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import { DEFAULT_LOCALE, LOCALES } from './src/lib/i18n/locales.ts';
 import sitemap from './src/integrations/sitemap.ts';
 import search from './src/integrations/pagefind.ts';
+import serifFonts from './src/integrations/serif-fonts.ts';
 
 // Placeholder origin until a production domain is decided; Cloudflare Pages serves *.pages.dev.
 const SITE = process.env.SITE_URL ?? 'https://tpi-website-ai-poc.pages.dev';
@@ -11,7 +12,7 @@ export default defineConfig({
   site: SITE,
   output: 'static',
   trailingSlash: 'never',
-  integrations: [sitemap(), search()],
+  integrations: [serifFonts(), sitemap(), search()],
   build: {
     format: 'file',
   },

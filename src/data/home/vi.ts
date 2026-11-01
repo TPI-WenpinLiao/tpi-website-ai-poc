@@ -1,11 +1,12 @@
 // Home page copy in vi (M7-03, #40), written like the zh-TW file (see its header): facts through
 // fact('<id>'), the rest is wording, still taken from the current site's vi pages
-// (www.tpisoftware.vn) at the places the zh-TW lines come from. The current site has no vi page for
-// the AI and ESG product families, so they have no line, like family-security in zh-TW. `meta` and
-// `labels` are this site's own wording.
+// (www.tpisoftware.vn) at the places the zh-TW lines come from; `meta` is this site's own wording.
+// #167 rebuilt the home page in five sections (src/data/home/types.ts) for zh-TW only: this file
+// keeps its earlier copy where a section has a place for it, and the sections and headings it has no
+// copy for are left out or named after their node, until the vi copy is written (#167 follow-up).
 
 import { fact } from '../facts.ts';
-import type { Home } from './zh-TW';
+import type { Home } from './types.ts';
 
 const hero = {
   // The subtitle of the about page's h1, as in zh-TW
@@ -13,16 +14,9 @@ const hero = {
   description: 'Không ngừng nỗ lực mang đến những công nghệ và giải pháp phần mềm đổi mới.',
 };
 
-const familyLines: Record<string, string> = {
-  'family-dx': 'Nền tảng trung gian ưu tiên API dành cho các hệ thống quan trọng',
-};
-
 const orientAi = {
   node: 'orient-ai',
-  eyebrow: 'Nền tảng AI đa tác nhân cấp doanh nghiệp',
   title: 'Hiện thực hóa giá trị thực tiễn từ AI',
-  // zh-TW's third feature is Token 成本控管; the vi page says Tối đa hóa ROI
-  features: [fact('orientai-multi-agent-vi'), fact('orientai-governance-vi'), fact('orientai-roi-vi')],
   action: 'Tìm hiểu thêm',
 };
 
@@ -52,18 +46,13 @@ export const home: Home = {
     description:
       'TPIsoftware cung cấp nền tảng trung gian iPaaS DigiLism, dòng AI hội thoại SysTalk.ai, nền tảng quản lý bền vững ESGswift và nền tảng bảo mật GadoSecurity.',
   },
-  hero,
-  familyLines,
-  orientAi,
-  industryLines,
-  cases,
-  contactCta,
-  labels: {
-    // 「Dòng Sản phẩm」 as on the vi contact form
-    families: 'Dòng sản phẩm',
-    familyLink: (family: string) => `Xem dòng sản phẩm ${family}`,
-    orientFeatures: 'Tính năng OrientAI',
-    all: (listing: string) => `Tất cả ${listing}`,
-    latest: 'Bài viết và tin tức mới nhất',
+  hero: { title: hero.title, lead: hero.description },
+  industries: {
+    entries: Object.fromEntries(Object.entries(industryLines).map(([node, text]) => [node, { text }])),
   },
+  cases: { items: cases.map((c) => ({ node: c.node, name: c.title, result: c.summary })) },
+  products: { nodes: ['digirunner', 'systalk-viki', 'gadodido', 'greenswift'] },
+  orientAi: { node: orientAi.node, title: orientAi.title, link: orientAi.action },
+  contactCta,
+  contact: { title: contactCta.title, description: contactCta.description },
 };

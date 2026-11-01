@@ -1,10 +1,12 @@
 /*
  * Design tokens (M3-02). Rules: .claude/skills/design-system/SKILL.md
  *
- * The site is a scene with depth: narrative pages (home, products, solutions) sit on the dark
- * surface over the 3D scroll scene (M3-07); reading pages (blog, legal) use the light surface.
+ * Direction ribbon-route (#166, rebuilt in #167): white paper everywhere, a white isometric system map
+ * with one purple → magenta → orange ribbon on the home page, flat color, no shadows, no glow. The
+ * gradient lives only in the ribbon's three.js render; every CSS token here is flat.
  * `:root` is the light surface; any element with data-surface="dark" switches every semantic color
- * token below it, so components work on both without variants.
+ * token below it to the purple brand band (contact band, OrientAI band, footer), so components work
+ * on both without variants.
  *
  * Layers:
  * - Primitives (--purple-*, --magenta-*, --orange-*, --ink-*, --red-*, --green-*): raw values,
@@ -17,7 +19,7 @@
  * (npm run check:design). Breakpoints live in src/styles/media.css as @custom-media.
  */
 :root {
-  /* Primitives: brand purple. 700 is the current site's primary color. */
+  /* Primitives: brand purple. 700 is the current site's primary color; 900 is the dark band. */
   --purple-50: #f6f1fa;
   --purple-100: #ebdff3;
   --purple-200: #d9c4f2;
@@ -117,23 +119,39 @@
   --glass-blur: 16px;
   --scene-worst: var(--ink-950);
 
-  /* Light and energy. The gradient is decoration only: lines, borders, the scroll progress bar. */
-  --gradient-energy: linear-gradient(100deg, var(--purple-500), var(--magenta-500) 55%, var(--orange-500));
-  --glow-brand: 0 8px 24px rgb(102 46 141 / 0.22);
-  --glow-accent: 0 8px 24px rgb(255 99 41 / 0.22);
-
-  /* Depth: three elevations above the page. Dark surface swaps shadows for rim light. */
-  --shadow-sm: 0 1px 2px rgb(18 15 29 / 0.08);
-  --shadow-md: 0 6px 16px rgb(18 15 29 / 0.1);
-  --shadow-lg: 0 18px 40px rgb(18 15 29 / 0.14);
+  /* Lines that mark a section, a card edge or the scroll progress bar. ribbon-route keeps the
+     brand gradient for the ribbon only (#167), so this is one flat color in gradient form: the
+     components that paint it as a background or border-image keep working. */
+  --gradient-energy: linear-gradient(var(--color-brand), var(--color-brand));
+  /* The ribbon's three colors, purple → magenta → orange, read by the three.js scene: the only
+     gradient on the site (ribbon-route P4). Never CSS gradients. */
+  --ribbon-start: var(--purple-500);
+  --ribbon-mid: var(--magenta-500);
+  --ribbon-end: var(--orange-500);
+  /* The system map's paint, read by the three.js world (src/lib/scene/ribbon/world.ts) and by
+     scripts/design/ribbon-capture.mjs for the static pictures: the ground and plain blocks, the
+     tint the plain blocks vary towards, the existing systems' grey, the core system's dark. */
+  --map-ground: var(--ink-0);
+  --map-block-tint: var(--ink-100);
+  --map-legacy: var(--ink-200);
+  --map-core: var(--ink-700);
+  /* No glow and no shadow in the HTML layer: depth comes from the 3D render (P4). Kept as tokens
+     so a component can still name its elevation. */
+  --glow-brand: none;
+  --glow-accent: none;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
   --perspective: 75rem;
-  --tilt: 3deg;
-  --lift: -0.375rem;
+  --tilt: 0deg;
+  --lift: 0;
 
-  /* Typography. Latin and Vietnamese use self-hosted Inter; Chinese falls back to system fonts.
-     Mono (JetBrains Mono) is for indices, eyebrows and data labels only. Both are declared in
-     base.css, latin, vietnamese and greek subsets only (#143). */
+  /* Typography. Latin and Vietnamese use self-hosted Inter; Chinese body text falls back to system
+     fonts. Headings (h1–h3, .serif) use Noto Serif TC 700, each page its own subset of the characters
+     it sets in serif (src/integrations/serif-fonts.ts, #167). Mono (JetBrains Mono) is for indices,
+     eyebrows and data labels only. Inter and Mono: latin, vietnamese and greek subsets only (#143). */
   --font-sans: "Inter Variable", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+  --font-serif: "Noto Serif TC Subset", "Noto Serif TC", "Songti TC", "PMingLiU", serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -145,18 +163,22 @@
   --font-size-base: 1rem;
   --font-size-lg: 1.125rem;
   --font-size-xl: 1.25rem;
+  /* ribbon-route's four steps: small (--font-size-base), text, head (h2) and display (the home
+     h1 only, ten characters across the grid at most). h1 on the other pages and h3 sit between. */
+  --font-size-text: clamp(1.125rem, 1rem + 0.4vw, 1.25rem);
   --font-size-h4: 1.125rem;
-  --font-size-h3: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-  --font-size-h2: clamp(1.75rem, 1.3rem + 2vw, 2.75rem);
+  --font-size-h3: clamp(1.125rem, 1rem + 0.4vw, 1.25rem);
+  --font-size-h2: clamp(1.625rem, 1.1rem + 2.6vw, 3.25rem);
   --font-size-h1: clamp(2.25rem, 1.5rem + 3.5vw, 4rem);
-  --font-size-display: clamp(2.75rem, 1.5rem + 5.5vw, 6rem);
+  --font-size-display: min(7rem, calc((100vw - 2 * var(--grid-margin)) / 10.4));
 
-  --line-height-display: 1.05;
+  --line-height-display: 1.1;
+  --line-height-head: 1.25;
   --line-height-tight: 1.2;
   --line-height-snug: 1.45;
   --line-height-base: 1.7;
-  --letter-spacing-display: -0.035em;
-  --letter-spacing-tight: -0.02em;
+  --letter-spacing-display: 0;
+  --letter-spacing-tight: 0;
   --letter-spacing-mono: 0.08em;
 
   /* Spacing: 4px scale. */
@@ -173,12 +195,17 @@
   --space-24: 6rem;
   --space-section: clamp(4rem, 2rem + 8vw, 9rem);
   --space-gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
+  /* One 12-column grid for every section of the pilot pages (#167): the same left edge for all text */
+  --grid-columns: 12;
+  --grid-margin: clamp(1.75rem, 3.75vw, 3.5rem);
+  --grid-gutter: clamp(1rem, 2.5vw, 2rem);
 
-  /* Shape and lines */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
+  /* Shape and lines. ribbon-route is square: buttons, cards and panels have no rounded corners;
+     only pills (tags, dots) stay round. */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
   --radius-pill: 62.5rem;
   --border-width: 1px;
   --border-width-strong: 2px;
@@ -195,31 +222,15 @@
   --duration-slow: 480ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  /* Time between staggered siblings (LayerStack nodes), and the period of an ambient loop (their
-     pulse). Effect list and reduced-motion rules: docs/design/motion.md. */
-  --delay-step: 480ms;
-  --duration-loop: 2400ms;
   --reveal-distance: 2rem;
   /* Reveal's stagger is a scroll offset, not a time: each `delay` step starts the scroll range
      this much later. */
   --reveal-stagger: 8%;
 
-  /* Scene: the shared isometric viewing angle. The CSS 3D fallback in the hero uses it now; the
-     three.js camera (M3-07) should match it so static and 3D versions line up. */
+  /* The isometric viewing angle of the default OG image (scripts/design/og-image.mjs) */
   --scene-angle-x: 58deg;
   --scene-angle-z: -45deg;
-  --scene-size: clamp(13rem, 8rem + 18vw, 22rem);
-  --layer-gap: clamp(1.75rem, 1rem + 2vw, 3rem);
-  --node-size: 0.625rem;
   --quarter-turn: 90deg;
-
-  /* Direction B Modular Stack block material (M3-04), read by src/lib/scene/modular-stack.ts:
-     how far the face color moves from --color-bg toward --color-border-brand, the rim width as a
-     share of the face, and the rim brightness for idle and active modules */
-  --scene-block-tint: 0.35;
-  --scene-rim-width: 0.06;
-  --scene-rim-glow: 0.9;
-  --scene-rim-glow-active: 2.3;
 
   /* Stacking */
   --z-raised: 1;
@@ -242,6 +253,8 @@
   --hero-image-drop: 0;
 
   /* Layout */
+  /* The orange band that ends the ribbon at the home page's contact button (#167) */
+  --home-band-width: clamp(5rem, 16vw, 16rem);
   --content-max-width: 72rem;
   --reading-max-width: 46rem;
   /* Person photo on the person template; 20rem in its sizes attribute */
@@ -264,55 +277,47 @@
 
 }
 
-/* Dark surface: the scene the 3D scroll effects play on. Only semantic tokens change. */
+/* Dark surface: the purple brand band (contact, OrientAI, footer). Only semantic tokens change. */
 [data-surface="dark"] {
-  --color-text: var(--ink-50);
-  --color-text-muted: var(--ink-300);
-  --color-text-brand: var(--purple-300);
-  --color-text-accent: var(--orange-400);
+  --color-text: var(--ink-0);
+  --color-text-muted: var(--purple-100);
+  --color-text-brand: var(--purple-200);
+  --color-text-accent: var(--orange-300);
 
-  --color-bg: var(--ink-950);
-  --color-bg-subtle: var(--ink-900);
-  --color-bg-muted: var(--ink-850);
-  --color-bg-brand-subtle: var(--purple-900);
-  --color-bg-accent-subtle: var(--orange-950);
+  --color-bg: var(--purple-900);
+  --color-bg-subtle: var(--purple-800);
+  --color-bg-muted: var(--purple-800);
+  --color-bg-brand-subtle: var(--purple-800);
+  --color-bg-accent-subtle: var(--purple-800);
   --color-bg-overlay: rgb(0 0 0 / 0.65);
 
-  --color-border: var(--ink-700);
-  --color-border-strong: var(--ink-400);
-  --color-border-brand: var(--purple-700);
+  --color-border: var(--purple-500);
+  --color-border-strong: var(--purple-200);
+  --color-border-brand: var(--purple-400);
   --color-grid-line: rgb(255 255 255 / 0.06);
 
-  --color-action: var(--purple-300);
-  --color-action-hover: var(--purple-200);
-  --color-action-text: var(--ink-950);
-  --color-action-subtle-hover: var(--ink-800);
-  --color-link: var(--purple-300);
-  --color-link-hover: var(--purple-200);
-  --color-disabled-bg: var(--ink-800);
-  --color-disabled-text: var(--ink-400);
+  --color-action: var(--ink-0);
+  --color-action-hover: var(--purple-100);
+  --color-action-text: var(--purple-700);
+  --color-action-subtle-hover: var(--purple-800);
+  --color-link: var(--ink-0);
+  --color-link-hover: var(--purple-100);
+  --color-disabled-bg: var(--purple-800);
+  --color-disabled-text: var(--purple-300);
   --color-focus: var(--orange-400);
 
   --color-accent: var(--orange-500);
-  --color-brand: var(--purple-300);
-  --color-brand-soft: var(--purple-700);
+  --color-brand: var(--purple-200);
+  --color-brand-soft: var(--purple-500);
 
   --color-error: var(--red-300);
   --color-error-bg: var(--red-950);
   --color-success: var(--green-300);
   --color-success-bg: var(--green-950);
 
-  --glass-bg: rgb(18 15 29 / 0.85);
-  --glass-border: rgb(255 255 255 / 0.1);
+  --glass-bg: rgb(56 24 80 / 0.92);
+  --glass-border: rgb(255 255 255 / 0.12);
   --scene-worst: var(--ink-0);
-
-  --gradient-energy: linear-gradient(100deg, var(--purple-400), var(--magenta-400) 55%, var(--orange-400));
-  --glow-brand: 0 0 0 1px rgb(191 157 232 / 0.35), 0 0 32px rgb(184 36 209 / 0.35);
-  --glow-accent: 0 0 0 1px rgb(255 122 69 / 0.4), 0 0 32px rgb(255 99 41 / 0.35);
-
-  --shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.06);
-  --shadow-md: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 12px 32px rgb(0 0 0 / 0.45);
-  --shadow-lg: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 24px 56px rgb(0 0 0 / 0.55);
 
   color-scheme: dark;
 }
@@ -322,8 +327,6 @@
     --duration-fast: 0ms;
     --duration-base: 0ms;
     --duration-slow: 0ms;
-    --delay-step: 0ms;
-    --duration-loop: 0ms;
     --tilt: 0deg;
     --lift: 0;
   }
