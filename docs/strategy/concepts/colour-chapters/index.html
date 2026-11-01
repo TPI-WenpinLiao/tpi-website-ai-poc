@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>昕力資訊 TPIsoftware｜金融與政府的 API 與 AI 軟體</title>
+<meta name="description" content="昕力資訊（TPIsoftware）研發並導入自有軟體，替金融與政府把 API、資料與 AI 安全接進既有系統，產品家族涵蓋 AI、數位轉型（DigiLism）、資安與 ESG。">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="wordmark" href="#top" aria-label="昕力資訊 TPIsoftware 首頁"><img src="assets/logo-horizontal-color.svg" alt="昕力資訊 TPIsoftware" width="180" height="32"></a>
+  <nav class="site-nav" aria-label="主選單">
+    <ul class="nav-links">
+      <li><a href="#industries">產業</a></li>
+      <li><a href="#cases">案例</a></li>
+      <li><a href="#products">產品</a></li>
+      <li><a href="#about">關於昕力</a></li>
+    </ul>
+    <a class="button" href="/contact-us">聯絡業務</a>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- 1. hero: grey = the systems already running, orange = the part TPI connects, the overlap = the connection -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__text">
+    <h1 id="hero-title"><span class="line"><span style="--d:0">金融與政府的系統</span></span><span class="line"><span style="--d:1">接上 API 與 AI</span></span></h1>
+    <p class="hero__lede lead" data-reveal style="--d:4">昕力資訊（TPIsoftware）研發並導入自有軟體，把 API、資料與 AI 安全接進既有系統；規範要求直接做在產品功能裡。</p>
+    <div class="hero__actions" data-reveal style="--d:6">
+      <a class="button" href="/contact-us">聯絡業務</a>
+      <a class="link arrow" href="#industries">依產業看方案</a>
+    </div>
+  </div>
+  <div class="shapes" aria-hidden="true">
+    <div class="shape shape--system"></div>
+    <div class="shape shape--tpi"></div>
+  </div>
+  <p class="shape-label shape-label--system small"><strong>既有系統</strong><span>以微服務架構的 DigiLism 專門協助處理核心銀行系統或過時大型機的資料轉換及通訊機制變更，可代替企業服務匯流排（ESB）</span></p>
+  <p class="shape-label shape-label--join" aria-hidden="true">接點</p>
+  <p class="shape-label shape-label--tpi" aria-hidden="true">昕力接上的部分</p>
+</section>
+
+<!-- 2. list: the rules (grey) met by the product (orange) at a hard vertical edge; index with preview -->
+<section class="list chapter" id="industries" aria-labelledby="industries-title">
+  <div class="list__head">
+    <h2 id="industries-title" data-reveal>規範要求，<span>已做進產品</span></h2>
+    <p class="list__intro" data-reveal style="--d:1">開放銀行、金融檢查與政府 API 規範的要求，digiRunner 已有對應功能，專案不必從零設計合規架構。</p>
+  </div>
+  <div class="list__left">
+    <p class="list__system" data-reveal style="--d:2"><strong>機關原本的防護</strong>digiRunner 透過 Nginx 將流量分配到各個伺服器端點，以確保 API 服務的穩定性。此外，也可整合現有的 WAF 廠商，如 F5 或 No Name Security。</p>
+    <figure class="index__frame" data-reveal style="--d:3">
+      <img class="frame-a" src="assets/interior-decorator-s-account-book-of-hours.jpg" width="1031" height="1600" alt="十九世紀的手寫帳冊，逐列記錄工時與金額">
+      <img class="frame-b is-hidden" src="assets/interior-decorator-s-account-book-of-hours.jpg" width="1031" height="1600" alt="">
+      <figcaption class="small">手寫帳冊，1846 年</figcaption>
+    </figure>
+  </div>
+  <div class="list__table index">
+    <p class="list__name small">規範</p>
+    <div class="index__group" data-reveal>
+      <h3>金融</h3>
+      <p>銀行與保險公司導入 API 管理平台時，開放銀行與金融檢查的要求已經對應好。</p>
+      <div class="index__rows">
+        <a class="index__row" href="/industries/finance" data-preview="assets/interior-decorator-s-account-book-of-hours.jpg" data-caption="手寫帳冊，1846 年" data-alt="十九世紀的手寫帳冊，逐列記錄工時與金額"><span class="index__kind">開放銀行</span><span>昕力資訊 digiRunner API 管理平台反應台灣開放銀行金管會法規要求</span><span class="go" aria-hidden="true">→</span></a>
+        <a class="index__row" href="/industries/finance" data-preview="assets/invoice-from-ct-lesueur-horticulture-nursery-rouen.jpg" data-caption="商號發票，1880 年" data-alt="1880 年法國商號的手寫發票，列出品項與金額"><span class="index__kind">開放銀行</span><span>昕力資訊實現三階段開放銀行規範</span><span class="go" aria-hidden="true">→</span></a>
+        <a class="index__row" href="/industries/finance" data-preview="assets/invoice-from-ct-lesueur-horticulture-nursery-rouen.jpg" data-caption="商號發票，1880 年" data-alt="1880 年法國商號的手寫發票，列出品項與金額"><span class="index__kind">金融檢查</span><span>針對金融檢查，完善 API 管理： API 生命週期作業 訂定交易限制 訂定連線識別名稱產製方式 定期盤點作業及風險評估 進行資源與服務監控作業 完善之服務憑證管理規範 進行分類分級管理 API Key 識別認證 採用 OAuth 2.0</span><span class="go" aria-hidden="true">→</span></a>
+      </div>
+      <a class="index__more link arrow" href="/industries/finance">看金融業方案</a>
+    </div>
+    <div class="index__group" data-reveal>
+      <h3>政府與公部門</h3>
+      <p>政府單位建置 API 管理平台時，共通性規範與惡意行為防護已經內建。</p>
+      <div class="index__rows">
+        <a class="index__row" href="/industries/government" data-preview="assets/birth-certificate.jpg" data-caption="手繪證書，1800 年" data-alt="1800 年手繪花飾的證書文件"><span class="index__kind">共通性規範</span><span>符合國家發展委員會【共通性應用程式介面規範】。</span><span class="go" aria-hidden="true">→</span></a>
+        <a class="index__row" href="/industries/government" data-preview="assets/lock-and-key.jpg" data-caption="門鎖與鑰匙，1700–1730 年" data-alt="十八世紀的鐵製門鎖與鑰匙"><span class="index__kind">惡意行為防護</span><span>具備惡意行為防護功能，可以識別程式碼注入、跨站台腳本攻擊、SQL 攻擊語法與 XML、JSON 結構語法威脅；並能搭配防毒軟體偵測病毒攻擊。</span><span class="go" aria-hidden="true">→</span></a>
+        <a class="index__row" href="/industries/government" data-preview="assets/telegraph-instrument.jpg" data-caption="電報機，約 1837–44 年" data-alt="十九世紀的電報機，線圈、槓桿與紙帶滾輪裝在木座上"><span class="index__kind">臺北市政府</span><span>為臺北市政府建置符合統一標準的API管理平台，使各機關的異質應用系統資料介接，讓市府推動資料開放政策，拓展創新應用之可行性，極大化開放資料加值應用與民眾參與公共政策。此外，昕力顧問團隊更協助市府建立API管理制度，並輔導各級機關一一導入上線。</span><span class="go" aria-hidden="true">→</span></a>
+      </div>
+      <a class="index__more link arrow" href="/industries/government">看政府與公部門方案</a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. work: three full panels; the paper the case reads (grey) and the orange row that reads it -->
+<section class="work" id="cases" aria-labelledby="cases-title">
+  <article class="panel">
+    <img src="assets/birth-certificate.jpg" width="1600" height="1287" alt="1800 年的手繪證書，近拍花飾與手寫字">
+    <div class="panel__title">
+      <h2 id="cases-title">AI 已用在理賠、建檔與阻詐</h2>
+      <p>三則案例都是金融保險的日常作業，每一則都有可以引用的成果。</p>
+    </div>
+    <div class="panel__row">
+      <span class="when small">理賠立案到派件</span>
+      <h3><a class="link" href="/solutions/smartclaim">AI 智慧理賠</a></h3>
+      <span class="fact">全自動執行理賠立案到派件，精確解析診斷書，節省逾80%&#8203;人工作業時間</span>
+    </div>
+    <p class="panel__caption small">手繪證書，1800 年</p>
+    <a class="panel__more arrow" href="/solutions/smartclaim">AI 智能理賠解決方案</a>
+  </article>
+  <article class="panel">
+    <img src="assets/invoice-from-ct-lesueur-horticulture-nursery-rouen.jpg" width="1600" height="1276" alt="1880 年法國商號的手寫發票，近拍品項與金額欄">
+    <div class="panel__row">
+      <span class="when small">醫療單據建檔</span>
+      <h3><a class="link" href="/solutions/smartfilling">AI 智慧建檔</a></h3>
+      <span class="fact">透過免模板辨識醫療單據&#8203;解決格式變動痛點，提升辨識率並降低40%維護人力</span>
+    </div>
+    <p class="panel__caption small">商號發票，1880 年</p>
+    <a class="panel__more arrow" href="/solutions/smartfilling">AI 智慧建檔解決方案</a>
+  </article>
+  <article class="panel">
+    <img src="assets/interior-decorator-s-account-book-of-hours.jpg" width="1031" height="1600" alt="1846 年的手寫帳冊，近拍逐列的工時與金額">
+    <div class="panel__row">
+      <span class="when small">跨行詐騙聯防</span>
+      <h3><a class="link" href="/success-story">金融聯防阻詐平台</a></h3>
+      <span class="fact">標準化聯防流程，詐騙事件即時共享，提升跨行交換的效率與透明度</span>
+    </div>
+    <p class="panel__caption small">手寫帳冊，1846 年</p>
+    <a class="panel__more arrow" href="/success-story">看所有成功案例</a>
+  </article>
+</section>
+
+<!-- 4. features: four product families dealt into a fan; each card is orange or paper (TPI), its picture plate grey (the world it connects to) -->
+<section class="features" id="products" aria-labelledby="products-title">
+  <div class="fan">
+    <div class="fan__stage">
+      <div class="fan__head">
+        <h2 id="products-title" data-reveal>依要解決的問題找產品</h2>
+      </div>
+      <ul class="cards">
+        <li class="card" style="--i:0; --r:-3deg">
+          <h3><a href="/products/digilism">數位轉型<br>（DigiLism）</a></h3>
+          <div class="card__plate"><img src="assets/telegraph-instrument.jpg" width="1600" height="1124" alt="十九世紀的電報機"></div>
+          <p>核心系統與大型主機透過 API 接進來，AI 模型也走同一道 Gateway。</p>
+        </li>
+        <li class="card" style="--i:1; --r:2deg">
+          <h3><a href="/products/systalk-ai">AI<br>（SysTalk.ai）</a></h3>
+          <div class="card__plate" data-ui role="img" aria-label="介面示意：依場景選擇模型">
+            <div class="pick">
+              <span class="pick__label">場景</span><span class="pick__value">智能客服</span>
+              <span class="pick__label">模型</span><span class="pick__value">企業級 LLM（如 70B 模型）</span>
+              <span class="pick__note">示意</span>
+            </div>
+          </div>
+          <p>依場景選擇合適的大語言模型，從智能客服、語音質檢到文件辨識都有產品。</p>
+        </li>
+        <li class="card" style="--i:2; --r:-2deg">
+          <h3><a href="/products/esgswift">ESG 與能源<br>（ESGswift）</a></h3>
+          <div class="card__plate"><img src="assets/factory-building-with-chimney-construction.jpg" width="1266" height="1600" alt="十九世紀工廠與煙囪的銀版照片" style="object-position: 50% 40%"></div>
+          <p>碳盤查、產品碳足跡與 CBAM 申報資料，用同一套平台整理。</p>
+        </li>
+        <li class="card" style="--i:3; --r:4deg">
+          <h3>資安<br>（GadoSecurity）</h3>
+          <div class="card__plate"><img src="assets/lock-and-key.jpg" width="1600" height="981" alt="十八世紀的鐵製門鎖與鑰匙"></div>
+          <p>使用者登入不必用密碼，系統日誌裡的入侵與攻擊由機器學習找出來。</p>
+        </li>
+      </ul>
+      <div class="fan__foot">
+        <a class="link arrow mint" href="/products">產品總覽</a>
+      </div>
+    </div>
+  </div>
+  <div class="families">
+    <div data-reveal>
+      <h3><a class="link" href="/products/digilism">數位轉型（DigiLism）</a></h3>
+      <p class="system">以微服務架構的 DigiLism 專門協助處理核心銀行系統或過時大型機的資料轉換及通訊機制變更，可代替企業服務匯流排（ESB）</p>
+      <blockquote>整合 MCP 協定與 AI Gateway 架構，讓 AI 模型安全串接企業 API、資料與業務流程</blockquote>
+      <ul>
+        <li><a href="/products/digirunner">digiRunner API 管理平台</a></li>
+        <li><a href="/products/digilogs">digiLogs 集中化日誌管理平台</a></li>
+        <li><a href="/products/digimars">digiMars 大數據管理平台</a></li>
+        <li><a href="/products/digiflexis">digiFlexis 企業流程管理平台</a></li>
+        <li><a href="/products/digicare">digiCare 智慧醫療服務</a></li>
+      </ul>
+    </div>
+    <div data-reveal style="--d:1">
+      <h3><a class="link" href="/products/systalk-ai">AI（SysTalk.ai）</a></h3>
+      <blockquote>SysTalk.ai 支援主流開源與企業級 LLM（如 70B 模型），企業可依場景選擇最合適的模型</blockquote>
+      <ul>
+        <li><a href="/orient-ai">OrientAI 企業級 Agentic AI 平台</a></li>
+        <li><a href="/products/systalk-chat">SysTalk.Chat AI 智能客服</a></li>
+        <li><a href="/products/systalk-viki">SysTalk.VIKI 企業生成式 AI 應用平台</a></li>
+        <li><a href="/products/systalk-coach">SysTalk.Coach AI 業務培訓</a></li>
+        <li><a href="/products/systalk-audit">SysTalk.Audit AI 語音質檢</a></li>
+        <li><a href="/products/systalk-icr">SysTalk.ICR AI 智慧光學字元辨識</a></li>
+        <li><a href="/products/systalk-rpa">SysTalk.RPA 流程自動化</a></li>
+        <li><a href="/solutions/smartclaim">AI 智能理賠解決方案</a></li>
+        <li><a href="/solutions/smartfilling">AI 智慧建檔解決方案</a></li>
+      </ul>
+    </div>
+    <div data-reveal style="--d:2">
+      <h3><a class="link" href="/products/esgswift">ESG 與能源（ESGswift）</a></h3>
+      <blockquote>碳盤查 盤查企業自身碳排放 包括跨地區/廠區/設備/系統<br>CBAM 自動文件資訊化碳排 並產出申報清冊<br>碳足跡 計算企業產品碳足跡 計算相關供應鏈碳足跡</blockquote>
+      <ul>
+        <li><a href="/products/greenswift">GreenSwift 智慧碳管理平台</a></li>
+        <li><a href="/products/electriswift">ElectriSwift 智慧能源管理系統</a></li>
+      </ul>
+    </div>
+    <div data-reveal style="--d:3">
+      <h3>資安（GadoSecurity）</h3>
+      <blockquote>FIDO2 無密碼 零信任身分驗證</blockquote>
+      <blockquote>利用機器學習模型分析日誌並檢測異常，能快速識別入侵與攻擊</blockquote>
+      <ul>
+        <li><a href="/products/gadodido">gadoDIDO 無密碼身分驗證</a></li>
+        <li><a href="/products/gadoscout">gadoScout AI 異常偵測系統</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 5. showcase: one control, blown up; it swaps the field between grey and orange -->
+<section class="showcase" id="orientai" aria-labelledby="orientai-title">
+  <div class="showcase__text">
+    <h2 id="orientai-title" data-reveal>企業 AI 留在<span data-word data-on="自己的" data-off="誰的">自己的</span>環境</h2>
+    <p class="showcase__lede" data-reveal style="--d:1">OrientAI 只部署在企業端，資料的掌控權在企業手上。Agent 的權限、影子 AI 與 Token 用量都有管控；搭配群聯 aiDAPTIV，地端架構離線也能運行。</p>
+    <dl class="showcase__points" data-reveal style="--d:2">
+      <div><dt>資料會交給外部嗎？</dt><dd>不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。</dd></div>
+      <div><dt>統一管控</dt><dd>AI Agent 統一管控與授權標準化 Token 用量監控與資源配置最佳化 消除影子 AI，防止機敏資料外洩 跨部門統一權限管理與資料治理</dd></div>
+      <div><dt>離線運行</dt><dd>結合群聯 aiDAPTIV 獨家記憶體擴充技術，突破算力與容量限制，地端架構確保離線仍可穩定運行</dd></div>
+      <div><dt>擴充</dt><dd>MCP 擴充應用 標準化整合功能模組，彈性擴展業務，持續優化流程</dd></div>
+      <div><dt>成本</dt><dd>Token 成本控管</dd></div>
+    </dl>
+    <a class="showcase__more link arrow" href="/orient-ai">認識 OrientAI</a>
+  </div>
+  <div class="control" data-ui>
+    <p class="control__label">OrientAI 統一管控（示意）</p>
+    <p class="control__name" id="token-label">Token 用量監控</p>
+    <div class="control__row">
+      <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="token-label"></button>
+      <span class="control__value" aria-hidden="true">開啟</span>
+    </div>
+  </div>
+</section>
+
+<!-- 6. how it works: the same AI onboarding card at four stages, tiles growing from grey to orange -->
+<section class="how" id="services" aria-labelledby="services-title">
+  <h2 id="services-title" class="how__title" data-reveal>產品和導入，同一家負責</h2>
+  <div class="how__grid">
+    <div class="how__head">
+      <p data-reveal style="--d:1">昕力自己研發產品，也負責導入規劃、模型設定、建置與應用模組設計，決策者不必在產品原廠和導入廠商之間協調。</p>
+      <blockquote data-reveal style="--d:2">昕力資訊提供完整的導入規劃、模型設定、建置與應用模組設計服務</blockquote>
+    </div>
+    <div class="stage stage--1" data-reveal style="--d:1">
+      <div class="tile"><div class="plan" data-ui style="--s:1" role="img" aria-label="介面示意：AI 導入清單，完成第一項">
+        <div class="plan__top"><span>AI 導入</span><span>示意</span></div>
+        <ol><li class="done">AI 導入情境分析</li><li class="todo">解決方案搭配建議</li><li class="todo">效益評估</li><li class="todo">模型評估、微調</li></ol>
+      </div></div>
+      <h3>AI 導入情境分析</h3><p>導入前</p>
+    </div>
+    <div class="stage stage--2" data-reveal style="--d:2">
+      <div class="tile"><div class="plan" data-ui style="--s:2" role="img" aria-label="介面示意：AI 導入清單，完成兩項">
+        <div class="plan__top"><span>AI 導入</span><span>示意</span></div>
+        <ol><li class="done">AI 導入情境分析</li><li class="done">解決方案搭配建議</li><li class="todo">效益評估</li><li class="todo">模型評估、微調</li></ol>
+      </div></div>
+      <h3>解決方案搭配建議</h3><p>導入前</p>
+    </div>
+    <div class="stage stage--3" data-reveal style="--d:3">
+      <div class="tile"><div class="plan" data-ui style="--s:3" role="img" aria-label="介面示意：AI 導入清單，完成三項">
+        <div class="plan__top"><span>SysTalk.ai 的 AI 導入</span><span>示意</span></div>
+        <ol><li class="done">AI 導入情境分析</li><li class="done">解決方案搭配建議</li><li class="done">效益評估</li><li class="todo">模型評估、微調</li></ol>
+      </div></div>
+      <h3>效益評估</h3><p>導入前</p>
+    </div>
+    <div class="stage stage--4" data-reveal style="--d:4">
+      <div class="tile"><div class="plan" data-ui style="--s:4" role="img" aria-label="介面示意：AI 導入清單，四項都完成">
+        <div class="plan__top"><span>SysTalk.ai 的 AI 導入</span><span>示意</span></div>
+        <ol><li class="done">AI 導入情境分析</li><li class="done">解決方案搭配建議</li><li class="done">效益評估</li><li class="done">模型評估、微調</li></ol>
+      </div></div>
+      <h3>模型評估、微調</h3><p>導入中</p>
+    </div>
+  </div>
+  <div class="services" data-reveal>
+    <h3>導入與服務</h3>
+    <ul>
+      <li><a class="link" href="/aiso">AISO 主權 AI</a><span>說明待補</span></li>
+      <li><a class="link" href="/outsourcing">委外服務</a><span>說明待補</span></li>
+      <li><a class="link" href="/cloudservice">雲端整合服務</a><span>說明待補</span></li>
+      <li><a class="link" href="/chatgpt-enterprise">ChatGPT 企業服務</a><span>說明待補</span></li>
+      <li><a class="link" href="/solutions/uiux">UI/UX 數位產品設計</a><span>說明待補</span></li>
+      <li><a class="link" href="/esg-advisory">ESG 永續發展與顧問服務</a><span>說明待補</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 7. about: the record as one statement, the facts a scanning reader wants highlighted -->
+<section class="about" id="about" aria-labelledby="about-title">
+  <div class="about__head">
+    <h2 id="about-title" data-reveal>評估長期合作的依據</h2>
+    <p data-reveal style="--d:1">成立年份、海外子公司、資安認證與雲端夥伴關係，是評估長期合作風險的資料。<a class="link arrow" href="/about-us">關於昕力</a></p>
+  </div>
+  <div class="about__story" data-reveal style="--d:2">
+    <p><strong>昕力資訊</strong>的紀錄：<span class="hl hl--paper">昕力資訊創立於 2005 年</span>。接著，<span class="hl hl--grey">2008 年首度跨足金融產業，為華南銀行建置 CRM 系統</span>。往海外，<span class="hl hl--paper">分別在2017、2019年設立新加坡與越南子公司</span>；然後 2020年以「TPIsoftware」 邁入國際。開發流程上，<span class="hl hl--orange">企業產品中台之開發流程 獲ISO27001 認證</span>；雲端上，<span class="hl hl--paper">正式成為 Google Cloud 合作夥伴</span>。</p>
+    <p>今天的據點：台北總部 新加坡 越南 日本 新竹專案管理中心 台中專案管理中心 台南開發中心 高雄開發中心。</p>
+    <p><a class="about__close" href="#contact">從既有系統談起</a></p>
+  </div>
+</section>
+
+<!-- 8. cta: one word is the button -->
+<section class="cta" id="contact" aria-labelledby="contact-title">
+  <div class="cta__top">
+    <div>
+      <h2 id="contact-title">談需求，或預約 demo</h2>
+      <p>填寫聯絡表單，說明您的產業、現有系統與想接上的服務，昕力的業務會與您聯絡。回覆時間：待補。</p>
+    </div>
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 36 36 12M16 12h20v20" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="square"/></svg>
+  </div>
+  <a class="cta__link" href="/contact-us">聯絡業務</a>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <p class="name"><img src="assets/logo-horizontal-white.svg" alt="昕力資訊 TPIsoftware" width="1200" height="214"></p>
+  <div class="foot">
+    <address class="places" style="font-style: normal">
+      <a href="https://maps.google.com/?q=114台北市內湖區瑞光路335號12樓">114台北市內湖區瑞光路335號12樓</a>
+      <a href="tel:+886226580508">+886 2 2658 0508</a>
+      <a href="mailto:service@tpisoftware.com">service@tpisoftware.com</a>
+    </address>
+    <div class="foot__links">
+      <div><h3>產業</h3><ul><li><a href="/industries/finance">金融</a></li><li><a href="/industries/government">政府與公部門</a></li></ul></div>
+      <div><h3>產品</h3><ul><li><a href="/products">產品總覽</a></li><li><a href="/products/systalk-ai">AI（SysTalk.ai）</a></li><li><a href="/products/digilism">數位轉型（DigiLism）</a></li><li><a href="/products/esgswift">ESG 與能源（ESGswift）</a></li></ul></div>
+      <div><h3>公司</h3><ul><li><a href="/about-us">關於我們</a></li><li><a href="/success-story">成功案例</a></li><li><a href="/contact-us">聯絡我們</a></li></ul></div>
+    </div>
+  </div>
+  <div class="legal">
+    <p>©2026 TPIsoftware All rights reserved</p>
+    <a class="link" href="#top">回到頂端</a>
+    <p class="credits">圖片：<a href="https://www.metmuseum.org/art/collection/search/537">“Birth Certificate”, American maker, 1800</a>、<a href="https://www.metmuseum.org/art/collection/search/756878">“Invoice from Ct. Lesueur, horticulture-nursery, Rouen, for fruit trees”, Lesueur Horticulteur-Pépiniériste, 1880</a>、<a href="https://www.metmuseum.org/art/collection/search/432618">“Interior Decorator’s Account Book of Hours Spent”, Jules-Edmond-Charles Lachaise, 1846</a>、<a href="https://www.metmuseum.org/art/collection/search/4803">“Lock and Key”, 1700–1730</a>、<a href="https://www.metmuseum.org/art/collection/search/8484">“Telegraph Instrument”, ca. 1837–44</a>，以上 The Metropolitan Museum of Art，public domain（CC0）；<a href="https://www.artic.edu/artworks/33542">“Factory Building with Chimney Construction”, 19th century</a>，Art Institute of Chicago，public domain（CC0）。圖片轉為灰階並裁切。</p>
+  </div>
+</footer>
+
+<script src="page.js"></script>
+</body>
+</html>

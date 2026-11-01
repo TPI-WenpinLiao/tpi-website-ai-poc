@@ -1,0 +1,94 @@
+[
+ {
+  "file": "docs/strategy/concepts/product-performs/assets/mainframe.jpg",
+  "media": "image",
+  "ref": "commons:148645108",
+  "title": "IBM System 360 model 40 panel",
+  "creator": "Darklanlan",
+  "date": "2024-05-23 10:48:22",
+  "license": "CC0",
+  "licenseCode": "cc0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "creditRequired": false,
+  "page": "https://commons.wikimedia.org/wiki/File:IBM_System_360_model_40_panel.jpg",
+  "via": "Wikimedia Commons",
+  "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/IBM_System_360_model_40_panel.jpg/1280px-IBM_System_360_model_40_panel.jpg",
+  "width": 1280,
+  "height": 970,
+  "bytes": 252670,
+  "credit": "\"IBM System 360 model 40 panel\" by Darklanlan, CC0, via Wikimedia Commons",
+  "notes": [
+   "downloaded with curl-equivalent fetch (assets.mjs --get was rate limited, HTTP 429)"
+  ],
+  "saved": "2026-11-01T07:28:10.019Z"
+ },
+ {
+  "file": "docs/strategy/concepts/product-performs/assets/insurance-office.jpg",
+  "media": "image",
+  "ref": "commons:26269282",
+  "title": "StateLibQld 2 391473 Interior of South British Insurance Company on Queen Street, Brisbane, 1903",
+  "creator": null,
+  "date": "1903",
+  "license": "Public domain",
+  "licenseCode": "pd",
+  "licenseUrl": null,
+  "creditRequired": false,
+  "page": "https://commons.wikimedia.org/wiki/File:StateLibQld_2_391473_Interior_of_South_British_Insurance_Company_on_Queen_Street,_Brisbane,_1903.jpg",
+  "via": "Wikimedia Commons",
+  "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/StateLibQld_2_391473_Interior_of_South_British_Insurance_Company_on_Queen_Street%2C_Brisbane%2C_1903.jpg/960px-StateLibQld_2_391473_Interior_of_South_British_Insurance_Company_on_Queen_Street%2C_Brisbane%2C_1903.jpg",
+  "width": 960,
+  "height": 746,
+  "bytes": 123079,
+  "credit": "\"StateLibQld 2 391473 Interior of South British Insurance Company on Queen Street, Brisbane, 1903\", Public domain, via Wikimedia Commons",
+  "notes": [
+   "downloaded with curl-equivalent fetch (assets.mjs --get was rate limited, HTTP 429)"
+  ],
+  "saved": "2026-11-01T07:30:35.220Z"
+ },
+ {
+  "file": "docs/strategy/concepts/product-performs/assets/medical-records.jpg",
+  "media": "image",
+  "ref": "commons:53024065",
+  "title": "Medical records Mennonite Hospital La Junta CO (24307113179)",
+  "creator": "Mennonite Church USA Archives",
+  "date": "2016-01-28 15:28:02",
+  "license": "No restrictions",
+  "licenseCode": "pd",
+  "licenseUrl": "https://www.flickr.com/commons/usage/",
+  "creditRequired": false,
+  "page": "https://commons.wikimedia.org/wiki/File:Medical_records_Mennonite_Hospital_La_Junta_CO_(24307113179).jpg",
+  "via": "Wikimedia Commons",
+  "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Medical_records_Mennonite_Hospital_La_Junta_CO_%2824307113179%29.jpg/1280px-Medical_records_Mennonite_Hospital_La_Junta_CO_%2824307113179%29.jpg",
+  "width": 1280,
+  "height": 1226,
+  "bytes": 181165,
+  "credit": "\"Medical records Mennonite Hospital La Junta CO (24307113179)\" by Mennonite Church USA Archives, No restrictions, via Wikimedia Commons",
+  "notes": [
+   "downloaded with curl-equivalent fetch (assets.mjs --get was rate limited, HTTP 429)"
+  ],
+  "saved": "2026-11-01T07:31:11.082Z"
+ },
+ {
+  "file": "docs/strategy/concepts/product-performs/assets/bank-counter.jpg",
+  "media": "image",
+  "ref": "commons:12654868",
+  "title": "StateLibQld 1 151711 Teller's counter at the Queensland National Bank, Brisbane, 1922",
+  "creator": null,
+  "date": "1922",
+  "license": "Public domain",
+  "licenseCode": "pd",
+  "licenseUrl": null,
+  "creditRequired": false,
+  "page": "https://commons.wikimedia.org/wiki/File:StateLibQld_1_151711_Teller%27s_counter_at_the_Queensland_National_Bank,_Brisbane,_1922.jpg",
+  "via": "Wikimedia Commons",
+  "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/StateLibQld_1_151711_Teller%27s_counter_at_the_Queensland_National_Bank%2C_Brisbane%2C_1922.jpg/960px-StateLibQld_1_151711_Teller%27s_counter_at_the_Queensland_National_Bank%2C_Brisbane%2C_1922.jpg",
+  "width": 960,
+  "height": 727,
+  "bytes": 135337,
+  "credit": "\"StateLibQld 1 151711 Teller's counter at the Queensland National Bank, Brisbane, 1922\", Public domain, via Wikimedia Commons",
+  "notes": [
+   "downloaded with curl-equivalent fetch (assets.mjs --get was rate limited, HTTP 429)"
+  ],
+  "saved": "2026-11-01T07:31:46.933Z"
+ }
+]

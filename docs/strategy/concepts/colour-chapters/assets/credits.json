@@ -118,5 +118,29 @@
       "resized to 1600px and converted to greyscale for the prototype"
     ],
     "saved": "2026-11-01T06:48:23.113Z"
+  },
+  {
+    "file": "docs/strategy/concepts/colour-chapters/assets/telegraph-instrument.jpg",
+    "media": "image",
+    "ref": "met:8484",
+    "title": "Telegraph Instrument",
+    "creator": null,
+    "creatorUrl": null,
+    "date": "ca. 1837–44",
+    "license": "public domain (CC0)",
+    "licenseCode": "cc0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "creditRequired": false,
+    "page": "https://www.metmuseum.org/art/collection/search/8484",
+    "via": "The Metropolitan Museum of Art",
+    "image": "https://images.metmuseum.org/CRDImages/ad/original/36990.jpg",
+    "width": 1600,
+    "height": 1124,
+    "bytes": 57705,
+    "credit": "\"Telegraph Instrument\", ca. 1837–44, public domain (CC0), via The Metropolitan Museum of Art",
+    "notes": [
+      "resized to 1600px and converted to greyscale for the prototype"
+    ],
+    "saved": "2026-11-01T06:54:14.414Z"
   }
 ]
