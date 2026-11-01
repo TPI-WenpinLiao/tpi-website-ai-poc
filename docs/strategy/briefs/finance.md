@@ -210,4 +210,4 @@ hub schema（`src/content.config.ts`）現有 `tagline`、`heroImage`、`industr
 | 4 | `nodes.csv` 寫「其餘介紹需人工提供」。本 brief 用事實庫既有的事實補了第 3–8 段；內容負責人若有其他想放的主題（例如證券業的專屬方案、金融業的客戶數），要先收進事實庫 | 事實庫沒有 | 新段落 |
 | 5 | 智能理賠（`smartclaim`）的內容檔沒有 `useCases` 帶 `industry: finance`；若採用模板反查（「schema 缺口」建議），要補一項 | 內容檔變更，製作階段處理 | 4 |
 | 6 | 保險產品其他未確認的說法：富邦人壽行動投保的案例（`fact:insurebrick-case-fubon-life`，含「3 分鐘成案」「最速、最佳」）、InsureRing 的「上架縮短 90%」（`fact:insurering-90-percent`） | 數字與最高級說法沒有量測依據；第 6 段改用已確認的新光金保代、新光人壽案例 | 6 |
-| 7 | 現有頁面第一階段 highlight 還留著「專利的服務不中斷熱部署」。事實庫沒有單獨的熱部署專利條目，只出現在 `fact:digirunner-hot-deploy-50`（`to_confirm`，note 寫成效數字與「專利」都沒有依據）；但 `fact:digirunner-smart-caching-patent` 這類功能層級的專利說法是 `confirmed`（#164），兩者的判斷要由人工統一 | 熱部署的專利沒有可引用的 confirmed 事實 | 2（改寫時不寫熱部署專利，除非補進事實庫） |
+| 7 | 已處理：功能層級的專利說法統一為 `confirmed`（使用者決定，#165），「專利的服務不中斷熱部署」另收為 `fact:digirunner-hot-deploy-patent`，第 2 段改寫時可以引用；同一句的「提升高達 50%」（`fact:digirunner-hot-deploy-50`）仍是 `to_confirm`，已從現有頁面刪除 | 無 | 2 |

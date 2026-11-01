@@ -2856,7 +2856,17 @@
     quote: digiRunner API 管理平台擁有專利的服務不中斷熱部署特點，在跨平台開發速度以及與下游應用系統的對接效率提升高達 50%
   locale: zh-TW
   status: to_confirm
-  note: 成效數字（提升高達 50%）與「專利」都沒有依據或比較基準，與 TCO 低 40% 等同類宣稱一致處理
+  note: 成效數字（提升高達 50%）沒有依據或比較基準，與 TCO 低 40% 等同類宣稱一致處理；專利的部分另收 digirunner-hot-deploy-patent
+
+# 功能層級的專利說法統一 confirmed（#165 使用者決定）
+- id: digirunner-hot-deploy-patent
+  type: feature
+  text: digiRunner API 管理平台擁有專利的服務不中斷熱部署特點
+  source:
+    url: https://www.tpisoftware.com/products/open-banking
+    quote: digiRunner API 管理平台擁有專利的服務不中斷熱部署特點
+  locale: zh-TW
+  status: confirmed
 
 - id: digirunner-open-banking-security
   type: feature

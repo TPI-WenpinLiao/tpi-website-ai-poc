@@ -80,7 +80,7 @@ node scripts/content/offering-files.mjs
 | family-dx | IDC 報告下載（表單，M6）、整合綜效 4 項、服務能力 5 項未搬；`highlights` 只放「DigiLism 為何與眾不同？」6 項 |
 | family-esg | ESG 國際認證標準清單、「降低 30% 人力成本」「平均節能 15%」等數字、ESG 顧問段落（`esg-advisory` 節點）未搬 |
 | family-security | 新頁，介紹文字需人工提供；提供前是 draft |
-| industry-finance | 承接 `/products/open-banking`，台灣開放銀行三階段的時程（2019–2021）可能過時；「專利的服務不中斷熱部署」「對接效率提升高達 50%」照抄；#165 依使用者決定刪除 50% 那一句（事實 `digirunner-hot-deploy-50` 是 `to_confirm`），「專利的服務不中斷熱部署」仍在。事實庫沒有單獨的熱部署專利條目，只出現在 `to_confirm` 的 `digirunner-hot-deploy-50`，所以這句的依據待確認，列在 `docs/strategy/briefs/finance.md`「待確認」第 7 項；`to_confirm`：現站 title 拼錯「Bankning」；開放銀行說明、傳統與開放銀行比較、授權流程圖未搬；產業頁其餘介紹需人工提供 |
+| industry-finance | 承接 `/products/open-banking`，台灣開放銀行三階段的時程（2019–2021）可能過時；「專利的服務不中斷熱部署」「對接效率提升高達 50%」照抄；#165 依使用者決定刪除 50% 那一句（事實 `digirunner-hot-deploy-50` 是 `to_confirm`），「專利的服務不中斷熱部署」保留，依據是 `digirunner-hot-deploy-patent`（功能層級的專利統一 confirmed，#165 使用者決定）；`to_confirm`：現站 title 拼錯「Bankning」；開放銀行說明、傳統與開放銀行比較、授權流程圖未搬；產業頁其餘介紹需人工提供 |
 | industry-government | 承接 `/products/open-government`；「臺北市政府 API 平臺（昕力資訊建置）」等專案與客戶名稱、智慧政府 2.0 說明、API 規格清單未搬；`to_confirm`：現站 title 寫「開放銀行 Open Government」；產業頁其餘介紹需人工提供 |
 | products | 現站 meta description 是舊的產品分組，改從四個家族頁籤寫；各產品的一句介紹沒有欄位，總覽卡片用各 `offering` 的 `description` |
 
