@@ -1,5 +1,7 @@
 # 第四輪的兩個方向（#166）
 
+> 定案（2026-11-01，`design-approved`）：使用者選定 `ribbon-route`。`t-gateway` 的原型已刪除，最後的版本在 git 歷史 `443e440:docs/strategy/concepts/t-gateway/`；本檔保留兩個方向的定義，當選擇的紀錄。
+
 本檔定義設計概念第四輪的兩個首頁方向，交給建原型的 agent 各自做成 `docs/strategy/concepts/<id>/index.html`。方向由 `design-director` 以科技品牌網站為參考定義，不用 `taste-skill` 的 `draw.mjs` 發牌（`.claude/skills/design-concept/SKILL.md`「用 `taste-skill` 檢查原型」）。
 
 - 依據：使用者 2026-11-01 的決定（`design-concept` skill 衝突表「第四輪」一列）、`docs/strategy/design-principles.md` 的 P1–P5、`docs/strategy/messaging.md` 的定位句、`docs/strategy/concepts/copy-deck.md` 的 5 段文字（另一個 agent 同時在改，段落的標題與事實以它為準）
