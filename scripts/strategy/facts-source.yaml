@@ -339,7 +339,8 @@ groups:
       - { id: digilism-ipaas, type: feature, quote: 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。 }
       - { id: digilism-patent-background-processing, type: feature, quote: 具備專利技術的背景服務運算處理，支援處理瞬間大量的數據或請求，達到零阻塞式運行。 }
       - { id: digilism-patent-resource-scheduling, type: feature, text: 專利技術的運算資源調度機制、靈活調配，以提高資訊系統可用性。, quote: '專利技術的運算資源調度機制、靈活調配，,以提高資訊系統可用性。' }
-      - { id: digilism-patent-sla, type: feature, quote: 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。, status: to_confirm, note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定） }
+      - { id: digilism-patent-sla, type: feature, quote: 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。, status: to_confirm, note: 「確保100% 符合 SLA」沒有依據或比較基準，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）；專利的部分另收 digilism-patent-load-balancing }
+      - { id: digilism-patent-load-balancing, type: feature, quote: 自適應負載平衡機制及紅黑佈署策略的專利技術, comment: 功能層級的專利說法統一 confirmed（#165 使用者決定） }
       - { id: digilism-system-integration, type: feature, quote: 結合 DevOps 與 CI/CD 流程、整合 API 管理、BPM、日誌管理，支援地端、雲端、雲地混合與多雲架構，介接大型企業的傳統 ESB }
       - { id: digilism-microservice-framework, type: feature, quote: DigiLism 以 K8S 滿足系統高可用性，直接實踐微服務架構的 BFF （Backend for Frontend），並以自有自動擴容 （Auto-scaling）研發專利技術，讓系統具備佈署彈性。 }
       - { id: digilism-auth-module, type: feature, quote: 提供多元身分驗證、驗身機制及安控機制的整合，包含訪問控制、資料加密和單一登入（SSO）等，同時內建組織階層管理 }

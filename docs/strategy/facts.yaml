@@ -1512,7 +1512,17 @@
     quote: 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。
   locale: zh-TW
   status: to_confirm
-  note: 沒有依據或比較基準的成效數字或最高級說法，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）
+  note: 「確保100% 符合 SLA」沒有依據或比較基準，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）；專利的部分另收 digilism-patent-load-balancing
+
+# 功能層級的專利說法統一 confirmed（#165 使用者決定）
+- id: digilism-patent-load-balancing
+  type: feature
+  text: 自適應負載平衡機制及紅黑佈署策略的專利技術
+  source:
+    url: https://www.tpisoftware.com/products/digilism
+    quote: 自適應負載平衡機制及紅黑佈署策略的專利技術
+  locale: zh-TW
+  status: confirmed
 
 - id: digilism-system-integration
   type: feature

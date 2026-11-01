@@ -293,7 +293,7 @@
 | 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。 | `digilism-ipaas` |
 | 具備專利技術的背景服務運算處理，支援處理瞬間大量的數據或請求，達到零阻塞式運行。 | `digilism-patent-background-processing` |
 | 專利技術的運算資源調度機制、靈活調配，,以提高資訊系統可用性。 | `digilism-patent-resource-scheduling` |
-| 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。 | `digilism-patent-sla` |
+| 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。 | `digilism-patent-sla` `digilism-patent-load-balancing` |
 | DigiLism 以 K8S 滿足系統高可用性，直接實踐微服務架構的 BFF （Backend for Frontend），並以自有自動擴容 （Auto-scaling）研發專利技術，讓系統具備佈署彈性。 | `digilism-microservice-framework` |
 | 記錄分散於各系統或 AP 的所有日誌，透過集中控管、即時監控告警，提供第一線 IT 人員精確即時查找、分析系統問題來源，進一步快速排除故障，高效且安全的運用數位軌跡。 | `digilism-log-audit` |
 | 以微服務架構的 DigiLism 專門協助處理核心銀行系統或過時大型機的資料轉換及通訊機制變更，可代替企業服務匯流排（ESB），以確保系統的高可用性和可靠性。 | `digilism-protocol-integration` |

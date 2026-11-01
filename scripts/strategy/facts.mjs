@@ -187,8 +187,8 @@ export function checkStrategyDoc(name, md, facts, locale = 'zh-TW') {
     if (h) {
       headings.length = h[1].length - 1;
       headings[h[1].length - 1] = h[2];
-      return;
     }
+    // A citation in a heading is checked under that heading itself
     const pendingAllowed = headings.some((t) => t && PENDING_HEADING.test(t));
     for (const m of line.matchAll(/`fact:([^`\s]+)`/g)) {
       const id = m[1];
