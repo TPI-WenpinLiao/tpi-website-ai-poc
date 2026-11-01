@@ -9,7 +9,7 @@
 - 首頁 5 段，每段一句標題加最多一句說明或一則事實，細節移到產品、產業頁（P5）
 - 標題用中文襯線 webfont，只取用到的字（P1）
 
-本檔是分階段流程設計概念階段的第一份產出（`.claude/skills/design-concept/SKILL.md`「1. 設計原則」「2. 參考對照」）。它決定試點頁（`docs/strategy/site-profile.md`「試點頁面」）在畫面上要傳達什麼，用來否決不符合的設計。各方向的首頁原型（`docs/strategy/concepts/<direction>/`），每個主要視覺決定都要指到這裡的一條原則（P1…P5）；`reviewer` 的設計 rubric D2「與設計原則一致」也拿本檔評分。各方向共用的論點與文案在 `docs/strategy/concepts/argument.md`、`docs/strategy/concepts/copy-deck.md`。
+本檔是分階段流程設計概念階段的第一份產出（`.claude/skills/design-concept/SKILL.md`「1. 設計原則」「2. 參考對照」）。它決定試點頁（`docs/strategy/site-profile.md`「試點頁面」）在畫面上要傳達什麼，用來否決不符合的設計。各方向的首頁原型（`docs/strategy/concepts/<direction>/`），每個主要視覺決定都要指到這裡的一條原則（P1…P5）；`reviewer` 的設計 rubric D2「與設計原則一致」也拿本檔評分。首頁的文案在 `docs/strategy/concepts/copy-deck.md`；`argument.md` 是第二輪的論點紀錄。
 
 - 輸入：`docs/strategy/messaging.md`（#165，`strategy-approved`）的定位句、`DM-1`～`DM-7`、`IT-1`～`IT-8` 與「語氣與用詞」；`docs/strategy/briefs/home.md` 的段落結構與 CTA，另兩份 brief（`digirunner.md`、`finance.md`）；`docs/strategy/competitors.md` 與 `docs/strategy/competitors/*.png`；現有設計系統（`design-system` skill、`src/styles/tokens.css`、`docs/design/motion.md`、ADR 0003、`docs/design/brand-assets.md`）
 - 原則限制「傳達什麼」，不規定唯一的樣式。每條原則最後一列寫各方向可以在哪裡不同；亮色或深色、有沒有 3D、用不用插圖，都不是原則決定的事

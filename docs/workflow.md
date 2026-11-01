@@ -120,7 +120,7 @@ quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighth
 |---|---|---|---|---|
 | 研究 | `researcher` | `site-research` | 事實庫、未搬內容盤點、競品分析、搜尋意圖 | script 檢查事實庫 |
 | 策略 | `content-strategist`、`seo-strategist` | `content-strategy` | messaging framework、每頁的 content brief | 人工加 `strategy-approved` |
-| 設計概念 | `design-director` | `design-concept` | 設計原則、三個 HTML 原型 | `reviewer` 依 rubric 評分，人工選方向後加 `design-approved` |
+| 設計概念 | `design-director` | `design-concept` | 設計原則、HTML 原型（預設 3 個，使用者可指定個數，用 `taste-skill` 檢查品質） | `reviewer` 依 rubric 評分，人工選方向後加 `design-approved` |
 | 製作 | `content-strategist`（文案）、主 session（前端） | `content-strategy`、`design-system`、`seo-checklist` | 頁面文案與實作 | `npm run check` |
 | 評審 | `reviewer` | `site-review` | 設計、文案與行銷、SEO 三份 rubric 的評分 | 低於門檻退回製作 |
 
@@ -144,7 +144,7 @@ quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighth
 
 - 研究：事實庫的檢查 `node scripts/strategy/facts.mjs` 在 `npm run check` 裡，沒過就不能開 PR；`--sources` 要連現站，不在 `npm run check`，結果寫進 PR
 - 策略：issue 帶「## 關卡」段落寫 `strategy-approved`，不進自動模式，走兩階段流程：階段一開 draft PR 後停下，你看完 messaging 與 brief，在 issue 加上 `strategy-approved` 再告訴 Claude 繼續
-- 設計概念：issue 帶 `needs-design`，同樣走兩階段流程。PR 附 `reviewer` 對三個方向的評分，你選定方向後加 `design-approved`
+- 設計概念：issue 帶 `needs-design`，同樣走兩階段流程。PR 附 `reviewer` 對各方向的評分，你選定方向後加 `design-approved`
 - 製作：照一般的 `/issue-ship` 與審查迴圈
 - 評審：rubric 的門檻寫在 `site-review`。沒過時，「要改的地方」回到製作，修正後由新的 `reviewer` 重評
 

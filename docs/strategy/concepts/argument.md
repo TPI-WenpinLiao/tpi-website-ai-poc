@@ -1,5 +1,7 @@
 # 首頁的清點與論點（#166）
 
+> 第二輪的紀錄，之後沒有更新：第二輪的五個方向與 `sheet.md` 已刪除；品牌色在第三輪改為完整使用，「品牌紫只用在 logo 與主要 CTA」不再適用；第四輪起首頁改為 5 段，文字以 `copy-deck.md` 為準，選定的方向見 `ribbon-route/` 與 `design-principles.md` 開頭的「定案」。
+
 `taste-skill` run 的第 1、2 步（`.claude/skills/taste-skill/SKILL.md`「1. Read the brief and the project」「2. Write the argument」），五個方向共用。清點是 idea 的來源（每個方向的 idea 句寫在 `<direction>/sheet.md` 開頭），論點決定首頁有哪些段落、什麼順序。文案在 [`copy-deck.md`](copy-deck.md)。
 
 - 輸入：`docs/strategy/briefs/home.md`（段落結構）、`docs/strategy/messaging.md`（主張 id）、`docs/strategy/competitors.md`、`docs/strategy/facts.yaml`、`docs/design/brand-assets.md`
