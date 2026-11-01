@@ -14,7 +14,7 @@
 // Pages checked: src/data/home/<locale>.ts and src/data/site.ts (every exported string; facts used
 // via fact('<id>') in the source), and the Markdown entries of src/content that are not verbatim
 // migrations: `sourceUrl: []` or a `facts` field (frontmatter strings and body; facts listed in `facts`).
-// Strategy documents (#165): docs/strategy/messaging.md and docs/strategy/briefs/*.md cite facts as
+// Strategy documents (#165, #166): docs/strategy/messaging.md, design-principles.md and briefs/*.md cite facts as
 // `fact:<id>`; each must exist and be zh-TW, and confirmed unless it sits under a heading that names
 // it as missing evidence (缺少證據) or to confirm (待確認).
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -205,7 +205,7 @@ export function checkStrategyDoc(name, md, facts, locale = 'zh-TW') {
 
 function strategyDocs() {
   const briefs = join(ROOT, 'docs/strategy/briefs');
-  const files = [join(ROOT, 'docs/strategy/messaging.md'), ...(existsSync(briefs) ? readdirSync(briefs).filter((f) => f.endsWith('.md')).map((f) => join(briefs, f)) : [])];
+  const files = [join(ROOT, 'docs/strategy/messaging.md'), join(ROOT, 'docs/strategy/design-principles.md'), ...(existsSync(briefs) ? readdirSync(briefs).filter((f) => f.endsWith('.md')).map((f) => join(briefs, f)) : [])];
   return files.filter((p) => existsSync(p)).map((p) => ({ name: relative(ROOT, p).split('\\').join('/'), md: readFileSync(p, 'utf8') }));
 }
 

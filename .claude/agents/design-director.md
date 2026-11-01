@@ -31,8 +31,9 @@ tools: Read, Grep, Glob, Bash, WebFetch, Write, Edit
 依序讀並照做：
 
 1. `.claude/skills/design-concept/SKILL.md`：原則、參考、原型的做法
-2. `.claude/skills/design-system/SKILL.md`：現有的設計方向與限制，寫「要放寬哪些限制」時對照
-3. `.claude/skills/writing-style/SKILL.md`
+2. `.claude/skills/taste-skill/SKILL.md`：house rules 與 inspector，原型的品質關卡（與本專案衝突時照 `design-concept`「用 `taste-skill` 檢查原型」）
+3. `.claude/skills/design-system/SKILL.md`：現有的設計方向與限制，寫「要放寬哪些限制」時對照
+4. `.claude/skills/writing-style/SKILL.md`
 
 ## 不做的事
 

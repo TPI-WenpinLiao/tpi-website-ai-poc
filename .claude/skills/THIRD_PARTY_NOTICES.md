@@ -9,6 +9,14 @@
 | `pr-review/SKILL.md` 的分類與判斷原則 | `interrogate` 的 `references/lead-judgment.md`；`thermo-nuclear-review` | pstack-claude @ 49b6850（移植自 cursor/plugins/pstack @ e46364b；[cursor/plugins/thermos @ 118e73b](https://github.com/cursor/plugins/tree/118e73b0e196e4d49d5aade7ce6dd8985a621f68/thermos)） | (c) 2026 Lauren Tan；(c) 2026 Michael Denyer；(c) 2026 Cursor |
 | `CLAUDE.md` 的「工作原則」 | `principle-prove-it-works`、`principle-build-the-lever`、`principle-make-operations-idempotent`、`principle-encode-lessons-in-structure`、`principle-fix-root-causes`、`principle-sequence-verifiable-units`、`principle-laziness-protocol` | pstack-claude @ 49b6850（移植自 cursor/plugins/pstack @ e46364b） | (c) 2026 Lauren Tan；(c) 2026 Michael Denyer |
 
+## 原封不動收錄的 skill
+
+| 本專案目錄 | 來源 | 上游版本 | 授權 |
+|---|---|---|---|
+| `taste-skill/` | `skills/taste-skill`（tasteskill v2，`design-taste-frontend`） | [leonxlnx/taste-skill @ 12af471](https://github.com/leonxlnx/taste-skill/tree/12af471f627f866411b4bd785b19646d3672784c) | MIT，(c) 2026 Leonxlnx，全文在 `taste-skill/LICENSE` |
+
+`taste-skill/` 照上游原樣複製（#166 使用者要求），不改寫；本專案與它衝突的規則寫在 `design-concept` skill。更新時整個目錄換成新版本，並改上表的版本。
+
 ## MIT License（pstack、pstack-claude）
 
 ```
