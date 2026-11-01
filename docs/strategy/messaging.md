@@ -5,27 +5,27 @@
 - 範圍：zh-TW。en、vi 列為後續事項（`site-profile.md`「語系」）
 - 事實一律寫成反引號包住的 `fact:` 加事實 id，對應 `docs/strategy/facts.yaml` 裡 `locale: zh-TW`、`status: confirmed` 的條目。`node scripts/strategy/facts.mjs` 會檢查每個引用
 - 定位句與主張是表述，可以改寫；主張裡不放數字、客戶名或最高級說法，這些只能出現在引用的事實裡
-- 受眾依 `docs/research/audience-and-goals.md`：主要受眾是金融、政府與公部門、製造業的決策者與 IT 主管，主要轉換是聯絡業務
+- 受眾依 `docs/research/audience-and-goals.md`：主要受眾是金融、政府與公部門、製造業的決策者與 IT 主管，主要轉換是聯絡業務。定位句只點名金融與政府（使用者決定，#165），理由見「定位不說的事」
 
 ## 定位
 
-> 昕力資訊研發並導入自有軟體，幫金融、政府與製造業的企業把 API、資料與 AI 安全接進既有系統；金融與政府的規範要求，直接做在產品功能裡。
+> 昕力資訊研發並導入自有軟體，幫金融機構與政府單位把 API、資料與 AI 安全接進既有系統；金融與政府的規範要求，直接做在產品功能裡。
 
-短版（給 brief 寫 hero 方向時參考，實際文案由 brief 與製作階段決定）：替金融、政府與製造業，把 API 與 AI 安全接進既有系統。
+短版（給 brief 寫 hero 方向時參考，實際文案由 brief 與製作階段決定）：替金融與政府，把 API 與 AI 安全接進既有系統。
 
 ### 定位句的依據
 
 | 定位句的部分 | 事實 | `competitors.md` 的觀察 |
 |---|---|---|
 | 研發並導入自有軟體 | `fact:products-families`、`fact:company-offerings`、`fact:aiso-onboarding` | 「選擇理由」：叡揚 GSS 也是自家產品加導入服務，模式最接近。所以「自有產品加導入」本身不是差異，差異在下兩列 |
-| 金融、政府與製造業 | `fact:company-industries`、`fact:aiso-industries` | 「比較」表的「定位說法」：四家都沒在定位句寫服務對象。「本站缺」第 1 項：第一屏點出產業可能是區隔的機會；「本站已有」第 2 項：產業入口可能是差異點 |
+| 金融與政府 | `fact:company-industries`、`fact:aiso-industries` | 「比較」表的「定位說法」：四家都沒在定位句寫服務對象。「本站缺」第 1 項：第一屏點出產業可能是區隔的機會；「本站已有」第 2 項：產業入口可能是差異點 |
 | 把 API、資料與 AI 接進既有系統 | `fact:digilism-protocol-integration`、`fact:digilism-family-digirunner`、`fact:digirunner-ai-gateway` | 「比較」表的「定位說法」：SYSTEX 只有短標，GSS 寫服務分類，Syscom 只有單一服務 banner，FPT 寫 AI 定位，都沒寫具體做什麼 |
 | 規範要求做在產品功能裡 | `fact:digirunner-open-banking-fsc`、`fact:digirunner-financial-inspection`、`fact:digirunner-ndc-spec` | 「比較」表的「定位說法」：四家的定位句都沒提到法規或合規（本檔的推論，依該列記錄的內容） |
 
 ### 定位不說的事
 
 - 不說「第一」「唯一」「領先」「頂尖」：事實庫沒有 `confirmed` 的依據，見「缺少證據的主張」
-- 製造業的證據最少：只有產業清單與 GreenSwift 的碳管理功能（`DM-7`），沒有製造業案例。首頁可以列出製造業，但不寫製造業的成果
+- 不點名製造業（使用者決定，#165）：製造業的證據只有產業清單，沒有製造業案例（「缺少證據的主張」第 13 項），`/industries/manufacturing` 也是 draft、沒有頁面。定位句、hero 與產業入口都只寫金融與政府。GreenSwift 的碳盤查改由 `DM-7` 以 ESG 產品的角度說，不框成製造業的主張
 
 ## 價值主張：決策者
 
@@ -40,6 +40,7 @@
 - `fact:digirunner-financial-inspection`：針對金融檢查列出的 API 管理作業
 - `fact:digirunner-ndc-spec`：符合國發會共通性應用程式介面規範
 - `fact:digirunner-open-banking-consulting`：顧問團隊協助規劃符合各國開放銀行規範的技術架構
+- `fact:digirunner-case-taipei-city`：為臺北市政府建置符合統一標準的 API 管理平台，並協助建立 API 管理制度（具名案例）
 
 用在：`/industries/finance`、`/products/digirunner`。對應 `search-intent.md` 的「API 管理 金融業」（共同子題含台灣法規）。
 
@@ -77,6 +78,7 @@ OrientAI 部署在企業端，資料不交給外部；權限、影子 AI 與 Tok
 - `fact:aiso-onboarding`：導入規劃、模型設定、建置與應用模組設計服務
 - `fact:systalk-ai-onboarding`：導入前的情境分析、效益評估，導入中的模型評估與微調
 - `fact:digirunner-open-banking-consulting`：顧問團隊協助規劃技術架構
+- `fact:digirunner-case-taipei-city`：昕力顧問團隊協助臺北市政府建立 API 管理制度，輔導各機關導入上線（具名案例）
 
 用在：`/`、`/industries/finance`。
 
@@ -90,8 +92,10 @@ OrientAI 部署在企業端，資料不交給外部；權限、影子 AI 與 Tok
 - `fact:insurering-rule-engine`：保險產業的規則引擎
 - `fact:insurering-automated-rules`：自動化檢核因應商品上下架、核保規則與法令
 - `fact:insurebrick-case-online-insurance`：以微服務建立網路投保平台的案例
+- `fact:insurebrick-case-shin-kong`：新光金保代核心系統以 InsureBrick 模組整合業務流程（具名案例）
+- `fact:insurering-case-shin-kong-life`：為新光人壽建置集中化規則引擎的成果（具名案例，數字照事實原文引用）
 
-用在：`/industries/finance`。InsureBrick、InsureRing 在 `docs/ia/nodes.csv` 標為「待確認：不在導覽，是否仍銷售」，brief 引用前先確認。
+用在：`/industries/finance`。InsureBrick、InsureRing 仍在銷售（使用者確認，#165）；`docs/ia/nodes.csv` 的「待確認：不在導覽，是否仍銷售」註記由主 session 更新。
 
 ### DM-6 合作對象的穩定度看得到
 
@@ -102,18 +106,22 @@ OrientAI 部署在企業端，資料不交給外部；權限、影子 AI 與 Tok
 - `fact:company-milestone-2020-brand`：以 TPIsoftware 品牌進入國際
 - `fact:cert-iso27001-product-platform`：企業產品中台的開發流程獲 ISO27001 認證
 - `fact:company-google-cloud-partner`：Google Cloud 合作夥伴
+- `fact:company-milestone-2008-finance`：2008 年首度跨足金融產業（具名客戶，#165 起已確認）
 
-用在：`/`。`competitors.md`「本站缺」第 2 項：新站首頁沒有第三方證據；在獎項與客戶名確認前，這組是首頁能用的信任證據。
+用在：`/`。`competitors.md`「本站缺」第 2 項：新站首頁沒有第三方證據；獎項確認前，這組與具名案例（`DM-1`、`DM-5` 的案例事實）是首頁能用的信任證據。
 
-### DM-7 有廠區、要面對 CBAM 的製造業，碳盤查有現成工具
+### DM-7 碳盤查、產品碳足跡與 CBAM 申報有現成工具
 
-GreenSwift 處理跨廠區的碳盤查、產品碳足跡與 CBAM 申報資料。
+要做溫室氣體盤查或回應 CBAM 的企業，有現成工具可用。GreenSwift 處理跨地區、跨據點的碳盤查、產品碳足跡與 CBAM 申報資料，內建常用的盤查標準。不點名產業（使用者決定定位句不保留製造業，#165）。
+
+保留這條、不刪的理由：ESGswift 是四個自有產品家族之一，首頁第 4 段要寫它解決什麼問題，需要一條有證據的主張；事實都已確認，問題只在原本把它框成製造業。
 
 - `fact:greenswift-scope`：碳盤查、CBAM、碳足跡的範圍，含跨地區、廠區、設備
 - `fact:greenswift-cbam-plan`：提供進出口供應鏈符合 CBAM 要求的數據
+- `fact:greenswift-standards`：內建 GHG Protocol 與 ISO 14064-1 標準，定期更新 IPCC 係數
 - `fact:cert-greenswift-aup`：通過國際查證機構核發的 AUP 認證
 
-用在：`/` 的 ESG 產品家族段。`/industries/manufacturing` 不是試點頁，現站也沒有製造業內容（`nodes.csv`）。
+用在：`/` 的 ESG 產品家族段。
 
 ## 價值主張：IT 主管
 
@@ -128,12 +136,13 @@ digiRunner 與 DigiLism 可裝在地端、雲端或 Kubernetes，多雲與混合
 - `fact:digirunner-cloud-platforms`：雲端版支援的雲平台
 - `fact:digilism-ipaas`：DigiLism 可在雲端、地端及混合環境部署
 - `fact:digilism-system-integration`：支援地端、雲端、混合與多雲架構，介接傳統 ESB
+- `fact:digirunner-case-pharmacity`：為 Pharmacity 在雲端建構 API 管理平台（具名案例）
 
 用在：`/products/digirunner`。
 
 ### IT-2 安全機制內建，對應常用的認證與加密標準
 
-存取防護、認證授權與加密不必另外拼裝，產品本身通過資安認證。
+API 的存取防護、認證授權與加密（digiRunner），以及使用者的身分驗證（gadoDIDO），都不必另外拼裝；產品本身通過資安或 FIDO 認證。
 
 - `fact:digirunner-zero-trust`：零信任的 API 存取防護，支援 OIDC、OAuth2
 - `fact:digirunner-security`：OAuth 2.0、OIDC、API Key、mTLS、JWT、HSM 介接
@@ -141,8 +150,12 @@ digiRunner 與 DigiLism 可裝在地端、雲端或 Kubernetes，多雲與混合
 - `fact:digirunner-open-banking-security`：傳輸層、資料層、行為層的資安防護
 - `fact:digirunner-gov-threat-protection`：識別程式碼注入、XSS、SQL 攻擊等威脅
 - `fact:cert-iso27001-digirunner`：通過 ISO27001 資訊安全認證
+- `fact:gadodido-fido-certified`：gadoDIDO 是通過 FIDO 認證的身分驗證應用
+- `fact:gadodido-passwordless`：FIDO2 無密碼、零信任身分驗證
+- `fact:gadodido-mfa`：結合 FIDO2、UAF 生物辨識與多因子核身流程
+- `fact:gadodido-device-only-data`：個人驗證資料只存放在用戶裝置
 
-用在：`/products/digirunner`、`/industries/finance`。
+用在：`/products/digirunner`、`/industries/finance`（金融頁第 2 段用 digiRunner 的事實，第 5 段用 gadoDIDO 的事實）。
 
 ### IT-3 尖峰流量與單點故障有機制處理
 
@@ -167,6 +180,7 @@ digiRunner 與 DigiLism 可裝在地端、雲端或 Kubernetes，多雲與混合
 - `fact:digirunner-gov-protocols`：圖形化串接 DB、FTP 等協定，支援 JSON、XML、SOAP 轉換
 - `fact:digirunner-nginx-waf`：可整合現有的 WAF 廠商
 - `fact:insurebrick-buy-modules`：只買需要的模組，可串接內外部系統
+- `fact:digirunner-case-taishin`：與台新銀行以 digiRunner 開發 API 管理平台，整合現金管理業務模組（具名案例）
 
 用在：`/`、`/products/digirunner`、`/industries/finance`。
 
@@ -226,17 +240,17 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 
 | 主張 | 事實 id | 數量 | 試點頁 |
 |---|---|--:|---|
-| DM-1 規範要求做在產品裡 | `fact:digirunner-open-banking-fsc`、`fact:digirunner-open-banking-3-stages`、`fact:digirunner-financial-inspection`、`fact:digirunner-ndc-spec`、`fact:digirunner-open-banking-consulting` | 5 | 金融、digiRunner |
+| DM-1 規範要求做在產品裡 | `fact:digirunner-open-banking-fsc`、`fact:digirunner-open-banking-3-stages`、`fact:digirunner-financial-inspection`、`fact:digirunner-ndc-spec`、`fact:digirunner-open-banking-consulting`、`fact:digirunner-case-taipei-city` | 6 | 金融、digiRunner |
 | DM-2 AI 用在核心作業 | `fact:smartclaim-result`、`fact:smartfilling-result`、`fact:smartfilling-case-bank`、`fact:fraud-platform-result`、`fact:smartclaim-case-medical-documents` | 5 | 首頁、金融 |
 | DM-3 AI 留在企業端 | `fact:orientai-on-prem-data`、`fact:orientai-governance-layer`、`fact:orientai-governance`、`fact:orientai-token-cost`、`fact:orientai-aidaptiv`、`fact:aiso-no-token-limit` | 6 | 首頁 |
-| DM-4 產品與導入同一家 | `fact:company-offerings`、`fact:products-families`、`fact:aiso-onboarding`、`fact:systalk-ai-onboarding`、`fact:digirunner-open-banking-consulting` | 5 | 首頁、金融 |
-| DM-5 保險專用模組 | `fact:insurebrick-platform`、`fact:insurebrick-28-modules`、`fact:insurebrick-scenarios`、`fact:insurering-rule-engine`、`fact:insurering-automated-rules`、`fact:insurebrick-case-online-insurance` | 6 | 金融（產品是否仍銷售待確認） |
-| DM-6 穩定度看得到 | `fact:company-founded`、`fact:company-subsidiaries-sg-vn`、`fact:company-milestone-2020-brand`、`fact:cert-iso27001-product-platform`、`fact:company-google-cloud-partner` | 5 | 首頁 |
-| DM-7 製造業碳盤查 | `fact:greenswift-scope`、`fact:greenswift-cbam-plan`、`fact:cert-greenswift-aup` | 3 | 首頁 |
-| IT-1 部署環境自選 | `fact:digirunner-deployment`、`fact:digirunner-multi-cloud`、`fact:digirunner-cloud-platforms`、`fact:digilism-ipaas`、`fact:digilism-system-integration` | 5 | digiRunner |
-| IT-2 安全機制內建 | `fact:digirunner-zero-trust`、`fact:digirunner-security`、`fact:digirunner-auth-methods`、`fact:digirunner-open-banking-security`、`fact:digirunner-gov-threat-protection`、`fact:cert-iso27001-digirunner` | 6 | digiRunner、金融 |
+| DM-4 產品與導入同一家 | `fact:company-offerings`、`fact:products-families`、`fact:aiso-onboarding`、`fact:systalk-ai-onboarding`、`fact:digirunner-open-banking-consulting`、`fact:digirunner-case-taipei-city` | 6 | 首頁、金融 |
+| DM-5 保險專用模組 | `fact:insurebrick-platform`、`fact:insurebrick-28-modules`、`fact:insurebrick-scenarios`、`fact:insurering-rule-engine`、`fact:insurering-automated-rules`、`fact:insurebrick-case-online-insurance`、`fact:insurebrick-case-shin-kong`、`fact:insurering-case-shin-kong-life` | 8 | 金融 |
+| DM-6 穩定度看得到 | `fact:company-founded`、`fact:company-subsidiaries-sg-vn`、`fact:company-milestone-2020-brand`、`fact:cert-iso27001-product-platform`、`fact:company-google-cloud-partner`、`fact:company-milestone-2008-finance` | 6 | 首頁 |
+| DM-7 碳盤查與 CBAM 工具 | `fact:greenswift-scope`、`fact:greenswift-cbam-plan`、`fact:greenswift-standards`、`fact:cert-greenswift-aup` | 4 | 首頁 |
+| IT-1 部署環境自選 | `fact:digirunner-deployment`、`fact:digirunner-multi-cloud`、`fact:digirunner-cloud-platforms`、`fact:digilism-ipaas`、`fact:digilism-system-integration`、`fact:digirunner-case-pharmacity` | 6 | digiRunner |
+| IT-2 安全機制內建 | `fact:digirunner-zero-trust`、`fact:digirunner-security`、`fact:digirunner-auth-methods`、`fact:digirunner-open-banking-security`、`fact:digirunner-gov-threat-protection`、`fact:cert-iso27001-digirunner`、`fact:gadodido-fido-certified`、`fact:gadodido-passwordless`、`fact:gadodido-mfa`、`fact:gadodido-device-only-data` | 10 | digiRunner、金融 |
 | IT-3 尖峰與故障 | `fact:digirunner-zero-downtime`、`fact:digirunner-failover`、`fact:digirunner-container-scaling`、`fact:digirunner-load-balancing`、`fact:digirunner-smart-caching-patent`、`fact:digirunner-redis-storage`、`fact:digirunner-tps` | 7 | digiRunner |
-| IT-4 接既有系統 | `fact:digilism-protocol-integration`、`fact:digirunner-api-composer`、`fact:digirunner-gov-protocols`、`fact:digirunner-nginx-waf`、`fact:insurebrick-buy-modules` | 5 | 首頁、digiRunner、金融 |
+| IT-4 接既有系統 | `fact:digilism-protocol-integration`、`fact:digirunner-api-composer`、`fact:digirunner-gov-protocols`、`fact:digirunner-nginx-waf`、`fact:insurebrick-buy-modules`、`fact:digirunner-case-taishin` | 6 | 首頁、digiRunner、金融 |
 | IT-5 軌跡看得到 | `fact:digirunner-console`、`fact:digirunner-low-code`、`fact:digirunner-cloud-opensearch`、`fact:digirunner-ai-usage-log`、`fact:digilism-log-audit` | 5 | digiRunner |
 | IT-6 AI 走同一道 Gateway | `fact:digirunner-ai-gateway`、`fact:digirunner-ai-model-config`、`fact:digirunner-ai-content-review`、`fact:digirunner-ai-traffic`、`fact:digirunner-ai-governance`、`fact:digilism-family-digirunner` | 6 | digiRunner、首頁 |
 | IT-7 先試用 | `fact:digirunner-trial-30-days`、`fact:digirunner-trial-all-features`、`fact:digirunner-cloud-trial-full`、`fact:digirunner-cloud-trial-terms`、`fact:digirunner-sandbox` | 5 | digiRunner |
@@ -307,21 +321,21 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 
 ## 缺少證據的主張
 
-想說但找不到 `confirmed` 事實的主張。這些不寫進上面的主張，也不寫進頁面文案。下表的事實 id 是 `to_confirm`，列出來是為了說明卡在哪；要用時由人工確認後改 `scripts/strategy/facts-source.yaml` 並重跑 `node scripts/strategy/extract-facts.mjs`。
+想說但找不到 `confirmed` 事實的主張。這些不寫進上面的主張，也不寫進頁面文案。下表「相關事實」欄的事實 id 是 `to_confirm`，列出來是為了說明卡在哪（「卡在哪」欄提到的是已確認、可以用的事實）；要用時由人工確認後改 `scripts/strategy/facts-source.yaml` 並重跑 `node scripts/strategy/extract-facts.mjs`。
 
 | # | 想說的主張 | 卡在哪 | 相關事實 |
 |---|---|---|---|
 | 1 | 昕力是台灣第一或領先的企業軟體公司 | 最高級自我宣稱，現站沒有排名依據 | `fact:company-claim-taiwan-first` |
 | 2 | 規模：員工數、累積專案數、AI 服務用戶數 | 數字有年份或統計時間不明，可能過時 | `fact:company-employees-630`、`fact:company-projects-400`、`fact:systalk-ai-140-million-users` |
 | 3 | 產品獲獎肯定（台灣精品獎、Gartner Cool Vendor 等） | 有年份的獎項，可能過時；`competitors.md`「本站缺」第 2 項指出首頁缺第三方證據，這是最直接的一類 | `fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`、`fact:award-innovative-business-2022` |
-| 4 | 具名的金融與政府客戶、客戶證言 | 客戶名稱與證言對外使用要授權；這是決策者「找成功案例」最需要的證據（GSS 的做法），授權確認後可補 DM-2 與 DM-1 | `fact:client-taishin-bank`、`fact:client-taipei-city`、`fact:client-cathay-fhc`、`fact:testimonial-cathay-fhc`、`fact:testimonial-shin-kong-bank`、`fact:digirunner-case-taishin`、`fact:digirunner-case-taipei-city` |
+| 4 | 客戶證言（含說話人姓名與職稱） | 客戶名稱已可用：使用者決定現站寫出的客戶名稱視為已授權（#165），`client-*` 與只因寫出客戶名稱而待確認的案例已改為 `confirmed`，並補進 `DM-1`、`DM-4`、`DM-5`、`IT-1`、`IT-4`（例如 `fact:digirunner-case-taipei-city`、`fact:digirunner-case-taishin`、`fact:insurering-case-shin-kong-life`）。仍卡住的是證言本身與說話人的姓名、職稱，這些仍要確認授權；證言是決策者「找成功案例」最直接的第三方說法（GSS 的做法） | `fact:testimonial-cathay-fhc`、`fact:testimonial-shin-kong-bank` |
 | 5 | digiRunner 是國內唯一符合金管會法令、100% 合規的 API 管理平台 | 最高級說法與 100% 都沒有依據。DM-1 只用「反應法規要求」「針對金融檢查」等已確認的說法 | `fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100`、`fact:digirunner-claim-gov-compliance-100` |
 | 6 | digiRunner 比 Kong 好導入、好維運、更合規 | 與競品的比較沒有依據或比較日期；`search-intent.md` 的「Kong 替代方案 API Gateway」是比較型查詢，確認後可給 digiRunner 頁接住 | `fact:digirunner-vs-kong-integration`、`fact:digirunner-vs-kong-adoption`、`fact:digirunner-vs-kong-compliance`、`fact:digirunner-vs-kong-operations` |
-| 7 | 成效數字：開發效率提升、正常運行時間、OrientAI 的效率與成本改善、InsureRing 上架時間 | 沒有量測方式或比較基準（#164 的宣稱規則）。首頁案例的 `fact:smartclaim-result` 已確認，可以用；理賠解決方案頁的同類數字還沒有 | `fact:digirunner-hot-deploy-50`、`fact:digirunner-uptime-999`、`fact:orientai-benefits`、`fact:insurering-90-percent`、`fact:smartclaim-80-percent` |
+| 7 | 成效數字：開發效率提升、正常運行時間、OrientAI 的效率與成本改善、InsureRing 上架時間 | 沒有量測方式或比較基準（#164 的宣稱規則）。首頁案例的 `fact:smartclaim-result` 已確認，可以用；理賠解決方案頁的同類數字還沒有。InsureRing 的具名案例成果（`fact:insurering-case-shin-kong-life`）已確認，產品頁的「上架縮短 90%」仍未確認 | `fact:digirunner-hot-deploy-50`、`fact:digirunner-uptime-999`、`fact:orientai-benefits`、`fact:insurering-90-percent`、`fact:smartclaim-80-percent` |
 | 8 | DigiLism 擁有多項發明專利 | 專利數會變，要確認現況。個別功能「具專利技術」的說法已確認（例如 `fact:digirunner-smart-caching-patent`），可以用 | `fact:digilism-patents-7` |
 | 9 | 搭配群聯 aiDAPTIV 的地端 AI 比其他硬體更快、能跑更大的模型 | 合作夥伴提供的估算與點名競品的比較，要確認授權與量測條件 | `fact:aiso-10x-dell-hpe`、`fact:aiso-52-to-2-seconds`、`fact:aiso-70b-on-4-gpus` |
 | 10 | 台灣開放銀行的三階段時程 | 法規時程是現站的說法，要對照主管機關公告。DM-1 只用「實現三階段規範」，不寫年份 | `fact:open-banking-taiwan-2019`、`fact:open-banking-stage-1`、`fact:open-banking-stage-2`、`fact:open-banking-stage-3` |
 | 11 | 在東南亞與東北亞多國設有據點 | 據點清單兩處說法不一致（有沒有泰國）。DM-6 改用已確認的新加坡、越南子公司 | `fact:company-asia-presence`、`fact:company-offices-overseas` |
 | 12 | digiRunner 有開源版，可以先自己裝來試 | 事實庫沒有開源版的條目。`search-intent.md` 的「開源 API Gateway 推薦」與 `digiRunner API 管理平台` 結果提到開源專案頁，要先從現站或官方來源收進事實庫 | 無 |
-| 13 | 製造業有導入案例與成果 | 事實庫只有產業清單（`fact:company-industries`）與 GreenSwift 功能，沒有製造業案例；`nodes.csv` 寫製造業頁「需人工提供」 | 無 |
+| 13 | 製造業有導入案例與成果 | 事實庫只有產業清單（`fact:company-industries`）與 GreenSwift 功能，沒有製造業案例；`nodes.csv` 寫製造業頁「需人工提供」。因此定位句不點名製造業（使用者決定，#165） | 無 |
 | 14 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答。`competitors.md`「本站缺」第 3 項：FPT 在聯絡頁寫明回覆時間 | 無 |

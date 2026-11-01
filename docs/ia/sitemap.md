@@ -339,8 +339,8 @@ flowchart LR
 | 　　　ElectriSwift 智慧能源管理系統（`electriswift`） | `offering` | `/products/electriswift` | 1 | 1 | 1 |  |
 | 　產業方案（`industries`） | `hub` | `/industries` | 0 | 0 | 0 | 新頁：介紹文字需人工提供；子頁順序待確認（audience-and-goals.md 問題 2） |
 | 　　金融（`industry-finance`） | `hub` | `/industries/finance` | 1 | 1 | 1 | 新頁：承接 /products/open-banking 內容，其餘介紹需人工提供 |
-| 　　　InsureBrick 保險科技模組化平台（`insurebrick`） | `offering` | `/products/insurebrick` | 1 | 1 | 1 | 待確認：不在導覽，是否仍銷售 |
-| 　　　InsureRing 保險自動化規則檢核（`insurering`） | `offering` | `/solutions/insurering` | 1 | 1 | 1 | 待確認：不在導覽，是否仍銷售 |
+| 　　　InsureBrick 保險科技模組化平台（`insurebrick`） | `offering` | `/products/insurebrick` | 1 | 1 | 1 | 不在導覽；仍在銷售（#165 使用者確認） |
+| 　　　InsureRing 保險自動化規則檢核（`insurering`） | `offering` | `/solutions/insurering` | 1 | 1 | 1 | 不在導覽；仍在銷售（#165 使用者確認） |
 | 　　政府與公部門（`industry-government`） | `hub` | `/industries/government` | 1 | 1 | 1 | 新頁：承接 /products/open-government 內容，其餘介紹需人工提供 |
 | 　　　GIS 空間數據解決方案（`gis`） | `offering` | `/solutions/gis` | 1 | 1 | 1 | 待確認：不在導覽，是否仍銷售 |
 | 　　製造業（`industry-manufacturing`） | `hub` | `/industries/manufacturing` | 0 | 0 | 0 | 新頁：現站沒有製造業內容，需人工提供 |

@@ -16,7 +16,7 @@
 
 ### 哪些產品能在這頁介紹
 
-`nodes.csv` 裡 `industry-finance` 的子節點只有 `insurebrick`、`insurering`，兩者都標「待確認：不在導覽，是否仍銷售」。模板的子頁卡片只會列這兩個。其他金融相關的產品掛在產品家族下：
+`nodes.csv` 裡 `industry-finance` 的子節點只有 `insurebrick`、`insurering`。兩者在 `nodes.csv` 標「待確認：不在導覽，是否仍銷售」，使用者已確認仍在銷售（#165），註記由主 session 更新。模板的子頁卡片只會列這兩個。其他金融相關的產品掛在產品家族下：
 
 | 產品 | 節點的 parent | 在這頁的處理 |
 |---|---|---|
@@ -24,7 +24,7 @@
 | DigiLism（家族頁） | `products` | 第 3 段的核心系統串接是家族層級的功能，連到家族頁 |
 | AI 智能理賠解決方案、AI 智慧建檔解決方案 | `family-ai` | 第 4 段介紹並連過去 |
 | gadoDIDO | `family-security` | 第 5 段介紹並連過去 |
-| InsureBrick、InsureRing | `industry-finance` | 第 6 段；是否仍銷售確認前不寫 |
+| InsureBrick、InsureRing | `industry-finance` | 第 6 段介紹，子頁卡片由模板產生 |
 
 在段落裡介紹不屬於子節點的產品，是內容層的連結，不改 `nodes.csv` 的階層。模板要怎麼列這些產品見「schema 缺口」。
 
@@ -61,7 +61,7 @@
 
 | 查詢 | 交給 | 理由 |
 |---|---|---|
-| `台灣 開放銀行 第三方業者 API 金管會`（主要） | 之後的 blog 文章（`/blog/{slug}`），台灣時程的事實確認後才寫 | 前幾名是制度說明的新聞，需要寫時程；時程的四筆事實是 `to_confirm`（「待確認」第 4 項）。決定見 `digirunner.md`「取捨」的「三件待決事項」第 1 項 |
+| `台灣 開放銀行 第三方業者 API 金管會`（主要） | 之後的 blog 文章（`/blog/{slug}`），台灣時程的事實確認後才寫 | 前幾名是制度說明的新聞，需要寫時程；時程的四筆事實是 `to_confirm`（「待確認」第 2 項）。決定見 `digirunner.md`「取捨」的「三件待決事項」第 1 項 |
 | `保險科技 AI 理賠`（主要） | `/solutions/smartclaim` | 解決方案頁寫理賠流程，本頁第 4 段只寫成果並連過去（「取捨」第 4 項） |
 | digiRunner 的品牌與功能查詢 | `/products/digirunner` | 本頁不展開功能清單 |
 
@@ -77,13 +77,11 @@
 | 2 | 法規要求已做在產品裡 | 開放銀行（金管會法規、三階段規範、TSP 授權時不留存帳密）與金融檢查的 API 管理作業，各對應 digiRunner 的哪些功能；傳輸層、資料層、行為層的防護。開頭一句交代開放銀行的起源當背景，不寫台灣時程。不寫財金公司 Open API 規範的名稱，也不寫「符合」該規範（取捨第 10 項）。連到 digiRunner 產品頁 | 決策者任務「了解產品與方案」；`DM-1`、`IT-2` | `API 管理 金融業`：台灣法規（API 盤點、認證與防禦、端對端加密），對應 `fact:digirunner-financial-inspection` 的定期盤點與 OAuth 2.0、`fact:digirunner-open-banking-security` 的傳輸層防護；`開放銀行 API`：定義的起源（PSD2）、客戶授權第三方存取的流程；`台灣 開放銀行 第三方業者 API 金管會`：三階段推動（只寫「三階段規範」）、第三方服務業者（TSP）；`銀行 API 平台`：保護、監控 API | `fact:digirunner-open-banking-fsc`、`fact:digirunner-open-banking-3-stages`、`fact:digirunner-open-banking-no-credentials`、`fact:digirunner-financial-inspection`、`fact:digirunner-open-banking-security`、`fact:digirunner-oauth2`、`fact:open-banking-history` | 200–300 字 |
 | 3 | 接上核心系統，不必先汰換 | 核心銀行系統與大型主機的資料轉換、通訊機制可以透過微服務與 API 接進來（DigiLism 的功能，連到 DigiLism 家族頁）；API 組合與資料庫配置、金融業常用的高可用架構（digiRunner 的功能，連到 digiRunner 產品頁） | IT 主管任務「確認接得上核心系統」；`IT-4` | `銀行 API 平台`：建立 API，把帳戶、支付等核心系統的資料開放給金融科技業者 | `fact:digilism-protocol-integration`、`fact:digirunner-api-composer`、`fact:digirunner-redis-storage` | 100–160 字 |
 | 4 | AI 用在理賠、建檔與阻詐 | 引言用「金融業 AI 應用」的說法帶出三個作業（取捨第 2 項）。三個作業各一項：做了什麼、成果是什麼、用的是昕力自研的 NLP 或辨識模型。連到智能理賠、智慧建檔解決方案頁；阻詐平台連成功案例列表。段末一句寫 AI 接進金融作業時，使用歷程可完整記錄、AI 應用有治理機制，供稽核與監管查核（取捨第 7 項），連到 digiRunner 產品頁 | 決策者任務「找成功案例」「了解產品與方案」；`DM-2`、`IT-8`；段末一句依據 `IT-5`、`IT-6` | `金融業 AI 應用`：風險與詐欺、營運自動化；`保險科技 AI 理賠`：反詐欺、理賠文件審閱自動化（次要，主要在 `/solutions/smartclaim`） | `fact:smartclaim-result`、`fact:smartclaim-case-medical-documents`、`fact:smartclaim-nlp`、`fact:smartfilling-case-bank-title`、`fact:smartfilling-case-bank`、`fact:smartfilling-template-free`、`fact:fraud-platform-title`、`fact:fraud-platform-result`、`fact:digirunner-ai-usage-log`、`fact:digirunner-ai-governance` | 引言 30–50 字；每項 60–100 字；段末一句 30–50 字 |
-| 5 | 金融通路的身分驗證 | gadoDIDO 給金融集團統一的身分驗證，一次註冊、跨通路使用；列出適用的金融業務（網銀、數位帳戶、證券開戶等）與保險投保流程。這是證券業唯一有具體事實的段落 | 決策者任務「了解產品與方案」（銀行、證券、保險通路）；`IT-2`（延伸，見「待確認」第 6 項） | `金融科技 解決方案 台灣`：身分驗證 | `fact:gadodido-finance-group`、`fact:gadodido-finance-uses`、`fact:gadodido-insurance`、`fact:gadodido-fido-certified` | 80–130 字 |
-| 6 | 保險業務的專用模組（待確認後才寫） | InsureBrick 依保險業務拆成模組、只買需要的模組；InsureRing 是保險產業的規則引擎，因應商品上下架、核保規則與法令調整。這段與子頁卡片合併 | 決策者任務「了解產品與方案」（保險）；`DM-5`、`IT-4` | — | `fact:insurebrick-platform`、`fact:insurebrick-28-modules`、`fact:insurebrick-scenarios`、`fact:insurebrick-buy-modules`、`fact:insurebrick-case-online-insurance`、`fact:insurering-rule-engine`、`fact:insurering-automated-rules` | 120–180 字，加子頁卡片 |
+| 5 | 金融通路的身分驗證 | gadoDIDO 給金融集團統一的身分驗證，一次註冊、跨通路使用；列出適用的金融業務（網銀、數位帳戶、證券開戶等）與保險投保流程。這是證券業唯一有具體事實的段落 | 決策者任務「了解產品與方案」（銀行、證券、保險通路）；`IT-2` | `金融科技 解決方案 台灣`：身分驗證 | `fact:gadodido-finance-group`、`fact:gadodido-finance-uses`、`fact:gadodido-insurance`、`fact:gadodido-fido-certified`、`fact:gadodido-passwordless` | 80–130 字 |
+| 6 | 保險業務的專用模組 | InsureBrick 依保險業務拆成模組、只買需要的模組；InsureRing 是保險產業的規則引擎，因應商品上下架、核保規則與法令調整。各帶一則具名案例（新光金保代、新光人壽），案例數字照事實原文。這段與子頁卡片合併 | 決策者任務「了解產品與方案」（保險）、「找成功案例」；`DM-5`、`IT-4` | — | `fact:insurebrick-platform`、`fact:insurebrick-28-modules`、`fact:insurebrick-scenarios`、`fact:insurebrick-buy-modules`、`fact:insurebrick-case-online-insurance`、`fact:insurebrick-case-shin-kong`、`fact:insurering-rule-engine`、`fact:insurering-automated-rules`、`fact:insurering-case-shin-kong-life` | 150–220 字，加子頁卡片 |
 | 7 | 規劃與導入由同一家負責 | 昕力的顧問協助規劃符合各國開放銀行規範的架構，AI 導入有情境分析、效益評估與模型微調；產品與導入不必分兩家找。作為聯絡前的最後一段 | 決策者任務「決定要不要聯絡業務」；`DM-4` | — | `fact:digirunner-open-banking-consulting`、`fact:systalk-ai-onboarding`、`fact:company-offerings` | 60–100 字 |
-| 8 | 金融業成功案例 | 精選 3–6 則與第 2–6 段對應的金融案例（`featuredCaseStudies`），連到成功案例列表（錨點「看所有成功案例」）。不列出全部 | 決策者任務「找成功案例」 | `昕力資訊 金融`：昕力在金融業的實績（客戶名能否顯示見「待確認」第 3 項） | 無已確認的事實，見「待確認」第 3 項 | 卡片 3–6 則 |
+| 8 | 金融業成功案例 | 精選 3–6 則與第 2–6 段對應的具名金融案例（`featuredCaseStudies`），連到成功案例列表（錨點「看所有成功案例」）。不列出全部。客戶名稱已可用（使用者決定，#165）；引言可帶昕力進入金融業的年份。建議的挑選見「待確認」第 1 項 | 決策者任務「找成功案例」；`DM-1`、`IT-4`、`DM-6` | `昕力資訊 金融`：昕力在金融業的實績 | `fact:digirunner-case-taishin`、`fact:client-taishin-bank`、`fact:client-entie-bank`、`fact:company-milestone-2008-finance` | 引言 20–40 字；卡片 3–6 則 |
 | 9 | 聯絡業務 | 頁尾的主要轉換 | 主要轉換：聯絡業務 | — | 無 | 沿用模板的 `ContactCta` |
-
-第 6 段若確認不再銷售，整段刪除，子節點也要從 `nodes.csv` 移除（主 session 處理），頁面不留空段。
 
 ### 與現有頁面的差異
 
@@ -93,9 +91,10 @@
 |---|---|---|
 | tagline「昕力資訊實現三階段開放銀行規範」 | 改寫成產業層級的一句；這句改放第 2 段當事實 | 產業頁的 hero 要回答「昕力替金融業做什麼」，開放銀行只是其中一件 |
 | description（digiRunner 反應開放銀行法規…） | 交 seo-strategist 依新段落重寫 | 只寫了開放銀行 |
-| highlights 第一到第三階段各一段 | 併成第 2 段 | 三段大多在重述 digiRunner 的資安與授權功能，決策者不需要逐階段讀；第一階段的內文另有問題，見「待確認」第 2 項 |
+| highlights 第一到第三階段各一段 | 併成第 2 段 | 三段大多在重述 digiRunner 的資安與授權功能，決策者不需要逐階段讀 |
+| 第一階段 highlight 的「提升高達 50%」（未確認的成效數字，來自現站的熱部署說法） | 已刪除（#165，zh-TW、en、vi 三語內容檔） | 沒有量測方式或比較基準（messaging「缺少證據的主張」第 7 項）；內容檔沒有 `facts` 欄位，`facts.mjs` 原本擋不到。改寫時補上 `facts` 欄位後就會被檢查 |
 | highlights「安全合規的技術架構」 | 移到第 7 段 | 講的是顧問協助規劃，屬於 `DM-4` |
-| 子頁卡片只有 InsureBrick、InsureRing | 併入第 6 段，條件式 | 兩者是否仍銷售未確認 |
+| 子頁卡片只有 InsureBrick、InsureRing，沒有說明 | 保留，接在第 6 段後面 | 兩者仍在銷售（使用者確認，#165）；第 6 段先說保險業務得到什麼，卡片才有上下文 |
 | 案例區列出所有 `industry: finance` 的案例（目前 44 則） | 改為精選 | 44 則卡片會蓋過前面的段落；決策者要的是跟自己問題相關的幾則 |
 | 現站開放銀行頁的「什麼是開放銀行」、台灣三階段時間軸、傳統銀行與開放銀行比較圖、「如何選擇 API 管理平台」（`unmigrated.md`） | 不放 | 起源只留一句當背景；時間軸的事實是 `to_confirm`；比較圖與選購建議是通用知識，不是昕力的事實，指不到決策者任務 |
 
@@ -126,8 +125,8 @@
 | 4 | `/products/digirunner` | digiRunner 的 AI 使用歷程紀錄與 AI 治理 | 第 4 段段末一句（取捨第 7 項） |
 | 4、8 | `/success-story` | 看所有成功案例 | 列表頁沒有產業篩選，錨點不能寫「金融業案例」，見「取捨」第 9 項 |
 | 5 | `/products/gadodido` | gadoDIDO 無密碼身分驗證 | |
-| 6 | `/products/insurebrick`、`/solutions/insurering` | 節點名稱 | 子頁卡片由模板產生；是否仍銷售確認前，第 6 段整段不寫（「待確認」第 1 項） |
-| 8 | 精選案例內頁（`/success-story/{slug}`） | 案例標題 | `featuredCaseStudies` 挑選見「待確認」第 3 項 |
+| 6 | `/products/insurebrick`、`/solutions/insurering` | 節點名稱 | 子頁卡片由模板產生 |
+| 8 | 精選案例內頁（`/success-story/{slug}`） | 案例標題（含客戶名稱） | `featuredCaseStudies` 挑選見「待確認」第 1 項 |
 | 9 | `/contact-us` | 聯絡業務，談金融業的需求 | 主要轉換 |
 
 ### 連入
@@ -138,7 +137,7 @@
 | 首頁第 2 段的產業卡片 | 金融（卡片說明寫這個產業得到什麼） | 首頁 brief 已列 |
 | `/products/digirunner` 第 6 段 | 金融業的開放銀行與金融檢查要求 | digiRunner brief 已列；`useCases` 帶 `industry: finance` 時模板也會連 |
 | 其他 `useCases` 帶 `industry: finance` 的產品頁（gadoDIDO、AI 智慧建檔解決方案、SysTalk.ICR） | 產業名 | 已有（`OfferingTemplate` 依 `industry` 連到產業頁） |
-| `/solutions/smartclaim` | 金融業的 AI 應用 | 建議補：內容檔沒有帶 `industry: finance` 的 `useCases`，補上後模板會連（「待確認」第 8 項） |
+| `/solutions/smartclaim` | 金融業的 AI 應用 | 建議補：內容檔沒有帶 `industry: finance` 的 `useCases`，補上後模板會連（「待確認」第 5 項） |
 | `/blog/customer-complaint-ai-tool-selection-guide` | 金融業的 AI 應用 | 可選：文章寫金融客服，見「取捨」第 5 項 |
 
 ### 建議新增
@@ -179,7 +178,7 @@ hub schema（`src/content.config.ts`）現有 `tagline`、`heroImage`、`industr
 |---|---|---|---|
 | 2–7 | `highlights` 只有標題與一段文字，放不下「說明 + 清單 + 連到產品頁」 | `sections`，取代這頁的 `highlights` | `{ heading: string; body: string; items?: { title: string; body?: string; node?: string }[]; node?: string }[]`，`node` 取 `nodes.csv` 的節點 id。形狀跟 `page.sections` 一致，多一個 `node` |
 | 2–5 | 這頁介紹的產品不是子節點，模板只列子節點 | 不加欄位，改模板（建議）；或加 `featuredOfferings` | 建議：`HubTemplate` 照 `content-model.md`「hub」已寫的規則，用 `industry` 反查 `offering.useCases[].industry` 列出相關產品（目前沒實作）。現有 `useCases` 帶 `industry: finance` 的是 digiRunner、gadoDIDO、智慧建檔、SysTalk.ICR，智能理賠要補一項 `useCases`。替代方案：`featuredOfferings: string[]`（offering 節點 id） |
-| 8 | `featuredCaseStudies` 已有 | 無 | 沿用，挑選見「待確認」第 3 項 |
+| 8 | `featuredCaseStudies` 已有 | 無 | 沿用，挑選見「待確認」第 1 項 |
 | — | 內容檔沒有 `facts` 欄位，`facts.mjs` 不檢查這頁的數字 | `facts`（共用欄位已有） | 製作階段改寫時補上 `facts: [...]`，不是 schema 缺口，是內容檔要加 |
 
 `sections` 與 `items[].node` 若也用在 digiRunner 頁（見 `digirunner.md`「schema 缺口」的替代方案），兩個模板共用同一個型別。
@@ -205,11 +204,9 @@ hub schema（`src/content.config.ts`）現有 `tagline`、`heroImage`、`industr
 
 | # | 事項 | 卡在哪 | 影響的段落 |
 |---|---|---|---|
-| 1 | InsureBrick、InsureRing 是否仍銷售 | `nodes.csv` 標「待確認：不在導覽，是否仍銷售」；messaging `DM-5` 也註明引用前先確認。保險案例另有 `fact:insurebrick-case-fubon-life`、`fact:insurering-case-shin-kong-life`、`fact:insurering-90-percent` 是 `to_confirm` | 6（不賣就刪整段與子節點） |
-| 2 | 現有頁面第一階段 highlight 的內文含「提升高達 50%」，來源是 `fact:digirunner-hot-deploy-50`（`to_confirm`）。這個內容檔沒有 `facts` 欄位，`facts.mjs` 不檢查，所以目前頁面上有一個未確認的數字 | 沒有量測方式或比較基準 | 2（改寫時刪除）；改寫前的現行頁面要不要先拿掉這句，請人工決定 |
-| 3 | 金融案例的客戶名稱。`src/content/case-study/zh-TW/` 有 44 則 `industry: finance` 的案例，都是 `client.disclosed: true`，會顯示客戶名稱；這些客戶在事實庫是 `to_confirm`（例如 `fact:client-taishin-bank`、`fact:client-cathay-fhc`），`fact:digirunner-case-taishin` 也是 | 客戶授權（`nodes.csv` 的 `case-study` 節點：客戶授權待確認）。確認前第 8 段挑哪幾則、要不要改成 `disclosed: false`，請內容負責人決定 | 8 |
-| 4 | 台灣開放銀行時程：`fact:open-banking-taiwan-2019`、`fact:open-banking-stage-1`、`fact:open-banking-stage-2`、`fact:open-banking-stage-3` | 要對照主管機關公告 | 2（目前只用「三階段規範」） |
-| 5 | 「國內唯一符合金管會法令」「100% 符合金融檢查規範」：`fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100` | 最高級與 100% 沒有依據 | 2 |
-| 6 | gadoDIDO 不在 messaging 的主張裡。第 5 段的依據是受眾任務（銀行、證券通路的身分驗證），借用 `IT-2` 的方向；要不要在 messaging 補一條主張，或把 gadoDIDO 的事實加進 `IT-2` | messaging 目前的 `IT-2` 只收 digiRunner 的事實 | 5 |
-| 7 | `nodes.csv` 寫「其餘介紹需人工提供」。本 brief 用事實庫既有的事實補了第 3–7 段；內容負責人若有其他想放的主題（例如證券業的專屬方案、金融業的客戶數），要先收進事實庫。昕力進入金融業的年份（`fact:company-milestone-2008-finance`）也是 `to_confirm` | 事實庫沒有 | 新段落 |
-| 8 | 智能理賠（`smartclaim`）的內容檔沒有 `useCases` 帶 `industry: finance`；若採用模板反查（「schema 缺口」建議），要補一項 | 內容檔變更，製作階段處理 | 4 |
+| 1 | 第 8 段精選哪幾則。客戶名稱已可用（使用者決定，#165），`client.disclosed: true` 照現站顯示即可，剩下的是挑選。建議依段落對應挑：第 2、3 段對應 `taishin-cash-sales-api-management-platform`、`entie-bank-api-management-platform`（兩者 `offerings` 都是 digiRunner）；第 4 段對應 `cathay-united-bank-ai-intelligent-customer-service-system`、`bank-of-taiwan-robotic-process-automation-rpa`；第 6 段的保險案例已在段落文字裡，卡片可以不重複 | 內容負責人決定最後的挑選與排序 | 8 |
+| 2 | 台灣開放銀行時程：`fact:open-banking-taiwan-2019`、`fact:open-banking-stage-1`、`fact:open-banking-stage-2`、`fact:open-banking-stage-3` | 要對照主管機關公告 | 2（目前只用「三階段規範」） |
+| 3 | 「國內唯一符合金管會法令」「100% 符合金融檢查規範」：`fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100` | 最高級與 100% 沒有依據 | 2 |
+| 4 | `nodes.csv` 寫「其餘介紹需人工提供」。本 brief 用事實庫既有的事實補了第 3–8 段；內容負責人若有其他想放的主題（例如證券業的專屬方案、金融業的客戶數），要先收進事實庫 | 事實庫沒有 | 新段落 |
+| 5 | 智能理賠（`smartclaim`）的內容檔沒有 `useCases` 帶 `industry: finance`；若採用模板反查（「schema 缺口」建議），要補一項 | 內容檔變更，製作階段處理 | 4 |
+| 6 | 保險產品其他未確認的說法：富邦人壽行動投保的案例（`fact:insurebrick-case-fubon-life`，含「3 分鐘成案」「最速、最佳」）、InsureRing 的「上架縮短 90%」（`fact:insurering-90-percent`） | 數字與最高級說法沒有量測依據；第 6 段改用已確認的新光金保代、新光人壽案例 | 6 |

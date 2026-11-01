@@ -46,7 +46,7 @@
 
 ## 這頁要讓讀者相信什麼
 
-昕力替金融、政府與製造業，把 API、資料與 AI 接進既有系統（定位句）；AI 已用在核心作業並有成果（`DM-2`），企業 AI 可以留在自己的環境（`DM-3`），產品和導入由同一家負責（`DM-4`），而且這家公司的穩定度看得到（`DM-6`）。
+昕力替金融與政府，把 API、資料與 AI 接進既有系統（定位句）；AI 已用在核心作業並有成果（`DM-2`），企業 AI 可以留在自己的環境（`DM-3`），產品和導入由同一家負責（`DM-4`），而且這家公司的穩定度看得到（`DM-6`）。
 
 ## 段落結構
 
@@ -54,13 +54,13 @@
 
 | # | 段落 | 目的 | 依據（受眾任務／主張 id） | 搜尋子題 | 事實 | 預估長度 |
 |---|---|---|---|---|---|---|
-| 1 | Hero：替誰、做什麼 | 第一屏說出服務對象（金融、政府、製造業）與做的事（把 API 與 AI 安全接進既有系統）。h1 寫定位句，不含品牌詞；說明的第一句以「昕力資訊（TPIsoftware）」開頭（取捨第 3 項）。換掉現行的「以頂尖科技為企業賦能」。附主要 CTA 與「依產業看方案」的次要動作 | 決策者任務「判斷昕力做什麼、是不是為我做」；定位句；`competitors.md`「本站缺」第 1 項（四家第一屏都沒寫服務對象） | 品牌導航（`昕力資訊`、`TPIsoftware`、`昕力資訊 官網`）要的「這家公司做什麼」；`台灣 AI 解決方案 公司`、`企業數位轉型 軟體公司` 要的「哪家公司、為誰做」 | `fact:company-industries` | 標題 15–25 字，說明 40–60 字 |
-| 2 | 產業入口 | 每個產業一句「這個產業得到什麼」，連到產業頁。金融與政府寫規範要求已做在產品裡，製造業寫碳盤查與 CBAM。從現行的第四區提前到 hero 後 | 決策者任務「找自己的產業」；`DM-1`、`DM-7`；`competitors.md`「本站已有」第 2 項（產業入口可能是差異點） | —（不承接子題，把 `昕力資訊 金融`、`API 管理 金融業` 等產業查詢的讀者送到產業頁） | `fact:digirunner-open-banking-fsc`、`fact:digirunner-ndc-spec`、`fact:greenswift-cbam-plan` | 段落引言 20–40 字；每個產業 25–40 字 |
-| 3 | AI 用在核心作業的成果 | 三則案例，每則一個作業（理賠、建檔、阻詐）加一句成果。說明這些是已上線的作業，不是展示。連到解決方案頁或成功案例列表 | 決策者任務「找成功案例」；`DM-2`、`IT-8` | —（`保險科技 AI 理賠` 的「理賠文件審閱自動化」由 `/solutions/smartclaim` 承接，本段只連過去） | `fact:smartclaim-title`、`fact:smartclaim-result`、`fact:smartfilling-title`、`fact:smartfilling-result`、`fact:fraud-platform-title`、`fact:fraud-platform-result` | 引言 20–40 字；每則沿用事實原文 |
+| 1 | Hero：替誰、做什麼 | 第一屏說出服務對象（金融與政府；不點名製造業，messaging「定位不說的事」）與做的事（把 API 與 AI 安全接進既有系統）。h1 寫定位句，不含品牌詞；說明的第一句以「昕力資訊（TPIsoftware）」開頭（取捨第 3 項）。換掉現行的「以頂尖科技為企業賦能」。附主要 CTA 與「依產業看方案」的次要動作 | 決策者任務「判斷昕力做什麼、是不是為我做」；定位句；`competitors.md`「本站缺」第 1 項（四家第一屏都沒寫服務對象） | 品牌導航（`昕力資訊`、`TPIsoftware`、`昕力資訊 官網`）要的「這家公司做什麼」；`台灣 AI 解決方案 公司`、`企業數位轉型 軟體公司` 要的「哪家公司、為誰做」 | `fact:company-industries` | 標題 15–25 字，說明 40–60 字 |
+| 2 | 產業入口 | 只列有頁面的金融、政府兩個產業，每個一句「這個產業得到什麼」（規範要求已做在產品裡），連到產業頁。製造業不列（頁面是 draft，定位句也不點名）。從現行的第四區提前到 hero 後 | 決策者任務「找自己的產業」；`DM-1`；`competitors.md`「本站已有」第 2 項（產業入口可能是差異點） | —（不承接子題，把 `昕力資訊 金融`、`API 管理 金融業` 等產業查詢的讀者送到產業頁） | `fact:digirunner-open-banking-fsc`、`fact:digirunner-ndc-spec` | 段落引言 20–40 字；每個產業 25–40 字 |
+| 3 | AI 用在核心作業的成果 | 三則案例，每則一個作業（理賠、建檔、阻詐）加一句成果。說明這些是已上線的作業，不是展示。連到解決方案頁或成功案例列表。客戶名稱已可用（使用者決定，#165），但已確認的具名案例講的是 API 平台與規則引擎（`DM-1`、`IT-4`、`DM-5`），不是 AI 作業，所以這段維持三則 AI 案例；具名案例放在產品頁與金融頁 | 決策者任務「找成功案例」；`DM-2`、`IT-8` | —（`保險科技 AI 理賠` 的「理賠文件審閱自動化」由 `/solutions/smartclaim` 承接，本段只連過去） | `fact:smartclaim-title`、`fact:smartclaim-result`、`fact:smartfilling-title`、`fact:smartfilling-result`、`fact:fraud-platform-title`、`fact:fraud-platform-result` | 引言 20–40 字；每則沿用事實原文 |
 | 4 | 產品家族 | 每個家族一句「解決什麼問題」，不寫形容詞：DigiLism 寫接既有系統與 AI 串接，SysTalk.ai 寫 AI 模型可選，ESGswift 寫碳盤查範圍，GadoSecurity 寫身分驗證與異常偵測。列出導覽裡的產品，產品連結的錨點帶類別詞（例如「digiRunner API 管理平台」）；保留到產品總覽的入口 | IT 主管任務「依問題找產品」；決策者任務「了解產品與方案」；`IT-4`、`IT-6`、`IT-8`、`DM-7` | `昕力資訊 官網`：四條產品線；`TPIsoftware`：digiRunner、DigiLism 等產品名；`企業數位轉型 軟體公司`：以整合平台取代單點系統 | `fact:products-families`、`fact:digilism-protocol-integration`、`fact:digilism-family-digirunner`、`fact:aiso-llm-support`、`fact:greenswift-scope`、`fact:gadodido-passwordless`、`fact:gadoscout-ml-detection` | 每個家族 20–40 字 |
 | 5 | OrientAI：企業 AI 留在自己的環境 | 主軸從「讓 AI 真正做事」改成資料與權限的掌控：只部署在企業端、權限與影子 AI 管控、Token 用量看得到、離線可運行。連到 OrientAI 頁 | 決策者任務「了解產品與方案」；`DM-3`，次要 `IT-8` | `台灣 AI 解決方案 公司`：地端部署、資料主權；`企業主權 AI 地端部署 方案`：部署形式（次要，主要在 `/aiso`） | `fact:orientai-on-prem-data`、`fact:orientai-governance-layer`、`fact:orientai-token-cost`、`fact:orientai-aidaptiv`、`fact:orientai-mcp` | 標題 15–25 字，說明 40–80 字，特色 3–4 項 |
 | 6 | 產品與導入同一家 | 一段說明昕力自己研發產品，也做導入規劃、建置與顧問，決策者不必在原廠和導入商之間協調。下面接服務總覽的卡片（現有的服務區） | 決策者任務「決定要不要聯絡業務」（評估導入風險）；`DM-4` | — | `fact:company-offerings`、`fact:aiso-onboarding`、`fact:systalk-ai-onboarding` | 40–80 字，加服務卡片 |
-| 7 | 合作對象的穩定度 | 列出成立年份、新加坡與越南子公司、國際品牌、ISO27001 認證、Google Cloud 合作夥伴，連到關於我們。數字直接輸出在 HTML，不做數字動畫 | 決策者任務「決定要不要聯絡業務」（評估長期合作風險）；`DM-6`；`competitors.md`「本站缺」第 2 項（新站首頁沒有第三方證據） | `昕力資訊 官網`：公司成立年份 | `fact:company-founded`、`fact:company-subsidiaries-sg-vn`、`fact:company-milestone-2020-brand`、`fact:cert-iso27001-product-platform`、`fact:company-google-cloud-partner` | 引言 20–30 字；5 項，每項沿用事實原文 |
+| 7 | 合作對象的穩定度 | 列出成立年份、首度跨足金融產業的年份、新加坡與越南子公司、國際品牌、ISO27001 認證、Google Cloud 合作夥伴，連到關於我們。數字直接輸出在 HTML，不做數字動畫 | 決策者任務「決定要不要聯絡業務」（評估長期合作風險）；`DM-6`；`competitors.md`「本站缺」第 2 項（新站首頁沒有第三方證據） | `昕力資訊 官網`：公司成立年份 | `fact:company-founded`、`fact:company-subsidiaries-sg-vn`、`fact:company-milestone-2020-brand`、`fact:cert-iso27001-product-platform`、`fact:company-google-cloud-partner`、`fact:company-milestone-2008-finance` | 引言 20–30 字；6 項，每項沿用事實原文 |
 | 8 | 聯絡業務 | 頁尾的主要轉換。標題寫讀者的下一步（談需求、預約 demo），不寫「用心傾聽」這類感受句 | 主要轉換：聯絡業務 | — | 無（回覆時間沒有事實，見「待確認」） | 標題 10–20 字，說明 30–50 字 |
 
 ### 與現有頁面的差異
@@ -75,14 +75,14 @@
 | 產業、服務、案例三個入口共用一區 | 拆開：產業到第 2 段，案例到第 3 段，服務併入第 6 段 | 三者回答不同的問題；服務卡片沒有說明，單獨放推不出理由，接在 `DM-4` 後面才有意義 |
 | 最新文章與新聞（2 篇 blog、1 則新聞） | 刪除 | 指不到主要受眾的任務，也指不到主張；次要受眾（媒體、投資人）的任務未定。blog 與媒體中心在 header 導覽裡 |
 | 聯絡 CTA「您的需求，我們用心傾聽」 | 改寫 | 感受句，沒說下一步 |
-| 產業段沒有製造業的文案 | 補一句 | 製造業是主要受眾的產業；只寫 GreenSwift 的碳盤查功能，不寫製造業成果（messaging「定位不說的事」） |
+| 產業段列出三個產業，製造業卡片沒有文案也沒有連結 | 拿掉製造業卡片，只留金融、政府 | 使用者決定定位句不保留製造業（#165）；製造業頁是 draft，沒有案例可寫。GreenSwift 的碳盤查改在第 4 段的 ESGswift 家族句（`DM-7`）說，不點名產業 |
 
 ## CTA
 
 | CTA | 文案方向 | 位置 | 連到 |
 |---|---|---|---|
 | 主要：聯絡業務 | 談需求或預約 demo | 第 1 段 hero、第 8 段 | `/contact-us`（`contact`） |
-| 次要：依產業看方案 | 找自己的產業 | 第 1 段 hero，取代現行的「產品總覽」按鈕 | 頁內第 2 段；產業卡片各自連到 `/industries/finance`、`/industries/government`，製造業頁是 draft，沒有連結 |
+| 次要：依產業看方案 | 找自己的產業 | 第 1 段 hero，取代現行的「產品總覽」按鈕 | 頁內第 2 段；產業卡片各自連到 `/industries/finance`、`/industries/government` |
 | 次要：看案例 | 看所有成功案例 | 第 3 段 | `/success-story`（`success-stories`） |
 | 次要：認識 OrientAI | 進產品頁 | 第 5 段 | `/orient-ai`（`orient-ai`） |
 | 次要：關於昕力 | 看公司資料 | 第 7 段 | `/about-us`（`about`） |
@@ -125,12 +125,12 @@ hero 的次要按鈕從「產品總覽」改成「依產業看方案」：決策
 
 ### title
 
-- 要涵蓋：公司名兩種寫法（昕力資訊、TPIsoftware），服務對象（金融、政府、製造業），做的事（API、AI）
-- 傳達的主張：定位句的短版（替金融、政府與製造業，把 API 與 AI 安全接進既有系統）
+- 要涵蓋：公司名兩種寫法（昕力資訊、TPIsoftware），服務對象（金融、政府），做的事（API、AI）
+- 傳達的主張：定位句的短版（替金融與政府，把 API 與 AI 安全接進既有系統）
 - 公司名放最前面：首頁承接的主要查詢都是品牌導航
 - 不放「數位轉型」「解決方案」「賦能」「頂尖」：前兩個是 messaging 限定用法，後兩個是「本站不用的字」；現行 title「TPIsoftware 昕力資訊｜以頂尖科技為企業賦能」要換掉
 - 示例：
-  - `昕力資訊 TPIsoftware｜金融、政府與製造業的 API 與 AI 軟體`
+  - `昕力資訊 TPIsoftware｜金融與政府的 API 與 AI 軟體`
   - `TPIsoftware 昕力資訊｜把 API 與 AI 安全接進既有系統`
 
 ### description
@@ -140,8 +140,8 @@ hero 的次要按鈕從「產品總覽」改成「依產業看方案」：決策
 - 依據的事實：`fact:company-industries`、`fact:products-families`、`fact:company-offerings`。描述裡只寫這些事實能撐住的範圍，不寫數字
 - 「數位轉型」只以家族名「數位轉型（DigiLism）」出現，這樣同時涵蓋 `企業數位轉型 軟體公司` 的用詞，又不當價值主張
 - 示例：
-  - `昕力資訊（TPIsoftware）研發並導入自有軟體，替金融、政府與製造業把 API、資料與 AI 安全接進既有系統，產品家族涵蓋 AI、數位轉型（DigiLism）、資安與 ESG。`
-  - `昕力資訊（TPIsoftware）替金融、政府與製造業研發並導入 API 管理、企業 AI 與碳管理軟體，金融與政府的規範要求做在產品裡，導入也由同一家負責。`
+  - `昕力資訊（TPIsoftware）研發並導入自有軟體，替金融與政府把 API、資料與 AI 安全接進既有系統，產品家族涵蓋 AI、數位轉型（DigiLism）、資安與 ESG。`
+  - `昕力資訊（TPIsoftware）替金融與政府研發並導入 API 管理、企業 AI 與碳管理軟體，規範要求做在產品裡，導入也由同一家負責。`
 
 ## schema 缺口
 
@@ -157,7 +157,9 @@ hero 的次要按鈕從「產品總覽」改成「依產業看方案」：決策
 | 1 | hero 的次要動作寫死為「產品總覽」 | `hero.secondary` | `{ label: string; href: '#industries' }`，或模板直接改為產業段的錨點 |
 | — | 刪除最新文章與新聞 | 刪 `labels.latest` | 模板拿掉該區 |
 
-`industryLines` 與 `familyLines` 用節點 id 當 key，補製造業與 GadoSecurity 的句子不必改型別。
+`familyLines` 用節點 id 當 key，補 GadoSecurity 的句子不必改型別。
+
+第 2 段只列有頁面的產業：`HomeTemplate.astro` 現在列 `children('industries')` 全部子節點（含 draft 的製造業），要改成只列 `hasPage()` 為真的節點。這是模板變更，不是欄位；`industryLines` 不再需要製造業的 key。
 
 ## 取捨
 
@@ -177,9 +179,9 @@ hero 的次要按鈕從「產品總覽」改成「依產業看方案」：決策
 
 | # | 事項 | 卡在哪 | 影響的段落 |
 |---|---|---|---|
-| 1 | 獎項與客戶名能不能放首頁。最直接的第三方證據是台灣精品獎（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`）、Gartner Cool Vendor（`fact:award-gartner-cool-vendor-2018`）、具名客戶與證言（`fact:client-cathay-fhc`、`fact:testimonial-cathay-fhc`、`fact:testimonial-shin-kong-bank`） | 獎項有年份可能過時；客戶名與證言要授權。確認前第 7 段只用已確認的公司資料 | 7（確認後可加獎項或證言）、3（可改用具名案例） |
+| 1 | 獎項與客戶證言能不能放首頁。最直接的第三方證據是台灣精品獎（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`）、Gartner Cool Vendor（`fact:award-gartner-cool-vendor-2018`）與客戶證言（`fact:testimonial-cathay-fhc`、`fact:testimonial-shin-kong-bank`）。客戶名稱本身已可用（使用者決定，#165），不在此列 | 獎項有年份可能過時；證言含說話人姓名與職稱，仍要確認授權。確認前第 7 段只用已確認的公司資料 | 7（確認後可加獎項或證言） |
 | 2 | 規模數字：`fact:company-employees-630`、`fact:company-projects-400` | 統計時間不明 | 7 |
-| 3 | 製造業頁（`src/content/hub/zh-TW/industry-manufacturing.md`）是 draft，首頁的製造業卡片沒有連結 | `nodes.csv` 寫「現站沒有製造業內容，需人工提供」；messaging 缺少證據第 13 項 | 1（hero 要不要點名製造業）、2 |
+| 3 | 製造業之後要不要回到首頁。目前已決定 hero 與產業入口不點名製造業（使用者決定，#165）；製造業頁（`src/content/hub/zh-TW/industry-manufacturing.md`）有內容並產生頁面後，再決定要不要加回產業入口 | `nodes.csv` 寫「現站沒有製造業內容，需人工提供」；messaging 缺少證據第 13 項 | 2（之後） |
 | 4 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答；messaging 缺少證據第 14 項 | 8 |
-| 5 | 三個產業的排序 | `audience-and-goals.md` 問題 2，M2-01 暫定金融、政府、製造業 | 1、2 |
+| 5 | 金融與政府的排序 | `audience-and-goals.md` 問題 2，M2-01 暫定金融、政府、製造業 | 1、2 |
 | 6 | GadoSecurity 家族頁是 draft（`src/content/hub/zh-TW/family-security.md`），家族沒有連結；第 4 段的句子只能用 gadoDIDO、gadoScout 的產品事實 | 家族介紹需人工提供 | 4 |

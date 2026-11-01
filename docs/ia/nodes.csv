@@ -31,8 +31,8 @@ greenswift,family-esg,GreenSwift 智慧碳管理平台,offering,page,/products/g
 electriswift,family-esg,ElectriSwift 智慧能源管理系統,offering,page,/products/electriswift,
 industries,home,產業方案,hub,page,/industries,新頁：介紹文字需人工提供；子頁順序待確認（audience-and-goals.md 問題 2）
 industry-finance,industries,金融,hub,page,/industries/finance,新頁：承接 /products/open-banking 內容，其餘介紹需人工提供
-insurebrick,industry-finance,InsureBrick 保險科技模組化平台,offering,page,/products/insurebrick,待確認：不在導覽，是否仍銷售
-insurering,industry-finance,InsureRing 保險自動化規則檢核,offering,page,/solutions/insurering,待確認：不在導覽，是否仍銷售
+insurebrick,industry-finance,InsureBrick 保險科技模組化平台,offering,page,/products/insurebrick,不在導覽；仍在銷售（#165 使用者確認）
+insurering,industry-finance,InsureRing 保險自動化規則檢核,offering,page,/solutions/insurering,不在導覽；仍在銷售（#165 使用者確認）
 industry-government,industries,政府與公部門,hub,page,/industries/government,新頁：承接 /products/open-government 內容，其餘介紹需人工提供
 gis,industry-government,GIS 空間數據解決方案,offering,page,/solutions/gis,待確認：不在導覽，是否仍銷售
 industry-manufacturing,industries,製造業,hub,page,/industries/manufacturing,新頁：現站沒有製造業內容，需人工提供
