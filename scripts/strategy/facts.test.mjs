@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { bodyCopy, checkPage, copyStrings, factCalls, markdownPage, numbers, quoteOnPage, validateFacts } from './facts.mjs';
+import { bodyCopy, checkPage, copyStrings, factCalls, markdownPage, numbers, validateFacts } from './facts.mjs';
 
 const entry = (over = {}) => ({
   id: 'smartclaim-result',
@@ -100,11 +100,4 @@ test('bodyCopy drops code, tags, link targets and ordered-list markers', () => {
   const page = markdownPage('src/content/hub/zh-TW/x.md', '---\ntitle: 測試\nsourceUrl: []\nfacts: []\n---\n\n1. 盤點需求\n2. 建置平台\n');
   assert.deepEqual(checkPage(page, facts), []);
   assert.equal(bodyCopy('見[案例](/case/2024)與 `v2` <img src="a1.png"> 文字').replace(/\s+/g, ' '), '見[案例]與 文字');
-});
-
-test('quoteOnPage ignores tags, whitespace and U+200B', () => {
-  const html = '<h3>AI</h3>\n<h3>智慧理賠</h3><p>節省逾<b>80%</b>人工</p>';
-  assert.ok(quoteOnPage(html, 'AI 智慧​理賠'));
-  assert.ok(quoteOnPage(html, '節省逾80%人工'));
-  assert.ok(!quoteOnPage(html, '節省逾90%人工'));
 });

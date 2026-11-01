@@ -137,11 +137,13 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 搬移現站的雲端、委外、ChatGPT 企業服務與資源頁完成（#159）：`node scripts/content/migrate/offerings.mjs` 加上 `cloudservice`、`outsourcing`、`chatgpt-enterprise` 三個服務頁（offering，`kind: service`）與 `/resource`（hub）的轉換，建出 zh-TW 4 頁、en 與 vi 各 3 頁（`chatgpt-enterprise` 現站只有 zh-TW）。只填 schema 既有欄位，沒搬的段落（客戶見證與 logo、比較表、第三方數字、洽詢表單等）列在 `docs/content/migration.md`「服務頁」；超過上限或現站沒有的 description 寫在 `offering-overrides.yaml`。`scripts/seo/links.mjs` 的 `PENDING` 清空後連同 `redirect-targets.mjs` 的豁免一起刪除，連到沒建出的頁面一律失敗。`offering-content.mjs` 的 feature 內文改為也能拆成句子與清單項目比對，三語 2169/2169
 - 角色 agent 與分階段流程完成（#162）：`CLAUDE.md`「專案目標」改為驗證 AI 開發官網的品質、不上線，不做 Search Console、GTM 的實際設定，`launch-readiness.md` 標為範圍外。新增 5 個 agent（`.claude/agents/`：researcher、content-strategist、seo-strategist、design-director、reviewer）與 4 個 skill（site-research、content-strategy、design-concept、site-review，rubric 三份在 `site-review/rubrics/`，評分項目與門檻經使用者確認：每份平均 ≥ 4.0 且沒有一項 < 3）；本站專屬的設定集中在 `docs/strategy/site-profile.md`。`docs/workflow.md` 新增「分階段流程」：新頁面、改版、內容大改依序走研究、策略、設計概念、製作、評審。新 label `strategy-approved`；issue 本身有「## 關卡」段落時不進自動模式。`scripts/docs/claude-md.mjs` 的 `PARENTS` 加上 `.claude`
 - 文案規則改為事實可追溯、表述可原創（#163）：`CLAUDE.md`「內容規則」把文案分成事實與表述。事實庫 `docs/strategy/facts.yaml`（schema 與 `fact()` 在 `src/data/facts.ts`）先收首頁與 footer 用到的 29 筆，完整的事實庫在 #164 建立。`node scripts/strategy/facts.mjs` 接進 `npm run check`：檢查事實庫格式、頁面引用的事實存在且 `confirmed`，以及首頁、`site.ts` 與 `sourceUrl: []` 或有 `facts` 欄位的內容檔，文案的數字與客戶名稱要在引用的事實裡；`--sources` 連現站比對原文（29/29），取代刪除的 `scripts/design/home-content.mjs`。首頁三語的事實改用 `fact()`、表述改成字串，文字不變（build 出的 `dist/` 逐檔相同）。content schema 共用欄位加 `facts`
+- 分階段流程的研究完成（#164）：事實庫改由 `node scripts/strategy/extract-facts.mjs` 從 `scripts/strategy/facts-source.yaml` 產生，675 筆（zh-TW 657、en 9、vi 9；confirmed 456、to_confirm 219），候選報告 `docs/strategy/facts-candidates.md` 59 頁未收 0。`facts.mjs --sources` 也找頁面載入的 Nuxt chunk，加上 `--locales`（`www.tpisoftware.vn` 在雲端 session 連不上）。另有試點三頁的未搬內容盤點 `unmigrated.md`、4 家競品分析與截圖 `competitors.md`（`competitor-shots.mjs`）、三頁各 8 組查詢的 `search-intent.md`；Bing 台灣在雲端 session 回傳無關結果，搜尋意圖改用 WebSearch（US）
 
 ## 下一步
 
 - 在 Actions 手動執行一次 `bootstrap` workflow，建立 `strategy-approved` label（#162 加進 `labels.yml`，雲端 session 沒有建 label 的工具）
-- 分階段流程的研究（#164）可以開始：事實庫的格式與檢查已定（#163），擷取 script 要保留首頁已引用的 29 筆 id
+- 分階段流程的策略（#165）可以開始：研究產出在 `docs/strategy/`（事實庫、`unmigrated.md`、`competitors.md`、`search-intent.md`）
+- 回覆 #164 PR 的「待確認」：219 筆 `to_confirm` 事實（客戶名稱與證言的授權、獎項年份、沒有依據的成效數字與最高級宣稱、現站各頁說法不一致）；`www.tpisoftware.vn` 恢復後跑一次 `node scripts/strategy/facts.mjs --sources`
 - 回覆 #159 PR 的「待確認」：沒搬的段落、組成或刪減的 description、vi `/resource` 的標題是英文「Resource Center」
 - 回覆 #137 後續 PR（en 知識邊界一文對應 zh-TW 版）的「待確認」：en 版多一段上線第一週的問卷數字（40 份有效回覆、90% 用過等），zh-TW 沒有；要不要補到 zh-TW、數字是否經客戶同意公開
 - 回覆 M7-03（#40）PR 的「待確認」：越南文審稿（詞彙表 vi 欄、從 zh-TW 翻譯的 8 頁、`glossary.md`「vi 待確認」的專有名詞）、現站 vi 與 zh-TW 的事實差異（`docs/content/products.md`「vi 待確認」）、vi footer 電話

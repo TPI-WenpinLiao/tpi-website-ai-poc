@@ -23,20 +23,24 @@ description: 分階段流程的研究階段使用：從現站擷取事實到事�
 
 | 產出物 | 位置 | 關卡 |
 |---|---|---|
-| 事實庫 | `docs/strategy/facts.yaml`，由擷取 script 產生 | `node scripts/strategy/facts.mjs` 與 `node scripts/strategy/facts.mjs --sources` 通過 |
+| 事實庫 | `docs/strategy/facts.yaml` 與候選報告 `docs/strategy/facts-candidates.md`，都由 `scripts/strategy/extract-facts.mjs` 從 `scripts/strategy/facts-source.yaml` 產生 | `node scripts/strategy/facts.mjs` 與 `node scripts/strategy/facts.mjs --sources` 通過 |
 | 未搬內容盤點 | `docs/strategy/unmigrated.md` | 涵蓋 `site-profile.md` 的每個試點頁面 |
-| 競品分析 | `docs/strategy/competitors.md`，截圖放 `docs/strategy/competitors/` | 每項觀察附來源網址 |
+| 競品分析 | `docs/strategy/competitors.md`，截圖由 `scripts/strategy/competitor-shots.mjs` 存到 `docs/strategy/competitors/` | 每項觀察附來源網址 |
 | 搜尋意圖 | `docs/strategy/search-intent.md` | 每組查詢附觀察日期與來源 |
 
 ## 1. 事實庫
 
 事實是可以查證的陳述：數字、百分比、客戶名、認證、獎項、產品功能、案例成果。標題、口號、形容詞不是事實，不收。
 
-1. 擷取寫成 script（放 `scripts/strategy/`），可以重跑，結果相同（`CLAUDE.md`「工作原則」）。不手改 `facts.yaml`；要修正的寫進 script 讀的覆寫檔。#163 手寫了首頁與 footer 用到的 29 筆，頁面以 id 引用它們：script 接手後要產生同樣的 id 與內容，`node scripts/strategy/facts.mjs` 會擋下被引用但消失的 id
+1. 哪一句是事實要判斷，所以挑選的結果寫在輸入檔 `scripts/strategy/facts-source.yaml`（格式在檔頭），`node scripts/strategy/extract-facts.mjs` 產生 `facts.yaml`，不手改 `facts.yaml`（`CLAUDE.md`「工作原則」）。script 逐筆確認 quote 在來源頁上，有一筆不在就失敗、不寫檔；重跑結果相同。頁面已引用的 id 不能改，`node scripts/strategy/facts.mjs` 會擋下被引用但消失的 id
+   - 頁面先由 `scripts/strategy/source-pages.mjs` 抓取並快取到 `.cache/facts`；`--offline` 只讀快取。quote 不在 HTML 時會找頁面載入的 Nuxt chunk（`/success-story` 的案例卡片只在 chunk 裡），`facts.mjs --sources` 用同一套
+   - 某個語系的現站連不上時（例如 `www.tpisoftware.vn`），兩支都加 `--locales zh-TW,en`，只驗證這些語系，其他語系照原樣寫出並列為未驗證
+   - 漏收靠候選報告 `facts-candidates.md` 檢查：`inventory.csv` 中 zh-TW 的首頁、關於、產品、解決方案、服務、案例頁，每頁列出含數字、認證、獎項、客戶與產業名稱的文字區塊，標出收進哪些 id，或被 `facts-source.yaml` 的 `ignore` 規則略過（附原因）。完成條件是「未收」0 筆。標「（他頁）」的區塊只有別頁來源的事實文字相符（例如兩個產品寫同一句宣稱），要確認那筆事實是否就是這頁的意思，不是就在這頁另收一筆。另外，confirmed 事實的 text 不能含 to_confirm 的客戶名稱，`facts.mjs` 會擋下（頁面引用它就能繞過客戶授權）。報告只看 4 字以上的文字區塊，不看 `<script>` 裡的資料：一個字一個 tag 的表格（digiRunner v.s. Kong）、首頁 banner（Nuxt payload）要人工補看
 2. 每一筆都要有來源網址與原文（`source.url`、`source.quote`），原文逐字照抄現站；`text` 是頁面要顯示的字，可以加 U+200B 斷行點或截掉原文的前後文，數字與名稱不改（`facts.mjs` 擋下 `text` 有、`source.quote` 沒有的數字）。`--sources` 比對原文時忽略空白與 U+200B
 3. `status`：
    - `confirmed`：現站原文明確寫出，且不涉及授權
    - `to_confirm`：授權不明（人物照片、客戶 logo、客戶名稱用於行銷）、可能過時（年份、數字、價格）、或現站各語系說法不一致。理由寫在該筆的 `note`（schema 要求）
+   - 宣稱也是 `to_confirm`：沒有依據或比較基準的成效數字（「效率提升高達 50%」「縮短 70%」「100% SLA」「TCO 低 40%」）與最高級說法（「業界唯一」「領先業界」「台灣第一」）。描述功能範圍的數字（「24/7」「100% 覆蓋率」）、寫明依據的數字（「基於 Amazon SLA… 99%」）與特定案例的成果（type `case`）不算宣稱，照常 `confirmed`（#164 使用者決定）。改一筆時，整份事實庫同類的一起改
 4. en、vi 的事實是各自的一筆（`locale` 不同，id 加 `-en`、`-vi`），來源取該語系的現站頁面；頁面只能用自己語系的事實
 5. 同一個事實在多頁出現時只收一筆，來源取最完整的一頁
 6. 數字只收現站寫出的，不換算、不四捨五入、不合併
@@ -68,7 +72,7 @@ description: 分階段流程的研究階段使用：從現站擷取事實到事�
    | 轉換路徑 | 主要 CTA、出現幾次、表單長度 |
    | 視覺語言 | 字體、色彩、影像風格、動態 |
 
-3. 每家附首頁第一屏截圖（375、1280 寬）與截圖日期
+3. 每家附首頁第一屏截圖（375、1280 寬）與截圖日期，用 `node scripts/strategy/competitor-shots.mjs [--only <slug>]` 產生；競品網域要先在環境的 Allowed domains 放行（含轉址後的網域，例如 `tw.systex.com`）
 4. 只記錄觀察與來源網址，不複製文案。引用原文時限一句並加引號
 5. 最後一節「對本站的意義」：哪些做法本站已有、哪些缺、哪些不適合，供策略與設計概念階段引用。這一節是推論，跟觀察分開寫
 
@@ -79,7 +83,7 @@ description: 分階段流程的研究階段使用：從現站擷取事實到事�
    - 意圖：資訊型、比較型、商業型、導航型
    - 前幾名的頁面類型（產品頁、比較文、教學、列表）
    - 前幾名共同涵蓋的子題
-3. 寫明觀察日期與搜尋地區、語系
+3. 寫明觀察日期與搜尋地區、語系。Bing 台灣繁中在雲端 session 回傳與查詢無關的結果（#164 實測，`node scripts/strategy/serp.mjs` 重現），這時改用 WebSearch，但它只有美國地區、沒有名次，要在文件開頭寫明
 4. 沒有 Search Console 等數據時，不寫搜尋量、不估流量，文件開頭寫明這個限制
 5. 最後一節對應到頁面：每組查詢應該由哪一頁承接，交給 `seo-strategist` 在策略階段確認
 
