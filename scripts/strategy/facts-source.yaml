@@ -123,7 +123,7 @@ groups:
         quote: '創辦人 Ben Yao'
         status: to_confirm
         note: 人物，對外使用姓名要確認
-      - { id: company-milestone-2008-finance, type: company, quote: '2008 年首度跨足金融產業，為華南銀行建置 CRM 系統', status: to_confirm, note: 寫出客戶名稱（華南銀行），對外使用要確認授權 }
+      - { id: company-milestone-2008-finance, type: company, quote: '2008 年首度跨足金融產業，為華南銀行建置 CRM 系統' }
       - id: award-2008-outstanding-enterprise
         type: award
         quote: '同年也名列為傑出企業成就'
@@ -282,63 +282,63 @@ groups:
     locale: zh-TW
     comment: One entry per client name as the site spells it (facts.mjs matches page copy against text); variants are separate entries
     facts:
-      - { id: client-anz, type: client, quote: 'ANZ澳盛銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-anz-short, type: client, quote: '澳盛銀行', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-youbike, type: client, quote: 'YouBike', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-ipass, type: client, quote: '一卡通', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-china-life, type: client, quote: '中國人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-prudential-taiwan, type: client, quote: '保德信人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-excellence-wire, type: client, quote: '卓新工業', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-taishin-bank, type: client, quote: '台新銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-taiwan-life, type: client, quote: '台灣人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-taiwan-mobile, type: client, quote: '台灣大哥大', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-hotai, type: client, quote: '和泰汽車', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-cathay-united-bank, type: client, quote: '國泰世華銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-cathay-life, type: client, quote: '國泰人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-cathay-century, type: client, quote: '國泰產險', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-cathay-fhc, type: client, quote: '國泰金控', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-good-health, type: client, quote: '好適康', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-entie-bank, type: client, quote: '安泰銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-fubon-life, type: client, quote: '富邦人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-chang-hwa-bank, type: client, quote: '彰化銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-dunqian, type: client, quote: '敦謙國際', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-shin-kong-life, type: client, quote: '新光人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-shin-kong-bank, type: client, quote: '新光銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-tokio-marine-newa, type: client, quote: '新安東京海上產險', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-union-insurance, type: client, quote: '旺旺友聯', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-dbs, type: client, quote: '星展', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-dbs-bank, type: client, quote: '星展銀行', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-sinopac, type: client, quote: '永豐銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-bnp-paribas-cardif, type: client, quote: '法國巴黎人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-bnp-paribas-cardif-short, type: client, quote: '法巴人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-standard-chartered, type: client, quote: '渣打銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-innolux, type: client, quote: '群創光電', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-taipei-city, type: client, quote: '臺北市政府', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-taipei-city-alt, type: client, quote: '台北市政府', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-bank-of-taiwan, type: client, quote: '臺灣銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-prudential-uk, type: client, quote: '英國保誠人壽', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-prudential-uk-short, type: client, quote: '保誠人壽', url: 'https://www.tpisoftware.com/about-us', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-ministry-of-finance, type: client, quote: '財政部', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-fu-jen-hospital, type: client, quote: '輔大醫院', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-far-eastern-bank, type: client, quote: '遠東商業銀行', url: 'https://www.tpisoftware.com/success-story', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-line-pay, type: client, quote: 'LINE Pay', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-chunghwa-telecom, type: client, quote: '中華電信', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-icash, type: client, quote: '愛金卡', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-thsr, type: client, quote: '台灣高鐵', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-chailease, type: client, quote: '中租', url: 'https://www.tpisoftware.com/outsourcing', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-ericsson-taiwan, type: client, quote: '台灣易利信', url: 'https://www.tpisoftware.com/about-us', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-tsmc, type: client, quote: '台積電', url: 'https://www.tpisoftware.com/about-us', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-hua-nan-bank, type: client, quote: '華南銀行', url: 'https://www.tpisoftware.com/about-us', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-pharmacity, type: client, quote: 'Pharmacity', url: 'https://www.tpisoftware.com/products/digirunner', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-wemo, type: client, quote: 'Wemo Scooter', url: 'https://www.tpisoftware.com/products/systalk-chat', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-taichung-vgh, type: client, quote: '台中榮總', url: 'https://www.tpisoftware.com/products/digicare', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-ncku-hospital, type: client, quote: '成大醫院', url: 'https://www.tpisoftware.com/products/digicare', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-wanfang-hospital, type: client, quote: '萬芳醫院', url: 'https://www.tpisoftware.com/products/digicare', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-youbike-operator, type: client, quote: '微笑單車股份有限公司', url: 'https://www.tpisoftware.com/', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-sinyi, type: client, quote: '信義房屋', url: 'https://www.tpisoftware.com/products/digimars', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-kaohsiung-city, type: client, quote: '高市府', url: 'https://www.tpisoftware.com/products/digiflexis', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-shin-kong-insurance-agency, type: client, quote: '新光金保代', url: 'https://www.tpisoftware.com/products/insurebrick', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
-      - { id: client-archives, type: client, quote: '檔管局', url: 'https://www.tpisoftware.com/solutions/textualanalysis', status: to_confirm, note: 客戶名稱用於行銷要確認授權 }
+      - { id: client-anz, type: client, quote: 'ANZ澳盛銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-anz-short, type: client, quote: '澳盛銀行', url: 'https://www.tpisoftware.com/outsourcing' }
+      - { id: client-youbike, type: client, quote: 'YouBike', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-ipass, type: client, quote: '一卡通', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-china-life, type: client, quote: '中國人壽', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-prudential-taiwan, type: client, quote: '保德信人壽', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-excellence-wire, type: client, quote: '卓新工業', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-taishin-bank, type: client, quote: '台新銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-taiwan-life, type: client, quote: '台灣人壽', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-taiwan-mobile, type: client, quote: '台灣大哥大', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-hotai, type: client, quote: '和泰汽車', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-cathay-united-bank, type: client, quote: '國泰世華銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-cathay-life, type: client, quote: '國泰人壽', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-cathay-century, type: client, quote: '國泰產險', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-cathay-fhc, type: client, quote: '國泰金控', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-good-health, type: client, quote: '好適康', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-entie-bank, type: client, quote: '安泰銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-fubon-life, type: client, quote: '富邦人壽', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-chang-hwa-bank, type: client, quote: '彰化銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-dunqian, type: client, quote: '敦謙國際', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-shin-kong-life, type: client, quote: '新光人壽', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-shin-kong-bank, type: client, quote: '新光銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-tokio-marine-newa, type: client, quote: '新安東京海上產險', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-union-insurance, type: client, quote: '旺旺友聯', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-dbs, type: client, quote: '星展', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-dbs-bank, type: client, quote: '星展銀行', url: 'https://www.tpisoftware.com/outsourcing' }
+      - { id: client-sinopac, type: client, quote: '永豐銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-bnp-paribas-cardif, type: client, quote: '法國巴黎人壽', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-bnp-paribas-cardif-short, type: client, quote: '法巴人壽', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-standard-chartered, type: client, quote: '渣打銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-innolux, type: client, quote: '群創光電', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-taipei-city, type: client, quote: '臺北市政府', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-taipei-city-alt, type: client, quote: '台北市政府', url: 'https://www.tpisoftware.com/outsourcing' }
+      - { id: client-bank-of-taiwan, type: client, quote: '臺灣銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-prudential-uk, type: client, quote: '英國保誠人壽', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-prudential-uk-short, type: client, quote: '保誠人壽', url: 'https://www.tpisoftware.com/about-us' }
+      - { id: client-ministry-of-finance, type: client, quote: '財政部', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-fu-jen-hospital, type: client, quote: '輔大醫院', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-far-eastern-bank, type: client, quote: '遠東商業銀行', url: 'https://www.tpisoftware.com/success-story' }
+      - { id: client-line-pay, type: client, quote: 'LINE Pay', url: 'https://www.tpisoftware.com/outsourcing' }
+      - { id: client-chunghwa-telecom, type: client, quote: '中華電信', url: 'https://www.tpisoftware.com/outsourcing' }
+      - { id: client-icash, type: client, quote: '愛金卡', url: 'https://www.tpisoftware.com/outsourcing' }
+      - { id: client-thsr, type: client, quote: '台灣高鐵', url: 'https://www.tpisoftware.com/outsourcing' }
+      - { id: client-chailease, type: client, quote: '中租', url: 'https://www.tpisoftware.com/outsourcing' }
+      - { id: client-ericsson-taiwan, type: client, quote: '台灣易利信', url: 'https://www.tpisoftware.com/about-us' }
+      - { id: client-tsmc, type: client, quote: '台積電', url: 'https://www.tpisoftware.com/about-us' }
+      - { id: client-hua-nan-bank, type: client, quote: '華南銀行', url: 'https://www.tpisoftware.com/about-us' }
+      - { id: client-pharmacity, type: client, quote: 'Pharmacity', url: 'https://www.tpisoftware.com/products/digirunner' }
+      - { id: client-wemo, type: client, quote: 'Wemo Scooter', url: 'https://www.tpisoftware.com/products/systalk-chat' }
+      - { id: client-taichung-vgh, type: client, quote: '台中榮總', url: 'https://www.tpisoftware.com/products/digicare' }
+      - { id: client-ncku-hospital, type: client, quote: '成大醫院', url: 'https://www.tpisoftware.com/products/digicare' }
+      - { id: client-wanfang-hospital, type: client, quote: '萬芳醫院', url: 'https://www.tpisoftware.com/products/digicare' }
+      - { id: client-youbike-operator, type: client, quote: '微笑單車股份有限公司', url: 'https://www.tpisoftware.com/' }
+      - { id: client-sinyi, type: client, quote: '信義房屋', url: 'https://www.tpisoftware.com/products/digimars' }
+      - { id: client-kaohsiung-city, type: client, quote: '高市府', url: 'https://www.tpisoftware.com/products/digiflexis' }
+      - { id: client-shin-kong-insurance-agency, type: client, quote: '新光金保代', url: 'https://www.tpisoftware.com/products/insurebrick' }
+      - { id: client-archives, type: client, quote: '檔管局', url: 'https://www.tpisoftware.com/solutions/textualanalysis' }
 
   - group: DigiLism
     url: https://www.tpisoftware.com/products/digilism
@@ -388,7 +388,7 @@ groups:
         type: case
         quote: 國泰人壽每月約需存取 6 TB 的 logs日誌數據，透過 digiLogs 快速的水平擴展機制（分片），能夠整合多台系統資料運作記錄，進一步整合及分析，並匯入同一平台輕鬆管理大量且每日增長的數據資料。
         status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權；數據量是當時的數字
+        note: 數據量是當時的數字
       - id: digilogs-case-online-banking
         type: case
         quote: 銀行端系統客戶單日日誌收集數據量多達 50 GB（每月約1.5 TB），舊有系統維運能力有限且難應對日趨複雜的管理需求。導入昕力自有研發產品「 digiLogs 」後，因其單一介面跨平台 log 查詢、流量監控、視覺化報表統計、即時告警等特點，管理效率大增。
@@ -430,13 +430,9 @@ groups:
       - id: digimars-case-cathay-life
         type: case
         quote: 國泰人壽選擇 digiMars 來管理超過 20 台 MongoDB 伺服器，及進行高達 100 TB 的數據備份和監控，顯著提高了 MongoDB 監控效率，成功達到資料庫安全需求
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: digimars-case-sinyi
         type: case
         quote: 專業顧問協助 MongoDB 進行版本升級及順利遷移至雲端環境，讓原已採用 MongoDB 的信義房屋進行系統調校、優化
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
 
   - group: digiFlexis
     url: https://www.tpisoftware.com/products/digiflexis
@@ -456,8 +452,6 @@ groups:
       - id: digiflexis-case-kaohsiung
         type: case
         quote: 協助高市府導入流程引擎，提供動態表單、流程供管理人員設定，可快速新增各式便民的表單流程
-        status: to_confirm
-        note: 寫出客戶名稱（高市府），對外使用要確認授權
 
   - group: digiCare
     url: https://www.tpisoftware.com/products/digicare
@@ -473,8 +467,6 @@ groups:
       - id: digicare-hospitals
         type: case
         quote: 協助台灣台中榮總、成大醫院、萬芳醫院等醫療院所，除醫學中心外，也協助區域醫院或地區醫院建置 FHIR 標準平台於院內實際上線應用
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: digicare-mou-taipei-medical-alliance
         type: company
         quote: 與社團法人台北醫療聯盟協會簽署「公益交流合作備忘錄」（MOU）
@@ -540,23 +532,17 @@ groups:
       - id: digirunner-case-taishin
         type: case
         quote: 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: award-global-finance-2020
         type: award
         quote: 該平台獲全球金融雜誌 (Global Finance)頒發「The Innovators 2020 Cash Management」獎。
         status: to_confirm
-        note: 客戶專案的獎項，有年份，可能過時；與台新銀行的案例相連，對外使用要確認授權
+        note: 客戶專案的獎項，有年份，可能過時；與台新銀行的案例相連
       - id: digirunner-case-taipei-city
         type: case
         quote: 為臺北市政府建置符合統一標準的API管理平台，使各機關的異質應用系統資料介接，讓市府推動資料開放政策，拓展創新應用之可行性，極大化開放資料加值應用與民眾參與公共政策。此外，昕力顧問團隊更協助市府建立API管理制度，並輔導各級機關一一導入上線。
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: digirunner-case-pharmacity
         type: case
         quote: digiRunner 為 Pharmacity 於雲端建構 API 管理平台，透過 API 策略推動電子商務模式，在平台上整合第三方 API 並進行管理、監控
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: digirunner-vs-kong-integration
         type: feature
         comment: The v.s. Kong table puts each character of the digiRunner column in its own tag, so facts-candidates.md does not list it; the quotes match once whitespace is ignored
@@ -646,7 +632,7 @@ groups:
         type: case
         quote: 2018年臺北市政府 API 平臺建置（昕力資訊建置已於2019年建置完成，預計三年內導入上百個 API 服務）
         status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權；「預計三年內」是 2019 年的說法，已過時
+        note: 「預計三年內」是 2019 年的說法，已過時
       - id: digirunner-claim-gov-compliance-100
         type: feature
         quote: digiRunner - 100% 合規、智慧政府的推手
@@ -784,12 +770,10 @@ groups:
         type: case
         quote: 跨平台數位整合富邦人壽的行動投保網頁及App，導入昕力獨家4種系統模組，可彈性調整功能介面、快速上/下架商品。完善檢核機制模組，降低錯誤率及照會率。3分鐘快速成案，整合第三方支付平台，有效提高成交率，提供最速、最佳的保單購買體驗。
         status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權；InsureRing 頁也用同一個案例
+        note: InsureRing 頁也用同一個案例
       - id: insurebrick-case-shin-kong
         type: case
         quote: 新光金保代核心系統應用 InsureBrick 模組規劃設計，透過多元且彈性的模組，整合內部各項業務流程，縮短進件作業時間
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
 
   - group: InsureRing
     url: https://www.tpisoftware.com/solutions/insurering
@@ -806,8 +790,6 @@ groups:
       - id: insurering-case-shin-kong-life
         type: case
         quote: 協助新光人壽建置集中化規則引擎，e化整合產品及計費資料，如：保險核心計算、公式、檢核模組等，整體降低50%作業成本。簡化商品上架流程，節省60%上架時間
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
 
   - group: Interactive health
     url: https://www.tpisoftware.com/solutions/interactivehealth
@@ -818,18 +800,12 @@ groups:
       - id: interactivehealth-case-sinopac
         type: case
         quote: 昕力協助永豐銀行以健康生活角度出發建置『汗水不白流』APP，透過整合跨系統串接及監管海量運動數據，建立高效體驗的同時，讓用戶運動燃燒卡路里能轉換為信用卡點數回饋。
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: interactivehealth-case-good-health
         type: case
         quote: 昕力協助好適康開發個人健康管理 APP，將使用者每日健康數據儲存於雲端，並以圖表方式呈現健康記錄及臨床數值，且建置就診預約、用藥提醒、疫苗接種日期記錄等功能
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: interactivehealth-case-fu-jen
         type: case
         quote: 昕力協助輔大醫院建置全方位服務 APP，整合醫院現有系統，提供預約掛號、看診檢查進度查詢、行動繳費、住院申請、慢箋領藥等功能
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - { id: interactivehealth-case-hospital-title, type: case, quote: 醫院服務 APP }
 
   - group: AI smart claim
@@ -871,8 +847,6 @@ groups:
       - id: detect-case-archives
         type: case
         quote: 透過文本分析技術，建立「銷毀檔案目錄」與「檔案分類及保存年限區分表」兩大智能審查模型，協助檔管局線上批註審查意見及統計功能
-        status: to_confirm
-        note: 寫出客戶名稱（檔管局），對外使用要確認授權
       - { id: detect-case-petitions, type: case, quote: 建立推薦模型以分析民眾陳情來信，提供政府部門回覆文稿範本，以精準回應民眾之訴求，並減輕逐一撰稿回覆所耗費之人力與時間，案件處理更有效率。 }
 
   - group: UI/UX
@@ -886,8 +860,6 @@ groups:
       - id: uiux-case-e-payment
         type: case
         quote: 結合社群與支付，提供P2P轉帳、分帳，電支交易等服務，從日常交易到週期性帳單處理。介面設計遵循Line集團規範
-        status: to_confirm
-        note: 寫出客戶集團名稱（Line集團），對外使用要確認授權
 
   - group: GIS
     url: https://www.tpisoftware.com/solutions/gis
@@ -948,18 +920,12 @@ groups:
       - id: systalk-chat-case-youbike
         type: case
         quote: YouBike 小管家 AI 客服透過 SysTalk.Chat 在官方網站、官方App 等渠道建立完整且最擬人的客服問答機制，全天候輔助真人客服服務廣大的用戶群，包含了場站資訊、租借狀態、失物招領、通報協尋等項目，提供24小時不間斷的線上資訊服務。
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: systalk-chat-case-sinyi
         type: case
         quote: 昕力團隊協助信義房屋建置找房助理，使用手機內建Google助理即可喚醒，運用NLU自然語言理解技術
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: systalk-chat-case-wemo
         type: case
         quote: 昕力團隊協助Wemo Scooter打造智能客服威威，於App提供24小時諮詢服務，可即時回答操作使用、保險車禍相關、騎乘注意事項，並提供方案介紹服務
-        status: to_confirm
-        note: 寫出客戶名稱，對外使用要確認授權
       - id: cert-systalk-rpa-intel-rrk
         type: certification
         quote: 昕力SysTalk.RPA 打造Intel RRK認證RPA解決方案

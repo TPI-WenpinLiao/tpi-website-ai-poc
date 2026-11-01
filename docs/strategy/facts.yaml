@@ -368,8 +368,7 @@
     url: https://www.tpisoftware.com/about-us
     quote: 2008 年首度跨足金融產業，為華南銀行建置 CRM 系統
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱（華南銀行），對外使用要確認授權
+  status: confirmed
 
 - id: award-2008-outstanding-enterprise
   type: award
@@ -979,8 +978,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: ANZ澳盛銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-anz-short
   type: client
@@ -989,8 +987,7 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: 澳盛銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-youbike
   type: client
@@ -999,8 +996,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: YouBike
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-ipass
   type: client
@@ -1009,8 +1005,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 一卡通
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-china-life
   type: client
@@ -1019,8 +1014,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 中國人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-prudential-taiwan
   type: client
@@ -1029,8 +1023,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 保德信人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-excellence-wire
   type: client
@@ -1039,8 +1032,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 卓新工業
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-taishin-bank
   type: client
@@ -1049,8 +1041,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 台新銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-taiwan-life
   type: client
@@ -1059,8 +1050,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 台灣人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-taiwan-mobile
   type: client
@@ -1069,8 +1059,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 台灣大哥大
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-hotai
   type: client
@@ -1079,8 +1068,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 和泰汽車
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-cathay-united-bank
   type: client
@@ -1089,8 +1077,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 國泰世華銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-cathay-life
   type: client
@@ -1099,8 +1086,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 國泰人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-cathay-century
   type: client
@@ -1109,8 +1095,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 國泰產險
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-cathay-fhc
   type: client
@@ -1119,8 +1104,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 國泰金控
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-good-health
   type: client
@@ -1129,8 +1113,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 好適康
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-entie-bank
   type: client
@@ -1139,8 +1122,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 安泰銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-fubon-life
   type: client
@@ -1149,8 +1131,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 富邦人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-chang-hwa-bank
   type: client
@@ -1159,8 +1140,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 彰化銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-dunqian
   type: client
@@ -1169,8 +1149,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 敦謙國際
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-shin-kong-life
   type: client
@@ -1179,8 +1158,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 新光人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-shin-kong-bank
   type: client
@@ -1189,8 +1167,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 新光銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-tokio-marine-newa
   type: client
@@ -1199,8 +1176,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 新安東京海上產險
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-union-insurance
   type: client
@@ -1209,8 +1185,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 旺旺友聯
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-dbs
   type: client
@@ -1219,8 +1194,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 星展
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-dbs-bank
   type: client
@@ -1229,8 +1203,7 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: 星展銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-sinopac
   type: client
@@ -1239,8 +1212,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 永豐銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-bnp-paribas-cardif
   type: client
@@ -1249,8 +1221,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 法國巴黎人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-bnp-paribas-cardif-short
   type: client
@@ -1259,8 +1230,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 法巴人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-standard-chartered
   type: client
@@ -1269,8 +1239,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 渣打銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-innolux
   type: client
@@ -1279,8 +1248,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 群創光電
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-taipei-city
   type: client
@@ -1289,8 +1257,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 臺北市政府
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-taipei-city-alt
   type: client
@@ -1299,8 +1266,7 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: 台北市政府
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-bank-of-taiwan
   type: client
@@ -1309,8 +1275,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 臺灣銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-prudential-uk
   type: client
@@ -1319,8 +1284,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 英國保誠人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-prudential-uk-short
   type: client
@@ -1329,8 +1293,7 @@
     url: https://www.tpisoftware.com/about-us
     quote: 保誠人壽
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-ministry-of-finance
   type: client
@@ -1339,8 +1302,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 財政部
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-fu-jen-hospital
   type: client
@@ -1349,8 +1311,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 輔大醫院
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-far-eastern-bank
   type: client
@@ -1359,8 +1320,7 @@
     url: https://www.tpisoftware.com/success-story
     quote: 遠東商業銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-line-pay
   type: client
@@ -1369,8 +1329,7 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: LINE Pay
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-chunghwa-telecom
   type: client
@@ -1379,8 +1338,7 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: 中華電信
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-icash
   type: client
@@ -1389,8 +1347,7 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: 愛金卡
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-thsr
   type: client
@@ -1399,8 +1356,7 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: 台灣高鐵
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-chailease
   type: client
@@ -1409,8 +1365,7 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: 中租
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-ericsson-taiwan
   type: client
@@ -1419,8 +1374,7 @@
     url: https://www.tpisoftware.com/about-us
     quote: 台灣易利信
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-tsmc
   type: client
@@ -1429,8 +1383,7 @@
     url: https://www.tpisoftware.com/about-us
     quote: 台積電
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-hua-nan-bank
   type: client
@@ -1439,8 +1392,7 @@
     url: https://www.tpisoftware.com/about-us
     quote: 華南銀行
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-pharmacity
   type: client
@@ -1449,8 +1401,7 @@
     url: https://www.tpisoftware.com/products/digirunner
     quote: Pharmacity
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-wemo
   type: client
@@ -1459,8 +1410,7 @@
     url: https://www.tpisoftware.com/products/systalk-chat
     quote: Wemo Scooter
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-taichung-vgh
   type: client
@@ -1469,8 +1419,7 @@
     url: https://www.tpisoftware.com/products/digicare
     quote: 台中榮總
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-ncku-hospital
   type: client
@@ -1479,8 +1428,7 @@
     url: https://www.tpisoftware.com/products/digicare
     quote: 成大醫院
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-wanfang-hospital
   type: client
@@ -1489,8 +1437,7 @@
     url: https://www.tpisoftware.com/products/digicare
     quote: 萬芳醫院
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-youbike-operator
   type: client
@@ -1499,8 +1446,7 @@
     url: https://www.tpisoftware.com/
     quote: 微笑單車股份有限公司
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-sinyi
   type: client
@@ -1509,8 +1455,7 @@
     url: https://www.tpisoftware.com/products/digimars
     quote: 信義房屋
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-kaohsiung-city
   type: client
@@ -1519,8 +1464,7 @@
     url: https://www.tpisoftware.com/products/digiflexis
     quote: 高市府
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-shin-kong-insurance-agency
   type: client
@@ -1529,8 +1473,7 @@
     url: https://www.tpisoftware.com/products/insurebrick
     quote: 新光金保代
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 - id: client-archives
   type: client
@@ -1539,8 +1482,7 @@
     url: https://www.tpisoftware.com/solutions/textualanalysis
     quote: 檔管局
   locale: zh-TW
-  status: to_confirm
-  note: 客戶名稱用於行銷要確認授權
+  status: confirmed
 
 # --- DigiLism ---
 - id: digilism-ipaas
@@ -1799,7 +1741,7 @@
     quote: 國泰人壽每月約需存取 6 TB 的 logs日誌數據，透過 digiLogs 快速的水平擴展機制（分片），能夠整合多台系統資料運作記錄，進一步整合及分析，並匯入同一平台輕鬆管理大量且每日增長的數據資料。
   locale: zh-TW
   status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權；數據量是當時的數字
+  note: 數據量是當時的數字
 
 - id: digilogs-case-online-banking
   type: case
@@ -2010,8 +1952,7 @@
     url: https://www.tpisoftware.com/products/digimars
     quote: 國泰人壽選擇 digiMars 來管理超過 20 台 MongoDB 伺服器，及進行高達 100 TB 的數據備份和監控，顯著提高了 MongoDB 監控效率，成功達到資料庫安全需求
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: digimars-case-sinyi
   type: case
@@ -2020,8 +1961,7 @@
     url: https://www.tpisoftware.com/products/digimars
     quote: 專業顧問協助 MongoDB 進行版本升級及順利遷移至雲端環境，讓原已採用 MongoDB 的信義房屋進行系統調校、優化
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 # --- digiFlexis ---
 - id: digiflexis-bpmn
@@ -2130,8 +2070,7 @@
     url: https://www.tpisoftware.com/products/digiflexis
     quote: 協助高市府導入流程引擎，提供動態表單、流程供管理人員設定，可快速新增各式便民的表單流程
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱（高市府），對外使用要確認授權
+  status: confirmed
 
 # --- digiCare ---
 - id: digicare-fhir-core
@@ -2204,8 +2143,7 @@
     url: https://www.tpisoftware.com/products/digicare
     quote: 協助台灣台中榮總、成大醫院、萬芳醫院等醫療院所，除醫學中心外，也協助區域醫院或地區醫院建置 FHIR 標準平台於院內實際上線應用
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: digicare-mou-taipei-medical-alliance
   type: company
@@ -2518,8 +2456,7 @@
     url: https://www.tpisoftware.com/products/digirunner
     quote: 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: award-global-finance-2020
   type: award
@@ -2529,7 +2466,7 @@
     quote: 該平台獲全球金融雜誌 (Global Finance)頒發「The Innovators 2020 Cash Management」獎。
   locale: zh-TW
   status: to_confirm
-  note: 客戶專案的獎項，有年份，可能過時；與台新銀行的案例相連，對外使用要確認授權
+  note: 客戶專案的獎項，有年份，可能過時；與台新銀行的案例相連
 
 - id: digirunner-case-taipei-city
   type: case
@@ -2538,8 +2475,7 @@
     url: https://www.tpisoftware.com/products/digirunner
     quote: 為臺北市政府建置符合統一標準的API管理平台，使各機關的異質應用系統資料介接，讓市府推動資料開放政策，拓展創新應用之可行性，極大化開放資料加值應用與民眾參與公共政策。此外，昕力顧問團隊更協助市府建立API管理制度，並輔導各級機關一一導入上線。
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: digirunner-case-pharmacity
   type: case
@@ -2548,8 +2484,7 @@
     url: https://www.tpisoftware.com/products/digirunner
     quote: digiRunner 為 Pharmacity 於雲端建構 API 管理平台，透過 API 策略推動電子商務模式，在平台上整合第三方 API 並進行管理、監控
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 # The v.s. Kong table puts each character of the digiRunner column in its own tag, so facts-candidates.md does not list it; the quotes match once whitespace is ignored
 - id: digirunner-vs-kong-integration
@@ -2967,7 +2902,7 @@
     quote: 2018年臺北市政府 API 平臺建置（昕力資訊建置已於2019年建置完成，預計三年內導入上百個 API 服務）
   locale: zh-TW
   status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權；「預計三年內」是 2019 年的說法，已過時
+  note: 「預計三年內」是 2019 年的說法，已過時
 
 - id: digirunner-claim-gov-compliance-100
   type: feature
@@ -3837,7 +3772,7 @@
     quote: 跨平台數位整合富邦人壽的行動投保網頁及App，導入昕力獨家4種系統模組，可彈性調整功能介面、快速上/下架商品。完善檢核機制模組，降低錯誤率及照會率。3分鐘快速成案，整合第三方支付平台，有效提高成交率，提供最速、最佳的保單購買體驗。
   locale: zh-TW
   status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權；InsureRing 頁也用同一個案例
+  note: InsureRing 頁也用同一個案例
 
 - id: insurebrick-case-shin-kong
   type: case
@@ -3846,8 +3781,7 @@
     url: https://www.tpisoftware.com/products/insurebrick
     quote: 新光金保代核心系統應用 InsureBrick 模組規劃設計，透過多元且彈性的模組，整合內部各項業務流程，縮短進件作業時間
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 # --- InsureRing ---
 - id: insurering-automated-rules
@@ -3930,8 +3864,7 @@
     url: https://www.tpisoftware.com/solutions/insurering
     quote: 協助新光人壽建置集中化規則引擎，e化整合產品及計費資料，如：保險核心計算、公式、檢核模組等，整體降低50%作業成本。簡化商品上架流程，節省60%上架時間
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 # --- Interactive health ---
 - id: interactivehealth-iot
@@ -3959,8 +3892,7 @@
     url: https://www.tpisoftware.com/solutions/interactivehealth
     quote: 昕力協助永豐銀行以健康生活角度出發建置『汗水不白流』APP，透過整合跨系統串接及監管海量運動數據，建立高效體驗的同時，讓用戶運動燃燒卡路里能轉換為信用卡點數回饋。
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: interactivehealth-case-good-health
   type: case
@@ -3969,8 +3901,7 @@
     url: https://www.tpisoftware.com/solutions/interactivehealth
     quote: 昕力協助好適康開發個人健康管理 APP，將使用者每日健康數據儲存於雲端，並以圖表方式呈現健康記錄及臨床數值，且建置就診預約、用藥提醒、疫苗接種日期記錄等功能
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: interactivehealth-case-fu-jen
   type: case
@@ -3979,8 +3910,7 @@
     url: https://www.tpisoftware.com/solutions/interactivehealth
     quote: 昕力協助輔大醫院建置全方位服務 APP，整合醫院現有系統，提供預約掛號、看診檢查進度查詢、行動繳費、住院申請、慢箋領藥等功能
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: interactivehealth-case-hospital-title
   type: case
@@ -4202,8 +4132,7 @@
     url: https://www.tpisoftware.com/solutions/textualanalysis
     quote: 透過文本分析技術，建立「銷毀檔案目錄」與「檔案分類及保存年限區分表」兩大智能審查模型，協助檔管局線上批註審查意見及統計功能
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱（檔管局），對外使用要確認授權
+  status: confirmed
 
 - id: detect-case-petitions
   type: case
@@ -4258,8 +4187,7 @@
     url: https://www.tpisoftware.com/solutions/uiux
     quote: 結合社群與支付，提供P2P轉帳、分帳，電支交易等服務，從日常交易到週期性帳單處理。介面設計遵循Line集團規範
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶集團名稱（Line集團），對外使用要確認授權
+  status: confirmed
 
 # --- GIS ---
 - id: gis-2d-3d
@@ -4571,8 +4499,7 @@
     url: https://www.tpisoftware.com/products/systalk-chat
     quote: YouBike 小管家 AI 客服透過 SysTalk.Chat 在官方網站、官方App 等渠道建立完整且最擬人的客服問答機制，全天候輔助真人客服服務廣大的用戶群，包含了場站資訊、租借狀態、失物招領、通報協尋等項目，提供24小時不間斷的線上資訊服務。
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: systalk-chat-case-sinyi
   type: case
@@ -4581,8 +4508,7 @@
     url: https://www.tpisoftware.com/products/systalk-chat
     quote: 昕力團隊協助信義房屋建置找房助理，使用手機內建Google助理即可喚醒，運用NLU自然語言理解技術
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: systalk-chat-case-wemo
   type: case
@@ -4591,8 +4517,7 @@
     url: https://www.tpisoftware.com/products/systalk-chat
     quote: 昕力團隊協助Wemo Scooter打造智能客服威威，於App提供24小時諮詢服務，可即時回答操作使用、保險車禍相關、騎乘注意事項，並提供方案介紹服務
   locale: zh-TW
-  status: to_confirm
-  note: 寫出客戶名稱，對外使用要確認授權
+  status: confirmed
 
 - id: cert-systalk-rpa-intel-rrk
   type: certification
