@@ -112,7 +112,7 @@ test('a strategy document cites confirmed zh-TW facts, and pending ones only und
   assert.deepEqual(doc('## 缺少證據的主張\n\n### 得獎\n\n- `fact:pending-award`'), []);
   assert.deepEqual(doc('## 待確認\n\n- `fact:pending-award`'), []);
   assert.equal(doc('## 缺少證據的主張\n\n## 證據對照\n\n- `fact:pending-award`').length, 1);
-  // Headings and citations inside code fences are not read as such
+  // A heading inside a code fence is not a heading (citations in fences are still checked)
   assert.equal(doc('## 缺少證據\n\n```\n## x\n```\n- `fact:pending-award`').length, 0);
   // Plain backticked ids (paths, nodes, labels) are not citations
   assert.deepEqual(checkStrategyDoc('b.md', '`industry-finance` `pending-award`', facts).cited, []);

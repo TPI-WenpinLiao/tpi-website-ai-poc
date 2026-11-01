@@ -73,7 +73,7 @@ node scripts/content/offering-files.mjs
 | systalk-rpa | Center、Studio、Agent 的細項、雲端方案部署於 GCP、SysTalk.RPA + AI 模組、六大導入步驟、導入諮詢表單未搬；`enterp-diagnosis` 是 RPA 適性分析問卷（M6） |
 | gadodido | `/products/gadoDIDO` 與 `/products/gadodido` 內容相同；「FIDO Alliance Member」「通過 FIDO 認證」的有效期；FIDO2 驗證流程、四項效益（含「優於業界」）、安全交易流程、影片未搬；修正半形逗號 |
 | gadoscout | 現站 `<title>` 寫「入侵預防系統」，導覽與 `nodes.csv` 寫「AI 異常偵測系統」；「彈性擴展」的內文講安全事件分析，和標題不符（照抄）；SRE 效能 3 項、影片 2 支未搬 |
-| insurebrick | `to_confirm`：不在導覽，是否仍銷售；現站 description 講市場不講產品，改從頁面介紹取句；「業界唯一微服務設計的基礎架構」「28 個模組」、6 種導入領域未搬 |
+| insurebrick | 不在導覽，仍在銷售（#165 使用者確認）；現站 description 講市場不講產品，改從頁面介紹取句；「業界唯一微服務設計的基礎架構」「28 個模組」、6 種導入領域未搬 |
 | greenswift | 「通過國際查證機構核發 AUP 認證」的機構與效期（ESGswift 頁寫 ARES）；FAQ 有未來式的說法，可能已過時：「未來我們也會推出係數管理中心」「多場所報告書功能正在開發中」「未來還將整合 ISO 14067 和 ISO 14068」；方案表、六大盤查步驟、儀表板說明未搬；`/carbon` 的 `<title>` 與 description 是 vikibundle 頁的（現站錯誤），經濟型方案價格（每支產品 15 萬）、第三方查證機構名稱（愛法諾、亞瑞士）、5 題 FAQ、短網址申請連結未搬；修正半形句點 |
 | electriswift | MODEL、CONVERGE 等五步驟、平均節電與電費節省的數字、能源管理法說明未搬；工業廠房情境 `industry` 填 manufacturing（製造業 hub 目前是 draft） |
 | family-ai | 主頁的「已為全球超過 1.4億用戶」、一日應用情境、SysTalk.Service 導入前中後未搬；`highlights` 取自併入的 `systalk-ai-phison`，但該頁以 AISO 為名、介紹與群聯電子 aiDAPTIV+ 合作的 AI 一體機（2025 AI AWARD、回應快 25 倍、70B–200B 模型），曾考慮移到 `aiso` 節點，使用者在 #106（PR #110）決定維持在 family-ai；該頁 FAQ 4 題、方案表、影片 2 支未搬 |
