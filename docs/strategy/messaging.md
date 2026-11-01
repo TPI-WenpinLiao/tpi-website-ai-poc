@@ -95,7 +95,7 @@ OrientAI 部署在企業端，資料不交給外部；權限、影子 AI 與 Tok
 - `fact:insurebrick-case-shin-kong`：新光金保代核心系統以 InsureBrick 模組整合業務流程（具名案例）
 - `fact:insurering-case-shin-kong-life`：為新光人壽建置集中化規則引擎的成果（具名案例，數字照事實原文引用）
 
-用在：`/industries/finance`。InsureBrick、InsureRing 仍在銷售（使用者確認，#165）；`docs/ia/nodes.csv` 的「待確認：不在導覽，是否仍銷售」註記由主 session 更新。
+用在：`/industries/finance`。InsureBrick、InsureRing 仍在銷售（使用者確認，#165）；`docs/ia/nodes.csv` 已改為「仍在銷售」。
 
 ### DM-6 合作對象的穩定度看得到
 
@@ -328,7 +328,7 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 | 1 | 昕力是台灣第一或領先的企業軟體公司 | 最高級自我宣稱，現站沒有排名依據 | `fact:company-claim-taiwan-first` |
 | 2 | 規模：員工數、累積專案數、AI 服務用戶數 | 數字有年份或統計時間不明，可能過時 | `fact:company-employees-630`、`fact:company-projects-400`、`fact:systalk-ai-140-million-users` |
 | 3 | 產品獲獎肯定（台灣精品獎、Gartner Cool Vendor 等） | 有年份的獎項，可能過時；`competitors.md`「本站缺」第 2 項指出首頁缺第三方證據，這是最直接的一類 | `fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`、`fact:award-innovative-business-2022` |
-| 4 | 客戶證言（含說話人姓名與職稱） | 大部分已解決：使用者決定現站寫出的客戶名稱、證言與說話人姓名、職稱都視為已授權（#165），例如 `fact:testimonial-shin-kong-bank`、`fact:testimonial-cathay-fhc-excerpt` 已是 `confirmed`，可以當決策者「找成功案例」的第三方說法用。仍卡住的兩則是因為內容：國泰金控的證言含當時的 50% 用戶服務量，可能過時；政大金融科技研究中心的證言有「第一家」的最高級說法 | `fact:testimonial-cathay-fhc`、`fact:testimonial-nccu-fintech` |
+| 4 | 客戶證言（含說話人姓名與職稱） | 大部分已解決：使用者決定現站寫出的客戶名稱、證言與說話人姓名、職稱都視為已授權（#165），例如 `fact:testimonial-shin-kong-bank`、`fact:testimonial-excellence-wire` 已是 `confirmed`，可以當決策者「找成功案例」的第三方說法用。仍卡住的三則是因為內容：國泰金控的證言含當時的 50% 用戶服務量，可能過時；政大金融科技研究中心的證言有「第一家」、委外服務頁的國泰證言摘錄有「最佳技術」，都是最高級說法 | `fact:testimonial-cathay-fhc`、`fact:testimonial-nccu-fintech`、`fact:testimonial-cathay-fhc-excerpt` |
 | 5 | digiRunner 是國內唯一符合金管會法令、100% 合規的 API 管理平台 | 最高級說法與 100% 都沒有依據。DM-1 只用「反應法規要求」「針對金融檢查」等已確認的說法 | `fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100`、`fact:digirunner-claim-gov-compliance-100` |
 | 6 | digiRunner 比 Kong 好導入、好維運、更合規 | 與競品的比較沒有依據或比較日期；`search-intent.md` 的「Kong 替代方案 API Gateway」是比較型查詢，確認後可給 digiRunner 頁接住 | `fact:digirunner-vs-kong-integration`、`fact:digirunner-vs-kong-adoption`、`fact:digirunner-vs-kong-compliance`、`fact:digirunner-vs-kong-operations` |
 | 7 | 成效數字：開發效率提升、正常運行時間、OrientAI 的效率與成本改善、InsureRing 上架時間 | 沒有量測方式或比較基準（#164 的宣稱規則）。首頁案例的 `fact:smartclaim-result` 已確認，可以用；理賠解決方案頁的同類數字還沒有。InsureRing 的具名案例成果（`fact:insurering-case-shin-kong-life`）已確認，產品頁的「上架縮短 90%」仍未確認 | `fact:digirunner-hot-deploy-50`、`fact:digirunner-uptime-999`、`fact:orientai-benefits`、`fact:insurering-90-percent`、`fact:smartclaim-80-percent` |

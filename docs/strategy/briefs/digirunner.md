@@ -2,7 +2,7 @@
 
 - 模板：`offering`（`kind: product`）；內容檔：`src/content/offering/zh-TW/digirunner.md`
 - 主張 id 指 `docs/strategy/messaging.md`；事實的寫法見 `content-strategy` skill「引用事實的寫法」，只用 `docs/strategy/facts.yaml` 裡 zh-TW、`status: confirmed` 的條目
-- 狀態：content-strategist 已定案取捨，待人工確認（`strategy-approved`）
+- 狀態：已確認（#165 加上 `strategy-approved`）
 
 ## 受眾與任務
 

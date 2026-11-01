@@ -241,7 +241,7 @@ groups:
   - group: Testimonials (home page)
     url: https://www.tpisoftware.com/
     locale: zh-TW
-    comment: Each testimonial is the statement and its speaker; names, titles and quotes need the client's consent
+    comment: Each testimonial is the statement and its speaker; quotes, names and titles shown on the site count as licensed (#165), a quote with a dated number or a superlative stays to_confirm
     facts:
       - id: testimonial-nccu-fintech
         type: case
@@ -1323,6 +1323,8 @@ groups:
         type: case
         url: https://www.tpisoftware.com/outsourcing
         quote: 透過昕力的最佳技術與完整客戶體驗的合作，我們獲得了相當好的成果！
+        status: to_confirm
+        note: 「最佳技術」是證言中的最高級說法
 
 ignore:
   - match: "- 昕力資訊TPIsoftware$|^昕力資訊｜SysTalk\\.RPA｜"

@@ -2,7 +2,7 @@
 
 - 模板：`home`；文案位置：`src/data/home/zh-TW.ts`（型別 `Home`，en、vi 檔要滿足同一型別）
 - 主張 id 指 `docs/strategy/messaging.md`；事實的寫法見 `content-strategy` skill「引用事實的寫法」，只用 `docs/strategy/facts.yaml` 裡 zh-TW、`status: confirmed` 的條目
-- 狀態：content-strategist 已定案取捨，待人工確認（`strategy-approved`）
+- 狀態：已確認（#165 加上 `strategy-approved`）
 
 ## 受眾與任務
 
@@ -179,7 +179,7 @@ hero 的次要按鈕從「產品總覽」改成「依產業看方案」：決策
 
 | # | 事項 | 卡在哪 | 影響的段落 |
 |---|---|---|---|
-| 1 | 獎項能不能放首頁：台灣精品獎（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`）、Gartner Cool Vendor（`fact:award-gartner-cool-vendor-2018`）。客戶名稱與證言已視為已授權（使用者決定，#165），例如 `fact:testimonial-shin-kong-bank`、`fact:testimonial-cathay-fhc-excerpt`；要不要在第 7 段加一則證言，交設計概念與製作階段決定 | 獎項有年份，可能過時。確認前第 7 段只用已確認的公司資料 | 7（確認後可加獎項；證言可直接加） |
+| 1 | 獎項能不能放首頁：台灣精品獎（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`）、Gartner Cool Vendor（`fact:award-gartner-cool-vendor-2018`）。客戶名稱與證言已視為已授權（使用者決定，#165），例如 `fact:testimonial-shin-kong-bank`、`fact:testimonial-excellence-wire`（委外服務頁的國泰摘錄有「最佳技術」，仍待確認）；要不要在第 7 段加一則證言，交設計概念與製作階段決定 | 獎項有年份，可能過時。確認前第 7 段只用已確認的公司資料 | 7（確認後可加獎項；證言可直接加） |
 | 2 | 規模數字：`fact:company-employees-630`、`fact:company-projects-400` | 統計時間不明 | 7 |
 | 3 | 製造業之後要不要回到首頁。目前已決定 hero 與產業入口不點名製造業（使用者決定，#165）；製造業頁（`src/content/hub/zh-TW/industry-manufacturing.md`）有內容並產生頁面後，再決定要不要加回產業入口 | `nodes.csv` 寫「現站沒有製造業內容，需人工提供」；messaging 缺少證據第 13 項 | 2（之後） |
 | 4 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答；messaging 缺少證據第 14 項 | 8 |

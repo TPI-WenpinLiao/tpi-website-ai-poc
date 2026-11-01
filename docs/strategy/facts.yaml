@@ -868,7 +868,7 @@
   status: confirmed
 
 # --- Testimonials (home page) ---
-# Each testimonial is the statement and its speaker; names, titles and quotes need the client's consent
+# Each testimonial is the statement and its speaker; quotes, names and titles shown on the site count as licensed (#165), a quote with a dated number or a superlative stays to_confirm
 - id: testimonial-nccu-fintech
   type: case
   text: 昕力是台灣本土在 API 管理平台上，相較於國際來說，走得最前面，且是第一家開始投入相關技術的企業。昕力在 API 管理平台的技術和 Al 都提供很好的服務，在未來的開放銀行有很大的發揮效果，可擔任領頭羊，引領其他公司投入。
@@ -6294,4 +6294,5 @@
     url: https://www.tpisoftware.com/outsourcing
     quote: 透過昕力的最佳技術與完整客戶體驗的合作，我們獲得了相當好的成果！
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 「最佳技術」是證言中的最高級說法

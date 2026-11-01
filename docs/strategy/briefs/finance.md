@@ -2,7 +2,7 @@
 
 - 模板：`hub`（產業 hub，`industry: finance`）；內容檔：`src/content/hub/zh-TW/industry-finance.md`
 - 主張 id 指 `docs/strategy/messaging.md`；事實的寫法見 `content-strategy` skill「引用事實的寫法」，只用 `docs/strategy/facts.yaml` 裡 zh-TW、`status: confirmed` 的條目
-- 狀態：content-strategist 已定案取捨，待人工確認（`strategy-approved`）
+- 狀態：已確認（#165 加上 `strategy-approved`）
 
 ## 這頁從哪裡推出來
 
@@ -16,7 +16,7 @@
 
 ### 哪些產品能在這頁介紹
 
-`nodes.csv` 裡 `industry-finance` 的子節點只有 `insurebrick`、`insurering`。兩者在 `nodes.csv` 標「待確認：不在導覽，是否仍銷售」，使用者已確認仍在銷售（#165），註記由主 session 更新。模板的子頁卡片只會列這兩個。其他金融相關的產品掛在產品家族下：
+`nodes.csv` 裡 `industry-finance` 的子節點只有 `insurebrick`、`insurering`。使用者已確認兩者仍在銷售（#165），`nodes.csv` 的備註已改為「仍在銷售」。模板的子頁卡片只會列這兩個。其他金融相關的產品掛在產品家族下：
 
 | 產品 | 節點的 parent | 在這頁的處理 |
 |---|---|---|
