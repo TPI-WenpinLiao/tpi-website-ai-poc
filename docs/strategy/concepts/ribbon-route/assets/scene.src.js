@@ -1,10 +1,21 @@
-// ribbon-route: the system map and the brand ribbon (#166 round 4, docs/strategy/concepts/directions.md).
-// One three.js world, two scroll scenes: the hero (#top) and the AI results (#cases). The canvas moves
-// into whichever stage is on screen; nothing renders while neither is.
+// ribbon-route: the system map and the brand ribbon (#166 round 4, docs/strategy/concepts/directions.md;
+// revised 2026-11-01 after the user's notes, README「修正紀錄」).
+//
+// One ribbon for the whole page. It leaves the core system, runs through the city past the products, the
+// AI model and the new services, leaves the map at its front edge, and on the white ground of section 2
+// forks into two branches that end on the two industry entries. One three.js world, two places to show it:
+//
+//   route  the hero and section 2 share one sticky canvas (#route .route__stage). While the hero is held,
+//          the camera rises from 31° to straight above; after that the camera pans with the page, one CSS
+//          pixel to one pixel of map, so the map, the ribbon's tail and the section's text scroll together.
+//          The tail and the fork are built from the box of the fork picture (.fork__img), the same shape
+//          the static picture shows, so both versions end the branches on the same two entries.
+//   cases  a framed close-up (#cases .cases__slot) that walks the magenta stretch while the section is
+//          held; the block of the result on screen lights up and an HTML label names its work.
 //
 // Loaded only on desktop with motion allowed (the inline script in index.html decides). Without WebGL 2
-// it removes html.want-3d and marks both scenes .is-rest, so the static pictures show instead.
-// ?capture renders named views for the static pictures (capture.mjs) and skips the scroll scenes.
+// it removes html.want-3d and marks the scenes .is-rest, so the static pictures show instead.
+// ?capture renders named views for the static pictures (capture.mjs) and skips the page.
 import {
   WebGLRenderer, Scene, OrthographicCamera, Color, Fog, Vector3,
   BoxGeometry, PlaneGeometry, BufferGeometry, Float32BufferAttribute, Uint32BufferAttribute,
@@ -29,43 +40,47 @@ const smooth = (t) => t * t * (3 - 2 * t);
 const rad = (d) => (d * Math.PI) / 180;
 const rng = (seed) => () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
 
-// ---------------------------------------------------------------- the ribbon routes
-// x right, z towards the viewer, y up. The main route leaves the core system (left), forks, runs its
-// magenta stretch past the three AI blocks and ends at the orange services (right); the branch goes
-// from the fork to a second group of services at the back.
-const MAIN = [[-10.1, 1.0, 0.55], [-8.4, 1.0, 0.4], [-6.9, 0.6, 0.44], [-5.6, -0.4, 0.56], [-4.3, -1.1, 0.5],
-  [-2.7, -0.8, 0.36], [-1.3, 0.5, 0.42], [0.5, 1.3, 0.52], [2.4, 1.0, 0.6], [3.9, -0.2, 0.46], [5.3, -0.9, 0.36],
-  [6.9, -0.5, 0.42], [8.3, 0.3, 0.5], [9.7, 0.5, 0.46]];
-const BRANCH = [[-6.9, 0.6, 0.44], [-5.6, -0.4, 0.56], [-5.0, -1.9, 0.62], [-3.7, -3.1, 0.5], [-1.5, -3.8, 0.4],
-  [1.1, -3.6, 0.46], [3.5, -4.3, 0.5], [5.8, -4.7, 0.44]];
+// ---------------------------------------------------------------- the route
+// x right, z towards the viewer (down the page in the plan view), y up. [x, z, lift]
+const CITY_ROUTE = [[-9.1, 2.0, 0.55], [-7.6, 2.0, 0.42], [-6.2, 1.5, 0.44], [-5.0, 0.6, 0.56], [-3.6, 0.3, 0.5],
+  [-2.1, 0.8, 0.36], [-0.8, 1.9, 0.42], [0.8, 2.4, 0.52], [2.5, 2.0, 0.6], [4.0, 1.2, 0.46], [5.6, 1.0, 0.4],
+  [7.1, 1.9, 0.44], [7.9, 3.6, 0.5], [7.4, 5.4, 0.46], [5.8, 6.5, 0.42], [3.6, 7.1, 0.44], [1.8, 8.1, 0.46],
+  [1.0, 9.4, 0.46], [0.8, 10.6, 0.45]];
+const CORE = [-9.75, 2.0];
+const CITY_EDGE = 10.45; // the front edge of the blocks: the hero's bottom edge in every view
 const RIBBON_W = 0.36;
+const LIFT = 0.45;
+const HALF_W = 10.6;
+const POSTER_LABEL = [0.566, 0.458]; // where the first AI block sits on case-1.webp (capture.mjs, labels.json) // half the visible width of the hero and plan views, in world units
 
-const v3 = (a) => new Vector3(a[0], a[2], a[1]); // [x, z, y] → Vector3(x, y, z)
+// The fork picture's box (the static picture and, in the live page, the same box with the picture hidden).
+// Fractions of the box: the two branch ends sit on the left edge of the two entries' columns.
+const FORK = {
+  wide: { w: 2560, h: 720, left: 0.046, right: 0.521, halfW: HALF_W },
+  tall: { w: 900, h: 720, left: 0.093, right: 0.54, halfW: 6.4 },
+};
+/** The tail in box fractions [fx, fy]: from the entry at the top over to the right column, the fork, two ends. */
+function tailFractions(fe, f) {
+  const mid = lerp(fe, f.right, 0.5);
+  return {
+    main: [[fe, 0.12], [lerp(fe, f.right, 0.12), 0.19], [mid, 0.27], [lerp(fe, f.right, 0.88), 0.35], [f.right, 0.43], [f.right, 0.5], [f.right, 0.72], [f.right, 0.935]],
+    branch: [[f.right, 0.5], [f.right, 0.58], [f.right - 0.012, 0.65], [f.right - 0.05, 0.7], [lerp(f.right, f.left, 0.5), 0.73],
+      [f.left + 0.05, 0.76], [f.left + 0.012, 0.8], [f.left, 0.86], [f.left, 0.935]],
+  };
+}
 
-/** Points spaced evenly along the curve from parameter t0 to t1. */
-function spaced(curve, t0, t1, step) {
-  const dense = [];
-  for (let i = 0; i <= 2000; i++) dense.push(curve.getPoint(lerp(t0, t1, i / 2000)));
-  const acc = [0];
-  for (let i = 1; i < dense.length; i++) acc.push(acc[i - 1] + dense[i].distanceTo(dense[i - 1]));
-  const total = acc[acc.length - 1];
-  const n = Math.max(2, Math.round(total / step));
-  const out = [];
-  let k = 0;
-  for (let i = 0; i <= n; i++) {
-    const s = (total * i) / n;
-    while (k < acc.length - 2 && acc[k + 1] < s) k++;
-    const f = (s - acc[k]) / (acc[k + 1] - acc[k] || 1);
-    out.push(dense[k].clone().lerp(dense[k + 1], f));
-  }
-  return { pts: out, length: total };
+const v3 = (a) => new Vector3(a[0], a[2] ?? LIFT, a[1]); // [x, z, lift] → Vector3(x, y, z)
+
+/** Points spaced evenly along the curve. */
+function spaced(curve, step) {
+  const dense = curve.getSpacedPoints(Math.max(20, Math.round(curve.getLength() / step)));
+  return { pts: dense, length: curve.getLength() };
 }
 
 /** A flat band along pts, banked into its bends, coloured along its length, its far end cut on a slant. */
 function ribbonGeometry(pts, colourAt) {
   const n = pts.length;
   const T = pts.map((p, i) => pts[Math.min(n - 1, i + 1)].clone().sub(pts[Math.max(0, i - 1)]).normalize());
-  // signed curvature in plan, smoothed, decides the bank
   const bend = T.map((t, i) => {
     const a = T[Math.max(0, i - 3)], b = T[Math.min(n - 1, i + 3)];
     return a.x * b.z - a.z * b.x;
@@ -73,21 +88,22 @@ function ribbonGeometry(pts, colourAt) {
   const bank = bend.map((_, i) => {
     let s = 0, c = 0;
     for (let j = Math.max(0, i - 8); j <= Math.min(n - 1, i + 8); j++) { s += bend[j]; c++; }
-    return clamp((-s / c) * 2.4, -0.7, 0.7);
+    // flat on the blank ground below the map (the plan view would show a bank as a pinch)
+    return clamp((-s / c) * 2.4, -0.7, 0.7) * (1 - smooth(clamp((pts[i].z - CITY_EDGE + 0.6) / 0.8)));
   });
   const pos = [], col = [], idx = [];
   const up = new Vector3(0, 1, 0), side = new Vector3(), lift = new Vector3();
   for (let i = 0; i < n; i++) {
     const t = T[i];
     side.set(-t.z, 0, t.x).normalize();
-    lift.crossVectors(t, side).normalize(); // perpendicular to both: the band's normal before banking
+    lift.crossVectors(t, side).normalize();
     if (lift.dot(up) < 0) lift.negate();
     const s = side.clone().multiplyScalar(Math.cos(bank[i])).addScaledVector(lift, Math.sin(bank[i]));
     const half = RIBBON_W / 2;
     const L = pts[i].clone().addScaledVector(s, half), R = pts[i].clone().addScaledVector(s, -half);
     if (i === n - 1) { L.addScaledVector(t, RIBBON_W * 0.42); R.addScaledVector(t, -RIBBON_W * 0.42); } // the logo's slanted cut
     pos.push(L.x, L.y, L.z, R.x, R.y, R.z);
-    const c = colourAt(i / (n - 1));
+    const c = colourAt(i / (n - 1), pts[i]);
     col.push(c.r, c.g, c.b, c.r, c.g, c.b);
     if (i < n - 1) { const a = 2 * i; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
   }
@@ -99,7 +115,7 @@ function ribbonGeometry(pts, colourAt) {
   return g;
 }
 
-/** Colour stops along a route: [[at, Color], …]. */
+/** Colour stops along the city route: [[at, Color], …]. */
 const ramp = (stops) => (u) => {
   for (let i = 1; i < stops.length; i++) {
     if (u <= stops[i][0]) {
@@ -109,15 +125,14 @@ const ramp = (stops) => (u) => {
   }
   return stops[stops.length - 1][1].clone();
 };
+const cityColour = ramp([[0, C.purple500], [0.3, C.purple500], [0.4, C.magenta500], [0.6, C.magenta500], [0.7, C.orange500], [1, C.orange500]]);
 
-// The ribbon keeps its brand colours: lit a little for its bends, mostly flat.
 function flatter(mat, amount) {
   mat.onBeforeCompile = (sh) => {
     sh.fragmentShader = sh.fragmentShader.replace('#include <opaque_fragment>', `outgoingLight = mix(outgoingLight, diffuseColor.rgb, ${amount.toFixed(2)});\n#include <opaque_fragment>`);
   };
   return mat;
 }
-// Blocks darken towards the ground: a cheap stand-in for ambient occlusion.
 function occluded(mat) {
   mat.onBeforeCompile = (sh) => {
     sh.vertexShader = 'varying float vAoY;\n' + sh.vertexShader.replace('#include <project_vertex>', `#include <project_vertex>
@@ -138,51 +153,70 @@ function buildWorld() {
   scene.background = C.ink0.clone();
   scene.fog = new Fog(C.ink0.clone(), 60, 80);
 
-  const mainCurve = new CatmullRomCurve3(MAIN.map(v3), false, 'centripetal');
-  const branchCurve = new CatmullRomCurve3(BRANCH.map(v3), false, 'centripetal');
-  const main = spaced(mainCurve, 0, 1, 0.04);
-  const branch = spaced(branchCurve, 1 / (BRANCH.length - 1), 1, 0.04); // from the fork on
-  const mainColour = ramp([[0, C.purple500], [0.3, C.purple500], [0.44, C.magenta500], [0.66, C.magenta500], [0.8, C.orange500], [1, C.orange500]]);
-  const branchColour = ramp([[0, C.purple500], [0.4, C.purple500], [0.78, C.orange500], [1, C.orange500]]);
+  const cityCurve = new CatmullRomCurve3(CITY_ROUTE.map(v3), false, 'centripetal');
+  const city = spaced(cityCurve, 0.04);
+  const exit = city.pts[city.pts.length - 1].clone();
 
   const ribbonMat = flatter(new MeshLambertMaterial({ vertexColors: true, side: DoubleSide }), 0.62);
-  const ribbons = [
-    { mesh: new Mesh(ribbonGeometry(main.pts, mainColour), ribbonMat), segs: main.pts.length - 1, start: 0, length: main.length },
-    { mesh: new Mesh(ribbonGeometry(branch.pts, branchColour), ribbonMat), segs: branch.pts.length - 1, start: 0, length: branch.length },
-  ];
-  // the branch starts drawing when the main ribbon reaches the fork
-  const forkAt = main.pts.reduce((best, p, i) => (p.distanceTo(branch.pts[0]) < main.pts[best].distanceTo(branch.pts[0]) ? i : best), 0);
-  ribbons[1].start = (forkAt / (main.pts.length - 1)) * main.length;
-  for (const r of ribbons) { r.mesh.castShadow = true; scene.add(r.mesh); }
+  const main = new Mesh(new BufferGeometry(), ribbonMat);
+  const branch = new Mesh(new BufferGeometry(), ribbonMat);
+  for (const m of [main, branch]) { m.castShadow = true; m.frustumCulled = false; scene.add(m); }
+  const ribbon = { main, branch, cityLength: city.length, mainSegs: 0, citySegs: 0, branchSegs: 0 };
 
-  const routePts = [...main.pts, ...branch.pts];
+  /** Rebuilds the ribbon: the city route, then the tail and the branch through world points. */
+  ribbon.build = (tailMain, tailBranch) => {
+    const all = [...CITY_ROUTE.slice(0, -1).map(v3), ...tailMain.map(v3)];
+    const curve = new CatmullRomCurve3(all, false, 'chordal');
+    const sp = spaced(curve, 0.04);
+    const cityShare = city.length / sp.length;
+    main.geometry.dispose();
+    main.geometry = ribbonGeometry(sp.pts, (u) => (u <= cityShare ? cityColour(u / cityShare) : C.orange500.clone()));
+    ribbon.mainSegs = sp.pts.length - 1;
+    ribbon.citySegs = Math.round(cityShare * ribbon.mainSegs);
+    const b = spaced(new CatmullRomCurve3(tailBranch.map(v3), false, 'chordal'), 0.04);
+    branch.geometry.dispose();
+    branch.geometry = ribbonGeometry(b.pts, () => C.orange500.clone());
+    ribbon.branchSegs = b.pts.length - 1;
+  };
+  /** k = 0…1 draws the city route (the load animation); at 1 the tail and the branch are there too. */
+  ribbon.draw = (k) => {
+    const segs = k >= 1 ? ribbon.mainSegs : Math.floor(k * ribbon.citySegs);
+    main.geometry.setDrawRange(0, segs * 6);
+    main.visible = segs > 0;
+    branch.visible = k >= 1;
+  };
+
+  const routePts = city.pts;
   const distToRoute = (x, z) => {
     let d = Infinity;
     for (let i = 0; i < routePts.length; i += 2) { const p = routePts[i]; d = Math.min(d, Math.hypot(p.x - x, p.z - z)); }
     return d;
   };
-  const along = (route, u) => route.pts[Math.round(u * (route.pts.length - 1))];
-  const sideOf = (route, u, s) => {
-    const i = Math.round(u * (route.pts.length - 1));
-    const a = route.pts[Math.max(0, i - 2)], b = route.pts[Math.min(route.pts.length - 1, i + 2)];
+  const sideOf = (u, s) => {
+    const i = Math.round(u * (city.pts.length - 1));
+    const a = city.pts[Math.max(0, i - 2)], b = city.pts[Math.min(city.pts.length - 1, i + 2)];
     const t = b.clone().sub(a).normalize();
-    const p = route.pts[i];
+    const p = city.pts[i];
     return new Vector3(p.x - t.z * s, 0, p.z + t.x * s);
   };
 
   // the blocks the scene names, placed first; the city fills in around them
   const specials = [];
   const special = (kind, x, z, w, d, h, extra = {}) => specials.push({ kind, x, z, w, d, h, ...extra });
-  special('core', -10.6, 1.0, 1.05, 1.05, 1.5);
-  const ai = [0.47, 0.555, 0.64].map((u, i) => { const p = sideOf(main, u, i % 2 ? -0.98 : 0.98); return { x: p.x, z: p.z, u }; });
+  special('core', CORE[0], CORE[1], 1.05, 1.05, 1.5);
+  const ai = [0.44, 0.5, 0.56].map((u, i) => { const p = sideOf(u, i % 2 ? -0.98 : 0.98); return { x: p.x, z: p.z, u }; });
   ai.forEach((p, i) => special('ai', p.x, p.z, 0.72, 0.72, 0.62 + i * 0.12, { index: i }));
+  const model = sideOf(0.36, -1.02);
+  special('model', model.x, model.z, 0.8, 0.8, 0.95);
   const products = {
-    digirunner: sideOf(main, 0.215, -0.98),
-    viki: sideOf(main, 0.4, 0.98),
-    gadodido: sideOf(branch, 0.5, 0.98),
-    greenswift: sideOf(branch, 0.84, -0.98),
+    digirunner: sideOf(0.1, -0.98),
+    viki: sideOf(0.2, 0.98),
+    gadodido: sideOf(0.29, -0.98),
+    greenswift: sideOf(0.66, 0.98),
   };
   for (const [name, p] of Object.entries(products)) special('product', p.x, p.z, 0.7, 0.7, 0.8, { name });
+  const legacy = new Vector3(-6.9, 0, 3.5);
+  special('legacy', legacy.x, legacy.z, 0.9, 0.9, 1.25);
   const enclosure = new Vector3(10.4, 0, -5.4);
   special('enclosed', enclosure.x, enclosure.z, 0.7, 0.7, 0.55);
   for (const [dx, dz] of [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]) special('wall', enclosure.x + dx * 1.15, enclosure.z + dz * 1.15, 0.8, 0.8, 0.95 + ((dx + dz + 2) % 3) * 0.1);
@@ -202,30 +236,31 @@ function buildWorld() {
       if (dr < 0.68) continue;
       if (dr < 1.45) h = Math.min(h, 0.3 + (dr - 0.68) * 0.35); // the blocks along the route stay low, so the ribbon reads
       if (specials.some((s) => Math.abs(s.x - x) < (s.w + w) / 2 + 0.12 && Math.abs(s.z - z) < (s.d + d) / 2 + 0.12)) continue;
-      blocks.push({ x, z, w, d, h, tint });
+      blocks.push({ x, z: Math.min(z, CITY_EDGE - d / 2), w, d, h, tint });
     }
   }
-  // the services each route ends at: regular blocks near the two ends get orange roofs
-  const ends = [main.pts[main.pts.length - 1], branch.pts[branch.pts.length - 1]];
+  // the new services: the regular blocks beside the orange stretch get orange roofs
   const services = [];
+  const servicesAt = [sideOf(0.7, 1.3), sideOf(0.75, 1.3), sideOf(0.72, -1.3)];
   for (let k = blocks.length - 1; k >= 0; k--) {
     const b = blocks[k];
-    if (ends.some((e) => Math.hypot(e.x - b.x, e.z - b.z) < 1.75)) { services.push(b); blocks.splice(k, 1); }
+    if (servicesAt.some((e) => Math.hypot(e.x - b.x, e.z - b.z) < 0.7)) { services.push(b); blocks.splice(k, 1); }
   }
 
   const box = new BoxGeometry(1, 1, 1).translate(0, 0.5, 0);
   const blockMat = occluded(new MeshLambertMaterial({ color: 0xffffff }));
-  const city = new InstancedMesh(box, blockMat, blocks.length);
+  const cityMesh = new InstancedMesh(box, blockMat, blocks.length);
   const o = new Object3D();
   blocks.forEach((b, i) => {
     o.position.set(b.x, 0, b.z); o.scale.set(b.w, b.h, b.d); o.updateMatrix();
-    city.setMatrixAt(i, o.matrix);
-    city.setColorAt(i, C.ink0.clone().lerp(C.ink100, b.tint * 0.9));
+    cityMesh.setMatrixAt(i, o.matrix);
+    cityMesh.setColorAt(i, C.ink0.clone().lerp(C.ink100, b.tint * 0.9));
   });
-  city.castShadow = true; city.receiveShadow = true;
-  scene.add(city);
+  cityMesh.castShadow = true; cityMesh.receiveShadow = true;
+  scene.add(cityMesh);
 
   const sideMat = occluded(new MeshLambertMaterial({ color: 0xffffff }));
+  const greyMat = occluded(new MeshLambertMaterial({ color: C.ink200 }));
   const darkMat = occluded(new MeshLambertMaterial({ color: C.ink700 }));
   const roof = (c) => new MeshBasicMaterial({ color: c.clone() });
   const orangeRoof = roof(C.orange500), purpleRoof = roof(C.purple500), magentaRoof = roof(C.magenta500);
@@ -238,16 +273,21 @@ function buildWorld() {
     return m;
   };
   const withRoof = (top) => [sideMat, sideMat, top, sideMat, sideMat, sideMat];
-  for (const b of services) place(b, withRoof(orangeRoof));
+  for (const b of services) meshes.service = place(b, withRoof(orangeRoof));
   for (const s of specials) {
     if (s.kind === 'core') meshes.core = place(s, darkMat);
-    else if (s.kind === 'ai') { const top = roof(C.ink0); top.userData.lit = 0; meshes.ai[s.index] = place(s, withRoof(top)); meshes.ai[s.index].userData.top = top; }
+    else if (s.kind === 'legacy') meshes.legacy = place(s, greyMat);
+    else if (s.kind === 'model') meshes.model = place(s, withRoof(magentaRoof));
+    else if (s.kind === 'ai') { const top = roof(C.ink0); meshes.ai[s.index] = place(s, withRoof(top)); meshes.ai[s.index].userData.top = top; }
     else if (s.kind === 'product') meshes.product[s.name] = place(s, withRoof(purpleRoof));
     else if (s.kind === 'enclosed') meshes.enclosed = place(s, withRoof(magentaRoof));
     else if (s.kind === 'wall') place(s, sideMat);
   }
+  // the service block nearest the middle of the three carries the label
+  const sc = servicesAt[0];
+  meshes.service = services.reduce((best, b) => (Math.hypot(b.x - sc.x, b.z - sc.z) < Math.hypot(best.x - sc.x, best.z - sc.z) ? b : best), services[0]);
 
-  const ground = new Mesh(new PlaneGeometry(120, 120).rotateX(-Math.PI / 2), new ShadowMaterial({ color: C.ink700, opacity: 0.16 }));
+  const ground = new Mesh(new PlaneGeometry(160, 160).rotateX(-Math.PI / 2), new ShadowMaterial({ color: C.ink700, opacity: 0.16 }));
   ground.receiveShadow = true;
   scene.add(ground);
   scene.userData.ground = ground;
@@ -255,35 +295,43 @@ function buildWorld() {
   const hemi = new HemisphereLight(0xffffff, C.ink200, 2.1);
   scene.add(hemi);
   const sun = new DirectionalLight(0xffffff, 1.55);
-  sun.position.set(-7, 14, 9);
-  sun.target.position.set(0, 0, 0);
+  sun.position.set(-7, 14, 13);
+  sun.target.position.set(0, 0, 4);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
-  Object.assign(sun.shadow.camera, { left: -18, right: 18, top: 14, bottom: -14, near: 1, far: 50 });
+  Object.assign(sun.shadow.camera, { left: -18, right: 18, top: 18, bottom: -18, near: 1, far: 60 });
   sun.shadow.radius = 3;
   sun.shadow.bias = -0.0006;
   sun.shadow.normalBias = 0.02;
   scene.add(sun, sun.target);
 
-  return { scene, ribbons, main, branch, meshes, ai, products, enclosure, mainLength: main.length };
+  // the points the HTML labels hang from (the top of each block)
+  const top = (m) => new Vector3(m.position?.x ?? m.x, (m.scale?.y ?? m.h), m.position?.z ?? m.z);
+  const anchors = {
+    core: top(meshes.core), legacy: top(meshes.legacy), product: top(meshes.product.viki), model: top(meshes.model), service: top(meshes.service),
+    ai: meshes.ai.map(top),
+  };
+
+  return { scene, ribbon, exit, meshes, ai, products, enclosure, anchors };
 }
 
 // ---------------------------------------------------------------- the camera
 // A view: target [x, y, z], pitch and yaw in degrees, halfW = half the visible width in world units,
 // sx / sy = where the target sits on screen (-1…1).
-function viewAt(world, kind, p = 0) {
-  const pt = (u) => { const q = world.main.pts[Math.round(clamp(u) * (world.main.pts.length - 1))]; return [q.x, 0, q.z]; };
+function viewAt(world, kind, p = 0, aspect = 1.6) {
   switch (kind) {
-    case 'heroStart': return { target: [-1.2, 0, 0.6], pitch: 31, yaw: -8, halfW: 10.6, sx: 0, sy: -0.84 };
-    case 'heroPlan': return { target: [-1.4, 0, -1.3], pitch: 89.5, yaw: 0, halfW: 10.6, sx: 0, sy: -0.04 };
+    // the front edge of the city on the bottom edge of the screen
+    case 'heroStart': return { target: [-0.9, 0, CITY_EDGE], pitch: 21, yaw: -6, halfW: HALF_W, sx: 0, sy: -1, fog: 9.5 };
+    case 'plan': return { target: [0, 0, CITY_EDGE - HALF_W / aspect], pitch: 90, yaw: 0, halfW: HALF_W, sx: 0, sy: 0 };
     case 'cases': {
-      const u = lerp(world.ai[0].u - 0.025, world.ai[2].u + 0.01, p);
-      return { target: pt(u), pitch: 42, yaw: lerp(-30, -18, p), halfW: 4.3, sx: -0.3, sy: -0.3 };
+      const a = world.ai[0], b = world.ai[2];
+      return { target: [lerp(a.x - 0.5, b.x + 0.3, p), 0, lerp(a.z, b.z, p)], pitch: 44, yaw: lerp(-26, -14, p), halfW: 3.4, sx: 0, sy: -0.15 };
     }
     default: return null;
   }
 }
 const mixView = (a, b, t) => ({
+  fog: a.fog != null || b.fog != null ? lerp(a.fog ?? 0, b.fog ?? 0, t) : undefined,
   target: a.target.map((v, i) => lerp(v, b.target[i], t)),
   pitch: lerp(a.pitch, b.pitch, t), yaw: lerp(a.yaw, b.yaw, t), halfW: lerp(a.halfW, b.halfW, t), sx: lerp(a.sx, b.sx, t), sy: lerp(a.sy, b.sy, t),
 });
@@ -291,7 +339,7 @@ const DIST = 60;
 function applyView(cam, scene, v, aspect, fogColour) {
   const halfH = v.halfW / aspect;
   cam.left = -v.halfW; cam.right = v.halfW; cam.top = halfH; cam.bottom = -halfH;
-  const pitch = rad(v.pitch), yaw = rad(v.yaw);
+  const pitch = rad(Math.min(v.pitch, 89.99)), yaw = rad(v.yaw);
   const target = new Vector3(...v.target);
   const back = new Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch));
   cam.position.copy(target).addScaledVector(back, DIST);
@@ -300,15 +348,24 @@ function applyView(cam, scene, v, aspect, fogColour) {
   cam.updateMatrixWorld();
   const right = new Vector3().setFromMatrixColumn(cam.matrixWorld, 0), up = new Vector3().setFromMatrixColumn(cam.matrixWorld, 1);
   cam.position.addScaledVector(right, -v.sx * v.halfW).addScaledVector(up, -v.sy * halfH);
-  cam.near = 1; cam.far = 140;
+  cam.near = 1; cam.far = 160;
   cam.updateProjectionMatrix(); cam.updateMatrixWorld();
   // the back rows dissolve into the ground colour when the camera is low; none when it looks straight down
   const high = smooth(clamp((v.pitch - 40) / 40));
-  scene.fog.near = DIST + lerp(0.4 * (v.halfW / 12), 60, high);
-  scene.fog.far = scene.fog.near + lerp(6 * (v.halfW / 12) + 1, 60, high);
+  // (fog: how far behind the target the fading starts, for views whose target is the city's front edge)
+  scene.fog.near = DIST + lerp(v.fog ?? 0.4 * (v.halfW / 12), 80, high);
+  scene.fog.far = scene.fog.near + lerp(v.fog ? 7 : 6 * (v.halfW / 12) + 1, 80, high);
   scene.fog.color.copy(fogColour);
-  scene.userData.ground.material.opacity = lerp(0.17, 0.035, high);
+  scene.userData.ground.material.opacity = lerp(0.17, 0.05, high);
   scene.background.copy(fogColour);
+}
+
+/** World points of the tail for a fork box whose top edge is the city edge, centred on x = cx. */
+function tailWorld(world, f, cx, fe) {
+  const boxH = 2 * f.halfW * (f.h / f.w);
+  const at = ([fx, fy]) => [cx + (fx - 0.5) * 2 * f.halfW, CITY_EDGE + fy * boxH, LIFT];
+  const t = tailFractions(fe ?? 0.5 + (world.exit.x - cx) / (2 * f.halfW), f);
+  return { main: t.main.map(at), branch: t.branch.map(at) };
 }
 
 // ---------------------------------------------------------------- the page
@@ -340,142 +397,169 @@ function start() {
   canvas.setAttribute('aria-hidden', 'true');
 
   const world = buildWorld();
-  const cam = new OrthographicCamera(-1, 1, 1, -1, 1, 140);
-
-  let raf = 0;
-  const state = { mode: 'hero', heroP: 0, casesP: 0, sHero: 0, sCases: 0, draw: capture ? 1 : 0, dirty: true };
-  const setDraw = (k) => {
-    const total = world.mainLength;
-    for (const r of world.ribbons) {
-      const drawn = clamp((k * total - r.start) / r.length);
-      r.mesh.geometry.setDrawRange(0, Math.floor(drawn * r.segs) * 6);
-      r.mesh.visible = drawn > 0;
-    }
-  };
+  const cam = new OrthographicCamera(-1, 1, 1, -1, 1, 160);
   const lightAi = (levels) => world.meshes.ai.forEach((m, i) => m.userData.top.color.copy(C.ink0).lerp(C.magenta500, levels[i]));
   const project = (p) => { const v = p.clone().project(cam); return { x: (v.x + 1) / 2, y: (1 - v.y) / 2 }; };
-  const coreAnchor = new Vector3(world.meshes.core.position.x, 1.5, world.meshes.core.position.z);
-
-  function render(kind, p, size) {
-    const [w, h] = size;
-    let v, ground = C.ink0, levels = [0, 0, 0];
-    if (kind === 'hero') v = mixView(viewAt(world, 'heroStart'), viewAt(world, 'heroPlan'), smooth(clamp((p - 0.06) / 0.88)));
-    else if (kind === 'cases') {
-      v = viewAt(world, 'cases', p); ground = C.ink50;
-      levels = [1, clamp((p - 0.3) / 0.08), clamp((p - 0.63) / 0.08)];
-    } else { v = kind; ground = kind.ground || C.ink0; levels = kind.levels || [1, 1, 1]; }
+  const draw = (v, size, ground = C.ink0, levels = [0, 0, 0]) => {
     lightAi(levels);
-    applyView(cam, world.scene, v, w / h, ground);
+    applyView(cam, world.scene, v, size[0] / size[1], ground);
     renderer.render(world.scene, cam);
-  }
+  };
 
   if (capture) {
-    // capture.mjs: one named view at a time, with the screen position of the core-system label
+    // capture.mjs: one view at a time; returns the picture and where the named anchors land on it
     window.__ribbon = {
-      world,
-      shot(view, w, h) {
+      FORK,
+      shot(job) {
+        const { w, h } = job;
         renderer.setPixelRatio(1);
         renderer.setSize(w, h, false);
-        setDraw(1);
-        const named = typeof view === 'string' ? viewAt(world, view) : null;
-        const v = named ? { ...named, levels: [0, 0, 0] } : typeof view === 'string' ? view : { ...view, ground: view.ground ? new Color(view.ground) : C.ink0 };
-        if (view === 'cases0') render('cases', 0, [w, h]);
-        else if (view === 'cases1') render('cases', 0.5, [w, h]);
-        else if (view === 'cases2') render('cases', 1, [w, h]);
-        else render(v, 0, [w, h]);
-        return { url: canvas.toDataURL('image/webp', 0.9), core: project(coreAnchor) };
+        const aspect = w / h;
+        if (job.tail) {
+          const f = FORK[job.tail.box];
+          const t = tailWorld(world, f, job.tail.cx, job.tail.fe);
+          world.ribbon.build(t.main, t.branch);
+        } else {
+          const t = tailWorld(world, FORK.wide, 0);
+          world.ribbon.build(t.main, t.branch);
+        }
+        world.ribbon.draw(1);
+        const v = job.view.kind ? { ...viewAt(world, job.view.kind, job.view.p || 0, aspect), ...job.view.o } : job.view;
+        draw(v, [w, h], job.ground ? new Color(job.ground) : C.ink0, job.levels || [0, 0, 0]);
+        const where = {};
+        for (const [k, p] of Object.entries(world.anchors)) {
+          if (Array.isArray(p)) p.forEach((q, i) => { where[`${k}${i}`] = project(q); });
+          else where[k] = project(p);
+        }
+        where.exit = project(new Vector3(world.exit.x, LIFT, CITY_EDGE));
+        return { url: canvas.toDataURL('image/webp', 0.9), where };
       },
-      focus: (name) => { const m = world.meshes.product[name]; return m ? [m.position.x, 0, m.position.z] : world.ai.map((a) => [a.x, 0, a.z]); },
+      focus: (name) => { const m = world.meshes.product[name]; return [m.position.x, 0, m.position.z]; },
+      exitX: world.exit.x,
       enclosure: [world.enclosure.x, 0, world.enclosure.z],
-      viewAt: (k, p) => viewAt(world, k, p),
+      viewAt: (k, p, a) => viewAt(world, k, p, a),
     };
     document.body.appendChild(canvas);
     return;
   }
 
+  const route = document.getElementById('route');
   const hero = document.getElementById('top');
+  const forkBox = route.querySelector('.fork__img');
   const cases = document.getElementById('cases');
-  const slots = { hero: hero.querySelector('.gl-slot'), cases: cases.querySelector('.gl-slot') };
-  const label = hero.querySelector('.map-label--live');
-  for (const s of [hero, cases]) { s.classList.remove('is-rest'); s.classList.add('is-live'); }
-  slots.hero.appendChild(canvas);
+  const slots = { route: route.querySelector('.gl-slot'), cases: cases.querySelector('.gl-slot') };
+  const routeLabels = [...route.querySelectorAll('.map-label--live')];
+  const caseLabel = cases.querySelector('.map-label--live');
+  for (const s of [route, cases]) { s.classList.remove('is-rest'); s.classList.add('is-live'); }
 
+  let mode = 'route';
   let size = [1, 1];
-  const resize = () => {
-    const el = slots[state.mode];
+  const layout = { heroTop: 0, held: 1 };
+  const state = { draw: 0, casesP: 0, sCases: 0 };
+
+  const measure = () => {
+    const el = slots[mode];
     size = [el.clientWidth || innerWidth, el.clientHeight || innerHeight];
     renderer.setSize(size[0], size[1], false);
-    state.dirty = true;
+    const y = scrollY;
+    const hr = hero.getBoundingClientRect();
+    layout.heroTop = hr.top + y;
+    layout.held = hr.bottom + y - innerHeight; // the scroll position where the hero lets go
+    // the tail: the fork picture's box, its top on the city edge, the page's centre on x = 0
+    const fb = forkBox.getBoundingClientRect();
+    const f = { ...FORK.wide, w: fb.width || FORK.wide.w, h: fb.height || FORK.wide.h, halfW: HALF_W * (fb.width / (slots.route.clientWidth || fb.width) || 1) };
+    const cx = ((fb.left + fb.width / 2) - (slots.route.clientWidth || innerWidth) / 2) * (2 * HALF_W / (slots.route.clientWidth || innerWidth));
+    const t = tailWorld(world, f, cx);
+    world.ribbon.build(t.main, t.branch);
+    world.ribbon.draw(state.draw);
+    // before the cases scene takes the canvas, its slot shows the first stop's picture: label that block
+    if (mode === 'route') {
+      caseLabel.style.translate = `${(POSTER_LABEL[0] * slots.cases.clientWidth).toFixed(1)}px ${(POSTER_LABEL[1] * slots.cases.clientHeight).toFixed(1)}px`;
+      caseLabel.style.visibility = 'visible';
+    }
   };
 
-  // which stage is on screen
-  const onScreen = { hero: true, cases: false };
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) onScreen[e.target === hero ? 'hero' : 'cases'] = e.isIntersecting;
-    const next = onScreen.hero ? 'hero' : onScreen.cases ? 'cases' : null;
-    if (next && next !== state.mode) { state.mode = next; slots[next].appendChild(canvas); resize(); }
-    state.active = !!next;
-    if (state.active) kick();
-  });
-  io.observe(hero);
-  io.observe(cases);
-  state.active = true;
+  // the route view for the current scroll position: rising while the hero is held, then a plan that pans
+  const routeView = () => {
+    const aspect = size[0] / size[1];
+    const y = scrollY;
+    const plan = viewAt(world, 'plan', 0, aspect);
+    if (y < layout.held) {
+      const p = clamp((y - layout.heroTop) / Math.max(1, layout.held - layout.heroTop));
+      return mixView(viewAt(world, 'heroStart', 0, aspect), plan, smooth(clamp((p - 0.04) / 0.9)));
+    }
+    // the stage stays stuck until the route's end leaves the top (its negative margin), so the map pans all the way
+    const pan = (y - layout.held) * (2 * HALF_W / size[0]);
+    return { ...plan, target: [plan.target[0], 0, plan.target[2] + pan] };
+  };
 
-  // the hero: the camera rises from 30° to straight above while the words leave
-  ScrollTrigger.create({ trigger: hero, start: 'top top', end: 'bottom bottom', onUpdate: (s) => { state.heroP = s.progress; kick(); } });
-  gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom bottom', scrub: 0.4 } })
-    .to(hero.querySelector('.hero__copy'), { yPercent: -36, autoAlpha: 0, duration: 0.34 }, 0.1)
-    .to(label, { autoAlpha: 0, duration: 0.14 }, 0.08)
-    .to({}, { duration: 1 }, 0);
-
-  // the cases: one result at a time, the camera walking the magenta stretch
+  // the cases: one result at a time while the camera walks the magenta stretch
   const panels = gsap.utils.toArray(cases.querySelectorAll('.case'));
   const count = cases.querySelector('.cases__count');
-  gsap.set(panels.slice(1), { autoAlpha: 0, y: 48 });
+  const names = panels.map((p) => p.querySelector('.case__name').textContent);
+  gsap.set(panels.slice(1), { autoAlpha: 0, y: 32 });
   const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: cases, start: 'top top', end: 'bottom bottom', scrub: 0.4 } });
-  tl.to(panels[0], { autoAlpha: 0, y: -40, duration: 0.06, ease: 'power2.in' }, 0.27)
+  tl.to(panels[0], { autoAlpha: 0, y: -24, duration: 0.06, ease: 'power2.in' }, 0.28)
     .to(panels[1], { autoAlpha: 1, y: 0, duration: 0.07, ease: 'power2.out' }, 0.34)
-    .to(panels[1], { autoAlpha: 0, y: -40, duration: 0.06, ease: 'power2.in' }, 0.6)
+    .to(panels[1], { autoAlpha: 0, y: -24, duration: 0.06, ease: 'power2.in' }, 0.61)
     .to(panels[2], { autoAlpha: 1, y: 0, duration: 0.07, ease: 'power2.out' }, 0.67)
     .to({}, { duration: 1 }, 0);
+  let current = 0;
   ScrollTrigger.create({
     trigger: cases, start: 'top top', end: 'bottom bottom',
     onUpdate: (s) => {
       state.casesP = s.progress; kick();
-      const n = s.progress < 0.305 ? 1 : s.progress < 0.635 ? 2 : 3;
-      if (count.dataset.n !== String(n)) { count.dataset.n = String(n); count.textContent = `第 ${n} 則，共 3 則`; }
+      const n = s.progress < 0.31 ? 0 : s.progress < 0.64 ? 1 : 2;
+      if (n !== current) { current = n; count.textContent = `第 ${n + 1} 則，共 3 則`; caseLabel.textContent = names[n]; }
     },
   });
+  caseLabel.textContent = names[0];
 
-  // the signature move: the ribbon draws itself from the core system to the services, once, in 1.2s
-  gsap.to(state, { draw: 1, duration: 1.2, ease: 'power2.inOut', delay: 0.1, onUpdate: kick });
+  // the hero words leave while the camera rises
+  gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom bottom', scrub: true } })
+    .to(hero.querySelector('.hero__copy'), { yPercent: -30, autoAlpha: 0, duration: 0.3 }, 0.08)
+    .to({}, { duration: 1 }, 0);
 
+  // the signature move: the ribbon draws itself from the core system through the city, once, in 1.2s
+  gsap.to(state, { draw: 1, duration: 1.2, ease: 'power2.inOut', delay: 0.1, onUpdate: () => { world.ribbon.draw(state.draw); kick(); } });
+
+  let raf = 0;
   function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+  const place = (el, p, show) => {
+    el.style.translate = `${(p.x * size[0]).toFixed(1)}px ${(p.y * size[1]).toFixed(1)}px`;
+    el.style.visibility = show && p.x > 0.02 && p.x < 0.98 && p.y > 0.04 && p.y < 1 ? 'visible' : 'hidden';
+  };
   function tick() {
     raf = 0;
-    if (!state.active || document.hidden) return;
-    const k = 0.16;
-    const dh = state.heroP - state.sHero, dc = state.casesP - state.sCases;
-    state.sHero += Math.abs(dh) < 1e-4 ? dh : dh * k;
-    state.sCases += Math.abs(dc) < 1e-4 ? dc : dc * k;
-    setDraw(state.draw);
-    if (state.mode === 'hero') render('hero', state.sHero, size);
-    else render('cases', state.sCases, size);
-    if (state.mode === 'hero' && label) {
-      const s = project(coreAnchor);
-      label.style.translate = `${(s.x * size[0]).toFixed(1)}px ${(s.y * size[1]).toFixed(1)}px`;
+    if (document.hidden) return;
+    const next = cases.getBoundingClientRect().top <= 1 ? 'cases' : 'route';
+    if (next !== mode) { mode = next; slots[mode].appendChild(canvas); measure(); }
+    if (mode === 'route') {
+      if (route.getBoundingClientRect().bottom < 0) return;
+      draw(routeView(), size);
+      routeLabels.forEach((el) => place(el, project(world.anchors[el.dataset.anchor]), state.draw >= 1));
+    } else {
+      if (cases.getBoundingClientRect().bottom < 0) return;
+      const d = state.casesP - state.sCases;
+      state.sCases += Math.abs(d) < 1e-4 ? d : d * 0.16;
+      const p = state.sCases;
+      draw(viewAt(world, 'cases', p, size[0] / size[1]), size, C.ink0, [1, clamp((p - 0.3) / 0.08), clamp((p - 0.63) / 0.08)]);
+      place(caseLabel, project(world.anchors.ai[current]), true);
+      if (Math.abs(d) > 1e-4) kick();
     }
-    if (Math.abs(dh) > 1e-4 || Math.abs(dc) > 1e-4 || state.draw < 1) kick();
   }
 
-  addEventListener('resize', () => { resize(); kick(); });
+  addEventListener('scroll', kick, { passive: true });
+  addEventListener('resize', () => { measure(); kick(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
-  resize();
+  slots.route.appendChild(canvas);
+  measure();
   html.classList.add('gl-ready');
   kick();
-  // the fonts and the pictures change the heights the triggers measured
-  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => ScrollTrigger.refresh());
-  addEventListener('load', () => ScrollTrigger.refresh());
+  // the fonts and the pictures change the heights the layout measured
+  const again = () => { ScrollTrigger.refresh(); measure(); kick(); };
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(again);
+  addEventListener('load', again);
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
