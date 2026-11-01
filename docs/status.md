@@ -145,7 +145,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 ## 下一步
 
 - #167 可以開始（試點重做：首頁、digiRunner、金融產業頁），依 `design-system`「設計方向」的 `ribbon-route`；開工時要決定的事列在同一節
-- 依 #165 brief 的「待確認」與 PR 另開 issue：兩篇 blog（`API Gateway 是什麼`、`企業 AI 導入`）、digiRunner 開源版的事實收進事實庫
+- #165 brief 的「待確認」已開成 issue：#173（兩篇 blog：`API Gateway 是什麼`、`企業 AI 導入`）、#174（digiRunner 開源版的事實收進事實庫）
 - 回覆 #164 PR 的「待確認」：`to_confirm` 事實，#165 確認客戶名稱與證言後剩 137 筆（ESG 顧問與合作單位的授權、獎項年份、沒有依據的成效數字與最高級宣稱、現站各頁說法不一致）；`www.tpisoftware.vn` 恢復後跑一次 `node scripts/strategy/facts.mjs --sources`
 - 回覆 #159 PR 的「待確認」：沒搬的段落、組成或刪減的 description、vi `/resource` 的標題是英文「Resource Center」
 - 回覆 #137 後續 PR（en 知識邊界一文對應 zh-TW 版）的「待確認」：en 版多一段上線第一週的問卷數字（40 份有效回覆、90% 用過等），zh-TW 沒有；要不要補到 zh-TW、數字是否經客戶同意公開
