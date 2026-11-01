@@ -3764,7 +3764,7 @@
     quote: 跨平台數位整合富邦人壽的行動投保網頁及App，導入昕力獨家4種系統模組，可彈性調整功能介面、快速上/下架商品。完善檢核機制模組，降低錯誤率及照會率。3分鐘快速成案，整合第三方支付平台，有效提高成交率，提供最速、最佳的保單購買體驗。
   locale: zh-TW
   status: to_confirm
-  note: InsureRing 頁也用同一個案例
+  note: 「3分鐘快速成案」沒有量測方式，「最速、最佳」是最高級說法；InsureRing 頁也用同一個案例
 
 - id: insurebrick-case-shin-kong
   type: case
@@ -4491,7 +4491,8 @@
     url: https://www.tpisoftware.com/products/systalk-chat
     quote: YouBike 小管家 AI 客服透過 SysTalk.Chat 在官方網站、官方App 等渠道建立完整且最擬人的客服問答機制，全天候輔助真人客服服務廣大的用戶群，包含了場站資訊、租借狀態、失物招領、通報協尋等項目，提供24小時不間斷的線上資訊服務。
   locale: zh-TW
-  status: confirmed
+  status: to_confirm
+  note: 「最擬人」是對昕力產品的最高級說法
 
 - id: systalk-chat-case-sinyi
   type: case
