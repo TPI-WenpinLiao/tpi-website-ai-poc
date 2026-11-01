@@ -50,8 +50,10 @@ const CORE = [-9.75, 2.0];
 const CITY_EDGE = 10.45; // the front edge of the blocks: the hero's bottom edge in every view
 const RIBBON_W = 0.36;
 const LIFT = 0.45;
-const HALF_W = 10.6;
-const POSTER_LABEL = [0.566, 0.458]; // where the first AI block sits on case-1.webp (capture.mjs, labels.json) // half the visible width of the hero and plan views, in world units
+const HALF_W = 10.6; // half the visible width of the hero and plan views, in world units
+const LABEL_GAP = 24; // px between the hero words and the highest label
+const MAX_ZOOM_OUT = 1.8;
+const POSTER_LABEL = [0.566, 0.458]; // where the first AI block sits on case-1.webp (capture.mjs, labels.json)
 
 // The fork picture's box (the static picture and, in the live page, the same box with the picture hidden).
 // Fractions of the box: the two branch ends sit on the left edge of the two entries' columns.
@@ -454,7 +456,8 @@ function start() {
 
   let mode = 'route';
   let size = [1, 1];
-  const layout = { heroTop: 0, held: 1 };
+  const copy = hero.querySelector('.hero__copy');
+  const layout = { heroTop: 0, held: 1, copyBottom: 0, labelH: 0 };
   const state = { draw: 0, casesP: 0, sCases: 0 };
 
   const measure = () => {
@@ -465,6 +468,9 @@ function start() {
     const hr = hero.getBoundingClientRect();
     layout.heroTop = hr.top + y;
     layout.held = hr.bottom + y - innerHeight; // the scroll position where the hero lets go
+    // where the hero words end on the stuck stage (its top is the screen's top), and how tall a label is
+    layout.copyBottom = copy.getBoundingClientRect().bottom - copy.closest('.hero__stage').getBoundingClientRect().top;
+    layout.labelH = routeLabels[0].offsetHeight + 8;
     // the tail: the fork picture's box, its top on the city edge, the page's centre on x = 0
     const fb = forkBox.getBoundingClientRect();
     const f = { ...FORK.wide, w: fb.width || FORK.wide.w, h: fb.height || FORK.wide.h, halfW: HALF_W * (fb.width / (slots.route.clientWidth || fb.width) || 1) };
@@ -480,13 +486,24 @@ function start() {
   };
 
   // the route view for the current scroll position: rising while the hero is held, then a plan that pans
+  // the hero view, zoomed out until every labelled stop sits below the hero words: on a wide, short screen
+  // the city would otherwise rise behind the lead and the buttons (the front edge stays on the bottom edge,
+  // so in this orthographic view a stop's distance from the bottom shrinks by the zoom factor)
+  const heroView = (aspect) => {
+    const v = viewAt(world, 'heroStart', 0, aspect);
+    applyView(cam, world.scene, v, aspect, C.ink0);
+    const top = Math.min(...routeLabels.map((el) => project(world.anchors[el.dataset.anchor]).y));
+    const free = (layout.copyBottom + layout.labelH + LABEL_GAP) / size[1];
+    if (top < free) v.halfW *= Math.min((1 - top) / Math.max(0.05, 1 - free), MAX_ZOOM_OUT);
+    return v;
+  };
   const routeView = () => {
     const aspect = size[0] / size[1];
     const y = scrollY;
     const plan = viewAt(world, 'plan', 0, aspect);
     if (y < layout.held) {
       const p = clamp((y - layout.heroTop) / Math.max(1, layout.held - layout.heroTop));
-      return mixView(viewAt(world, 'heroStart', 0, aspect), plan, smooth(clamp((p - 0.04) / 0.9)));
+      return mixView(heroView(aspect), plan, smooth(clamp((p - 0.04) / 0.9)));
     }
     // the stage stays stuck until the route's end leaves the top (its negative margin), so the map pans all the way
     const pan = (y - layout.held) * (2 * HALF_W / size[0]);
@@ -537,7 +554,13 @@ function start() {
     if (mode === 'route') {
       if (route.getBoundingClientRect().bottom < 0) return;
       draw(routeView(), size);
-      routeLabels.forEach((el) => place(el, project(world.anchors[el.dataset.anchor]), state.draw >= 1));
+      // a label never sits on the hero words while they are still on screen (a very short screen can need
+      // more zoom than MAX_ZOOM_OUT allows)
+      const words = Number(getComputedStyle(copy).opacity) > 0.02 ? copy.getBoundingClientRect().bottom : -Infinity;
+      routeLabels.forEach((el) => {
+        const p = project(world.anchors[el.dataset.anchor]);
+        place(el, p, state.draw >= 1 && p.y * size[1] - layout.labelH > words);
+      });
     } else {
       if (cases.getBoundingClientRect().bottom < 0) return;
       const d = state.casesP - state.sCases;
