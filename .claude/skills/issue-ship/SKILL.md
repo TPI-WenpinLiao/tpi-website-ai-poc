@@ -137,7 +137,7 @@ Closes #N
 - 最新一輪審查的結論行全部是 0（沒有 Act on、沒有上一輪未修好、沒有缺證據的驗收條件），而且那一輪審的就是目前的 head。之後又 push 過（例如修了 Consider）就再跑一輪
 - 最新的 head 上，本機 `npm run check` 通過，PR 上的 CI 也是綠的（判斷方式見第 7 步的「等 CI」）
 - PR 裡沒有 `.claude/progress/`
-- 改了 `docs/strategy/site-profile.md` 試點頁面的版面或元件時（分階段流程的製作階段）：每個改到的試點頁各開一個新的 `reviewer`，依 `site-review` 的設計 rubric 評分，結果貼到 PR；D2 低於 3 就修正後重評。D2 檢查的是設計原則的「不會怎麼呈現」，`npm run check` 擋不到（#168）
+- 分階段流程的製作 issue（`docs/workflow.md`「分階段流程」的製作階段，依賴設計概念或評審的 issue），且 diff 改到 `docs/strategy/site-profile.md` 試點頁用的模板、元件或內容時：每個試點頁各開一個新的 `reviewer`，依 `site-review` 的設計 rubric 評分，結果貼到 PR；D2 低於 3 就修正後重評。D2 檢查的是設計原則的「不會怎麼呈現」，`npm run check` 擋不到（#168）。其他 issue 改到共用元件時不用跑
 
 例外：因審查迴圈達輪數上限停下找人，使用者回覆「接受現狀」時，結論行可以不是 0。合併判斷摘要的結論寫「需要你決定」，逐條列出還沒清零的發現。CI 綠燈與沒有進度檔兩項仍要成立。
 

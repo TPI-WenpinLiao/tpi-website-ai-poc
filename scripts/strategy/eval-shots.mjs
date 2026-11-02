@@ -80,7 +80,8 @@ const want = (group) => !values.only || values.only.split(',').includes(group);
 
 /**
  * Orders `items` by the SHA-256 of their key, so codes do not follow the group order and a re-run gives
- * the same codes. A rotation such as (i·7 + 3) mod n keeps neighbours together when n divides 6.
+ * the same codes. The #168 reviews were blinded by a one-off command before this function existed, so
+ * their codes (written at the top of each review) differ from what map.tsv gives on a re-run.
  */
 function shuffle(items, key) {
   const hash = (item) => createHash('sha256').update(key(item)).digest('hex');

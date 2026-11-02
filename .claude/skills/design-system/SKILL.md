@@ -135,12 +135,12 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | 元件 | 用途 | 重點 |
 |---|---|---|
 | `Surface` | 頁面區塊 | `tone` 切換亮暗；`pattern="grid"` 畫由上往下淡出的座標格線；`width="reading"` 收窄到閱讀寬度；同 tone 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
-| `PageHero` | 頁面開場 | 預設深色＋格線；輸出該頁唯一的 h1（display 字級）；`visual` slot 放 3D 場景或其靜態版本；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」）；待改（#168）：h1 上方的 eyebrow 違反 `design-principles.md` P1，見 `docs/strategy/evaluation.md`「新版還不夠好的地方」 |
-| `SectionHeading` | 區塊標題 | `index`（`01`）＋mono eyebrow＋漸層線；`level` 由呼叫端指定，避免跳級；`size="display"` 每頁最多一次，`size="sm"` 用在面板裡的標題（表單的錯誤摘要）；`action` slot 放整區的連結（同一列靠右）；待改（#168）：`01` 編號、mono 大寫 eyebrow 與短線違反 P1、P2，見 `docs/strategy/evaluation.md`「新版還不夠好的地方」 |
+| `PageHero` | 頁面開場 | 預設深色＋格線；輸出該頁唯一的 h1（display 字級）；`visual` slot 放 3D 場景或其靜態版本；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」）；待改（#187，依據 #168 的評審）：h1 上方的 eyebrow 違反 `design-principles.md` P1，見 `docs/strategy/evaluation.md`「新版還不夠好的地方」 |
+| `SectionHeading` | 區塊標題 | `index`（`01`）＋mono eyebrow＋漸層線；`level` 由呼叫端指定，避免跳級；`size="display"` 每頁最多一次，`size="sm"` 用在面板裡的標題（表單的錯誤摘要）；`action` slot 放整區的連結（同一列靠右）；待改（#187，依據 #168 的評審）：`01` 編號、mono 大寫 eyebrow 與短線違反 P1、P2，見 `docs/strategy/evaluation.md`「新版還不夠好的地方」 |
 | `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；小圓角（`--radius-md`）；primary 發光上浮、secondary 漸層外框、text；`disabled` 只存在於 `<button>` |
 | `Link` | 內文連結、獨立連結 | 內文連結一律底線；`external` 加 ↗ 與「（外部網站）」螢幕閱讀器文字 |
 | `Tag` | 標籤 | `neutral`、`brand`、`node`（mono＋發光點，用於模組與技術關鍵字）；有 `href` 才是連結 |
-| `Card` | 列表卡片 | 玻璃面板，hover／focus 時傾斜、亮起漸層外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`size="sm"` 是只有標題、手機上一列兩張的短卡；`date` 在 meta 列顯示日期；沒有 `href` 是不能點的靜態面板（功能、應用情境），meta 裡的 `Tag` 連結各自可點；待改（#168）：細框與同尺寸卡片列違反 P2、P5，見 `docs/strategy/evaluation.md`「新版還不夠好的地方」 |
+| `Card` | 列表卡片 | 玻璃面板，hover／focus 時傾斜、亮起漸層外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`size="sm"` 是只有標題、手機上一列兩張的短卡；`date` 在 meta 列顯示日期；沒有 `href` 是不能點的靜態面板（功能、應用情境），meta 裡的 `Tag` 連結各自可點；待改（#187，依據 #168 的評審）：細框與同尺寸卡片列違反 P2、P5，見 `docs/strategy/evaluation.md`「新版還不夠好的地方」 |
 | `FormField` | 表單欄位 | `kind` 區分 text／email／tel／textarea／select／checkbox；hint、error 以 `aria-describedby` 連到欄位，error 加 `aria-invalid`；有連結的說明（個資同意的隱私權政策）放 `hint` slot |
 | `FormGroup` | 多選題 | `fieldset`＋`legend`，選項是不帶 `required` 的 `FormField` checkbox，`--bp-sm-up` 起兩欄；`error` 屬於整組（至少選一項），以 `aria-describedby` 連到 fieldset，`id` 給錯誤摘要連結 |
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |

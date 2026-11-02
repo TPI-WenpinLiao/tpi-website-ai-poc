@@ -30,7 +30,8 @@
 - 375×812 與 1280×800 兩種寬度，各存第一屏（`-first.jpg`）與整頁（`-full.jpg`）
 - 以 `prefers-reduced-motion: reduce` 截取。新版首頁因此是靜態的緞帶圖，不是桌機的 3D 場景；headless Chromium 用軟體算 WebGL，畫面和訪客看到的不同
 - 給評審的 HTML 與整頁切段（每 1600 px 一張，375 寬是 1400 px）只放在 `--work` 目錄，不 commit：現站與競品是第三方內容。新版、舊版的 HTML 是 `dist/` 原檔，現站與競品是渲染後的 DOM
-- `--work/blind/` 把每頁換成中性代號，評審看不到組別名稱。現站可以從 Nuxt 的 markup 與 canonical 認出來，r05、r06 的評審在結果開頭寫了這件事，這一點匿名化沒做到
+- `--work/blind/` 把每頁換成中性代號，評審看不到組別名稱。現站可以從 Nuxt 的 markup 與 canonical 認出來，現站 digiRunner 與金融頁的評審在結果開頭寫了這件事，這一點匿名化沒做到
+- 這一輪評審用的代號，是 script 加入 `blind/` 之前用一次性指令配的，記在每份評審檔的開頭（例如 SYSTEX 是 r01，5 秒測試的新版是 f3）。照下方「重現」重跑時，`blind/map.tsv` 產生的代號不同，從代號回頭追評審檔時以評審檔開頭為準
 
 重現：
 
@@ -46,7 +47,7 @@ node scripts/strategy/eval-shots.mjs --new <scratch>/new-dist --old <scratch>/ol
 
 ### 評分
 
-- 依 `site-review`「做法」第 1 步，每頁開一個新的 `reviewer`，共 11 個。prompt 只給截圖、HTML、`docs/strategy/` 的依據與 rubric，不給其他組的分數。評審結果原文存在 `evaluation/reviews/<組>-<頁>.md`，只調整標題層級
+- 依 `site-review`「做法」第 1 步，每頁開一個新的 `reviewer`，共 11 個。評分用的是本 PR 修改前（eb0592e）的 rubric 與 `site-review`；本 PR 改了 D1 錨點，補了 4、2 分的給法與 C3、C4、S6 的提示（見「流程回寫」），之後用新 rubric 重評的分數不能和這一輪直接比較。prompt 只給截圖、HTML、`docs/strategy/` 的依據與 rubric，不給其他組的分數。評審結果原文存在 `evaluation/reviews/<組>-<頁>.md`，只調整標題層級
 - 新版、舊版、現站都是昕力的頁面，三份 rubric 全評，對照同一份 brief，量的是離 brief 多遠
 - 競品沒有 brief，也不適用昕力的設計原則：D2、C5、S1、S2、S5 標不適用，平均只算其餘項目。競品的平均和昕力頁面的平均算的項目不同，只能大致比較
 - 每頁另請評審寫「評審依據不足」：哪些項目因為文件寫得不清楚而難以判斷。流程回寫主要依據這一節
@@ -160,8 +161,8 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 | # | 缺口 | 階段 | 證據 | 這次的修改 |
 |---|---|---|---|---|
 | 1 | 設計原則只寫首頁的「會怎麼呈現」，產品頁、產業頁沒有依據 | 設計概念 | 6 份評審都提到（new-digirunner、new-finance、old-digirunner、old-finance、current-digirunner、current-finance） | `design-concept`：原則要為 `site-profile.md` 的每個試點模板寫「會怎麼呈現」 |
-| 2 | 原則定案後，`design-system` 的元件表沒有跟著改，還在規定 eyebrow 與編號 | 設計概念 → 製作 | new-digirunner D2、new-finance D2 | `design-concept`：寫回 `design-system` 時，列出和「不會怎麼呈現」衝突的元件，寫進製作 issue；`design-system` 元件表的 `PageHero`、`SectionHeading`、`Card` 標「待改（#168）」 |
-| 3 | 製作階段的關卡只有 `npm run check`，原則違反到評審階段才抓到 | 製作 | 同上 | `issue-ship` 第 8 步與 `docs/workflow.md`「分階段流程」：改了試點頁的版面或元件時，轉 ready 前每頁由新的 `reviewer` 評設計 rubric，D2 < 3 先修 |
+| 2 | 原則定案後，`design-system` 的元件表沒有跟著改，還在規定 eyebrow 與編號 | 設計概念 → 製作 | new-digirunner D2、new-finance D2 | `design-concept`：寫回 `design-system` 時，列出和「不會怎麼呈現」衝突的元件，寫進製作 issue；`design-system` 元件表的 `PageHero`、`SectionHeading`、`Card` 標「待改（#187）」 |
+| 3 | 製作階段的關卡只有 `npm run check`，原則違反到評審階段才抓到 | 製作 | 同上 | `issue-ship` 第 8 步與 `docs/workflow.md`「分階段流程」：製作 issue 改到試點頁用的模板、元件或內容時，轉 ready 前每頁由新的 `reviewer` 評設計 rubric，D2 < 3 先修 |
 | 4 | brief 在製作階段改了段落結構，但只在開頭加一段「製作階段的版本」，段落表、CTA 表、連出表沒有同步；原則 P5 也還寫 8 段 | 製作 | new-home、old-home、current-home 第 1 項 | `content-strategy`：製作階段改了段落就改寫 brief 的段落表與相關表格，不另加版本段落 |
 | 5 | brief 與原則、brief 與 messaging 互相衝突（金融頁 eyebrow、digiRunner hero 的「免費」） | 策略、設計概念 | old-finance、new-digirunner | `design-concept`：原則定案後逐份對照 brief，衝突寫進 brief 的「取捨」；`content-strategy`：hero 證據點要符合 messaging 的限制 |
 | 6 | brief 沒寫每段放什麼圖 | 策略 | new-digirunner 第 2 項 | `content-strategy`：段落表加「影像」欄，設計概念階段填 |
