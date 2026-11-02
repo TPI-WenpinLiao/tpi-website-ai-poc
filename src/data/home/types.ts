@@ -17,6 +17,8 @@ export interface Home {
     lead: string;
     /** The second action, to the industries section */
     secondary?: string;
+    /** Alt text of the map picture; without it the picture is decorative */
+    mapAlt?: string;
   };
   /** What each kind of block on the map is; without it the map has no labels */
   mapLabels?: Record<MapLabel, string>;

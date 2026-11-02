@@ -187,7 +187,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   {
     cases.length > 0 && (
       <Surface tone="light" pattern="grid">
-        <SectionHeading eyebrow="Success stories" title={localNode('success-stories', locale).title} />
+        <SectionHeading eyebrow="Success stories" title={localNode('success-stories', locale).title} description={data.casesIntro} />
         <CardGrid>
           {cases.map((c, i) => (
             <li>

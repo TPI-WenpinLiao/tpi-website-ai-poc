@@ -94,6 +94,7 @@ sourceUrl: []
 | `node` | `string` | 是 | `nodes.csv` 的 `id`。所屬家族、上層產品（例如 `digirunner-cloud` 在 `digirunner` 底下）由節點推出 | `page-map.csv` 的 `node` |
 | `kind` | `'product' \| 'solution' \| 'service'` | 是 | 產品是可授權的軟體；解決方案是產品加導入的組合；服務是人力或顧問服務 | `inventory.csv` 的 `page_type`（`product`、`solution`、`service`），M5 逐頁確認 |
 | `tagline` | `string` | 否 | hero 標語 | 現站 hero 區 |
+| `heroLead` | `string` | 否 | tagline 下方的一句說明，寫類別與用途，是表述、不夾帶事實（#167） | — |
 | `heroPoints` | `string[]` | 否 | hero 說明下方的證據點，每項是事實原文（#167） | — |
 | `secondaryCta` | `{ label: string; node: string }` | 否 | hero 的第二個動作，連到另一個節點（例如試用雲端版），#167 | — |
 | `heroImage` | `image` | 否 | hero 主圖 | 現站 hero 區 |
@@ -158,6 +159,7 @@ JSON-LD：
 | `industry` | `'finance' \| 'government' \| 'manufacturing'` | 產業頁必填 | 產業頁用這個值反查 `offering.useCases[].industry` 與 `case-study.industry`，列出相關產品與案例 | — |
 | `highlights` | `{ title: string; body: string }[]` | 否 | 介紹區塊。金融、政府頁承接開放銀行、開放政府頁的內容 | `/products/open-banking`、`/products/open-government` |
 | `sections` | `{ heading: string; body?: string; items?: { title: string; body?: string; node?: string }[]; link?: { label: string; node: string } }[]` | 否 | brief 要求比 highlights 多的段落（#167）：標題、一句說明、事實項目（`body` 是事實原文，`node` 連到該頁）、接著要看的頁面。段落已連到的子頁不再列在子頁卡片 | — |
+| `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句，是事實原文，要列進 `facts`（#167） | — |
 | `featuredCaseStudies` | `ref(case-study)[]` | 否 | 指定精選案例；沒填時用 `industry` 反查 | — |
 | `featuredPosts` | `ref(blog)[]` | 否 | 指定精選文章 | — |
 

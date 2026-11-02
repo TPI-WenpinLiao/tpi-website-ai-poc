@@ -11,6 +11,8 @@ node: digirunner
 kind: product
 # Rewritten from the brief (#167): the category and what it is for. Wording, no facts
 tagline: 關鍵系統的 API 與 AI 串接，交給同一個管理平台
+# brief「段落結構」第 1 段的說明句（40–60 字）: the category and what it is for. Wording, no facts
+heroLead: digiRunner 是 API 管理平台：關鍵系統要開放出去的 API、要接進來的 AI 模型，都經過同一道 Gateway，權限、流量與紀錄在同一處管理。
 heroPoints:
   - 通過 ISO27001 資訊安全認證
   - 30 天免費試用
@@ -83,12 +85,20 @@ features:
 useCasesTitle: 金融與政府的規範要求
 useCasesAfter: 4
 useCases:
-  - title: 開放銀行與金融檢查
+  - title: 開放銀行的法規要求
     body: 昕力資訊 digiRunner API 管理平台反應台灣開放銀行金管會法規要求
+    industry: finance
+  - title: 三階段開放銀行規範
+    body: 昕力資訊實現三階段開放銀行規範
+    industry: finance
+  - title: 金融檢查的 API 管理作業
+    body: 針對金融檢查，完善 API 管理： API 生命週期作業 訂定交易限制 訂定連線識別名稱產製方式 定期盤點作業及風險評估 進行資源與服務監控作業 完善之服務憑證管理規範 進行分類分級管理 API Key 識別認證 採用 OAuth 2.0
     industry: finance
   - title: 政府共通性 API 規範
     body: 符合國家發展委員會【共通性應用程式介面規範】。
     industry: government
+  - title: OpenAPI 規格
+    body: 符合國際 Open API Initiative 組織之 OpenAPI Specification（以下簡稱 OAS）標準來定義 RESTful APIs。
 heroImage: ../../../assets/design/ribbon/page-digirunner.webp
 cta: demo
 facts:
@@ -123,7 +133,10 @@ facts:
   - digirunner-cloud-trial-terms
   - digirunner-sandbox
   - digirunner-open-banking-fsc
+  - digirunner-open-banking-3-stages
+  - digirunner-financial-inspection
   - digirunner-ndc-spec
+  - digirunner-oas
 sourceUrl: https://www.tpisoftware.com/products/digirunner
 migratedAt: 2026-10-22
 ---

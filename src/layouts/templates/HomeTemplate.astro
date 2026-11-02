@@ -172,7 +172,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
               width={heroWide.width}
               height={heroWide.height}
               fetchpriority="high"
-              alt=""
+              alt={copy.hero.mapAlt ?? ''}
             />
           </picture>
           {

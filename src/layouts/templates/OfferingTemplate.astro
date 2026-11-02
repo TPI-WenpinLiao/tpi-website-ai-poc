@@ -148,6 +148,7 @@ const blog = localNode('blog', locale);
   <PageHero eyebrow={brand} title={data.title} description={data.tagline}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
     <Fragment slot="actions">
+      {data.heroLead && <p class="hero-lead">{data.heroLead}</p>}
       {
         data.heroPoints && (
           <ul class="hero-points">
@@ -349,7 +350,16 @@ const blog = localNode('blog', locale);
     list-style: none;
   }
 
-  /* Evidence under the hero's lead: facts, one per line, before the actions */
+  /* The lead sentence under the tagline, then the evidence (facts, one per line), before the
+     actions; both take the actions row's full width */
+  .hero-lead {
+    flex-basis: 100%;
+    max-inline-size: var(--reading-max-width);
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+
   .hero-points {
     flex-basis: 100%;
     margin: 0 0 var(--space-2);

@@ -93,6 +93,7 @@ sections:
         body: 導入前 AI應用規劃與導入 AI 導入情境分析 解決方案搭配建議 效益評估 AI 服務導入 導入中 模型評估、微調
       - title: 產品與服務
         body: 由企業服務中台、交談式 AI 產品、雲服務，再到全方位軟體解決方案
+casesIntro: 2008 年首度跨足金融產業，為華南銀行建置 CRM 系統
 featuredCaseStudies:
   - zh-TW/taishin-cash-sales-api-management-platform
   - zh-TW/entie-bank-api-management-platform
@@ -130,6 +131,7 @@ facts:
   - client-entie-bank
   - client-cathay-united-bank
   - client-bank-of-taiwan
+  - company-milestone-2008-finance
 sourceUrl: https://www.tpisoftware.com/products/open-banking
 migratedAt: 2026-10-23
 ---

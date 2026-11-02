@@ -15,6 +15,7 @@ export const home: Home = {
   },
   hero: {
     title: '金融與政府的既有系統\n原地接上 API 與 AI',
+    mapAlt: '白色方塊排成的系統地圖：一條緞帶從深灰色的核心系統出發，經過頂面塗紫的昕力產品、品紅的 AI 模型與橘色的新服務，由紫轉品紅再轉橘，從地圖前緣往下伸出。',
     lead: '昕力資訊（TPIsoftware）自行研發產品，也負責導入規劃與建置。',
     secondary: '依產業看方案',
   },
@@ -47,10 +48,12 @@ export const home: Home = {
     quote: `資料會離開企業嗎？「${fact('orientai-on-prem-data')}」`,
     link: '認識 OrientAI 企業級 Agentic AI 平台',
   },
-  // ContactCta on the other pages (the current site's wording, kept from M3-04)
+  // ContactCta on the other pages and the contact page's lead (#167): the heading says the next
+  // step (briefs/home.md「聯絡業務」, briefs/digirunner.md「預約演示」), not a feeling; no reply time,
+  // which the fact library doesn't have
   contactCta: {
-    title: '您的需求，我們用心傾聽',
-    description: '若有任何問題或建議，請留下聯絡資訊，我們會請專人向您進一步說明。',
+    title: '談需求，或預約演示',
+    description: '留下您的系統現況與想解決的問題，昕力的業務與顧問會與您聯絡，安排說明或演示。',
   },
   contact: {
     title: '合作得久，有紀錄可查',

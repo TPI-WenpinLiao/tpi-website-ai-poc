@@ -94,6 +94,8 @@ const offering = defineCollection({
         tagline: text.optional(),
         heroImage: image().optional(),
         // Fact texts shown with the hero (#167); the second action, to another page (a trial)
+        // One sentence under the tagline: the category and what it is for (#167); wording, no facts
+        heroLead: text.optional(),
         heroPoints: z.array(text).optional(),
         secondaryCta: z.strictObject({ label: text, node: anyNode }).optional(),
         // `points` are fact texts listed under the body, `link` a page the feature leads on to (#167)
@@ -138,6 +140,8 @@ const hub = defineCollection({
           )
           .optional(),
         featuredCaseStudies: z.array(ref('case-study')).optional(),
+        // A line under the case studies' heading (#167): a fact text, listed in `facts`
+        casesIntro: text.optional(),
         featuredPosts: z.array(ref('blog')).optional(),
       })
       .superRefine(requireMigratedAt)
