@@ -50,7 +50,7 @@ node scripts/strategy/eval-shots.mjs --new <scratch>/new-dist --old <scratch>/ol
 - 依 `site-review`「做法」第 1 步，每頁開一個新的 `reviewer`，共 11 個。評分用的是本 PR 修改前（eb0592e）的 rubric 與 `site-review`；本 PR 改了 D1 錨點，補了 4、2 分的給法與 C3、C4、S6 的提示（見「流程回寫」），之後用新 rubric 重評的分數不能和這一輪直接比較。prompt 只給截圖、HTML、`docs/strategy/` 的依據與 rubric，不給其他組的分數。評審結果原文存在 `evaluation/reviews/<組>-<頁>.md`，只調整標題層級
 - 新版、舊版、現站都是昕力的頁面，三份 rubric 全評，對照同一份 brief，量的是離 brief 多遠
 - 競品沒有 brief，也不適用昕力的設計原則：D2、C5、S1、S2、S5 標不適用，平均只算其餘項目。競品的平均和昕力頁面的平均算的項目不同，只能大致比較
-- 每頁另請評審寫「評審依據不足」：哪些項目因為文件寫得不清楚而難以判斷。流程回寫主要依據這一節
+- 昕力的 9 頁另請評審寫「評審依據不足」（競品沒有 brief 與設計原則可對照，不寫）：哪些項目因為文件寫得不清楚而難以判斷。流程回寫主要依據這一節
 
 分數表由 `node scripts/strategy/eval-scores.mjs --write` 從評審檔的表格重算，`npm run check` 確認表格沒有過期、每份評審檔頭寫的平均與通過與否和表內分數一致。新版首頁的 SEO，評審寫 4.3，重算是 4.2（25 ÷ 6），評審檔已改正。
 
@@ -167,7 +167,7 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 | 5 | brief 與原則、brief 與 messaging 互相衝突（金融頁 eyebrow、digiRunner hero 的「免費」） | 策略、設計概念 | old-finance、new-digirunner | `design-concept`：原則定案後逐份對照 brief，衝突寫進 brief 的「取捨」；`content-strategy`：hero 證據點要符合 messaging 的限制 |
 | 6 | brief 沒寫每段放什麼圖 | 策略 | new-digirunner 第 2 項 | `content-strategy`：段落表加「影像」欄，設計概念階段填 |
 | 7 | messaging 的證據點不一定支撐主張的關鍵詞（`DM-2` 收了沒提到 AI 的阻詐平台） | 策略 | new-home C3 與第 5 項 | `content-strategy`：證據點的原文要直接支撐主張的關鍵詞 |
-| 8 | 競品分析只看首頁，產品頁與產業頁的 D1、S2 沒有對照 | 研究 | 7 份評審 | `site-research`：競品分析涵蓋每個試點模板；搜尋意圖記錄前幾名缺了哪些子題 |
+| 8 | 競品分析只看首頁，產品頁與產業頁的 D1、S2 沒有對照 | 研究 | 6 份評審（new-finance、old-home、old-digirunner、old-finance、current-digirunner、current-finance） | `site-research`：競品分析涵蓋每個試點模板；搜尋意圖記錄前幾名缺了哪些子題 |
 | 9 | rubric 只有 5、3、1 的錨點，「取低的」讀法不一，D1 的 3 與 1 重疊 | 評審 | 4 份評審 | `site-review`「Rubric」寫出 4、2 分的判斷方式；`design.md` 的 D1 錨點改為 3 分「看得出做什麼，但看不出給誰或跟競品的差別」、1 分「只看得出是軟體或科技公司」；內頁的 D1、D2 照該模板的原則，D2 包含共用元件 |
 | 10 | C3 沒說 `to_confirm`、messaging 排除的事實、原文後接加強句怎麼算 | 評審 | current-home、current-digirunner、old-digirunner | `copy-marketing.md` 評分提示補上 |
 | 11 | C4 的主要轉換：`site-profile.md` 與 brief 不同時以哪個為準 | 評審 | old-digirunner、current-digirunner | `copy-marketing.md`：brief 指定時以 brief 為準 |
