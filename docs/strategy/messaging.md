@@ -326,7 +326,7 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 | # | 想說的主張 | 卡在哪 | 相關事實 |
 |---|---|---|---|
 | 1 | 昕力是台灣第一或領先的企業軟體公司 | 最高級自我宣稱，現站沒有排名依據 | `fact:company-claim-taiwan-first` |
-| 2 | 規模：員工數、累積專案數、AI 服務用戶數 | 員工數已解決：原文寫出 2020 年，改為 `confirmed`，引用時寫出年份（使用者決定，#180）。專案數那句沒有年份、AI 服務用戶數沒寫統計時間，仍不能用 | `fact:company-projects-400`、`fact:systalk-ai-140-million-users` |
+| 2 | 規模：員工數、累積專案數、AI 服務用戶數 | 員工數已解決：原文寫出 2020 年，改為 `confirmed`，引用時寫出年份（使用者決定，#180）。專案數那句沒有年份，使用者決定不用；AI 服務用戶數沒寫統計時間，仍不能用 | `fact:company-projects-400`、`fact:systalk-ai-140-million-users` |
 | 3 | 產品獲獎肯定（台灣精品獎、Gartner Cool Vendor 等） | 已解決：有年份的獎項改為 `confirmed`，引用時寫出年份（使用者決定，#180）。可以用的有 `fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`、`fact:award-innovative-business-2022`；沒寫年份的 Best in Singapore、GoodFirms 仍不能用 | `fact:award-best-in-singapore`、`fact:award-goodfirms-software`、`fact:award-goodfirms-mobile` |
 | 4 | 客戶證言（含說話人姓名與職稱） | 大部分已解決：使用者決定現站寫出的客戶名稱、證言與說話人姓名、職稱都視為已授權（#165），例如 `fact:testimonial-shin-kong-bank`、`fact:testimonial-excellence-wire` 已是 `confirmed`，可以當決策者「找成功案例」的第三方說法用。仍卡住的三則是因為內容：國泰金控的證言含當時的 50% 用戶服務量，可能過時；政大金融科技研究中心的證言有「第一家」、委外服務頁的國泰證言摘錄有「最佳技術」，都是最高級說法 | `fact:testimonial-cathay-fhc`、`fact:testimonial-nccu-fintech`、`fact:testimonial-cathay-fhc-excerpt` |
 | 5 | digiRunner 是國內唯一符合金管會法令、100% 合規的 API 管理平台 | 最高級說法與 100% 都沒有依據。DM-1 只用「反應法規要求」「針對金融檢查」等已確認的說法。決定不用（使用者決定，#180） | `fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100`、`fact:digirunner-claim-gov-compliance-100` |
