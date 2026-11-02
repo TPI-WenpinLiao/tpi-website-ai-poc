@@ -19,7 +19,6 @@ export const home: Home = {
     lead: '昕力資訊（TPIsoftware）自行研發產品，也負責導入規劃與建置。',
     secondary: '依產業看方案',
   },
-  mapLabels: { core: '核心系統', legacy: '既有系統', product: '昕力的產品', model: 'AI 模型', service: '新的服務' },
   industries: {
     title: '規範要求，\n已做進產品',
     entries: {

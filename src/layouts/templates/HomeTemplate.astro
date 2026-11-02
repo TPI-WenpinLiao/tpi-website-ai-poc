@@ -19,10 +19,11 @@ import PageLayout from '../PageLayout.astro';
 import Button from '../../components/ui/Button.astro';
 import Link from '../../components/ui/Link.astro';
 import { home } from '../../data/home';
-import type { MapLabel } from '../../data/home/types';
+import { strings } from '../../data/strings';
 import { hasPage, localeHref, localNode, nodeHref } from '../../lib/ia/navigation';
 import type { Locale } from '../../lib/i18n/locales';
 import { homeJsonLd } from '../../lib/seo/jsonld/home';
+import { LIVE } from '../../lib/scene/tiers';
 import pictures from '../../lib/scene/ribbon/pictures.json';
 import heroWide from '../../assets/design/ribbon/hero-wide.webp';
 import heroTall from '../../assets/design/ribbon/hero-tall.webp';
@@ -60,8 +61,11 @@ const labelsOn = (where: Where, names: readonly string[], text: (name: string) =
     const edge = p.x < 0.12 ? 'start' : p.x > 0.88 ? 'end' : undefined;
     return [{ label, edge, style: `--x: ${(p.x * 100).toFixed(1)}%; --y: ${(p.y * 100).toFixed(1)}%` }];
   });
+// The map labels are interface strings (src/data/strings, docs/i18n/glossary.csv), in every locale
+const mapLabels = strings(locale).mapLabels;
+type MapLabel = keyof typeof mapLabels;
 const MAP_LABELS: MapLabel[] = ['core', 'legacy', 'product', 'model', 'service'];
-const mapLabel = (name: string) => copy.mapLabels?.[name as MapLabel];
+const mapLabel = (name: string) => mapLabels[name as MapLabel];
 const heroLabels = {
   wide: labelsOn(pictures['hero-wide'].where, MAP_LABELS, mapLabel),
   tall: labelsOn(pictures['hero-tall'].where, MAP_LABELS, mapLabel),
@@ -129,22 +133,19 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
 ---
 
 <PageLayout title={copy.meta.title} titleSuffix={false} description={copy.meta.description} jsonLd={jsonLd}>
-  <!-- Decides the layout before the first paint: the same query as src/lib/scene/tiers.ts LIVE -->
-  <script is:inline>
-    (() => {
-      const c = navigator.connection;
-      if (matchMedia('(width >= 64rem) and (not (pointer: coarse)) and (prefers-reduced-motion: no-preference)').matches && !(c && c.saveData))
-        document.documentElement.classList.add('want-3d');
-    })();
+  <!-- Decides the layout before the first paint, with src/lib/scene/tiers.ts LIVE -->
+  <script is:inline define:vars={{ live: LIVE }}>
+    const c = navigator.connection;
+    if (matchMedia(live).matches && !(c && c.saveData)) document.documentElement.classList.add('want-3d');
   </script>
 
   <div class="route" data-ribbon-route>
     <div class="stage" data-ribbon-slot="route" aria-hidden="true">
       {
-        copy.mapLabels &&
+        mapLabels &&
           MAP_LABELS.map((name) => (
             <span class:list={['map-label', 'live-label', { start: name === 'core' }]} data-ribbon-anchor={name}>
-              {copy.mapLabels?.[name]}
+              {mapLabels[name]}
             </span>
           ))
       }
@@ -473,8 +474,16 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
       display: none;
     }
 
+    /* The tall picture is narrow: a step smaller, so the longer en and vi labels don't run into the
+       next one (wrapping would grow them into the label above) */
     .map-label.tall {
       display: block;
+      font-size: var(--font-size-xs);
+    }
+
+    /* The label at the right edge hangs below its block, clear of the one in the middle of the row */
+    .map-label.tall.end {
+      transform: translate(-100%, var(--space-2));
     }
   }
 

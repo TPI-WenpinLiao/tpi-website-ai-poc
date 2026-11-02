@@ -36,6 +36,7 @@ export const strings: Strings = {
   externalSite: ' (trang web riêng)',
   externalLink: ' (trang web bên ngoài)',
   homeLogoAlt: 'TPIsoftware (trang chủ)',
+  mapLabels: { core: 'Hệ thống lõi', legacy: 'Hệ thống hiện có', product: 'Sản phẩm TPIsoftware', model: 'Mô hình AI', service: 'Dịch vụ mới' },
   footerNav: 'Menu chân trang',
   legal: 'Thông tin pháp lý',
   phone: 'Điện thoại',

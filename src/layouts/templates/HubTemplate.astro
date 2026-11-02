@@ -20,6 +20,7 @@ import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
 import FactRow from '../../components/ui/FactRow.astro';
 import { breadcrumb, children, localeHref, localNode, node } from '../../lib/ia/navigation';
+import { nodes } from '../../lib/ia/nodes';
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { caseCard, postCard } from '../../lib/content/cards';
 import { hubJsonLd } from '../../lib/seo/jsonld/hub';
@@ -57,6 +58,7 @@ const parts = children(self.id, locale)
 const industryOfferings = data.industry
   ? (await getCollection('offering', (o) => inLocale(o) && !!o.data.useCases?.some((u) => u.industry === data.industry)))
       .map((o) => localNode(o.data.node, locale))
+      .toSorted((a, b) => nodes.findIndex((n) => n.id === a.id) - nodes.findIndex((n) => n.id === b.id))
       .map((n) => ({ ...n, href: href(n), description: described.get(n.id) }))
   : [];
 const highlights = data.highlights ?? [];

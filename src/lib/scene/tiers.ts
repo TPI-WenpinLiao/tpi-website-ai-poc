@@ -4,8 +4,8 @@
 
 // Desktop only: a layout at least 64rem wide (--bp-lg-up in src/styles/media.css; scripts can't
 // read @custom-media) and not a touch screen. Written as "not coarse", not "fine": headless
-// Chromium reports pointer: none. HomeTemplate's inline script repeats this query before the first
-// paint, so the page takes the live layout (html.want-3d) without a shift.
+// Chromium reports pointer: none. HomeTemplate's inline script reads this query (define:vars) before
+// the first paint, so the page takes the live layout (html.want-3d) without a shift.
 export const LIVE = '(width >= 64rem) and (not (pointer: coarse)) and (prefers-reduced-motion: no-preference)';
 
 // Network Information API is not in TypeScript's DOM lib

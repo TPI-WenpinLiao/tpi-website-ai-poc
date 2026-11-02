@@ -5,9 +5,6 @@
 // has and en and vi don't yet (#167 follow-up): a section without its copy is left out, a heading
 // without its copy falls back to the linked node's name.
 
-/** Where a map label hangs (src/lib/scene/ribbon/world.ts) */
-export type MapLabel = 'core' | 'legacy' | 'product' | 'model' | 'service';
-
 export interface Home {
   /** <title> and description of the home page, which carries no site-name suffix */
   meta: { title: string; description: string };
@@ -20,8 +17,6 @@ export interface Home {
     /** Alt text of the map picture; without it the picture is decorative */
     mapAlt?: string;
   };
-  /** What each kind of block on the map is; without it the map has no labels */
-  mapLabels?: Record<MapLabel, string>;
   industries: {
     title?: string;
     /** Keyed by industry node id: one line (a fact) and the link text */

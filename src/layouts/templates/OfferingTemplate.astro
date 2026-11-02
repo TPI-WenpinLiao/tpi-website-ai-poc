@@ -184,7 +184,8 @@ const blog = localNode('blog', locale);
     blocks.map((block) =>
       block.kind === 'features' ? (
         <Surface tone="light" id={block.first ? 'features' : undefined} class:list={{ 'anchor-target': block.first }}>
-          {block.first && <h2 class="sr-only">{t.offering.features}</h2>}
+          {/* Every block of features has its heading, so features after the use cases aren't read as part of them */}
+          <h2 class="sr-only">{t.offering.features}</h2>
           <ol class="features" start={block.start + 1}>
             {block.items.map((f, i) => (
               <li>
