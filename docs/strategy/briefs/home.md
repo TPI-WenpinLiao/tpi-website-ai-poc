@@ -202,9 +202,16 @@ hero 的次要按鈕從「產品總覽」改成「依產業看方案」：決策
 
 | # | 事項 | 卡在哪 | 影響的段落 |
 |---|---|---|---|
-| 1 | 獎項能不能放首頁：台灣精品獎（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`）、Gartner Cool Vendor（`fact:award-gartner-cool-vendor-2018`）。客戶名稱與證言已視為已授權（使用者決定，#165），例如 `fact:testimonial-shin-kong-bank`、`fact:testimonial-excellence-wire`（委外服務頁的國泰摘錄有「最佳技術」，仍待確認）；要不要在第 7 段加一則證言，交設計概念與製作階段決定 | 獎項有年份，可能過時。確認前第 7 段只用已確認的公司資料 | 7（確認後可加獎項；證言可直接加） |
-| 2 | 規模數字：`fact:company-employees-630`、`fact:company-projects-400` | 統計時間不明 | 7 |
-| 3 | 製造業之後要不要回到首頁。目前已決定 hero 與產業入口不點名製造業（使用者決定，#165）；製造業頁（`src/content/hub/zh-TW/industry-manufacturing.md`）有內容並產生頁面後，再決定要不要加回產業入口 | `nodes.csv` 寫「現站沒有製造業內容，需人工提供」；messaging 缺少證據第 13 項 | 2（之後） |
-| 4 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答；messaging 缺少證據第 14 項 | 8 |
 | 5 | 金融與政府的排序 | `audience-and-goals.md` 問題 2，M2-01 暫定金融、政府、製造業 | 1、2 |
-| 6 | GadoSecurity 家族頁是 draft（`src/content/hub/zh-TW/family-security.md`），家族沒有連結；第 4 段的句子只能用 gadoDIDO、gadoScout 的產品事實 | 家族介紹需人工提供 | 4 |
+
+### 已結算（#180）
+
+其餘項目在 #180 結算（使用者決定，2026-11-02），編號保留：
+
+| # | 事項 | 結果 |
+|---|---|---|
+| 1 | 獎項能不能放首頁（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`） | 改為 `confirmed`，第 7 段可以加獎項，寫出年份。證言照 #165 可以直接加；委外服務頁國泰摘錄的「最佳技術」（`fact:testimonial-cathay-fhc-excerpt`）不用 |
+| 2 | 規模數字（`fact:company-employees-630`、`company-projects-400`） | 員工數改為 `confirmed`，原文寫出 2020 年，第 7 段可以用。專案數那句沒有年份，維持 `to_confirm`、不用（使用者決定） |
+| 3 | 製造業之後要不要回到首頁 | 現站沒有製造業內容，不處理。hero 與產業入口維持不點名製造業（#165） |
+| 4 | 聯絡後多久回覆 | 現站沒有資料，不處理。聯絡段不寫回覆時間 |
+| 6 | GadoSecurity 家族介紹 | 現站沒有資料，不處理。家族頁維持 draft，第 4 段只用 gadoDIDO、gadoScout 的產品事實 |

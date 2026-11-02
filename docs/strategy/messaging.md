@@ -108,7 +108,7 @@ OrientAI 部署在企業端，資料不交給外部；權限、影子 AI 與 Tok
 - `fact:company-google-cloud-partner`：Google Cloud 合作夥伴
 - `fact:company-milestone-2008-finance`：2008 年首度跨足金融產業（具名客戶，#165 起已確認）
 
-用在：`/`。`competitors.md`「本站缺」第 2 項：新站首頁沒有第三方證據；獎項確認前，這組與具名案例（`DM-1`、`DM-5` 的案例事實）是首頁能用的信任證據。
+用在：`/`。`competitors.md`「本站缺」第 2 項：新站首頁沒有第三方證據；這組與具名案例（`DM-1`、`DM-5` 的案例事實）是首頁能用的信任證據；有年份的獎項在 #180 確認後也可以用（「缺少證據的主張」第 3 項）。
 
 ### DM-7 碳盤查、產品碳足跡與 CBAM 申報有現成工具
 
@@ -326,16 +326,16 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 | # | 想說的主張 | 卡在哪 | 相關事實 |
 |---|---|---|---|
 | 1 | 昕力是台灣第一或領先的企業軟體公司 | 最高級自我宣稱，現站沒有排名依據 | `fact:company-claim-taiwan-first` |
-| 2 | 規模：員工數、累積專案數、AI 服務用戶數 | 數字有年份或統計時間不明，可能過時 | `fact:company-employees-630`、`fact:company-projects-400`、`fact:systalk-ai-140-million-users` |
-| 3 | 產品獲獎肯定（台灣精品獎、Gartner Cool Vendor 等） | 有年份的獎項，可能過時；`competitors.md`「本站缺」第 2 項指出首頁缺第三方證據，這是最直接的一類 | `fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`、`fact:award-innovative-business-2022` |
+| 2 | 規模：員工數、累積專案數、AI 服務用戶數 | 員工數已解決：原文寫出 2020 年，改為 `confirmed`，引用時寫出年份（使用者決定，#180）。專案數那句沒有年份，使用者決定不用；AI 服務用戶數沒寫統計時間，仍不能用 | `fact:company-projects-400`、`fact:systalk-ai-140-million-users` |
+| 3 | 產品獲獎肯定（台灣精品獎、Gartner Cool Vendor 等） | 已解決：有年份的獎項改為 `confirmed`，引用時寫出年份（使用者決定，#180）。可以用的有 `fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`、`fact:award-innovative-business-2022`；沒寫年份的 Best in Singapore、GoodFirms 仍不能用 | `fact:award-best-in-singapore`、`fact:award-goodfirms-software`、`fact:award-goodfirms-mobile` |
 | 4 | 客戶證言（含說話人姓名與職稱） | 大部分已解決：使用者決定現站寫出的客戶名稱、證言與說話人姓名、職稱都視為已授權（#165），例如 `fact:testimonial-shin-kong-bank`、`fact:testimonial-excellence-wire` 已是 `confirmed`，可以當決策者「找成功案例」的第三方說法用。仍卡住的三則是因為內容：國泰金控的證言含當時的 50% 用戶服務量，可能過時；政大金融科技研究中心的證言有「第一家」、委外服務頁的國泰證言摘錄有「最佳技術」，都是最高級說法 | `fact:testimonial-cathay-fhc`、`fact:testimonial-nccu-fintech`、`fact:testimonial-cathay-fhc-excerpt` |
-| 5 | digiRunner 是國內唯一符合金管會法令、100% 合規的 API 管理平台 | 最高級說法與 100% 都沒有依據。DM-1 只用「反應法規要求」「針對金融檢查」等已確認的說法 | `fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100`、`fact:digirunner-claim-gov-compliance-100` |
-| 6 | digiRunner 比 Kong 好導入、好維運、更合規 | 與競品的比較沒有依據或比較日期；`search-intent.md` 的「Kong 替代方案 API Gateway」是比較型查詢，確認後可給 digiRunner 頁接住 | `fact:digirunner-vs-kong-integration`、`fact:digirunner-vs-kong-adoption`、`fact:digirunner-vs-kong-compliance`、`fact:digirunner-vs-kong-operations` |
-| 7 | 成效數字：開發效率提升、正常運行時間、OrientAI 的效率與成本改善、InsureRing 上架時間 | 沒有量測方式或比較基準（#164 的宣稱規則）。首頁案例的 `fact:smartclaim-result` 已確認，可以用；理賠解決方案頁的同類數字還沒有。InsureRing 的具名案例成果（`fact:insurering-case-shin-kong-life`）已確認，產品頁的「上架縮短 90%」仍未確認 | `fact:digirunner-hot-deploy-50`、`fact:digirunner-uptime-999`、`fact:orientai-benefits`、`fact:insurering-90-percent`、`fact:smartclaim-80-percent` |
-| 8 | DigiLism 擁有多項發明專利 | 專利數會變，要確認現況。個別功能「具專利技術」的說法已確認（例如 `fact:digirunner-smart-caching-patent`），可以用。功能層級的專利說法統一為 `confirmed`（使用者決定，#165），digiRunner 的熱部署專利也已另收 `fact:digirunner-hot-deploy-patent`；同一句的「提升高達 50%」仍是 `to_confirm` | `fact:digilism-patents-7` |
+| 5 | digiRunner 是國內唯一符合金管會法令、100% 合規的 API 管理平台 | 最高級說法與 100% 都沒有依據。DM-1 只用「反應法規要求」「針對金融檢查」等已確認的說法。決定不用（使用者決定，#180） | `fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100`、`fact:digirunner-claim-gov-compliance-100` |
+| 6 | digiRunner 比 Kong 好導入、好維運、更合規 | 與競品的比較沒有依據或比較日期；`search-intent.md` 的「Kong 替代方案 API Gateway」是比較型查詢，確認後可給 digiRunner 頁接住。決定不用，不加比較段落（使用者決定，#180） | `fact:digirunner-vs-kong-integration`、`fact:digirunner-vs-kong-adoption`、`fact:digirunner-vs-kong-compliance`、`fact:digirunner-vs-kong-operations` |
+| 7 | 成效數字：開發效率提升、正常運行時間、OrientAI 的效率與成本改善、InsureRing 上架時間 | 沒有量測方式或比較基準（#164 的宣稱規則）。首頁案例的 `fact:smartclaim-result` 已確認，可以用；理賠解決方案頁的同類數字還沒有。InsureRing 的具名案例成果（`fact:insurering-case-shin-kong-life`）已確認，產品頁的「上架縮短 90%」仍未確認。決定不用（使用者決定，#180） | `fact:digirunner-hot-deploy-50`、`fact:digirunner-uptime-999`、`fact:orientai-benefits`、`fact:insurering-90-percent`、`fact:smartclaim-80-percent` |
+| 8 | DigiLism 擁有多項發明專利 | 已解決：`fact:digilism-patents-7` 改為 `confirmed`，現站沒寫統計時間，照現站的數字使用、不寫年份（使用者決定的例外，#180）。個別功能「具專利技術」的說法已確認（#165）；熱部署的「提升高達 50%」不用 | 無 |
 | 9 | 搭配群聯 aiDAPTIV 的地端 AI 比其他硬體更快、能跑更大的模型 | 合作夥伴提供的估算與點名競品的比較，要確認授權與量測條件 | `fact:aiso-10x-dell-hpe`、`fact:aiso-52-to-2-seconds`、`fact:aiso-70b-on-4-gpus` |
-| 10 | 台灣開放銀行的三階段時程 | 法規時程是現站的說法，要對照主管機關公告。DM-1 只用「實現三階段規範」，不寫年份 | `fact:open-banking-taiwan-2019`、`fact:open-banking-stage-1`、`fact:open-banking-stage-2`、`fact:open-banking-stage-3` |
+| 10 | 台灣開放銀行的三階段時程 | 已解決：四筆時程改為 `confirmed`，可以寫出年份（使用者決定，#180） | 無 |
 | 11 | 在東南亞與東北亞多國設有據點 | 據點清單兩處說法不一致（有沒有泰國）。DM-6 改用已確認的新加坡、越南子公司 | `fact:company-asia-presence`、`fact:company-offices-overseas` |
 | 12 | digiRunner 有開源版，可以先自己裝來試 | 事實庫沒有開源版的條目。`search-intent.md` 的「開源 API Gateway 推薦」與 `digiRunner API 管理平台` 結果提到開源專案頁，要先從現站或官方來源收進事實庫 | 無 |
-| 13 | 製造業有導入案例與成果 | 事實庫只有產業清單（`fact:company-industries`）與 GreenSwift 功能，沒有製造業案例；`nodes.csv` 寫製造業頁「需人工提供」。因此定位句不點名製造業（使用者決定，#165） | 無 |
-| 14 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答。`competitors.md`「本站缺」第 3 項：FPT 在聯絡頁寫明回覆時間 | 無 |
+| 13 | 製造業有導入案例與成果 | 事實庫只有產業清單（`fact:company-industries`）與 GreenSwift 功能，沒有製造業案例；`nodes.csv` 寫製造業頁「需人工提供」。因此定位句不點名製造業（使用者決定，#165）。現站沒有資料，不處理（使用者決定，#180） | 無 |
+| 14 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答。`competitors.md`「本站缺」第 3 項：FPT 在聯絡頁寫明回覆時間。現站沒有資料，不處理；聯絡段不寫回覆時間（使用者決定，#180） | 無 |
