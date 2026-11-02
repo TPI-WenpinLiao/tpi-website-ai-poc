@@ -121,7 +121,7 @@ quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighth
 | 研究 | `researcher` | `site-research` | 事實庫、未搬內容盤點、競品分析、搜尋意圖 | script 檢查事實庫 |
 | 策略 | `content-strategist`、`seo-strategist` | `content-strategy` | messaging framework、每頁的 content brief | 人工加 `strategy-approved` |
 | 設計概念 | `design-director` | `design-concept` | 設計原則、HTML 原型（預設 3 個，使用者可指定個數，用 `taste-skill` 檢查品質） | `reviewer` 依 rubric 評分，人工選方向後加 `design-approved` |
-| 製作 | `content-strategist`（文案）、主 session（前端） | `content-strategy`、`design-system`、`seo-checklist` | 頁面文案與實作 | `npm run check` |
+| 製作 | `content-strategist`（文案）、主 session（前端） | `content-strategy`、`design-system`、`seo-checklist` | 頁面文案與實作 | `npm run check`，加上 `reviewer` 的設計 rubric D2 ≥ 3 |
 | 評審 | `reviewer` | `site-review` | 設計、文案與行銷、SEO 三份 rubric 的評分 | 低於門檻退回製作 |
 
 產出物都放在 `docs/strategy/`，路徑寫在各 skill 的「產出物」。
@@ -145,8 +145,8 @@ quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighth
 - 研究：事實庫的檢查 `node scripts/strategy/facts.mjs` 在 `npm run check` 裡，沒過就不能開 PR；`--sources` 要連現站，不在 `npm run check`，結果寫進 PR
 - 策略：issue 帶「## 關卡」段落寫 `strategy-approved`，不進自動模式，走兩階段流程：階段一開 draft PR 後停下，你看完 messaging 與 brief，在 issue 加上 `strategy-approved` 再告訴 Claude 繼續
 - 設計概念：issue 帶 `needs-design`，同樣走兩階段流程。PR 附 `reviewer` 對各方向的評分，你選定方向後加 `design-approved`
-- 製作：照一般的 `/issue-ship` 與審查迴圈
-- 評審：rubric 的門檻寫在 `site-review`。沒過時，「要改的地方」回到製作，修正後由新的 `reviewer` 重評
+- 製作：照一般的 `/issue-ship` 與審查迴圈。改了試點頁的版面或元件時，轉 ready 前每頁由新的 `reviewer` 評設計 rubric，D2（與設計原則一致）低於 3 就先修。#167 只過了 `npm run check`，offering 與 hub 模板留著原則禁止的 eyebrow 與編號，到 #168 才被抓到（[`issue-ship` 第 8 步](../.claude/skills/issue-ship/SKILL.md#8-完成條件轉-ready)）
+- 評審：rubric 的門檻寫在 `site-review`。沒過時，「要改的地方」回到製作，修正後由新的 `reviewer` 重評。比較多組頁面（新版、舊版、現站、競品）時，素材用 `scripts/strategy/eval-shots.mjs` 準備，報告寫在 `docs/strategy/evaluation.md`（`site-review`「評審對象的準備」）。評審的「評審依據不足」整理成流程缺口，改回對應階段的 skill
 
 ## 視覺回歸
 
