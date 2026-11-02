@@ -230,7 +230,7 @@ const blog = localNode('blog', locale);
   {
     caseStudies.length > 0 && (
       <Surface tone="light" id="cases" class="anchor-target">
-        <SectionHeading eyebrow="Success stories" title={successStories.title}>
+        <SectionHeading eyebrow="Success stories" title={successStories.title} description={data.casesIntro}>
           <Button slot="action" href={nodeHref('success-stories', locale)} variant="text">
             {successStories.title}
           </Button>

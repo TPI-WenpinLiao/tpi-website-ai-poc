@@ -54,11 +54,17 @@ export const home: Home = {
     title: '談需求，或預約演示',
     description: '留下您的系統現況與想解決的問題，昕力的業務與顧問會與您聯絡，安排說明或演示。',
   },
+  // Records (#183): DM-6's facts plus the awards confirmed in #180, by year, the certificate last.
+  // Six fill two rows of three. One award per prize: Taiwan Excellence 2024 only (2023 names the
+  // same products); no Gartner 2018 (messaging.md DM-8)
   contact: {
     title: '合作得久，有紀錄可查',
     records: [
       { label: '2005', text: fact('company-founded') },
       { label: '2008', text: fact('company-milestone-2008-finance') },
+      { label: '2020', text: fact('company-employees-630') },
+      { label: '2022', text: fact('award-ft-high-growth-2022') },
+      { label: '2024', text: fact('award-taiwan-excellence-2024') },
       { label: '資安認證', text: fact('cert-iso27001-product-platform') },
     ],
     action: '聯絡業務',
