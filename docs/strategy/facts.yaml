@@ -396,8 +396,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 累積超過 400個不同的專案成功經驗
   locale: zh-TW
-  status: confirmed
-  note: 年份取里程碑「2016 - 2019」，頁面引用時寫出（使用者決定，#180）
+  status: to_confirm
+  note: 這句沒有年份（「2016 - 2019」是段落標題，同句另有「領導廠商」的說法），頁面寫不出統計時間；#180 的有年份事實不含這筆
 
 - id: company-subsidiaries-sg-vn
   type: company
@@ -429,13 +429,13 @@
 
 - id: company-employees-630
   type: metric
-  text: 全球員工超過 630 名
+  text: 2020年以「TPIsoftware」 邁入國際，全球員工超過 630 名
   source:
     url: https://www.tpisoftware.com/about-us
-    quote: 全球員工超過 630 名
+    quote: 2020年以「TPIsoftware」 邁入國際，全球員工超過 630 名
   locale: zh-TW
   status: confirmed
-  note: 年份取里程碑「2020 - 2022」，頁面引用時寫出（使用者決定，#180）
+  note: 年份在原文，頁面引用時寫出（使用者決定，#180）
 
 - id: company-milestone-retail
   type: company
@@ -484,8 +484,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: DigiLism 企業服務中台獲 「第29屆中小企業創新研究獎」
   locale: zh-TW
-  status: confirmed
-  note: 屆次對應年份，里程碑寫 2022，頁面引用時寫出（使用者決定，#180）
+  status: to_confirm
+  note: 原文沒有年份；寫得出年份的同一個獎見 award-sbir-2022（#180）
 
 - id: award-innovative-business-2022
   type: award
@@ -513,8 +513,28 @@
     url: https://www.tpisoftware.com/about-us
     quote: 獲「第一屆數位金融獎」 金融科技新創公司推薦獎
   locale: zh-TW
+  status: to_confirm
+  note: 原文沒有年份；寫得出年份的同一個獎見 award-digital-finance-2021（#180）
+
+- id: award-digital-finance-2021
+  type: award
+  text: 2021 第一屆數位金融獎
+  source:
+    url: https://www.tpisoftware.com/about-us
+    quote: 2021 第一屆數位金融獎
+  locale: zh-TW
   status: confirmed
-  note: 里程碑寫 2021，頁面引用時寫出（使用者決定，#180）
+  note: 里程碑「2020 - 2022」段的寫法，有年份，頁面引用時寫出（使用者決定，#180）
+
+- id: award-sbir-2022
+  type: award
+  text: 2022 中小企業創新研究獎
+  source:
+    url: https://www.tpisoftware.com/about-us
+    quote: 2022 中小企業創新研究獎
+  locale: zh-TW
+  status: confirmed
+  note: 里程碑「2020 - 2022」段的寫法，有年份，頁面引用時寫出（使用者決定，#180）
 
 - id: award-cx-asia-2021
   type: award
@@ -2194,7 +2214,7 @@
     quote: DigiLism 產品系列擁有7項發明專利
   locale: zh-TW
   status: confirmed
-  note: 現站沒寫統計時間，頁面寫成現站列出的數字（使用者決定，#180）
+  note: 現站沒寫統計時間；使用者決定照現站的數字使用，不寫年份（#180 的例外）
 
 - id: cert-iso27001-digirunner
   type: certification

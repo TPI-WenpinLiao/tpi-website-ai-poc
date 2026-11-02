@@ -211,7 +211,7 @@ hero 的次要按鈕從「產品總覽」改成「依產業看方案」：決策
 | # | 事項 | 結果 |
 |---|---|---|
 | 1 | 獎項能不能放首頁（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`） | 改為 `confirmed`，第 7 段可以加獎項，寫出年份。證言照 #165 可以直接加；委外服務頁國泰摘錄的「最佳技術」（`fact:testimonial-cathay-fhc-excerpt`）不用 |
-| 2 | 規模數字（`fact:company-employees-630`、`fact:company-projects-400`） | 改為 `confirmed`，第 7 段可以用，寫出里程碑的年份（`note` 有出處） |
+| 2 | 規模數字（`fact:company-employees-630`、`company-projects-400`） | 員工數改為 `confirmed`，原文寫出 2020 年，第 7 段可以用。專案數那句沒有年份，維持 `to_confirm`、不用 |
 | 3 | 製造業之後要不要回到首頁 | 現站沒有製造業內容，不處理。hero 與產業入口維持不點名製造業（#165） |
 | 4 | 聯絡後多久回覆 | 現站沒有資料，不處理。聯絡段不寫回覆時間 |
 | 6 | GadoSecurity 家族介紹 | 現站沒有資料，不處理。家族頁維持 draft，第 4 段只用 gadoDIDO、gadoScout 的產品事實 |

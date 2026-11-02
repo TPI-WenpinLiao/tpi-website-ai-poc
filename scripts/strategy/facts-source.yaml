@@ -133,7 +133,8 @@ groups:
       - id: company-projects-400
         type: metric
         quote: '累積超過 400個不同的專案成功經驗'
-        note: 年份取里程碑「2016 - 2019」，頁面引用時寫出（使用者決定，#180）
+        status: to_confirm
+        note: 這句沒有年份（「2016 - 2019」是段落標題，同句另有「領導廠商」的說法），頁面寫不出統計時間；#180 的有年份事實不含這筆
       - { id: company-subsidiaries-sg-vn, type: company, quote: '分別在2017、2019年設立新加坡與越南子公司' }
       - id: company-product-families
         type: company
@@ -143,8 +144,8 @@ groups:
       - { id: company-milestone-2020-brand, type: company, quote: '2020年以「TPIsoftware」 邁入國際' }
       - id: company-employees-630
         type: metric
-        quote: '全球員工超過 630 名'
-        note: 年份取里程碑「2020 - 2022」，頁面引用時寫出（使用者決定，#180）
+        quote: '2020年以「TPIsoftware」 邁入國際，全球員工超過 630 名'
+        note: 年份在原文，頁面引用時寫出（使用者決定，#180）
       - { id: company-milestone-retail, type: company, quote: '跨足零售產業' }
       - id: award-ft-high-growth-2022
         type: award
@@ -160,13 +161,17 @@ groups:
       - id: award-sbir-29
         type: award
         quote: 'DigiLism 企業服務中台獲 「第29屆中小企業創新研究獎」'
-        note: 屆次對應年份，里程碑寫 2022，頁面引用時寫出（使用者決定，#180）
+        status: to_confirm
+        note: 原文沒有年份；寫得出年份的同一個獎見 award-sbir-2022（#180）
       - { id: award-innovative-business-2022, type: award, quote: '2022 創新商務獎 digiRunner 獲得「最佳技術創新獎」； SysTalk.Chat 獲得「最佳產品創新獎」', note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
       - { id: company-talent-in-taiwan, type: company, quote: '正式加入「TALENT, in Taiwan， 台灣人才永續行動聯盟」' }
       - id: award-digital-finance-1st
         type: award
         quote: '獲「第一屆數位金融獎」 金融科技新創公司推薦獎'
-        note: 里程碑寫 2021，頁面引用時寫出（使用者決定，#180）
+        status: to_confirm
+        note: 原文沒有年份；寫得出年份的同一個獎見 award-digital-finance-2021（#180）
+      - { id: award-digital-finance-2021, type: award, quote: '2021 第一屆數位金融獎', note: 里程碑「2020 - 2022」段的寫法，有年份，頁面引用時寫出（使用者決定，#180） }
+      - { id: award-sbir-2022, type: award, quote: '2022 中小企業創新研究獎', note: 里程碑「2020 - 2022」段的寫法，有年份，頁面引用時寫出（使用者決定，#180） }
       - { id: award-cx-asia-2021, type: award, quote: '獲新加坡 「2021 CX Asia Excellence Awards」- 卓越供應商金獎', note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
       - id: award-best-in-singapore
         type: award
@@ -474,7 +479,7 @@ groups:
       - id: digilism-patents-7
         type: metric
         quote: DigiLism 產品系列擁有7項發明專利
-        note: 現站沒寫統計時間，頁面寫成現站列出的數字（使用者決定，#180）
+        note: 現站沒寫統計時間；使用者決定照現站的數字使用，不寫年份（#180 的例外）
       - { id: cert-iso27001-digirunner, type: certification, quote: 通過 ISO27001 資訊安全認證 }
       - { id: digirunner-ai-gateway, type: feature, quote: AI Gateway 智能負載平衡與安全防護，全面監控AI運作 }
       - { id: digirunner-ai-model-config, type: feature, quote: 根據需求調配不同類型的AI模型，靈活平衡效能與成本 }

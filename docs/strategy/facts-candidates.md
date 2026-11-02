@@ -41,7 +41,7 @@
 | 為台灣易利信、台積電提供軟體品質管理與顧問服務，不斷累積經驗、汲取多方養分；2008 年首度跨足金融產業，為華南銀行建置 CRM 系統，同年也名列為傑出企業成就，專業服務受到多家知名客戶信任，優質的服務於業界不斷獲得好評。 | `company-milestone-2008-finance` `award-2008-outstanding-enterprise` `client-ericsson-taiwan` `client-tsmc` `client-hua-nan-bank` |
 | 透過豐富的軟體經驗實踐，逐步發展自有軟體產品，2011年開發第一個 產品 – TPRS 推薦系統；同時於金融業界獲得國泰世華、台新銀行、保誠人壽、澳盛銀行、法國巴黎人壽等指標性客戶信賴，成功為銀行客戶建置多項金融系統服務，推動銀行數位轉型成果斐然。 | `company-milestone-2011-tprs` `client-prudential-uk-short` |
 | 成為台灣金融科技解決方案領導廠商，累積超過 400個不同的專案成功經驗，分別在2017、2019年設立新加坡與越南子公司，前進東南亞市場；積極發展兩大產品系列 DigiLism 與 SysTalk.ai，而 AI Chatbot 產品於 2018 年更獲頒 Gartner 亞太地區 Cool Vendor 獎項。 | `company-projects-400` `company-subsidiaries-sg-vn` `company-product-families` |
-| 2020年以「TPIsoftware」 邁入國際，全球員工超過 630 名，成為台灣資訊軟體業領導廠商，不僅奠基海外金融科技服務供應商，更跨足零售產業，同時，無懼疫情逆勢成長，入選英國金融時報 (Financial Times) 2022 亞太地區快速成長 500 強企業。接連榮獲 2021 第一屆數位金融獎與 CX Asia Excellence Awards、2022 創新商務獎、2022 中小企業創新研究獎、2023 台灣精品獎等多項肯定。 | `company-milestone-2020-brand` `company-employees-630` `company-milestone-retail` `award-ft-high-growth-2022` |
+| 2020年以「TPIsoftware」 邁入國際，全球員工超過 630 名，成為台灣資訊軟體業領導廠商，不僅奠基海外金融科技服務供應商，更跨足零售產業，同時，無懼疫情逆勢成長，入選英國金融時報 (Financial Times) 2022 亞太地區快速成長 500 強企業。接連榮獲 2021 第一屆數位金融獎與 CX Asia Excellence Awards、2022 創新商務獎、2022 中小企業創新研究獎、2023 台灣精品獎等多項肯定。 | `company-milestone-2020-brand` `company-employees-630` `company-milestone-retail` `award-ft-high-growth-2022` `award-digital-finance-2021` `award-sbir-2022` |
 | digiRunner、digiLogs、SysTalk.Chat 獲得「2023 台灣精品獎」 | `award-taiwan-excellence-2023` |
 | digiRunner、digiLogs、SysTalk.ai 獲得「2024 台灣精品獎」 | `award-taiwan-excellence-2024` |
 | DigiLism 企業服務中台獲 「第29屆中小企業創新研究獎」 | `award-sbir-29` |
