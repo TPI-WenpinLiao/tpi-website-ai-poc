@@ -149,8 +149,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 
 - #168 可以開始（評審與驗證報告，回寫流程）
 - #167 的後續已開成 issue：#177（en、vi 首頁依新版面寫文案）、#178（政府頁、digiRunner on Cloud、`/blog/enterprise-grade-apim` 連到 digiRunner）、#179（首頁 header 經過紫色段落時換色，`needs-design`）
-- #183 寫頁面時照 `messaging.md` 的 `DM-8`（產品獎）與 `DM-6`（公司獎）：Gartner 2018、SBIR 2022、數位金融獎 2021、104 雇主品牌 2024 在 #182 判斷為試點頁不用，理由見 `DM-8`；`briefs/home.md`「已結算」第 1 項還寫首頁可放 Gartner 2018，#183 計畫時對齊
-- #180 之後可用的事實：首頁第 7 段可以加有年份的獎項與員工數（2020 年），digiRunner hero 可以加 DigiLism 專利數、台新案例可以加 Global Finance 2020 獎項，金融頁第 2 段可以寫開放銀行三階段的年份。要不要改頁面另開 issue
+- #183 可以開始（試點三頁加入 #180 確認的事實）：獎項照 `messaging.md` 的 `DM-8`（產品獎）與 `DM-6`（公司獎）寫，Gartner 2018、SBIR 2022、數位金融獎 2021、104 雇主品牌 2024 在 #182 判斷為試點頁不用，理由見 `DM-8`；`briefs/home.md`「已結算」第 1 項還寫首頁可放 Gartner 2018，#183 計畫時對齊
 - #165 brief 的「待確認」已開成 issue：#173（兩篇 blog：`API Gateway 是什麼`、`企業 AI 導入`）、#174（digiRunner 開源版的事實收進事實庫）
 - 回覆 #164 PR 的「待確認」：`to_confirm` 事實，#180 後剩 117 筆（ESG 顧問與合作單位的授權、沒寫年份或統計時間的獎項與數字、沒有依據的成效數字與最高級宣稱、現站各頁說法不一致）；`www.tpisoftware.vn` 恢復後跑一次 `node scripts/strategy/facts.mjs --sources`
 - 回覆 #159 PR 的「待確認」：沒搬的段落、組成或刪減的 description、vi `/resource` 的標題是英文「Resource Center」

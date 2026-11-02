@@ -129,7 +129,7 @@ OrientAI 部署在企業端，資料不交給外部；權限、影子 AI 與 Tok
 
 ### DM-8 自有產品經過外部單位評選
 
-digiRunner、SysTalk 等自有產品經過國內外單位評選，決策者評估產品時，有昕力以外的說法可以參考。
+digiRunner、SysTalk 等自有產品經過國內單位評選，台新以 digiRunner 建置的平台另獲 Global Finance 的獎項；決策者評估產品時，有昕力以外的說法可以參考。
 
 - `fact:award-taiwan-excellence-2023`：digiRunner、digiLogs、SysTalk.Chat 獲台灣精品獎
 - `fact:award-taiwan-excellence-2024`：digiRunner、digiLogs、SysTalk.ai 獲台灣精品獎
