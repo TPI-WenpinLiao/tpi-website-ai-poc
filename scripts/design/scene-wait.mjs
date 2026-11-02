@@ -16,8 +16,12 @@ import { serve } from '../lib/static-server.mjs';
 export const LAUNCH_ARGS = ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'];
 
 const DIST = resolve(import.meta.dirname, '../../dist');
-// The home page is the only page with the scene (ADR 0003「ribbon-route」, #167)
+// The home page is the only page with the scene (ADR 0003「ribbon-route」, #167). The waits are
+// measured on the zh-TW home; the other locales' homes must get ready too, since a locale whose
+// copy lacks an element the scene needs falls back to the static pictures without an error on the
+// page (#167: en and vi had no 3D)
 const PATH = '/';
+export const OTHER_LOCALE_PATHS = ['/en', '/vi'];
 // Read from the runtime, so the limit is written in one place
 const RUNTIME = resolve(import.meta.dirname, '../../src/lib/scene/ribbon/runtime.ts');
 const WAIT_LIMIT_MS = Number(/const WAIT_LIMIT_MS = (\d+);/.exec(readFileSync(RUNTIME, 'utf8'))?.[1]);
@@ -90,6 +94,11 @@ async function main() {
     const base = await timeToReady(browser, url, CASES.unpatched);
     if (base === undefined) throw new Error(`${PATH}: the scene never got ready without a patch`);
     console.log(`${PATH} unpatched: ready ${Math.round(base)} ms after the 3D chunk`);
+    for (const path of OTHER_LOCALE_PATHS) {
+      const ms = await timeToReady(browser, `http://localhost:${address.port}${path}`, CASES.unpatched);
+      console.log(`${path} unpatched: ${ms === undefined ? 'never ready' : `ready ${Math.round(ms)} ms after the 3D chunk`}`);
+      if (ms === undefined) errors.push(`${path} never ready`);
+    }
     for (const [name, patch] of Object.entries(CASES).filter(([n]) => n !== 'unpatched')) {
       const ms = await timeToReady(browser, url, patch);
       const limit = base + WAIT_LIMIT_MS + SLACK_MS;
@@ -101,7 +110,7 @@ async function main() {
     server.close();
   }
   if (errors.length) {
-    console.error(`3D scene waits without a limit: ${errors.join(', ')} (src/lib/scene/runtime.ts, WAIT_LIMIT_MS)`);
+    console.error(`3D scene waits without a limit: ${errors.join(', ')} (src/lib/scene/ribbon/runtime.ts, WAIT_LIMIT_MS; a locale never ready: see the browser console)`);
     process.exitCode = 1;
   }
 }

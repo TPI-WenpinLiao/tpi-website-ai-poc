@@ -15,7 +15,8 @@
 // DOM contract (HomeTemplate): [data-ribbon-route] with its stage [data-ribbon-slot="route"] and
 // the map labels [data-ribbon-anchor]; [data-ribbon-hero] and its words [data-ribbon-copy];
 // the fork picture [data-ribbon-fork]; [data-ribbon-cases] with [data-ribbon-slot="cases"],
-// [data-ribbon-case] panels (name in [data-ribbon-case-name]), [data-ribbon-count] and
+// [data-ribbon-case] panels (name in [data-ribbon-case-name]), the optional [data-ribbon-count]
+// (only locales with a count template have one) and
 // [data-ribbon-case-label]. The route gets data-scene="ready" once the first frame is on the page.
 import { NoToneMapping, PCFShadowMap, SRGBColorSpace, WebGLRenderer } from 'three';
 import {
@@ -96,9 +97,9 @@ export async function mount({ canvas, context, route, cases }: Options): Promise
   const routeLabels = [...route.querySelectorAll<HTMLElement>('[data-ribbon-anchor]')];
   const caseLabel = required<HTMLElement>(cases, '[data-ribbon-case-label]');
   const panels = [...cases.querySelectorAll<HTMLElement>('[data-ribbon-case]')];
-  const count = required<HTMLElement>(cases, '[data-ribbon-count]');
+  const count = cases.querySelector<HTMLElement>('[data-ribbon-count]');
   const names = panels.map((p) => required<HTMLElement>(p, '[data-ribbon-case-name]').textContent?.trim() ?? '');
-  const countText = (n: number) => (count.dataset.template ?? '{n}/{total}').replace('{n}', String(n + 1)).replace('{total}', String(panels.length));
+  const countText = (n: number) => (count?.dataset.template ?? '{n}/{total}').replace('{n}', String(n + 1)).replace('{total}', String(panels.length));
 
   await nextTask();
   const style = getComputedStyle(route);
@@ -196,7 +197,7 @@ export async function mount({ canvas, context, route, cases }: Options): Promise
     const n = p < (HANDOVERS[0] ?? 1) ? 0 : p < (HANDOVERS[1] ?? 1) ? 1 : 2;
     if (n !== state.current) {
       state.current = n;
-      count.textContent = countText(n);
+      if (count) count.textContent = countText(n);
       caseLabel.textContent = names[n] ?? '';
     }
   };
@@ -251,7 +252,7 @@ export async function mount({ canvas, context, route, cases }: Options): Promise
 
   measure();
   caseLabel.textContent = names[0] ?? '';
-  count.textContent = countText(0);
+  if (count) count.textContent = countText(0);
   // Compile the shaders and draw one frame before the canvas is on the page, then wait for the GPU
   // to finish it, each wait at most WAIT_LIMIT_MS (#127, #136)
   await nextTask();
