@@ -13,10 +13,18 @@ tagline: 銀行、保險與證券的法規要求做在產品裡，AI 用在核�
 heroImage: ../../../assets/design/ribbon/page-finance.webp
 sections:
   - heading: 法規要求已做在產品裡
-    body: 開放銀行從歐洲開始，台灣由金管會推動。開放銀行的規範與金融檢查的 API 管理作業，都對應到 digiRunner 的功能。
+    # The middle sentence and the three stages are fact texts with their years (#183,
+    # briefs/finance.md「待確認」第 2 項)
+    body: 開放銀行從歐洲開始。2019 年，台灣金管會拍板定案，將台灣 Open Banking 導入分為三階段。開放銀行的規範與金融檢查的 API 管理作業，都對應到 digiRunner 的功能。
     items:
       - title: 開放銀行的起源
         body: Open Banking 起源於 2015 年歐盟的 The Revised Payment Services Directive (PSD2)，隔年（2016）八月，由英國率先要求其國內九家大型銀行要採用，並於 2018 年強制導入
+      - title: 台灣第一階段（2019）
+        body: 2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。
+      - title: 台灣第二階段（2020）
+        body: 2020 第二階段 個人資訊開放 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。
+      - title: 台灣第三階段（2021 Q1）
+        body: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。
       - title: 台灣的開放銀行
         body: 昕力資訊 digiRunner API 管理平台反應台灣開放銀行金管會法規要求
         node: digirunner
@@ -101,6 +109,10 @@ featuredCaseStudies:
   - zh-TW/bank-of-taiwan-robotic-process-automation-rpa
 facts:
   - open-banking-history
+  - open-banking-taiwan-2019
+  - open-banking-stage-1
+  - open-banking-stage-2
+  - open-banking-stage-3
   - digirunner-open-banking-fsc
   - digirunner-open-banking-3-stages
   - digirunner-open-banking-no-credentials

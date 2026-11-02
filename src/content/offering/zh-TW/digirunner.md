@@ -16,6 +16,9 @@ heroLead: digiRunner 是 API 管理平台：關鍵系統要開放出去的 API�
 heroPoints:
   - 通過 ISO27001 資訊安全認證
   - 30 天免費試用
+  # The third proof point (#183, briefs/digirunner.md「待確認」第 1 項): no year, the current site
+  # gives none (#180)
+  - DigiLism 產品系列擁有7項發明專利
 secondaryCta:
   label: 試用 digiRunner on Cloud
   node: digirunner-cloud
@@ -99,6 +102,9 @@ useCases:
     industry: government
   - title: OpenAPI 規格
     body: 符合國際 Open API Initiative 組織之 OpenAPI Specification（以下簡稱 OAS）標準來定義 RESTful APIs。
+# Section 10 of the brief (#183): the Global Finance award beside the Taishin case
+# (messaging.md DM-8); the first sentence names the case, the second is the fact text
+casesIntro: 台新銀行的現金業務 API 管理平台以 digiRunner 開發。該平台獲全球金融雜誌 (Global Finance)頒發「The Innovators 2020 Cash Management」獎。
 heroImage: ../../../assets/design/ribbon/page-digirunner.webp
 cta: demo
 facts:
@@ -137,6 +143,10 @@ facts:
   - digirunner-financial-inspection
   - digirunner-ndc-spec
   - digirunner-oas
+  - digilism-patents-7
+  - digirunner-case-taishin
+  - client-taishin-bank
+  - award-global-finance-2020
 sourceUrl: https://www.tpisoftware.com/products/digirunner
 migratedAt: 2026-10-22
 ---

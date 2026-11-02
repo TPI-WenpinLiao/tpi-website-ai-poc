@@ -105,6 +105,7 @@ sourceUrl: []
 | `faq` | `{ question: string; answer: string }[]` | 否 | 常見問題 | 現站 FAQ 區（少數頁有） |
 | `cta` | `'contact' \| 'demo'` | 是 | 主要 CTA：聯絡業務或預約 demo。表單端點由 M6 依此決定 | `features.md`「表單」 |
 | `relatedCaseStudies` | `ref(case-study)[]` | 否 | 精選案例與排序。留空時由 `case-study.offerings` 反查；關聯以 `case-study.offerings` 為準，這裡只列其中的項目 | — |
+| `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句：點名案例的表述，加上該案例的事實原文，事實要列進 `facts`（#183） | — |
 | `relatedPosts` | `ref(blog)[]` | 否 | 精選文章與排序。留空時由 `blog.relatedOfferings` 反查；關聯以 `blog.relatedOfferings` 為準，這裡只列其中的項目 | — |
 | `downloads` | `{ label: string; file: string }[]` | 否 | 下載檔（例如 `digirunner-aws-guide` 的 PDF），也是 `download` 中繼頁的資料來源。白皮書不列在這裡，由 `whitepaper.offeringNode` 反查 | 現站下載按鈕 |
 

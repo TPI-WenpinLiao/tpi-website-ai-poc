@@ -110,6 +110,9 @@ const offering = defineCollection({
         faq: z.array(z.strictObject({ question: text, answer: text })).optional(),
         cta: z.enum(['contact', 'demo']),
         relatedCaseStudies: z.array(ref('case-study')).optional(),
+        // A line under the case studies' heading (#183): wording that names the case, then a fact
+        // text about it; the facts are listed in `facts`
+        casesIntro: text.optional(),
         relatedPosts: z.array(ref('blog')).optional(),
         downloads: z.array(z.strictObject({ label: text, file: text })).optional(),
       })

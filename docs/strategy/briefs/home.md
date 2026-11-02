@@ -14,7 +14,7 @@
 | 2 產業入口 | 2 | 金融、政府與公部門各一則事實原文；沒有段落引言，h2 直接說結論 |
 | 3 AI 成果 | 3 | 三則成果原文，每則一個連結（理賠、建檔各連解決方案頁，阻詐連成功案例） |
 | 4 產品與 OrientAI | 4、5 | 4 個產品名稱（帶類別詞）＋縮圖，不放家族說明；OrientAI 一句主張加 `fact:orientai-on-prem-data` 原文，前面加一句問句承接原文的「不會。」 |
-| 5 紀錄與聯絡 | 7、8 | 6 項穩定度取 3 項（成立年份、跨足金融、ISO27001）；一個動作「聯絡業務」 |
+| 5 紀錄與聯絡 | 7、8 | 6 則紀錄，依年份排、認證放最後：成立年份、跨足金融、2020 年員工數、FT 2022（`DM-6`）、台灣精品獎 2024（`DM-8`）、ISO27001（#183 從 3 則加到 6 則）；一個動作「聯絡業務」 |
 
 移出首頁的內容不新增頁面，由已有的頁面承接：
 
@@ -210,8 +210,8 @@ hero 的次要按鈕從「產品總覽」改成「依產業看方案」：決策
 
 | # | 事項 | 結果 |
 |---|---|---|
-| 1 | 獎項能不能放首頁（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`） | 改為 `confirmed`，第 7 段可以加獎項，寫出年份。證言照 #165 可以直接加；委外服務頁國泰摘錄的「最佳技術」（`fact:testimonial-cathay-fhc-excerpt`）不用 |
-| 2 | 規模數字（`fact:company-employees-630`、`company-projects-400`） | 員工數改為 `confirmed`，原文寫出 2020 年，第 7 段可以用。專案數那句沒有年份，維持 `to_confirm`、不用（使用者決定） |
+| 1 | 獎項能不能放首頁（`fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`） | 改為 `confirmed`，第 7 段可以加獎項，寫出年份。證言照 #165 可以直接加；委外服務頁國泰摘錄的「最佳技術」（`fact:testimonial-cathay-fhc-excerpt`）不用。#183 照 `messaging.md` 的 `DM-6`、`DM-8` 放了 FT 2022 與台灣精品獎 2024；Gartner 2018 不用（理由見 `DM-8`），台灣精品獎 2023 與 2024 的得獎產品重疊，首頁只放 2024 |
+| 2 | 規模數字（`fact:company-employees-630`、`company-projects-400`） | 員工數改為 `confirmed`，原文寫出 2020 年，第 7 段可以用（#183 已放）。專案數那句沒有年份，維持 `to_confirm`、不用（使用者決定） |
 | 3 | 製造業之後要不要回到首頁 | 現站沒有製造業內容，不處理。hero 與產業入口維持不點名製造業（#165） |
 | 4 | 聯絡後多久回覆 | 現站沒有資料，不處理。聯絡段不寫回覆時間 |
 | 6 | GadoSecurity 家族介紹 | 現站沒有資料，不處理。家族頁維持 draft，第 4 段只用 gadoDIDO、gadoScout 的產品事實 |
