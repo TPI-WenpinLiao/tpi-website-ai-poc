@@ -3,7 +3,9 @@
 # section 8 as featuredCaseStudies. Headings, bodies and item titles are wording; item bodies are
 # fact texts, verbatim (facts below)
 title: 金融
-description: 昕力資訊 digiRunner API 管理平台反應台灣開放銀行金管會法規要求，透過一致的標準規格與安全控管機制，加速金融業者與第三方服務提供商（TSP）更廣泛的合作。
+# docs/strategy/briefs/finance.md「title 與 description 方向」: the h1 stays the node's name
+seoTitle: 金融業的開放銀行、API 管理與 AI 應用
+description: 昕力資訊替銀行、保險與證券業者，把開放銀行與金融檢查的 API 管理要求做進 digiRunner，並以 AI 處理理賠、建檔與阻詐，也提供身分驗證與導入規劃。
 translationKey: industry-finance
 node: industry-finance
 industry: finance

@@ -3,9 +3,9 @@ title: digiRunner API 管理平台
 # docs/strategy/briefs/digirunner.md「title 與 description 方向」: the title adds AI Gateway, the h1
 # stays the node's name
 seoTitle: digiRunner API 管理平台與 AI Gateway
-# The current site's meta description, cut to the seo-checklist length (60–80 full-width
-# characters): the closing praise is dropped, the facts are unchanged
-description: 昕力資訊 digiRunner 企業級 API 管理平台，為現有後端服務設立一致性的 API 閘道，提供 API 開發設計、部署發佈、權限控管、資安管理、API 組合與串接等完整管理功能。
+# docs/strategy/briefs/digirunner.md「description」: the category, one Gateway for APIs and AI
+# models, where it deploys, one security mechanism and the trial, without numbers (#167)
+description: digiRunner 是昕力資訊的 API 管理平台，把既有系統與 AI 模型的串接集中在同一道 Gateway 管理，支援地端、雲端與 Kubernetes 部署，內建零信任存取防護，可先試用再導入。
 translationKey: digirunner
 node: digirunner
 kind: product
@@ -22,6 +22,9 @@ secondaryCta:
 features:
   - title: 接上既有系統，不必先汰換
     body: digiRunner 涵蓋 API Gateway、API 生命週期管理與 AI Gateway。它放在既有系統前面，負責 API 的組合、格式轉換與串接，後端不必先汰換；外部夥伴也能自己註冊、登入後接上 API。
+    link:
+      label: DigiLism 數位轉型產品家族
+      node: family-dx
     points:
       - 使用 API 組合與設計（API Composer）功能，支援多種 API 格式轉換，拖拉即可輕鬆組合打造出新的 API
       - 圖形化管理介面可快速便利開發，以流程視覺化方式串接各種 Protocol（如 DB、FTP），並支援各種格式轉換（如 JSON、XML、SOAP）。

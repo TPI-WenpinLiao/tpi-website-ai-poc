@@ -60,5 +60,6 @@ export const home: Home = {
       { label: '資安認證', text: fact('cert-iso27001-product-platform') },
     ],
     action: '聯絡業務',
+    about: '關於昕力',
   },
 };

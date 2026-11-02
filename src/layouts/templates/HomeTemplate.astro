@@ -295,6 +295,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
       <span class="band" aria-hidden="true"></span>
       <Button href={href(contact)} size="lg">{copy.contact.action ?? contact.title}</Button>
     </div>
+    <p><Link href={nodeHref('about', locale)} variant="standalone">{copy.contact.about ?? localNode('about', locale).title}</Link></p>
   </section>
 </PageLayout>
 
