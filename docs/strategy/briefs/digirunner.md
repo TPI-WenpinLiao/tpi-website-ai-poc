@@ -199,12 +199,14 @@ offering schema（`src/content.config.ts`）現有 `tagline`、`features[]{title
 
 ## 待確認
 
-| # | 事項 | 卡在哪 | 影響的段落 |
-|---|---|---|---|
-| 1 | hero 想用的第三個證據點：DigiLism 發明專利數（`fact:digilism-patents-7`） | 專利數會變，要確認現況；個別功能的專利（`fact:digirunner-smart-caching-patent`）已確認，放在第 7 段 | 1 |
-| 2 | 台新案例的獎項：`fact:award-global-finance-2020`。客戶名稱與三則案例本身已確認可用（使用者決定，#165），第 10 段已引用；獎項有年份，可能過時，仍待確認 | 獎項年份可能過時 | 10（確認後可在台新案例加一句） |
-| 3 | 「100% 合規」「國內唯一符合金管會法令」：`fact:digirunner-finance-compliance-100`、`fact:digirunner-insurance-compliance-100`、`fact:digirunner-claim-fsc-only` | 最高級與 100% 沒有依據；第 6 段只用已確認的規範對應 | 6 |
-| 4 | 與 Kong 的比較：`fact:digirunner-vs-kong-integration`、`fact:digirunner-vs-kong-adoption`、`fact:digirunner-vs-kong-visibility`、`fact:digirunner-vs-kong-compliance`、`fact:digirunner-vs-kong-operations` | 沒有比較依據與日期；確認後可加一段承接比較型查詢 | 新段落（目前不放） |
-| 5 | 成效數字：`fact:digirunner-hot-deploy-50`、`fact:digirunner-uptime-999` | 沒有量測方式或比較基準 | 7 |
-| 6 | 試用的入口。主產品頁的「30 天免費試用」（`fact:digirunner-trial-30-days`）與「各方案功能皆可使用」（`fact:digirunner-trial-all-features`）是 Enterprise／Lite 的試用；雲端版的試用走 AWS Marketplace（`fact:digirunner-cloud-trial-terms`）。新站沒有地端版的試用表單或節點，第 9 段與 hero 的次要 CTA 暫連 `/products/digirunner-cloud` | 地端版試用怎麼申請，現站資料沒有寫 | 1、9 |
-| 7 | digiRunner 白皮書（`src/content/whitepaper/zh-TW/whitepaper-digirunner.md`）是 draft，檔案位置待確認，下載區不會出現 | `content-model.md`「待確認」：白皮書檔案的實際位置 | 不影響段落；檔案確認後下載區自動出現 |
+沒有待確認的項目。原本的 7 項在 #180 結算（使用者決定，2026-11-02），編號保留，本文引用的「待確認第 N 項」對照下表：
+
+| # | 事項 | 結果 |
+|---|---|---|
+| 1 | DigiLism 發明專利數（`fact:digilism-patents-7`） | 改為 `confirmed`，可以當 hero 的第三個證據點；現站沒寫統計時間，引用時寫成現站列出的數字 |
+| 2 | 台新案例的獎項（`fact:award-global-finance-2020`） | 改為 `confirmed`，可以在第 10 段的台新案例加一句，寫出年份 |
+| 3 | 「100% 合規」「國內唯一符合金管會法令」（`fact:digirunner-finance-compliance-100`、`fact:digirunner-insurance-compliance-100`、`fact:digirunner-claim-fsc-only`） | 不用，維持 `to_confirm`。第 6 段只用已確認的規範對應 |
+| 4 | 與 Kong 的比較（`fact:digirunner-vs-kong-integration`、`fact:digirunner-vs-kong-adoption`、`fact:digirunner-vs-kong-visibility`、`fact:digirunner-vs-kong-compliance`、`fact:digirunner-vs-kong-operations`） | 不用，維持 `to_confirm`。不加比較段落 |
+| 5 | 成效數字（`fact:digirunner-hot-deploy-50`、`fact:digirunner-uptime-999`） | 不用，維持 `to_confirm` |
+| 6 | 地端版的試用入口 | 現站沒有資料，不處理。第 9 段與 hero 的次要 CTA 維持連到 `/products/digirunner-cloud` |
+| 7 | digiRunner 白皮書的檔案位置 | 現站沒有資料，不處理。白皮書維持 draft，下載區不出現 |

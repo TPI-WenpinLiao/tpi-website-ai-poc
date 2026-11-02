@@ -396,8 +396,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 累積超過 400個不同的專案成功經驗
   locale: zh-TW
-  status: to_confirm
-  note: 2016 - 2019 里程碑的累計數字，可能過時
+  status: confirmed
+  note: 年份取里程碑「2016 - 2019」，頁面引用時寫出（使用者決定，#180）
 
 - id: company-subsidiaries-sg-vn
   type: company
@@ -434,8 +434,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 全球員工超過 630 名
   locale: zh-TW
-  status: to_confirm
-  note: 2020 - 2022 里程碑的人數，可能過時
+  status: confirmed
+  note: 年份取里程碑「2020 - 2022」，頁面引用時寫出（使用者決定，#180）
 
 - id: company-milestone-retail
   type: company
@@ -453,8 +453,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 入選英國金融時報 (Financial Times) 2022 亞太地區快速成長 500 強企業
   locale: zh-TW
-  status: to_confirm
-  note: 有年份的獎項，可能過時
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 # --- Awards and recognition (about us) ---
 - id: award-taiwan-excellence-2023
@@ -464,8 +464,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: digiRunner、digiLogs、SysTalk.Chat 獲得「2023 台灣精品獎」
   locale: zh-TW
-  status: to_confirm
-  note: 有年份的獎項，可能過時
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: award-taiwan-excellence-2024
   type: award
@@ -474,8 +474,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: digiRunner、digiLogs、SysTalk.ai 獲得「2024 台灣精品獎」
   locale: zh-TW
-  status: to_confirm
-  note: 有年份的獎項，可能過時
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: award-sbir-29
   type: award
@@ -484,8 +484,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: DigiLism 企業服務中台獲 「第29屆中小企業創新研究獎」
   locale: zh-TW
-  status: to_confirm
-  note: 屆次對應年份（里程碑寫 2022），可能過時
+  status: confirmed
+  note: 屆次對應年份，里程碑寫 2022，頁面引用時寫出（使用者決定，#180）
 
 - id: award-innovative-business-2022
   type: award
@@ -494,8 +494,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 2022 創新商務獎 digiRunner 獲得「最佳技術創新獎」； SysTalk.Chat 獲得「最佳產品創新獎」
   locale: zh-TW
-  status: to_confirm
-  note: 有年份的獎項，可能過時
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: company-talent-in-taiwan
   type: company
@@ -513,8 +513,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 獲「第一屆數位金融獎」 金融科技新創公司推薦獎
   locale: zh-TW
-  status: to_confirm
-  note: 里程碑寫 2021，可能過時
+  status: confirmed
+  note: 里程碑寫 2021，頁面引用時寫出（使用者決定，#180）
 
 - id: award-cx-asia-2021
   type: award
@@ -523,8 +523,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 獲新加坡 「2021 CX Asia Excellence Awards」- 卓越供應商金獎
   locale: zh-TW
-  status: to_confirm
-  note: 有年份的獎項，可能過時
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: award-best-in-singapore
   type: award
@@ -561,8 +561,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 獲頒 Gartner 亞太地區 2018 年 Cool Vendor 獎項
   locale: zh-TW
-  status: to_confirm
-  note: 有年份的獎項，可能過時；里程碑寫得獎的是 AI Chatbot 產品
+  status: confirmed
+  note: 頁面引用時寫出年份；里程碑寫得獎的是 AI Chatbot 產品（使用者決定，#180）
 
 - id: award-goodfirms-software
   type: award
@@ -591,8 +591,8 @@
     url: https://www.tpisoftware.com/about-us
     quote: 獲104人力銀行「雇主品牌大賞」評選 2024年科技業組【104 最佳吸引力獎】
   locale: zh-TW
-  status: to_confirm
-  note: 有年份的獎項，可能過時
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 # --- Offices (about us) ---
 - id: office-taipei-address
@@ -2193,8 +2193,8 @@
     url: https://www.tpisoftware.com/products/digirunner
     quote: DigiLism 產品系列擁有7項發明專利
   locale: zh-TW
-  status: to_confirm
-  note: 專利數會隨時間增加，要確認是否仍是 7 項
+  status: confirmed
+  note: 現站沒寫統計時間，頁面寫成現站列出的數字（使用者決定，#180）
 
 - id: cert-iso27001-digirunner
   type: certification
@@ -2467,8 +2467,8 @@
     url: https://www.tpisoftware.com/products/digirunner
     quote: 該平台獲全球金融雜誌 (Global Finance)頒發「The Innovators 2020 Cash Management」獎。
   locale: zh-TW
-  status: to_confirm
-  note: 客戶專案的獎項，有年份，可能過時；與台新銀行的案例相連
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: digirunner-case-taipei-city
   type: case
@@ -2807,8 +2807,8 @@
     url: https://www.tpisoftware.com/products/open-banking
     quote: 2019 年，台灣金管會拍板定案，將台灣 Open Banking 導入分為三階段。
   locale: zh-TW
-  status: to_confirm
-  note: 法規時程，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: open-banking-stage-1
   type: metric
@@ -2817,8 +2817,8 @@
     url: https://www.tpisoftware.com/products/open-banking
     quote: 2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。
   locale: zh-TW
-  status: to_confirm
-  note: 法規時程，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: open-banking-stage-2
   type: metric
@@ -2827,8 +2827,8 @@
     url: https://www.tpisoftware.com/products/open-banking
     quote: 2020 第二階段 個人資訊開放 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。
   locale: zh-TW
-  status: to_confirm
-  note: 法規時程，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: open-banking-stage-3
   type: metric
@@ -2837,8 +2837,8 @@
     url: https://www.tpisoftware.com/products/open-banking
     quote: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。
   locale: zh-TW
-  status: to_confirm
-  note: 法規時程，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: digirunner-open-banking-3-stages
   type: feature
@@ -5901,8 +5901,8 @@
     url: https://www.tpisoftware.com/esg-advisory
     quote: 2023 年通過《氣候變遷因應法》和金管會發布《上市櫃公司永續發展行動方案》等相關法政
   locale: zh-TW
-  status: to_confirm
-  note: 法規時程，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: esg-regulation-2024
   type: metric
@@ -5911,8 +5911,8 @@
     url: https://www.tpisoftware.com/esg-advisory
     quote: 2024 年開放國內碳權交易，資本額百億元的上市櫃公司為第一波碳盤查對象
   locale: zh-TW
-  status: to_confirm
-  note: 法規時程，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: esg-regulation-2025-carbon-fee
   type: metric
@@ -5921,8 +5921,8 @@
     url: https://www.tpisoftware.com/esg-advisory
     quote: 2025 年國內碳費開徵且企業需編制永續報告書
   locale: zh-TW
-  status: to_confirm
-  note: 法規時程，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: esg-regulation-2025-second-wave
   type: metric
@@ -5931,8 +5931,8 @@
     url: https://www.tpisoftware.com/esg-advisory
     quote: 2025 年資本額50~100億的上市櫃公司為第二波碳盤查對象
   locale: zh-TW
-  status: to_confirm
-  note: 法規時程，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: esg-regulation-2027
   type: metric
@@ -5951,8 +5951,8 @@
     url: https://www.tpisoftware.com/esg-advisory
     quote: 2030 年達成台灣減碳24%±1目標
   locale: zh-TW
-  status: to_confirm
-  note: 政策目標，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: esg-regulation-2050
   type: metric
@@ -5961,8 +5961,8 @@
     url: https://www.tpisoftware.com/esg-advisory
     quote: 2050 年實現淨零轉型計畫
   locale: zh-TW
-  status: to_confirm
-  note: 政策目標，現站的說法，要對照主管機關公告
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
 - id: esg-regulation-roadmap
   type: metric

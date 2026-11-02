@@ -133,8 +133,7 @@ groups:
       - id: company-projects-400
         type: metric
         quote: '累積超過 400個不同的專案成功經驗'
-        status: to_confirm
-        note: 2016 - 2019 里程碑的累計數字，可能過時
+        note: 年份取里程碑「2016 - 2019」，頁面引用時寫出（使用者決定，#180）
       - { id: company-subsidiaries-sg-vn, type: company, quote: '分別在2017、2019年設立新加坡與越南子公司' }
       - id: company-product-families
         type: company
@@ -145,34 +144,30 @@ groups:
       - id: company-employees-630
         type: metric
         quote: '全球員工超過 630 名'
-        status: to_confirm
-        note: 2020 - 2022 里程碑的人數，可能過時
+        note: 年份取里程碑「2020 - 2022」，頁面引用時寫出（使用者決定，#180）
       - { id: company-milestone-retail, type: company, quote: '跨足零售產業' }
       - id: award-ft-high-growth-2022
         type: award
         quote: '入選英國金融時報 (Financial Times) 2022 亞太地區快速成長 500 強企業'
-        status: to_confirm
-        note: 有年份的獎項，可能過時
+        note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
 
   - group: Awards and recognition (about us)
     url: https://www.tpisoftware.com/about-us
     locale: zh-TW
     facts:
-      - { id: award-taiwan-excellence-2023, type: award, quote: 'digiRunner、digiLogs、SysTalk.Chat 獲得「2023 台灣精品獎」', status: to_confirm, note: 有年份的獎項，可能過時 }
-      - { id: award-taiwan-excellence-2024, type: award, quote: 'digiRunner、digiLogs、SysTalk.ai 獲得「2024 台灣精品獎」', status: to_confirm, note: 有年份的獎項，可能過時 }
+      - { id: award-taiwan-excellence-2023, type: award, quote: 'digiRunner、digiLogs、SysTalk.Chat 獲得「2023 台灣精品獎」', note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
+      - { id: award-taiwan-excellence-2024, type: award, quote: 'digiRunner、digiLogs、SysTalk.ai 獲得「2024 台灣精品獎」', note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
       - id: award-sbir-29
         type: award
         quote: 'DigiLism 企業服務中台獲 「第29屆中小企業創新研究獎」'
-        status: to_confirm
-        note: 屆次對應年份（里程碑寫 2022），可能過時
-      - { id: award-innovative-business-2022, type: award, quote: '2022 創新商務獎 digiRunner 獲得「最佳技術創新獎」； SysTalk.Chat 獲得「最佳產品創新獎」', status: to_confirm, note: 有年份的獎項，可能過時 }
+        note: 屆次對應年份，里程碑寫 2022，頁面引用時寫出（使用者決定，#180）
+      - { id: award-innovative-business-2022, type: award, quote: '2022 創新商務獎 digiRunner 獲得「最佳技術創新獎」； SysTalk.Chat 獲得「最佳產品創新獎」', note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
       - { id: company-talent-in-taiwan, type: company, quote: '正式加入「TALENT, in Taiwan， 台灣人才永續行動聯盟」' }
       - id: award-digital-finance-1st
         type: award
         quote: '獲「第一屆數位金融獎」 金融科技新創公司推薦獎'
-        status: to_confirm
-        note: 里程碑寫 2021，可能過時
-      - { id: award-cx-asia-2021, type: award, quote: '獲新加坡 「2021 CX Asia Excellence Awards」- 卓越供應商金獎', status: to_confirm, note: 有年份的獎項，可能過時 }
+        note: 里程碑寫 2021，頁面引用時寫出（使用者決定，#180）
+      - { id: award-cx-asia-2021, type: award, quote: '獲新加坡 「2021 CX Asia Excellence Awards」- 卓越供應商金獎', note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
       - id: award-best-in-singapore
         type: award
         quote: '獲 Best in Singapore 肯定， 入選「最佳軟體服務開發商」'
@@ -183,8 +178,7 @@ groups:
       - id: award-gartner-cool-vendor-2018
         type: award
         quote: '獲頒 Gartner 亞太地區 2018 年 Cool Vendor 獎項'
-        status: to_confirm
-        note: 有年份的獎項，可能過時；里程碑寫得獎的是 AI Chatbot 產品
+        note: 頁面引用時寫出年份；里程碑寫得獎的是 AI Chatbot 產品（使用者決定，#180）
       - id: award-goodfirms-software
         type: award
         quote: '獲 GoodFirms 最佳軟體開發供應商認可'
@@ -195,7 +189,7 @@ groups:
         quote: '獲 GoodFirms 最佳手機應用程式開發供應商認可'
         status: to_confirm
         note: 現站沒有寫年份，是否仍有效要確認
-      - { id: award-104-employer-2024, type: award, quote: '獲104人力銀行「雇主品牌大賞」評選 2024年科技業組【104 最佳吸引力獎】', status: to_confirm, note: 有年份的獎項，可能過時 }
+      - { id: award-104-employer-2024, type: award, quote: '獲104人力銀行「雇主品牌大賞」評選 2024年科技業組【104 最佳吸引力獎】', note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
 
   - group: Offices (about us)
     url: https://www.tpisoftware.com/about-us
@@ -480,8 +474,7 @@ groups:
       - id: digilism-patents-7
         type: metric
         quote: DigiLism 產品系列擁有7項發明專利
-        status: to_confirm
-        note: 專利數會隨時間增加，要確認是否仍是 7 項
+        note: 現站沒寫統計時間，頁面寫成現站列出的數字（使用者決定，#180）
       - { id: cert-iso27001-digirunner, type: certification, quote: 通過 ISO27001 資訊安全認證 }
       - { id: digirunner-ai-gateway, type: feature, quote: AI Gateway 智能負載平衡與安全防護，全面監控AI運作 }
       - { id: digirunner-ai-model-config, type: feature, quote: 根據需求調配不同類型的AI模型，靈活平衡效能與成本 }
@@ -528,8 +521,7 @@ groups:
       - id: award-global-finance-2020
         type: award
         quote: 該平台獲全球金融雜誌 (Global Finance)頒發「The Innovators 2020 Cash Management」獎。
-        status: to_confirm
-        note: 客戶專案的獎項，有年份，可能過時；與台新銀行的案例相連
+        note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
       - id: digirunner-case-taipei-city
         type: case
         quote: 為臺北市政府建置符合統一標準的API管理平台，使各機關的異質應用系統資料介接，讓市府推動資料開放政策，拓展創新應用之可行性，極大化開放資料加值應用與民眾參與公共政策。此外，昕力顧問團隊更協助市府建立API管理制度，並輔導各級機關一一導入上線。
@@ -606,10 +598,10 @@ groups:
     locale: zh-TW
     facts:
       - { id: open-banking-history, type: metric, quote: Open Banking 起源於 2015 年歐盟的 The Revised Payment Services Directive (PSD2)，隔年（2016）八月，由英國率先要求其國內九家大型銀行要採用，並於 2018 年強制導入 }
-      - { id: open-banking-taiwan-2019, type: metric, quote: 2019 年，台灣金管會拍板定案，將台灣 Open Banking 導入分為三階段。, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
-      - { id: open-banking-stage-1, type: metric, quote: 2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
-      - { id: open-banking-stage-2, type: metric, quote: 2020 第二階段 個人資訊開放 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
-      - { id: open-banking-stage-3, type: metric, quote: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - { id: open-banking-taiwan-2019, type: metric, quote: 2019 年，台灣金管會拍板定案，將台灣 Open Banking 導入分為三階段。, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
+      - { id: open-banking-stage-1, type: metric, quote: 2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
+      - { id: open-banking-stage-2, type: metric, quote: 2020 第二階段 個人資訊開放 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
+      - { id: open-banking-stage-3, type: metric, quote: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
       - { id: digirunner-open-banking-3-stages, type: feature, quote: 昕力資訊實現三階段開放銀行規範 }
       - { id: digirunner-open-banking-fsc, type: feature, quote: 昕力資訊 digiRunner API 管理平台反應台灣開放銀行金管會法規要求 }
       - { id: digirunner-hot-deploy-50, type: feature, quote: digiRunner API 管理平台擁有專利的服務不中斷熱部署特點，在跨平台開發速度以及與下游應用系統的對接效率提升高達 50%, status: to_confirm, note: 成效數字（提升高達 50%）沒有依據或比較基準，與 TCO 低 40% 等同類宣稱一致處理；專利的部分另收 digirunner-hot-deploy-patent }
@@ -1225,17 +1217,17 @@ groups:
         quote: 3年內需完成 ESG 評鑑與數位化
         status: to_confirm
         note: 現站沒有寫出「3年內」的起算時間與法規依據
-      - { id: esg-regulation-2023, type: metric, quote: 2023 年通過《氣候變遷因應法》和金管會發布《上市櫃公司永續發展行動方案》等相關法政, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
-      - { id: esg-regulation-2024, type: metric, quote: 2024 年開放國內碳權交易，資本額百億元的上市櫃公司為第一波碳盤查對象, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
-      - { id: esg-regulation-2025-carbon-fee, type: metric, quote: 2025 年國內碳費開徵且企業需編制永續報告書, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
-      - { id: esg-regulation-2025-second-wave, type: metric, quote: 2025 年資本額50~100億的上市櫃公司為第二波碳盤查對象, status: to_confirm, note: 法規時程，現站的說法，要對照主管機關公告 }
+      - { id: esg-regulation-2023, type: metric, quote: 2023 年通過《氣候變遷因應法》和金管會發布《上市櫃公司永續發展行動方案》等相關法政, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
+      - { id: esg-regulation-2024, type: metric, quote: 2024 年開放國內碳權交易，資本額百億元的上市櫃公司為第一波碳盤查對象, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
+      - { id: esg-regulation-2025-carbon-fee, type: metric, quote: 2025 年國內碳費開徵且企業需編制永續報告書, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
+      - { id: esg-regulation-2025-second-wave, type: metric, quote: 2025 年資本額50~100億的上市櫃公司為第二波碳盤查對象, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
       - id: esg-regulation-2027
         type: metric
         quote: 2027 年全體上市櫃公司完成溫室氣體盤查
         status: to_confirm
         note: 法規時程，現站的說法，要對照主管機關公告；同頁 FAQ 寫所有企業 2029 年完成查驗
-      - { id: esg-regulation-2030, type: metric, quote: 2030 年達成台灣減碳24%±1目標, status: to_confirm, note: 政策目標，現站的說法，要對照主管機關公告 }
-      - { id: esg-regulation-2050, type: metric, quote: 2050 年實現淨零轉型計畫, status: to_confirm, note: 政策目標，現站的說法，要對照主管機關公告 }
+      - { id: esg-regulation-2030, type: metric, quote: 2030 年達成台灣減碳24%±1目標, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
+      - { id: esg-regulation-2050, type: metric, quote: 2050 年實現淨零轉型計畫, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
       - id: esg-regulation-roadmap
         type: metric
         quote: 第一階段針對資本額百億元的上市櫃公司、鋼鐵、水泥和金融業進行盤查，並於 2024 年完成查驗。未來所有企業須於 2029 年完成查驗，並公開經過驗證的盤查結果。

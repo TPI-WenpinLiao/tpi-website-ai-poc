@@ -202,12 +202,14 @@ hub schema（`src/content.config.ts`）現有 `tagline`、`heroImage`、`industr
 
 ## 待確認
 
-| # | 事項 | 卡在哪 | 影響的段落 |
-|---|---|---|---|
-| 1 | 第 8 段的精選案例：已決定（使用者確認，#165），照建議的 4 則，見段落結構第 8 段。排序與卡片文字在製作階段定 | 無 | 8 |
-| 2 | 台灣開放銀行時程：`fact:open-banking-taiwan-2019`、`fact:open-banking-stage-1`、`fact:open-banking-stage-2`、`fact:open-banking-stage-3` | 要對照主管機關公告 | 2（目前只用「三階段規範」） |
-| 3 | 「國內唯一符合金管會法令」「100% 符合金融檢查規範」：`fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100` | 最高級與 100% 沒有依據 | 2 |
-| 4 | `nodes.csv` 寫「其餘介紹需人工提供」。本 brief 用事實庫既有的事實補了第 3–8 段；內容負責人若有其他想放的主題（例如證券業的專屬方案、金融業的客戶數），要先收進事實庫 | 事實庫沒有 | 新段落 |
-| 5 | 智能理賠（`smartclaim`）的內容檔沒有 `useCases` 帶 `industry: finance`；若採用模板反查（「schema 缺口」建議），要補一項 | 內容檔變更，製作階段處理 | 4 |
-| 6 | 保險產品其他未確認的說法：富邦人壽行動投保的案例（`fact:insurebrick-case-fubon-life`，含「3 分鐘成案」「最速、最佳」）、InsureRing 的「上架縮短 90%」（`fact:insurering-90-percent`） | 數字與最高級說法沒有量測依據；第 6 段改用已確認的新光金保代、新光人壽案例 | 6 |
-| 7 | 已處理：功能層級的專利說法統一為 `confirmed`（使用者決定，#165），「專利的服務不中斷熱部署」另收為 `fact:digirunner-hot-deploy-patent`，第 2 段改寫時可以引用；同一句的「提升高達 50%」（`fact:digirunner-hot-deploy-50`）仍是 `to_confirm`，已從現有頁面刪除 | 無 | 2 |
+沒有待確認的項目。原本的 7 項在 #167、#180 結算（#180 為使用者決定，2026-11-02），編號保留，本文引用的「待確認第 N 項」對照下表：
+
+| # | 事項 | 結果 |
+|---|---|---|
+| 1 | 第 8 段的精選案例 | 已決定（#165），照段落結構第 8 段的 4 則 |
+| 2 | 台灣開放銀行時程（`fact:open-banking-taiwan-2019`、`fact:open-banking-stage-1`、`fact:open-banking-stage-2`、`fact:open-banking-stage-3`） | 改為 `confirmed`，第 2 段可以寫出三階段的年份 |
+| 3 | 「國內唯一符合金管會法令」「100% 符合金融檢查規範」（`fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100`） | 不用，維持 `to_confirm` |
+| 4 | 內容負責人想另外放的主題（證券業的專屬方案、金融業的客戶數等） | 現站沒有資料，不處理 |
+| 5 | 智能理賠的 `useCases` 帶 `industry: finance` | #167 已補（`src/content/offering/zh-TW/smartclaim.md`） |
+| 6 | 富邦人壽行動投保的案例（`fact:insurebrick-case-fubon-life`）、InsureRing 的「上架縮短 90%」（`fact:insurering-90-percent`） | 不用，維持 `to_confirm`。第 6 段用已確認的新光金保代、新光人壽案例 |
+| 7 | 熱部署專利與「提升高達 50%」 | 已處理（#165）：專利收為 `fact:digirunner-hot-deploy-patent`，「提升高達 50%」不用 |
