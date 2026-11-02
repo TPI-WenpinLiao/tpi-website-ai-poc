@@ -92,11 +92,6 @@ body {
 
 /* ---- Typography ---- */
 
-/* Short display text breaks Chinese only at spaces and punctuation, never inside a word
-   (數位轉／型, 與能／源): headings, and lead text or labels marked .text-phrase. A run too long for
-   the line still breaks anywhere instead of overflowing; a line-start full-width opening bracket
-   drops its blank half where the font supports it (PingFang TC, Noto Sans TC). Not for body
-   paragraphs, where breaks only at punctuation would leave ragged lines. */
 /* Headings and .serif text (names in an index, years in a record) use the serif face; one weight */
 :is(h1, h2, h3),
 .serif {
@@ -104,6 +99,11 @@ body {
   font-weight: var(--font-weight-bold);
 }
 
+/* Short display text breaks Chinese only at spaces and punctuation, never inside a word
+   (數位轉／型, 與能／源): headings, and lead text or labels marked .text-phrase. A run too long for
+   the line still breaks anywhere instead of overflowing; a line-start full-width opening bracket
+   drops its blank half where the font supports it (PingFang TC, Noto Sans TC). Not for body
+   paragraphs, where breaks only at punctuation would leave ragged lines. */
 :is(h1, h2, h3, h4, h5, h6),
 .text-phrase {
   word-break: keep-all;

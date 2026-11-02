@@ -93,9 +93,9 @@ const offering = defineCollection({
         kind: z.enum(['product', 'solution', 'service']),
         tagline: text.optional(),
         heroImage: image().optional(),
-        // Fact texts shown with the hero (#167); the second action, to another page (a trial)
         // One sentence under the tagline: the category and what it is for (#167); wording, no facts
         heroLead: text.optional(),
+        // Fact texts shown with the hero (#167); the second action, to another page (a trial)
         heroPoints: z.array(text).optional(),
         secondaryCta: z.strictObject({ label: text, node: anyNode }).optional(),
         // `points` are fact texts listed under the body, `link` a page the feature leads on to (#167)

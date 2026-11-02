@@ -300,7 +300,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
 </PageLayout>
 
 <script>
-  import { createSurface, wantsLive } from '../../lib/scene/tiers';
+  import { createSurface, LIVE, wantsLive } from '../../lib/scene/tiers';
 
   const IDLE_TIMEOUT = 2000;
   const LCP_TIMEOUT = 1000;
@@ -336,24 +336,44 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
 
   async function boot(routeEl: HTMLElement, casesEl: HTMLElement) {
     if (!root.classList.contains('want-3d')) return;
-    if (!wantsLive()) return rest();
+    // Leaving the desktop layout or turning on reduced motion (both in LIVE), at any point, falls back
+    // to the static pictures; coming back needs a reload
+    let stop: (() => void) | undefined;
+    let left = false;
+    const live = matchMedia(LIVE);
+    const leave = () => {
+      left = true;
+      live.removeEventListener('change', onChange);
+      stop?.();
+      stop = undefined;
+      rest();
+    };
+    function onChange() {
+      if (!live.matches) leave();
+    }
+    live.addEventListener('change', onChange);
+    const gone = () => left || !wantsLive();
+
+    if (gone()) return leave();
     await afterLoad();
     await afterLcp();
     await idle();
-    if (!wantsLive()) return rest();
+    if (gone()) return leave();
     // Checks for WebGL 2 before downloading three.js; the scene renders into this context
     const surface = createSurface();
-    if (!surface) return rest();
-    const { mount } = await import('../../lib/scene/ribbon/runtime');
-    if (!wantsLive()) return rest();
-    // A scene that fails to start leaves the static pictures, not an empty stage
-    const stop = await mount({ ...surface, route: routeEl, cases: casesEl }).catch((error: unknown) => {
+    if (!surface) return leave();
+    // A chunk that fails to load or a scene that fails to start leaves the static pictures, not an
+    // empty stage: html.want-3d hides them
+    try {
+      const { mount } = await import('../../lib/scene/ribbon/runtime');
+      if (gone()) return leave();
+      const started = await mount({ ...surface, route: routeEl, cases: casesEl });
+      if (left) return started();
+      stop = started;
+    } catch (error) {
       console.error(error);
-      rest();
-    });
-    if (!stop) return;
-    // Turning on reduced motion, or leaving the desktop layout, falls back to the static pictures
-    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', () => (stop(), rest()), { once: true });
+      leave();
+    }
   }
 
   if (route && cases) void boot(route, cases);

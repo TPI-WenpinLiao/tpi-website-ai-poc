@@ -3,7 +3,8 @@
 // canvas on the page. Each case is simulated by patching WebGL before the page loads, and the
 // time from the 3D chunk's arrival to the first frame (track's data-scene="ready") is compared
 // with an unpatched load. Exits 1 when a patched load never gets ready, or takes longer than the
-// unpatched one plus the limit and SLACK.
+// unpatched one plus the limit and SLACK; also when a locale's home never gets ready, or a 3D chunk
+// that fails to load leaves the live layout (#167).
 // Run after `npm run build`: node scripts/design/scene-wait.mjs
 
 import { readFileSync } from 'node:fs';
@@ -83,6 +84,26 @@ async function timeToReady(browser, url, patch) {
   }
 }
 
+/**
+ * Whether the page drops the live layout (html.want-3d) when the 3D chunk fails to load: the live
+ * layout hides the static pictures, so a failed download must not leave an empty stage (#167).
+ * @param {import('puppeteer-core').Browser} browser @param {string} url
+ */
+async function fallsBackWithoutChunk(browser, url) {
+  const page = await browser.newPage();
+  try {
+    await page.setViewport({ width: 1280, height: 800 });
+    await page.setRequestInterception(true);
+    page.on('request', (r) => (/\/_astro\/runtime\.[\w-]+\.js$/.test(r.url()) ? r.abort() : r.continue()));
+    await page.goto(url, { waitUntil: 'load' });
+    return await page
+      .waitForFunction(() => !document.documentElement.classList.contains('want-3d'), { timeout: SCENE_TIMEOUT })
+      .then(() => true, () => false);
+  } finally {
+    await page.close();
+  }
+}
+
 async function main() {
   const server = await serve(DIST);
   const address = server.address();
@@ -94,6 +115,9 @@ async function main() {
     const base = await timeToReady(browser, url, CASES.unpatched);
     if (base === undefined) throw new Error(`${PATH}: the scene never got ready without a patch`);
     console.log(`${PATH} unpatched: ready ${Math.round(base)} ms after the 3D chunk`);
+    const fallback = await fallsBackWithoutChunk(browser, url);
+    console.log(`${PATH} 3D chunk blocked: ${fallback ? 'static pictures' : 'still the live layout'}`);
+    if (!fallback) errors.push('a failed 3D chunk leaves the live layout');
     for (const path of OTHER_LOCALE_PATHS) {
       const ms = await timeToReady(browser, `http://localhost:${address.port}${path}`, CASES.unpatched);
       console.log(`${path} unpatched: ${ms === undefined ? 'never ready' : `ready ${Math.round(ms)} ms after the 3D chunk`}`);
