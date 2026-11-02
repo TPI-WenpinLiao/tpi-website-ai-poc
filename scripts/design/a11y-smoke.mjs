@@ -2,13 +2,13 @@
 // - text over images: every text line inside a section with a Backdrop must reach WCAG 2.2 AA
 //   (4.5:1, or 3:1 for large text) against the worst pixel behind it. contrast.mjs can only check
 //   token pairs; this measures what the image actually puts behind the text, at several widths.
-// - text over the 3D scene (Scene3D): with motion on, the same measurement over what the running
-//   scene draws, at several positions of the scene track
+// - text over the 3D scene (the home page's ribbon scene, #167): with motion on, the same
+//   measurement over what the running scene draws, at several positions of each held section
 // - no horizontal scrolling at any of those widths
 // - keyboard: every focusable element shows a visible focus indicator when reached with Tab
 // - prefers-reduced-motion: no element is still animating and nothing is left transparent
 // Results depend on the installed fonts and on Chromium, so this is not part of `npm run check`;
-// run it after changing hero images, Backdrop, Surface, Scene3D or focus styles.
+// run it after changing hero images, Backdrop, Surface, the home page's 3D sections or focus styles.
 // Run after `npm run build`: node scripts/design/a11y-smoke.mjs [path=/design-system]
 
 import { resolve } from 'node:path';
@@ -16,6 +16,7 @@ import { pathToFileURL } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import sharp from 'sharp';
 import { serve } from '../lib/static-server.mjs';
+import { LAUNCH_ARGS } from './scene-wait.mjs';
 
 const DIST = resolve(import.meta.dirname, '../../dist');
 export const VIEWPORTS = [
@@ -89,6 +90,9 @@ async function textContrast(page, selector) {
           clipped = box.width <= 1 && box.height <= 1;
         }
         if (clipped) continue;
+        // Not drawn at all: hidden, or faded out by the page (the home hero's words once the camera
+        // has risen, the cases panel not on screen, #167). Text mid-fade is still measured
+        if (!el.checkVisibility({ opacityProperty: true, visibilityProperty: true })) continue;
         const style = getComputedStyle(el);
         const range = document.createRange();
         range.selectNodeContents(node);
@@ -160,7 +164,9 @@ async function textOverImages(page, index) {
   return textContrast(page, '[data-a11y-measure]');
 }
 
-// Fractions of the 3D scene track (Scene3D) at which text over the running scene is measured
+// The sections the ribbon scene plays behind (HomeTemplate, src/lib/scene/ribbon/runtime.ts), and the
+// fractions of each at which text over the running scene is measured
+const SCENE_TRACKS = ['[data-ribbon-route]', '[data-ribbon-cases]'];
 const SCENE_STOPS = [0, 0.25, 0.5, 0.75, 1];
 const SCENE_VIEWPORTS = [
   [375, 800],
@@ -169,29 +175,37 @@ const SCENE_VIEWPORTS = [
 const SCENE_TIMEOUT = 20_000;
 
 /**
- * Text over the running 3D scene, at each SCENE_STOPS position of the track. Empty when the page
- * has no scene track; a problem when the scene never draws.
+ * Text over the running 3D scene, at each SCENE_STOPS position of each SCENE_TRACKS section. Empty
+ * when the page has no scene or shows its static layout at this viewport (phones: no html.want-3d);
+ * a problem when the scene never draws.
  * @param {import('puppeteer-core').Page} page
  */
 async function textOverScene(page) {
-  if (!(await page.$('[data-scene-track]'))) return [];
+  if (!(await page.$(SCENE_TRACKS[0]))) return [];
+  if (!(await page.evaluate(() => document.documentElement.classList.contains('want-3d')))) return [];
   const ready = await page
-    .waitForSelector('[data-scene="ready"]', { timeout: SCENE_TIMEOUT })
+    .waitForSelector(`${SCENE_TRACKS[0]}[data-scene="ready"]`, { timeout: SCENE_TIMEOUT })
     .then(() => true)
     .catch(() => false);
-  if (!ready) return [{ stop: 0, checked: 0, problems: ['3D scene never reached data-scene="ready"'] }];
+  if (!ready) return [{ track: SCENE_TRACKS[0], stop: 0, checked: 0, problems: ['3D scene never reached data-scene="ready"'] }];
   const results = [];
-  for (const stop of SCENE_STOPS) {
-    await page.evaluate((f) => {
-      const track = document.querySelector('[data-scene-track]');
-      const top = track.getBoundingClientRect().top + scrollY;
-      scrollTo(0, top + (track.offsetHeight - innerHeight) * f);
-    }, stop);
-    // The track's start is the hero, which the first screen shows below the top bars
-    if (stop === 0) await clearTopBars(page);
-    // Let the canvas fade in and the camera settle on the new position
-    await new Promise((r) => setTimeout(r, 1200));
-    results.push({ stop, ...(await textContrast(page, '[data-scene-track]')) });
+  for (const track of SCENE_TRACKS) {
+    for (const stop of SCENE_STOPS) {
+      await page.evaluate(
+        (sel, f) => {
+          const el = /** @type {HTMLElement} */ (document.querySelector(sel));
+          const top = el.getBoundingClientRect().top + scrollY;
+          scrollTo(0, top + (el.offsetHeight - innerHeight) * f);
+        },
+        track,
+        stop,
+      );
+      // The first section starts with the hero, which the first screen shows below the top bars
+      if (stop === 0 && track === SCENE_TRACKS[0]) await clearTopBars(page);
+      // Let the camera and the scrubbed text settle on the new position
+      await new Promise((r) => setTimeout(r, 1200));
+      results.push({ track, stop, ...(await textContrast(page, track)) });
+    }
   }
   return results;
 }
@@ -238,7 +252,9 @@ async function reducedMotionProblems(page) {
 async function main([path = '/design-system']) {
   const server = await serve(DIST);
   const url = `http://127.0.0.1:${server.address().port}${path}`;
-  const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true, args: ['--no-sandbox'] });
+  // SwiftShader, as scene-wait.mjs: without it the 3D canvas draws black in headless Chromium and
+  // the text over it measures against that
+  const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true, args: LAUNCH_ARGS });
   let failures = 0;
   const report = (label, problems) => {
     console.log(`${problems.length ? 'FAIL' : 'ok  '} ${label}`);
@@ -271,14 +287,14 @@ async function main([path = '/design-system']) {
       await page.goto(url, { waitUntil: 'load' });
       await page.evaluate(() => document.fonts.ready);
       for (const r of await textOverScene(page)) {
-        report(`${width}×${height} text over 3D scene at ${r.stop * 100}% (${r.checked} lines in view, ${r.covered ?? 0} covered)`, r.problems);
+        report(`${width}×${height} text over 3D scene, ${r.track} at ${r.stop * 100}% (${r.checked} lines in view, ${r.covered ?? 0} covered)`, r.problems);
       }
       await page.close();
     }
 
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 860 });
-    // Not networkidle0: a running 3D scene (Scene3D) keeps the renderer busy and it never fires
+    // Not networkidle0: a running 3D scene keeps the renderer busy and it never fires
     await page.goto(url, { waitUntil: 'load' });
     await page.evaluate(() => document.fonts.ready);
     const focus = await focusProblems(page);

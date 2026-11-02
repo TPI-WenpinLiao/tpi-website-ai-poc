@@ -178,3 +178,16 @@ LCP 都是 hero 靜態圖，3D chunk 都在實測 LCP 與 `load` 之後請求。
 ### 量測
 
 上面「決策」第 9 項的 script 中，`scene-capture.mjs` 已和方向 B 一起刪除。`scene-wait.mjs` 改量首頁桌機（1280×800），讀 `src/lib/scene/ribbon/runtime.ts` 的 `WAIT_LIMIT_MS`；`lighthouse-3d.mjs` 只量 `/`。行動版不載入 3D，所以行動版 Lighthouse 量到的是靜態版。
+
+### 結果（#167 階段二）
+
+`node scripts/design/lighthouse-3d.mjs /`（2026-11-02，雲端 session，headless Chromium 以 SwiftShader 軟體算圖，每種裝置 3 次取中位數）：
+
+| 頁面 | 行動版 | 桌機 |
+|---|---|---|
+| `/` | 0.98（0.97、0.98、0.98；TBT 0 ms，LCP 是 hero 靜態圖，不載 3D） | 0.71（0.71、0.71、0.71；TBT 1,102 ms，LCP 是 h1） |
+
+- 行動版不載 three.js，量到的是靜態版
+- 桌機的長任務有 11 個，110–230 ms，落在 3D 上頁後 1.2 秒的緞帶畫出動畫：每個 frame 的繪製在 SwiftShader 上要 100 ms 以上。陰影貼圖改成只在緞帶改變時重算（`shadowMap.autoUpdate = false`）後，TBT 從 1,218 ms 降到 1,102 ms；實驗關掉 antialias 只到 0.72（TBT 892 ms），沒有採用
+- 3D chunk 在實測 LCP 與 `load` 之後才請求（169 ms／180 ms／206 ms），初始化的時序照本 ADR
+- 方向 B 在同一環境的桌機 TBT 是 0 ms（上方「結果」）。headless 的軟體算圖會放大每個 frame 的成本，真機的數字待 preview 部署後量；`npm run check` 的 Lighthouse 只量行動版，不擋這個差異（ADR 0004）

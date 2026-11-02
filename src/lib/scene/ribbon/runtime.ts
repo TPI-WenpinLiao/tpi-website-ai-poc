@@ -109,6 +109,13 @@ export async function mount({ canvas, context, route, cases }: Options): Promise
   renderer.toneMapping = NoToneMapping;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = PCFShadowMap;
+  // The light and the blocks never move and the camera doesn't change the shadow map, so it is drawn
+  // only when the ribbon changes (built, or finished drawing), not on every frame: on a software
+  // renderer every frame of the draw-in otherwise was a long task (#167, lighthouse-3d.mjs desktop)
+  renderer.shadowMap.autoUpdate = false;
+  const updateShadows = () => {
+    renderer.shadowMap.needsUpdate = true;
+  };
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
   canvas.setAttribute('aria-hidden', 'true');
   const cam = newCamera();
@@ -141,6 +148,7 @@ export async function mount({ canvas, context, route, cases }: Options): Promise
     const t = tailWorld(world, f, cx);
     world.ribbon.build(t.main, t.branch);
     world.ribbon.draw(state.draw);
+    updateShadows();
   };
 
   // The hero view, zoomed out until every labelled stop sits below the hero words: on a wide, short
@@ -215,6 +223,7 @@ export async function mount({ canvas, context, route, cases }: Options): Promise
     if (state.draw < 1) {
       state.draw = easeInOut(clamp((now - drawStart) / DRAW_MS));
       world.ribbon.draw(state.draw);
+      if (state.draw >= 1) updateShadows();
       kick();
     }
     fadeCopy();
