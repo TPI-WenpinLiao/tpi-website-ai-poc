@@ -168,11 +168,11 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 | 6 | brief 沒寫每段放什麼圖 | 策略 | new-digirunner 第 2 項 | `content-strategy`：段落表加「影像」欄，設計概念階段填 |
 | 7 | messaging 的證據點不一定支撐主張的關鍵詞（`DM-2` 收了沒提到 AI 的阻詐平台） | 策略 | new-home C3 與第 5 項 | `content-strategy`：證據點的原文要直接支撐主張的關鍵詞 |
 | 8 | 競品分析只看首頁，產品頁與產業頁的 D1、S2 沒有對照 | 研究 | 6 份評審（new-finance、old-home、old-digirunner、old-finance、current-digirunner、current-finance） | `site-research`：競品分析涵蓋每個試點模板；搜尋意圖記錄前幾名缺了哪些子題。`seo.md` 的 S2 提示改為對照這一項 |
-| 9 | rubric 只有 5、3、1 的錨點，「取低的」讀法不一，D1 的 3 與 1 重疊 | 評審 | 4 份評審 | `site-review`「Rubric」寫出 4、2 分的判斷方式；`design.md` 的 D1 錨點改為 3 分「看得出做什麼，但看不出給誰或跟競品的差別」、1 分「只看得出是軟體或科技公司」；內頁的 D1、D2 照該模板的原則，D2 包含共用元件 |
+| 9 | rubric 只有 5、3、1 的錨點，「取低的」讀法不一，D1 的 3 與 1 重疊 | 評審 | 4 份評審；共用元件算不算進 D2 來自 new-home 第 4 項 | `site-review`「Rubric」寫出 4、2 分的判斷方式；`design.md` 的 D1 錨點改為 3 分「看得出做什麼，但看不出給誰或跟競品的差別」、1 分「只看得出是軟體或科技公司」；內頁的 D1、D2 照該模板的原則，D2 包含共用元件 |
 | 10 | C3 沒說 `to_confirm`、messaging 排除的事實、原文後接加強句怎麼算 | 評審 | current-home、current-digirunner、old-digirunner | `copy-marketing.md` 評分提示補上 |
 | 11 | C4 的主要轉換：`site-profile.md` 與 brief 不同時以哪個為準 | 評審 | old-digirunner、current-digirunner | `copy-marketing.md`：brief 指定時以 brief 為準 |
 | 12 | S6 沒寫缺整個必要類型、欄位要多少才算一致 | 評審 | current-home、new-digirunner | `seo.md` 評分提示：以 `content-model.md` 規定的類型與欄位為準 |
-| 13 | 減少動態下的空白、淡出、只在 hover 出現的內容怎麼算；S5 的「連入」只有一頁 HTML 評不了 | 評審 | old-home、current-finance、current-digirunner | `site-review`「評審對象的準備」：截圖以減少動態截取，看不到的內容當實際呈現評；hover 才出現的不算看得到；連入用 grep 查整份 `dist/` |
+| 13 | 減少動態下的空白、淡出、只在 hover 出現的內容怎麼算；S5 的「連入」只有一頁 HTML 評不了 | 評審 | old-home、current-finance、current-digirunner、current-home 第 4 項 | `site-review`「評審對象的準備」：截圖以減少動態截取，看不到的內容當實際呈現評；hover 才出現的不算看得到；連入用 grep 查整份 `dist/` |
 | 14 | 評審素材要手動準備，整頁長圖縮小後讀不到字 | 評審 | 本次執行 | `site-review` 新增「評審對象的準備」，用 `eval-shots.mjs` 產生匿名代號與切段，`eval-scores.mjs` 產生分數表；`site-review`「做法」第 5 步與 `reviewer` agent 要求每份評審寫「評審依據不足」 |
 | 15 | S1 要照實際搜尋結果的意圖，還是照 brief 決定承接的查詢 | 評審 | new-home 第 7 項 | `seo.md` 評分提示：brief 決定不承接的查詢，S1 照 brief 評，不扣分 |
 | 16 | 製作備註漏進文案（「以下照原文列出」） | 製作 | new-digirunner C6 | `content-strategy`「3. 頁面文案」：說明句寫讀者得到什麼，不描述頁面怎麼排 |
@@ -181,6 +181,7 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 
 - 匿名化對現站不完全（缺口無法用流程解決，現站的 markup 本身就看得出來）。報告註明，分數照用
 - 「事實原文照引時能不能加標點、拆成清單」（new-finance 第 6 項）。這是內容規則的取捨，改了會影響 `facts.mjs` 的比對方式，列在 #186 由使用者決定
+- 站內搜尋算不算已上線（new-home 第 8 項）。不是流程缺口：站內搜尋在 M6 已上線（`docs/status.md`「M6 功能」），首頁 `WebSite` 少了 `potentialAction` 是製作的漏項，列在「新版還不夠好的地方」，由 #187 修
 
 ### 交給 #186 的單頁問題
 
