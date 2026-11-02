@@ -643,17 +643,19 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
   .case-fig {
     position: relative;
     grid-column: 1 / -1;
-    overflow: clip;
+    /* Sideways only: a wrapped label over a block near the top (case 2) may rise a few px above the
+       picture rather than lose its first line */
+    overflow-x: clip;
     background: var(--color-bg);
   }
 
-  /* A long work name (en, vi) wraps inside the picture. It hangs below the point, so the extra lines
-     grow down into the picture, not off its top: every case's block is in the picture's upper half
-     (pictures.json ai0–ai2) */
+  /* A long work name (en, vi) wraps inside the picture. It hangs above the block like the other
+     labels, so the block stays visible; max-content lets the cap, not the room right of --x, decide
+     where it wraps */
   .case-fig .map-label {
+    inline-size: max-content;
     max-inline-size: 70%;
     white-space: normal;
-    transform: translate(-50%, var(--space-2));
   }
 
   /* Below the desktop layout the picture is a column or a phone wide: a step smaller, so a long
