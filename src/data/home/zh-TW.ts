@@ -1,79 +1,67 @@
-// Home page copy in zh-TW. Facts (case titles and results, OrientAI features) come from the fact
-// library through fact('<id>') (docs/strategy/facts.yaml, #163); the rest is wording, written here.
-// The wording is still the current site's (M3-04, #17) until the pages are rewritten from the
-// messaging framework. `node scripts/strategy/facts.mjs` fails when a line here has a number or a
-// client name that none of the facts this file uses has.
-// Names, paths and order come from docs/ia (src/lib/ia/navigation.ts), not from here.
-// The en and vi files (M7) satisfy the same Home type, so a missing line fails astro check.
+// Home page copy in zh-TW (#167), from the approved ribbon-route prototype
+// (docs/strategy/concepts/ribbon-route/index.html, README「與 copy-deck 不同的文字（已定案）」) and
+// docs/strategy/briefs/home.md. Facts come from the fact library through fact('<id>')
+// (docs/strategy/facts.yaml); the rest is wording, written here. `node scripts/strategy/facts.mjs`
+// fails when a line here has a number or a client name that none of the facts this file uses has.
 
 import { fact } from '../facts.ts';
+import type { Home } from './types.ts';
 
-const hero = {
-  // U+200B marks the only break point the title may take (PageHero)
-  title: '以頂尖科技\u200b為企業賦能',
-  description: '以客戶利益為導向，致力於提供創新技術及軟體解決方案。',
-};
-
-// One line per product family, keyed by node id; family-security is a new page with no copy yet
-const familyLines: Record<string, string> = {
-  'family-ai': '企業級 AI Agent 應用平台',
-  'family-dx': '專為關鍵應用設計的\u200b高可用性數位中台',
-  'family-esg': '碳管理 × 能源管理，助企業邁向低碳永續',
-};
-
-const orientAi = {
-  node: 'orient-ai',
-  eyebrow: '企業級 Agentic AI 平台',
-  title: '讓 AI 不只會回答\u3000更能真正做事',
-  features: [fact('orientai-multi-agent'), fact('orientai-governance'), fact('orientai-token-cost')],
-  action: '探索 OrientAI',
-};
-
-// Industry taglines, keyed by node id; industry-manufacturing has no copy yet
-const industryLines: Record<string, string> = {
-  'industry-finance': '開放銀行：以開放應用程式介面（OpenAPI）共享相關數據資料，為客戶提供更多元及便利的服務。',
-  'industry-government': '智慧政府 Open API 開放資料應用',
-};
-
-// Case highlights. They name no client. `node` is the page the current site links to; the
-// highlight without a link goes to the success-story listing.
-const cases: { node: string; title: string; summary: string }[] = [
-  { node: 'smartclaim', title: fact('smartclaim-title'), summary: fact('smartclaim-result') },
-  { node: 'smartfilling', title: fact('smartfilling-title'), summary: fact('smartfilling-result') },
-  { node: 'success-stories', title: fact('fraud-platform-title'), summary: fact('fraud-platform-result') },
-];
-
-const contactCta = {
-  title: '您的需求，我們用心傾聽',
-  description: '若有任何問題或建議，請留下聯絡資訊，我們會請專人向您進一步說明。',
-};
-
-// A space between Chinese and an adjoining Latin letter, on that side only (「看 AI 產品家族」,
-// 「看 ESG 與能源產品家族」)
-const spaced = (word: string) => `${/^[A-Za-z]/.test(word) ? ' ' : ''}${word}${/[A-Za-z]$/.test(word) ? ' ' : ''}`;
-
-export const home = {
-  // <title> and description of the home page, which carries no site-name suffix
+export const home: Home = {
   meta: {
-    title: 'TPIsoftware 昕力資訊｜以頂尖科技為企業賦能',
+    title: '昕力資訊 TPIsoftware｜金融與政府的 API 與 AI 軟體',
     description:
-      '昕力資訊以客戶利益為導向，致力於提供創新技術及軟體解決方案：AI、數位轉型、資安、ESG 與能源四個產品家族，以及委外、雲端整合、UI/UX 設計與 ESG 顧問等服務。',
+      '昕力資訊（TPIsoftware）研發並導入自有軟體，替金融與政府把 API、資料與 AI 安全接進既有系統，產品家族涵蓋 AI、數位轉型（DigiLism）、資安與 ESG。',
   },
-  hero,
-  familyLines,
-  orientAi,
-  industryLines,
-  cases,
-  contactCta,
-  labels: {
-    families: '產品家族',
-    // Link under a family chapter; `family` is the family name without its brand
-    familyLink: (family: string) => `看${spaced(family)}產品家族`,
-    orientFeatures: 'OrientAI 特色',
-    // Button to a listing; `listing` is its name
-    all: (listing: string) => `所有${listing}`,
-    latest: '最新文章與新聞',
+  hero: {
+    title: '金融與政府的既有系統\n原地接上 API 與 AI',
+    mapAlt: '白色方塊排成的系統地圖：一條緞帶從深灰色的核心系統出發，經過頂面塗紫的昕力產品、品紅的 AI 模型與橘色的新服務，由紫轉品紅再轉橘，從地圖前緣往下伸出。',
+    lead: '昕力資訊（TPIsoftware）自行研發產品，也負責導入規劃與建置。',
+    secondary: '依產業看方案',
+  },
+  industries: {
+    title: '規範要求，\n已做進產品',
+    entries: {
+      'industry-finance': { text: fact('digirunner-open-banking-fsc'), link: '看金融業方案' },
+      'industry-government': { text: fact('digirunner-ndc-spec'), link: '看政府與公部門方案' },
+    },
+  },
+  cases: {
+    title: 'AI 已用在\n每天的作業',
+    count: '第 {n} 則，共 {total} 則',
+    items: [
+      { node: 'smartclaim', name: fact('smartclaim-title'), result: fact('smartclaim-result'), link: '看 AI 智慧理賠方案' },
+      { node: 'smartfilling', name: fact('smartfilling-title'), result: fact('smartfilling-result'), link: '看 AI 智慧建檔方案' },
+      { node: 'success-stories', name: fact('fraud-platform-title'), result: fact('fraud-platform-result'), link: '看所有成功案例' },
+    ],
+  },
+  products: {
+    title: 'API、AI、資安\n與碳管理，各有產品',
+    nodes: ['digirunner', 'systalk-viki', 'gadodido', 'greenswift'],
+  },
+  orientAi: {
+    node: 'orient-ai',
+    title: '企業要用 AI，\n資料留在企業端。',
+    // The fact is the current site's answer to "does the data leave the company?"; the question is
+    // wording, so the answer's 不會 has something to answer (#167 plan)
+    quote: `資料會離開企業嗎？「${fact('orientai-on-prem-data')}」`,
+    link: '認識 OrientAI 企業級 Agentic AI 平台',
+  },
+  // ContactCta on the other pages and the contact page's lead (#167): the heading says the next
+  // step (briefs/home.md「聯絡業務」, briefs/digirunner.md「預約演示」), not a feeling; no reply time,
+  // which the fact library doesn't have
+  contactCta: {
+    title: '談需求，或預約演示',
+    description: '留下您的系統現況與想解決的問題，昕力的業務與顧問會與您聯絡，安排說明或演示。',
+  },
+  contact: {
+    title: '合作得久，有紀錄可查',
+    records: [
+      { label: '2005', text: fact('company-founded') },
+      { label: '2008', text: fact('company-milestone-2008-finance') },
+      { label: '資安認證', text: fact('cert-iso27001-product-platform') },
+    ],
+    action: '聯絡業務',
+    about: '關於昕力',
   },
 };
-
-export type Home = typeof home;

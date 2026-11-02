@@ -36,6 +36,8 @@ export const strings = {
   // Screen-reader text after a Link that leaves the site
   externalLink: '（外部網站）',
   homeLogoAlt: 'TPIsoftware 昕力資訊（回首頁）',
+  // What each kind of block on the home page's system map is (#167, HomeTemplate's map labels)
+  mapLabels: { core: '核心系統', legacy: '既有系統', product: '昕力的產品', model: 'AI 模型', service: '新的服務' },
   footerNav: '頁尾選單',
   legal: '法務資訊',
   phone: '電話',

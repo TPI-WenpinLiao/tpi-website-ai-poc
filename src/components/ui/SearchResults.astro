@@ -345,8 +345,11 @@ const marked = (excerpt: string) => excerpt.split(/\[([^\]]*)\]/).map((part, i) 
     letter-spacing: var(--letter-spacing-mono);
   }
 
+  /* Sans, not the serif of headings: result titles arrive after the build, so the page's own serif
+     subset (src/integrations/serif-fonts.ts) doesn't have their characters (#167) */
   .title {
     margin: 0;
+    font-family: var(--font-sans);
     font-size: var(--font-size-h4);
     line-height: var(--line-height-snug);
   }

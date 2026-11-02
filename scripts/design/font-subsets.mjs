@@ -8,13 +8,18 @@
 // - a page has a character the font covers but these subsets do not (it would show in the system
 //   font), unless ALLOWED lists it; an ALLOWED character no page uses any more also fails.
 // Characters the font does not cover at all (Chinese, emoji) use the system font by design.
+// The serif heading font (#167) is checked too: it fails when a page sets a character in serif that
+// the committed source subset does not list (rerun scripts/design/serif-subset.mjs), when the source
+// grew past SERIF_MAX_BYTES, or when a page's own font (src/integrations/serif-fonts.ts) is over
+// PAGE_FONT_MAX_BYTES.
 // Run after `astro build`: node scripts/design/font-subsets.mjs [dist]
 
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'node-html-parser';
+import { SERIF_CHARS, SERIF_FONT, SERIF_MAX_BYTES, serialize, siteSerifChars } from './serif-subset.mjs';
 
 const require = createRequire(import.meta.url);
 export const SUBSETS = ['latin', 'vietnamese', 'greek'];
@@ -23,6 +28,8 @@ const FONTS = [
   { family: 'JetBrains Mono Variable', unicode: '@fontsource-variable/jetbrains-mono/unicode.json' },
 ];
 // Characters that may fall back to the system font, and why
+// A page's own serif font: the largest is about 40 KB (the finance page, 186 characters, #167)
+export const PAGE_FONT_MAX_BYTES = 64 * 1024;
 export const ALLOWED = new Map([['ō', 'Tokyo office address (2-chōme) on the contact pages; latin-ext is 83 KB (#143)']]);
 
 /**
@@ -125,6 +132,26 @@ function main([dist = resolve(import.meta.dirname, '../../dist')]) {
       failures += 1;
     }
   }
+  const subset = new Set(readFileSync(SERIF_CHARS, 'utf8').replace(/\n$/, ''));
+  const stale = [...siteSerifChars(dist)].filter((c) => !subset.has(c));
+  if (stale.length) {
+    console.log(`serif headings use ${stale.length} characters not in ${SERIF_CHARS}: ${serialize(stale)}; run node scripts/design/serif-subset.mjs`);
+    failures += 1;
+  }
+  const serifBytes = statSync(SERIF_FONT).size;
+  if (serifBytes > SERIF_MAX_BYTES) {
+    console.log(`serif font is ${serifBytes} bytes, over ${SERIF_MAX_BYTES}`);
+    failures += 1;
+  }
+  const pageFonts = files.filter((f) => /^_astro\/serif-[0-9a-f]+\.woff2$/.test(f));
+  for (const f of pageFonts) {
+    const size = statSync(join(dist, f)).size;
+    if (size > PAGE_FONT_MAX_BYTES) {
+      console.log(`${f} is ${size} bytes, over ${PAGE_FONT_MAX_BYTES}: a page sets too much text in serif`);
+      failures += 1;
+    }
+  }
+  console.log(`${pageFonts.length} page serif fonts, largest ${Math.max(0, ...pageFonts.map((f) => statSync(join(dist, f)).size))} bytes`);
   console.log(`${failures} font subset problems`);
   if (failures) process.exitCode = 1;
 }

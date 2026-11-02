@@ -2,13 +2,15 @@
 // hub template (M4-04, #23): products overview, product families, industries, services overview and
 // resources, from a hub entry. Structure follows the M3-01 hub wireframe (#14): intro, highlights (industry hubs),
 // child page cards from nodes.csv, whitepapers, case studies, related posts, contact.
-// A dark narrative page like the offering template, with the static hero image and no 3D scene.
+// Light paper like every page (ribbon-route, #167). A hub whose brief asks for more than highlights
+// gives `sections` (heading, body, fact items linking to pages, a link on); an industry hub also lists
+// the offerings whose use cases name its industry (content-model.md「hub」).
 // Child cards take their description from the child's own entry when it has one.
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import PageLayout from '../PageLayout.astro';
 import PageHero from '../../components/ui/PageHero.astro';
-import Backdrop from '../../components/ui/Backdrop.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Surface from '../../components/ui/Surface.astro';
 import Card from '../../components/ui/Card.astro';
@@ -16,14 +18,14 @@ import CardGrid from '../../components/ui/CardGrid.astro';
 import Reveal from '../../components/ui/Reveal.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
+import FactRow from '../../components/ui/FactRow.astro';
 import { breadcrumb, children, localeHref, localNode, node } from '../../lib/ia/navigation';
+import { nodes } from '../../lib/ia/nodes';
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { caseCard, postCard } from '../../lib/content/cards';
 import { hubJsonLd } from '../../lib/seo/jsonld/hub';
 import { canonicalUrl } from '../../lib/seo/meta';
 import { strings } from '../../data/strings';
-import image from '../../assets/design/hero-modular-stack.webp';
-import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
 
 interface Props {
   entry: CollectionEntry<'hub'>;
@@ -42,9 +44,23 @@ const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.
 const described = new Map(
   [...(await getCollection('offering', inLocale)), ...(await getCollection('hub', inLocale))].map((e) => [e.data.node, e.data.description]),
 );
+const sections = (data.sections ?? []).map((sec) => ({
+  ...sec,
+  href: sec.link ? href(node(sec.link.node)) : undefined,
+  items: (sec.items ?? []).map((i) => ({ ...i, href: i.node ? href(node(i.node)) : undefined })),
+}));
+// Pages a section already links to aren't listed again as child cards
+const linkedInSections = new Set(sections.flatMap((sec) => [sec.link?.node, ...sec.items.map((i) => i.node)]));
 const parts = children(self.id, locale)
-  .filter((n) => n.kind === 'page' || n.kind === 'external')
+  .filter((n) => (n.kind === 'page' || n.kind === 'external') && !linkedInSections.has(n.id))
   .map((n) => ({ ...n, href: href(n), description: described.get(n.id) }));
+// Industry hubs: the offerings whose use cases name the industry, in nodes.csv order
+const industryOfferings = data.industry
+  ? (await getCollection('offering', (o) => inLocale(o) && !!o.data.useCases?.some((u) => u.industry === data.industry)))
+      .map((o) => localNode(o.data.node, locale))
+      .toSorted((a, b) => nodes.findIndex((n) => n.id === a.id) - nodes.findIndex((n) => n.id === b.id))
+      .map((n) => ({ ...n, href: href(n), description: described.get(n.id) }))
+  : [];
 const highlights = data.highlights ?? [];
 const whitepapers = (await getCollection('whitepaper', (w) => inLocale(w) && w.data.offeringNode === self.id)).map((w) => ({
   title: w.data.title,
@@ -82,12 +98,48 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 <PageLayout searchTrail={trail} title={data.seoTitle ?? data.title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
   <PageHero eyebrow={localNode(self.parent, locale).title} title={data.title} description={data.tagline ?? data.description}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
-    <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
+    {
+      data.heroImage && (
+        <Image slot="visual" class="hero-image" src={data.heroImage} widths={[640, 960, 1280]} sizes="(width >= 64rem) 36rem, 100vw" alt="" priority />
+      )
+    }
   </PageHero>
 
   {
+    sections.map((sec) => (
+      <Surface tone="light">
+        <FactRow title={sec.heading} description={sec.body} link={sec.link && sec.href ? { label: sec.link.label, href: sec.href } : undefined}>
+          {sec.items.map((i) => (
+            <li>
+              <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>
+              {i.body && <p class="item-body">{i.body}</p>}
+            </li>
+          ))}
+        </FactRow>
+      </Surface>
+    ))
+  }
+
+  {
+    industryOfferings.length > 0 && (
+      <Surface tone="light">
+        <SectionHeading eyebrow="Products" title={localNode('products', locale).title} />
+        <CardGrid>
+          {industryOfferings.map((p, i) => (
+            <li>
+              <Reveal delay={stagger(i)}>
+                <Card title={p.title} href={p.href} description={p.description} size={p.description ? 'md' : 'sm'} />
+              </Reveal>
+            </li>
+          ))}
+        </CardGrid>
+      </Surface>
+    )
+  }
+
+  {
     highlights.length > 0 && (
-      <Surface tone="dark" pattern="grid">
+      <Surface tone="light" pattern="grid">
         <SectionHeading eyebrow="Highlights" title={t.hub.highlights} />
         <CardGrid>
           {highlights.map((h, i) => (
@@ -104,7 +156,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
   {
     parts.length > 0 && (
-      <Surface tone="dark">
+      <Surface tone="light">
         <SectionHeading eyebrow="Explore" title={t.hub.parts} />
         <CardGrid>
           {parts.map((p, i) => (
@@ -121,7 +173,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
   {
     whitepapers.length > 0 && (
-      <Surface tone="dark">
+      <Surface tone="light">
         <SectionHeading eyebrow="Whitepapers" title={t.hub.whitepapers} />
         <CardGrid>
           {whitepapers.map((w) => (
@@ -136,8 +188,8 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
   {
     cases.length > 0 && (
-      <Surface tone="dark" pattern="grid">
-        <SectionHeading eyebrow="Success stories" title={localNode('success-stories', locale).title} />
+      <Surface tone="light" pattern="grid">
+        <SectionHeading eyebrow="Success stories" title={localNode('success-stories', locale).title} description={data.casesIntro} />
         <CardGrid>
           {cases.map((c, i) => (
             <li>
@@ -170,3 +222,25 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 
   <ContactCta />
 </PageLayout>
+
+<style>
+  .item-body {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-muted);
+  }
+
+  .item-title {
+    margin: 0;
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-snug);
+  }
+
+  .item-title a {
+    color: var(--color-link);
+  }
+
+  .hero-image {
+    inline-size: 100%;
+    block-size: auto;
+  }
+</style>

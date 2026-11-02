@@ -35,6 +35,7 @@ export const strings: Strings = {
   externalSite: ' (external site)',
   externalLink: ' (external website)',
   homeLogoAlt: 'TPIsoftware (home)',
+  mapLabels: { core: 'Core system', legacy: 'Existing systems', product: 'TPIsoftware products', model: 'AI model', service: 'New services' },
   footerNav: 'Footer navigation',
   legal: 'Legal',
   phone: 'Phone',

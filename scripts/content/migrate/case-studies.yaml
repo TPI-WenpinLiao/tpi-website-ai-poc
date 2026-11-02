@@ -148,6 +148,9 @@ entries:
     description: 與台新銀行合作，以digiRunner模組開發API管理平台，整合現金管理業務模組，讓企業客戶的多通路收付款作業更便利。
   zh-TW/taipei-city-api-management-platform:
     description: 為臺北市府建置符合統一標準的API管理平臺，增進各機關系統資料介接、推動資料開放，並協助建立API管理制度，輔導各級機關導入上線。
+    # The card doesn't name digiRunner, but the fact library does (digirunner-case-taipei-city);
+    # the digiRunner page lists it (docs/strategy/briefs/digirunner.md「schema 缺口」, #167)
+    offerings: [zh-TW/digirunner]
   zh-TW/standard-chartered-sc-keyboard-banking:
     description: 協助渣打銀行建置「專屬手機鍵盤」，用戶綁定設備後，可在LINE、Messenger等社群帳戶上轉帳、發紅包、查詢匯率與交易紀錄。
   zh-TW/shin-kong-bank-centralized-log-management-platform:

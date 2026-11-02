@@ -146,8 +146,8 @@ export function parseOverrides(text) {
   }
   for (const [id, o] of Object.entries(entries)) {
     if (!/^(?:zh-TW|en|vi)\/[a-z0-9-]+$/.test(id)) throw new Error(`${OVERRIDES}: "${id}" is not <locale>/<slug>`);
-    const extra = Object.keys(o ?? {}).filter((k) => !['title', 'seoTitle', 'description', 'cardDescription'].includes(k));
-    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (title, seoTitle, description, cardDescription)`);
+    const extra = Object.keys(o ?? {}).filter((k) => !['title', 'seoTitle', 'description', 'cardDescription', 'offerings'].includes(k));
+    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (title, seoTitle, description, cardDescription, offerings)`);
   }
   return { clients, entries };
 }

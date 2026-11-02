@@ -78,6 +78,9 @@ function ref<C extends 'offering' | 'case-study' | 'blog' | 'tag'>(collection: C
 }
 
 const nodeOf = (template: string) => z.enum(nodeIds((n) => n.template === template, template));
+// A link to any page node by its nodes.csv id; the template resolves the path per locale
+const anyNode = z.enum(nodeIds(() => true, 'any'));
+const nodeLink = z.strictObject({ label: text, node: anyNode });
 const parentOf = (id: string) => nodes.find((n) => n.id === id)?.parent;
 
 const offering = defineCollection({
@@ -90,8 +93,20 @@ const offering = defineCollection({
         kind: z.enum(['product', 'solution', 'service']),
         tagline: text.optional(),
         heroImage: image().optional(),
-        features: z.array(z.strictObject({ title: text, body: text, icon: image().optional() })).optional(),
+        // One sentence under the tagline: the category and what it is for (#167); wording, no facts
+        heroLead: text.optional(),
+        // Fact texts shown with the hero (#167); the second action, to another page (a trial)
+        heroPoints: z.array(text).optional(),
+        secondaryCta: z.strictObject({ label: text, node: anyNode }).optional(),
+        // `points` are fact texts listed under the body, `link` a page the feature leads on to (#167)
+        features: z
+          .array(z.strictObject({ title: text, body: text, icon: image().optional(), points: z.array(text).optional(), link: nodeLink.optional() }))
+          .optional(),
         useCases: z.array(z.strictObject({ title: text, body: text, industry: z.enum(INDUSTRIES).optional() })).optional(),
+        // Heading of the use cases block, and the number of features shown before it (#167); by
+        // default 「應用情境」 after every feature
+        useCasesTitle: text.optional(),
+        useCasesAfter: z.number().int().min(0).optional(),
         faq: z.array(z.strictObject({ question: text, answer: text })).optional(),
         cta: z.enum(['contact', 'demo']),
         relatedCaseStudies: z.array(ref('case-study')).optional(),
@@ -112,7 +127,21 @@ const hub = defineCollection({
         heroImage: image().optional(),
         industry: z.enum(INDUSTRIES).optional(),
         highlights: z.array(z.strictObject({ title: text, body: text })).optional(),
+        // The page's sections when its brief asks for more than highlights (#167): a heading, a short
+        // body, items (a fact text each, linking to a page by node id) and a link on to a page
+        sections: z
+          .array(
+            z.strictObject({
+              heading: text,
+              body: text.optional(),
+              items: z.array(z.strictObject({ title: text, body: text.optional(), node: anyNode.optional() })).optional(),
+              link: nodeLink.optional(),
+            }),
+          )
+          .optional(),
         featuredCaseStudies: z.array(ref('case-study')).optional(),
+        // A line under the case studies' heading (#167): a fact text, listed in `facts`
+        casesIntro: text.optional(),
         featuredPosts: z.array(ref('blog')).optional(),
       })
       .superRefine(requireMigratedAt)

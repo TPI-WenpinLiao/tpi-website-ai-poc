@@ -22,6 +22,9 @@ zh-TW/interactivehealth:
 zh-TW/smartclaim:
   frontmatter:
     description: 保險理賠需投注大量人力進行單據登打、格式整合、資料判定與理賠審核。AI 技術是保險業以數位科技精進流程效率、佈局轉型的數位策略之一。
+  # 「保險業 - 醫療文件解析」: the finance page lists this solution (docs/strategy/briefs/finance.md「待確認」第 5 項, #167)
+  useCaseIndustry:
+    0: finance
 
 zh-TW/smartfilling:
   frontmatter:

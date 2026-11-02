@@ -155,3 +155,39 @@ LCP 都是 hero 靜態圖，3D chunk 都在實測 LCP 與 `load` 之後請求。
 - three.js 130 KB gzip 是在閒置時下載，行動網路上仍會用到流量。Save-Data 開啟時不載入；要更省，可以改成捲動接近 hero 底部時才載入，代價是第一次捲動時場景還沒出現
 - canvas 固定在 viewport（`position: fixed`），讓場景在 chapter 捲過時持續播放。M3-04 起 canvas 從 sticky header 下緣開始（`--header-height`），構圖和 header 下方的靜態主視覺一致；窄螢幕 hero 的取景依 `PageHero` 的視覺區決定（見「窄螢幕的取景」）。track 裡 hero 之後的區塊用 `SceneChapter`，它在 ready 後改成透明背景，不擋住場景；M3-05 起首頁與產品頁共用
 - 3D 文字對比是在雲端的軟體算圖下量測，場景隨時間微動，量到的是當下那一格；改場景的亮度、位置或 scrim 後要重跑
+
+## ribbon-route（#167）
+
+#166 選定設計方向 `ribbon-route`（`docs/strategy/concepts/ribbon-route/`），#167 把它做進 production，取代方向 B Modular Stack。上面各節的原則（3D 是裝飾性的 island、首屏之後才載入、初始化拆成多個 task、等待有上限、不載入的條件）照舊；以下是改變的地方，與上面衝突時以本節為準。
+
+### 改了什麼
+
+| 項目 | 方向 B（M3-07～#136） | ribbon-route（#167） |
+|---|---|---|
+| 用在哪 | 首頁＋屬於 `SCENE_FAMILIES` 的產品頁 | 只有首頁。產品頁與產業頁的 hero 用同一個世界渲染的靜態圖（使用者 2026-11-01 決定） |
+| 誰載入 | 手機與桌機（手機用 `TIERS.mobile` 降級） | 只有桌機：`(width >= 64rem) and (not (pointer: coarse)) and (prefers-reduced-motion: no-preference)`，且沒有 Save-Data（`src/lib/scene/tiers.ts` 的 `LIVE`）。手機不下載 three.js |
+| 版面怎麼切換 | 靜態 `Backdrop` 是 LCP，canvas 淡入疊在上面 | `HomeTemplate` 的 inline script 在第一次繪製前依同一個條件加上 `html.want-3d`，版面直接是 3D 版（hero 與 AI 成果段用 CSS sticky 固定），canvas 準備好前 stage 是空白的；沒有 WebGL 2 或 mount 失敗時拿掉 `want-3d`，回到靜態版。LCP 是 h1 |
+| 捲動驅動 | `progress` 一個值，場景自己解讀 | `src/lib/scene/ribbon/runtime.ts` 從捲動位置算鏡頭（hero 期間由 21° 升到俯視，之後平移跟著頁面）、hero 文字的淡出、AI 成果段的逐則切換。沒有用 GSAP（使用者決定，見下方「JS 大小」） |
+| 靜態圖 | 生成式影像（`docs/design/image-prompts.md`） | 同一個 three.js 世界渲染的圖：`node scripts/design/ribbon-capture.mjs` 輸出 `src/assets/design/ribbon/*.webp` 與標籤位置 `src/lib/scene/ribbon/pictures.json`，模板不手抄座標 |
+| 顏色 | `--gradient-energy`、`--scene-block-*` | `--map-*`、`--ribbon-*`（`tokens.css`），漸層只在緞帶的頂點色上，CSS 沒有漸層 |
+
+### JS 大小
+
+原型（three.js＋GSAP core＋ScrollTrigger）延後載入 181 KB gzip，超過 `scene-budget.mjs` 的 140 KB。使用者選擇拿掉 GSAP、不放寬預算：hero 與 AI 成果段的固定改用 CSS sticky，scrub 改成每個 frame 往捲動位置靠近 16%（`CASES_FOLLOW`）。結果延後載入 135.0 KB（`node scripts/design/scene-budget.mjs`，2026-11-01），在預算內。
+
+### 量測
+
+上面「決策」第 9 項的 script 中，`scene-capture.mjs` 已和方向 B 一起刪除。`scene-wait.mjs` 改量首頁桌機（1280×800），讀 `src/lib/scene/ribbon/runtime.ts` 的 `WAIT_LIMIT_MS`；`lighthouse-3d.mjs` 只量 `/`。行動版不載入 3D，所以行動版 Lighthouse 量到的是靜態版。
+
+### 結果（#167 階段二）
+
+`node scripts/design/lighthouse-3d.mjs /`（2026-11-02，雲端 session，headless Chromium 以 SwiftShader 軟體算圖，每種裝置 3 次取中位數）：
+
+| 頁面 | 行動版 | 桌機 |
+|---|---|---|
+| `/` | 0.98（0.97、0.98、0.98；TBT 0 ms，LCP 是 hero 靜態圖，不載 3D） | 0.71（0.71、0.71、0.71；TBT 1,102 ms，LCP 是 h1） |
+
+- 行動版不載 three.js，量到的是靜態版
+- 桌機的長任務有 11 個，110–230 ms，落在 3D 上頁後 1.2 秒的緞帶畫出動畫：每個 frame 的繪製在 SwiftShader 上要 100 ms 以上。陰影貼圖改成只在緞帶改變時重算（`shadowMap.autoUpdate = false`）後，TBT 從 1,218 ms 降到 1,102 ms；實驗關掉 antialias 只到 0.72（TBT 892 ms），沒有採用
+- 3D chunk 在實測 LCP 與 `load` 之後才請求（169 ms／180 ms／206 ms），初始化的時序照本 ADR
+- 方向 B 在同一環境的桌機 TBT 是 0 ms（上方「結果」）。headless 的軟體算圖會放大每個 frame 的成本，真機的數字待 preview 部署後量；`npm run check` 的 Lighthouse 只量行動版，不擋這個差異（ADR 0004）

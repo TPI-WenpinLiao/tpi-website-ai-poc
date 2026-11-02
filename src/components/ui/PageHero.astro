@@ -1,6 +1,6 @@
 ---
-// Opening scene of a page: dark surface with the coordinate grid, mono eyebrow, the page's single
-// h1 at display size, lead text, actions, and a `visual` slot. The visual is where the 3D scroll
+// Opening scene of a page: light surface (tone="dark" for a purple band) with the coordinate grid,
+// mono eyebrow, the page's single h1, lead text, actions, and a `visual` slot. The visual is where the 3D scroll
 // scene mounts (M3-07); until it loads it must show a static fallback, which is also the LCP
 // candidate, so never fade the hero in. Breadcrumbs go in the `breadcrumb` slot: their own row at
 // the top of the hero, outside the copy, at every width.
@@ -24,7 +24,7 @@ interface Props {
   size?: 'display' | 'compact';
 }
 
-const { title, eyebrow, description, tone = 'dark', size = 'display' } = Astro.props;
+const { title, eyebrow, description, tone = 'light', size = 'display' } = Astro.props;
 const hasVisual = Astro.slots.has('visual');
 const hasBackdrop = Astro.slots.has('backdrop');
 const hasCrumbs = Astro.slots.has('breadcrumb');
@@ -103,7 +103,7 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
   h1 {
     margin: 0;
     color: var(--color-text);
-    font-size: var(--font-size-display);
+    font-size: var(--font-size-h1);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-display);
     letter-spacing: var(--letter-spacing-display);

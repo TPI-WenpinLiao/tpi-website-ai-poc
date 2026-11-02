@@ -1,320 +1,963 @@
 ---
-// Home page, direction B Modular Stack (M3-04, #17; built from the M3-07 prototype). Structure
-// follows the approved M3-01 home wireframe (#14).
-// The hero and the product-family chapters form the scene track: the static hero image is the LCP
-// and the complete fallback, and the 3D scene (Scene3D, ADR 0003) plays behind the chapters as
-// they scroll. Names, paths and order come from docs/ia (src/lib/ia/navigation.ts); copy comes
-// from the current site through src/data/home/<locale>.ts. src/pages/index.astro draws the zh-TW
-// home, src/pages/[locale]/index.astro the others.
+// Home page, direction ribbon-route (#166 concept, built in #167): five sections on one 12-column
+// grid, from docs/strategy/concepts/ribbon-route/ (README「5 段的畫面與捲動」) and
+// docs/strategy/briefs/home.md. Copy comes from src/data/home/<locale>.ts (src/data/home/types.ts);
+// names, paths and order of linked pages from docs/ia (src/lib/ia/navigation.ts).
+//
+// One ribbon runs through the page. Static (phones, touch screens, reduced motion, Save-Data, no
+// WebGL 2, and every page before the live scene is ready): pictures of the ribbon world
+// (scripts/design/ribbon-capture.mjs), the hero picture and the fork picture stacked so the ribbon
+// reads as one, the map labels placed from src/lib/scene/ribbon/pictures.json. Live (desktop, ADR 0003
+// 「ribbon-route」): the inline script below marks html.want-3d before the first paint; the hero and
+// the cases section are then held with CSS sticky, and once the load event, the LCP and an idle
+// callback have passed, the script at the end downloads three.js (src/lib/scene/ribbon/runtime.ts),
+// which draws the same world on a canvas in the stage and drives the camera from the scroll position.
+// Without WebGL 2 it takes html.want-3d off again and the static layout shows.
+import { getImage, Image } from 'astro:assets';
+import { getEntry } from 'astro:content';
 import PageLayout from '../PageLayout.astro';
-import PageHero from '../../components/ui/PageHero.astro';
-import Backdrop from '../../components/ui/Backdrop.astro';
-import Scene3D from '../../components/ui/Scene3D.astro';
-import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Link from '../../components/ui/Link.astro';
-import Surface from '../../components/ui/Surface.astro';
-import Card from '../../components/ui/Card.astro';
-import Tag from '../../components/ui/Tag.astro';
-import LayerStack from '../../components/ui/LayerStack.astro';
-import Reveal from '../../components/ui/Reveal.astro';
-import SceneChapter from '../../components/ui/SceneChapter.astro';
-import CardGrid from '../../components/ui/CardGrid.astro';
-import ContactCta from '../../components/ui/ContactCta.astro';
-import { children, hasPage, localeHref, localizedNav, localNode, node, nodeHref, type NavItem } from '../../lib/ia/navigation';
-import { entryLocale, isPublished } from '../../lib/content/entries';
-import { newsCard, postCard } from '../../lib/content/cards';
-import { newest } from '../../lib/content/listings';
-import { SCENE_FAMILIES } from '../../lib/scene/families';
-import { homeJsonLd } from '../../lib/seo/jsonld/home';
-import { siteName } from '../../lib/seo/meta';
-import type { Locale } from '../../lib/i18n/locales';
-import { getCollection, getEntry } from 'astro:content';
 import { home } from '../../data/home';
-import image from '../../assets/design/hero-modular-stack.webp';
-import mobile from '../../assets/design/hero-modular-stack-mobile.webp';
+import { strings } from '../../data/strings';
+import { hasPage, localeHref, localNode, nodeHref } from '../../lib/ia/navigation';
+import type { Locale } from '../../lib/i18n/locales';
+import { homeJsonLd } from '../../lib/seo/jsonld/home';
+import { LIVE } from '../../lib/scene/tiers';
+import pictures from '../../lib/scene/ribbon/pictures.json';
+import heroWide from '../../assets/design/ribbon/hero-wide.webp';
+import heroTall from '../../assets/design/ribbon/hero-tall.webp';
+import forkWide from '../../assets/design/ribbon/fork-wide.webp';
+import forkTall from '../../assets/design/ribbon/fork-tall.webp';
+import case1 from '../../assets/design/ribbon/case-1.webp';
+import case2 from '../../assets/design/ribbon/case-2.webp';
+import case3 from '../../assets/design/ribbon/case-3.webp';
+import prodDigirunner from '../../assets/design/ribbon/prod-digirunner.webp';
+import prodViki from '../../assets/design/ribbon/prod-viki.webp';
+import prodGadodido from '../../assets/design/ribbon/prod-gadodido.webp';
+import prodGreenswift from '../../assets/design/ribbon/prod-greenswift.webp';
+import orientaiImage from '../../assets/design/ribbon/orientai.webp';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
-const { meta, hero, familyLines, orientAi, industryLines, cases, labels } = home(locale);
+const copy = home(locale);
 const href = localeHref(locale);
+const contact = localNode('contact', locale);
 
-// Products are the ones the header lists, in its order (navigation.csv, e.g. OrientAI first).
-// Products left out of the navigation are 待確認 whether they are still sold (nodes.csv note,
-// sitemap.md decision 2), so the home page doesn't show them either.
-const flatten = (items: NavItem[]): string[] => items.flatMap((i) => [i.key, ...flatten(i.children)]);
-const navOrder = flatten(localizedNav('header', locale));
-// Card headings drop the brand in brackets: nodes.csv titles such as 「AI（SysTalk.ai）」 show as 「AI」
-// One chapter per family, in the scene's module order
-const families = SCENE_FAMILIES.map((id) => {
-  const family = localNode(id, locale);
+// `\n` in the copy is where a heading's first line ends
+const lines = (text: string) => text.split('\n');
+
+// The map labels on a static picture: the blocks that land inside it, the ones near an edge hung
+// from that edge so they stay on the picture
+type Where = Record<string, { x: number; y: number }>;
+const labelsOn = (where: Where, names: readonly string[], text: (name: string) => string | undefined) =>
+  names.flatMap((name) => {
+    const p = where[name];
+    const label = text(name);
+    if (!p || !label || p.x < 0 || p.x > 1 || p.y < 0 || p.y > 1) return [];
+    const edge = p.x < 0.12 ? 'start' : p.x > 0.88 ? 'end' : undefined;
+    return [{ label, edge, style: `--x: ${(p.x * 100).toFixed(1)}%; --y: ${(p.y * 100).toFixed(1)}%` }];
+  });
+// The map labels are interface strings (src/data/strings, docs/i18n/glossary.csv), in every locale
+const mapLabels = strings(locale).mapLabels;
+type MapLabel = keyof typeof mapLabels;
+const MAP_LABELS: MapLabel[] = ['core', 'legacy', 'product', 'model', 'service'];
+const mapLabel = (name: string) => mapLabels[name as MapLabel];
+const heroLabels = {
+  wide: labelsOn(pictures['hero-wide'].where, MAP_LABELS, mapLabel),
+  tall: labelsOn(pictures['hero-tall'].where, MAP_LABELS, mapLabel),
+};
+
+// Art direction: the tall framing below --bp-md-up (48rem; <source media> can't read @custom-media)
+const NARROW_MEDIA = '(width < 48rem)';
+const [heroWideImg, heroTallImg, forkWideImg, forkTallImg] = await Promise.all([
+  getImage({ src: heroWide, widths: [1280, 1920, 2560], format: 'webp' }),
+  getImage({ src: heroTall, widths: [450, 900], format: 'webp' }),
+  getImage({ src: forkWide, widths: [1280, 1920, 2560], format: 'webp' }),
+  getImage({ src: forkTall, widths: [450, 900], format: 'webp' }),
+]);
+
+// Industries: only those with a page (a draft industry isn't listed), in the copy's order
+const industries = Object.entries(copy.industries.entries)
+  .map(([id, entry]) => ({ ...entry, node: localNode(id, locale) }))
+  .filter((i) => hasPage(i.node));
+const industriesTitle = copy.industries.title ?? localNode('industries', locale).title;
+
+// The AI results, one picture each: the close-up of the same ribbon, the result's block lit
+const CASE_PICTURES: { image: ImageMetadata; where: Where }[] = [
+  { image: case1, where: pictures['case-1'].where },
+  { image: case2, where: pictures['case-2'].where },
+  { image: case3, where: pictures['case-3'].where },
+];
+const cases = copy.cases.items.map((c, i) => {
+  const target = localNode(c.node, locale);
+  const picture = CASE_PICTURES[i];
+  const anchor = picture?.where[`ai${i}`];
   return {
-    id,
-    heading: family.title.replace(/（[^）]*）$/, ''),
-    brand: /（([^）]*)）$/.exec(family.title)?.[1],
-    // A family hub with no page yet (#138) gets no link; its products still do
-    href: hasPage(family) ? nodeHref(id, locale) : undefined,
-    line: familyLines[id],
-    products: children(id, locale)
-      .filter((p) => navOrder.includes(p.id))
-      .toSorted((a, b) => navOrder.indexOf(a.id) - navOrder.indexOf(b.id)),
+    ...c,
+    href: nodeHref(c.node, locale),
+    link: c.link ?? target.title,
+    picture,
+    label: anchor ? { style: `--x: ${(anchor.x * 100).toFixed(1)}%; --y: ${(anchor.y * 100).toFixed(1)}%` } : undefined,
   };
 });
-const contact = localNode('contact', locale);
-const products = localNode('products', locale);
+const casesTitle = copy.cases.title ?? localNode('success-stories', locale).title;
+// Numbers in a result stand out; the text is the fact as it is (​ is a break point in the fact)
+const emphasize = (text: string) =>
+  text
+    .split(/(\d+(?:\.\d+)?%?)/)
+    .map((part, i) => ({ part, strong: i % 2 === 1 }));
 
-const orient = node(orientAi.node);
-const industries = children('industries', locale).map((n) => ({ ...n, line: industryLines[n.id] }));
-const services = children('services', locale);
-const successStories = localNode('success-stories', locale);
-const caseCards = cases.map((c) => ({ ...c, href: href(node(c.node)) }));
-// Wireframe: the two newest blog posts and the newest news item of this locale, shown as on the
-// listing pages (src/lib/content/cards.ts)
-const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
-const posts = [
-  ...(await getCollection('blog', inLocale)).toSorted(newest).slice(0, 2).map(postCard),
-  ...(await getCollection('news', inLocale)).toSorted(newest).slice(0, 1).map(newsCard),
-];
-const blog = localNode('blog', locale);
-const news = localNode('media-center', locale);
+const THUMBS: Record<string, ImageMetadata> = {
+  digirunner: prodDigirunner,
+  'systalk-viki': prodViki,
+  gadodido: prodGadodido,
+  greenswift: prodGreenswift,
+};
+const products = copy.products.nodes
+  .map((id) => localNode(id, locale))
+  .filter((p) => hasPage(p))
+  .map((p) => ({ ...p, thumb: THUMBS[p.id] }));
+const productsNode = localNode('products', locale);
+const productsTitle = copy.products.title ?? productsNode.title;
+const orient = localNode(copy.orientAi.node, locale);
+
 // Structured data from the organization data file of this page's locale
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
-const jsonLd = homeJsonLd({
-  org: org.data,
-  site: Astro.site,
-  logoUrl: new URL(org.data.logo.src, Astro.site).href,
-  inLanguage: locale,
-});
-
-// Reveal staggers each row of a three-column grid
-const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
+const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(org.data.logo.src, Astro.site).href, inLanguage: locale });
 ---
 
-<PageLayout title={meta.title} titleSuffix={false} description={meta.description} jsonLd={jsonLd}>
-  <div class="track" data-scene-track>
-    <PageHero eyebrow={siteName(locale)} title={hero.title} description={hero.description}>
-      <Backdrop slot="backdrop" image={image} mobile={mobile} fade="hero" focus="end" priority />
-      <Scene3D slot="backdrop" direction="modular-stack" />
-      <Fragment slot="actions">
-        <Button href={href(contact)} size="lg">{contact.title}</Button>
-        <Button href={href(products)} size="lg" variant="secondary">{products.title}</Button>
-      </Fragment>
-    </PageHero>
+<PageLayout title={copy.meta.title} titleSuffix={false} description={copy.meta.description} jsonLd={jsonLd}>
+  <!-- Decides the layout before the first paint, with src/lib/scene/tiers.ts LIVE -->
+  <script is:inline define:vars={{ live: LIVE }}>
+    const c = navigator.connection;
+    if (matchMedia(live).matches && !(c && c.saveData)) document.documentElement.classList.add('want-3d');
+  </script>
 
-    <section aria-labelledby="families-title">
-      <h2 id="families-title" class="sr-only">{labels.families}</h2>
+  <div class="route" data-ribbon-route>
+    <div class="stage" data-ribbon-slot="route" aria-hidden="true">
       {
-        families.map((f, i) => (
-          <SceneChapter>
-            <SectionHeading
-              level={3}
-              index={String(i + 1).padStart(2, '0')}
-              eyebrow={f.brand ?? 'Product family'}
-              title={f.heading}
-              description={f.line}
-            />
-            <ul class="items">
-              {f.products.map((p) => (
-                <li class="text-phrase">
-                  <a href={href(p)}>{p.title}</a>
-                </li>
-              ))}
-            </ul>
-            {f.href && <Link href={f.href}>{labels.familyLink(f.heading)}</Link>}
-          </SceneChapter>
+        MAP_LABELS.map((name) => (
+          <span class:list={['map-label', 'live-label', { start: name === 'core' }]} data-ribbon-anchor={name}>
+            {mapLabels[name]}
+          </span>
         ))
       }
+    </div>
+
+    <section class="hero" data-ribbon-hero aria-labelledby="hero-title">
+      <div class="hero-stage">
+        <div class="hero-copy grid" data-ribbon-copy>
+          <h1 id="hero-title" class="display">
+            {lines(copy.hero.title).map((line, i) => (i ? [<br />, line] : line))}
+          </h1>
+          <p class="lead">{copy.hero.lead}</p>
+          <div class="actions">
+            <Button href={href(contact)} size="lg">{copy.contact.action ?? contact.title}</Button>
+            {copy.hero.secondary && <Link href="#industries" variant="standalone">{copy.hero.secondary}</Link>}
+          </div>
+        </div>
+        <figure class="hero-map">
+          <picture>
+            <source media={NARROW_MEDIA} srcset={heroTallImg.srcSet.attribute} sizes="100vw" width={heroTall.width} height={heroTall.height} />
+            <img
+              src={heroWideImg.src}
+              srcset={heroWideImg.srcSet.attribute}
+              sizes="100vw"
+              width={heroWide.width}
+              height={heroWide.height}
+              fetchpriority="high"
+              alt={copy.hero.mapAlt ?? ''}
+            />
+          </picture>
+          {
+            (['wide', 'tall'] as const).map((variant) =>
+              heroLabels[variant].map((l) => (
+                <span class:list={['map-label', variant, l.edge]} style={l.style} aria-hidden="true">
+                  {l.label}
+                </span>
+              )),
+            )
+          }
+        </figure>
+      </div>
+    </section>
+
+    <section class="industries" id="industries" aria-labelledby="industries-title">
+      <div class="industries-grid grid">
+        <figure class="fork" aria-hidden="true">
+          <picture>
+            <source media={NARROW_MEDIA} srcset={forkTallImg.srcSet.attribute} sizes="100vw" width={forkTall.width} height={forkTall.height} />
+            <img src={forkWideImg.src} srcset={forkWideImg.srcSet.attribute} sizes="100vw" width={forkWide.width} height={forkWide.height} loading="lazy" alt="" data-ribbon-fork />
+          </picture>
+        </figure>
+        <h2 id="industries-title" class="head industries-title">{lines(industriesTitle).map((line, i) => (i ? [<br />, line] : line))}</h2>
+        {
+          industries.map((i, k) => (
+            <a class:list={['industry', k === 0 ? 'first' : 'second']} href={href(i.node)}>
+              <h3 class="entry-title">{i.node.title}</h3>
+              <span>{i.text}</span>
+              {i.link && <span class="arrow-link">{i.link}</span>}
+            </a>
+          ))
+        }
+      </div>
     </section>
   </div>
 
-  <Surface tone="dark" pattern="grid">
-    <div class="spotlight">
-      <div class="spotlight-copy">
-        <SectionHeading eyebrow={orientAi.eyebrow} title={orientAi.title} />
-        <ul class="features" aria-label={labels.orientFeatures}>
-          {
-            orientAi.features.map((f) => (
-              <li>
-                <Tag tone="node">{f}</Tag>
-              </li>
-            ))
-          }
-        </ul>
-        <Button href={href(orient)} size="lg">{orientAi.action}</Button>
+  <section class="cases" id="cases" data-ribbon-cases aria-labelledby="cases-title">
+    <div class="cases-stage grid">
+      <h2 id="cases-title" class="head">{lines(casesTitle).map((line, i) => (i ? [<br />, line] : line))}</h2>
+      {copy.cases.count && <p class="count" aria-hidden="true" data-ribbon-count data-template={copy.cases.count} />}
+      <div class="panels">
+        {
+          cases.map((c) => (
+            <article class="case" data-ribbon-case aria-label={c.name}>
+              <div class="case-text">
+                <p class="case-name serif" data-ribbon-case-name>
+                  {c.name}
+                </p>
+                <p class="case-result">{emphasize(c.result).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
+                <Link href={c.href} variant="standalone">
+                  {c.link}
+                </Link>
+              </div>
+              {c.picture && (
+                <figure class="case-fig">
+                  <Image src={c.picture.image} widths={[640, 1200, 1600]} sizes="(width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
+                  {c.label && (
+                    <span class="map-label" style={c.label.style} aria-hidden="true">
+                      {c.name}
+                    </span>
+                  )}
+                </figure>
+              )}
+            </article>
+          ))
+        }
       </div>
-      <LayerStack layers={5} />
-    </div>
-  </Surface>
-
-  <!-- The wireframe's three entry points (industries, services, success stories) share one surface -->
-  <Surface tone="dark">
-    <div class="blocks">
-      <div>
-        <SectionHeading eyebrow="Industries" title={localNode('industries', locale).title} />
-        <CardGrid>
-          {
-            industries.map((n, i) => (
-              <li>
-                <Reveal delay={stagger(i)}>
-                  <Card title={n.title} href={href(n)} description={n.line} />
-                </Reveal>
-              </li>
-            ))
-          }
-        </CardGrid>
-      </div>
-
-      <div>
-        <SectionHeading eyebrow="Services" title={localNode('services', locale).title} />
-        <CardGrid compact>
-          {
-            services.map((n, i) => (
-              <li>
-                <Reveal delay={stagger(i)}>
-                  <Card title={n.title} href={href(n)} size="sm" />
-                </Reveal>
-              </li>
-            ))
-          }
-        </CardGrid>
-      </div>
-
-      <div>
-        <SectionHeading eyebrow="Success stories" title={successStories.title}>
-          <Button slot="action" href={href(successStories)} variant="secondary">{labels.all(successStories.title)}</Button>
-        </SectionHeading>
-        <CardGrid>
-          {
-            caseCards.map((c, i) => (
-              <li>
-                <Reveal delay={stagger(i)}>
-                  <Card title={c.title} href={c.href} eyebrow={successStories.title} description={c.summary} />
-                </Reveal>
-              </li>
-            ))
-          }
-        </CardGrid>
+      <div class="slot" data-ribbon-slot="cases" aria-hidden="true">
+        <Image src={case1} widths={[640, 1200, 1600]} sizes="50vw" alt="" loading="lazy" />
+        <span class="map-label live-label" data-ribbon-case-label style={cases[0]?.label?.style}>{cases[0]?.name}</span>
       </div>
     </div>
-  </Surface>
+  </section>
 
-  <Surface tone="light">
-    <SectionHeading eyebrow="Insights" title={labels.latest}>
-      <Fragment slot="action">
-        <Button href={href(blog)} variant="text">{blog.title}</Button>
-        <Button href={href(news)} variant="text">{news.title}</Button>
-      </Fragment>
-    </SectionHeading>
-    <CardGrid>
+  <section class="products grid" id="products" aria-labelledby="products-title">
+    <h2 id="products-title" class="head">{lines(productsTitle).map((line, i) => (i ? [<br />, line] : line))}</h2>
+    <ul class="index">
       {
-        posts.map((p, i) => (
+        products.map((p) => (
           <li>
-            <Reveal delay={stagger(i)}>
-              <Card title={p.title} href={p.href} eyebrow={p.eyebrow} image={p.image} date={p.date} />
-            </Reveal>
+            <a class="row" href={href(p)}>
+              <span class="name serif">{p.title}</span>
+              {p.thumb && <Image class="thumb" src={p.thumb} widths={[384, 768]} sizes="(width >= 64rem) 16vw, 33vw" alt="" loading="lazy" />}
+            </a>
           </li>
         ))
       }
-    </CardGrid>
-  </Surface>
+    </ul>
+    <p class="all"><Link href={nodeHref(productsNode.id, locale)} variant="standalone">{productsNode.title}</Link></p>
+  </section>
 
-  <ContactCta />
+  <section class="orient grid" data-surface="dark" aria-labelledby="orient-title">
+    <div class="orient-text">
+      <h2 id="orient-title" class="head">{lines(copy.orientAi.title).map((line, i) => (i ? [<br />, line] : line))}</h2>
+      {copy.orientAi.quote && <p class="quote">{copy.orientAi.quote}</p>}
+      <Link href={nodeHref(orient.id, locale)} variant="standalone">{copy.orientAi.link}</Link>
+    </div>
+    <figure class="orient-fig">
+      <Image src={orientaiImage} widths={[640, 1200, 1600]} sizes="(width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
+    </figure>
+  </section>
+
+  <section class="contact grid" data-surface="dark" aria-labelledby="contact-title">
+    <h2 id="contact-title" class="head">{copy.contact.title}</h2>
+    {copy.contact.description && <p class="contact-lead">{copy.contact.description}</p>}
+    {
+      copy.contact.records && (
+        <ul class="records">
+          {copy.contact.records.map((r) => (
+            <li>
+              <span class="serif">{r.label}</span>
+              <span>{r.text}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    <div class="act">
+      <span class="band" aria-hidden="true"></span>
+      <Button href={href(contact)} size="lg">{copy.contact.action ?? contact.title}</Button>
+    </div>
+    <p><Link href={nodeHref('about', locale)} variant="standalone">{copy.contact.about ?? localNode('about', locale).title}</Link></p>
+  </section>
 </PageLayout>
+
+<script>
+  import { createSurface, LIVE, wantsLive } from '../../lib/scene/tiers';
+
+  const IDLE_TIMEOUT = 2000;
+  const LCP_TIMEOUT = 1000;
+  const root = document.documentElement;
+  const route = document.querySelector<HTMLElement>('[data-ribbon-route]');
+  const cases = document.querySelector<HTMLElement>('[data-ribbon-cases]');
+
+  const afterLoad = () =>
+    new Promise<void>((resolve) => {
+      if (document.readyState === 'complete') resolve();
+      else addEventListener('load', () => resolve(), { once: true });
+    });
+  // The scene starts after the LCP (#127): wait for the browser's LCP entry, or give up after LCP_TIMEOUT
+  const afterLcp = () =>
+    new Promise<void>((resolve) => {
+      if (!PerformanceObserver.supportedEntryTypes.includes('largest-contentful-paint')) return resolve();
+      const timer = setTimeout(done, LCP_TIMEOUT);
+      const observer = new PerformanceObserver(() => done());
+      function done() {
+        observer.disconnect();
+        clearTimeout(timer);
+        resolve();
+      }
+      observer.observe({ type: 'largest-contentful-paint', buffered: true });
+    });
+  const idle = () =>
+    new Promise<void>((resolve) => {
+      if ('requestIdleCallback' in window) requestIdleCallback(() => resolve(), { timeout: IDLE_TIMEOUT });
+      else setTimeout(resolve, IDLE_TIMEOUT);
+    });
+  // Back to the static layout: no WebGL 2, or reduced motion turned on
+  const rest = () => root.classList.remove('want-3d');
+
+  async function boot(routeEl: HTMLElement, casesEl: HTMLElement) {
+    if (!root.classList.contains('want-3d')) return;
+    // Leaving the desktop layout or turning on reduced motion (both in LIVE), at any point, falls back
+    // to the static pictures; coming back needs a reload
+    let stop: (() => void) | undefined;
+    let left = false;
+    const live = matchMedia(LIVE);
+    const leave = () => {
+      left = true;
+      live.removeEventListener('change', onChange);
+      stop?.();
+      stop = undefined;
+      rest();
+    };
+    function onChange() {
+      if (!live.matches) leave();
+    }
+    live.addEventListener('change', onChange);
+    const gone = () => left || !wantsLive();
+
+    if (gone()) return leave();
+    await afterLoad();
+    await afterLcp();
+    await idle();
+    if (gone()) return leave();
+    // Checks for WebGL 2 before downloading three.js; the scene renders into this context
+    const surface = createSurface();
+    if (!surface) return leave();
+    // A chunk that fails to load or a scene that fails to start leaves the static pictures, not an
+    // empty stage: html.want-3d hides them
+    try {
+      const { mount } = await import('../../lib/scene/ribbon/runtime');
+      if (gone()) return leave();
+      const started = await mount({ ...surface, route: routeEl, cases: casesEl });
+      if (left) return started();
+      stop = started;
+    } catch (error) {
+      console.error(error);
+      leave();
+    }
+  }
+
+  if (route && cases) void boot(route, cases);
+</script>
 
 <style>
   @import '../../styles/media.css';
 
-  /* One product per row: equal-width rows on a hairline grid, so long names wrap under their own
-     first line instead of making uneven pills */
-  /* Two columns keep the panel short: the AI family has ten products, and on narrow screens the
-     panel must leave the upper part of the viewport to the scene */
-  .items {
+  /* One 12-column grid and one left edge for every section */
+  .grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--space-4);
-    align-self: stretch;
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    padding-inline: var(--grid-margin);
+  }
+
+  /* Full width by default; :where keeps this below each section's own column rules */
+  :where(.grid) > * {
+    grid-column: 1 / -1;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  ul,
+  figure {
     margin: 0;
+  }
+
+  ul {
     padding: 0;
     list-style: none;
   }
 
-  .items li {
-    display: grid;
-    grid-template-columns: var(--space-2) minmax(0, 1fr);
-    gap: var(--space-2);
-    align-items: center;
-    /* Every row draws both lines and overlaps the one above */
-    border-block: var(--border-width) solid var(--glass-border);
-    margin-block-start: calc(var(--border-width) * -1);
-    font-size: var(--font-size-xs);
+  .display {
+    font-size: var(--font-size-display);
+    line-height: var(--line-height-display);
+  }
+
+  .head {
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-head);
+  }
+
+  .lead,
+  .case-result,
+  .quote,
+  .contact-lead {
+    font-size: var(--font-size-text);
     line-height: var(--line-height-snug);
   }
 
-  .items li::before {
-    content: '';
-    block-size: var(--space-2);
-    border-radius: var(--radius-pill);
-    background: var(--color-accent);
-    box-shadow: var(--glow-accent);
+  .entry-title,
+  .case-name,
+  .name,
+  .records .serif {
+    font-size: var(--font-size-text);
+    line-height: var(--line-height-snug);
   }
 
-  .items a {
-    display: flex;
+  /* Labels on the map: what each kind of block is. --x and --y are where the block's top lands on
+     the picture (pictures.json); the live ones are moved by runtime.ts */
+  .map-label {
+    position: absolute;
+    z-index: var(--z-raised);
+    inset-inline-start: var(--x, 0);
+    inset-block-start: var(--y, 0);
+    padding: 0 var(--space-3);
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-snug);
+    white-space: nowrap;
+    pointer-events: none;
+    /* Hangs above the point; runtime.ts moves the live ones with `translate`, which adds to this */
+    transform: translate(-50%, calc(-100% - var(--space-2)));
+  }
+
+  /* Near a picture's edge the label hangs inwards from the point, so it stays on the picture */
+  .map-label.start {
+    transform: translate(0, calc(-100% - var(--space-2)));
+  }
+
+  .map-label.end {
+    transform: translate(-100%, calc(-100% - var(--space-2)));
+  }
+
+  .map-label.tall,
+  .live-label {
+    display: none;
+  }
+
+  /* Below the desktop layout the wide picture is narrower too: a step smaller, so the longer en and
+     vi labels don't run into each other */
+  @media (--bp-lg-down) {
+    .map-label.wide {
+      font-size: var(--font-size-xs);
+    }
+  }
+
+  @media (--bp-md-down) {
+    .map-label.wide {
+      display: none;
+    }
+
+    /* The tall picture is narrow: a step smaller, so the longer en and vi labels don't run into the
+       next one (wrapping would grow them into the label above) */
+    .map-label.tall {
+      display: block;
+      font-size: var(--font-size-xs);
+    }
+
+    /* The label at the right edge hangs below its block, clear of the one in the middle of the row */
+    .map-label.tall.end {
+      transform: translate(-100%, var(--space-2));
+    }
+  }
+
+  figure img,
+  picture img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  /* ---- 1 Hero and 2 industries: one ribbon ---- */
+  .route {
+    position: relative;
+  }
+
+  .stage {
+    display: none;
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: var(--z-raised);
+    row-gap: var(--space-8);
     align-items: center;
-    min-block-size: var(--touch-target);
-    color: var(--color-text);
+    padding-block-start: var(--space-12);
+  }
+
+  .lead {
+    max-inline-size: var(--reading-max-width);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+  }
+
+  .hero-map {
+    position: relative;
+    margin-block-start: var(--space-10);
+    overflow: clip;
+  }
+
+  .industries {
+    padding-block-end: var(--space-section);
+  }
+
+  .industries-grid {
+    align-items: start;
+    row-gap: var(--space-6);
+  }
+
+  .fork {
+    grid-row: 1;
+    margin-inline: calc(var(--grid-margin) * -1);
+  }
+
+  .industries-title {
+    position: relative;
+    grid-row: 1;
+    grid-column: 1 / 7;
+    padding-block-start: var(--space-16);
+  }
+
+  .industry {
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-inline-end: var(--grid-gutter);
+    color: inherit;
     text-decoration: none;
   }
 
-  .items a:hover {
-    color: var(--color-link-hover);
+  .industry.first {
+    grid-column: 1 / 7;
   }
 
-  /* OrientAI spotlight: copy on the start side, the CSS 3D stack on the end side */
-  .spotlight {
+  .industry.second {
+    grid-column: 7 / -1;
+  }
+
+  .entry-title {
+    transition: color var(--duration-base) var(--ease-standard);
+  }
+
+  .industry:hover .entry-title {
+    color: var(--color-link);
+  }
+
+  /* The entry is one link; its last line looks like a standalone Link */
+  .arrow-link {
+    color: var(--color-link);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: underline;
+    text-underline-offset: var(--underline-offset);
+  }
+
+  .arrow-link::after {
+    content: ' →';
+  }
+
+  @media (--bp-md-down) {
+    .industries-title {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ---- 3 AI results ---- */
+  .cases {
+    padding-block: var(--space-section);
+    background: var(--color-bg-subtle);
+  }
+
+  .cases-stage {
+    row-gap: var(--space-12);
+  }
+
+  .count,
+  .slot {
+    display: none;
+  }
+
+  .panels {
     display: grid;
-    gap: var(--space-12);
+    gap: var(--space-16);
+  }
+
+  .case {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    row-gap: var(--space-6);
     align-items: center;
   }
 
-  .spotlight-copy {
+  .case-text {
+    grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    gap: var(--space-8);
-  }
-
-  .features {
-    display: flex;
-    flex-wrap: wrap;
+    align-items: flex-start;
     gap: var(--space-3);
-    margin: 0;
-    padding: 0;
-    list-style: none;
   }
 
-  .blocks {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-section);
+  .case-result strong {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .case-fig {
+    position: relative;
+    grid-column: 1 / -1;
+    /* Sideways only: a wrapped label over a block near the top (case 2) may rise a few px above the
+       picture rather than lose its first line */
+    overflow-x: clip;
+    background: var(--color-bg);
+  }
+
+  /* A long work name (en, vi) wraps inside the picture. It hangs above the block like the other
+     labels, so the block stays visible; max-content lets the cap, not the room right of --x, decide
+     where it wraps */
+  .case-fig .map-label {
+    inline-size: max-content;
+    max-inline-size: 70%;
+    white-space: normal;
+  }
+
+  /* Below the desktop layout the picture is a column or a phone wide: a step smaller, so a long
+     name stays a few lines */
+  @media (--bp-lg-down) {
+    .case-fig .map-label {
+      font-size: var(--font-size-xs);
+    }
+  }
+
+  @media (--bp-md-up) {
+    .cases h2 {
+      grid-column: 1 / 8;
+    }
+
+    .case-text {
+      grid-column: 1 / 7;
+    }
+
+    .case-fig {
+      grid-column: 8 / -1;
+    }
+  }
+
+  /* ---- 4 Products: an index; OrientAI on its own band ---- */
+  .products {
+    row-gap: var(--space-10);
+    padding-block: var(--space-section);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+    align-items: center;
+    padding-block: var(--space-3);
+    color: inherit;
+    text-decoration: none;
+    transition: opacity var(--duration-base) var(--ease-standard);
+  }
+
+  .name {
+    grid-row: 1;
+    grid-column: 5 / -1;
+    transition:
+      translate var(--duration-slow) var(--ease-out-expo),
+      color var(--duration-base) var(--ease-standard);
+  }
+
+  .thumb {
+    grid-row: 1;
+    grid-column: 1 / 5;
+    inline-size: 100%;
+    block-size: auto;
+    background: var(--color-bg-muted);
+  }
+
+  .row:is(:hover, :focus-visible) .name {
+    color: var(--color-link);
+    translate: var(--space-3) 0;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .index:has(.row:is(:hover, :focus-visible)) .row:not(:hover, :focus-visible) {
+      opacity: var(--backdrop-soft-opacity);
+    }
   }
 
   @media (--bp-lg-up) {
-    .spotlight {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    .products {
+      align-items: start;
     }
 
-    .items {
-      column-gap: var(--space-6);
+    .products h2 {
+      grid-column: 1 / 7;
+      grid-row: 1 / 3;
     }
 
-    .items li {
-      font-size: var(--font-size-sm);
+    .index,
+    .all {
+      grid-column: 7 / -1;
     }
+  }
+
+  .orient {
+    row-gap: var(--space-10);
+    align-items: center;
+    padding-block: var(--space-section);
+    background: var(--color-bg-subtle);
+    color: var(--color-text);
+  }
+
+  .orient-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-6);
+  }
+
+  .quote {
+    max-inline-size: var(--reading-max-width);
+  }
+
+  @media (--bp-md-up) {
+    .orient-text {
+      grid-column: 1 / 7;
+    }
+
+    .orient-fig {
+      grid-column: 8 / -1;
+    }
+  }
+
+  /* ---- 5 Records and contact: the ribbon ends at the button, in orange ---- */
+  .contact {
+    row-gap: var(--space-10);
+    padding-block: var(--space-section);
+  }
+
+  .records {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    gap: var(--space-8) var(--grid-gutter);
+  }
+
+  .records li {
+    grid-column: span 12;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  @media (--bp-md-up) {
+    .records li {
+      grid-column: span 4;
+    }
+  }
+
+  .act {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-6) var(--space-12);
+  }
+
+  /* The ribbon's end: an orange band from the page edge into the button, cut on a slant */
+  .band {
+    flex: 0 0 auto;
+    inline-size: var(--home-band-width);
+    block-size: var(--space-10);
+    margin-inline: calc(var(--grid-margin) * -1) calc(var(--space-8) * -1);
+    background: var(--color-accent);
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--space-6)) 100%, 0 100%);
+  }
+
+  @media (--bp-md-down) {
+    .band {
+      inline-size: calc(var(--grid-margin) + var(--space-10));
+      block-size: var(--space-6);
+      margin-inline-end: 0;
+    }
+
+  }
+
+  /* ---- The live tier (html.want-3d): one sticky canvas under the hero and the industries, the camera
+     rising, then moving with the page; the cases held for three screens ---- */
+  :global(html.want-3d) .stage {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 0;
+    display: block;
+    block-size: 100svh;
+    margin-block-end: -100svh;
+    overflow: clip;
+  }
+
+  :global(html.want-3d) .hero {
+    block-size: 200svh;
+  }
+
+  :global(html.want-3d) .hero,
+  :global(html.want-3d) .industries {
+    position: relative;
+    z-index: var(--z-raised);
+  }
+
+  :global(html.want-3d) .hero-stage {
+    position: sticky;
+    inset-block-start: 0;
+    block-size: 100svh;
+    pointer-events: none;
+  }
+
+  :global(html.want-3d) .hero-copy {
+    pointer-events: auto;
+    background: var(--color-bg);
+  }
+
+  :global(html.want-3d) .hero h1 {
+    font-size: min(var(--font-size-display), 13svh);
+  }
+
+  :global(html.want-3d) .hero-map {
+    display: none;
+  }
+
+  :global(html.want-3d) .fork img {
+    visibility: hidden;
+  }
+
+  :global(html.want-3d) .live-label {
+    display: block;
+    inset: 0 auto auto 0;
+    visibility: hidden;
+  }
+
+  .stage :global(canvas) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  :global(html.want-3d) .cases {
+    block-size: 300svh;
+    padding-block: 0;
+  }
+
+  :global(html.want-3d) .cases-stage {
+    position: sticky;
+    inset-block-start: 0;
+    block-size: 100svh;
+    grid-template-rows: auto auto 1fr;
+    align-content: start;
+    row-gap: var(--space-6);
+    padding-block: var(--space-16);
+  }
+
+  :global(html.want-3d) .cases h2 {
+    grid-row: 1;
+    grid-column: 1 / 6;
+  }
+
+  :global(html.want-3d) .count {
+    display: block;
+    grid-row: 2;
+    grid-column: 1 / 6;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  :global(html.want-3d) .panels {
+    position: relative;
+    display: block;
+    grid-row: 3;
+    grid-column: 1 / 6;
+  }
+
+  :global(html.want-3d) .case {
+    position: absolute;
+    inset: 0 0 auto;
+    display: block;
+  }
+
+  :global(html.want-3d) .case:not(:first-child) {
+    visibility: hidden;
+  }
+
+  :global(html.want-3d) .case-fig {
+    display: none;
+  }
+
+  :global(html.want-3d) .slot {
+    position: relative;
+    display: block;
+    grid-row: 1 / 4;
+    grid-column: 7 / -1;
+    align-self: start;
+    inline-size: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: clip;
+    background: var(--color-bg);
+  }
+
+  :global(html.want-3d) .slot :global(img),
+  .slot :global(canvas) {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  :global(html.want-3d) .slot .live-label {
+    display: block;
+    visibility: visible;
+    inset: var(--y, 0) auto auto var(--x, 0);
+  }
+
+  /* While the canvas is in the slot, runtime.ts places the label with `translate` from the slot's
+     corner; before that (and after the canvas leaves) the label stays on the static picture's
+     --x/--y. At least as specific as the rule above (html.want-3d), or that rule's offset stays
+     under the translate and the label lands off the slot */
+  :global(html.want-3d) .slot:has(:global(canvas)) .live-label {
+    inset: 0 auto auto 0;
   }
 </style>

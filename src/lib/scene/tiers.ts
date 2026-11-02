@@ -1,59 +1,34 @@
-// Rendering tiers and the WebGL context for the 3D scenes (ADR 0003). Kept apart from runtime.ts,
-// which carries three.js: Scene3D creates the context before it downloads that chunk, both to
-// check for WebGL and so the renderer doesn't create a second one (#127).
+// When the home page plays the live ribbon scene, and the WebGL context it renders into (ADR 0003
+// 「ribbon-route」, #167). Kept apart from ribbon/runtime.ts, which carries three.js: HomeTemplate
+// creates the context before it downloads that chunk, to check for WebGL 2 (#127).
 
-/** Rendering budget per device class; mobile is the degraded tier (#54 acceptance). */
-export interface Tier {
-  kind: 'desktop' | 'mobile';
-  /** Cap on devicePixelRatio */
-  maxDpr: number;
-  /** Multiplier for particle and block counts */
-  density: number;
-  antialias: boolean;
-  /** Camera follows the pointer */
-  parallax: boolean;
-  /** Camera path: 'orbit' moves on several axes, 'dolly' only along one */
-  path: 'orbit' | 'dolly';
-}
+// Desktop only: a layout at least 64rem wide (--bp-lg-up in src/styles/media.css; scripts can't
+// read @custom-media) and not a touch screen. Written as "not coarse", not "fine": headless
+// Chromium reports pointer: none. HomeTemplate's inline script reads this query (define:vars) before
+// the first paint, so the page takes the live layout (html.want-3d) without a shift.
+export const LIVE = '(width >= 64rem) and (not (pointer: coarse)) and (prefers-reduced-motion: no-preference)';
 
-export const TIERS = {
-  desktop: { kind: 'desktop', maxDpr: 2, density: 1, antialias: true, parallax: true, path: 'orbit' },
-  mobile: { kind: 'mobile', maxDpr: 1.5, density: 0.35, antialias: false, parallax: false, path: 'dolly' },
-} as const satisfies Record<Tier['kind'], Tier>;
+// Network Information API is not in TypeScript's DOM lib. HomeTemplate's inline script can't import
+// this, so it repeats the check (`c && c.saveData`): change both together
+export const saveData = () => {
+  const connection: unknown = Reflect.get(navigator, 'connection');
+  return typeof connection === 'object' && connection !== null && Reflect.get(connection, 'saveData') === true;
+};
 
-// The narrow layout follows the CSS: scripts can't read @custom-media, so this is --bp-lg-down
-// from src/styles/media.css. runtime.ts frames the scene by it.
-export const NARROW = '(width < 64rem)';
+export const wantsLive = () => matchMedia(LIVE).matches && !saveData();
 
-// The rendering budget drops on narrow layouts and on touch devices, whatever their layout (a
-// landscape tablet gets the desktop layout but the mobile tier). Picked when the scene starts;
-// Scene3D restarts the scene when this query flips (a window resized across the breakpoint).
-export const LOW_POWER = `${NARROW}, (pointer: coarse)`;
-
-export const pickTier = (): Tier => (matchMedia(LOW_POWER).matches ? TIERS.mobile : TIERS.desktop);
-
-/** A canvas with the WebGL 2 context a scene renders into, created for `tier`. */
-export interface SceneSurface {
-  tier: Tier;
-  canvas: HTMLCanvasElement;
-  context: WebGL2RenderingContext;
-}
-
-/**
- * Creates the canvas and its WebGL 2 context (three.js renders only with WebGL 2), with the
- * attributes WebGLRenderer asks for when it creates the context itself (three r186); undefined
- * when the browser can't.
- */
-export function createSurface(tier: Tier): SceneSurface | undefined {
+/** A canvas with the WebGL 2 context the scene renders into; undefined when the browser can't */
+export function createSurface(): { canvas: HTMLCanvasElement; context: WebGL2RenderingContext } | undefined {
   const canvas = document.createElement('canvas');
+  // The attributes WebGLRenderer asks for when it creates the context itself (three r186)
   const context = canvas.getContext('webgl2', {
-    alpha: true,
+    alpha: false,
     depth: true,
     stencil: false,
-    antialias: tier.antialias,
+    antialias: true,
     premultipliedAlpha: true,
     preserveDrawingBuffer: false,
-    powerPreference: 'low-power',
+    powerPreference: 'high-performance',
   });
-  return context ? { tier, canvas, context } : undefined;
+  return context ? { canvas, context } : undefined;
 }

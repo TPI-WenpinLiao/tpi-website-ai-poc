@@ -14,7 +14,7 @@ interface Props {
 const { items, label, stick = 'header' } = Astro.props;
 ---
 
-<nav class:list={['in-page-nav', stick]} aria-label={label} data-surface="dark">
+<nav class:list={['in-page-nav', stick]} aria-label={label}>
   <ul>
     {
       items.map((i) => (
@@ -32,9 +32,8 @@ const { items, label, stick = 'header' } = Astro.props;
   .in-page-nav {
     position: relative;
     z-index: var(--z-raised);
-    border-block-end: var(--border-width) solid var(--glass-border);
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
+    border-block-end: var(--border-width) solid var(--color-border);
+    background: var(--color-bg);
   }
 
   .top {

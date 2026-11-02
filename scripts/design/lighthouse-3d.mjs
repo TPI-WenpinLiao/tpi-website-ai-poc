@@ -1,10 +1,10 @@
-// Lighthouse for the pages with the 3D scroll scene (M3-07, #54; the home page since M3-04), mobile
-// and desktop. `npm run check` audits only mobile, and until #127 its performance assertion on these
+// Lighthouse for the page with the 3D scene (the home page, ribbon-route since #167), mobile and
+// desktop. `npm run check` audits only mobile, and until #127 its performance assertion on these
 // pages only warns (lighthouserc.cjs, ADR 0004).
 // Each page and form factor runs RUNS times; the run with the median performance score is
-// reported, as a Markdown table for the PR. The 3D chunk (src/lib/scene/runtime, with three.js)
+// reported, as a Markdown table for the PR. The 3D chunk (src/lib/scene/ribbon/runtime, with three.js)
 // loads after the load event and an idle callback, so it lands inside Lighthouse's trace: the
-// numbers include its cost. Scene3D also stops loading under Save-Data and reduced motion, which
+// numbers include its cost (desktop only: phones get the static pictures). The scene also stops loading under Save-Data and reduced motion, which
 // Lighthouse does not emulate.
 // The score uses Lighthouse's simulated throttling, but the page's work runs on this machine's
 // CPU, and headless Chromium draws WebGL in software (SwiftShader). Treat TBT as an upper bound.
@@ -15,7 +15,9 @@ import lighthouse from 'lighthouse';
 import desktopConfig from 'lighthouse/core/config/desktop-config.js';
 import puppeteer from 'puppeteer-core';
 import { serve } from '../lib/static-server.mjs';
-import { PATHS } from './scene-capture.mjs';
+
+// The pages with the 3D scene
+const PATHS = ['/'];
 
 const DIST = resolve(import.meta.dirname, '../../dist');
 const RUNS = 3;

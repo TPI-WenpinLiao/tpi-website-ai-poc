@@ -17,6 +17,7 @@ features:
 useCases:
   - title: 保險業 - 醫療文件解析
     body: 藉由自然語言技術，分析診斷證明書、單據等文件，強化保險業智能理賠系統，解決傳統流程中大量人力需求，作業效率大幅的提升，並透過進化系統持續優化模型精準度，提供最佳化理賠給付計算結果。
+    industry: finance
 cta: contact
 sourceUrl: https://www.tpisoftware.com/solutions/smartclaim
 migratedAt: 2026-10-23

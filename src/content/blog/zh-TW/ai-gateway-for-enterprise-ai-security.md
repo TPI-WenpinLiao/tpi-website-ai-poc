@@ -9,6 +9,7 @@ author: TPIsoftware
 authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f18f046-68f9-6413-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/zh-TW/ai-gateway-for-enterprise-ai-security/cover.webp
+relatedOfferings: [zh-TW/digirunner]
 sourceUrl: https://www.tpisoftware.com/blog/ai/ai-gateway-for-enterprise-ai-security
 migratedAt: 2026-10-23
 sourceUpdatedAt: 2026-08-10

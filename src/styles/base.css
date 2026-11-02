@@ -68,6 +68,9 @@
   unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
 }
 
+/* Headings: Noto Serif TC 700. No @font-face here: each page declares its own subset inline
+   (src/integrations/serif-fonts.ts, #167). */
+
 /* ---- Reset ---- */
 
 /* Sizes include padding and border. Without this, <a> buttons and text inputs (content-box)
@@ -88,6 +91,13 @@ body {
 }
 
 /* ---- Typography ---- */
+
+/* Headings and .serif text (names in an index, years in a record) use the serif face; one weight */
+:is(h1, h2, h3),
+.serif {
+  font-family: var(--font-serif);
+  font-weight: var(--font-weight-bold);
+}
 
 /* Short display text breaks Chinese only at spaces and punctuation, never inside a word
    (數位轉／型, 與能／源): headings, and lead text or labels marked .text-phrase. A run too long for

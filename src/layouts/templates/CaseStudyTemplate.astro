@@ -90,7 +90,7 @@ const approachIndex = data.challenge ? '02' : '01';
 
   {
     results.length > 0 && (
-      <Surface tone="dark" pattern="grid">
+      <Surface tone="light" pattern="grid">
         <SectionHeading eyebrow="Results" title={t.caseStudy.results} />
         <CardGrid>
           {results.map((r, i) => (
@@ -125,7 +125,7 @@ const approachIndex = data.challenge ? '02' : '01';
 
   {
     offerings.length > 0 && (
-      <Surface tone="dark">
+      <Surface tone="light">
         <SectionHeading eyebrow="Used" title={t.caseStudy.offerings} />
         <CardGrid>
           {offerings.map((o) => (
@@ -140,7 +140,7 @@ const approachIndex = data.challenge ? '02' : '01';
 
   {
     others.length > 0 && (
-      <Surface tone="dark" pattern="grid">
+      <Surface tone="light" pattern="grid">
         <SectionHeading eyebrow="More stories" title={t.caseStudy.others} />
         <CardGrid>
           {others.map((c, i) => (

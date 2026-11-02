@@ -15,8 +15,6 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 | `--duration-fast` | 顏色、底線、caret 等小範圍的狀態變化 | 歸零 |
 | `--duration-base` | 按鈕上浮、連結箭頭、`Faq` 的展開符號 | 歸零 |
 | `--duration-slow` | 卡片傾斜、3D canvas 淡入 | 歸零 |
-| `--duration-loop` | 循環動畫的一個週期（`LayerStack` 節點的脈動） | 歸零 |
-| `--delay-step` | 依序開始的元素之間的間隔（`LayerStack` 的節點） | 歸零 |
 | `--ease-standard` | 顏色、透明度、展開等狀態變化 | 不變 |
 | `--ease-out-expo` | 位移：上浮、傾斜、箭頭 | 不變 |
 | `--reveal-distance` | `Reveal` 進場時往上移的距離 | 不變（動畫本身不執行） |
@@ -34,9 +32,7 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 
 | 效果 | 元件 | 頁面 | 觸發 | 減少動態時 |
 |---|---|---|---|---|
-| 3D 捲動場景 | `Scene3D`、`SceneChapter` | 首頁；offering 模板中 parent 屬於 `SCENE_FAMILIES`（`src/lib/scene/families.ts`）的產品與解決方案頁，只用在 hero 與功能章節。目前 60 個公開頁面 | 捲動、時間、滑鼠（只有桌機 tier） | 不載入 three.js，只顯示 hero 的靜態圖 `Backdrop`；執行中切換成減少動態時停止場景並移除 canvas。章節背景維持不透明 |
-| 3D canvas 淡入 | `Scene3D` | 同上 | 第一個 frame 畫完 | 不發生（場景不載入） |
-| CSS 偽 3D 圖層 | `LayerStack` | 首頁的 Orient AI 區塊 | 捲動分開圖層與光束；節點循環脈動 | 圖層疊在一起、光束不拉長，節點不脈動 |
+| 3D 捲動場景（ribbon-route） | `HomeTemplate`、`src/lib/scene/ribbon/` | 首頁的 hero、產業與 AI 成果段，只有桌機（ADR 0003「ribbon-route」） | 捲動：鏡頭升到俯視再跟著頁面平移、hero 文字淡出、AI 成果逐則切換；載入後緞帶畫出一次（1.2 秒） | 不載入 three.js，顯示同一個世界渲染的靜態圖；執行中切換成減少動態時停止場景並回到靜態版 |
 | 捲動進場 | `Reveal` | 首頁、offering、hub、listing、article、case-study 模板的卡片與區塊 | 元素捲進畫面 | 直接顯示在最終位置 |
 | 捲動進度條 | `ScrollProgress` | `PageLayout` 的每一頁 | 頁面捲動 | 不輸出進度條 |
 | 卡片傾斜與上浮 | `Card` | 有卡片的頁面 | hover、focus | `--tilt`、`--lift` 歸零，只剩漸層外框與光暈，沒有過場 |
@@ -50,10 +46,9 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 
 ### 3D 的使用範圍
 
-真 3D（`Scene3D`）只用在上表的頁面，而且只放 hero 與緊接在後的章節（ADR 0003「與『預設零 client JS』的關係」）。其他頁面與其他區塊：
+真 3D 只用在首頁桌機版（ribbon-route 的緞帶場景，ADR 0003「ribbon-route」）。其他頁面與其他區塊：
 
-- 要表達層次或模組時用 CSS 偽 3D：`LayerStack`、`Card` 的傾斜，視角共用 `--perspective` 與 `--scene-angle-*`
-- 要表達場景時用 `Surface pattern="grid"` 的格線或 `Backdrop` 的靜態圖
+- 要表達場景時用同一個世界渲染的靜態圖（`src/assets/design/ribbon/`，`scripts/design/ribbon-capture.mjs`）或 `Surface pattern="grid"` 的格線
 - 閱讀頁（blog、法務、長文）不加裝飾性動態，只保留 `ScrollProgress`、`Reveal` 與互動元件的狀態變化
 
 新的頁面類型要用真 3D 時，先在 issue 寫出理由，並照下方「效能預算」量測。
@@ -63,10 +58,10 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 | 項目 | 預算 | 目前 | 量測方式 |
 |---|---|---|---|
 | 每頁初始 JS（gzip） | 6 KB | 最大 3.0 KB（`/search`），3D 頁 2.7 KB | `node scripts/design/scene-budget.mjs`（`npm run check`） |
-| 3D 延後載入的 JS（gzip） | 140 KB | 130.6 KB（runtime 加 three.js 128.5 KB，場景 2.1 KB） | 同上 |
+| 3D 延後載入的 JS（gzip） | 140 KB | 135.0 KB（`src/lib/scene/ribbon/runtime.ts`、`world.ts` 加 three.js，沒有 GSAP；2026-11-01，#167） | 同上 |
 | 3D 頁的 Lighthouse performance（行動版） | ≥ 0.95 | 見下方 | `npm run check` 的 LHCI（`lighthouserc.cjs`）、`node scripts/design/lighthouse-3d.mjs` |
 | 3D 初始化的每個 task（不節流） | 50 ms 以下 | 14–22 ms（ADR 0003「初始化的長任務」） | Chrome trace（headless Chromium，412×823、DPR 1.75）。`lighthouse-3d.mjs` 的「3D 長任務」欄是 Lighthouse 模擬節流後的時間（乘 4），會計入 TBT |
-| 3D 等待上限 | fence 與 shader 的等待各有上限，超過就照常上頁 | `src/lib/scene/runtime.ts` 的 `WAIT_LIMIT_MS`（ADR 0003「等待的上限」） | `node scripts/design/scene-wait.mjs`（`npm run check`） |
+| 3D 等待上限 | fence 與 shader 的等待各有上限，超過就照常上頁 | `src/lib/scene/ribbon/runtime.ts` 的 `WAIT_LIMIT_MS`（ADR 0003「等待的上限」） | `node scripts/design/scene-wait.mjs`（`npm run check`） |
 | LCP 元素 | hero 靜態圖，3D chunk 在 LCP 與 `load` 之後才請求 | 符合 | `lighthouse-3d.mjs` 不符合時 exit 1 |
 
 - 「目前」的數字：main `f9ff8c1`、2026-10-29、`npm run build` 的輸出
@@ -79,21 +74,18 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 
 | 頁面 | 行動版 | 桌機 |
 |---|---|---|
-| `/` | 0.99（0.98、0.99、0.99；TBT 55 ms） | 1（TBT 0 ms） |
-| `/products/digirunner` | 0.98（0.98、0.98、0.98；TBT 17 ms） | 1（TBT 0 ms） |
+| `/` | 0.98（0.97、0.98、0.98；TBT 0 ms，不載 3D） | 0.71（0.71、0.71、0.71；TBT 1,102 ms） |
 
-2026-10-29，main `f9ff8c1` 加上本 issue 的 token 與檢查（3D 的程式沒有改）。四次量測的 LCP 元素都是 hero 靜態圖，3D chunk 都在實測 LCP 與 `load` 之後才請求。
+2026-11-02，#167 階段二（ribbon-route）。行動版量到的是靜態版；桌機的長任務落在 3D 上頁後 1.2 秒的緞帶畫出動畫，細節見 ADR 0003「ribbon-route」的「結果（#167 階段二）」。產品頁不再有 3D。
 
 headless Chromium 的 TBT 偏高，當成上限看；真機待 preview 部署後量測（ADR 0003「結果」）。
 
 ### 行動版降級
 
-`(width < 64rem), (pointer: coarse)` 的裝置用行動版 tier（`src/lib/scene/tiers.ts` 的 `LOW_POWER`），在場景啟動時決定，視窗縮放跨過條件時重建。行動版降低 `devicePixelRatio` 上限（`maxDpr`）與方塊數量（`density`），關掉 antialias 與滑鼠視差（`parallax`），鏡頭只沿一個方向移動（`path: 'dolly'`）。數值只寫在 `tiers.ts` 的 `TIERS`。
-
-以下情況完全不載入 3D，只顯示靜態圖：`prefers-reduced-motion: reduce`、`navigator.connection.saveData`、瀏覽器不支援 WebGL 2。
+手機、觸控裝置與 64rem 以下的視窗不載入 3D，顯示同一個世界渲染的靜態圖（`src/lib/scene/tiers.ts` 的 `LIVE`，ADR 0003「ribbon-route」）。以下情況也完全不載入 3D：`prefers-reduced-motion: reduce`、`navigator.connection.saveData`、瀏覽器不支援 WebGL 2。
 
 ## 改到動態後要跑的檢查
 
 - 改 tokens 或元件的動態：`npm run check:design`
-- 改 `Scene3D`、`src/lib/scene/` 或用到它們的頁面：ADR 0003「量測」的 script（`lighthouse-3d.mjs`、`a11y-smoke.mjs`、`scene-capture.mjs`），`scene-capture.mjs` 也檢查減少動態時沒有 canvas、沒有 3D chunk 的請求
-- 改 `Reveal`、`LayerStack`、`ScrollProgress`：`node scripts/design/a11y-smoke.mjs`（含 reduced motion），以及 `npm run check` 的 `axe.mjs`（以 reduced motion 執行）
+- 改 `src/lib/scene/` 或首頁的 3D 段落：`lighthouse-3d.mjs`、`a11y-smoke.mjs`（ADR 0003「量測」）與 `npm run check` 的 `scene-wait.mjs`；改了世界或 `--map-*`、`--ribbon-*` 時重跑 `node scripts/design/ribbon-capture.mjs` 更新靜態圖
+- 改 `Reveal`、`ScrollProgress`：`node scripts/design/a11y-smoke.mjs`（含 reduced motion），以及 `npm run check` 的 `axe.mjs`（以 reduced motion 執行）
