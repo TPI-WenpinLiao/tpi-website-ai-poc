@@ -142,12 +142,11 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
   <div class="route" data-ribbon-route>
     <div class="stage" data-ribbon-slot="route" aria-hidden="true">
       {
-        mapLabels &&
-          MAP_LABELS.map((name) => (
-            <span class:list={['map-label', 'live-label', { start: name === 'core' }]} data-ribbon-anchor={name}>
-              {mapLabels[name]}
-            </span>
-          ))
+        MAP_LABELS.map((name) => (
+          <span class:list={['map-label', 'live-label', { start: name === 'core' }]} data-ribbon-anchor={name}>
+            {mapLabels[name]}
+          </span>
+        ))
       }
     </div>
 
@@ -469,6 +468,14 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
     display: none;
   }
 
+  /* Below the desktop layout the wide picture is narrower too: a step smaller, so the longer en and
+     vi labels don't run into each other */
+  @media (--bp-lg-down) {
+    .map-label.wide {
+      font-size: var(--font-size-xs);
+    }
+  }
+
   @media (--bp-md-down) {
     .map-label.wide {
       display: none;
@@ -640,10 +647,21 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
     background: var(--color-bg);
   }
 
-  /* A long work name (en, vi) wraps inside the picture */
+  /* A long work name (en, vi) wraps inside the picture. It hangs below the point, so the extra lines
+     grow down into the picture, not off its top: every case's block is in the picture's upper half
+     (pictures.json ai0–ai2) */
   .case-fig .map-label {
-    max-inline-size: 60%;
+    max-inline-size: 70%;
     white-space: normal;
+    transform: translate(-50%, var(--space-2));
+  }
+
+  /* Below the desktop layout the picture is a column or a phone wide: a step smaller, so a long
+     name stays a few lines */
+  @media (--bp-lg-down) {
+    .case-fig .map-label {
+      font-size: var(--font-size-xs);
+    }
   }
 
   @media (--bp-md-up) {

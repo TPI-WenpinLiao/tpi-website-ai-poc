@@ -8,7 +8,8 @@
 // the first paint, so the page takes the live layout (html.want-3d) without a shift.
 export const LIVE = '(width >= 64rem) and (not (pointer: coarse)) and (prefers-reduced-motion: no-preference)';
 
-// Network Information API is not in TypeScript's DOM lib
+// Network Information API is not in TypeScript's DOM lib. HomeTemplate's inline script can't import
+// this, so it repeats the check (`c && c.saveData`): change both together
 export const saveData = () => {
   const connection: unknown = Reflect.get(navigator, 'connection');
   return typeof connection === 'object' && connection !== null && Reflect.get(connection, 'saveData') === true;
