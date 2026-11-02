@@ -99,7 +99,7 @@ OrientAI 部署在企業端，資料不交給外部；權限、影子 AI 與 Tok
 
 ### DM-6 合作對象的穩定度看得到
 
-成立年份、海外子公司、資安認證與雲端夥伴關係，讓決策者評估長期合作的風險。
+成立年份、海外子公司、資安認證、雲端夥伴關係，以及外部單位對公司本身的評選，讓決策者評估長期合作的風險。
 
 - `fact:company-founded`：創立年份
 - `fact:company-subsidiaries-sg-vn`：新加坡與越南子公司
@@ -107,8 +107,12 @@ OrientAI 部署在企業端，資料不交給外部；權限、影子 AI 與 Tok
 - `fact:cert-iso27001-product-platform`：企業產品中台的開發流程獲 ISO27001 認證
 - `fact:company-google-cloud-partner`：Google Cloud 合作夥伴
 - `fact:company-milestone-2008-finance`：2008 年首度跨足金融產業（具名客戶，#165 起已確認）
+- `fact:award-ft-high-growth-2022`：入選英國金融時報亞太地區快速成長企業（公司獎，#182）
+- `fact:award-cx-asia-2021`：新加坡 CX Asia Excellence Awards 的供應商獎（公司獎，#182）
 
-用在：`/`。`competitors.md`「本站缺」第 2 項：新站首頁沒有第三方證據；這組與具名案例（`DM-1`、`DM-5` 的案例事實）是首頁能用的信任證據；有年份的獎項在 #180 確認後也可以用（「缺少證據的主張」第 3 項）。
+兩筆公司獎放在這裡、不放 `DM-8` 的理由：它們評的是昕力這家公司的成長與供應商表現，回答的是本主張的問題（這家公司能不能長期合作），不是某個產品好不好用。頁面引用時寫出年份（使用者決定，#180）。
+
+用在：`/`。`competitors.md`「本站缺」第 2 項：新站首頁沒有第三方證據；這組與具名案例（`DM-1`、`DM-5` 的案例事實）是首頁能用的信任證據。產品獲獎另列為 `DM-8`（#182），首頁的信任段可以兩條一起用。
 
 ### DM-7 碳盤查、產品碳足跡與 CBAM 申報有現成工具
 
@@ -122,6 +126,31 @@ OrientAI 部署在企業端，資料不交給外部；權限、影子 AI 與 Tok
 - `fact:cert-greenswift-aup`：通過國際查證機構核發的 AUP 認證
 
 用在：`/` 的 ESG 產品家族段。
+
+### DM-8 自有產品經過外部單位評選
+
+digiRunner、SysTalk 等自有產品經過國內外單位評選，決策者評估產品時，有昕力以外的說法可以參考。
+
+- `fact:award-taiwan-excellence-2023`：digiRunner、digiLogs、SysTalk.Chat 獲台灣精品獎
+- `fact:award-taiwan-excellence-2024`：digiRunner、digiLogs、SysTalk.ai 獲台灣精品獎
+- `fact:award-innovative-business-2022`：創新商務獎，digiRunner 與 SysTalk.Chat 各獲一個獎項
+- `fact:award-global-finance-2020`：台新銀行以 digiRunner 建置的平台獲 Global Finance 獎項（具名案例的獎）
+
+新增這條、不併進 `DM-6` 的理由：決策者來官網的任務是「了解產品與方案、找成功案例」與「決定要不要聯絡業務」（`audience-and-goals.md`「受眾分群」）。`DM-6` 回答後者裡「這家公司能不能長期合作」，產品獎回答的是前者「這個產品有沒有外部肯定」，而且每一筆都點名產品，用在產品頁比用在公司介紹更直接。併進 `DM-6` 會讓一條主張同時說公司與產品，brief 挑證據時分不開。
+
+寫法：
+
+- 頁面引用時寫出年份（使用者決定，#180），照事實原文寫獎名與得獎產品，不合併成「屢獲大獎」這類說法
+- 獎名裡的「最佳技術創新獎」「最佳產品創新獎」是事實原文，只能出現在引用 `fact:award-innovative-business-2022` 的地方；標題、引言與 CTA 不用「最佳」
+- `fact:award-global-finance-2020` 是台新案例平台的獎，頁面放在台新案例旁（`IT-4` 的 `fact:digirunner-case-taishin`），不單獨列成產品獎
+
+沒收進這條的有年份獎項：
+
+- `fact:award-gartner-cool-vendor-2018`：不用在試點頁。決策者評估的是現在的產品，這筆是 2018 年對 AI Chatbot 產品的肯定，得獎產品不是現行產品家族的名稱，和 2023、2024 的獎並列寫出年份時，讀者會先看到它的年份久。留給公司沿革（關於我們的里程碑）使用
+- `fact:award-sbir-2022`、`fact:award-digital-finance-2021`：不用。確認的原文只有年份與獎名，沒寫得獎的產品或類別；寫出產品或類別的同一個獎（事實庫的 `award-sbir-29`、`award-digital-finance-1st`）沒寫年份，仍是 `to_confirm`，頁面不能拿來補。「第一屆」也容易被讀成最高級說法
+- `fact:award-104-employer-2024`：不用。雇主品牌獎回答的是求職者的問題，求職者不在本站受眾內（`audience-and-goals.md`「受眾分群」）
+
+用在：`/products/digirunner`（台灣精品獎、創新商務獎點名 digiRunner；Global Finance 的獎放在第 10 段台新案例旁）、`/`（信任段，和 `DM-6` 一起用）。
 
 ## 價值主張：IT 主管
 
@@ -245,8 +274,9 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 | DM-3 AI 留在企業端 | `fact:orientai-on-prem-data`、`fact:orientai-governance-layer`、`fact:orientai-governance`、`fact:orientai-token-cost`、`fact:orientai-aidaptiv`、`fact:aiso-no-token-limit` | 6 | 首頁 |
 | DM-4 產品與導入同一家 | `fact:company-offerings`、`fact:products-families`、`fact:aiso-onboarding`、`fact:systalk-ai-onboarding`、`fact:digirunner-open-banking-consulting`、`fact:digirunner-case-taipei-city` | 6 | 首頁、金融 |
 | DM-5 保險專用模組 | `fact:insurebrick-platform`、`fact:insurebrick-28-modules`、`fact:insurebrick-scenarios`、`fact:insurering-rule-engine`、`fact:insurering-automated-rules`、`fact:insurebrick-case-online-insurance`、`fact:insurebrick-case-shin-kong`、`fact:insurering-case-shin-kong-life` | 8 | 金融 |
-| DM-6 穩定度看得到 | `fact:company-founded`、`fact:company-subsidiaries-sg-vn`、`fact:company-milestone-2020-brand`、`fact:cert-iso27001-product-platform`、`fact:company-google-cloud-partner`、`fact:company-milestone-2008-finance` | 6 | 首頁 |
+| DM-6 穩定度看得到 | `fact:company-founded`、`fact:company-subsidiaries-sg-vn`、`fact:company-milestone-2020-brand`、`fact:cert-iso27001-product-platform`、`fact:company-google-cloud-partner`、`fact:company-milestone-2008-finance`、`fact:award-ft-high-growth-2022`、`fact:award-cx-asia-2021` | 8 | 首頁 |
 | DM-7 碳盤查與 CBAM 工具 | `fact:greenswift-scope`、`fact:greenswift-cbam-plan`、`fact:greenswift-standards`、`fact:cert-greenswift-aup` | 4 | 首頁 |
+| DM-8 產品經過外部評選 | `fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-innovative-business-2022`、`fact:award-global-finance-2020` | 4 | digiRunner、首頁 |
 | IT-1 部署環境自選 | `fact:digirunner-deployment`、`fact:digirunner-multi-cloud`、`fact:digirunner-cloud-platforms`、`fact:digilism-ipaas`、`fact:digilism-system-integration`、`fact:digirunner-case-pharmacity` | 6 | digiRunner |
 | IT-2 安全機制內建 | `fact:digirunner-zero-trust`、`fact:digirunner-security`、`fact:digirunner-auth-methods`、`fact:digirunner-open-banking-security`、`fact:digirunner-gov-threat-protection`、`fact:cert-iso27001-digirunner`、`fact:gadodido-fido-certified`、`fact:gadodido-passwordless`、`fact:gadodido-mfa`、`fact:gadodido-device-only-data` | 10 | digiRunner、金融 |
 | IT-3 尖峰與故障 | `fact:digirunner-zero-downtime`、`fact:digirunner-failover`、`fact:digirunner-container-scaling`、`fact:digirunner-load-balancing`、`fact:digirunner-smart-caching-patent`、`fact:digirunner-redis-storage`、`fact:digirunner-tps` | 7 | digiRunner |
@@ -260,8 +290,8 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 
 | 試點頁 | 主要主張 | 次要主張 |
 |---|---|---|
-| `/` | DM-2、DM-3、DM-4、DM-6 | DM-7、IT-4、IT-6、IT-8 |
-| `/products/digirunner` | IT-1、IT-2、IT-3、IT-6、IT-7 | DM-1、IT-4、IT-5 |
+| `/` | DM-2、DM-3、DM-4、DM-6 | DM-7、DM-8、IT-4、IT-6、IT-8 |
+| `/products/digirunner` | IT-1、IT-2、IT-3、IT-6、IT-7 | DM-1、DM-8、IT-4、IT-5 |
 | `/industries/finance` | DM-1、DM-2、DM-5 | DM-4、IT-2、IT-4、IT-8 |
 
 ## 語氣與用詞
@@ -327,7 +357,7 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 |---|---|---|---|
 | 1 | 昕力是台灣第一或領先的企業軟體公司 | 最高級自我宣稱，現站沒有排名依據 | `fact:company-claim-taiwan-first` |
 | 2 | 規模：員工數、累積專案數、AI 服務用戶數 | 員工數已解決：原文寫出 2020 年，改為 `confirmed`，引用時寫出年份（使用者決定，#180）。專案數那句沒有年份，使用者決定不用；AI 服務用戶數沒寫統計時間，仍不能用 | `fact:company-projects-400`、`fact:systalk-ai-140-million-users` |
-| 3 | 產品獲獎肯定（台灣精品獎、Gartner Cool Vendor 等） | 已解決：有年份的獎項改為 `confirmed`，引用時寫出年份（使用者決定，#180）。可以用的有 `fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-gartner-cool-vendor-2018`、`fact:award-innovative-business-2022`；沒寫年份的 Best in Singapore、GoodFirms 仍不能用 | `fact:award-best-in-singapore`、`fact:award-goodfirms-software`、`fact:award-goodfirms-mobile` |
+| 3 | 產品獲獎肯定（台灣精品獎、Gartner Cool Vendor 等） | 已升成主張，見 `DM-8`（產品獎）與 `DM-6`（公司獎）（#182）。有年份的獎項改為 `confirmed`，引用時寫出年份（使用者決定，#180）；哪些有年份的獎項不用、理由見 `DM-8`「沒收進這條的有年份獎項」。沒寫年份的 Best in Singapore、GoodFirms 仍不能用 | `fact:award-best-in-singapore`、`fact:award-goodfirms-software`、`fact:award-goodfirms-mobile` |
 | 4 | 客戶證言（含說話人姓名與職稱） | 大部分已解決：使用者決定現站寫出的客戶名稱、證言與說話人姓名、職稱都視為已授權（#165），例如 `fact:testimonial-shin-kong-bank`、`fact:testimonial-excellence-wire` 已是 `confirmed`，可以當決策者「找成功案例」的第三方說法用。仍卡住的三則是因為內容：國泰金控的證言含當時的 50% 用戶服務量，可能過時；政大金融科技研究中心的證言有「第一家」、委外服務頁的國泰證言摘錄有「最佳技術」，都是最高級說法 | `fact:testimonial-cathay-fhc`、`fact:testimonial-nccu-fintech`、`fact:testimonial-cathay-fhc-excerpt` |
 | 5 | digiRunner 是國內唯一符合金管會法令、100% 合規的 API 管理平台 | 最高級說法與 100% 都沒有依據。DM-1 只用「反應法規要求」「針對金融檢查」等已確認的說法。決定不用（使用者決定，#180） | `fact:digirunner-claim-fsc-only`、`fact:digirunner-finance-compliance-100`、`fact:digirunner-claim-gov-compliance-100` |
 | 6 | digiRunner 比 Kong 好導入、好維運、更合規 | 與競品的比較沒有依據或比較日期；`search-intent.md` 的「Kong 替代方案 API Gateway」是比較型查詢，確認後可給 digiRunner 頁接住。決定不用，不加比較段落（使用者決定，#180） | `fact:digirunner-vs-kong-integration`、`fact:digirunner-vs-kong-adoption`、`fact:digirunner-vs-kong-compliance`、`fact:digirunner-vs-kong-operations` |
