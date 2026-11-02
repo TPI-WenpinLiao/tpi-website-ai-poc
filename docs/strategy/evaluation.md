@@ -47,7 +47,7 @@ node scripts/strategy/eval-shots.mjs --new <scratch>/new-dist --old <scratch>/ol
 
 ### 評分
 
-- 依 `site-review`「做法」第 1 步，每頁開一個新的 `reviewer`，共 11 個。評分用的是本 PR 修改前（eb0592e）的 rubric 與 `site-review`；本 PR 改了 D1 錨點，補了 4、2 分的給法與 C3、C4、S6 的提示（見「流程回寫」），之後用新 rubric 重評的分數不能和這一輪直接比較。prompt 只給截圖、HTML、`docs/strategy/` 的依據與 rubric，不給其他組的分數。評審結果原文存在 `evaluation/reviews/<組>-<頁>.md`，只調整標題層級
+- 依 `site-review`「做法」第 1 步，每頁開一個新的 `reviewer`，共 11 個。評分用的是本 PR 修改前（eb0592e）的 rubric 與 `site-review`；本 PR 改了 D1 錨點，補了 4、2 分的給法與 C3、C4、S1、S2、S6 的提示（見「流程回寫」），之後用新 rubric 重評的分數不能和這一輪直接比較。prompt 只給截圖、HTML、`docs/strategy/` 的依據與 rubric，不給其他組的分數。評審結果原文存在 `evaluation/reviews/<組>-<頁>.md`，只調整標題層級
 - 新版、舊版、現站都是昕力的頁面，三份 rubric 全評，對照同一份 brief，量的是離 brief 多遠
 - 競品沒有 brief，也不適用昕力的設計原則：D2、C5、S1、S2、S5 標不適用，平均只算其餘項目。競品的平均和昕力頁面的平均算的項目不同，只能大致比較
 - 昕力的 9 頁另請評審寫「評審依據不足」（競品沒有 brief 與設計原則可對照，不寫）：哪些項目因為文件寫得不清楚而難以判斷。流程回寫主要依據這一節
@@ -156,7 +156,7 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 
 ## 流程回寫
 
-評審的「評審依據不足」整理成下表。每一列是一個流程缺口：哪個階段的產出物不夠用、哪個關卡沒擋住，以及這次改了什麼。
+評審的「評審依據不足」裡，影響多份評審或卡住某一階段的項目整理成下表；只影響單頁的依據問題列在表後的「交給 #186 的單頁問題」。每一列是一個流程缺口：哪個階段的產出物不夠用、哪個關卡沒擋住，以及這次改了什麼。
 
 | # | 缺口 | 階段 | 證據 | 這次的修改 |
 |---|---|---|---|---|
@@ -167,18 +167,32 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 | 5 | brief 與原則、brief 與 messaging 互相衝突（金融頁 eyebrow、digiRunner hero 的「免費」） | 策略、設計概念 | old-finance、new-digirunner | `design-concept`：原則定案後逐份對照 brief，衝突寫進 brief 的「取捨」；`content-strategy`：hero 證據點要符合 messaging 的限制 |
 | 6 | brief 沒寫每段放什麼圖 | 策略 | new-digirunner 第 2 項 | `content-strategy`：段落表加「影像」欄，設計概念階段填 |
 | 7 | messaging 的證據點不一定支撐主張的關鍵詞（`DM-2` 收了沒提到 AI 的阻詐平台） | 策略 | new-home C3 與第 5 項 | `content-strategy`：證據點的原文要直接支撐主張的關鍵詞 |
-| 8 | 競品分析只看首頁，產品頁與產業頁的 D1、S2 沒有對照 | 研究 | 6 份評審（new-finance、old-home、old-digirunner、old-finance、current-digirunner、current-finance） | `site-research`：競品分析涵蓋每個試點模板；搜尋意圖記錄前幾名缺了哪些子題 |
+| 8 | 競品分析只看首頁，產品頁與產業頁的 D1、S2 沒有對照 | 研究 | 6 份評審（new-finance、old-home、old-digirunner、old-finance、current-digirunner、current-finance） | `site-research`：競品分析涵蓋每個試點模板；搜尋意圖記錄前幾名缺了哪些子題。`seo.md` 的 S2 提示改為對照這一項 |
 | 9 | rubric 只有 5、3、1 的錨點，「取低的」讀法不一，D1 的 3 與 1 重疊 | 評審 | 4 份評審 | `site-review`「Rubric」寫出 4、2 分的判斷方式；`design.md` 的 D1 錨點改為 3 分「看得出做什麼，但看不出給誰或跟競品的差別」、1 分「只看得出是軟體或科技公司」；內頁的 D1、D2 照該模板的原則，D2 包含共用元件 |
 | 10 | C3 沒說 `to_confirm`、messaging 排除的事實、原文後接加強句怎麼算 | 評審 | current-home、current-digirunner、old-digirunner | `copy-marketing.md` 評分提示補上 |
 | 11 | C4 的主要轉換：`site-profile.md` 與 brief 不同時以哪個為準 | 評審 | old-digirunner、current-digirunner | `copy-marketing.md`：brief 指定時以 brief 為準 |
 | 12 | S6 沒寫缺整個必要類型、欄位要多少才算一致 | 評審 | current-home、new-digirunner | `seo.md` 評分提示：以 `content-model.md` 規定的類型與欄位為準 |
 | 13 | 減少動態下的空白、淡出、只在 hover 出現的內容怎麼算；S5 的「連入」只有一頁 HTML 評不了 | 評審 | old-home、current-finance、current-digirunner | `site-review`「評審對象的準備」：截圖以減少動態截取，看不到的內容當實際呈現評；hover 才出現的不算看得到；連入用 grep 查整份 `dist/` |
 | 14 | 評審素材要手動準備，整頁長圖縮小後讀不到字 | 評審 | 本次執行 | `site-review` 新增「評審對象的準備」，用 `eval-shots.mjs` 產生匿名代號與切段，`eval-scores.mjs` 產生分數表；`site-review`「做法」第 5 步與 `reviewer` agent 要求每份評審寫「評審依據不足」 |
+| 15 | S1 要照實際搜尋結果的意圖，還是照 brief 決定承接的查詢 | 評審 | new-home 第 7 項 | `seo.md` 評分提示：brief 決定不承接的查詢，S1 照 brief 評，不扣分 |
+| 16 | 製作備註漏進文案（「以下照原文列出」） | 製作 | new-digirunner C6 | `content-strategy`「3. 頁面文案」：說明句寫讀者得到什麼，不描述頁面怎麼排 |
 
 不改的：
 
 - 匿名化對現站不完全（缺口無法用流程解決，現站的 markup 本身就看得出來）。報告註明，分數照用
 - 「事實原文照引時能不能加標點、拆成清單」（new-finance 第 6 項）。這是內容規則的取捨，改了會影響 `facts.mjs` 的比對方式，列在 #186 由使用者決定
+
+### 交給 #186 的單頁問題
+
+這些依據問題只影響一頁，答案要寫進該頁的 brief 或設計原則，由 #186 一併處理：
+
+- digiRunner brief 第 6 段：拆成 5 張卡算不算偏離，`fact:digirunner-oas` 放哪裡；brief 要求照原文列清單的段落，C2 怎麼評（new-digirunner 第 4、6 項）
+- 金融 brief：hero 要不要放聯絡按鈕；「產品總覽」段是不是 `industry` 反查的獨立一段；子頁卡片不顯示時 `hasPart` 要不要保留；案例卡要不要寫成果（new-finance 第 3、4、5、8 項）
+- 首頁 brief 第 4 段：4 個產品是哪 4 個（new-home 第 2 項）；類別詞進不進 title（current-home 第 2 項）
+- 舊網址併入新頁時，評審照哪一份 brief（current-finance 第 1 項）
+- 產品頁能不能沿用首頁 hero 的 3D 物件（old-digirunner 第 3 項）
+- 一句話的產品描述算事實還是表述（old-home 第 4 項）
+- C4 的「普通」與「埋在頁面極下方」、S1 整組主要查詢沒回答時給幾分（old-finance 第 4、5 項）。這兩項是錨點的寫法，`site-review`「Rubric」補的 4、2 分給法已涵蓋，#186 不另處理
 
 ### 後續 issue
 
