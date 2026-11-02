@@ -236,6 +236,8 @@ export async function mount({ canvas, context, route, cases }: Options): Promise
     if (next !== mode) {
       mode = next;
       slots[mode].append(canvas);
+      // Off the canvas the label is back on the static picture's --x/--y (HomeTemplate)
+      if (mode === 'route') caseLabel.style.translate = '';
       measure();
     }
     if (mode === 'route') {

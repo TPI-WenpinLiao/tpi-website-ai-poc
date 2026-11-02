@@ -105,8 +105,10 @@ async function fallsBackWithoutChunk(browser, url) {
   }
 }
 
-// Where the results section is scrolled to: one point in each result's stretch
-const CASE_POINTS = [0.1, 0.45, 0.8];
+// Where the results section is scrolled to: one point in each result's stretch, and one before the
+// section is held (its top below the screen's), where the canvas isn't in the slot and the label is
+// on the static picture: first on the way down, last on the way back up, after the scene placed it
+const CASE_POINTS = [-0.15, 0.1, 0.45, 0.8, -0.15];
 
 /**
  * The results whose label on the running scene is not inside the picture (data-ribbon-slot):
@@ -121,6 +123,7 @@ async function labelsOutside(browser, url) {
     await page.goto(url, { waitUntil: 'load' });
     await page.waitForSelector('[data-ribbon-cases][data-scene="ready"]', { timeout: SCENE_TIMEOUT });
     const outside = [];
+    let seen = 0;
     for (const at of CASE_POINTS) {
       await page.evaluate((f) => {
         const cases = /** @type {HTMLElement} */ (document.querySelector('[data-ribbon-cases]'));
@@ -134,10 +137,13 @@ async function labelsOutside(browser, url) {
         const s = slot.getBoundingClientRect();
         const l = label.getBoundingClientRect();
         const shown = getComputedStyle(label).visibility === 'visible';
-        return { text: label.textContent, inside: !shown || (l.left >= s.left && l.right <= s.right && l.top >= s.top && l.bottom <= s.bottom) };
+        return { text: label.textContent, shown, inside: !shown || (l.left >= s.left && l.right <= s.right && l.top >= s.top && l.bottom <= s.bottom) };
       });
+      if (box.shown) seen += 1;
       if (!box.inside) outside.push(box.text);
     }
+    // A label hidden at every point would check nothing
+    if (!seen) outside.push('(no label shown at any point)');
     return outside;
   } finally {
     await page.close();
