@@ -953,7 +953,10 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
     inset: var(--y, 0) auto auto var(--x, 0);
   }
 
-  :global([data-scene='ready']) .slot .live-label {
+  /* Once the scene runs, runtime.ts places the label with `translate` from the slot's corner. As
+     specific as the rule above (html.want-3d), or that rule's --x/--y offset stays and the label
+     lands that far right of its block, off the slot */
+  :global(html.want-3d) :global([data-scene='ready']) .slot .live-label {
     inset: 0 auto auto 0;
   }
 </style>

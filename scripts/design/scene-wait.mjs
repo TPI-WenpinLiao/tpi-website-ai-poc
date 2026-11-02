@@ -3,8 +3,9 @@
 // canvas on the page. Each case is simulated by patching WebGL before the page loads, and the
 // time from the 3D chunk's arrival to the first frame (track's data-scene="ready") is compared
 // with an unpatched load. Exits 1 when a patched load never gets ready, or takes longer than the
-// unpatched one plus the limit and SLACK; also when a locale's home never gets ready, or a 3D chunk
-// that fails to load leaves the live layout (#167).
+// unpatched one plus the limit and SLACK; also when a locale's home never gets ready, a 3D chunk
+// that fails to load leaves the live layout, or a result's label on the running scene leaves its
+// picture (#167).
 // Run after `npm run build`: node scripts/design/scene-wait.mjs
 
 import { readFileSync } from 'node:fs';
@@ -104,6 +105,45 @@ async function fallsBackWithoutChunk(browser, url) {
   }
 }
 
+// Where the results section is scrolled to: one point in each result's stretch
+const CASE_POINTS = [0.1, 0.45, 0.8];
+
+/**
+ * The results whose label on the running scene is not inside the picture (data-ribbon-slot):
+ * the label is placed from the slot's corner, so a leftover offset puts it off the picture, where
+ * the slot clips it (#167: a CSS rule kept the static picture's --x/--y under the scene's translate).
+ * @param {import('puppeteer-core').Browser} browser @param {string} url
+ */
+async function labelsOutside(browser, url) {
+  const page = await browser.newPage();
+  try {
+    await page.setViewport({ width: 1280, height: 800 });
+    await page.goto(url, { waitUntil: 'load' });
+    await page.waitForSelector('[data-ribbon-cases][data-scene="ready"]', { timeout: SCENE_TIMEOUT });
+    const outside = [];
+    for (const at of CASE_POINTS) {
+      await page.evaluate((f) => {
+        const cases = /** @type {HTMLElement} */ (document.querySelector('[data-ribbon-cases]'));
+        scrollTo(0, cases.getBoundingClientRect().top + scrollY + (cases.offsetHeight - innerHeight) * f);
+      }, at);
+      // the scene follows the scroll over a few frames
+      await new Promise((r) => setTimeout(r, 1500));
+      const box = await page.evaluate(() => {
+        const slot = /** @type {HTMLElement} */ (document.querySelector('[data-ribbon-slot="cases"]'));
+        const label = /** @type {HTMLElement} */ (slot.querySelector('[data-ribbon-case-label]'));
+        const s = slot.getBoundingClientRect();
+        const l = label.getBoundingClientRect();
+        const shown = getComputedStyle(label).visibility === 'visible';
+        return { text: label.textContent, inside: !shown || (l.left >= s.left && l.right <= s.right && l.top >= s.top && l.bottom <= s.bottom) };
+      });
+      if (!box.inside) outside.push(box.text);
+    }
+    return outside;
+  } finally {
+    await page.close();
+  }
+}
+
 async function main() {
   const server = await serve(DIST);
   const address = server.address();
@@ -123,6 +163,11 @@ async function main() {
       console.log(`${path} unpatched: ${ms === undefined ? 'never ready' : `ready ${Math.round(ms)} ms after the 3D chunk`}`);
       if (ms === undefined) errors.push(`${path} never ready`);
     }
+    for (const path of [PATH, ...OTHER_LOCALE_PATHS]) {
+      const outside = await labelsOutside(browser, `http://localhost:${address.port}${path}`);
+      console.log(`${path} result labels: ${outside.length ? `off the picture: ${outside.join(', ')}` : 'inside the picture'}`);
+      if (outside.length) errors.push(`${path} result labels off the picture`);
+    }
     for (const [name, patch] of Object.entries(CASES).filter(([n]) => n !== 'unpatched')) {
       const ms = await timeToReady(browser, url, patch);
       const limit = base + WAIT_LIMIT_MS + SLACK_MS;
@@ -134,7 +179,7 @@ async function main() {
     server.close();
   }
   if (errors.length) {
-    console.error(`3D scene waits without a limit: ${errors.join(', ')} (src/lib/scene/ribbon/runtime.ts, WAIT_LIMIT_MS; a locale never ready: see the browser console)`);
+    console.error(`3D scene problems: ${errors.join(', ')} (src/lib/scene/ribbon/runtime.ts, WAIT_LIMIT_MS; a locale never ready: see the browser console; labels off the picture: HomeTemplate's .slot .live-label rules)`);
     process.exitCode = 1;
   }
 }
