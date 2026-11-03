@@ -148,12 +148,13 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 評審與驗證報告完成（#168）：`docs/strategy/evaluation.md` 用 `site-review` 的三份 rubric 評試點三頁的新版、舊版（818988f）、現站與兩家競品（SYSTEX、Syscom），每頁一個新的 `reviewer`，共 11 份評審，全文在 `docs/strategy/evaluation/reviews/`。新版首頁三份都通過（設計 4.2、文案與行銷 4.3、SEO 4.2）；新版 digiRunner（3.0／3.8／4.3）與金融（3.0／3.7／3.8）未通過，設計都卡在 D2 = 2，扣分元素來自 `PageHero`、`SectionHeading`、`Card` 留下的 eyebrow、編號與框線；舊版、現站、競品全部未通過。另做 3 個只看首頁第一屏的 5 秒測試（模擬）。素材由 `node scripts/strategy/eval-shots.mjs` 產生（截圖、整頁切段、匿名代號），分數表由 `node scripts/strategy/eval-scores.mjs` 從評審檔重算（接進 `npm run check`）。評審的「評審依據不足」整理成 16 個流程缺口（只影響單頁的列給 #186），寫回 `design-concept`（每個試點模板都寫「會怎麼呈現」、寫回 `design-system` 時列出衝突的元件）、`content-strategy`（段落表加「影像」欄、製作時改寫 brief 而不是加版本段落、說明句寫讀者得到什麼）、`site-research`（競品對照涵蓋每個模板）、`site-review` 與三份 rubric（4、2 分的給法、D1 錨點、C3、C4、S1、S2、S6 的提示、評審對象的準備）、`issue-ship` 第 8 步與 `docs/workflow.md`（製作階段轉 ready 前由 `reviewer` 評設計 rubric，D2 ≥ 3）、`reviewer` agent
 - 策略文件依 #168 評審同步完成（#186，`strategy-approved`）：`design-principles.md` 新增「各模板怎麼呈現」（offering、hub 的第一屏、10 種段落版型、影像與案例列，#187 要改的共用元件），P5 改成首頁 5 段；三份 brief 的段落表加「影像」欄，`briefs/home.md` 改寫成 5 段版，digiRunner 與金融 brief 的衝突與單頁問題寫進「取捨」；`messaging.md` `DM-2` 改用原文提到 AI 的證據點（阻詐平台移到「缺少證據」）；`competitors.md` 補產品頁（Kong、Apigee、Syscom BanTalk）與產業頁（SYSTEX、Syscom、FPT）對照，`search-intent.md` 每個條目補「前幾名都沒有」。依使用者決定，事實庫的 `text` 可以加標點、用換行拆成清單，不改字也不加字，`facts.mjs` 擋下改字的 confirmed 事實。使用者確認時決定：金融頁保留新光銀行證言、精選案例維持 4 則（3 則缺成果事實，列在 brief「待確認」）
 - 試點三頁依 #168 評審修正並重評完成（#187，`design-approved`）：共用元件拿掉 eyebrow、編號、框線、玻璃與陰影（`PageHero`、`SectionHeading`、`Card`、`Button`、`ContactCta` 等），offering 與 hub 加上以 `layout` 區分版型的 `sections`（`PageSections` 與新元件 `JunctionDiagram`、`UiFragment`、`SpecTable`、`Timeline`、`CaseList`、`IndexList`、`MapPicture`），digiRunner 與金融頁照 brief 逐段排版，案例改成案例列。使用者提供的緞帶世界素材：段落圖依使用者決定只用在規格表、色帶段（`design-principles.md`「段落圖」），產品家族 hub 的 hero 圖也給家族底下沒有 hero 圖的產品頁用。全站聯絡按鈕叫「聯絡業務」（`navigation.csv` utility 列，`contactAction`），首頁 `WebSite` 加 `SearchAction`，hero 靜態圖重拍補上 AI 模型、核心銀行系統等標籤。第二輪重評三頁三份 rubric 都通過（`evaluation.md`「第二輪（#187）」）
+- en、vi 首頁依新版面重寫文案完成（#177）：`src/data/home/en.ts`、`vi.ts` 依 zh-TW 的 5 段改寫，事實從現站 en、vi 頁收進事實庫（各 11 筆 `-en`、`-vi`，`facts.mjs --sources` 701/701）。現站 en、vi 沒有的說法換成同語系現站有的：OrientAI 段用 FAQ 的「資料歸企業所有」，資安認證用 DigiLism 的 ISO 27001。`types.ts` 把三語都有的欄位改成必填，`HomeTemplate.astro` 拿掉退回節點名稱的寫法。en、vi 標題依版面縮短到跟 zh-TW 行數相近（en hero 沒寫金融與政府，移到 lead）
 
 ## 下一步
 
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
 - #188 可以開始（決定其他頁面是否照分階段流程重做，`needs-input`）
-- #167 的後續已開成 issue：#177（en、vi 首頁依新版面寫文案）、#178（政府頁、digiRunner on Cloud、`/blog/enterprise-grade-apim` 連到 digiRunner）、#179（首頁 header 經過紫色段落時換色，`needs-design`）
+- #167 的後續已開成 issue：#178（政府頁、digiRunner on Cloud、`/blog/enterprise-grade-apim` 連到 digiRunner）、#179（首頁 header 經過紫色段落時換色，`needs-design`）
 - digiRunner 頁要不要加產品獎（`DM-8` 的台灣精品獎 2023、2024，創新商務獎 2022）：#183 只放了 hero 的專利數與台新的 Global Finance 2020，`DM-8` 把 digiRunner 列為主要用途頁，要放的話另開 issue
 - #165 brief 的「待確認」已開成 issue：#173（兩篇 blog：`API Gateway 是什麼`、`企業 AI 導入`）、#174（digiRunner 開源版的事實收進事實庫）
 - 回覆 #164 PR 的「待確認」：`to_confirm` 事實，#180 後剩 117 筆（ESG 顧問與合作單位的授權、沒寫年份或統計時間的獎項與數字、沒有依據的成效數字與最高級宣稱、現站各頁說法不一致）；`www.tpisoftware.vn` 恢復後跑一次 `node scripts/strategy/facts.mjs --sources`
@@ -181,6 +182,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - Review M1-04 功能盤點（`docs/research/features.md`），向後端負責人與行銷確認文末「待確認」
 - 回答 `docs/research/audience-and-goals.md`「尚未回答的問題」其餘 6 題（第 2、5 題已在 M2-01 暫定）
 - 回覆 #39 PR 的「待確認」：glossary 的 AI 草擬譯名、en 頁面沒搬的段落與照抄的錯字、不在詞彙表的專有名詞、現站 en 沒有的產品頁、en 法務頁是否需法務審閱
+- 回覆 #177 PR 的「待確認」：en、vi 的資安認證寫 DigiLism（zh-TW 寫企業產品中台之開發流程）、vi FT 原文是 Finance Times、OrientAI 段改用訓練資料的 FAQ、en hero 沒寫金融與政府
 - 以 `/next-issue` 找出下一張可開始的 issue
 
 ## 待辦備忘

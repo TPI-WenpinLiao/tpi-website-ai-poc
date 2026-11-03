@@ -76,7 +76,6 @@ const [heroWideImg, heroTallImg, forkWideImg, forkTallImg] = await Promise.all([
 const industries = Object.entries(copy.industries.entries)
   .map(([id, entry]) => ({ ...entry, node: localNode(id, locale) }))
   .filter((i) => hasPage(i.node));
-const industriesTitle = copy.industries.title ?? localNode('industries', locale).title;
 
 // The AI results, one picture each: the close-up of the same ribbon, the result's block lit
 const CASE_PICTURES: { image: ImageMetadata; where: Where }[] = [
@@ -96,7 +95,6 @@ const cases = copy.cases.items.map((c, i) => {
     label: anchor ? { style: `--x: ${(anchor.x * 100).toFixed(1)}%; --y: ${(anchor.y * 100).toFixed(1)}%` } : undefined,
   };
 });
-const casesTitle = copy.cases.title ?? localNode('success-stories', locale).title;
 
 const THUMBS: Record<string, ImageMetadata> = {
   digirunner: prodDigirunner,
@@ -109,7 +107,6 @@ const products = copy.products.nodes
   .filter((p) => hasPage(p))
   .map((p) => ({ ...p, thumb: THUMBS[p.id] }));
 const productsNode = localNode('products', locale);
-const productsTitle = copy.products.title ?? productsNode.title;
 const orient = localNode(copy.orientAi.node, locale);
 
 // Structured data from the organization data file of this page's locale
@@ -147,8 +144,8 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
           </h1>
           <p class="lead">{copy.hero.lead}</p>
           <div class="actions">
-            <Button href={href(contact)} size="lg">{copy.contact.action ?? contact.title}</Button>
-            {copy.hero.secondary && <Link href="#industries" variant="standalone">{copy.hero.secondary}</Link>}
+            <Button href={href(contact)} size="lg">{copy.contact.action}</Button>
+            <Link href="#industries" variant="standalone">{copy.hero.secondary}</Link>
           </div>
         </div>
         <figure class="hero-map">
@@ -161,7 +158,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
               width={heroWide.width}
               height={heroWide.height}
               fetchpriority="high"
-              alt={copy.hero.mapAlt ?? ''}
+              alt={copy.hero.mapAlt}
             />
           </picture>
           {
@@ -185,13 +182,13 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
             <img src={forkWideImg.src} srcset={forkWideImg.srcSet.attribute} sizes="100vw" width={forkWide.width} height={forkWide.height} loading="lazy" alt="" data-ribbon-fork />
           </picture>
         </figure>
-        <h2 id="industries-title" class="head industries-title">{lines(industriesTitle).map((line, i) => (i ? [<br />, line] : line))}</h2>
+        <h2 id="industries-title" class="head industries-title">{lines(copy.industries.title).map((line, i) => (i ? [<br />, line] : line))}</h2>
         {
           industries.map((i, k) => (
             <a class:list={['industry', k === 0 ? 'first' : 'second']} href={href(i.node)}>
               <h3 class="entry-title">{i.node.title}</h3>
               <span>{i.text}</span>
-              {i.link && <span class="arrow-link">{i.link}</span>}
+              <span class="arrow-link">{i.link}</span>
             </a>
           ))
         }
@@ -201,8 +198,8 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
 
   <section class="cases" id="cases" data-ribbon-cases aria-labelledby="cases-title">
     <div class="cases-stage grid">
-      <h2 id="cases-title" class="head">{lines(casesTitle).map((line, i) => (i ? [<br />, line] : line))}</h2>
-      {copy.cases.count && <p class="count" aria-hidden="true" data-ribbon-count data-template={copy.cases.count} />}
+      <h2 id="cases-title" class="head">{lines(copy.cases.title).map((line, i) => (i ? [<br />, line] : line))}</h2>
+      <p class="count" aria-hidden="true" data-ribbon-count data-template={copy.cases.count} />
       <div class="panels">
         {
           cases.map((c) => (
@@ -238,7 +235,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
   </section>
 
   <section class="products grid" id="products" aria-labelledby="products-title">
-    <h2 id="products-title" class="head">{lines(productsTitle).map((line, i) => (i ? [<br />, line] : line))}</h2>
+    <h2 id="products-title" class="head">{lines(copy.products.title).map((line, i) => (i ? [<br />, line] : line))}</h2>
     <ul class="index">
       {
         products.map((p) => (
@@ -257,7 +254,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
   <section class="orient grid" data-surface="dark" aria-labelledby="orient-title">
     <div class="orient-text">
       <h2 id="orient-title" class="head">{lines(copy.orientAi.title).map((line, i) => (i ? [<br />, line] : line))}</h2>
-      {copy.orientAi.quote && <p class="quote">{copy.orientAi.quote}</p>}
+      <p class="quote">{copy.orientAi.quote}</p>
       <Link href={nodeHref(orient.id, locale)} variant="standalone">{copy.orientAi.link}</Link>
     </div>
     <figure class="orient-fig">
@@ -268,23 +265,21 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
   <section class="contact grid" data-surface="dark" aria-labelledby="contact-title">
     <h2 id="contact-title" class="head">{copy.contact.title}</h2>
     {copy.contact.description && <p class="contact-lead">{copy.contact.description}</p>}
-    {
-      copy.contact.records && (
-        <ul class="records">
-          {copy.contact.records.map((r) => (
-            <li>
-              <span class="serif">{r.label}</span>
-              <span>{r.text}</span>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    <ul class="records">
+      {
+        copy.contact.records.map((r) => (
+          <li>
+            <span class="serif">{r.label}</span>
+            <span>{r.text}</span>
+          </li>
+        ))
+      }
+    </ul>
     <div class="act">
       <span class="band" aria-hidden="true"></span>
-      <Button href={href(contact)} size="lg">{copy.contact.action ?? contact.title}</Button>
+      <Button href={href(contact)} size="lg">{copy.contact.action}</Button>
     </div>
-    <p><Link href={nodeHref('about', locale)} variant="standalone">{copy.contact.about ?? localNode('about', locale).title}</Link></p>
+    <p><Link href={nodeHref('about', locale)} variant="standalone">{copy.contact.about}</Link></p>
   </section>
 </PageLayout>
 

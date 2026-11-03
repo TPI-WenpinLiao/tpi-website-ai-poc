@@ -1,58 +1,69 @@
-// Home page copy in vi (M7-03, #40), written like the zh-TW file (see its header): facts through
-// fact('<id>'), the rest is wording, still taken from the current site's vi pages
-// (www.tpisoftware.vn) at the places the zh-TW lines come from; `meta` is this site's own wording.
-// #167 rebuilt the home page in five sections (src/data/home/types.ts) for zh-TW only: this file
-// keeps its earlier copy where a section has a place for it, and the sections and headings it has no
-// copy for are left out or named after their node, until the vi copy is written (#167 follow-up).
+// Home page copy in vi (#177), section by section like zh-TW.ts (see its header): facts through
+// fact('<id>') from the current vi pages (www.tpisoftware.vn, the `-vi` facts in
+// docs/strategy/facts.yaml), the rest is wording, written for this site after the zh-TW lines and
+// docs/strategy/messaging.md. Names of products and pages come from docs/i18n/glossary.csv.
 
 import { fact } from '../facts.ts';
 import type { Home } from './types.ts';
 
-const hero = {
-  // The subtitle of the about page's h1, as in zh-TW
-  title: 'Tái Định Hình Với AI Cho Một Tương Lai Xanh Hơn',
-  description: 'Không ngừng nỗ lực mang đến những công nghệ và giải pháp phần mềm đổi mới.',
-};
-
-const orientAi = {
-  node: 'orient-ai',
-  title: 'Hiện thực hóa giá trị thực tiễn từ AI',
-  action: 'Tìm hiểu thêm',
-};
-
-const industryLines: Record<string, string> = {
-  'industry-finance':
-    'Ngân hàng mở: dưới sự đồng ý của khách hàng của ngân hàng, việc sử dụng thông tin được cung cấp cho Nhà cung cấp dịch vụ Bên thứ ba (TSP) thông qua API mở.',
-  'industry-government': 'Ứng dụng API mở cho Chính phủ thông minh',
-};
-
-// The vi home page's case highlights at the places of the zh-TW ones
-const cases: { node: string; title: string; summary: string }[] = [
-  { node: 'smartclaim', title: fact('smartclaim-title-vi'), summary: fact('smartclaim-result-vi') },
-  { node: 'smartfilling', title: fact('smartfilling-title-vi'), summary: fact('smartfilling-result-vi') },
-  { node: 'success-stories', title: fact('fraud-platform-title-vi'), summary: fact('fraud-platform-result-vi') },
-];
-
-const contactCta = {
-  title: 'Chúng tôi luôn sẵn sàng lắng nghe bạn!',
-  description: 'Nếu bạn có bất kỳ câu hỏi hay thắc mắc nào, đừng ngần ngại liên hệ.',
-};
-
 export const home: Home = {
   meta: {
-    // The vi home page's <title>, with this site's separator
-    title: 'TPIsoftware | Dẫn đầu về giải pháp phần mềm cho doanh nghiệp',
-    // The vi home page's meta description, cut to the seo-checklist length
+    title: 'TPIsoftware | Phần mềm API và AI cho tài chính và chính phủ',
     description:
-      'TPIsoftware cung cấp nền tảng trung gian iPaaS DigiLism, dòng AI hội thoại SysTalk.ai, nền tảng quản lý bền vững ESGswift và nền tảng bảo mật GadoSecurity.',
+      'TPIsoftware tự phát triển và triển khai phần mềm, kết nối API, dữ liệu và AI một cách an toàn vào hệ thống hiện có của ngành tài chính và chính phủ.',
   },
-  hero: { title: hero.title, lead: hero.description },
+  hero: {
+    title: 'API và AI cho\ntài chính, chính phủ',
+    mapAlt:
+      'Bản đồ hệ thống gồm các khối trắng: một dải ruy băng xuất phát từ hệ thống lõi màu xám đậm, đi qua các sản phẩm TPIsoftware có mặt trên màu tím, mô hình AI màu hồng tím và dịch vụ mới màu cam, chuyển từ tím sang hồng tím rồi sang cam, và chạy xuống khỏi mép trước của bản đồ.',
+    lead: 'TPIsoftware tự phát triển sản phẩm, đồng thời lập kế hoạch và triển khai cho khách hàng.',
+    secondary: 'Giải pháp theo ngành',
+  },
   industries: {
-    entries: Object.fromEntries(Object.entries(industryLines).map(([node, text]) => [node, { text }])),
+    // Short like zh-TW (see en.ts)
+    title: 'Quy định,\nđã tích hợp',
+    entries: {
+      'industry-finance': { text: fact('digirunner-open-banking-fsc-vi'), link: 'Giải pháp cho ngành tài chính' },
+      'industry-government': { text: fact('digirunner-ndc-spec-vi'), link: 'Giải pháp cho chính phủ' },
+    },
   },
-  cases: { items: cases.map((c) => ({ node: c.node, name: c.title, result: c.summary })) },
-  products: { nodes: ['digirunner', 'systalk-viki', 'gadodido', 'greenswift'] },
-  orientAi: { node: orientAi.node, title: orientAi.title, link: orientAi.action },
-  contactCta,
-  contact: { title: contactCta.title, description: contactCta.description },
+  cases: {
+    title: 'AI trong công việc\nhằng ngày',
+    count: '{n} / {total}',
+    items: [
+      { node: 'smartclaim', name: fact('smartclaim-title-vi'), result: fact('smartclaim-result-vi') },
+      { node: 'smartfilling', name: fact('smartfilling-title-vi'), result: fact('smartfilling-result-vi') },
+      // The bank result, as in zh-TW (#187)
+      { node: 'industry-finance', name: fact('smartfilling-case-bank-title-vi'), result: fact('smartfilling-case-bank-vi'), link: 'AI trong ngành tài chính' },
+    ],
+  },
+  products: {
+    title: 'Sản phẩm cho API, AI,\nbảo mật và carbon',
+    nodes: ['digirunner', 'systalk-viki', 'gadodido', 'greenswift'],
+  },
+  orientAi: {
+    node: 'orient-ai',
+    // Like en.ts: the vi FAQ asks about training, not whether the data leaves the company
+    title: 'AI doanh nghiệp,\ndữ liệu là của bạn.',
+    quote: `Dữ liệu của tôi có được sử dụng để huấn luyện các mô hình của bên thứ ba không? “${fact('orientai-data-yours-vi')}”`,
+    link: 'Tìm hiểu OrientAI, nền tảng AI tự chủ cho doanh nghiệp',
+  },
+  contactCta: {
+    title: 'Trao đổi nhu cầu hoặc đặt lịch demo',
+    description:
+      'Hãy cho chúng tôi biết hệ thống hiện tại và vấn đề bạn muốn giải quyết. Đội ngũ kinh doanh và tư vấn của TPIsoftware sẽ liên hệ để sắp xếp buổi giới thiệu hoặc demo.',
+  },
+  contact: {
+    title: 'Hợp tác lâu dài, có hồ sơ để kiểm chứng',
+    records: [
+      { label: '2005', text: fact('company-founded-vi') },
+      { label: '2008', text: fact('company-milestone-2008-finance-vi') },
+      { label: '2020', text: fact('company-employees-630-vi') },
+      { label: '2022', text: fact('award-ft-high-growth-2022-vi') },
+      { label: '2024', text: fact('award-taiwan-excellence-2024-vi') },
+      { label: 'Chứng nhận', text: fact('cert-iso27001-digilism-vi') },
+    ],
+    action: 'Liên hệ kinh doanh',
+    about: 'Về TPIsoftware',
+  },
 };

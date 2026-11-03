@@ -284,6 +284,210 @@
   locale: vi
   status: confirmed
 
+# --- Home page facts (en), at the places of the zh-TW ones (#177) ---
+- id: digirunner-open-banking-fsc-en
+  type: feature
+  text: digiRunner API managing platforms reflect the law requirements of open banking financial supervisory commission.
+  source:
+    url: https://www.tpisoftware.com/en/products/open-banking
+    quote: digiRunner API managing platforms reflect the law requirements of open banking financial supervisory commission
+  locale: en
+  status: confirmed
+
+- id: digirunner-ndc-spec-en
+  type: feature
+  text: Compliant with Common API Specifications of Taiwanese National Development Council
+  source:
+    url: https://www.tpisoftware.com/en/products/open-government
+    quote: Compliant with Common API Specifications of Taiwanese National Development Council
+  locale: en
+  status: confirmed
+
+- id: smartfilling-case-bank-title-en
+  type: case
+  text: Financial Industry - A Stepping Stone to Document Digitization
+  source:
+    url: https://www.tpisoftware.com/en/solutions/smartfilling
+    quote: Financial Industry - A Stepping Stone to Document Digitization
+  locale: en
+  status: confirmed
+
+- id: smartfilling-case-bank-en
+  type: case
+  text: In response to the increasing volume of banking operations, our solution saves nearly 52% outsourcing costs for digital finance and information departments in the banking industry by streamlining document processing. The feedback system features model re-training, which seamlessly integrates recognized data into internal systems, effectively reducing operational cost by up to 45%.
+  source:
+    url: https://www.tpisoftware.com/en/solutions/smartfilling
+    quote: In response to the increasing volume of banking operations, our solution saves nearly 52% outsourcing costs for digital finance and information departments in the banking industry by streamlining document processing. The feedback system features model re-training, which seamlessly integrates recognized data into internal systems, effectively reducing operational cost by up to 45%.
+  locale: en
+  status: confirmed
+
+# The en page has no "does the data leave the company" question (zh-TW orientai-on-prem-data); this is its FAQ answer on data
+- id: orientai-data-yours-en
+  type: feature
+  text: Your data remains yours and will not be used for any other purpose.
+  source:
+    url: https://www.tpisoftware.com/en/orient-ai
+    quote: Your data remains yours and will not be used for any other purpose.
+  locale: en
+  status: confirmed
+
+- id: company-founded-en
+  type: company
+  text: Founded in 2005, TPIsoftware (formerly named ThinkPower) built custom enterprise digital systems.
+  source:
+    url: https://www.tpisoftware.com/en/about-us
+    quote: Founded in 2005, TPIsoftware (formerly named ThinkPower) built custom enterprise digital systems
+  locale: en
+  status: confirmed
+
+- id: company-milestone-2008-finance-en
+  type: company
+  text: It entered the financial sector by building the CRM system for Hua Nan Bank in 2008.
+  source:
+    url: https://www.tpisoftware.com/en/about-us
+    quote: It entered the financial sector by building the CRM system for Hua Nan Bank in 2008
+  locale: en
+  status: confirmed
+
+- id: company-employees-630-en
+  type: metric
+  text: Following its rebranding in 2020, TPIsoftware has become the key player in Taiwan’s software industry with 630 employees worldwide.
+  source:
+    url: https://www.tpisoftware.com/en/about-us
+    quote: Following its rebranding in 2020, TPIsoftware has become the key player in Taiwan’s software industry with 630 employees worldwide.
+  locale: en
+  status: confirmed
+
+- id: award-ft-high-growth-2022-en
+  type: award
+  text: It has been selected as a top FT 500 Asia-Pacific High-Growth Company of 2022.
+  source:
+    url: https://www.tpisoftware.com/en/about-us
+    quote: It has been selected as a top FT 500 Asia-Pacific High-Growth Company of 2022
+  locale: en
+  status: confirmed
+
+- id: award-taiwan-excellence-2024-en
+  type: award
+  text: digiRunner, digiLogs, SysTalk.ai awarded “Taiwan Excellence Awards 2024”
+  source:
+    url: https://www.tpisoftware.com/en/about-us
+    quote: digiRunner, digiLogs, SysTalk.ai awarded “Taiwan Excellence Awards 2024”
+  locale: en
+  status: confirmed
+
+# zh-TW names the development process of the enterprise product platform (cert-iso27001-product-platform); en and vi name DigiLism
+- id: cert-iso27001-digilism-en
+  type: certification
+  text: DigiLism certified with ISO 27001
+  source:
+    url: https://www.tpisoftware.com/en/about-us
+    quote: DigiLism certified with ISO 27001
+  locale: en
+  status: confirmed
+
+# --- Home page facts (vi), at the places of the zh-TW ones (#177) ---
+- id: digirunner-open-banking-fsc-vi
+  type: feature
+  text: Các nền tảng quản lý API digiRunner phản ánh yêu cầu pháp lý của Ủy ban Giám sát Tài chính về Ngân Hàng Mở.
+  source:
+    url: https://www.tpisoftware.vn/products/open-banking
+    quote: Các nền tảng quản lý API digiRunner phản ánh yêu cầu pháp lý của Ủy ban Giám sát Tài chính về Ngân Hàng Mở
+  locale: vi
+  status: confirmed
+
+- id: digirunner-ndc-spec-vi
+  type: feature
+  text: Tuân thủ các tiêu chuẩn kỹ thuật chung cho API của Hội đồng Phát triển Quốc gia Đài Loan
+  source:
+    url: https://www.tpisoftware.vn/products/open-government
+    quote: Tuân thủ các tiêu chuẩn kỹ thuật chung cho API của Hội đồng Phát triển Quốc gia Đài Loan
+  locale: vi
+  status: confirmed
+
+- id: smartfilling-case-bank-title-vi
+  type: case
+  text: Ngành Tài Chính - Bước đệm cho Số hóa tài liệu
+  source:
+    url: https://www.tpisoftware.vn/solutions/smartfilling
+    quote: Ngành Tài Chính - Bước đệm cho Số hóa tài liệu
+  locale: vi
+  status: confirmed
+
+- id: smartfilling-case-bank-vi
+  type: case
+  text: Để đáp ứng khối lượng công việc ngân hàng ngày càng tăng, giải pháp của chúng tôi tiết kiệm gần 52% chi phí thuê ngoài cho các bộ phận thông tin và tài chính số trong ngành ngân hàng bằng cách đơn giản hóa việc xử lý tài liệu. Hệ thống phản hồi có tính năng tái đào tạo mô hình, tích hợp liền mạch dữ liệu được nhận dạng vào hệ thống nội bộ, giúp giảm chi phí vận hành lên tới 45%.
+  source:
+    url: https://www.tpisoftware.vn/solutions/smartfilling
+    quote: Để đáp ứng khối lượng công việc ngân hàng ngày càng tăng, giải pháp của chúng tôi tiết kiệm gần 52% chi phí thuê ngoài cho các bộ phận thông tin và tài chính số trong ngành ngân hàng bằng cách đơn giản hóa việc xử lý tài liệu. Hệ thống phản hồi có tính năng tái đào tạo mô hình, tích hợp liền mạch dữ liệu được nhận dạng vào hệ thống nội bộ, giúp giảm chi phí vận hành lên tới 45%.
+  locale: vi
+  status: confirmed
+
+# Like orientai-data-yours-en
+- id: orientai-data-yours-vi
+  type: feature
+  text: Dữ liệu của bạn thuộc quyền sở hữu của bạn và sẽ không được sử dụng cho bất kỳ mục đích nào khác.
+  source:
+    url: https://www.tpisoftware.vn/orient-ai
+    quote: Dữ liệu của bạn thuộc quyền sở hữu của bạn và sẽ không được sử dụng cho bất kỳ mục đích nào khác.
+  locale: vi
+  status: confirmed
+
+- id: company-founded-vi
+  type: company
+  text: Được thành lập vào năm 2005, TPIsoftware (tên trước đây là ThinkPower) đã xây dựng các hệ thống kỹ thuật số tùy chỉnh cho doanh nghiệp.
+  source:
+    url: https://www.tpisoftware.vn/about-us
+    quote: Được thành lập vào năm 2005, TPIsoftware (tên trước đây là ThinkPower) đã xây dựng các hệ thống kỹ thuật số tùy chỉnh cho doanh nghiệp
+  locale: vi
+  status: confirmed
+
+- id: company-milestone-2008-finance-vi
+  type: company
+  text: Công ty đã tham gia vào lĩnh vực tài chính bằng cách xây dựng hệ thống CRM cho Ngân hàng Hua Nan vào năm 2008.
+  source:
+    url: https://www.tpisoftware.vn/about-us
+    quote: Công ty đã tham gia vào lĩnh vực tài chính bằng cách xây dựng hệ thống CRM cho Ngân hàng Hua Nan vào năm 2008
+  locale: vi
+  status: confirmed
+
+- id: company-employees-630-vi
+  type: metric
+  text: Sau khi đổi thương hiệu vào năm 2020, TPIsoftware đã trở thành công ty chủ chốt trong ngành công nghiệp phần mềm của Đài Loan với 630 nhân viên trên toàn thế giới.
+  source:
+    url: https://www.tpisoftware.vn/about-us
+    quote: Sau khi đổi thương hiệu vào năm 2020, TPIsoftware đã trở thành công ty chủ chốt trong ngành công nghiệp phần mềm của Đài Loan với 630 nhân viên trên toàn thế giới.
+  locale: vi
+  status: confirmed
+
+# The page writes Finance Times for Financial Times; copied as is (content-migration「多語系內容」)
+- id: award-ft-high-growth-2022-vi
+  type: award
+  text: TPIsoftware được chọn là Công ty trong top 500 Công ty Châu Á-Thái Bình Dương có tốc độ tăng trưởng cao hàng đầu do Finance Times bình chọn năm 2022.
+  source:
+    url: https://www.tpisoftware.vn/about-us
+    quote: TPIsoftware được chọn là Công ty trong top 500 Công ty Châu Á-Thái Bình Dương có tốc độ tăng trưởng cao hàng đầu do Finance Times bình chọn năm 2022
+  locale: vi
+  status: confirmed
+
+- id: award-taiwan-excellence-2024-vi
+  type: award
+  text: digiRunner, digiLogs, SysTalk.ai được trao giải "Taiwan Excellence Awards 2024"
+  source:
+    url: https://www.tpisoftware.vn/about-us
+    quote: digiRunner, digiLogs, SysTalk.ai được trao giải "Taiwan Excellence Awards 2024"
+  locale: vi
+  status: confirmed
+
+- id: cert-iso27001-digilism-vi
+  type: certification
+  text: DigiLism đạt chứng nhận ISO 27001
+  source:
+    url: https://www.tpisoftware.vn/about-us
+    quote: DigiLism đạt chứng nhận ISO 27001
+  locale: vi
+  status: confirmed
+
 # --- Company profile (about us) ---
 - id: company-offerings
   type: company
