@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { bodyCopy, checkPage, checkStrategyDoc, copyStrings, factCalls, markdownPage, numbers, validateFacts } from './facts.mjs';
+import { bodyCopy, checkPage, checkStrategyDoc, copyStrings, factCalls, markdownPage, numbers, validateFacts, wording } from './facts.mjs';
 
 const entry = (over = {}) => ({
   id: 'smartclaim-result',
@@ -37,6 +37,22 @@ test('validateFacts accepts a valid library and names the entry and field of eac
   assert.notDeepEqual(validateFacts({}), []);
   // text may trim the quote but not change its numbers
   assert.match(validateFacts([entry({ text: '節省逾90%人工作業時間' })])[0], /smartclaim-result: 90% in text is not in source.quote/);
+});
+
+test('a readable text may add punctuation and line breaks to the quote, not words (#186)', () => {
+  const stage = entry({ id: 'stage', text: '', source: { url: 'https://www.tpisoftware.com/', quote: '2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。' } });
+  assert.deepEqual(validateFacts([{ ...stage, text: '2019 第一階段：公開資訊開放。開放商品資訊，如：匯率、房貸利息等。' }]), []);
+  assert.deepEqual(validateFacts([{ ...stage, text: '2019 第一階段\n公開資訊開放\n開放商品資訊' }]), []);
+  assert.deepEqual(validateFacts([entry({ text: '節省逾80%' })]), []);
+  assert.match(validateFacts([{ ...stage, text: '2019 年第一階段：公開資訊開放' }])[0], /stage: text changes or adds words/);
+  assert.match(validateFacts([{ ...stage, text: '2019 第一階段：公開資訊全面開放' }])[0], /stage: text changes or adds words/);
+  // to_confirm facts never reach a page, so their text may still label a table's columns
+  assert.deepEqual(validateFacts([{ ...stage, text: '比較：2019 第一階段', status: 'to_confirm', note: 'comparison' }]), []);
+});
+
+test('wording drops spaces, break points and punctuation, folding full-width', () => {
+  assert.equal(wording('整合性： 一站式平台，開箱即用'), wording('整合性 一站式平台，開箱即用'));
+  assert.equal(wording('ＡＰＩ​Log'), 'APILog');
 });
 
 test('numbers folds full-width digits and drops thousands separators', () => {

@@ -9,7 +9,9 @@
 - 首頁 5 段，每段一句標題加最多一句說明或一則事實，細節移到產品、產業頁（P5）
 - 標題用中文襯線 webfont，只取用到的字（P1）
 
-本檔是分階段流程設計概念階段的第一份產出（`.claude/skills/design-concept/SKILL.md`「1. 設計原則」「2. 參考對照」）。它決定試點頁（`docs/strategy/site-profile.md`「試點頁面」）在畫面上要傳達什麼，用來否決不符合的設計。各方向的首頁原型（`docs/strategy/concepts/<direction>/`），每個主要視覺決定都要指到這裡的一條原則（P1…P5）；`reviewer` 的設計 rubric D2「與設計原則一致」也拿本檔評分。首頁的文案在 `docs/strategy/concepts/copy-deck.md`；`argument.md` 是第二輪的論點紀錄。
+**補上內頁（#186，2026-11-03）**：#168 的評審指出原則只為首頁寫了「會怎麼呈現」，offering 與 hub 模板沒有依據（`docs/strategy/evaluation.md`「流程回寫」第 1、2 項）。新增「各模板怎麼呈現」一節，寫 digiRunner 產品頁與金融產業頁的第一屏、段落版型、影像與案例卡，列出和這些寫法衝突、要由 #187 改的共用元件，並回答「交給 #186 的單頁問題」裡屬於設計的兩項。P1–P5 的原則本身沒改；首頁的段數改成定案的 5 段。
+
+本檔是分階段流程設計概念階段的第一份產出（`.claude/skills/design-concept/SKILL.md`「1. 設計原則」「2. 參考對照」）。它決定試點頁（`docs/strategy/site-profile.md`「試點頁面」）在畫面上要傳達什麼，用來否決不符合的設計。各方向的首頁原型（`docs/strategy/concepts/<direction>/`），每個主要視覺決定都要指到這裡的一條原則（P1…P5）；`reviewer` 的設計 rubric D2「與設計原則一致」也拿本檔評分。P1–P5 的「會怎麼呈現」以首頁舉例，產品頁與產業頁的做法在「各模板怎麼呈現」，評內頁的 D2 時兩處一起看。首頁的文案在 `docs/strategy/concepts/copy-deck.md`；`argument.md` 是第二輪的論點紀錄。
 
 - 輸入：`docs/strategy/messaging.md`（#165，`strategy-approved`）的定位句、`DM-1`～`DM-7`、`IT-1`～`IT-8` 與「語氣與用詞」；`docs/strategy/briefs/home.md` 的段落結構與 CTA，另兩份 brief（`digirunner.md`、`finance.md`）；`docs/strategy/competitors.md` 與 `docs/strategy/competitors/*.png`；現有設計系統（`design-system` skill、`src/styles/tokens.css`、`docs/design/motion.md`、ADR 0003、`docs/design/brand-assets.md`）
 - 原則限制「傳達什麼」，不規定唯一的樣式。每條原則最後一列寫各方向可以在哪裡不同；亮色或深色、有沒有 3D、用不用插圖，都不是原則決定的事
@@ -58,11 +60,11 @@
 
 | 面向 | 做法 |
 |---|---|
-| 版面 | 事實用固定的「紀錄」格式，全頁一致。案例寫成「作業 → 成果 → 連結」三個部分，用位置與留白分開，不畫框（brief 第 3 段的 `fact:smartclaim-result`、`fact:smartfilling-result`、`fact:fraud-platform-result`）；穩定度寫成一列年份或項目加原文（brief 第 7 段的 `fact:company-founded`、`fact:company-milestone-2008-finance`、`fact:company-subsidiaries-sg-vn`、`fact:cert-iso27001-product-platform`、`fact:company-google-cloud-partner`）。條件小字緊貼在數字下方，不放到註腳 |
+| 版面 | 事實用固定的「紀錄」格式，全頁一致。案例寫成「作業 → 成果 → 連結」三個部分，用位置與留白分開，不畫框（首頁第 3 段 AI 成果的 `fact:smartclaim-result`、`fact:smartfilling-result`、`fact:smartfilling-case-bank`，#186 依 `DM-2` 換掉原文沒提到 AI 的阻詐平台；產品頁與產業頁的案例列見「各模板怎麼呈現」）；穩定度寫成一列年份或項目加原文（首頁第 5 段的紀錄，例如 `fact:company-founded`、`fact:company-milestone-2008-finance`，6 則的清單照 `briefs/home.md`）。條件小字緊貼在數字下方，不放到註腳 |
 | 字體 | 事實與表述用同一個內文字體，靠位置、字級與字重分開：例如事實原文固定放在表述的下方或右側、用內文字級，表述用標題字級。年份與數字用等寬數字（`font-variant-numeric: tabular-nums`），不用等寬字體（house rule：no monospace）。標籤用一般大小寫、可讀的字級，不用大寫小字加字距。成果原文照引，不改寫成更強的短句 |
 | 色彩 | 證據區塊用底色的一階色差或一整片平塗色和其他段落分開，不用細框線、左側色條或陰影（house rules：no thin rules、no shadows）。品牌色（紫、品紅、橘）可以當 accent 標出事實的類別、狀態與重點，同一種事實全頁用同一個顏色；成果數字不塗成漸層 |
 | 影像 | 具名客戶以文字呈現客戶名稱（`fact:digirunner-case-taishin`、`fact:digirunner-case-taipei-city` 這類具名案例），合作夥伴與客戶分開標示（`competitors.md`「本站缺」第 2 項）。證言若採用（見「待確認」第 3 項），寫出說話人與原文，不配圖庫人像 |
-| 動態 | 數字直接輸出在 HTML，不做數字跳動或計數動畫（brief 第 7 段）。證據可以在段落進場時上移淡入一次，減少動態時直接顯示 |
+| 動態 | 數字直接輸出在 HTML，不做數字跳動或計數動畫（`briefs/home.md` 的穩定度段）。證據可以在段落進場時上移淡入一次，減少動態時直接顯示 |
 
 不會怎麼呈現：
 
@@ -76,13 +78,13 @@
 
 ## P3 畫的是「接進既有系統」，不是「全新的未來」
 
-依據：定位句「把 API、資料與 AI 安全接進既有系統」；`IT-4`（接上既有系統，不必先汰換）、`IT-6`（AI 流量和 API 走同一道 Gateway）、`DM-4`（產品與導入由同一家負責）；`briefs/home.md` 第 4 段（每個產品家族寫解決什麼問題）與第 6 段。`competitors.md` 的「視覺語言」列：四家用的是晶片、手指、光流、漸層這類和業務無關的科技圖。
+依據：定位句「把 API、資料與 AI 安全接進既有系統」；`IT-4`（接上既有系統，不必先汰換）、`IT-6`（AI 流量和 API 走同一道 Gateway）、`DM-4`（產品與導入由同一家負責）；`briefs/home.md` 的產品家族段（每個家族寫解決什麼問題，首頁 5 段版併成第 4 段「產品與 OrientAI」）與「產品與導入同一家」段。`competitors.md` 的「視覺語言」列：四家用的是晶片、手指、光流、漸層這類和業務無關的科技圖。
 
 會怎麼呈現：
 
 | 面向 | 做法 |
 |---|---|
-| 版面 | 產品家族依「要解決的問題」排（接既有系統與 AI 串接、AI 模型、碳盤查、身分驗證，brief 第 4 段），不依內部組織排。能表達接點的地方用「既有系統、昕力的產品、新的服務」左中右或上中下的位置關係，用相鄰、重疊或一條平塗色帶表示接上，不畫細線箭頭 |
+| 版面 | 產品家族依「要解決的問題」排（接既有系統與 AI 串接、AI 模型、碳盤查、身分驗證，`briefs/home.md` 的產品家族段），不依內部組織排。能表達接點的地方用「既有系統、昕力的產品、新的服務」左中右或上中下的位置關係，用相鄰、重疊或一條平塗色帶表示接上，不畫細線箭頭 |
 | 字體 | 圖解與介面片段裡的標籤用真實的系統類別名稱（核心系統、大型主機、WAF、AI 模型，取自 `fact:digilism-protocol-integration`、`fact:digirunner-nginx-waf` 等事實的用詞），產品名照 messaging「產品與公司名寫法」 |
 | 色彩 | 既有系統用中性色，昕力的產品與接點用方向配色裡的 accent 或一個 field 色，讓「誰接了什麼」一眼分得出來。方塊與底色平塗，不用光暈；串起接點的緞帶用紫→品紅→橘的漸層，讀成資料從既有系統經過昕力的產品流到新的服務（定案的放寬，只用在緞帶）。品牌色完整使用：紫、品紅、橘可以分別標昕力的產品、AI 的流量與接點，全頁的對應固定，每個方向在 `concepts/directions.md` 寫明 |
 | 影像 | 影像要能讀成「層」「接點」「管線」「閘道」。本站沒有產品截圖，接點用兩種東西畫：在 HTML 裡照事實文字做的產品介面片段（根元素標 `data-ui`，標「示意」，taste-skill `references/imagery.md` §7），以及 SVG 架構圖解（既有系統、昕力的產品、新的服務的位置關係）。不用開放圖庫的照片。`src/assets/design/` 的抽象渲染可以沿用，但它不畫接點，不當表達接點的主要影像。定案的首頁用 WebGL 渲染的系統地圖：白色方塊是既有系統，頂面上色的是昕力的產品與 AI 模型，標籤寫系統類別，手機與減少動態時用同一個世界渲染的靜態圖；介面片段留給產品、案例頁 |
@@ -124,16 +126,16 @@
 
 ## P5 版面照讀者的判斷順序分輕重，每段回答一個問題
 
-依據：`briefs/home.md`「段落結構」的排序理由（先確認「是不是為我做」：hero、產業；再看「做得到嗎」：案例、產品、OrientAI；最後看「找這家安不安心」：導入、穩定度，再聯絡）與「受眾與任務」（兩次捲動內找到自己的產業入口與一則有成果的案例）。`competitors.md`「不適合本站」：FPT 約 11,100 px 的長首頁；`competitors.md`「首頁結構」：GSS、SYSTEX 每段用同一種卡片格。rubric D3 與 D4 評視覺層級與節奏。
+依據：`briefs/home.md`「段落結構」的排序理由（先確認「是不是為我做」：hero、產業；再看「做得到嗎」：AI 成果、產品與 OrientAI；最後看「找這家安不安心」：紀錄，再聯絡。定案的首頁是 5 段：hero、產業入口、AI 成果、產品與 OrientAI、紀錄與聯絡）與「受眾與任務」（兩次捲動內找到自己的產業入口與一則有成果的案例）。`competitors.md`「不適合本站」：FPT 約 11,100 px 的長首頁；`competitors.md`「首頁結構」：GSS、SYSTEX 每段用同一種卡片格。rubric D3 與 D4 評視覺層級與節奏。
 
 會怎麼呈現：
 
 | 面向 | 做法 |
 |---|---|
-| 版面 | 8 段各自有不同的版型密度：hero、產業入口、案例三段的視覺權重最高；產品家族是可掃讀的索引；穩定度是緊湊的紀錄列；聯絡是收束。375 寬重新安排，不是縮小版：產業入口與第一則案例在兩次捲動內出現 |
+| 版面 | 首頁 5 段各自有不同的版型密度：hero、產業入口、AI 成果三段的視覺權重最高；產品與 OrientAI 是可掃讀的索引加一條紫色帶；紀錄與聯絡是緊湊的紀錄列加收束。375 寬重新安排，不是縮小版：產業入口與第一則成果在兩次捲動內出現。產品頁與產業頁的段落較多，版型清單與輪替規則見「各模板怎麼呈現」 |
 | 字體 | 每段都有一個標題，寫這段回答的問題的答案（文案在 `concepts/copy-deck.md`），兩行以內。字級依段落重要性分級，但全頁不超過五種字級；不是每段都用同一級 h2 樣式加同樣的留白 |
 | 色彩 | 用底色的色差或整片平塗色標出三組判斷（是不是為我做、做得到嗎、安不安心），讓長頁面有節奏；不用分隔線，也不是每段交替黑白 |
-| 影像 | 每段的圖都是這一段的內容（案例作業的介面片段、產品的介面片段、這一段的架構圖解），不是封面圖；產品與案例頁至少 4 張圖（taste-skill 的下限，由介面片段滿足，SVG 不算）；首頁的圖是系統地圖與沿緞帶的近景，不套這個下限 |
+| 影像 | 每段的圖都是這一段的內容（案例作業的介面片段、產品的介面片段、這一段的架構圖解），不是封面圖；產品頁、產業頁與案例頁至少 4 張圖（taste-skill 的下限，由介面片段滿足，SVG 架構圖另計、不算進 4 張）；首頁的圖是系統地圖與沿緞帶的近景，不套這個下限。各段放哪張圖見「各模板怎麼呈現」 |
 | 動態 | 進場動態只用在每段的主要元素（標題、文字、圖依序錯開 60–90ms），不讓每張卡片都依序飛入 |
 
 不會怎麼呈現：
@@ -145,6 +147,168 @@
 
 各方向可以不同的地方：段落的分組方式、各段的版型（全寬、雙欄、索引表、整片色塊）、頁面總長度。
 
+## 各模板怎麼呈現
+
+P1–P5 的「會怎麼呈現」以首頁（home 模板，定案的原型是 `concepts/ribbon-route/`）舉例。本節寫 `site-profile.md` 列的另兩個試點模板：offering（`/products/digirunner`）與 hub（`/industries/finance`）。原則照舊，本節寫原則落到這兩個模板時的具體做法，評內頁的 D2 時拿本節與 P1–P5 一起對照。
+
+- 依據：P1–P5；#168 的評審（`evaluation/reviews/new-digirunner.md`、`new-finance.md` 的 D2、D4、D5 與「評審依據不足」，現在的截圖在 `evaluation/new/`）；上方「競品的觀察」後半的產品頁與產業頁對照
+- 段落編號指 `briefs/digirunner.md`、`briefs/finance.md` 的「段落結構」。brief 增減段落時，照段落的類型套版型，不照編號；brief 段落表的「影像」欄照本節填
+- 模板改了以後，同模板的其他頁面（其他產品頁、政府產業頁）跟著換版型。它們的內容要不要照 brief 重寫由 #188 決定，本節只寫兩個試點頁
+- 事實照事實庫原文，本節舉的 `fact:` 只說明那一格放哪一類事實，實際放哪幾則照 brief
+
+### 內頁共用的規則
+
+| 面向 | 做法 | 依據 |
+|---|---|---|
+| 第一屏 | h1 是頁面最大的字，兩行以內，上方沒有任何小標。上層節點（DigiLism、產業方案）只出現在麵包屑。h1 下方依序是說明句、證據點、動作，影像在文字旁邊或按鈕下方，換掉影像第一屏的意思不變 | P1；new-digirunner D2 第 1 項、new-finance D2 第 1 項；Apigee 的 h1 是小字（「競品的觀察」） |
+| 段落的輪替 | 相鄰兩段不用同一種版型（下方「內頁的版型」）；同一種版型全頁最多 3 次。現在的「左標題、右條列」雙欄（`FactRow`）是其中一種，不再是預設 | P5；new-digirunner D4、new-finance D4 |
+| 段落的分隔 | 不用分隔線、框線、背景格線。段落之間只有 `--space-section` 的間距；P5 的判斷組之間換底色（`--color-bg-subtle`、`--color-bg-brand-subtle`），全頁最多一條深紫帶（`data-surface="dark"`），放在聯絡段 | P2、P4、P5；house rules：no thin rules、no shadows |
+| 段落標題 | 每段一個 h2，寫這段回答的問題的答案，兩行以內，中文；不加英文小標、編號與短線。主要段落的 h2 用 `--font-size-h2`，次要段落（相關文章、相關產品、子頁）的標題用 `--font-size-text` 的襯線粗體，權重低於案例與規範。h1 可以比 h2 大一級，全頁仍不超過五種字級 | P4、P5；new-digirunner D3 |
+| 事實 | 照 P2 的紀錄格式：事實原文用內文字級，放在表述的下方或右側；數字只加粗，不放大成主視覺；條件緊貼在數字下方。清單項目用間距分開，不畫底線。照引的事實原文在畫面上是片段時，用清單或表格的一格呈現，不硬接成一段 | P2；new-finance C6 第 1 項 |
+| 頁內導覽 | 保留 `InPageNav`，列中文段名。和頁面用底色的一階色差分開，不用下框線；375 寬時列內橫向捲動，右緣露出下一項的一部分，讓人看得出還有 | P4；new-digirunner D6 |
+| 影像 | 至少 4 張介面片段（`data-ui`、標「示意」，文字只用事實原文）；SVG 架構圖另計。片段只畫事實寫得出的東西：功能名稱、設定項目、狀態名稱。要靠假資料才成立的畫面（流量曲線、筆數、時間戳記、客戶名單）不畫，那會變成 house rule 禁止的假儀表板。同一頁的片段用同一種外框與比例 | P3、P5；new-digirunner D2 第 6 項 |
+| 375 寬 | 重新安排，不是把雙欄堆疊：介面片段只留主要的一塊；短詞清單（標準名稱、雲平台、適用業務）排成兩欄；一段不超過約 1.5 個螢幕高。不把事實收進 `<details>`：評審以減少動態的截圖評分，收起來的內容當作沒有 | P5；`site-review`「評審對象的準備」；new-digirunner D6、new-finance D6 |
+| 動態 | 照 P4 與 `motion.md`：每段的主要元素進場一次，介面片段在進場時可以前進一個狀態（例如故障的節點換成分流），減少動態時停在完成狀態。不載 3D | P4；ADR 0003「ribbon-route」 |
+
+### 內頁的版型
+
+offering 與 hub 共用下列 10 種版型。欄位指 12 欄格線（`--grid-*`），寬度是 1280 寬的排法。
+
+| 版型 | 長相 | 375 寬 | 用在哪種段落 | 依據 |
+|---|---|---|---|---|
+| 接點圖 | h2 與說明句在 1–5 欄，SVG 架構圖在 7–12 欄：既有系統在左（中性色）、昕力的產品在中（紫）、新的服務或 AI 在右（橘、品紅），接上用相鄰或一條平塗色帶表示，不畫細線箭頭。事實原文在圖下方跨 12 欄，兩欄排列 | 圖接在說明句後面，事實一欄 | 「接得上嗎」：接上既有系統、高可用架構 | P3；Apigee 的「運作方式」架構圖、BanTalk 的架構圖 |
+| 介面片段 | 片段在 1–7 欄，佔段落最大的面積；h2、說明句與 2–4 則事實原文在 9–12 欄。同一頁下一個介面片段段落左右對調 | 片段在說明句後面、滿版 | 「產品做什麼」：AI Gateway、認證、主控台、規則設定 | P3、P5；Apigee 用產品介面當插圖 |
+| 規格表 | h2 加一句說明，下面是真的 `<table>` 或 `<dl>`（項目一欄、原文一欄）；整段墊 `--color-bg-subtle`。表格可以有列線（house rules 的例外：真的表格） | 兩欄改成上下 | 「規格與標準」：部署環境、資安標準、硬體與 TPS、適用業務 | P2 |
+| 對應表 | 一列一個規範或需求：規範名稱（襯線粗體）在 1–4 欄，對應功能的事實原文在 5–10 欄，連到產業頁或產品頁的連結在 11–12 欄，錨點寫目標頁的內容 | 每列上下排 | 「規範要求有沒有被處理」：產品頁的規範段、產業頁的法規段 | P2、`DM-1`；三家競品的產業頁都沒寫在地法規（`competitors.md`「本站已有（產業頁）」第 2 項） |
+| 時間列 | 有順序的事實用 `<ol>`：年份在前（襯線粗體、`tabular-nums`），原文在後，一列一則 | 同 | 年份有意義的事實：開放銀行三階段 | P2；house rule：順序用真的 `<ol>` |
+| 成果 | 一則一列：作業名稱（襯線粗體）、成果原文（數字加粗，條件緊貼）、客戶名（有的話）、連結在 1–6 欄，這則作業的介面片段在 8–12 欄。和首頁第 3 段的減少動態版同一種排法 | 文字在上、片段在下 | 「做得到嗎」：AI 作業的成果 | P2、P5；首頁的 AI 成果段 |
+| 案例列 | 見下方「案例列」 | 同 | 成功案例 | P2；new-digirunner D5、new-finance D5 |
+| 色帶 | 整段墊一片平塗色：淺紫（`--color-bg-brand-subtle`）放一句段標字級的主張、1–2 則事實與一個動作；深紫（`data-surface="dark"`）只給頁尾的聯絡段，做法同首頁第 5 段（平塗按鈕，沒有格線與框） | 同 | 試用、規劃與導入、聯絡 | P4、P5 |
+| 主張與原文 | h2 與說明句在 1–5 欄，事實原文清單在 7–12 欄，沒有線（現在的 `FactRow`）。全頁最多 2 次，不相鄰 | 上下排 | 短的、只有 2–4 則事實的段落 | P5 |
+| 索引列 | 一列一項：名稱（`--font-size-text` 的襯線粗體）、一句、連結，可加小縮圖；沒有框，hover 只換名稱的顏色與底線。和首頁第 4 段的產品索引同一種排法 | 同 | 次要段落：相關文章、子頁、相關產品 | P5；new-digirunner D3 |
+
+### 案例列（產品頁、產業頁）
+
+| 部分 | 做法 |
+|---|---|
+| 客戶 | 客戶名稱在最前面，襯線粗體（`fact:client-taishin-bank` 這類 `client` 事實）。客戶名稱也放進連結的錨點 |
+| 作業 | 案例做了什麼：案例的標題，或事實原文的前半（例如 `fact:digirunner-case-taishin` 的「以 digiRunner 模組開發 API 管理平台」那一句） |
+| 成果 | 事實庫有這則案例的成果時，放成果原文，數字加粗、條件緊貼；獎項（`fact:award-global-finance-2020`）放在得獎的那一則案例的同一列。事實庫沒有成果時這一行不放，不寫待補、不寫成更強的說法，並在 brief 的「待確認」列出這則缺成果 |
+| 連結 | 一則一個連結到案例內頁，最後一個連結到成功案例列表（「看所有成功案例」） |
+| 排法 | 一則一列，用間距分開，不畫框、不做等大卡片；有成果的案例排前面。第一則可以比其他則大：成果原文用 `--font-size-text`，旁邊配這則作業的介面片段。產業標籤不做成小標籤，要連產業頁就寫成看得出目的地的文字連結（new-digirunner C4） |
+| 證言 | 若 brief 採用（「待確認」第 3 項），用 `<blockquote>` 接在案例列後面：原文用說明句的字級（36px 以下，taste-skill「Statements are paragraphs」），說話人寫在下方，不配人像 |
+
+### offering：digiRunner 產品頁
+
+第一屏：
+
+| 元素 | 做法 | 依據 |
+|---|---|---|
+| h1 | 產品名加類別詞（「digiRunner API 管理平台」），頁面最大的字。上方不放「DIGILISM」；產品屬於 DigiLism 由麵包屑表示 | P1；new-digirunner D2 第 1 項；brief「取捨」第 6 項 |
+| 說明句 | tagline 寫用途，說明句寫機制。服務對象要在第一屏讀得到：「金融」「政府」寫進說明句，或在動作下方寫成連到兩個產業頁的文字連結；不做成標籤或小標 | P1；new-digirunner D1 與「評審依據不足」第 1 項 |
+| 證據點 | 2–3 則事實原文，排成清單，項目前不加短線。帶條件的事實要和條件放在一起：放 `fact:digirunner-trial-30-days` 就在它下方緊貼 `fact:digirunner-cloud-trial-terms` 的條件；放不下時這則移到第 9 段，第一屏不放。放哪幾則由 brief 決定 | P2、`IT-7`；new-digirunner C3 第 1 項 |
+| 動作 | 主要「預約演示」是實心按鈕，次要的試用是平塗淺底的按鈕或文字連結，都沒有陰影與漸層 | brief「CTA」；P4 |
+| 影像 | 同一個世界渲染的靜態圖（`src/assets/design/ribbon/page-digirunner.webp`）。digiRunner 那一格的頂面是紫色，圖上用 HTML 標籤寫出各格是什麼：既有系統、digiRunner、AI 模型、新的服務，用詞照事實（例如 `fact:digirunner-ai-gateway` 的「AI Gateway」）；標籤位置讀 `pictures.json`，和首頁 hero 同一種做法。不載 3D（下方「產品頁能不能沿用首頁 hero 的 3D 物件」） | P1、P3；ADR 0003「ribbon-route」 |
+| 375 寬 | h1、說明句、證據點、兩個動作都在第一屏，圖在按鈕下方（評審肯定的排法，保留） | P1；new-digirunner D6 |
+
+段落與版型：
+
+| # | 段落 | 版型 | 影像 | 底色 |
+|---|---|---|---|---|
+| 1 | Hero | 上方「第一屏」 | 靜態圖加 HTML 標籤 | 白 |
+| 2 | 接上既有系統，不必先汰換 | 接點圖 | SVG：DB、FTP 等既有系統在左，digiRunner 在中（API 組合與格式轉換、沿用現有 WAF），新的服務在右（`fact:digirunner-gov-protocols`、`fact:digirunner-api-composer`、`fact:digirunner-nginx-waf`） | 白 |
+| 3 | AI 流量走同一道 Gateway | 介面片段 | 片段 1：AI Gateway 的設定面板，三個項目是模型配置、內容審查、流量監控（`fact:digirunner-ai-model-config`、`fact:digirunner-ai-content-review`、`fact:digirunner-ai-traffic`）。畫出的接點：企業的 API 與 AI 模型之間隔著同一道 Gateway | 白 |
+| 4 | 部署環境由企業決定 | 規格表 | 無。表的列是地端、雲端、Kubernetes、多雲與混合雲，雲平台一列（`fact:digirunner-deployment`、`fact:digirunner-multi-cloud`、`fact:digirunner-cloud-platforms`） | 淺灰 |
+| 5 | 資安機制內建 | 介面片段（和第 3 段左右對調） | 片段 2：一支 API 的認證方式設定，選項照 `fact:digirunner-auth-methods` 原文。畫出的接點：外部呼叫進到 Gateway 時先過認證。標準清單放在片段旁 | 白 |
+| 6 | 金融與政府的規範要求 | 對應表 | 無。一列一個規範（例如 `fact:digirunner-open-banking-fsc`、`fact:digirunner-financial-inspection`、`fact:digirunner-ndc-spec`），右欄連到產業頁。列數與 `fact:digirunner-oas` 放哪一列由 brief 決定；不做成卡片 | 淺灰 |
+| 7 | 尖峰流量與單點故障 | 接點圖 | SVG：兩台 digiRunner，一台故障時請求分流到另一台，後面是 Active/Standby 的資料庫（`fact:digirunner-failover`、`fact:digirunner-redis-storage`）。硬體規格與 TPS 用規格表的一列接在圖下，條件同列（`fact:digirunner-tps`） | 白 |
+| 8 | API 與 AI 的使用軌跡 | 介面片段 | 片段 3：主控台，「API 活動與軌跡」「AI 使用歷程」兩個分頁（`fact:digirunner-console`、`fact:digirunner-ai-usage-log`）。只畫分頁與欄位名稱，不畫筆數、時間與曲線 | 白 |
+| 9 | 先試用再決定 | 色帶（淺紫） | 片段 4：digiRunner on Cloud 的方案清單（`fact:digirunner-cloud-plans`），試用條件原文緊貼在旁（`fact:digirunner-cloud-trial-terms`）。不放價格（事實庫是 `to_confirm`）。子節點 digiRunner on Cloud 的入口併進這段的動作，不另成「相關產品」段 | 淺紫 |
+| 10 | 案例 | 案例列 | 第一則台新銀行可配一張片段（現金管理 API 平台的示意，文字照 `fact:digirunner-case-taishin`）；獎項放在台新那一列 | 白 |
+| 11 | 相關文章 | 索引列 | 文章自己的封面縮圖 | 白 |
+| 12 | 預約演示 | 色帶（深紫） | 無 | 深紫 |
+
+介面片段共 4 張（第 3、5、8、9 段），加上 hero 的靜態圖與第 2、7 段的 SVG，第 2–9 段每一段都有圖或表。相鄰兩段的版型都不同。
+
+不會怎麼呈現：
+
+- 7 個功能段都用「左標題、右條列」雙欄，或連續兩段同一種版型（new-digirunner D4）
+- h1 上方的「DIGILISM」、區塊上的「USE CASES」「SUCCESS STORIES」這類英文等寬小標、`01`–`07` 編號、段落之間的分隔線、背景格線（new-digirunner D2）
+- 第 2–9 段沒有圖，只有 hero 一張
+- 規範段做成一排同尺寸卡片，每張只重述規範名稱（new-digirunner C2、C5）
+- 活動 banner 或公告列放在 h1 上方（Apigee 的活動 banner、Kong 的跑馬燈公告列）；價格、Kong 比較表（事實庫是 `to_confirm`）
+- 相關產品、相關文章的標題和案例、規範同樣大（new-digirunner D3）
+
+### hub：金融產業頁
+
+第一屏：
+
+| 元素 | 做法 | 依據 |
+|---|---|---|
+| h1 | 「金融」（brief「取捨」第 6 項），頁面最大的字。上方不放「產業方案」；上層由麵包屑表示 | P1；new-finance D2 第 1 項 |
+| 說明句 | tagline 寫對象（銀行、保險、證券）與兩件事（brief 第 1 段）。第一屏也要讀得出昕力提供什麼：說明句或證據點寫出產品的類別（API 管理平台、AI），文字由 brief 決定。375 寬照詞組斷行，不在「銀行、」之後只剩三個字 | P1；new-finance D1、C1、D6 |
+| 證據點 | 1–2 則事實原文，例如進入金融業的年份（`fact:company-milestone-2008-finance`）。放哪幾則由 brief 決定 | P2 |
+| 動作 | hero 放主要 CTA「聯絡業務」實心按鈕（回答 `briefs/finance.md`「CTA」的「hero 是否加按鈕交設計概念」：加）。理由：P4 規定聯絡入口放在 hero、header、頁尾，位置可預期；首頁 hero 也有；FPT 的產業頁 hero 有「Let's talk」；金融頁的主要轉換是聯絡業務。次要動作不必有 | P4；new-finance「評審依據不足」第 3 項 |
+| 影像 | 同一個世界渲染的靜態圖（`src/assets/design/ribbon/page-finance.webp`），HTML 標籤寫金融業的系統類別，讓圖帶出金融的資訊：核心銀行系統、大型主機（`fact:digilism-protocol-integration` 的用詞）、第三方服務業者（`fact:digirunner-open-banking-no-credentials` 的 TSP）、AI 作業（理賠、建檔）。不載 3D | P1、P3；new-finance D1 |
+| 1280 寬 | tagline 下方由證據點與按鈕填上，不留大片空白（new-finance D1：tagline 下方到 y≈660 是空白） | house rule：no blank stretches |
+
+段落與版型：
+
+| # | 段落 | 版型 | 影像 | 底色 |
+|---|---|---|---|---|
+| 1 | Hero | 上方「第一屏」 | 靜態圖加 HTML 標籤 | 白 |
+| 2 | 法規要求已做在產品裡 | 時間列，接著對應表 | 無。起源一句當引言；時間列三列（`fact:open-banking-stage-1`、`fact:open-banking-stage-2`、`fact:open-banking-stage-3`）；對應表一列一個要求（開放銀行法規、金融檢查、三層防護 `fact:digirunner-open-banking-security`），連到 digiRunner 產品頁。拆成兩塊，不再是一欄 9 個條列（new-finance D2 第 6 項、D3） | 淺灰 |
+| 3 | 接上核心系統，不必先汰換 | 接點圖 | SVG：核心銀行系統、大型主機在左，DigiLism 的資料轉換與通訊機制、digiRunner 的 API 組合在中，金融科技業者與通路在右（`fact:digilism-protocol-integration`、`fact:digirunner-api-composer`） | 白 |
+| 4 | AI 用在理賠與建檔 | 成果 | 兩則各一張片段。片段 1：理賠案件從立案到派件的狀態（`fact:smartclaim-result`）；片段 2：文件辨識後把欄位介接到內部系統（`fact:smartfilling-case-bank`、`fact:smartfilling-template-free`）。自研模型（`fact:smartclaim-nlp`）寫在作業名稱下方；段末的使用歷程與治理是一列紀錄，不另做 h3。阻詐平台的原文沒提到 AI，#186 移到第 8 段（`briefs/finance.md`「取捨」第 13 項） | 白 |
+| 5 | 金融通路的身分驗證 | 規格表 | 無。適用的金融業務排成兩欄的短詞清單（`fact:gadodido-finance-uses`），認證一列（`fact:gadodido-fido-certified`） | 淺灰 |
+| 6 | 保險業務的專用模組 | 介面片段 | 片段 3：InsureRing 的規則設定，項目是商品上下架、核保規則、法令調整（`fact:insurering-automated-rules`）。兩則具名案例照紀錄格式放在片段旁，數字加粗（`fact:insurebrick-case-shin-kong`、`fact:insurering-case-shin-kong-life`）。子頁 InsureBrick、InsureRing 用索引列接在段末 | 白 |
+| 7 | 規劃與導入由同一家負責 | 色帶（淺紫） | 無 | 淺紫 |
+| 8 | 金融業成功案例 | 案例列 | 片段 4：第一則台新銀行的現金管理 API 平台示意（文字照 `fact:digirunner-case-taishin`）；證言若採用接在列後 | 白 |
+| 9 | 聯絡業務 | 色帶（深紫） | 無 | 深紫 |
+
+介面片段共 4 張（第 4 段 2 張、第 6 段 1 張、第 8 段 1 張），加上 hero 的靜態圖與第 3 段的 SVG。相鄰兩段的版型都不同。
+
+案例列的成果：brief 第 8 段的 4 則精選案例中，事實庫只有台新銀行有案例原文（`fact:digirunner-case-taishin`）；安泰銀行、國泰世華銀行、臺灣銀行只有客戶名稱（`fact:client-entie-bank`、`fact:client-cathay-united-bank`、`fact:client-bank-of-taiwan`），沒有成果。照「案例列」的規則，這三則只寫客戶、作業與連結，缺的成果列進 brief 的「待確認」。要不要改選有成果事實的案例，或補成果事實，由 brief 決定。
+
+375 寬：第 2 段不超過 2 個螢幕高（時間列 3 列、對應表每列上下排），第 4 段第一則成果才不會被推到很後面（new-finance D6：案例在 8 張截圖的第 6 張才出現）。
+
+不會怎麼呈現：
+
+- 第 2–7 段都用同一種雙欄條列，最後接兩排細框卡片（new-finance D4）
+- h1 上方的「產業方案」、「PRODUCTS」「SUCCESS STORIES」「CONTACT」這類英文等寬小標與短線、條列之間的分隔線、聯絡區的框與按鈕陰影、背景格線（new-finance D2）
+- hero 圖只放全站共用的方塊，看不出跟金融有關
+- 案例卡只有標題、客戶名與「金融」標籤；成果數字和功能說明一樣是內文字級、埋在條列裡（new-finance D5）
+- 「產品總覽」做成一排產品卡，重複前面各段的產品。brief 保留這段時，用索引列，標題用 `--font-size-text`
+- 整個產業的統計數字（FPT）、混入其他產業的案例（SYSTEX）、只有案例列表或下拉選單沒有說明（SYSTEX、Syscom）
+
+### 交給 #186 的兩個設計問題
+
+`evaluation.md`「交給 #186 的單頁問題」裡屬於設計的兩項，答案如下：
+
+| 問題 | 答案 | 理由 |
+|---|---|---|
+| 產品頁能不能沿用首頁 hero 的 3D 物件（old-digirunner「評審依據不足」第 3 項） | 不載 3D。產品頁與產業頁的 hero 用同一個世界渲染的靜態圖（`src/assets/design/ribbon/page-*.webp`），加上寫出這一頁接點的 HTML 標籤 | ADR 0003「ribbon-route」與 `motion.md`「3D 的使用範圍」已規定真 3D 只在首頁桌機版，這是使用者 2026-11-01 的決定；新的頁面類型要用 3D 得先在 issue 寫理由並量測。延後載入的 JS 已用到 135.0 KB，預算是 140 KB（`motion.md`「效能預算」）。內頁的讀者來確認功能與規範（brief「受眾與任務」），P1 要第一屏由文字承擔、影像只幫腔；評審扣分的原因是缺介面片段與架構圖，不是缺 3D（new-digirunner D2 第 6 項）。同一個世界的靜態圖讓內頁和首頁看得出是同一個網站，標籤讓圖說出這一頁的接點。P1「不會怎麼呈現」點名的 `hero-modular-stack.webp` 是 #167 以前的物件，已不用 |
+| 案例卡要不要寫成果（new-finance「評審依據不足」第 8 項） | 要。產品頁與產業頁的案例照 P2 寫成「作業 → 成果 → 連結」（上方「案例列」）；事實庫沒有這則案例的成果時不放成果那一行，列進 brief 的「待確認」 | P2 的「作業 → 成果 → 連結」原本只寫在首頁，現在適用所有試點模板。new-digirunner D5 與 new-finance D5 都因為案例卡只有標題與客戶名扣分；`competitors.md` 的觀察裡，SYSTEX 的金融案例卡沒有成果、Apigee 與 BanTalk 沒有「哪個客戶用它做了什麼」，Kong 的引言和連到的案例不是同一家公司，寫出成果是本站和競品的差別。成果只能用事實庫的原文（`CLAUDE.md`「內容規則」），所以缺事實的案例不補、不加強 |
+
+### 和新寫法衝突的共用元件（#187 要改的）
+
+`design-system` 元件表的 `PageHero`、`SectionHeading`、`Card` 已標「待改（#187）」。逐一對照本節與 P1–P5 的「不會怎麼呈現」，衝突的元件與要改成的樣子如下。這些元件也用在其他 8 個模板（`ArticleTemplate`、`CaseStudyTemplate`、`ContactTemplate`、`ContentTemplate`、`GatedDownloadTemplate`、`ListingTemplate`、`PersonTemplate`、`UtilityTemplate`），改了之後要照 `docs/workflow.md`「視覺回歸」更新 baseline，並寫回 `design-system` 的元件表。
+
+| 元件或位置 | 現在 | 違反 | #187 改成 |
+|---|---|---|---|
+| `PageHero` | `eyebrow` 在 h1 上方輸出 mono 大寫加光點的小標；固定 `pattern="grid"` 畫背景格線 | P1；house rules：no eyebrows、no monospace、no thin rules | 拿掉 `eyebrow` 與格線。加上證據點清單（每則可帶一行條件）與動作的位置，hub 也能放主要 CTA。`visual` 放同一個世界的靜態圖，HTML 標籤的位置讀 `pictures.json` |
+| `SectionHeading` | `index`（`01`）、mono 大寫 `eyebrow` 與 `::after` 的短線 | P1、P2、P5；house rules：no index numbering、no eyebrows、no thin rules | 拿掉 `index`、`eyebrow` 與短線，只留標題、`description`、`action`。加一個權重的選項，讓次要段落的標題用 `--font-size-text` 的襯線粗體。`FormPanel` 錯誤摘要用的「編號 eyebrow」一起改，順序用 `<ol>` |
+| `Card` | 玻璃面板：1px 框、`backdrop-filter`、陰影；hover 時傾斜、亮起漸層外框與光暈；mono 的 `eyebrow`、`index` | P2、P4、P5；house rules：no glass、no shadows、no gradients、no rows of identical cards | offering 與 hub 不用 `Card`：案例改用案例列，相關文章、子頁改用索引列。其他模板還要用 `Card` 時，拿掉框、玻璃、陰影、傾斜、漸層外框與 `eyebrow`、`index`，用底色的一階色差和頁面分開，hover 只換標題的顏色與底線；`motion.md` 的「卡片傾斜與上浮」一列跟著改 |
+| `CardGrid` | 等高的三欄卡片格 | P5；house rule：no rows of identical cards | offering 與 hub 不用；案例列與索引列是一列一項 |
+| `FactRow` | 固定「左標題、右條列」，每列上下各一條 1px 線 | P5（相鄰同版型）；house rule：no thin rules | 拿掉線，條列用間距分開；只當「主張與原文」一種版型用。其他版型（接點圖、介面片段、規格表、對應表、時間列、成果、案例列、色帶、索引列）照 `design-system`「新增元件」第 1 步，先看能不能給既有元件加 prop，不能再新增元件 |
+| 段落的版型怎麼選 | `OfferingTemplate` 把每個功能段都交給 `FactRow` | P5 | 版型要能逐段指定：在內容檔的段落加版型與影像的欄位（schema 的寫法由 #187 決定），brief 的「影像」欄寫的就是這個值 |
+| `Tag` 的 `node` | mono 字加發光點；offering 的應用情境卡用 `Tag` 標「金融」 | house rules：no monospace、no glows；new-digirunner C4 | 拿掉 `node` 的 mono 與光點。連到產業頁的入口改成看得出目的地的文字連結 |
+| `Button` | primary 帶 `--glow-brand` 並上浮；secondary 是漸層外框加 `--glow-accent` | P4；house rules：no shadows、no gradients | 全部平塗：primary 實心紫，secondary 平塗淺紫底或文字連結，hover 只換顏色 |
+| `ContactCta` | `pattern="grid"` 格線、漸層外框、`--glow-brand` | 同上；new-finance D2 第 4 項 | 照首頁第 5 段：整片深紫帶，平塗按鈕，沒有格線與框 |
+| `Surface` 的 `pattern="grid"` | `OfferingTemplate`、`HubTemplate`、`PageHero`、`ContactCta` 都用 | house rule：no thin rules（格線） | offering 與 hub 不用；其他模板也不用時連同 prop 一起刪 |
+| `InPageNav`、`SiteHeader` 的下框線 | 1px `--color-border` | house rule：no thin rules | 改成底色的一階色差。`SiteHeader` 展開選單的陰影可以保留（house rules 允許真的浮起來的東西有陰影） |
+| 模板裡的分隔線與列表底線 | `OfferingTemplate`、`HubTemplate` 段落之間與條列之間的 `border` | house rule：no thin rules | 拿掉，用間距與底色 |
+
 ## 原則與現有限制
 
 第 2 階段的方向說明要寫出放寬哪些現有限制與代價（`design-concept` skill 第 3 節第 3 步）。第一張表列出原則最可能碰到的現有限制，不代表要放寬。
@@ -153,7 +317,7 @@
 |---|---|---|
 | 不載中文 webfont，`@font-face` 只有 Inter 與 JetBrains Mono 的 latin、vietnamese、greek | `design-system`「Token 分層」、`scripts/design/font-subsets.mjs` | P1、P2：中文標題與事實只能用系統字表現層級。改用中文 webfont 的方向要寫出字型檔大小與首次繪製的代價 |
 | 每頁初始 JS 6 KB、延後載入 140 KB（gzip） | `motion.md`「效能預算」、`scripts/design/scene-budget.mjs` | P3：表達接點的互動圖解若要 JS，要放進預算 |
-| 真 3D 只在首頁與部分 offering 頁的 hero 與功能章節，靜態圖是 LCP | ADR 0003、`motion.md`「3D 的使用範圍」 | P1、P3：3D 物件不能承擔第一屏的辨識度；拿掉 3D 的方向省下延後載入的 JS，但要另找表達接點的方式 |
+| 真 3D 只在首頁桌機版（ribbon-route 的緞帶場景），產品頁與產業頁的 hero 用同一個世界渲染的靜態圖（#167 起；#166 時是首頁與部分 offering 頁） | ADR 0003「ribbon-route」、`motion.md`「3D 的使用範圍」 | P1、P3：3D 物件不能承擔第一屏的辨識度；內頁不載 3D，接點由靜態圖上的 HTML 標籤、介面片段與 SVG 架構圖表達（「各模板怎麼呈現」的「產品頁能不能沿用首頁 hero 的 3D 物件」） |
 | 色彩只用 `tokens.css` 的 token，品牌三色沿用現站，橘 500 只當裝飾 | `design-system`「規則」「Token 分層」、`docs/design/brand-assets.md`「品牌色」 | P2、P4：事實與接點的配色要在每一種底色上都過對比 |
 | 影像只用抽象 3D 渲染，不放文字、數字、人物、真實產品 | `design-system`「影像」 | P3：用介面片段、SVG 架構圖解表達接點時要放寬 |
 
@@ -175,7 +339,7 @@
 
 ### 競品的觀察
 
-以下引用 `competitors.md`（觀察日期 2026-10-31），不重做分析。
+以下引用 `competitors.md`，不重做分析。首頁的觀察日期 2026-10-31；「產品頁對照」（Kong、Apigee、Syscom BanTalk）與「產業頁對照」（SYSTEX、Syscom、FPT 的金融頁）是 2026-11-03，列在表的後半，是「各模板怎麼呈現」的依據。「本站缺（產品頁）」這類寫法指 `competitors.md`「對本站的意義（產品頁）」底下的同名小節。
 
 | 觀察 | 出處 | 對應原則 | 本站怎麼用 |
 |---|---|---|---|
@@ -185,8 +349,15 @@
 | SYSTEX、FPT 的規模數字靠動畫，讀取時一個在跳動、一個停在「1+」 | 「不適合本站」第 2 項 | P2 | 數字直接輸出在 HTML |
 | SYSTEX 的 logo 牆是技術原廠，不是客戶 | SYSTEX「證據呈現」列；「本站缺」第 2 項 | P2 | 客戶與合作夥伴分開標示 |
 | GSS、SYSTEX、FPT 都有常駐 AI 對話入口 | 「不適合本站」第 1 項 | P4 | 不做；固定的聯絡入口只連到聯絡頁 |
-| FPT 首頁約 11,100 px，含雇主品牌與十則新聞 | 「不適合本站」第 4 項 | P5 | 只保留 brief 的 8 段 |
+| FPT 首頁約 11,100 px，含雇主品牌與十則新聞 | 「不適合本站」第 4 項 | P5 | 首頁只有定案的 5 段 |
 | 本站首頁已有產業入口，三家只依服務或產品分類 | 「本站已有」第 2 項 | P1、P5 | 產業入口提前到 hero 之後，並在第一屏露出產業名稱 |
+| Apigee 的 h1 是小字的產品名，大標是 h2，h1 上方是一條活動 banner；Kong 的 h1 上方是跑馬燈公告列 | 「產品頁對照」Apigee、Kong「定位說法」；「不適合本站（產品頁）」第 1、2 項 | P1 | 內頁的 h1 是頁面最大的字，上方不放 banner、eyebrow |
+| Apigee 用一張架構圖說明 Proxy 擋在後端前面，插圖是產品介面與架構圖，沒有人物照片 | Apigee「頁面結構」「視覺語言」；「本站缺（產品頁）」第 3 項 | P3、P5 | 產品頁用 SVG 架構圖畫 digiRunner 在既有系統前面的位置，用介面片段畫功能 |
+| Apigee 沒有客戶與案例，BanTalk 只列三家銀行名稱；Kong 有具名引言與成果標題，但引言和連到的案例不是同一家公司。三家都沒有在同一處寫出「哪個客戶用它做了什麼」 | 「本站已有（產品頁）」第 1 項 | P2 | 產品頁的案例列寫客戶名、作業與成果原文 |
+| SYSTEX 的金融案例卡多用代稱、卡片上沒有成果；FPT 的案例段與延伸閱讀連到醫療 | 「產業頁對照」SYSTEX、FPT「證據呈現」；「不適合本站（產業頁）」第 2 項 | P2 | 金融頁的案例列寫具名客戶與成果原文，只列金融業的案例 |
+| FPT 產業頁的 h1 是產業名加一句副標，hero 有「Let's talk」按鈕；段落依「挑戰 → 做法」排 | FPT「定位說法」「頁面結構」；「本站已有（產業頁）」第 2 項 | P1、P4、P5 | 金融頁 hero 放主要 CTA；段落標題寫做法，各段用不同版型 |
+| FPT 的統計數字講整個產業、沒標出處，用大號彩色字 | FPT「證據呈現」「視覺語言」；「不適合本站（產業頁）」第 1 項 | P2 | 只放事實庫的數字，數字加粗但不放大成主視覺 |
+| FPT 產業頁有一則寫出姓名、職稱、銀行的客戶證言 | 「本站缺（產業頁）」第 1 項 | P2 | 證言若採用，放在金融頁的案例列（「待確認」第 3 項） |
 
 ### 非競品參考網站
 
@@ -205,6 +376,6 @@
 |---|---|---|---|
 | 1 | 已解決：2026-11-01 放行四個網域後補上「非競品參考網站」 | — | — |
 | 2 | 已解決：使用者選定 `ribbon-route`（2026-11-01），首頁保留 WebGL，但物件換成亮底的白色系統地圖與緞帶，不再是深色的 Modular Stack。ADR 0003 與 `design-system`「3D 場景」由 #167 改版 | — | — |
-| 3 | 第 7 段要不要加一則客戶證言（`fact:testimonial-shin-kong-bank`）。P2 規定證言要寫出說話人與原文、不配圖庫人像 | `briefs/home.md`「待確認」第 1 項交設計概念與製作階段決定；證言原文長，放進緊湊的紀錄列會改變段落節奏 | 第 7 段的版面 |
+| 3 | 要不要用一則客戶證言（`fact:testimonial-shin-kong-bank`、`fact:testimonial-shin-kong-bank-speaker`）。P2 規定證言要寫出說話人與原文、不配圖庫人像。首頁 5 段版的第 5 段是緊湊的紀錄列，證言原文長，放進去會改變段落節奏；`competitors.md`「本站缺（產業頁）」第 1 項指出金融頁沒有用它，金融頁的案例列可以放（「各模板怎麼呈現」的「案例列」） | `briefs/home.md`「待確認」第 1 項交設計概念與製作階段決定；放不放金融頁由 `briefs/finance.md` 決定 | 首頁第 5 段或金融頁第 8 段的版面 |
 | 4 | 產品介面截圖（例如 digiRunner 主控台）能不能當表達接點的影像，以及有沒有可用、已授權的截圖。taste-skill 在沒有截圖時改用 HTML 做的介面片段，片段的標籤只照事實文字寫，但版面是原型自己畫的，不是產品的真實畫面 | 現有影像規範不放真實產品；repo 裡沒有產品截圖 | P3 的影像做法；五個方向的介面片段 |
 | 5 | 要不要保留固定的聯絡入口（現站有浮動「聯絡我們」與「預約 Demo」） | `competitors.md`「本站缺」第 4 項交設計概念決定；P4 只規定入口位置可預期、不遮內容。house rules 不用浮動的膠囊導覽，五個方向都把入口放在 header 的單一動作與 hero、頁尾 | 第 2 階段的方向說明，選定後寫回 `design-system` |

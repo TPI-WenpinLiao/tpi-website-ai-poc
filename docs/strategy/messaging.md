@@ -5,6 +5,7 @@
 - 範圍：zh-TW。en、vi 列為後續事項（`site-profile.md`「語系」）
 - 事實一律寫成反引號包住的 `fact:` 加事實 id，對應 `docs/strategy/facts.yaml` 裡 `locale: zh-TW`、`status: confirmed` 的條目。`node scripts/strategy/facts.mjs` 會檢查每個引用
 - 定位句與主張是表述，可以改寫；主張裡不放數字、客戶名或最高級說法，這些只能出現在引用的事實裡
+- #186 依 #168 的評審改了 `DM-2` 的證據點，新增「一句話的產品描述算事實」與「缺少證據的主張」第 15 項
 - 受眾依 `docs/research/audience-and-goals.md`：主要受眾是金融、政府與公部門、製造業的決策者與 IT 主管，主要轉換是聯絡業務。定位句只點名金融與政府（使用者決定，#165），理由見「定位不說的事」
 
 ## 定位
@@ -44,15 +45,21 @@
 
 用在：`/industries/finance`、`/products/digirunner`。對應 `search-intent.md` 的「API 管理 金融業」（共同子題含台灣法規）。
 
-### DM-2 AI 用在理賠、建檔、阻詐這類核心作業，成果寫得出來
+### DM-2 AI 用在理賠、建檔這類核心作業，成果寫得出來
 
-昕力的 AI 不停在展示，已用在金融保險的日常作業，案例有可以引用的成果。
+昕力的 AI 不停在展示，已用在金融保險的理賠與文件建檔，案例有可以引用的成果。
 
-- `fact:smartclaim-result`：理賠立案到派件自動化的成果
-- `fact:smartfilling-result`：免模板辨識醫療單據的成果
-- `fact:smartfilling-case-bank`：金融業以 AI 取代傳統二登流程的成果
-- `fact:fraud-platform-result`：金融聯防阻詐平台的成果
-- `fact:smartclaim-case-medical-documents`：以自然語言技術分析診斷證明書等文件
+- `fact:smartfilling-case-bank`：金融業以 AI 取代傳統二登流程，原文寫出節省的委外成本與維運人力
+- `fact:smartclaim-technologies`：結合 NLP、AI OCR、RPA 讓保險理賠流程自動化
+- `fact:smartclaim-title` 與 `fact:smartclaim-result`：現站首頁同一則案例。標題是「AI 智慧理賠」，成果是理賠立案到派件自動化
+- `fact:smartfilling-title` 與 `fact:smartfilling-result`：現站首頁同一則案例。標題是「AI 智慧建檔」，成果是免模板辨識醫療單據
+
+後兩點的成果原文沒有「AI」，AI 寫在同一則案例的標題裡，所以兩筆事實算一個證據點。頁面引用這兩則成果時，標題要在同一則裡一起出現，不能只把成果原文放在 AI 的段落標題底下。
+
+#186 移出的證據點（#168 評審指出證據點原文要支撐主張的關鍵詞，new-home C3）：
+
+- `fact:fraud-platform-result`：原文寫的是標準化聯防流程與詐騙事件即時共享，沒有提到 AI。其他主張的關鍵詞（法規、既有系統、Gateway、部署）也不在原文裡，所以不併進別的主張。頁面要用時當金融業的案例，放在案例段，不放在 AI 的段落（`briefs/finance.md` 第 8 段）；首頁第 3 段改用 `fact:smartfilling-case-bank`（`briefs/home.md`「取捨」第 9 項）。要放回 AI 的段落，得先有原文寫出平台用了 AI，見「缺少證據的主張」第 15 項
+- `fact:smartclaim-case-medical-documents`：原文寫「自然語言技術」，沒有寫 AI，「作業效率大幅的提升」也沒有可引用的成果。理賠用的自研 NLP 改由 `IT-8` 的 `fact:smartclaim-nlp` 說
 
 用在：`/`、`/industries/finance`。`competitors.md`「本站已有」第 1 項：GSS、FPT 也把案例成果放在首頁前段，這是基本盤，不是差異點。
 
@@ -265,12 +272,12 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 
 ## 證據對照表
 
-每個主張的證據數與試點頁。少於 2 個 `confirmed` 事實的主張不列在這裡，改列在「缺少證據的主張」。
+每個主張的證據數與試點頁。每個主張至少 2 個證據點，每個證據點的原文要直接支撐主張的關鍵詞（`content-strategy` skill「1. Messaging framework」）；不到 2 個的主張不列在這裡，改列在「缺少證據的主張」。「數量」是證據點數，同一則案例的標題與成果算一個（`DM-2`）。
 
 | 主張 | 事實 id | 數量 | 試點頁 |
 |---|---|--:|---|
 | DM-1 規範要求做在產品裡 | `fact:digirunner-open-banking-fsc`、`fact:digirunner-open-banking-3-stages`、`fact:digirunner-financial-inspection`、`fact:digirunner-ndc-spec`、`fact:digirunner-open-banking-consulting`、`fact:digirunner-case-taipei-city` | 6 | 金融、digiRunner |
-| DM-2 AI 用在核心作業 | `fact:smartclaim-result`、`fact:smartfilling-result`、`fact:smartfilling-case-bank`、`fact:fraud-platform-result`、`fact:smartclaim-case-medical-documents` | 5 | 首頁、金融 |
+| DM-2 AI 用在核心作業 | `fact:smartfilling-case-bank`、`fact:smartclaim-technologies`、`fact:smartclaim-title` 與 `fact:smartclaim-result`、`fact:smartfilling-title` 與 `fact:smartfilling-result` | 4 | 首頁、金融 |
 | DM-3 AI 留在企業端 | `fact:orientai-on-prem-data`、`fact:orientai-governance-layer`、`fact:orientai-governance`、`fact:orientai-token-cost`、`fact:orientai-aidaptiv`、`fact:aiso-no-token-limit` | 6 | 首頁 |
 | DM-4 產品與導入同一家 | `fact:company-offerings`、`fact:products-families`、`fact:aiso-onboarding`、`fact:systalk-ai-onboarding`、`fact:digirunner-open-banking-consulting`、`fact:digirunner-case-taipei-city` | 6 | 首頁、金融 |
 | DM-5 保險專用模組 | `fact:insurebrick-platform`、`fact:insurebrick-28-modules`、`fact:insurebrick-scenarios`、`fact:insurering-rule-engine`、`fact:insurering-automated-rules`、`fact:insurebrick-case-online-insurance`、`fact:insurebrick-case-shin-kong`、`fact:insurering-case-shin-kong-life` | 8 | 金融 |
@@ -305,6 +312,14 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 - 數字只出現在引用的事實裡，連同事實裡的條件一起寫（例如 `fact:digirunner-tps` 的「取決於不同環境的配置」、`fact:digirunner-cloud-trial-terms` 的費用說明）
 - 稱呼讀者用「您」或直接省略主詞，不用「你」；稱公司用「昕力」或「昕力資訊」，不用「我們」開頭的長句
 
+### 一句話的產品描述算事實
+
+產業卡、產品索引、家族副標這類一句話的描述（#168 old-home「評審依據不足」第 4 項），照 `CLAUDE.md`「內容規則」分：
+
+- 寫出產品做什麼（功能、支援的標準、部署方式、適用場景）就是「產品功能」，屬於事實：用事實原文並引用 `fact:` id，例如首頁產業入口的 `fact:digirunner-open-banking-fsc`。沒有對應事實的功能描述不寫
+- 節點名稱裡的類別詞（「digiRunner API 管理平台」的「API 管理平台」、「gadoDIDO 無密碼身分驗證」）是 `docs/ia/nodes.csv` 的名稱，照名稱引用，不算描述，也不另外加長
+- 只點出問題類別、不說產品怎麼做的句子是表述，例如首頁第 4 段的標題「API、AI、資安與碳管理，各有產品」。表述一加上機制（「以零信任防護 API」），就變成要引用事實的描述
+
 ### 產品與公司名寫法
 
 照官方寫法，不翻譯、不改大小寫。以 `facts.yaml` 與 `docs/ia/nodes.csv` 的名稱為準。
@@ -336,6 +351,7 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 | 開放銀行 | Open Banking（表述中） | 頁面第一次出現可並列英文 |
 | 第三方服務業者（TSP） | 第三方業者、TSP（首次出現） | |
 | 導入 | 落地、實施 | 「導入」是昕力與受眾的慣用說法 |
+| 聯絡業務（主要轉換的按鈕） | 聯絡我們（按鈕上） | header 的常駐按鈕、hero、頁尾的按鈕都用這個名稱（#186，`briefs/home.md`「取捨」第 10 項）。聯絡頁本身的名稱仍是節點名「聯絡我們」 |
 | 產品家族 | 產品系列、產品線（表述中） | 與首頁（`src/data/home/zh-TW.ts`）和 `nodes.csv` 的 `family-*` 節點一致；事實原文的「產品系列」照引 |
 
 ### 本站不用的字
@@ -369,3 +385,4 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 | 12 | digiRunner 有開源版，可以先自己裝來試 | 事實庫沒有開源版的條目。`search-intent.md` 的「開源 API Gateway 推薦」與 `digiRunner API 管理平台` 結果提到開源專案頁，要先從現站或官方來源收進事實庫 | 無 |
 | 13 | 製造業有導入案例與成果 | 事實庫只有產業清單（`fact:company-industries`）與 GreenSwift 功能，沒有製造業案例；`nodes.csv` 寫製造業頁「需人工提供」。因此定位句不點名製造業（使用者決定，#165）。現站沒有資料，不處理（使用者決定，#180） | 無 |
 | 14 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答。`competitors.md`「本站缺」第 3 項：FPT 在聯絡頁寫明回覆時間。現站沒有資料，不處理；聯絡段不寫回覆時間（使用者決定，#180） | 無 |
+| 15 | 金融聯防阻詐平台用 AI 偵測或共享詐騙事件 | 已確認的 `fact:fraud-platform-title`、`fact:fraud-platform-result` 只寫聯防流程、詐騙事件即時共享與跨行交換，沒有提到 AI，所以 #186 把它移出 `DM-2`。現站也沒有這個平台的案例頁與客戶名稱。要放回 AI 的段落，要先從現站或內容負責人取得寫出 AI 的原文 | 無 |
