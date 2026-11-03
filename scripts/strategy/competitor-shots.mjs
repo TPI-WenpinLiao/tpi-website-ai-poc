@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Takes the first-screen screenshots of the competitor pages for docs/strategy/competitors.md
-// (.claude/skills/site-research「3. 競品分析」): the home pages (#164), and one page per pilot template
+// (.claude/skills/site-research「3. 競品分析」): the home pages (#164), and pages compared with each pilot template
 // other than home (#186): API management product pages for the offering template, finance industry
 // pages for the hub template. Each entry's `template` says which pilot template it is compared with.
 //

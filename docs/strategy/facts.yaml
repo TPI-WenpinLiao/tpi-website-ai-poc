@@ -4446,15 +4446,11 @@
   locale: zh-TW
   status: confirmed
 
-# text splits the run of items into list items, one per line (#186)
+# text keeps the two phases as two list items, the four steps under 導入前 (#186)
 - id: systalk-ai-onboarding
   type: feature
   text: |-
-    導入前：AI 應用規劃與導入
-    AI 導入情境分析
-    解決方案搭配建議
-    效益評估
-    AI 服務導入
+    導入前（AI 應用規劃與導入）：AI 導入情境分析、解決方案搭配建議、效益評估、AI 服務導入
     導入中：模型評估、微調
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
