@@ -110,7 +110,10 @@ const diagram = z.strictObject({
     .length(3),
   caption: text,
 });
-const sectionItem = z.strictObject({ title: text.optional(), body: text, node: anyNode.optional() });
+// An item's node is linked from its title, so an item with a node has a title (linkedNodes counts it as linked)
+const sectionItem = z
+  .strictObject({ title: text.optional(), body: text, node: anyNode.optional() })
+  .refine((i) => i.node === undefined || i.title !== undefined, { message: 'an item with a node needs a title to link from' });
 const specRow = z.strictObject({ label: text, values: z.array(text).min(1), link: nodeLink.optional() });
 const resultItem = z.strictObject({
   title: text,

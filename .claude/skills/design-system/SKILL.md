@@ -154,10 +154,10 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `FactRow` | 論點與撐住它的事實 | `design-principles.md`「內頁的版型」的「主張與原文」：左邊 `SectionHeading`（`level`、`description`）加選填的 `link`，右邊是 default slot 的 `<li>` 事實清單，用間距分開，沒有線與編號（#187）；64rem 以上照 12 欄並排（1–5、7–12） |
 | `PageSections` | offering、hub 依 brief 排的段落 | 讀內容檔的 `sections`（`src/content.config.ts` 的 `pageSection`），每段一個 `Surface`，照 `layout` 用 `FactRow`（claim）、`JunctionDiagram`（junction）、`UiFragment`（ui，`flip` 左右對調，`index` 接 `IndexList`）、`SpecTable`（spec）、`Timeline`（timeline，可接對應表）、`CaseList`（results）或淺紫色帶（band）；版型依據是 `design-principles.md`「內頁的版型」，相鄰兩段不用同一種（#187）；有 `id` 的段落是 `InPageNav` 的錨點；段落的 `image`（緞帶世界的段落圖）放在 spec 的 h2 旁（最後 4 欄）或沒有介面片段的 band 的圖位，375 寬不顯示；ui 段的事實超過 3 則時排到片段下方兩欄 |
 | `JunctionDiagram` | 接點圖 | 三欄：既有系統（中性）、產品（紫）、新的服務（橘），欄位相鄰用平塗色塊表示接上，不畫細線箭頭；節點可標 `down`（故障）、`standby`（待命），高可用架構用；HTML 畫，文字是事實的用詞；`caption` 一句話說圖在講什麼；窄螢幕三欄上下排 |
-| `UiFragment` | 介面片段 | HTML 畫的產品畫面局部，標「示意」（`mark`）、帶 `data-ui`；只畫事實寫得出的面板名稱、分頁、設定項目與狀態（`state`：on、off、down、next），不畫筆數、時間、曲線、客戶名單；同一頁的片段用同一個外框 |
+| `UiFragment` | 介面片段 | HTML 畫的產品畫面局部，標「示意」、帶 `data-ui`；只畫事實寫得出的面板名稱、分頁、設定項目與狀態（`state`：on、off、down、next，on、off、down 另有給螢幕閱讀器的文字，不只靠顏色）；`words` 傳頁面的 `strings.layout`（「示意」與狀態名稱），不畫筆數、時間、曲線、客戶名單；同一頁的片段用同一個外框 |
 | `SpecTable` | 規格表、對應表 | 真的 `<table>`：5 行以上的事實原文排成兩欄清單（第一行以冒號結尾時當導言）；一列一個項目（部署方式、標準、規範），事實原文一格，選填的 `link` 一格；可以有列線（house rules 對真表格的例外）；`emphasis="name"` 讓第一欄用襯線粗體（對應表的規範名稱）；欄名只給螢幕閱讀器 |
 | `Timeline` | 時間列 | 真的 `<ol>`：年份在前（襯線粗體、`tabular-nums`），事實原文在後，一列一則 |
-| `CaseList` | 案例列、成果列 | 一列一則，用間距分開，不做等大卡片：客戶（或作業名稱）用襯線粗體，接著作業、成果原文（數字加粗）、獎項、連結（錨點帶客戶或案例名）；`fragment` 在旁邊放這則作業的 `UiFragment`；`lead` 讓第一則的成果字級大一級；事實庫沒有成果時不放那一行；`more` 是「看所有成功案例」；`linkHeading` 讓每列的 heading 就是連到案例內頁的連結（「客戶名：案例標題」） |
+| `CaseList` | 案例列、成果列 | 一列一則，用間距分開，不做等大卡片：客戶（或作業名稱）用襯線粗體，接著作業、成果原文（數字加粗）、獎項、連結（錨點帶客戶或案例名）；`fragment` 在旁邊放這則作業的 `UiFragment`；`lead` 讓第一則的成果字級大一級；事實庫沒有成果時不放那一行；`more` 是「看所有成功案例」；`linkHeading` 讓每列的 heading 就是連到案例內頁的連結（「客戶名：案例標題」）；`words` 傳頁面的 `strings.layout` |
 | `IndexList` | 索引列 | 次要段落（相關文章、子頁、相關產品、下載）的一列一項：名稱（`--font-size-text` 的襯線粗體）、一句、日期、選填小縮圖；沒有框，整列可點，hover 只換名稱的顏色與底線；搭配 `SectionHeading weight="secondary"` |
 | `MapPicture` | hero 的靜態圖加標籤 | 同一個世界渲染的靜態圖（`src/assets/design/ribbon/`），`labels` 依 `pictures.json` 的錨點（core、legacy、product、model、service、ai0–ai2）放 HTML 標籤，落在圖外的不放；位置由 `src/lib/scene/ribbon/labels.ts` 算（首頁的地圖標籤共用）；`priority` 給 hero |
 | `CardGrid` | 卡片列表 | 手機一欄、`--bp-sm-up` 兩欄、`--bp-lg-up` 三欄（`cols`）；同一列等高；`compact` 讓手機也一列兩張短卡 |
