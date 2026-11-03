@@ -4,6 +4,7 @@ title: SysTalk.ai Nền tảng ứng dụng AI Agent cấp doanh nghiệp
 description: SysTalk.ai là nền tảng ứng dụng AI Agent hoàn chỉnh, giúp doanh nghiệp chuyển đổi số và vận hành thông minh, với giải pháp AI đầy đủ trên đám mây và tại chỗ.
 translationKey: family-ai
 node: family-ai
+heroImage: ../../../assets/design/family-ai.webp
 tagline: Nền tảng ứng dụng AI Agent cấp doanh nghiệp, từ tích hợp đến ứng dụng, nâng cấp toàn diện dịch vụ doanh nghiệp
 # The three benefits of the AI all-in-one appliance on /products/systalk-ai-phison (zh-TW entry)
 highlights:

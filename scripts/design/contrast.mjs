@@ -32,7 +32,7 @@ export const PAIRS = [
   ...pair('--color-text-accent', ['--glass-bg'], TEXT, '--scene-worst'),
   ...pair('--color-link', ['--glass-bg'], TEXT, '--scene-worst'),
   ...pair('--color-action-text', ['--color-action', '--color-action-hover'], TEXT),
-  ...pair('--color-action', ['--color-bg', '--color-bg-subtle', '--color-action-subtle-hover'], TEXT),
+  ...pair('--color-action', ['--color-bg', '--color-bg-subtle', '--color-bg-brand-subtle', '--color-action-subtle-hover'], TEXT),
   ...pair('--color-link', ['--color-bg', '--color-bg-subtle', '--color-bg-muted', '--color-bg-brand-subtle'], TEXT),
   ...pair('--color-link-hover', ['--color-bg', '--color-bg-subtle'], TEXT),
   ...pair('--color-error', ['--color-bg', '--color-bg-subtle', '--color-error-bg'], TEXT),

@@ -1,14 +1,14 @@
 ---
-// A page's one form (contact, document request, newsletter) on a raised panel, so it reads as the
+// A page's one form (contact, document request, newsletter) on a panel one step darker than the paper, so it reads as the
 // page's task: the form's heading, then its fields with even spacing. The form is labelled by its
 // heading. Fields are FormField and FormGroup; the page lays out anything more (a two-column row).
 // The submit button goes in the `actions` slot, so the spam check can sit between it and the fields.
 //
 // Feedback after a submit, shown in a status area under the heading (role="alert", so filling it
 // is announced; tabindex="-1", so focus can move to it):
-// - `errors`: an error summary in the site's index style (SectionHeading's numbered eyebrow on the
-//   energy line, then one numbered row per invalid field linking to it; `id` is the control's or
-//   FormGroup's id). The error color marks only the numbers, not a tinted box
+// - `errors`: an error summary (a small heading, then an <ol> with one numbered row per invalid
+//   field linking to it; `id` is the control's or FormGroup's id). The error color marks only the
+//   numbers, not a tinted box
 // - `message`: one message for the whole form (sending failed, the spam check failed), a row of
 //   the same list with an error dot
 // `challenge` reserves the space of the Cloudflare Turnstile widget above the actions: the compact
@@ -80,8 +80,8 @@ const siteKey = typeof key === 'string' && key ? key : TEST_SITE_KEY;
   <div class="status" id={`${id}-status`} role="alert" tabindex="-1" data-form-status>{
     errors.length > 0 ? (
       <div class="summary">
-        <SectionHeading level={3} size="sm" index={pad(errors.length)} eyebrow="Errors" title={t.form.errorSummary} />
-        <ol class="ruled-list">
+        <SectionHeading level={3} size="sm" title={t.form.errorSummary} />
+        <ol class="row-list">
           {errors.map((e, i) => (
             <li>
               <a class="row" href={`#${e.id}`}>
@@ -108,8 +108,8 @@ const siteKey = typeof key === 'string' && key ? key : TEST_SITE_KEY;
       <>
         <template data-form-summary>
           <div class="summary">
-            <SectionHeading level={3} size="sm" index="00" eyebrow="Errors" title={t.form.errorSummary} />
-            <ol class="ruled-list">
+            <SectionHeading level={3} size="sm" title={t.form.errorSummary} />
+            <ol class="row-list">
               <li>
                 <a class="row" href="#">
                   <span class="n" />
@@ -145,10 +145,7 @@ const siteKey = typeof key === 'string' && key ? key : TEST_SITE_KEY;
     flex-direction: column;
     gap: var(--space-5);
     padding: var(--space-8);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-lg);
     background: var(--color-bg-subtle);
-    box-shadow: var(--shadow-lg);
   }
 
   .title {
@@ -180,10 +177,9 @@ const siteKey = typeof key === 'string' && key ? key : TEST_SITE_KEY;
 
   .n {
     color: var(--color-error);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--letter-spacing-mono);
+    font-variant-numeric: tabular-nums;
   }
 
   .icon {
@@ -203,7 +199,6 @@ const siteKey = typeof key === 'string' && key ? key : TEST_SITE_KEY;
   .message {
     grid-template-columns: auto minmax(0, 1fr);
     margin: 0;
-    border-block: var(--border-width) solid var(--color-border);
   }
 
   .dot {

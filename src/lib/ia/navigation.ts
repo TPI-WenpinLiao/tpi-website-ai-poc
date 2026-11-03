@@ -103,6 +103,15 @@ export function navTree(area: string, locale: Locale = DEFAULT_LOCALE, href: Nav
 }
 
 export const utility = navTree('utility');
+
+// The name of every button to the contact page (header, hero, page end): the utility row's label,
+// which says the next step (聯絡業務, briefs/home.md「取捨」第 10 項, #187). Footer links, breadcrumbs
+// and the page's own h1 keep the node's name (聯絡我們)
+export const contactAction = (locale: Locale): string => {
+  const row = navRows.find((r) => r.area === 'utility' && r.node === 'contact');
+  if (!row?.label) throw new Error('docs/ia/navigation.csv has no labelled utility row for contact');
+  return labelIn(row.label, locale);
+};
 export const header = navTree('header');
 export const footer = navTree('footer');
 export const footerBottom = navTree('footer-bottom');

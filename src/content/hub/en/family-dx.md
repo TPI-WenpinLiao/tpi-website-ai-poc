@@ -4,6 +4,7 @@ title: DigiLism Digital Middle Platform
 description: Featuring DevOps and CI/CD, DigiLism integrates API management, BPM and log management across on-premise, cloud, hybrid and multi-cloud architectures.
 translationKey: family-dx
 node: family-dx
+heroImage: ../../../assets/design/family-dx.webp
 tagline: An API-first digital middle platform for mission critical systems
 # "How DigiLism Has Outshone the Others"
 highlights:

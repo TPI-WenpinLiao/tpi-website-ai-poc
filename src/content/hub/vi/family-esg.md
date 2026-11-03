@@ -5,6 +5,7 @@ seoTitle: "ESGswift: Quản lý carbon và quản lý năng lượng"
 description: ESGswift gồm hai nền tảng GreenSwift và ElectriSwift, tích hợp kiểm kê carbon, giám sát năng lượng, báo cáo AI, giúp doanh nghiệp tăng tốc chuyển đổi bền vững.
 translationKey: family-esg
 node: family-esg
+heroImage: ../../../assets/design/family-esg.webp
 tagline: Quản lý carbon × Quản lý năng lượng, giúp doanh nghiệp hướng tới phát triển bền vững carbon thấp
 # The four items under 「永續轉型生態系： 碳管理 x 能源管理」 (zh-TW entry)
 highlights:

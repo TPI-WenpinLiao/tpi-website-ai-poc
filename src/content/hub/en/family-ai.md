@@ -5,6 +5,7 @@ title: SysTalk.ai Enterprise AI Agent Application Platform
 description: "SysTalk.ai: AI solutions for digital transformation, with applications across knowledge management, optimized customer service and automated workflow."
 translationKey: family-ai
 node: family-ai
+heroImage: ../../../assets/design/family-ai.webp
 # The second line of the hero heading
 tagline: AI-Driven Business Innovations
 # The three benefits under "AISO provide enterprise-grade, bundled solutions to build, deploy and scale

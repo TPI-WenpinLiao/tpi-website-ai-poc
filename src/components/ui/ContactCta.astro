@@ -1,13 +1,14 @@
 ---
-// Closing call to action of a page: the purple band (data-surface="dark") with the coordinate grid
-// and a centered, outlined panel, with the contact copy of src/data/home/<locale>.ts (`contactCta`;
+// Closing call to action of a page: the whole section is the purple band (data-surface="dark"), no
+// grid, frame or glow, as the home page's last section (design-principles.md「內頁的版型」色帶, #187),
+// with the contact copy of src/data/home/<locale>.ts (`contactCta`;
 // zh-TW rewritten in #167 to say the next step) and one button to 聯絡我們 in the page's locale. `label` replaces the button text (an offering
 // whose cta is demo says 預約演示). The same on every page, so the site search leaves it out.
 import Surface from './Surface.astro';
 import SectionHeading from './SectionHeading.astro';
 import Button from './Button.astro';
 import { home } from '../../data/home';
-import { localNode, nodeHref } from '../../lib/ia/navigation';
+import { contactAction, nodeHref } from '../../lib/ia/navigation';
 import { localeFromPath } from '../../lib/i18n/paths';
 
 interface Props {
@@ -15,14 +16,14 @@ interface Props {
 }
 
 const locale = localeFromPath(Astro.url.pathname);
-const { label = localNode('contact', locale).title } = Astro.props;
+const { label = contactAction(locale) } = Astro.props;
 const { contactCta } = home(locale);
 const href = nodeHref('contact', locale);
 ---
 
-<Surface tone="dark" pattern="grid">
+<Surface tone="dark">
   <div class="contact-cta" data-pagefind-ignore>
-    <SectionHeading eyebrow="Contact" title={contactCta.title} description={contactCta.description} align="center" />
+    <SectionHeading title={contactCta.title} description={contactCta.description} align="center" />
     <Button href={href} size="lg">{label}</Button>
   </div>
 </Surface>
@@ -33,12 +34,5 @@ const href = nodeHref('contact', locale);
     flex-direction: column;
     align-items: center;
     gap: var(--space-8);
-    padding: var(--space-12) var(--space-6);
-    border: var(--border-width) solid transparent;
-    border-radius: var(--radius-lg);
-    background:
-      linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
-      var(--gradient-energy) border-box;
-    box-shadow: var(--glow-brand);
   }
 </style>

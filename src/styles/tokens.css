@@ -299,7 +299,7 @@
   --color-action: var(--ink-0);
   --color-action-hover: var(--purple-100);
   --color-action-text: var(--purple-700);
-  --color-action-subtle-hover: var(--purple-800);
+  --color-action-subtle-hover: var(--purple-700);
   --color-link: var(--ink-0);
   --color-link-hover: var(--purple-100);
   --color-disabled-bg: var(--purple-800);

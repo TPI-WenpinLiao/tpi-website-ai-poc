@@ -1,0 +1,131 @@
+---
+// A junction diagram (#187, design-principles.md「內頁的版型」接點圖): what the product sits between.
+// Three columns: the existing systems (neutral), the product (purple), what it opens up (orange).
+// Being joined is shown by the columns touching through a flat band, not by thin arrows. A node can
+// be `down` (failed, the error color) or `standby`; the failover diagram uses them. Drawn in HTML so
+// the words are text (the facts' own words); `caption` says in a sentence what the diagram shows and
+// names the figure. Columns stack on narrow screens, the band running down between them.
+interface Column {
+  title: string;
+  tone: 'legacy' | 'product' | 'new';
+  nodes: readonly { label: string; state?: 'down' | 'standby' | undefined }[];
+}
+
+interface Props {
+  columns: readonly Column[];
+  caption: string;
+  // The word for a node marked down or standby, in the page's language
+  states: { down: string; standby: string };
+}
+
+const { columns, caption, states } = Astro.props;
+---
+
+<figure class="junction">
+  <ol class="columns">
+    {
+      columns.map((c) => (
+        <li class:list={['column', c.tone]}>
+          <span class="column-title">{c.title}</span>
+          <ul class="row-list">
+            {c.nodes.map((n) => (
+              <li class:list={['node', n.state]}>
+                <span>{n.label}</span>
+                {n.state && <span class="node-state">{states[n.state]}</span>}
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ol>
+  <figcaption class="caption">{caption}</figcaption>
+</figure>
+
+<style>
+  @import '../../styles/media.css';
+
+  .junction {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+  }
+
+  .columns {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+
+  /* The band: each column sits on its own fill and touches the next, so they read as joined */
+  .legacy {
+    background: var(--color-bg-muted);
+  }
+
+  .product {
+    background: var(--color-action);
+    color: var(--color-action-text);
+  }
+
+  .new {
+    background: var(--color-bg-accent-subtle);
+  }
+
+  .column-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .node {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .node-state {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .down {
+    color: var(--color-error);
+    text-decoration: line-through;
+  }
+
+  .down .node-state {
+    text-decoration: none;
+  }
+
+  .standby {
+    background: var(--color-bg-subtle);
+    color: var(--color-text-muted);
+  }
+
+  .caption {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  @media (--bp-sm-up) {
+    .columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+    }
+  }
+</style>

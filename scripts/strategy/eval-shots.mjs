@@ -26,7 +26,11 @@
 // Nothing on a page is clicked or closed. A page that fails to load is reported with the error and the
 // run goes on with the others, then exits 1 without writing blind/. Re-running overwrites the same files.
 //
-// Usage: node scripts/strategy/eval-shots.mjs --new <dist> --old <old dist> [--work <dir>] [--only new,current]
+// A later round of the same pages (#187 re-evaluated the pilot pages) passes --group <name>: the built
+// site given as --new is shot into docs/strategy/evaluation/<name>/ instead of new/, so the first
+// round's pictures stay as the report quoted them.
+//
+// Usage: node scripts/strategy/eval-shots.mjs --new <dist> --old <old dist> [--work <dir>] [--only new,current] [--group <name>]
 import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -74,8 +78,11 @@ const { values } = parseArgs({
     old: { type: 'string' },
     work: { type: 'string', default: join(tmpdir(), 'eval-work') },
     only: { type: 'string' },
+    group: { type: 'string', default: 'new' },
   },
 });
+// The directory the --new site's pictures go into
+const outGroup = (group) => (group === 'new' ? values.group : group);
 const want = (group) => !values.only || values.only.split(',').includes(group);
 
 /**
@@ -196,20 +203,21 @@ for (const group of ['new', 'old']) {
     ok = false;
     continue;
   }
-  await mkdir(join(OUT_DIR, group), { recursive: true });
-  await mkdir(join(values.work, group), { recursive: true });
+  const out = outGroup(group);
+  await mkdir(join(OUT_DIR, out), { recursive: true });
+  await mkdir(join(values.work, out), { recursive: true });
   const server = await serve(root);
   const { port } = /** @type {import('node:net').AddressInfo} */ (server.address());
   for (const { slug, path } of PILOT) {
     const file = servedFile(path, fileKind(root));
-    const html = await shootBoth(browser, group, slug, `http://localhost:${port}${path}`);
+    const html = await shootBoth(browser, out, slug, `http://localhost:${port}${path}`);
     if (html === undefined || !file) {
-      if (!file) console.error(`FAIL ${group}/${slug}: ${path} is not in ${root}`);
+      if (!file) console.error(`FAIL ${out}/${slug}: ${path} is not in ${root}`);
       ok = false;
       continue;
     }
-    await copyFile(join(root, file), join(values.work, group, `${slug}.html`));
-    done.push({ group, slug });
+    await copyFile(join(root, file), join(values.work, out, `${slug}.html`));
+    done.push({ group: out, slug });
   }
   server.close();
 }

@@ -61,9 +61,11 @@ export const JOBS = [
   ...CASES.map((c) => ({ name: c.name, w: 1600, h: 1200, view: { kind: 'cases', p: c.p }, levels: c.levels })),
   ...PRODUCTS.map((p) => ({ name: `prod-${p}`, w: 768, h: 432, view: { kind: 'product', name: p } })),
   { name: 'orientai', w: 1600, h: 1200, view: { kind: 'enclosure' } },
-  // Inner pages' heroes (#167): the product's own block on the map; the finance page sees the AI stretch
-  { name: 'page-digirunner', w: 1600, h: 1200, view: { kind: 'product', name: 'digirunner' }, override: { halfW: 4.2, pitch: 34 } },
-  { name: 'page-finance', w: 1600, h: 1200, view: { kind: 'cases', p: 0.5 }, override: { halfW: 5.4, pitch: 36 }, levels: [1, 1, 1] },
+  // Inner pages' heroes (#167): the product's own block on the map; the finance page sees the AI stretch.
+  // Framed wide enough (#187) that the blocks their briefs name are on the picture: digiRunner's core,
+  // existing systems, digiRunner and the AI model; finance's core system, the AI work and the services
+  { name: 'page-digirunner', w: 1600, h: 1200, view: { kind: 'product', name: 'digirunner' }, override: { halfW: 9, pitch: 34 } },
+  { name: 'page-finance', w: 1600, h: 1200, view: { kind: 'cases', p: 0 }, override: { halfW: 12, pitch: 36 }, levels: [1, 1, 1] },
 ];
 
 /** The fork pictures: a plan whose top edge is the city edge, the trunk entering at the hero's exit */

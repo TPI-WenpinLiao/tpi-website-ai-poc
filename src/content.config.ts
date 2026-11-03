@@ -83,6 +83,108 @@ const anyNode = z.enum(nodeIds(() => true, 'any'));
 const nodeLink = z.strictObject({ label: text, node: anyNode });
 const parentOf = (id: string) => nodes.find((n) => n.id === id)?.parent;
 
+// Offering and hub pages laid out by their brief (#187): one section per brief paragraph, each with
+// the layout design-principles.md「內頁的版型」gives it. The template renders sections in order; a page
+// without `sections` falls back to the older fields (features, highlights). Every string under a
+// section is wording (headings, bodies, labels) or a fact text verbatim (items, rows, results); the
+// facts are listed in the entry's `facts` and checked by scripts/strategy/facts.mjs.
+// An interface fragment (UiFragment): a panel drawn in HTML and marked 示意, naming only what the
+// facts name (features, settings, states), never sample data (counts, times, curves, client lists)
+const uiFragment = z.strictObject({
+  title: text,
+  tabs: z.array(text).optional(),
+  rows: z.array(z.strictObject({ label: text, value: text.optional(), state: z.enum(['on', 'off', 'down', 'next']).optional() })).min(1),
+  note: text.optional(),
+});
+// A junction diagram (JunctionDiagram): existing systems, the product in the middle, what it opens
+// up; a node can be marked down (failover) or standby
+const diagram = z.strictObject({
+  columns: z
+    .array(
+      z.strictObject({
+        title: text,
+        tone: z.enum(['legacy', 'product', 'new']),
+        nodes: z.array(z.strictObject({ label: text, state: z.enum(['down', 'standby']).optional() })).min(1),
+      }),
+    )
+    .length(3),
+  caption: text,
+});
+// An item's node is linked from its title, so an item with a node has a title (linkedNodes counts it as linked)
+const sectionItem = z
+  .strictObject({ title: text.optional(), body: text, node: anyNode.optional() })
+  .refine((i) => i.node === undefined || i.title !== undefined, { message: 'an item with a node needs a title to link from' });
+const specRow = z.strictObject({ label: text, values: z.array(text).min(1), link: nodeLink.optional() });
+const resultItem = z.strictObject({
+  title: text,
+  // A line under the title (the model behind the work), wording or a fact text
+  sub: text.optional(),
+  result: text,
+  client: text.optional(),
+  link: nodeLink.optional(),
+  fragment: uiFragment.optional(),
+});
+const sectionCommon = (image: ImageFn) => ({
+  // The in-page anchor (InPageNav lists sections that have one), lowercase-slug
+  id: z.string().regex(SLUG).optional(),
+  heading: text,
+  body: text.optional(),
+  link: nodeLink.optional(),
+  // One step of fill to mark a change of question group (Surface fill)
+  fill: z.enum(['subtle', 'brand']).optional(),
+  // A picture of the ribbon world beside the claim (docs/design/image-prompts.md), decorative (alt
+  // ""): for the layouts without a figure of their own (spec, timeline, band without a fragment)
+  image: image().optional(),
+});
+const pageSection = (image: ImageFn) => z.discriminatedUnion('layout', [
+  // 主張與原文: claim on the start side, fact items on the end side (FactRow)
+  z.strictObject({ layout: z.literal('claim'), ...sectionCommon(image), items: z.array(sectionItem).min(1) }),
+  // 接點圖: the diagram beside the claim, fact items under it in two columns, spec rows after them
+  z.strictObject({ layout: z.literal('junction'), ...sectionCommon(image), diagram, items: z.array(sectionItem).optional(), rows: z.array(specRow).optional() }),
+  // 介面片段: the fragment takes the larger side; `flip` puts it on the end side; `index` lists the
+  // pages the section leads on to (IndexList)
+  z.strictObject({
+    layout: z.literal('ui'),
+    ...sectionCommon(image),
+    fragment: uiFragment,
+    items: z.array(sectionItem).optional(),
+    flip: z.boolean().optional(),
+    index: z.array(z.strictObject({ body: text.optional(), node: anyNode })).optional(),
+  }),
+  // 規格表 and 對應表: a real table, one row a label (a regulation) and its fact texts
+  z.strictObject({ layout: z.literal('spec'), ...sectionCommon(image), rows: z.array(specRow).min(1) }),
+  // 時間列: ordered steps with their year, then (optionally) the 對應表 rows
+  z.strictObject({
+    layout: z.literal('timeline'),
+    ...sectionCommon(image),
+    intro: text.optional(),
+    steps: z.array(z.strictObject({ year: text, body: text })).min(2),
+    rows: z.array(specRow).optional(),
+  }),
+  // 成果: one work a row, its result and a fragment of it; `record` is a line closing the section
+  z.strictObject({ layout: z.literal('results'), ...sectionCommon(image), items: z.array(resultItem).min(1), record: text.optional() }),
+  // 色帶: the claim, a few facts and the action on a pale purple band, a fragment beside them
+  z.strictObject({ layout: z.literal('band'), ...sectionCommon(image), items: z.array(sectionItem).optional(), fragment: uiFragment.optional() }),
+]);
+// Cases as rows (CaseList, design-principles.md「案例列」): client, the work, its result when the
+// fact library has one, the case study it links to; all fact texts
+const caseNotes = z
+  .array(
+    z.strictObject({
+      client: text.optional(),
+      work: text.optional(),
+      result: text.optional(),
+      award: text.optional(),
+      caseStudy: ref('case-study').optional(),
+      fragment: uiFragment.optional(),
+    }),
+  )
+  .optional();
+// A hero point is a fact text, with the condition that goes with it (#187)
+const heroPoint = z.union([text, z.strictObject({ text, note: text })]);
+// Labels on the hero's static picture, by the picture's anchor (src/lib/scene/ribbon/pictures.json)
+const heroLabels = z.partialRecord(z.enum(['core', 'legacy', 'product', 'model', 'service', 'ai0', 'ai1', 'ai2']), text).optional();
+
 const offering = defineCollection({
   loader: localizedGlob('offering'),
   schema: ({ image }) =>
@@ -96,8 +198,10 @@ const offering = defineCollection({
         // One sentence under the tagline: the category and what it is for (#167); wording, no facts
         heroLead: text.optional(),
         // Fact texts shown with the hero (#167); the second action, to another page (a trial)
-        heroPoints: z.array(text).optional(),
+        heroPoints: z.array(heroPoint).optional(),
+        heroLabels,
         secondaryCta: z.strictObject({ label: text, node: anyNode }).optional(),
+        sections: z.array(pageSection(image)).optional(),
         // `points` are fact texts listed under the body, `link` a page the feature leads on to (#167)
         features: z
           .array(z.strictObject({ title: text, body: text, icon: image().optional(), points: z.array(text).optional(), link: nodeLink.optional() }))
@@ -113,6 +217,7 @@ const offering = defineCollection({
         // A line under the case studies' heading (#183): wording that names the case, then a fact
         // text about it; the facts are listed in `facts`
         casesIntro: text.optional(),
+        caseNotes,
         relatedPosts: z.array(ref('blog')).optional(),
         downloads: z.array(z.strictObject({ label: text, file: text })).optional(),
       })
@@ -130,21 +235,18 @@ const hub = defineCollection({
         heroImage: image().optional(),
         industry: z.enum(INDUSTRIES).optional(),
         highlights: z.array(z.strictObject({ title: text, body: text })).optional(),
-        // The page's sections when its brief asks for more than highlights (#167): a heading, a short
-        // body, items (a fact text each, linking to a page by node id) and a link on to a page
-        sections: z
-          .array(
-            z.strictObject({
-              heading: text,
-              body: text.optional(),
-              items: z.array(z.strictObject({ title: text, body: text.optional(), node: anyNode.optional() })).optional(),
-              link: nodeLink.optional(),
-            }),
-          )
-          .optional(),
+        // The hero's sentence, evidence and contact button (#187), as offering's heroLead, heroPoints
+        heroLead: text.optional(),
+        heroPoints: z.array(heroPoint).optional(),
+        heroLabels,
+        heroCta: z.literal('contact').optional(),
+        // The page's sections when its brief asks for more than highlights (#167, laid out per #187)
+        sections: z.array(pageSection(image)).optional(),
         featuredCaseStudies: z.array(ref('case-study')).optional(),
         // A line under the case studies' heading (#167): a fact text, listed in `facts`
         casesIntro: text.optional(),
+        caseNotes,
+        testimonial: z.strictObject({ quote: text, speaker: text }).optional(),
         featuredPosts: z.array(ref('blog')).optional(),
       })
       .superRefine(requireMigratedAt)

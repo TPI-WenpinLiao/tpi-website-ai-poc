@@ -1,6 +1,9 @@
 ---
-// Opening scene of a page: light surface (tone="dark" for a purple band) with the coordinate grid,
-// mono eyebrow, the page's single h1, lead text, actions, and a `visual` slot. The visual is where the 3D scroll
+// Opening scene of a page: light surface (tone="dark" for a purple band), the page's single h1 with
+// nothing above it (no eyebrow: where the page sits shows in the breadcrumb; design-principles.md
+// P1,「內頁共用的規則」, #187), then the description, an optional `lead` sentence, the evidence
+// (`points`: fact texts, each with an optional `note` set tight under it, the condition that goes
+// with the fact), an optional `meta` line, the actions, and a `visual` slot. The visual is where the 3D scroll
 // scene mounts (M3-07); until it loads it must show a static fallback, which is also the LCP
 // candidate, so never fade the hero in. Breadcrumbs go in the `breadcrumb` slot: their own row at
 // the top of the hero, outside the copy, at every width.
@@ -18,13 +21,16 @@ import Surface from './Surface.astro';
 
 interface Props {
   title: string;
-  eyebrow?: string;
-  description?: string;
+  description?: string | undefined;
+  lead?: string | undefined;
+  points?: readonly { text: string; note?: string | undefined }[] | undefined;
+  // A short plain line under the copy (a case study's industry); never above the h1
+  meta?: string | undefined;
   tone?: 'light' | 'dark';
   size?: 'display' | 'compact';
 }
 
-const { title, eyebrow, description, tone = 'light', size = 'display' } = Astro.props;
+const { title, description, lead, points = [], meta, tone = 'light', size = 'display' } = Astro.props;
 const hasVisual = Astro.slots.has('visual');
 const hasBackdrop = Astro.slots.has('backdrop');
 const hasCrumbs = Astro.slots.has('breadcrumb');
@@ -32,7 +38,7 @@ const hasCrumbs = Astro.slots.has('breadcrumb');
 const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : undefined;
 ---
 
-<Surface tone={tone} pattern="grid" class="page-hero" style={imageDrop} trim={size === 'compact' ? 'end' : undefined}>
+<Surface tone={tone} class="page-hero" style={imageDrop} trim={size === 'compact' ? 'end' : undefined}>
   {
     hasBackdrop && (
       <Fragment slot="backdrop">
@@ -51,9 +57,22 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
     {hasBackdrop && <div class="hero-visual" data-hero-visual aria-hidden="true" />}
     <div class:list={['layout', { split: hasVisual, 'has-backdrop': hasBackdrop }]}>
       <div class="copy">
-        {eyebrow && <p class="eyebrow signal-dot">{eyebrow}</p>}
         <h1>{title}</h1>
         {description && <p class="description text-phrase">{description}</p>}
+        {lead && <p class="lead">{lead}</p>}
+        {
+          points.length > 0 && (
+            <ul class="points">
+              {points.map((p) => (
+                <li>
+                  <span class="point">{p.text}</span>
+                  {p.note && <span class="note">{p.note}</span>}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        {meta && <p class="meta">{meta}</p>}
         {
           Astro.slots.has('actions') && (
             <div class="actions">
@@ -88,18 +107,6 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
     gap: var(--space-6);
   }
 
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin: 0;
-    color: var(--color-text-brand);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-xs);
-    letter-spacing: var(--letter-spacing-mono);
-    text-transform: uppercase;
-  }
-
   h1 {
     margin: 0;
     color: var(--color-text);
@@ -124,6 +131,45 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
     margin: 0;
     color: var(--color-text-muted);
     font-size: var(--font-size-xl);
+  }
+
+  .lead {
+    max-width: var(--reading-max-width);
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  /* The evidence: fact texts as a list spaced apart, no markers or rules (P2); a fact's condition
+     sits tight under it in the small size */
+  .points {
+    display: grid;
+    gap: var(--space-3);
+    max-width: var(--reading-max-width);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .points li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .point {
+    font-weight: var(--font-weight-semibold);
+    white-space: pre-line;
+  }
+
+  .note {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .meta {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
   }
 
   .actions {

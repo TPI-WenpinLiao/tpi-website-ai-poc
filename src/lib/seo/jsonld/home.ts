@@ -11,9 +11,11 @@ interface HomeJsonLdInput {
   logoUrl: string;
   /** Page language (BCP 47), e.g. zh-TW */
   inLanguage: string;
+  /** Absolute URL of the locale's search page when it is built, for the SearchAction */
+  searchUrl?: string | undefined;
 }
 
-export function homeJsonLd({ org, site, logoUrl, inLanguage }: HomeJsonLdInput) {
+export function homeJsonLd({ org, site, logoUrl, inLanguage, searchUrl }: HomeJsonLdInput) {
   const organization = organizationNode(org, site, logoUrl);
   const website = {
     '@type': 'WebSite',
@@ -22,6 +24,17 @@ export function homeJsonLd({ org, site, logoUrl, inLanguage }: HomeJsonLdInput) 
     url: site.href,
     inLanguage,
     publisher: { '@id': organization['@id'] },
+    // The site search (M6) as a SearchAction (content-model.md「首頁」, #187): `q` is what
+    // SearchResults reads
+    ...(searchUrl
+      ? {
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: { '@type': 'EntryPoint', urlTemplate: `${searchUrl}?q={search_term_string}` },
+            'query-input': 'required name=search_term_string',
+          },
+        }
+      : {}),
   };
   return graph(organization, website);
 }

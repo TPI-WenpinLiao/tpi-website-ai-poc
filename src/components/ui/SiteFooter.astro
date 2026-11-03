@@ -5,7 +5,7 @@
 // site (src/data/site.ts). Dark surface, so it closes every page the same way.
 // `consentSettings` adds a button at the end of the legal row that reopens ConsentBanner's
 // preferences dialog (`dialog` is its id); PageLayout passes it when the build has a GTM ID.
-import { localizedNav, localNode, nodeHref } from '../../lib/ia/navigation';
+import { contactAction, localizedNav, nodeHref } from '../../lib/ia/navigation';
 import { getEntry } from 'astro:content';
 import { company } from '../../data/site';
 import { strings } from '../../data/strings';
@@ -21,7 +21,6 @@ type Props = { consentSettings?: { label: string; dialog: string } };
 const { consentSettings } = Astro.props;
 
 const locale = localeFromPath(normalizePath(Astro.url.pathname));
-const contact = localNode('contact', locale);
 const t = strings(locale);
 const path = normalizePath(Astro.url.pathname);
 // The link to the page being shown (docs/ia/navigation.md「無障礙」)
@@ -50,7 +49,7 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
             <dd><a href={`mailto:${company.email}`}>{company.email}</a></dd>
           </div>
         </dl>
-        <Button href={nodeHref('contact', locale)} variant="secondary" size="sm">{contact.title}</Button>
+        <Button href={nodeHref('contact', locale)} variant="secondary" size="sm">{contactAction(locale)}</Button>
       </div>
 
       <nav class="columns" aria-label={t.footerNav}>
@@ -174,11 +173,8 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
   dt {
     min-inline-size: var(--space-12);
     color: var(--color-text-muted);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-xs);
-    letter-spacing: var(--letter-spacing-mono);
+    font-size: var(--font-size-sm);
     line-height: var(--line-height-base);
-    text-transform: uppercase;
   }
 
   .columns {

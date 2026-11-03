@@ -5,6 +5,7 @@ title: Nền tảng trung gian DigiLism iPaaS
 description: DigiLism tích hợp DevOps và CI/CD, kết hợp quản lý API, BPM và quản lý log, hỗ trợ on-premise, đám mây, hybrid và multi-cloud, kết nối với ESB truyền thống.
 translationKey: family-dx
 node: family-dx
+heroImage: ../../../assets/design/family-dx.webp
 # The subheading under the h1 「Nền tảng trung gian iPaas」
 tagline: Nền tảng trung gian ưu tiên API dành cho các hệ thống quan trọng
 # 「DigiLism Vượt Trội So Với Các Giải Pháp Khác Như Thế Nào?」

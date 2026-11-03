@@ -355,7 +355,7 @@ sitemap 中所有頁面與外部連結（不含功能頁群組）都要出現在
 | 　　合作夥伴（`partners`） | header：公司 > 合作夥伴<br/>footer：公司 > 合作夥伴 |
 | 　　媒體中心（`media-center`） | header：公司 > 媒體中心<br/>footer：公司 > 媒體中心 |
 | 　　人才招募（`hr`） | header：公司 > 人才招募<br/>footer：公司 > 人才招募 |
-| 　聯絡我們（`contact`） | 工具列：聯絡我們<br/>footer：公司 > 聯絡我們 |
+| 　聯絡我們（`contact`） | 工具列：聯絡業務<br/>footer：公司 > 聯絡我們 |
 | 　　隱私權政策（`privacy`） | footer 最底列：隱私權政策 |
 | 　　使用條款（`terms`） | footer 最底列：使用條款 |
 | 　　免責聲明（`disclaimer`） | footer 最底列：免責聲明 |

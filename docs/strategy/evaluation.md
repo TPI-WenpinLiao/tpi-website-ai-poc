@@ -4,6 +4,7 @@
 
 ## 結論
 
+- 第二輪（#187）：試點三頁依本報告修正後重評，三頁三份 rubric 都通過（見「第二輪（#187）」），兩輪用的 rubric 版本不同，分數不能直接比較
 - 新版首頁三份 rubric 都通過（設計 4.2、文案與行銷 4.3、SEO 4.2）。舊版、現站、競品的首頁三份都沒過，最高的是舊版的 SEO 3.2
 - 新版 digiRunner 與金融頁沒過。兩頁的設計都是 3.0，卡在 D2 = 2：offering 與 hub 模板沿用 M3 的元件，留著設計原則明列不做的 mono 大寫 eyebrow、`01` 編號、細線與框線卡片。文案分別是 3.8、3.7，差在幾處做得不完整：製作備註式的句子、hero 的「免費」沒寫條件、brief 要的事實沒放、錨點沒照 brief
 - 比舊版進步最多的是定位與照 brief 做（C1、C5）。舊版三頁的內容停在 brief 之前，C5 都是 1 分；新版首頁是 5 分，另兩頁是 4、3 分
@@ -74,6 +75,9 @@ node scripts/strategy/eval-shots.mjs --new <scratch>/new-dist --old <scratch>/ol
 | 現站 | [金融（開放銀行頁）](evaluation/reviews/current-finance.md) | 1.3 未通過（6 項低於 3） | 1.5 未通過（6 項低於 3） | 1.8 未通過（5 項低於 3） |
 | 競品 | [SYSTEX 首頁](evaluation/reviews/competitors-systex.md) | 2.6 未通過（D1 = 2、D6 = 2） | 2.0 未通過（5 項低於 3） | 1.0 未通過（3 項低於 3） |
 | 競品 | [Syscom 首頁](evaluation/reviews/competitors-syscom.md) | 2.0 未通過（5 項低於 3） | 2.4 未通過（3 項低於 3） | 1.3 未通過（3 項低於 3） |
+| 第二輪（#187） | [首頁](evaluation/reviews/r2-new-home.md) | 4.0 通過 | 4.5 通過 | 4.5 通過 |
+| 第二輪（#187） | [digiRunner](evaluation/reviews/r2-new-digirunner.md) | 4.3 通過 | 4.7 通過 | 4.7 通過 |
+| 第二輪（#187） | [金融](evaluation/reviews/r2-new-finance.md) | 4.2 通過 | 4.2 通過 | 4.7 通過 |
 <!-- eval-scores:end -->
 
 ## 各組的主要差異
@@ -200,6 +204,57 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 - #186 策略文件同步：產品頁與產業頁的「會怎麼呈現」、`briefs/home.md` 改成 5 段版、`DM-2` 的證據點、brief 的衝突、競品內頁研究（`strategy-approved` 關卡）
 - #187 試點三頁依本報告修正並重評，依賴 #186
 - #188 決定其他頁面是否照分階段流程重做
+
+## 第二輪（#187）
+
+#187 依本報告「新版還不夠好的地方」修正試點三頁後，三頁各由新的 `reviewer` 用三份 rubric 重評。評審檔是 [`r2-new-home`](evaluation/reviews/r2-new-home.md)、[`r2-new-digirunner`](evaluation/reviews/r2-new-digirunner.md)、[`r2-new-finance`](evaluation/reviews/r2-new-finance.md)，分數在上方「分數」表的「第二輪」三列。
+
+### 方法
+
+- 用的是 #168 修改後的 rubric 與 `site-review`（4、2 分的給法、D1 錨點、C3、C4、S1、S2、S6 的提示、評審對象的準備）。第一輪用的是修改前的版本，兩輪的分數不能直接比較：第一輪的分數說明「修改前的頁面離 brief 多遠」，第二輪說明「修改後的頁面是否達到門檻」
+- 素材由 `node scripts/strategy/eval-shots.mjs --only new --group <組>` 產生，截圖存在 `evaluation/r2-new/`（第一次）與 `evaluation/r2b-new/`（最後一次），第一輪的 `evaluation/new/` 不動。prompt 只給匿名代號的截圖、`dist/` 的 HTML 與 `docs/strategy/`，不給第一輪的分數與製作過程
+- 每頁一個新的 `reviewer`，三份 rubric 一起評。評審寫錯平均時，以評審自己在「門檻判斷」的更正為準，`eval-scores.mjs` 檢查標題與分數一致
+
+### 結果
+
+同一輪評了兩次。第一次（PR #191 `177237c`，評審檔在 [`evaluation/r2-attempt1/`](evaluation/r2-attempt1/)）首頁、digiRunner 三份都通過，金融頁設計 3.5、文案與行銷 3.8（C3 = 2）未通過。依評審修正後（`f47eba0`），三頁再各由新的 `reviewer` 評一次，三份 rubric 都通過：
+
+| 頁面 | 設計 | 文案與行銷 | SEO |
+|---|---|---|---|
+| 首頁 | 4.0（D3 = 3） | 4.5 | 4.5 |
+| digiRunner | 4.3 | 4.7 | 4.7 |
+| 金融 | 4.2 | 4.2 | 4.7 |
+
+兩次之間修的是：
+
+- 金融頁的 description 寫了「以 AI 處理理賠、建檔與阻詐」，阻詐平台的原文沒有提到 AI（`messaging.md`「缺少證據的主張」第 15 項），C3 因此只有 2 分。改成 brief 的示例，同時修正 S3、S6
+- 段落裝飾圖：使用者在 #187 設計確認時覺得內頁「都是文字組成、過於單調」，用 ChatGPT 產生 5 張緞帶世界的段落圖。第一次評審兩位都把它們算成違反 P5（每張圖都要是那一段的內容）：時間列旁、案例列旁的圖把內容推後、和案例搶焦點。使用者決定保留部署、身分驗證、規劃與導入三張，拿掉另外兩張，`design-principles.md`「內頁共用的規則」新增「段落圖」一列寫明用法與上限，兩份 brief 的影像欄跟著改。第二次評審照新的原則評
+- 案例列的 heading 改成連到案例的「客戶名：案例標題」，獎項不再是淡色小字，證言降一級；保險段補 InsureBrick 的模組事實；事實裡的百分比加粗；digiRunner 的 OAS 併入政府列
+
+### 還不夠好的地方
+
+評審給 4 分的扣分處，沒有低於門檻，留給之後的 issue：
+
+- 首頁 D3 = 3：產業段的分岔緞帶與 AI 成果的近景圖仍比入口與成果文字搶眼；三張近景、四張產品縮圖都是同一條緞帶的裁切，看不出各自的作業或產品
+- digiRunner 與金融：第 2、3、5、7 段下半部的事實原文同字級排成兩欄，看不出主次；375 寬有幾段超過 1.5 個螢幕高；hero 圖沒有「新的服務」標籤（取景放寬後方塊太小，只放寬到 digiRunner 第 4 個錨點）
+- 金融：第 6 段 InsureBrick 與 InsureRing 的事實沒分組；第 8、9 段的標題沒有帶出金融業；時間列的年份與原文開頭的年份重複
+- 事實原文有漏字：`fact:digirunner-deployment`「支援地、雲端部署」、`fact:digirunner-ai-usage-log`「完整錄所有AI使用歷程」。照規則不能改字，前者在 digiRunner 第一屏，評審讀成錯字
+
+### 評審依據不足
+
+六份評審（兩次 × 三頁）的「評審依據不足」裡重複出現的：
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| 事實原文本身漏字時，照引與 C6「沒有錯字」衝突 | `CLAUDE.md`「內容規則」、`site-research`、`copy-marketing.md` C6 | digiRunner 兩次 |
+| 介面片段段落的事實超過 4 則時放哪裡；375 寬「一段不超過約 1.5 個螢幕高」和照原文列清單的段落衝突 | `design-principles.md`「內頁的版型」「內頁共用的規則」、兩份 brief | digiRunner、金融 |
+| 對應表算不算「真的表格」，能不能有列線 | `design-principles.md`「內頁的版型」 | 金融兩次 |
+| 時間列的年份欄與原文開頭的年份重複時怎麼處理 | `design-principles.md` 時間列、`briefs/finance.md` 第 2 段 | 金融 |
+| `heroLabels` 落在圖外就不輸出，和原則要求的標籤清單衝突 | `design-principles.md`、`content-model.md` | digiRunner |
+| S3 的 h1 要含查詢詞，brief 決定 h1 只寫節點名時算不算扣分 | `rubrics/seo.md` S3 | 金融 |
+| meta description 與 JSON-LD 的文字算不算 C3 的主張 | `rubrics/copy-marketing.md` C3 | 金融 |
+
+這些是規則文件之間的衝突，不是單頁的修正，#187 不改，列在 PR 的後續事項。
 
 ## 限制
 

@@ -1,0 +1,174 @@
+---
+// Cases as rows (#187, design-principles.md「案例列」and the「成果」layout): one row a case, the client
+// first in the bold serif, the work, its result when the fact library has one (numbers in bold, the
+// condition tight under it), an award on the row of the case that won it, and the link, its label
+// naming the client. Rows are set apart by space, no frames or equal cards; the first can be larger,
+// with a fragment of the work beside it (the `fragment` slot of the first row, or each row's own
+// `fragment` given as a UiFragment props object).
+// A result without a fact is left out, never written in. `more` is the link to the full list.
+import UiFragment from './UiFragment.astro';
+import Link from './Link.astro';
+import { numbers } from '../../lib/content/emphasis';
+
+interface Fragment {
+  title: string;
+  tabs?: readonly string[] | undefined;
+  rows: readonly { label: string; value?: string | undefined; state?: 'on' | 'off' | 'down' | 'next' | undefined }[];
+  note?: string | undefined;
+}
+
+interface Item {
+  // The client or, in the results layout, the work's name
+  title?: string | undefined;
+  // A line under the title (the model behind the work)
+  sub?: string | undefined;
+  work?: string | undefined;
+  result?: string | undefined;
+  award?: string | undefined;
+  link?: { label: string; href: string } | undefined;
+  fragment?: Fragment | undefined;
+}
+
+interface Props {
+  items: readonly Item[];
+  level?: 3 | 4;
+  more?: { label: string; href: string } | undefined;
+  // The fragments' words: the 示意 mark and the state names (strings.layout)
+  words: { mark: string; on: string; off: string; down: string };
+  // The first row larger (cases); the results layout keeps every row the same
+  lead?: boolean;
+  // Cases: the row's heading is its link, worded「客戶名：案例標題」(briefs「內部連結」), so the heading
+  // alone says whose case it is; a row without a link keeps its title as the heading
+  linkHeading?: boolean;
+}
+
+const { items, level = 3, more, words, lead = true, linkHeading = false } = Astro.props;
+const Heading = `h${level}` as const;
+---
+
+<div class="case-list">
+  <ol class="rows">
+    {
+      items.map((c, i) => (
+        <li class:list={['row', { lead: lead && i === 0, 'has-fragment': c.fragment }]}>
+          <div class="text">
+            {linkHeading && c.link ? (
+              <Heading class="title serif">
+                <a href={c.link.href}>{c.link.label}</a>
+              </Heading>
+            ) : (
+              c.title && <Heading class="title serif">{c.title}</Heading>
+            )}
+            {c.sub && <p class="sub">{c.sub}</p>}
+            {c.work && <p class="work">{c.work}</p>}
+            {c.result && (
+              <p class="result">
+                {numbers(c.result).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}
+              </p>
+            )}
+            {c.award && <p class="award">{c.award}</p>}
+            {c.link && !linkHeading && (
+              <Link href={c.link.href} variant="standalone">
+                {c.link.label}
+              </Link>
+            )}
+          </div>
+          {c.fragment && (
+            <div class="fragment">
+              <UiFragment {...c.fragment} words={words} />
+            </div>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+  {
+    more && (
+      <div class="more">
+        <Link href={more.href} variant="standalone">
+          {more.label}
+        </Link>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  @import '../../styles/media.css';
+
+  .case-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-10);
+  }
+
+  .rows {
+    display: grid;
+    gap: var(--space-12);
+    inline-size: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .row {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    max-inline-size: var(--reading-max-width);
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--font-size-text);
+    line-height: var(--line-height-snug);
+  }
+
+  .sub {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  /* An award is outside proof, set like the result, not as a footnote */
+  .award {
+    margin: 0;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .title a {
+    color: var(--color-link);
+  }
+
+  .work,
+  .result {
+    margin: 0;
+  }
+
+  .lead .result {
+    font-size: var(--font-size-text);
+  }
+
+  @media (--bp-lg-up) {
+    .row.has-fragment {
+      grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+      gap: var(--grid-gutter);
+    }
+
+    .has-fragment .text {
+      grid-column: 1 / 7;
+    }
+
+    .has-fragment .fragment {
+      grid-column: 8 / -1;
+    }
+  }
+</style>

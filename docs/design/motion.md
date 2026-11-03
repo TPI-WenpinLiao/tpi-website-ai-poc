@@ -13,14 +13,14 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 | token | 用途 | 減少動態時 |
 |---|---|---|
 | `--duration-fast` | 顏色、底線、caret 等小範圍的狀態變化 | 歸零 |
-| `--duration-base` | 按鈕上浮、連結箭頭、`Faq` 的展開符號 | 歸零 |
-| `--duration-slow` | 卡片傾斜、3D canvas 淡入 | 歸零 |
+| `--duration-base` | 影片按鈕上浮、連結箭頭、`Faq` 的展開符號 | 歸零 |
+| `--duration-slow` | 3D canvas 淡入 | 歸零 |
 | `--ease-standard` | 顏色、透明度、展開等狀態變化 | 不變 |
-| `--ease-out-expo` | 位移：上浮、傾斜、箭頭 | 不變 |
+| `--ease-out-expo` | 位移：上浮、箭頭 | 不變 |
 | `--reveal-distance` | `Reveal` 進場時往上移的距離 | 不變（動畫本身不執行） |
 | `--reveal-stagger` | `Reveal` 的 `delay` 每一級把捲動範圍的起點往後推的量 | 不變（動畫本身不執行） |
-| `--tilt` | 卡片 hover 時的傾斜 | 歸零 |
-| `--lift` | 卡片、按鈕、影片按鈕 hover 時的上浮 | 歸零 |
+| `--tilt` | 目前沒有元件使用（#187 拿掉 `Card` 的傾斜） | 歸零 |
+| `--lift` | 影片按鈕 hover 時的上浮 | 歸零 |
 
 - scroll-driven animation 的 timing function 寫 `linear`：進度就是捲動位置，再加 easing 會讓捲動和畫面對不上。`token-usage.mjs` 只在同一條規則有 `animation-timeline` 時允許 `linear`
 - `Reveal` 的錯開量是捲動距離，不是時間，所以用 `--reveal-stagger`，不用 `--delay-step`
@@ -35,8 +35,9 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 | 3D 捲動場景（ribbon-route） | `HomeTemplate`、`src/lib/scene/ribbon/` | 首頁的 hero、產業與 AI 成果段，只有桌機（ADR 0003「ribbon-route」） | 捲動：鏡頭升到俯視再跟著頁面平移、hero 文字淡出、AI 成果逐則切換；載入後緞帶畫出一次（1.2 秒） | 不載入 three.js，顯示同一個世界渲染的靜態圖；執行中切換成減少動態時停止場景並回到靜態版 |
 | 捲動進場 | `Reveal` | 首頁、offering、hub、listing、article、case-study 模板的卡片與區塊 | 元素捲進畫面 | 直接顯示在最終位置 |
 | 捲動進度條 | `ScrollProgress` | `PageLayout` 的每一頁 | 頁面捲動 | 不輸出進度條 |
-| 卡片傾斜與上浮 | `Card` | 有卡片的頁面 | hover、focus | `--tilt`、`--lift` 歸零，只剩漸層外框與光暈，沒有過場 |
-| 按鈕上浮 | `Button`、`VideoFacade` 的播放按鈕 | 全站 | hover、focus | `--lift` 歸零，只換顏色，沒有過場 |
+| 卡片標題換色 | `Card` | 有卡片的頁面 | hover、focus | 沒有傾斜、上浮與外框（#187），標題換色並加底線，減少動態時一樣 |
+| 按鈕換色 | `Button` | 全站 | hover | 平塗，只換底色（#187），沒有上浮與光暈 |
+| 影片按鈕上浮 | `VideoFacade` 的播放按鈕 | 有影片的頁面 | hover、focus | `--lift` 歸零，只換顏色，沒有過場 |
 | 箭頭位移 | `Link`（獨立連結）、`FormPanel` 的錯誤連結 | 全站 | hover | 箭頭直接移到 hover 位置，沒有過場 |
 | 展開符號旋轉 | `Faq`、`SiteHeader` 的 caret | offering 模板的 FAQ、header 選單 | 展開、收合 | 直接換成展開或收合的角度 |
 | 開關滑動 | `ConsentBanner` 的類別開關 | 設定 GTM ID 時的每一頁 | 切換 | 直接換位置 |

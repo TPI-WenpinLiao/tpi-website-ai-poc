@@ -1,0 +1,338 @@
+---
+// The sections of an offering or hub page laid out by its brief (#187): each section a Surface in the
+// layout its entry names (design-principles.md「內頁的版型」): claim (FactRow), junction
+// (JunctionDiagram), ui (UiFragment, the larger side; `flip` swaps sides), spec (SpecTable), timeline
+// (Timeline, then mapping rows), results (CaseList without a lead row) and band (pale purple). The
+// schema is `pageSection` in src/content.config.ts. Links go through the page's locale; a section with
+// an `id` is an in-page anchor target (the template lists it in InPageNav). A section's `image` (a
+// picture of the ribbon world) sits beside the heading of a spec or timeline, or in a band's figure.
+import type { CollectionEntry } from 'astro:content';
+import Surface from './Surface.astro';
+import SectionHeading from './SectionHeading.astro';
+import FactRow from './FactRow.astro';
+import JunctionDiagram from './JunctionDiagram.astro';
+import UiFragment from './UiFragment.astro';
+import SpecTable from './SpecTable.astro';
+import Timeline from './Timeline.astro';
+import CaseList from './CaseList.astro';
+import IndexList from './IndexList.astro';
+import Link from './Link.astro';
+import { percentages } from '../../lib/content/emphasis';
+import { Image } from 'astro:assets';
+import { localNode, nodeHref } from '../../lib/ia/navigation';
+import type { Locale } from '../../lib/i18n/locales';
+import { strings } from '../../data/strings';
+
+type Section = NonNullable<CollectionEntry<'offering'>['data']['sections']>[number];
+
+interface Props {
+  sections: readonly Section[];
+  locale: Locale;
+}
+
+const { sections, locale } = Astro.props;
+const t = strings(locale).layout;
+// An interface fragment's section keeps up to this many facts beside the fragment
+// (design-principles.md「內頁的版型」介面片段: 2–4); more go under both, two to a row, so the claim's
+// column doesn't run far past the fragment and leave the other side empty
+const SIDE_FACTS = 3;
+const to = (link: { label: string; node: string } | undefined) => link && { label: link.label, href: nodeHref(link.node, locale) };
+const rowsOf = (rows: readonly { label: string; values: readonly string[]; link?: { label: string; node: string } | undefined }[] = []) =>
+  rows.map((r) => ({ label: r.label, values: r.values, link: to(r.link) }));
+// A fact item: its own title when it has one, its body (the fact text), and the page it leads to
+const items = (list: readonly { title?: string | undefined; body: string; node?: string | undefined }[] = []) =>
+  list.map((i) => ({ ...i, href: i.node ? nodeHref(i.node, locale) : undefined }));
+---
+
+{
+  sections.map((sec) => {
+    const link = to(sec.link);
+    const surface = { id: sec.id, class: sec.id ? 'anchor-target' : undefined, fill: sec.layout === 'band' ? ('brand' as const) : sec.fill };
+    const heading = <SectionHeading title={sec.heading} description={sec.body} />;
+    // A section's picture (decorative, design-principles.md「內頁共用的規則」段落圖): beside the heading
+    // for spec and timeline, in the figure's place for a band without a fragment; not on phones
+    const picture = sec.image && (
+      <div class="figure picture-figure">
+        <Image class="picture" src={sec.image} widths={[640, 960, 1280]} sizes="(width >= 64rem) 36rem, 100vw" alt="" loading="lazy" />
+      </div>
+    );
+    const head = picture ? (
+      <div class="split with-picture">
+        <div class="claim">{heading}</div>
+        {picture}
+      </div>
+    ) : (
+      heading
+    );
+    const more = link && (
+      <Link href={link.href} variant="standalone">
+        {link.label}
+      </Link>
+    );
+    switch (sec.layout) {
+      case 'claim':
+        return (
+          <Surface {...surface}>
+            <FactRow title={sec.heading} description={sec.body} link={link}>
+              {items(sec.items).map((i) => (
+                <li>
+                  {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
+                  <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
+                </li>
+              ))}
+            </FactRow>
+          </Surface>
+        );
+      case 'junction':
+        return (
+          <Surface {...surface}>
+            <div class="split">
+              <div class="claim">
+                {heading}
+                {more}
+              </div>
+              <div class="figure">
+                <JunctionDiagram columns={sec.diagram.columns} caption={sec.diagram.caption} states={{ down: t.down, standby: t.standby }} />
+              </div>
+            </div>
+            {sec.items && (
+              <ul class="facts two">
+                {items(sec.items).map((i) => (
+                  <li>
+                    {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
+                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {sec.rows && <SpecTable rows={rowsOf(sec.rows)} head={[t.item, t.content]} caption={sec.heading} />}
+          </Surface>
+        );
+      case 'ui':
+        return (
+          <Surface {...surface}>
+            <div class:list={['split', 'ui', { flip: sec.flip }]}>
+              <div class="figure">
+                <UiFragment {...sec.fragment} words={t} />
+              </div>
+              <div class="claim">
+                {heading}
+                {sec.items && sec.items.length <= SIDE_FACTS && (
+                  <ul class="facts">
+                    {items(sec.items).map((i) => (
+                      <li>
+                        {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
+                        <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {more}
+              </div>
+            </div>
+            {sec.items && sec.items.length > SIDE_FACTS && (
+              <ul class="facts two">
+                {items(sec.items).map((i) => (
+                  <li>
+                    {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
+                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {sec.index && (
+              <IndexList
+                items={sec.index.map((i) => ({ title: localNode(i.node, locale).title, body: i.body, href: nodeHref(i.node, locale) }))}
+              />
+            )}
+          </Surface>
+        );
+      case 'spec':
+        return (
+          <Surface {...surface}>
+            {head}
+            <SpecTable
+              rows={rowsOf(sec.rows)}
+              head={sec.rows.some((r) => r.link) ? [t.requirement, t.feature, t.more] : [t.item, t.content]}
+              emphasis={sec.rows.some((r) => r.link) ? 'name' : 'none'}
+              caption={sec.heading}
+            />
+            {more}
+          </Surface>
+        );
+      case 'timeline':
+        return (
+          <Surface {...surface}>
+            {head}
+            {sec.intro && <p class="intro">{sec.intro}</p>}
+            <Timeline steps={sec.steps} />
+            {sec.rows && <SpecTable rows={rowsOf(sec.rows)} head={[t.requirement, t.feature, t.more]} emphasis="name" caption={sec.heading} />}
+            {more}
+          </Surface>
+        );
+      case 'results':
+        return (
+          <Surface {...surface}>
+            {heading}
+            <CaseList
+              lead={false}
+              words={t}
+              items={sec.items.map((r) => ({ title: r.title, sub: r.sub, work: r.client, result: r.result, link: to(r.link), fragment: r.fragment }))}
+            />
+            {sec.record && <p class="record">{sec.record}</p>}
+            {more}
+          </Surface>
+        );
+      case 'band':
+        return (
+          <Surface {...surface}>
+            <div class="split">
+              <div class="claim">
+                {heading}
+                {sec.items && (
+                  <ul class="facts">
+                    {items(sec.items).map((i) => (
+                      <li>
+                        {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
+                        <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {more}
+              </div>
+              {sec.fragment ? (
+                <div class="figure">
+                  <UiFragment {...sec.fragment} words={t} />
+                </div>
+              ) : (
+                picture
+              )}
+            </div>
+          </Surface>
+        );
+    }
+  })
+}
+
+<style>
+  @import '../../styles/media.css';
+
+  .picture {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  /* A section picture only backs the claim up: phones skip it, so the facts come sooner */
+  .picture-figure {
+    display: none;
+  }
+
+  /* A fact's title linking on (DigiLism) reads as the page's other links */
+  .item-title a {
+    color: var(--color-link);
+    font-family: var(--font-sans);
+  }
+
+  .split {
+    display: grid;
+    gap: var(--space-8) var(--grid-gutter);
+    align-items: start;
+  }
+
+  .claim {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+
+  .facts {
+    display: grid;
+    gap: var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item-title {
+    margin: 0 0 var(--space-1);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-snug);
+  }
+
+  .item-body,
+  .intro,
+  .record {
+    max-inline-size: var(--reading-max-width);
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  .record {
+    color: var(--color-text-muted);
+  }
+
+  /* Narrow screens: an interface fragment follows the claim it illustrates (design-principles.md
+     「內頁的版型」介面片段, 375 寬) */
+  .split.ui > .figure {
+    order: 1;
+  }
+
+  @media (--bp-sm-up) {
+    .facts.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-6) var(--grid-gutter);
+    }
+  }
+
+  /* 12 columns: the claim on 1–5 and the figure on 7–12; with an interface fragment the fragment
+     takes the larger side (1–6, the claim 8–12, wide enough for a two-line heading), and `flip`
+     swaps them */
+  @media (--bp-lg-up) {
+    .split {
+      grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    }
+
+    .split > .claim {
+      grid-column: 1 / 6;
+    }
+
+    .split > .figure {
+      grid-column: 7 / -1;
+    }
+
+    /* The heading beside a section picture: the picture takes the last four columns, so the claim's
+       column isn't left short beside a tall picture */
+    .picture-figure {
+      display: block;
+    }
+
+    .split.with-picture > .claim {
+      grid-column: 1 / 8;
+    }
+
+    .split.with-picture > .figure {
+      grid-column: 9 / -1;
+    }
+
+    .split.ui > .figure {
+      grid-row: 1;
+      grid-column: 1 / 7;
+    }
+
+    .split.ui > .claim {
+      grid-row: 1;
+      grid-column: 8 / -1;
+    }
+
+    .split.ui.flip > .figure {
+      grid-column: 7 / -1;
+    }
+
+    .split.ui.flip > .claim {
+      grid-column: 1 / 6;
+    }
+  }
+</style>

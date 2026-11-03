@@ -95,9 +95,11 @@ sourceUrl: []
 | `kind` | `'product' \| 'solution' \| 'service'` | 是 | 產品是可授權的軟體；解決方案是產品加導入的組合；服務是人力或顧問服務 | `inventory.csv` 的 `page_type`（`product`、`solution`、`service`），M5 逐頁確認 |
 | `tagline` | `string` | 否 | hero 標語 | 現站 hero 區 |
 | `heroLead` | `string` | 否 | tagline 下方的一句說明，寫類別與用途，是表述、不夾帶事實（#167） | — |
-| `heroPoints` | `string[]` | 否 | hero 說明下方的證據點，每項是事實原文（#167） | — |
+| `heroPoints` | `(string \| { text: string; note: string })[]` | 否 | hero 說明下方的證據點，每項是事實原文（#167）；`note` 是緊貼在下方的條件原文（#187） | — |
+| `heroLabels` | `Partial<Record<'core' \| 'legacy' \| 'product' \| 'model' \| 'service' \| 'ai0' \| 'ai1' \| 'ai2', string>>` | 否 | hero 靜態圖上的 HTML 標籤，鍵是 `src/lib/scene/ribbon/pictures.json` 的錨點，落在圖外的不輸出（#187） | — |
 | `secondaryCta` | `{ label: string; node: string }` | 否 | hero 的第二個動作，連到另一個節點（例如試用雲端版），#167 | — |
-| `heroImage` | `image` | 否 | hero 主圖 | 現站 hero 區 |
+| `heroImage` | `image` | 否 | hero 主圖；沒填時沿用所屬產品家族 hub 的 `heroImage`（#187） | 現站 hero 區 |
+| `sections` | 見下方「依 brief 排的段落」 | 否 | brief 要求比 highlights 多的段落（#167），照 brief 逐段排版（#187）。段落已連到的子頁不再列在子頁的索引列，`hasPart` 不受影響；有 `sections` 的產業頁不輸出依 `industry` 反查的產品列（`briefs/finance.md`「取捨」第 12 項） | — |
 | `features` | `{ title: string; body: string; icon?: image; points?: string[]; link?: { label: string; node: string } }[]` | 否 | 功能或服務項目。`points` 是列在說明下方的事實原文，`link` 是這項功能接著要看的頁面（`node` 取 `nodes.csv` 的 id），#167 | 現站功能區 |
 | `useCases` | `{ title: string; body: string; industry?: 'finance' \| 'government' \| 'manufacturing' }[]` | 否 | 應用情境。`industry` 讓產業頁（`hub`）反查相關產品 | 現站情境區 |
 | `useCasesTitle` | `string` | 否 | 應用情境區塊的標題，預設「應用情境」（#167） | — |
@@ -105,7 +107,8 @@ sourceUrl: []
 | `faq` | `{ question: string; answer: string }[]` | 否 | 常見問題 | 現站 FAQ 區（少數頁有） |
 | `cta` | `'contact' \| 'demo'` | 是 | 主要 CTA：聯絡業務或預約 demo。表單端點由 M6 依此決定 | `features.md`「表單」 |
 | `relatedCaseStudies` | `ref(case-study)[]` | 否 | 精選案例與排序。留空時由 `case-study.offerings` 反查；關聯以 `case-study.offerings` 為準，這裡只列其中的項目 | — |
-| `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句：點名案例的表述，加上該案例的事實原文，事實要列進 `facts`（#183） | — |
+| `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句：點名案例的表述，加上該案例的事實原文，事實要列進 `facts`（#183）；有 `caseNotes` 時不輸出 | — |
+| `caseNotes` | `{ client?: string; work?: string; result?: string; award?: string; caseStudy?: ref(case-study); fragment?: 介面片段 }[]` | 否 | 案例列（#187）：客戶、作業、成果、獎項都是事實原文，`caseStudy` 有就連到案例內頁（錨點「客戶名：案例標題」）；有填時取代反查出來的案例 | — |
 | `relatedPosts` | `ref(blog)[]` | 否 | 精選文章與排序。留空時由 `blog.relatedOfferings` 反查；關聯以 `blog.relatedOfferings` 為準，這裡只列其中的項目 | — |
 | `downloads` | `{ label: string; file: string }[]` | 否 | 下載檔（例如 `digirunner-aws-guide` 的 PDF），也是 `download` 中繼頁的資料來源。白皮書不列在這裡，由 `whitepaper.offeringNode` 反查 | 現站下載按鈕 |
 
@@ -156,11 +159,15 @@ JSON-LD：
 |---|---|---|---|---|
 | `node` | `string` | 是 | `nodes.csv` 的 `id` | `page-map.csv` |
 | `tagline` | `string` | 否 | hero 標語 | 現站 hero 區 |
-| `heroImage` | `image` | 否 | hero 主圖 | 現站 hero 區 |
+| `heroLead`、`heroPoints`、`heroLabels` | 同 offering | 否 | hero 的說明句、證據點與靜態圖標籤（#187） | — |
+| `heroCta` | `'contact'` | 否 | hero 放「聯絡業務」按鈕（#187） | — |
+| `heroImage` | `image` | 否 | hero 主圖；產品家族頁的圖也是家族底下沒有 hero 圖的產品頁的 hero（#187） | 現站 hero 區 |
 | `industry` | `'finance' \| 'government' \| 'manufacturing'` | 產業頁必填 | 產業頁用這個值反查 `offering.useCases[].industry` 與 `case-study.industry`，列出相關產品與案例 | — |
 | `highlights` | `{ title: string; body: string }[]` | 否 | 介紹區塊。金融、政府頁承接開放銀行、開放政府頁的內容 | `/products/open-banking`、`/products/open-government` |
 | `sections` | `{ heading: string; body?: string; items?: { title: string; body?: string; node?: string }[]; link?: { label: string; node: string } }[]` | 否 | brief 要求比 highlights 多的段落（#167）：標題、一句說明、事實項目（`body` 是事實原文，`node` 連到該頁）、接著要看的頁面。段落已連到的子頁不再列在子頁卡片 | — |
-| `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句，是事實原文，要列進 `facts`（#167） | — |
+| `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句，是事實原文，要列進 `facts`（#167）；有 `caseNotes` 時不輸出 | — |
+| `caseNotes` | 同 offering | 否 | 案例列（#187）；有 `caseNotes` 時取代 `featuredCaseStudies` | — |
+| `testimonial` | `{ quote: string; speaker: string }` | 否 | 接在案例列後的客戶證言，兩個都是事實原文（#187） | — |
 | `featuredCaseStudies` | `ref(case-study)[]` | 否 | 指定精選案例；沒填時用 `industry` 反查 | — |
 | `featuredPosts` | `ref(blog)[]` | 否 | 指定精選文章 | — |
 
@@ -175,7 +182,23 @@ industry: manufacturing
 sourceUrl: []
 ```
 
-JSON-LD：`CollectionPage`，`name` ← `title`、`description` ← `description`、`hasPart` ← 子節點頁面（`WebPage` 的 `name` 與 `url`）、`inLanguage` ← 語系。
+JSON-LD：`CollectionPage`，`name` ← `title`、`description` ← `description`、`hasPart` ← 子節點頁面（`WebPage` 的 `name` 與 `url`，不論段落有沒有連到）、`inLanguage` ← 語系。
+
+## 依 brief 排的段落（offering、hub 共用）
+
+`sections` 每段一個版型（`layout`），版型的長相與用法見 `docs/strategy/design-principles.md`「內頁的版型」，型別是 `src/content.config.ts` 的 `pageSection`，由 `PageSections` 輸出（#187）。共用欄位：`id`（頁內導覽的錨點）、`heading`、`body`、`link`、`fill`（`subtle`／`brand` 底色）、`image`（緞帶世界的段落圖，放在 spec 的 h2 旁或沒有片段的 band，規則見 `design-principles.md`「內頁共用的規則」段落圖）。
+
+| `layout` | 版型 | 自己的欄位 |
+|---|---|---|
+| `claim` | 主張與原文（`FactRow`） | `items`：`{ title?; body; node? }`，`body` 是事實原文；`node` 的連結掛在 `title` 上，有 `node` 就要有 `title`（schema 擋下）。`junction`、`ui`、`band` 的 `items` 同一個型別 |
+| `junction` | 接點圖（`JunctionDiagram`） | `diagram`：三欄 `{ title; tone: legacy\|product\|new; nodes: { label; state?: down\|standby }[] }` 與 `caption`；`items`；`rows`（規格表的列） |
+| `ui` | 介面片段（`UiFragment`） | `fragment`：`{ title; tabs?; rows: { label; value?; state?: on\|off\|down\|next }[]; note? }`，只寫事實寫得出的名稱與狀態；`items`；`flip` 左右對調；`index` 接索引列 |
+| `spec` | 規格表、對應表（`SpecTable`） | `rows`：`{ label; values: string[]; link? }`，有 `link` 時是對應表 |
+| `timeline` | 時間列（`Timeline`），可接對應表 | `intro`；`steps`：`{ year; body }`；`rows` |
+| `results` | 成果（`CaseList`） | `items`：`{ title; sub?; result; client?; link?; fragment? }`；`record` 段末一列紀錄 |
+| `band` | 淺紫色帶 | `items`；`fragment` |
+
+各段的字串不是表述（標題、說明句、片段與圖的用詞）就是事實原文（`items`、`rows`、`steps`、`result`），事實列進內容檔的 `facts`，`scripts/strategy/facts.mjs` 檢查數字與客戶名。
 
 ## case-study（成功案例）
 
@@ -468,7 +491,7 @@ offices:
 JSON-LD：
 
 - 首頁：`Organization`（`name`、`alternateName`、`logo`、`url` ← `Astro.site`、`sameAs`、`address` ← `headquarters: true` 的據點、`contactPoint` ← 各據點電話）＋ `WebSite`（`name`、`url`、`inLanguage`）
-- 站內搜尋（M6）上線後，`WebSite` 再加 `potentialAction`（`SearchAction`）
+- `WebSite` 有 `potentialAction`（`SearchAction`，#187）：`target` 是該語系的 `/search?q={search_term_string}`，`query-input` 是 `required name=search_term_string`；該語系沒有建出 `/search` 時不輸出
 
 ## 不建 collection 的模板
 

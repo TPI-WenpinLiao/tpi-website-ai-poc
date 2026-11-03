@@ -5,6 +5,7 @@ title: GadoSecurity 資安
 description: 待人工提供
 translationKey: family-security
 node: family-security
+heroImage: ../../../assets/design/family-security.webp
 draft: true
 sourceUrl: []
 ---

@@ -4,6 +4,9 @@
 // Copy comes from the entry; names, paths and parents from docs/ia (src/lib/ia/navigation.ts).
 // Blocks without data are left out, so is their anchor.
 // Light paper throughout (ribbon-route, #167): no 3D scene on offering pages (ADR 0003「ribbon-route」).
+// An entry with `sections` is laid out by its brief, section by section (#187, PageSections); other
+// entries keep the older fields: features and use cases as claims with their facts (FactRow). Cases
+// are rows (CaseList), related offerings, downloads and posts are index rows (IndexList); no cards.
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
@@ -13,21 +16,24 @@ import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import FactRow from '../../components/ui/FactRow.astro';
 import Surface from '../../components/ui/Surface.astro';
-import Card from '../../components/ui/Card.astro';
-import CardGrid from '../../components/ui/CardGrid.astro';
-import Tag from '../../components/ui/Tag.astro';
-import Reveal from '../../components/ui/Reveal.astro';
+import CaseList from '../../components/ui/CaseList.astro';
+import IndexList from '../../components/ui/IndexList.astro';
+import MapPicture from '../../components/ui/MapPicture.astro';
+import PageSections from '../../components/ui/PageSections.astro';
+import Link from '../../components/ui/Link.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import InPageNav from '../../components/ui/InPageNav.astro';
 import Faq from '../../components/ui/Faq.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
-import { breadcrumb, children, hasPage, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumb, children, contactAction, hasPage, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
+import type { PictureName } from '../../lib/scene/ribbon/labels';
+import { linkedNodes } from '../../lib/content/sections';
 import { entryLocale, isPublished } from '../../lib/content/entries';
 import { COLLECTION_NODES, entryPath } from '../../lib/content/urls';
 import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
 import { canonicalUrl, titleSeparator } from '../../lib/seo/meta';
 import { defaultOgImage } from '../../lib/seo/og';
-import { caseCard, postCard } from '../../lib/content/cards';
+import { caseLinkLabel, postCard } from '../../lib/content/cards';
 import { newest } from '../../lib/content/listings';
 import { strings } from '../../data/strings';
 
@@ -42,22 +48,34 @@ const locale = entryLocale(entry.id);
 const t = strings(locale);
 const href = localeHref(locale);
 const self = localNode(data.node, locale);
-const parent = localNode(self.parent, locale);
 
 const title = data.seoTitle ?? data.title;
-// Parent brand in brackets, as on the home page: 「數位轉型（DigiLism）」 → DigiLism
-const brand = /（([^）]*)）$/.exec(parent.title)?.[1] ?? parent.title;
-const contact = localNode('contact', locale);
 // Main call to action by the entry's cta (content-model.md); 預約演示 is the current site's wording
-const ctaLabel = data.cta === 'demo' ? t.offering.demo : contact.title;
+const ctaLabel = data.cta === 'demo' ? t.offering.demo : contactAction(locale);
 
-const features = (data.features ?? []).map((f) => ({ ...f, href: f.link ? href(node(f.link.node)) : undefined }));
+const sections = data.sections ?? [];
+const heroPoints = (data.heroPoints ?? []).map((p) => (typeof p === 'string' ? { text: p } : p));
+// An entry without a hero picture shows its product family's (the family hub's heroImage, #187), so
+// the first screen of every product page has a picture without each entry naming one
+const familyOf = (id: string | undefined): string | undefined =>
+  !id ? undefined : id.startsWith('family-') ? id : familyOf(node(id).parent);
+const familyId = data.heroImage ? undefined : familyOf(self.parent);
+const familyImage = familyId
+  ? (await getCollection('hub', (h) => h.data.node === familyId && entryLocale(h.id) === locale))[0]?.data.heroImage
+  : undefined;
+const heroImage = data.heroImage ?? familyImage;
+// The hero picture's labels need the picture's name in pictures.json: the file's base name
+const heroPicture = data.heroImage && data.heroLabels ? (data.heroImage.src.split('/').pop()?.split('.')[0] as PictureName | undefined) : undefined;
+const features = (sections.length ? [] : (data.features ?? [])).map((f) => ({ ...f, href: f.link ? href(node(f.link.node)) : undefined }));
 const secondary = data.secondaryCta && { label: data.secondaryCta.label, href: href(node(data.secondaryCta.node)) };
 // The use cases block sits after this many features (useCasesAfter, #167), else after all of them
 const splitAt = Math.min(data.useCasesAfter ?? features.length, features.length);
 const useCasesTitle = data.useCasesTitle ?? t.offering.useCases;
 const INDUSTRY_NODES = { finance: 'industry-finance', government: 'industry-government', manufacturing: 'industry-manufacturing' } as const;
-const useCases = (data.useCases ?? []).map((u) => ({ ...u, hub: u.industry ? localNode(INDUSTRY_NODES[u.industry], locale) : undefined }));
+const useCases = (sections.length ? [] : (data.useCases ?? [])).map((u) => {
+  const hub = u.industry ? localNode(INDUSTRY_NODES[u.industry], locale) : undefined;
+  return { ...u, hub, href: hub && hasPage(hub) ? href(hub) : undefined };
+});
 // The features, split around the use cases block: one list of blocks so a feature is written once
 type Feature = (typeof features)[number];
 const blocks: ({ kind: 'features'; items: Feature[]; start: number; first: boolean } | { kind: 'use-cases' })[] = [
@@ -66,11 +84,19 @@ const blocks: ({ kind: 'features'; items: Feature[]; start: number; first: boole
   ...(features.length > splitAt ? [{ kind: 'features' as const, items: features.slice(splitAt), start: splitAt, first: splitAt === 0 }] : []),
 ];
 // Fourth-level pages under this offering (navigation.md: linked from here, not from the header)
-const related = children(self.id, locale).filter((n) => n.kind === 'page');
+// Fourth-level pages a section already links to (digiRunner on Cloud from 先試用再決定) aren't listed again
+const linkedInSections = linkedNodes(sections);
+const related = children(self.id, locale).flatMap((n) => {
+  const to = n.kind === 'page' && !linkedInSections.has(n.id) ? href(n) : undefined;
+  return to ? [{ title: n.title, href: to }] : [];
+});
 // Whitepapers point at their offering (whitepaper.offeringNode); drafts have no page
 const whitepapers = (
   await getCollection('whitepaper', (w) => entryLocale(w.id) === locale && isPublished(w) && w.data.offeringNode === self.id)
-).map((w) => ({ title: w.data.title, cover: w.data.coverImage, href: href(node(w.data.node)) }));
+).flatMap((w) => {
+  const to = href(node(w.data.node));
+  return to ? [{ title: w.data.title, cover: w.data.coverImage, href: to }] : [];
+});
 const downloads = data.downloads ?? [];
 // People whose collection node sits under this offering (the ESG advisors under esg-advisory), in
 // the current site's team order
@@ -101,7 +127,19 @@ const caseStudies = (
   data.relatedCaseStudies?.length
     ? data.relatedCaseStudies.flatMap((r) => linkedCases.filter((c) => c.id === r.id))
     : linkedCases.toSorted((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity))
-).map(caseCard);
+);
+// Rows of cases: the brief's caseNotes when the entry has them (client, work, result, award; a case
+// without a client, the fraud platform, is headed by its work), else
+// the linked case studies with their client and title
+const caseHref = async (id: string) => {
+  const c = linkedCases.find((e) => e.id === id) ?? (await getCollection('case-study', (e) => e.id === id))[0];
+  return c && { label: caseLinkLabel(c), href: entryPath('case-study', c) };
+};
+const caseRows = data.caseNotes
+  ? await Promise.all(
+      data.caseNotes.map(async (n) => ({ title: n.client ?? n.work, work: n.client ? n.work : undefined, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? await caseHref(n.caseStudy.id) : undefined })),
+    )
+  : caseStudies.map((c) => ({ title: c.data.client.disclosed ? c.data.client.name : c.data.clientDescription, link: { label: caseLinkLabel(c), href: entryPath('case-study', c) } }));
 const successStories = localNode('success-stories', locale);
 const faq = data.faq ?? [];
 const hasDownloads = whitepapers.length + downloads.length > 0;
@@ -112,7 +150,8 @@ const split = related.length > 0 && hasDownloads;
 const anchors = [
   { href: '#features', label: t.offering.features, show: features.length > 0 },
   { href: '#use-cases', label: useCasesTitle, show: useCases.length > 0 },
-  { href: '#cases', label: successStories.title, show: caseStudies.length > 0 },
+  ...sections.flatMap((sec) => (sec.id ? [{ href: `#${sec.id}`, label: sec.heading, show: true }] : [])),
+  { href: '#cases', label: successStories.title, show: caseRows.length > 0 },
   { href: '#team', label: t.offering.team, show: team.length > 0 },
   { href: '#related', label: t.offering.related, show: related.length > 0 },
   { href: '#downloads', label: t.offering.downloads, show: hasDownloads },
@@ -139,25 +178,14 @@ const jsonLd = offeringJsonLd({
   inLanguage: locale,
 });
 
-const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
 const blog = localNode('blog', locale);
 ---
 
 <PageLayout searchTrail={trail} title={title} description={data.description} image={ogImage} jsonLd={jsonLd} translations={translations}>
   <InPageNav slot="nav" label={t.toc} items={anchors} />
-  <PageHero eyebrow={brand} title={data.title} description={data.tagline}>
+  <PageHero title={data.title} description={data.tagline} lead={data.heroLead} points={heroPoints}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
     <Fragment slot="actions">
-      {data.heroLead && <p class="hero-lead">{data.heroLead}</p>}
-      {
-        data.heroPoints && (
-          <ul class="hero-points">
-            {data.heroPoints.map((p) => (
-              <li>{p}</li>
-            ))}
-          </ul>
-        )
-      }
       <Button href={nodeHref('contact', locale)} size="lg">{ctaLabel}</Button>
       {
         secondary ? (
@@ -174,11 +202,16 @@ const blog = localNode('blog', locale);
       }
     </Fragment>
     {
-      data.heroImage && (
-        <Image slot="visual" class="hero-image" src={data.heroImage} widths={[640, 960, 1280]} sizes="(width >= 64rem) 36rem, 100vw" alt="" priority />
-      )
+      heroImage &&
+        (heroPicture && data.heroImage ? (
+          <MapPicture slot="visual" image={data.heroImage} picture={heroPicture} labels={data.heroLabels} priority />
+        ) : (
+          <Image slot="visual" class="hero-image" src={heroImage} widths={[640, 960, 1280]} sizes="(width >= 64rem) 36rem, 100vw" alt="" priority />
+        ))
     }
   </PageHero>
+
+  <PageSections sections={sections} locale={locale} />
 
   {
     blocks.map((block) =>
@@ -186,64 +219,44 @@ const blog = localNode('blog', locale);
         <Surface tone="light" id={block.first ? 'features' : undefined} class:list={{ 'anchor-target': block.first }}>
           {/* Every block of features has its heading, so features after the use cases aren't read as part of them */}
           <h2 class="sr-only">{t.offering.features}</h2>
-          <ol class="features" start={block.start + 1}>
-            {block.items.map((f, i) => (
+          <ul class="features">
+            {block.items.map((f) => (
               <li>
-                <FactRow
-                  level={3}
-                  index={String(block.start + i + 1).padStart(2, '0')}
-                  title={f.title}
-                  description={f.body}
-                  link={f.link && f.href ? { label: f.link.label, href: f.href } : undefined}
-                >
+                <FactRow level={3} title={f.title} description={f.body} link={f.link && f.href ? { label: f.link.label, href: f.href } : undefined}>
                   {f.points?.map((p) => (
                     <li>{p}</li>
                   ))}
                 </FactRow>
               </li>
             ))}
-          </ol>
+          </ul>
         </Surface>
       ) : (
-        <Surface tone="light" pattern="grid" id="use-cases" class="anchor-target">
-          <SectionHeading eyebrow="Use cases" title={useCasesTitle} />
-          <CardGrid>
-            {useCases.map((u, i) => (
+        <Surface tone="light" fill="subtle" id="use-cases" class="anchor-target">
+          <SectionHeading title={useCasesTitle} />
+          <ul class="use-cases">
+            {useCases.map((u) => (
               <li>
-                <Reveal delay={stagger(i)}>
-                  <Card title={u.title} index={String(i + 1).padStart(2, '0')} description={u.body}>
-                    {u.hub && (
-                      <Tag slot="meta" href={hasPage(u.hub) ? href(u.hub) : undefined} tone="brand">
-                        {u.hub.title}
-                      </Tag>
-                    )}
-                  </Card>
-                </Reveal>
+                <h3 class="use-case-title">{u.title}</h3>
+                <p class="use-case-body">{u.body}</p>
+                {u.href && (
+                  <Link href={u.href} variant="standalone">
+                    {u.hub?.title}
+                  </Link>
+                )}
               </li>
             ))}
-          </CardGrid>
+          </ul>
         </Surface>
       ),
     )
   }
 
   {
-    caseStudies.length > 0 && (
+    caseRows.length > 0 && (
       <Surface tone="light" id="cases" class="anchor-target">
-        <SectionHeading eyebrow="Success stories" title={successStories.title} description={data.casesIntro}>
-          <Button slot="action" href={nodeHref('success-stories', locale)} variant="text">
-            {successStories.title}
-          </Button>
-        </SectionHeading>
-        <CardGrid>
-          {caseStudies.map((c, i) => (
-            <li>
-              <Reveal delay={stagger(i)}>
-                <Card title={c.title} href={c.href} eyebrow={c.eyebrow} description={c.description} image={c.image} />
-              </Reveal>
-            </li>
-          ))}
-        </CardGrid>
+        <SectionHeading title={successStories.title} description={data.caseNotes ? undefined : data.casesIntro} />
+        <CaseList items={caseRows} linkHeading words={t.layout} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
       </Surface>
     )
   }
@@ -251,16 +264,8 @@ const blog = localNode('blog', locale);
   {
     team.length > 0 && (
       <Surface tone="light" id="team" class="anchor-target">
-        <SectionHeading eyebrow="Team" title={t.offering.team} />
-        <CardGrid>
-          {team.map((p, i) => (
-            <li>
-              <Reveal delay={stagger(i)}>
-                <Card title={p.title} href={p.href} description={p.role} size="sm" />
-              </Reveal>
-            </li>
-          ))}
-        </CardGrid>
+        <SectionHeading title={t.offering.team} />
+        <IndexList items={team.map((p) => ({ title: p.title, body: p.role, href: p.href }))} />
       </Surface>
     )
   }
@@ -270,32 +275,17 @@ const blog = localNode('blog', locale);
       <Surface tone="light">
         <div class:list={['pair', { split }]}>
           {related.length > 0 && (
-            <div id="related" class="anchor-target">
-              <SectionHeading eyebrow="Related" title={t.offering.related} />
-              <CardGrid cols={split ? 1 : 3}>
-                {related.map((n) => (
-                  <li>
-                    <Card title={n.title} href={href(n)} eyebrow={self.title} size="sm" />
-                  </li>
-                ))}
-              </CardGrid>
+            <div id="related" class="anchor-target minor">
+              <SectionHeading title={t.offering.related} weight="secondary" />
+              <IndexList items={related} />
             </div>
           )}
           {hasDownloads && (
-            <div id="downloads" class="anchor-target">
-              <SectionHeading eyebrow="Downloads" title={t.offering.downloads} />
-              <CardGrid cols={1}>
-                {whitepapers.map((w) => (
-                  <li>
-                    <Card title={w.title} href={w.href} eyebrow={localNode('resources', locale).title} image={{ src: w.cover, alt: '' }} />
-                  </li>
-                ))}
-                {downloads.map((d) => (
-                  <li>
-                    <Card title={d.label} href={d.file} size="sm" />
-                  </li>
-                ))}
-              </CardGrid>
+            <div id="downloads" class="anchor-target minor">
+              <SectionHeading title={t.offering.downloads} weight="secondary" />
+              <IndexList
+                items={[...whitepapers.map((w) => ({ title: w.title, href: w.href, image: w.cover })), ...downloads.map((d) => ({ title: d.label, href: d.file }))]}
+              />
             </div>
           )}
         </div>
@@ -306,7 +296,7 @@ const blog = localNode('blog', locale);
   {
     faq.length > 0 && (
       <Surface tone="light" width="reading" id="faq" class="anchor-target">
-        <SectionHeading eyebrow="FAQ" title={t.offering.faq} />
+        <SectionHeading title={t.offering.faq} />
         <div class="faq">
           <Faq items={faq} />
         </div>
@@ -317,20 +307,14 @@ const blog = localNode('blog', locale);
   {
     posts.length > 0 && (
       <Surface tone="light" id="posts" class="anchor-target">
-        <SectionHeading eyebrow="Insights" title={t.relatedPosts}>
-          <Button slot="action" href={nodeHref('blog', locale)} variant="text">
-            {blog.title}
-          </Button>
-        </SectionHeading>
-        <CardGrid>
-          {posts.map((p, i) => (
-            <li>
-              <Reveal delay={stagger(i)}>
-                <Card title={p.title} href={p.href} eyebrow={p.eyebrow} image={p.image} date={p.date} />
-              </Reveal>
-            </li>
-          ))}
-        </CardGrid>
+        <div class="minor">
+          <SectionHeading title={t.relatedPosts} weight="secondary">
+            <Button slot="action" href={nodeHref('blog', locale)} variant="text">
+              {blog.title}
+            </Button>
+          </SectionHeading>
+          <IndexList items={posts.map((p) => ({ title: p.title, href: p.href, image: p.image?.src, date: p.date }))} />
+        </div>
       </Surface>
     )
   }
@@ -341,8 +325,7 @@ const blog = localNode('blog', locale);
 <style>
   @import '../../styles/media.css';
 
-
-  /* Features down the page (FactRow) */
+  /* Features down the page (FactRow), set apart by space */
   .features {
     display: grid;
     gap: var(--space-16);
@@ -351,27 +334,29 @@ const blog = localNode('blog', locale);
     list-style: none;
   }
 
-  /* The lead sentence under the tagline, then the evidence (facts, one per line), before the
-     actions; both take the actions row's full width */
-  .hero-lead {
-    flex-basis: 100%;
-    max-inline-size: var(--reading-max-width);
+  .use-cases {
+    display: grid;
+    gap: var(--space-8) var(--grid-gutter);
     margin: 0;
-    color: var(--color-text-muted);
-  }
-
-
-  .hero-points {
-    flex-basis: 100%;
-    margin: 0 0 var(--space-2);
     padding: 0;
     list-style: none;
-    font-weight: var(--font-weight-semibold);
   }
 
-  .hero-points li::before {
-    content: '— ';
-    color: var(--color-text-brand);
+  .use-cases li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .use-case-title {
+    margin: 0;
+    font-size: var(--font-size-text);
+    line-height: var(--line-height-snug);
+  }
+
+  .use-case-body {
+    margin: 0;
   }
 
   .hero-image {
@@ -379,6 +364,11 @@ const blog = localNode('blog', locale);
     block-size: auto;
   }
 
+  .minor {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
 
   /* Related offerings and downloads side by side on wide screens, when both are there */
   .pair {
@@ -388,6 +378,12 @@ const blog = localNode('blog', locale);
 
   .faq {
     margin-block-start: var(--space-10);
+  }
+
+  @media (--bp-sm-up) {
+    .use-cases {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   @media (--bp-lg-up) {

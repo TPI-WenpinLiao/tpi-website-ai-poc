@@ -1,8 +1,10 @@
 ---
 // A claim and the facts that back it (#167): the heading, a short answer and an optional link on
-// the start side, the facts as a ruled list on the end side, side by side on the 12-column grid
-// from --bp-lg-up, stacked below. The offering template's features and the hub template's sections
-// use it. Put the facts in the default slot as <li> elements, in the order to read them; a fact is
+// the start side (columns 1–5), the facts as a list set apart by space on the end side (7–12), side
+// by side on the 12-column grid from --bp-lg-up, stacked below. No rules or numbers (#187). This is
+// the「主張與原文」layout of design-principles.md「內頁的版型」: at most twice a page, never twice in a
+// row on a page laid out by sections; the offering and hub templates fall back to it for pages
+// without `sections`. Put the facts in the default slot as <li> elements, in the order to read them; a fact is
 // plain text, or a heading and a line (hub sections, which link each to its page).
 import SectionHeading from './SectionHeading.astro';
 import Link from './Link.astro';
@@ -10,18 +12,16 @@ import Link from './Link.astro';
 interface Props {
   title: string;
   level?: 2 | 3;
-  // "01" for numbered rows
-  index?: string;
   description?: string | undefined;
   link?: { label: string; href: string } | undefined;
 }
 
-const { title, level = 2, index, description, link } = Astro.props;
+const { title, level = 2, description, link } = Astro.props;
 ---
 
 <div class="fact-row">
   <div class="claim">
-    <SectionHeading level={level} index={index} title={title} description={description} />
+    <SectionHeading level={level} title={title} description={description} />
     {
       link && (
         <Link href={link.href} variant="standalone">
@@ -45,8 +45,6 @@ const { title, level = 2, index, description, link } = Astro.props;
   .fact-row {
     display: grid;
     gap: var(--space-6) var(--grid-gutter);
-    padding-block-start: var(--space-8);
-    border-block-start: var(--border-width) solid var(--color-border);
   }
 
   .claim {
@@ -57,14 +55,15 @@ const { title, level = 2, index, description, link } = Astro.props;
   }
 
   .facts {
+    display: grid;
+    gap: var(--space-4);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
   .facts > :global(li) {
-    padding-block: var(--space-3);
-    border-block-end: var(--border-width) solid var(--color-border);
+    white-space: pre-line;
   }
 
   @media (--bp-lg-up) {

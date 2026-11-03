@@ -1,6 +1,7 @@
 id,category,zh-TW,en,vi,status,source,note
 brand:tpisoftware,brand,昕力資訊,TPIsoftware,TPIsoftware,confirmed,https://www.tpisoftware.com/en/solutions https://www.tpisoftware.com/vn,現站 en、vi 頁面 title 的公司名；zh-TW 現站也常寫成「昕力資訊 TPIsoftware」
 nav:搜尋,nav,搜尋,Search,Tìm kiếm,draft,docs/ia/navigation.csv,
+nav:聯絡業務,nav,聯絡業務,Contact sales,Liên hệ kinh doanh,draft,docs/ia/navigation.csv,AI 草擬（#187）；header、hero、頁尾的聯絡按鈕；聯絡頁本身仍是 node:contact
 nav:產品,nav,產品,Products,Sản Phẩm,draft,docs/ia/navigation.csv,現站 en 第一層是 Product & Services（產品與服務合併），vi 是 Sản Phẩm
 nav:服務,nav,服務,Services,Dịch Vụ,draft,docs/ia/navigation.csv,現站 en 的服務在 Product & Services 底下的 Services，vi 第一層是 Dịch Vụ
 nav:資源總覽,nav,資源總覽,All Resources,Tất cả tài nguyên,draft,docs/ia/navigation.csv,
@@ -184,6 +185,17 @@ ui:utility.recommended,ui,推薦內容,Recommended,Đề xuất,draft,src/data/s
 ui:utility.downloads,ui,下載檔案,Downloads,Tệp tải xuống,draft,src/data/strings/zh-TW.ts,
 ui:utility.subscribeSubmit,ui,訂閱,Subscribe,Đăng ký,draft,src/data/strings/zh-TW.ts,
 ui:utility.unsubscribeSubmit,ui,取消訂閱,Unsubscribe,Hủy đăng ký,draft,src/data/strings/zh-TW.ts,
+ui:layout.mark,ui,示意,Illustration,Minh họa,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.on,ui,已啟用,On,Bật,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）；介面片段的狀態，給螢幕閱讀器
+ui:layout.off,ui,未啟用,Off,Tắt,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）；介面片段的狀態，給螢幕閱讀器
+ui:layout.down,ui,故障,Down,Gặp sự cố,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.standby,ui,待命,Standby,Dự phòng,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.item,ui,項目,Item,Hạng mục,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.content,ui,內容,Details,Chi tiết,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.requirement,ui,要求,Requirement,Yêu cầu,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.feature,ui,對應的功能,How it is met,Cách đáp ứng,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.more,ui,延伸閱讀,Read more,Xem thêm,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.allCases,ui,看所有成功案例,See all success stories,Xem tất cả câu chuyện thành công,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
 ui:offering.demo,ui,預約演示,Book a demo,Đặt lịch demo,draft,src/data/strings/zh-TW.ts,
 ui:offering.seeFeatures,ui,看功能,See features,Xem tính năng,draft,src/data/strings/zh-TW.ts,
 ui:offering.features,ui,功能,Features,Tính năng,draft,src/data/strings/zh-TW.ts,

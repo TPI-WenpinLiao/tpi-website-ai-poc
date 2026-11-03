@@ -161,8 +161,6 @@ export function enhance(form: HTMLFormElement): void {
     clear();
     const copy = summary.content.cloneNode(true);
     if (!(copy instanceof DocumentFragment)) return;
-    const index = copy.querySelector('.index');
-    if (index) index.textContent = pad(errors.length);
     const list = copy.querySelector('ol');
     const row = list?.querySelector('li');
     if (!list || !row) return;
