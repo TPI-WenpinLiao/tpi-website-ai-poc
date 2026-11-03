@@ -506,7 +506,7 @@ const description =
           <div class="demo">
             <UiFragment
               title="面板名稱"
-              mark="示意"
+              words={{ mark: '示意', on: '已啟用', off: '未啟用', down: '故障' }}
               tabs={['分頁一', '分頁二']}
               rows={[
                 { label: '設定項目（on）', state: 'on' },
@@ -531,7 +531,7 @@ const description =
 
           <h3>CaseList</h3>
           <CaseList
-            mark="示意"
+            words={{ mark: '示意', on: '已啟用', off: '未啟用', down: '故障' }}
             more={{ label: '看所有成功案例', href: `#components-${tone}` }}
             items={[
               { title: '客戶名稱', work: '作業的事實原文', result: '成果原文，數字加粗', award: '獎項', link: { label: '案例名稱', href: `#components-${tone}` }, fragment: { title: '作業的片段', rows: [{ label: '狀態', state: 'on' }] } },

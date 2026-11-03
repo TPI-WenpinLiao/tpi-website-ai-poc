@@ -151,8 +151,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 
 ## 下一步
 
-- #187 第二輪重評的「評審依據不足」（`evaluation.md`「第二輪（#187）」）：事實原文漏字與 C6、介面片段段落的事實數與 375 寬的長度、對應表的列線、時間列年份重複、`heroLabels` 與原則的標籤清單、S3 的 h1 查詢詞，要改規則文件時另開 issue
-- #187 留下的單頁改進（評審 4 分的扣分處）：首頁分岔緞帶與近景圖的權重、事實清單的主次、金融第 6 段分組與第 8、9 段標題、digiRunner hero 圖的「新的服務」標籤
+- #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
 - #188 可以開始（決定其他頁面是否照分階段流程重做，`needs-input`）
 - #167 的後續已開成 issue：#177（en、vi 首頁依新版面寫文案）、#178（政府頁、digiRunner on Cloud、`/blog/enterprise-grade-apim` 連到 digiRunner）、#179（首頁 header 經過紫色段落時換色，`needs-design`）
 - digiRunner 頁要不要加產品獎（`DM-8` 的台灣精品獎 2023、2024，創新商務獎 2022）：#183 只放了 hero 的專利數與台新的 Global Finance 2020，`DM-8` 把 digiRunner 列為主要用途頁，要放的話另開 issue

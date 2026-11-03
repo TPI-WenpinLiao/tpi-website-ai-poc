@@ -256,7 +256,7 @@ const blog = localNode('blog', locale);
     caseRows.length > 0 && (
       <Surface tone="light" id="cases" class="anchor-target">
         <SectionHeading title={successStories.title} description={data.caseNotes ? undefined : data.casesIntro} />
-        <CaseList items={caseRows} linkHeading mark={t.layout.mark} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
+        <CaseList items={caseRows} linkHeading words={t.layout} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
       </Surface>
     )
   }

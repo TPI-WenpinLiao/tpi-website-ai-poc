@@ -148,6 +148,8 @@ export const strings: Strings = {
   pages,
   layout: {
     mark: 'Minh họa',
+    on: 'Bật',
+    off: 'Tắt',
     down: 'Gặp sự cố',
     standby: 'Dự phòng',
     item: 'Hạng mục',

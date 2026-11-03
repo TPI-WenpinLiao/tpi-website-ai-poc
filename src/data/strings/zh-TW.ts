@@ -160,6 +160,8 @@ export const strings = {
   // the states of a junction diagram's nodes, the column names of spec and mapping tables
   layout: {
     mark: '示意',
+    on: '已啟用',
+    off: '未啟用',
     down: '故障',
     standby: '待命',
     item: '項目',

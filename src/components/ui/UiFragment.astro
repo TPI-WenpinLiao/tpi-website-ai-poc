@@ -6,7 +6,8 @@
 // A row's `state`: on (set), off (not set), down (failed, in the error color) or next (what the
 // panel moves on to); the fragment's lead-in moves one step when it enters (motion.md), and stays
 // finished with reduced motion. The text is real text, so the facts in it can be searched and
-// checked; the figure is named by its title and the 示意 mark.
+// checked; the figure is named by its title and the 示意 mark. A state is also written out for screen
+// readers (`words`, the page's strings.layout), so it isn't carried by color alone (WCAG 1.4.1).
 interface Row {
   label: string;
   value?: string | undefined;
@@ -18,18 +19,18 @@ interface Props {
   tabs?: readonly string[] | undefined;
   rows: readonly Row[];
   note?: string | undefined;
-  // The mark that says this is an illustration, in the page's language
-  mark: string;
+  // The page's words: the 示意 mark and the state names, in the page's language (strings.layout)
+  words: { mark: string; on: string; off: string; down: string };
 }
 
-const { title, tabs = [], rows, note, mark } = Astro.props;
+const { title, tabs = [], rows, note, words } = Astro.props;
 ---
 
 <figure class="ui-fragment" data-ui>
   <div class="frame">
     <div class="bar">
       <span class="title">{title}</span>
-      <span class="mark">{mark}</span>
+      <span class="mark">{words.mark}</span>
     </div>
     {
       tabs.length > 0 && (
@@ -46,7 +47,12 @@ const { title, tabs = [], rows, note, mark } = Astro.props;
           <li class:list={['row', r.state]}>
             <span class="label">{r.label}</span>
             {r.value && <span class="value">{r.value}</span>}
-            {r.state && r.state !== 'next' && <span class="state" aria-hidden="true" />}
+            {r.state && r.state !== 'next' && (
+              <>
+                <span class="state" aria-hidden="true" />
+                <span class="sr-only">{words[r.state]}</span>
+              </>
+            )}
           </li>
         ))
       }

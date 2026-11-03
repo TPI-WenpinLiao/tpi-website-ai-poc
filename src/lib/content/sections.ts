@@ -10,7 +10,7 @@ export function linkedNodes(sections: readonly Section[]): Set<string> {
   return new Set(
     sections.flatMap((sec) => [
       sec.link?.node,
-      ...('items' in sec && sec.items ? sec.items.map((i) => ('node' in i ? i.node : undefined)) : []),
+      ...('items' in sec && sec.items ? sec.items.map((i) => ('node' in i ? i.node : 'link' in i ? i.link?.node : undefined)) : []),
       ...('index' in sec && sec.index ? sec.index.map((i) => i.node) : []),
       ...('rows' in sec && sec.rows ? sec.rows.map((r) => r.link?.node) : []),
     ]).filter((id): id is string => id !== undefined),

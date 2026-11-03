@@ -33,8 +33,8 @@ interface Props {
   items: readonly Item[];
   level?: 3 | 4;
   more?: { label: string; href: string } | undefined;
-  // The 示意 mark of the fragments, in the page's language
-  mark: string;
+  // The fragments' words: the 示意 mark and the state names (strings.layout)
+  words: { mark: string; on: string; off: string; down: string };
   // The first row larger (cases); the results layout keeps every row the same
   lead?: boolean;
   // Cases: the row's heading is its link, worded「客戶名：案例標題」(briefs「內部連結」), so the heading
@@ -42,7 +42,7 @@ interface Props {
   linkHeading?: boolean;
 }
 
-const { items, level = 3, more, mark, lead = true, linkHeading = false } = Astro.props;
+const { items, level = 3, more, words, lead = true, linkHeading = false } = Astro.props;
 const Heading = `h${level}` as const;
 ---
 
@@ -75,7 +75,7 @@ const Heading = `h${level}` as const;
           </div>
           {c.fragment && (
             <div class="fragment">
-              <UiFragment {...c.fragment} mark={mark} />
+              <UiFragment {...c.fragment} words={words} />
             </div>
           )}
         </li>

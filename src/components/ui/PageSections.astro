@@ -113,7 +113,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
           <Surface {...surface}>
             <div class:list={['split', 'ui', { flip: sec.flip }]}>
               <div class="figure">
-                <UiFragment {...sec.fragment} mark={t.mark} />
+                <UiFragment {...sec.fragment} words={t} />
               </div>
               <div class="claim">
                 {heading}
@@ -176,7 +176,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
             {heading}
             <CaseList
               lead={false}
-              mark={t.mark}
+              words={t}
               items={sec.items.map((r) => ({ title: r.title, sub: r.sub, work: r.client, result: r.result, link: to(r.link), fragment: r.fragment }))}
             />
             {sec.record && <p class="record">{sec.record}</p>}
@@ -193,7 +193,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                   <ul class="facts">
                     {items(sec.items).map((i) => (
                       <li>
-                        {i.title && <h3 class="item-title">{i.title}</h3>}
+                        {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
                         <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
                       </li>
                     ))}
@@ -203,7 +203,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
               </div>
               {sec.fragment ? (
                 <div class="figure">
-                  <UiFragment {...sec.fragment} mark={t.mark} />
+                  <UiFragment {...sec.fragment} words={t} />
                 </div>
               ) : (
                 picture

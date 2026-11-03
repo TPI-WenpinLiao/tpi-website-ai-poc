@@ -186,6 +186,8 @@ ui:utility.downloads,ui,下載檔案,Downloads,Tệp tải xuống,draft,src/dat
 ui:utility.subscribeSubmit,ui,訂閱,Subscribe,Đăng ký,draft,src/data/strings/zh-TW.ts,
 ui:utility.unsubscribeSubmit,ui,取消訂閱,Unsubscribe,Hủy đăng ký,draft,src/data/strings/zh-TW.ts,
 ui:layout.mark,ui,示意,Illustration,Minh họa,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.on,ui,已啟用,On,Bật,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）；介面片段的狀態，給螢幕閱讀器
+ui:layout.off,ui,未啟用,Off,Tắt,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）；介面片段的狀態，給螢幕閱讀器
 ui:layout.down,ui,故障,Down,Gặp sự cố,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
 ui:layout.standby,ui,待命,Standby,Dự phòng,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
 ui:layout.item,ui,項目,Item,Hạng mục,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）

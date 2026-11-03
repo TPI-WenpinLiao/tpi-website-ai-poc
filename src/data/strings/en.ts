@@ -147,6 +147,8 @@ export const strings: Strings = {
   pages,
   layout: {
     mark: 'Illustration',
+    on: 'On',
+    off: 'Off',
     down: 'Down',
     standby: 'Standby',
     item: 'Item',
