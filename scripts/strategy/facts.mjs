@@ -121,7 +121,7 @@ export function checkPage(page, facts) {
 }
 
 // Frontmatter fields that hold ids, paths, URLs or dates rather than copy
-const NOT_COPY = new Set(['translationKey', 'node', 'sourceUrl', 'migratedAt', 'sourceUpdatedAt', 'facts', 'tags', 'industry', 'href', 'url', 'image', 'cover', 'ogImage', 'logo', 'file', 'slug', 'id']);
+const NOT_COPY = new Set(['translationKey', 'node', 'sourceUrl', 'migratedAt', 'sourceUpdatedAt', 'publishedAt', 'updatedAt', 'facts', 'tags', 'industry', 'href', 'url', 'image', 'cover', 'ogImage', 'logo', 'file', 'slug', 'id']);
 const PATH_OR_URL = /^(?:\.{0,2}\/|https?:|mailto:|tel:)/;
 
 /**

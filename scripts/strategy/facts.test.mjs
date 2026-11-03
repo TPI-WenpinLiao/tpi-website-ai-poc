@@ -91,6 +91,10 @@ test('copyStrings skips functions, ids, paths and URLs', () => {
   assert.deepEqual(copyStrings(mod), ['標題', '一']);
 });
 
+test('copyStrings skips blog and news dates, which the yaml parser leaves as strings', () => {
+  assert.deepEqual(copyStrings({ title: '標題', publishedAt: '2026-11-03', updatedAt: '2026-11-04' }), ['標題']);
+});
+
 test('factCalls finds every fact id in a TypeScript source, not in comments', () => {
   assert.deepEqual(factCalls(`title: fact('a-1'),\n  x: fact( "b" ), y: notfact('c')`), ['a-1', 'b']);
   assert.deepEqual(factCalls(`// through fact('<id>')\n/* fact('x') */\nconst t = fact('c');`), ['c']);
