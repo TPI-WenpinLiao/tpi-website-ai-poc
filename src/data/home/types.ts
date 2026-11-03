@@ -42,7 +42,7 @@ export interface Home {
   };
   /** The contact band at the foot of the other pages (ContactCta) and the contact page's lead */
   contactCta: { title: string; description: string };
-  /** The last section: its heading, an optional lead, the records the reader can check (facts), the
-   * one action, and the link text to the about page */
-  contact: { title: string; description?: string; records: { label: string; text: string }[]; action: string; about: string };
+  /** The last section: its heading, the records the reader can check (facts), the one action, and
+   * the link text to the about page */
+  contact: { title: string; records: { label: string; text: string }[]; action: string; about: string };
 }

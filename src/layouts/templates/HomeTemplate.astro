@@ -264,7 +264,6 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
 
   <section class="contact grid" data-surface="dark" aria-labelledby="contact-title">
     <h2 id="contact-title" class="head">{copy.contact.title}</h2>
-    {copy.contact.description && <p class="contact-lead">{copy.contact.description}</p>}
     <ul class="records">
       {
         copy.contact.records.map((r) => (
@@ -405,8 +404,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
 
   .lead,
   .case-result,
-  .quote,
-  .contact-lead {
+  .quote {
     font-size: var(--font-size-text);
     line-height: var(--line-height-snug);
   }
