@@ -150,6 +150,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 試點三頁依 #168 評審修正並重評完成（#187，`design-approved`）：共用元件拿掉 eyebrow、編號、框線、玻璃與陰影（`PageHero`、`SectionHeading`、`Card`、`Button`、`ContactCta` 等），offering 與 hub 加上以 `layout` 區分版型的 `sections`（`PageSections` 與新元件 `JunctionDiagram`、`UiFragment`、`SpecTable`、`Timeline`、`CaseList`、`IndexList`、`MapPicture`），digiRunner 與金融頁照 brief 逐段排版，案例改成案例列。使用者提供的緞帶世界素材：段落圖依使用者決定只用在規格表、色帶段（`design-principles.md`「段落圖」），產品家族 hub 的 hero 圖也給家族底下沒有 hero 圖的產品頁用。全站聯絡按鈕叫「聯絡業務」（`navigation.csv` utility 列，`contactAction`），首頁 `WebSite` 加 `SearchAction`，hero 靜態圖重拍補上 AI 模型、核心銀行系統等標籤。第二輪重評三頁三份 rubric 都通過（`evaluation.md`「第二輪（#187）」）
 - en、vi 首頁依新版面重寫文案完成（#177）：`src/data/home/en.ts`、`vi.ts` 依 zh-TW 的 5 段改寫，事實從現站 en、vi 頁收進事實庫（各 11 筆 `-en`、`-vi`，`facts.mjs --sources` 701/701）。現站 en、vi 沒有的說法換成同語系現站有的：OrientAI 段用 FAQ 的「資料歸企業所有」，資安認證用 DigiLism 的 ISO 27001。`types.ts` 把三語都有的欄位改成必填，`HomeTemplate.astro` 拿掉退回節點名稱的寫法。en、vi 標題依版面縮短到跟 zh-TW 行數相近（en hero 沒寫金融與政府，移到 lead）
 - digiRunner 開源版的事實收進事實庫完成（#174）：12 筆 `confirmed`（zh-TW 4、en 8），來源是現站新聞 565、566 的內文、`tpi.dev`（OpenTPI，現站首頁 banner 連過去）與官方 repo 的 `LICENSE`（Apache License Version 2.0）。zh-TW 只有開源版存在、OpenTPI 與授權，功能說明只有英文。`briefs/digirunner.md` 第 9 段可以加一句開源版並連到 `tpi.dev`；跟 Enterprise、Cloud 版的比較在 `docs.tpi.dev` 與 GitHub repo 頁，雲端 session 連不到，沒收
+- 兩篇 blog 新文章完成（#173）：`/blog/what-is-api-gateway` 承接 `API Gateway 是什麼`，`/blog/enterprise-ai-adoption` 承接 `企業 AI 導入`，各有 content brief（`docs/strategy/briefs/blog-what-is-api-gateway.md`、`blog-enterprise-ai-adoption.md`，使用者確認後才寫文案）。API Gateway 篇填 `relatedOfferings: [zh-TW/digirunner]`，digiRunner 頁第 11 段變 3 則（`briefs/digirunner.md` 同步）；AI 導入篇填 `relatedOfferings: [zh-TW/orient-ai]`。`reviewer` 的文案與行銷、SEO rubric 都通過。`scripts/strategy/facts.mjs` 的 `NOT_COPY` 補上 `publishedAt`、`updatedAt`：yaml 把日期讀成字串，原創 blog 的發布日被當成文案數字
 
 ## 下一步
 
@@ -157,7 +158,8 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - #188 可以開始（決定其他頁面是否照分階段流程重做，`needs-input`）
 - #167 的後續已開成 issue：#178（政府頁、digiRunner on Cloud、`/blog/enterprise-grade-apim` 連到 digiRunner）、#179（首頁 header 經過紫色段落時換色，`needs-design`）
 - digiRunner 頁要不要加產品獎（`DM-8` 的台灣精品獎 2023、2024，創新商務獎 2022）：#183 只放了 hero 的專利數與台新的 Global Finance 2020，`DM-8` 把 digiRunner 列為主要用途頁，要放的話另開 issue
-- #165 brief 的「待確認」已開成 issue：#173（兩篇 blog：`API Gateway 是什麼`、`企業 AI 導入`）
+- #173 的延伸事項（兩份 blog brief 文末「延伸事項」），要做時另開 issue：`/products/systalk-ai` 與 `/industries/finance` 的 `featuredPosts` 加上 AI 導入篇（金融頁要先改 `finance.md` 取捨第 5 項）、既有文章連回兩篇新文章、`ArticleTemplate` 文末加聯絡 CTA、`search-intent.md`「對應到頁面」的 `API 管理平台` 補次要承接頁、兩篇的 en、vi 版
+- 回覆 #173 PR 的「待確認」：業界統計（API、AI 導入的 ROI 與失敗比例、成熟度調查）要不要收站外來源；OrientAI 部署方式的兩則事實說法不一（`orientai-execution-layer`、`orientai-on-prem-data`）；`digirunner-ai-usage-log` 原文漏「記」字
 - digiRunner 頁第 9 段加一句開源版（#174 收的事實，`briefs/digirunner.md`「三件待決事項」第 3 項），要做時另開 issue
 - 回覆 #174 PR 的「待確認」：開源版跟 Enterprise、Cloud 版的比較要放行 `docs.tpi.dev`、`github.com` 才能收；vi 新聞 567 的 HTML named entity 不被 `scripts/lib/page-text.mjs` 解碼，vi 的開源版事實沒收
 - 回覆 #164 PR 的「待確認」：`to_confirm` 事實，#180 後剩 117 筆（ESG 顧問與合作單位的授權、沒寫年份或統計時間的獎項與數字、沒有依據的成效數字與最高級宣稱、現站各頁說法不一致）；`www.tpisoftware.vn` 恢復後跑一次 `node scripts/strategy/facts.mjs --sources`

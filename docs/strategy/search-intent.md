@@ -316,13 +316,13 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 | 昕力資訊 官網 | `/` | 品牌導航 |
 | 企業數位轉型 軟體公司 | 次要 `/`、`/products/digilism`，沒有主要承接頁（#186，`briefs/home.md`「取捨」第 14 項） | 類別詞，前幾名是定義文、國際廠商頁與新聞，沒有廠商列表；首頁 title 不放類別詞 |
 | 台灣 AI 解決方案 公司 | 次要 `/`、`/products/systalk-ai`，沒有主要承接頁（#186，`briefs/home.md`「取捨」第 14 項） | 類別詞，前幾名沒有廠商列表；首頁 title 不放類別詞 |
-| 企業 AI 導入 | `/blog/{slug}`（文章） | 前幾名是指南與教學，產品頁或首頁不符合資訊型意圖；現站同主題文章是 `drop`，要不要寫新文章由策略決定 |
+| 企業 AI 導入 | `/blog/enterprise-ai-adoption`（文章，#173） | 前幾名是指南與教學，產品頁或首頁不符合資訊型意圖；現站同主題文章是 `drop`，#173 新寫一篇（`briefs/blog-enterprise-ai-adoption.md`） |
 | 系統整合 廠商 推薦 | `/cloudservice`（次要承接） | 比較型，結果是列表文；新站沒有對應的比較頁。原本建議的 `/services` 依 #138 不產生頁面，策略階段改交 `/cloudservice`，`/services` 建出後再改回（`briefs/home.md`「取捨」第 6 項） |
 | 企業主權 AI 地端部署 方案 | `/aiso` | `nodes.csv` 有 AISO 主權 AI 節點 |
 | digiRunner | `/products/digirunner` | 品牌導航 |
 | digiRunner API 管理平台 | `/products/digirunner`，次要 `/products/digirunner-cloud` | 前幾名有 AWS Marketplace，雲端版是 `digirunner-cloud` 節點 |
 | API 管理平台 | `/products/digirunner` | 類別詞；結果是定義文，產品頁要能回答「API 管理平台包含什麼」才接得住 |
-| API Gateway 是什麼 | `/blog/{slug}`（文章） | 資訊型，前幾名是教學；現站同主題文章是 `drop` |
+| API Gateway 是什麼 | `/blog/what-is-api-gateway`（文章，#173） | 資訊型，前幾名是教學；現站同主題文章是 `drop`，#173 新寫一篇（`briefs/blog-what-is-api-gateway.md`） |
 | API 管理 金融業 | `/industries/finance`，次要 `/products/digirunner` | 產業加類別；結果涵蓋台灣金融法規 |
 | API 管理平台 比較 | `/products/digirunner` | 比較型；新站沒有比較頁，是否新增由策略決定 |
 | Kong 替代方案 API Gateway | `/products/digirunner` | 比較型；同上 |

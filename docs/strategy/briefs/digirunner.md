@@ -63,7 +63,7 @@ digiRunner 接得上既有系統（`IT-4`），部署環境由企業決定（`IT
 | 8 | API 與 AI 的使用軌跡 | 即時主控台、監控與告警、AI 使用歷程紀錄；出問題查得到來源，稽核拿得出紀錄 | IT 主管任務「確認上線後維運得動」；`IT-5` | `API Gateway 是什麼`：監控（次要）；`API 管理平台`：分析 | `fact:digirunner-console`、`fact:digirunner-ai-usage-log`、`fact:digirunner-cloud-opensearch` | 80–120 字 | 介面片段 3：主控台，「API 活動與軌跡」「AI 使用歷程」兩個分頁（`fact:digirunner-console`、`fact:digirunner-ai-usage-log`）。只畫分頁與欄位名稱 |
 | 9 | 先試用再決定 | 試用天數、試用期間各方案功能都能用、不收授權費；雲端版的費用條件（AWS 仍收基礎設施費用、到期自動轉付費）緊貼在「免費」旁邊，同一處讀完。沙盒讓開發人員不影響現行服務就能測。列出 digiRunner on Cloud 的方案名稱，不放價格。子節點 digiRunner on Cloud 的入口併進這段的動作 | IT 主管任務「決定要不要先試用」；`IT-7`；次要轉換：試用 | `API 管理平台 比較`：依預算與授權選型；`digiRunner API 管理平台`：AWS Marketplace 的購買管道；`銀行 API 平台`：沙盒 | `fact:digirunner-trial-30-days`、`fact:digirunner-cloud-trial-terms`、`fact:digirunner-trial-all-features`、`fact:digirunner-cloud-trial-full`、`fact:digirunner-sandbox`、`fact:digirunner-cloud-plans` | 80–150 字 | 色帶（淺紫）。介面片段 4：digiRunner on Cloud 的方案清單（`fact:digirunner-cloud-plans`），試用條件原文緊貼在旁（`fact:digirunner-cloud-trial-terms`） |
 | 10 | 案例 | 一則一列：客戶名、作業、成果、連結（`design-principles.md`「案例列」）。台新銀行的現金管理 API 平台（金融，`IT-4`），Global Finance 獎項放在同一列，寫出年份；臺北市政府的 API 管理平台與管理制度（政府，`DM-1`、`DM-4`）；Pharmacity 的雲端 API 管理平台（`IT-1`，zh-TW 沒有案例頁，這列沒有內頁連結）；安泰銀行的 API 管理平台（由 `case-study.offerings` 反查出來，事實庫沒有成果，成果那一行不放，見「待確認」第 8 項）。有成果的排前面，最後一個連結到成功案例列表 | 決策者任務「找成功案例」；`DM-1`、`IT-4`、`IT-1`、`DM-8` | — | `fact:client-taishin-bank`、`fact:digirunner-case-taishin`、`fact:award-global-finance-2020`；`fact:client-taipei-city`、`fact:digirunner-case-taipei-city`；`fact:client-pharmacity`、`fact:digirunner-case-pharmacity`；`fact:client-entie-bank` | 4 列，每列照事實原文 | 案例列。第一則台新銀行配一張片段（現金管理 API 平台的示意，文字照 `fact:digirunner-case-taishin`），不算進第 3、5、8、9 段的 4 張 |
-| 11 | 相關文章 | 列出講 AI Gateway 與 AI 治理的 2026 年文章，給要深入了解第 3 段的讀者。模板依 `blog.relatedOfferings` 反查產生，不寫文案 | IT 主管任務「確認 AI 串接要另外處理什麼」；`IT-6` | — | 無（文章本身的事實由文章管） | 2 則 | 索引列，文章自己的封面縮圖 |
+| 11 | 相關文章 | API 與 AI Gateway 的延伸閱讀：講 AI Gateway 與 AI 治理的兩篇 2026 年文章，給要深入了解第 3 段的讀者；`/blog/what-is-api-gateway`（#173），給想先弄清楚 API Gateway 做什麼、跟 API 管理平台差在哪的讀者，本頁不寫這段通用定義（取捨第 3 項）。模板依 `blog.relatedOfferings` 反查產生，順序照新到舊，不寫文案 | IT 主管任務「確認 AI 串接要另外處理什麼」；`IT-6`；IT 主管評估要不要一套 API 管理平台時需要的前置知識（`/blog/what-is-api-gateway` 的受眾任務） | `API 管理平台`：定義子題（生命週期、開發者入口網站、分析）由 `/blog/what-is-api-gateway` 第 9 段回答，本頁不寫 | 無（文章本身的事實由文章管） | 3 則 | 索引列，文章自己的封面縮圖 |
 | 12 | 預約演示 | 頁尾的主要轉換，標題寫下一步（約 demo、談導入） | 主要轉換：預約 demo | — | 無 | 標題 10–20 字，說明 30–50 字 | 色帶（深紫），沒有圖 |
 
 第 2、3、5 段的情境、功能與標準清單由事實組成，製作階段用事實原文，不改寫成更強的說法。
@@ -100,7 +100,7 @@ digiRunner 接得上既有系統（`IT-4`），部署環境由企業決定（`IT
 | 現站有、新站沒搬的 AI Gateway、部署、資安、四大機制、API Composer／沙盒／主控台、金檢段落（`unmigrated.md`） | 放回第 2–9 段 | 各對應一個 IT 主管任務或主張 |
 | 現站的「digiRunner v.s. Kong」比較表 | 不放 | 比較事實全部 `to_confirm`，見「待確認」第 4 項 |
 | 現站的「立即解鎖」版本連結區 | 不另設段落 | 雲端版由 hero 的試用按鈕與第 4、9 段連結，子節點 digiRunner on Cloud 的入口併進第 9 段的動作，不另成「相關產品」段（`design-principles.md`「offering：digiRunner 產品頁」）；白皮書是 draft |
-| 現站的「進一步掌握 API 管理最新趨勢」相關文章區 | 保留為第 11 段 | 已有兩篇 2026 年文章（`/blog/ai-gateway-for-enterprise-ai-security`、`/blog/ai-infrastructure-operations-governance`）內文連到本頁，但沒填 `relatedOfferings`，所以模板反查不到。製作階段在兩篇文章補 `relatedOfferings: [zh-TW/digirunner]`（取捨第 9 項） |
+| 現站的「進一步掌握 API 管理最新趨勢」相關文章區 | 保留為第 11 段，列 3 則 | 已有兩篇 2026 年文章（`/blog/ai-gateway-for-enterprise-ai-security`、`/blog/ai-infrastructure-operations-governance`）內文連到本頁，但沒填 `relatedOfferings`，所以模板反查不到。製作階段在兩篇文章補 `relatedOfferings: [zh-TW/digirunner]`（取捨第 9 項）。#173 新寫的 `/blog/what-is-api-gateway` 也填了 `relatedOfferings: [zh-TW/digirunner]`，第 11 段因此列出 3 則，目的從「AI Gateway 的延伸閱讀」放寬成「API 與 AI Gateway 的延伸閱讀」（`docs/strategy/briefs/blog-what-is-api-gateway.md`「取捨」第 6 項） |
 
 ## CTA
 
@@ -190,7 +190,7 @@ offering schema（`src/content.config.ts`）現有 `tagline`、`features[]{title
 | 2–9 | 段落需要連到其他頁（雲端版、產業頁） | `features[].link` | `{ label: string; node: string }`（選填） |
 | 6 | `useCases` 能承接（帶 `industry`，產業頁可反查），但 `body` 是一段文字，一列放不下兩則事實（開放銀行列、政府列各兩則） | `useCases[].points` | `string[]`（選填，每項是事實原文），和 `features[].points` 同形。改成三列後，金融檢查列的 `body` 是 `fact:digirunner-financial-inspection` 的多行 `text`，模板排成清單 |
 | 10 | `relatedCaseStudies` 已有；臺北市政府 API 管理平台的案例檔（`src/content/case-study/zh-TW/taipei-city-api-management-platform.md`）沒有 `offerings`，反查不到；Pharmacity 在 zh-TW 沒有案例檔；案例的成果事實與獎項放不進反查出來的卡片 | `caseNotes` | `{ client?: string; work: string; result?: string; caseStudy?: string }[]`：`client`、`work`、`result` 是事實原文，`caseStudy` 是案例檔 id（有就連內頁，沒有就不加連結）。臺北市政府案例檔補 `offerings: [zh-TW/digirunner]`。金融頁第 8 段的阻詐平台用同一個欄位（`finance.md`「schema 缺口」），兩個模板共用型別 |
-| 11 | 相關文章由 `blog.relatedOfferings` 反查，兩篇文章沒填 | 無 | 在兩篇 blog 內容檔補 `relatedOfferings: [zh-TW/digirunner]`；本頁的 `relatedPosts` 只用來排序，不必填 |
+| 11 | 相關文章由 `blog.relatedOfferings` 反查，兩篇 AI Gateway 文章沒填 | 無 | 在兩篇 AI Gateway 文章的內容檔補 `relatedOfferings: [zh-TW/digirunner]`；`/blog/what-is-api-gateway`（#173）新寫時就填。三篇都填後列 3 則。本頁的 `relatedPosts` 只用來排序，不填，順序照新到舊 |
 | 2–10 | 段落的版型與影像要能逐段指定（`design-principles.md`「和新寫法衝突的共用元件」的「段落的版型怎麼選」） | 由 #187 決定 | 段落表的「影像」欄就是這個值 |
 
 也可以不加 `features[].points`、`link`，改成跟 `page.sections` 同形的 `sections` 欄位；選哪個由主 session 依模板決定，brief 只要求第 2–9 段放得下「說明 + 清單 + 連結」。
