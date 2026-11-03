@@ -3030,6 +3030,117 @@
   locale: zh-TW
   status: confirmed
 
+# --- digiRunner open source (OpenTPI) ---
+# Official sources outside the current site (#174). The news 565 and 566 bodies are the HTML files the news pages load client-side. tpi.dev (OpenTPI, English only) is linked from the zh-TW home page banner and news 565; its features are en facts. The license file of the repository tpi.dev links to is not localized and is listed once per locale. Not collected: the edition comparison (docs.tpi.dev and github.com are blocked in cloud sessions), vi (news 567 uses named HTML entities that scripts/lib/page-text.mjs does not decode), the repository URL (only in a lazy tpi.dev chunk)
+- id: opentpi-program
+  type: company
+  text: 昕力開源計劃 OpenTPI
+  source:
+    url: https://www.tpisoftware.com/file/html/news/565/56520260817021632.html
+    quote: 昕力開源計劃 OpenTPI
+  locale: zh-TW
+  status: confirmed
+
+- id: digirunner-open-source
+  type: feature
+  text: 開源版 digiRunner
+  source:
+    url: https://www.tpisoftware.com/file/html/news/565/56520260817021632.html
+    quote: 開源版 digiRunner
+  locale: zh-TW
+  status: confirmed
+
+- id: tpi-open-source-products
+  type: company
+  text: 開放自研軟體產品原始碼
+  source:
+    url: https://www.tpisoftware.com/file/html/news/565/56520260817021632.html
+    quote: 不僅開放自研軟體產品原始碼
+  locale: zh-TW
+  status: confirmed
+
+- id: digirunner-oss-license
+  type: feature
+  text: Apache License Version 2.0
+  source:
+    url: https://raw.githubusercontent.com/TPIsoftwareOSPO/digiRunner-Open-Source/HEAD/LICENSE
+    quote: Apache License Version 2.0
+  locale: zh-TW
+  status: confirmed
+
+- id: opentpi-program-en
+  type: company
+  text: open-source project OpenTPI
+  source:
+    url: https://www.tpisoftware.com/file/html/news/566/56620260903105219.html
+    quote: open-source project OpenTPI
+  locale: en
+  status: confirmed
+
+- id: digirunner-open-source-en
+  type: feature
+  text: open-source digiRunner
+  source:
+    url: https://www.tpisoftware.com/file/html/news/566/56620260903105219.html
+    quote: open-source digiRunner
+  locale: en
+  status: confirmed
+
+- id: digirunner-oss-lightweight-en
+  type: feature
+  text: A lightweight version of digiRunner featuring built-in OAuth and API Keys, facilitating API management and traffic control for authentication and authorization to ensure data security.
+  source:
+    url: https://tpi.dev/
+    quote: A lightweight version of digiRunner featuring built-in OAuth and API Keys, facilitating API management and traffic control for authentication and authorization to ensure data security.
+  locale: en
+  status: confirmed
+
+# text stops before "with proven adoption and effectiveness", a claim with no basis (like systalk-rpa-proven)
+- id: digirunner-oss-console-en
+  type: feature
+  text: Ready-to-use console for cloud collaboration
+  source:
+    url: https://tpi.dev/
+    quote: Ready-to-use console for cloud collaboration with proven adoption and effectiveness in real-world scenarios.
+  locale: en
+  status: confirmed
+
+- id: digirunner-oss-api-policies-en
+  type: feature
+  text: API policies for managing API client access, quotas and traffic control with token-based authentication.
+  source:
+    url: https://tpi.dev/
+    quote: API policies for managing API client access, quotas and traffic control with token-based authentication.
+  locale: en
+  status: confirmed
+
+- id: digirunner-oss-openapi-en
+  type: feature
+  text: Support for OpenAPI Specification 3.1 and later versions, enabling simple, rapid API deployment.
+  source:
+    url: https://tpi.dev/
+    quote: Support for OpenAPI Specification 3.1 and later versions, enabling simple, rapid API deployment.
+  locale: en
+  status: confirmed
+
+- id: digirunner-oss-reports-en
+  type: feature
+  text: Insightful reports into API usage with a deeper understanding of API calls, traffic and response time.
+  source:
+    url: https://tpi.dev/
+    quote: Insightful reports into API usage with a deeper understanding of API calls, traffic and response time.
+  locale: en
+  status: confirmed
+
+- id: digirunner-oss-license-en
+  type: feature
+  text: Apache License Version 2.0
+  source:
+    url: https://raw.githubusercontent.com/TPIsoftwareOSPO/digiRunner-Open-Source/HEAD/LICENSE
+    quote: Apache License Version 2.0
+  locale: en
+  status: confirmed
+
 # --- Open Banking (digiRunner) ---
 - id: open-banking-history
   type: metric

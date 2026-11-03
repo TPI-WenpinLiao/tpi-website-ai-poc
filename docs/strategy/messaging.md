@@ -382,7 +382,7 @@ IT 團隊可以在不影響現行服務的環境裡先試完整功能，再決�
 | 9 | 搭配群聯 aiDAPTIV 的地端 AI 比其他硬體更快、能跑更大的模型 | 合作夥伴提供的估算與點名競品的比較，要確認授權與量測條件 | `fact:aiso-10x-dell-hpe`、`fact:aiso-52-to-2-seconds`、`fact:aiso-70b-on-4-gpus` |
 | 10 | 台灣開放銀行的三階段時程 | 已解決：四筆時程改為 `confirmed`，可以寫出年份（使用者決定，#180） | 無 |
 | 11 | 在東南亞與東北亞多國設有據點 | 據點清單兩處說法不一致（有沒有泰國）。DM-6 改用已確認的新加坡、越南子公司 | `fact:company-asia-presence`、`fact:company-offices-overseas` |
-| 12 | digiRunner 有開源版，可以先自己裝來試 | 事實庫沒有開源版的條目。`search-intent.md` 的「開源 API Gateway 推薦」與 `digiRunner API 管理平台` 結果提到開源專案頁，要先從現站或官方來源收進事實庫 | 無 |
+| 12 | digiRunner 有開源版，可以先自己裝來試 | 部分解決（#174）：zh-TW 可以寫開源版存在與授權（`fact:digirunner-open-source`、`fact:digirunner-oss-license`、`fact:opentpi-program`），開源版的功能說明只在 `tpi.dev`，是英文，只收成 en 事實（id 以 `digirunner-oss-` 開頭、`-en` 結尾）。跟 Enterprise、Cloud 版的差異在 `docs.tpi.dev` 與 GitHub repo 頁，雲端 session 連不到，還沒收；zh-TW 不能寫「輕量版」或比較兩版的功能 | 無（缺的是比較的事實，不是 `to_confirm`） |
 | 13 | 製造業有導入案例與成果 | 事實庫只有產業清單（`fact:company-industries`）與 GreenSwift 功能，沒有製造業案例；`nodes.csv` 寫製造業頁「需人工提供」。因此定位句不點名製造業（使用者決定，#165）。現站沒有資料，不處理（使用者決定，#180） | 無 |
 | 14 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答。`competitors.md`「本站缺」第 3 項：FPT 在聯絡頁寫明回覆時間。現站沒有資料，不處理；聯絡段不寫回覆時間（使用者決定，#180） | 無 |
 | 15 | 金融聯防阻詐平台用 AI 偵測或共享詐騙事件 | 已確認的 `fact:fraud-platform-title`、`fact:fraud-platform-result` 只寫聯防流程、詐騙事件即時共享與跨行交換，沒有提到 AI，所以 #186 把它移出 `DM-2`。現站也沒有這個平台的案例頁與客戶名稱。要放回 AI 的段落，要先從現站或內容負責人取得寫出 AI 的原文 | 無 |
