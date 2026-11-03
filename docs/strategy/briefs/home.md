@@ -3,7 +3,7 @@
 - 模板：`home`；文案位置：`src/data/home/zh-TW.ts`（型別 `Home`，在 `src/data/home/types.ts`，en、vi 檔要滿足同一型別），版面在 `src/layouts/templates/HomeTemplate.astro`
 - 主張 id 指 `docs/strategy/messaging.md`；事實的寫法見 `content-strategy` skill「引用事實的寫法」，只用 `docs/strategy/facts.yaml` 裡 zh-TW、`status: confirmed` 的條目
 - 狀態：#165 加上 `strategy-approved`。#166 使用者決定首頁精簡成 5 段（`docs/strategy/concepts/copy-deck.md`「第四輪：偏離 brief 的地方」），#167 照 `ribbon-route` 原型做進 production。#186 把段落表、CTA 表與連出表改寫成 production 的 5 段，#165 的 8 段怎麼併成 5 段寫在「取捨」第 8 項；兩組類別詞改為次要承接（「取捨」第 14 項），「schema 缺口」加了 `WebSite` 的 `potentialAction`
-- en、vi 首頁還是 #167 之前的文案，5 段版沒有對應文字的段落不輸出（`src/data/home/types.ts`），列為 #177
+- en、vi 首頁依 5 段版寫在 `src/data/home/en.ts`、`vi.ts`（#177）：段落與 zh-TW 對應，事實用現站該語系原文的 `-en`、`-vi` 事實。現站 en、vi 沒有的事實換成同語系現站有的說法：OrientAI 段用 FAQ 的「資料歸企業所有」（`orientai-data-yours-*`），不寫部署在企業端；資安認證用 DigiLism 的 ISO 27001（`cert-iso27001-digilism-*`）
 
 ## 受眾與任務
 
