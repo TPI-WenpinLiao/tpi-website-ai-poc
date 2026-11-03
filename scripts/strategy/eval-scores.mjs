@@ -39,6 +39,11 @@ export const ROWS = [
   ['現站', '金融（開放銀行頁）', 'current-finance'],
   ['競品', 'SYSTEX 首頁', 'competitors-systex'],
   ['競品', 'Syscom 首頁', 'competitors-syscom'],
+  // #187 re-evaluated the pilot pages after its fixes, with the rubric as #168 left it: a second round,
+  // not comparable with the first (evaluation.md「第二輪（#187）」)
+  ['第二輪（#187）', '首頁', 'r2-new-home'],
+  ['第二輪（#187）', 'digiRunner', 'r2-new-digirunner'],
+  ['第二輪（#187）', '金融', 'r2-new-finance'],
 ];
 
 /**
