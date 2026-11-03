@@ -27,6 +27,7 @@ import { LIVE } from '../../lib/scene/tiers';
 import { builtNodes } from '../../lib/ia/built';
 import pictures from '../../lib/scene/ribbon/pictures.json';
 import { labelsOn, type Where } from '../../lib/scene/ribbon/labels';
+import { numbers } from '../../lib/content/emphasis';
 import heroWide from '../../assets/design/ribbon/hero-wide.webp';
 import heroTall from '../../assets/design/ribbon/hero-tall.webp';
 import forkWide from '../../assets/design/ribbon/fork-wide.webp';
@@ -96,11 +97,6 @@ const cases = copy.cases.items.map((c, i) => {
   };
 });
 const casesTitle = copy.cases.title ?? localNode('success-stories', locale).title;
-// Numbers in a result stand out; the text is the fact as it is (​ is a break point in the fact)
-const emphasize = (text: string) =>
-  text
-    .split(/(\d+(?:\.\d+)?%?)/)
-    .map((part, i) => ({ part, strong: i % 2 === 1 }));
 
 const THUMBS: Record<string, ImageMetadata> = {
   digirunner: prodDigirunner,
@@ -215,7 +211,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
                 <p class="case-name serif" data-ribbon-case-name>
                   {c.name}
                 </p>
-                <p class="case-result">{emphasize(c.result).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
+                <p class="case-result">{numbers(c.result).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
                 <Link href={c.href} variant="standalone">
                   {c.link}
                 </Link>

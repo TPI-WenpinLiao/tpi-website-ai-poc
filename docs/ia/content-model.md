@@ -109,7 +109,6 @@ sourceUrl: []
 | `relatedCaseStudies` | `ref(case-study)[]` | 否 | 精選案例與排序。留空時由 `case-study.offerings` 反查；關聯以 `case-study.offerings` 為準，這裡只列其中的項目 | — |
 | `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句：點名案例的表述，加上該案例的事實原文，事實要列進 `facts`（#183）；有 `caseNotes` 時不輸出 | — |
 | `caseNotes` | `{ client?: string; work?: string; result?: string; award?: string; caseStudy?: ref(case-study); fragment?: 介面片段 }[]` | 否 | 案例列（#187）：客戶、作業、成果、獎項都是事實原文，`caseStudy` 有就連到案例內頁（錨點「客戶名：案例標題」）；有填時取代反查出來的案例 | — |
-| `casesImage` | `image` | 否 | 案例列右側的直式裝飾圖（#187） | — |
 | `relatedPosts` | `ref(blog)[]` | 否 | 精選文章與排序。留空時由 `blog.relatedOfferings` 反查；關聯以 `blog.relatedOfferings` 為準，這裡只列其中的項目 | — |
 | `downloads` | `{ label: string; file: string }[]` | 否 | 下載檔（例如 `digirunner-aws-guide` 的 PDF），也是 `download` 中繼頁的資料來源。白皮書不列在這裡，由 `whitepaper.offeringNode` 反查 | 現站下載按鈕 |
 
@@ -167,7 +166,7 @@ JSON-LD：
 | `highlights` | `{ title: string; body: string }[]` | 否 | 介紹區塊。金融、政府頁承接開放銀行、開放政府頁的內容 | `/products/open-banking`、`/products/open-government` |
 | `sections` | `{ heading: string; body?: string; items?: { title: string; body?: string; node?: string }[]; link?: { label: string; node: string } }[]` | 否 | brief 要求比 highlights 多的段落（#167）：標題、一句說明、事實項目（`body` 是事實原文，`node` 連到該頁）、接著要看的頁面。段落已連到的子頁不再列在子頁卡片 | — |
 | `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句，是事實原文，要列進 `facts`（#167）；有 `caseNotes` 時不輸出 | — |
-| `caseNotes`、`casesImage` | 同 offering | 否 | 案例列與旁邊的直式圖（#187）；有 `caseNotes` 時取代 `featuredCaseStudies` | — |
+| `caseNotes` | 同 offering | 否 | 案例列（#187）；有 `caseNotes` 時取代 `featuredCaseStudies` | — |
 | `testimonial` | `{ quote: string; speaker: string }` | 否 | 接在案例列後的客戶證言，兩個都是事實原文（#187） | — |
 | `featuredCaseStudies` | `ref(case-study)[]` | 否 | 指定精選案例；沒填時用 `industry` 反查 | — |
 | `featuredPosts` | `ref(blog)[]` | 否 | 指定精選文章 | — |
@@ -187,7 +186,7 @@ JSON-LD：`CollectionPage`，`name` ← `title`、`description` ← `description
 
 ## 依 brief 排的段落（offering、hub 共用）
 
-`sections` 每段一個版型（`layout`），版型的長相與用法見 `docs/strategy/design-principles.md`「內頁的版型」，型別是 `src/content.config.ts` 的 `pageSection`，由 `PageSections` 輸出（#187）。共用欄位：`id`（頁內導覽的錨點）、`heading`、`body`、`link`、`fill`（`subtle`／`brand` 底色）、`image`（緞帶世界的裝飾圖，放在 spec、timeline 的標題旁或沒有片段的 band）。
+`sections` 每段一個版型（`layout`），版型的長相與用法見 `docs/strategy/design-principles.md`「內頁的版型」，型別是 `src/content.config.ts` 的 `pageSection`，由 `PageSections` 輸出（#187）。共用欄位：`id`（頁內導覽的錨點）、`heading`、`body`、`link`、`fill`（`subtle`／`brand` 底色）、`image`（緞帶世界的段落圖，放在 spec 的 h2 旁或沒有片段的 band，規則見 `design-principles.md`「內頁共用的規則」段落圖）。
 
 | `layout` | 版型 | 自己的欄位 |
 |---|---|---|

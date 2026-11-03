@@ -167,6 +167,7 @@ P1–P5 的「會怎麼呈現」以首頁（home 模板，定案的原型是 `co
 | 事實 | 照 P2 的紀錄格式：事實原文用內文字級，放在表述的下方或右側；數字只加粗，不放大成主視覺；條件緊貼在數字下方。清單項目用間距分開，不畫底線。照引的事實原文在畫面上是片段時，用清單或表格的一格呈現，不硬接成一段 | P2；new-finance C6 第 1 項 |
 | 頁內導覽 | 保留 `InPageNav`，列中文段名。和頁面用底色的一階色差分開，不用下框線；375 寬時列內橫向捲動，右緣露出下一項的一部分，讓人看得出還有 | P4；new-digirunner D6 |
 | 影像 | 至少 4 張介面片段（`data-ui`、標「示意」，文字只用事實原文）；SVG 架構圖另計。片段只畫事實寫得出的東西：功能名稱、設定項目、狀態名稱。要靠假資料才成立的畫面（流量曲線、筆數、時間戳記、客戶名單）不畫，那會變成 house rule 禁止的假儀表板。同一頁的片段用同一種外框與比例 | P3、P5；new-digirunner D2 第 6 項 |
+| 段落圖 | #187 使用者決定：沒有圖的規格表段、色帶段可以放一張「緞帶世界」的段落圖（`docs/design/image-prompts.md`「#187」，白色方塊、白底、只有緞帶有漸層，圖裡沒有字），放在 h2 旁的最後 4 欄或色帶的圖位，375 寬不顯示。每頁最多 3 張，相鄰兩段不同時放；時間列、案例列與介面片段段落不放（評審 r2 指出時間列旁與案例列旁的圖會把內容推後、和案例搶焦點）。段落圖是裝飾，不算進「至少 4 張介面片段」，也不取代介面片段與接點圖；能畫成介面片段或接點圖的段落，優先畫成那兩種 | 使用者 2026-11-03（#187 第二輪重評後）；P1 影像只幫腔、P5 |
 | 375 寬 | 重新安排，不是把雙欄堆疊：介面片段只留主要的一塊；短詞清單（標準名稱、雲平台、適用業務）排成兩欄；一段不超過約 1.5 個螢幕高。不把事實收進 `<details>`：評審以減少動態的截圖評分，收起來的內容當作沒有 | P5；`site-review`「評審對象的準備」；new-digirunner D6、new-finance D6 |
 | 動態 | 照 P4 與 `motion.md`：每段的主要元素進場一次，介面片段在進場時可以前進一個狀態（例如故障的節點換成分流），減少動態時停在完成狀態。不載 3D | P4；ADR 0003「ribbon-route」 |
 
@@ -218,7 +219,7 @@ offering 與 hub 共用下列 10 種版型。欄位指 12 欄格線（`--grid-*`
 | 1 | Hero | 上方「第一屏」 | 靜態圖加 HTML 標籤 | 白 |
 | 2 | 接上既有系統，不必先汰換 | 接點圖 | SVG：DB、FTP 等既有系統在左，digiRunner 在中（API 組合與格式轉換、沿用現有 WAF），新的服務在右（`fact:digirunner-gov-protocols`、`fact:digirunner-api-composer`、`fact:digirunner-nginx-waf`） | 白 |
 | 3 | AI 流量走同一道 Gateway | 介面片段 | 片段 1：AI Gateway 的設定面板，三個項目是模型配置、內容審查、流量監控（`fact:digirunner-ai-model-config`、`fact:digirunner-ai-content-review`、`fact:digirunner-ai-traffic`）。畫出的接點：企業的 API 與 AI 模型之間隔著同一道 Gateway | 白 |
-| 4 | 部署環境由企業決定 | 規格表 | 無。表的列是地端、雲端、Kubernetes、多雲與混合雲，雲平台一列（`fact:digirunner-deployment`、`fact:digirunner-multi-cloud`、`fact:digirunner-cloud-platforms`） | 淺灰 |
+| 4 | 部署環境由企業決定 | 規格表 | 段落圖 `sec-deployment`（#187）。表的列是地端、雲端、Kubernetes、多雲與混合雲，雲平台一列（`fact:digirunner-deployment`、`fact:digirunner-multi-cloud`、`fact:digirunner-cloud-platforms`） | 淺灰 |
 | 5 | 資安機制內建 | 介面片段（和第 3 段左右對調） | 片段 2：一支 API 的認證方式設定，選項照 `fact:digirunner-auth-methods` 原文。畫出的接點：外部呼叫進到 Gateway 時先過認證。標準清單放在片段旁 | 白 |
 | 6 | 金融與政府的規範要求 | 對應表 | 無。一列一個規範（例如 `fact:digirunner-open-banking-fsc`、`fact:digirunner-financial-inspection`、`fact:digirunner-ndc-spec`），右欄連到產業頁。列數與 `fact:digirunner-oas` 放哪一列由 brief 決定；不做成卡片 | 淺灰 |
 | 7 | 尖峰流量與單點故障 | 接點圖 | SVG：兩台 digiRunner，一台故障時請求分流到另一台，後面是 Active/Standby 的資料庫（`fact:digirunner-failover`、`fact:digirunner-redis-storage`）。硬體規格與 TPS 用規格表的一列接在圖下，條件同列（`fact:digirunner-tps`） | 白 |
@@ -260,9 +261,9 @@ offering 與 hub 共用下列 10 種版型。欄位指 12 欄格線（`--grid-*`
 | 2 | 法規要求已做在產品裡 | 時間列，接著對應表 | 無。起源一句當引言；時間列三列（`fact:open-banking-stage-1`、`fact:open-banking-stage-2`、`fact:open-banking-stage-3`）；對應表一列一個要求（開放銀行法規、金融檢查、三層防護 `fact:digirunner-open-banking-security`），連到 digiRunner 產品頁。拆成兩塊，不再是一欄 9 個條列（new-finance D2 第 6 項、D3） | 淺灰 |
 | 3 | 接上核心系統，不必先汰換 | 接點圖 | SVG：核心銀行系統、大型主機在左，DigiLism 的資料轉換與通訊機制、digiRunner 的 API 組合在中，金融科技業者與通路在右（`fact:digilism-protocol-integration`、`fact:digirunner-api-composer`） | 白 |
 | 4 | AI 用在理賠與建檔 | 成果 | 兩則各一張片段。片段 1：理賠案件從立案到派件的狀態（`fact:smartclaim-result`）；片段 2：文件辨識後把欄位介接到內部系統（`fact:smartfilling-case-bank`、`fact:smartfilling-template-free`）。自研模型（`fact:smartclaim-nlp`）寫在作業名稱下方；段末的使用歷程與治理是一列紀錄，不另做 h3。阻詐平台的原文沒提到 AI，#186 移到第 8 段（`briefs/finance.md`「取捨」第 13 項） | 白 |
-| 5 | 金融通路的身分驗證 | 規格表 | 無。適用的金融業務排成兩欄的短詞清單（`fact:gadodido-finance-uses`），認證一列（`fact:gadodido-fido-certified`） | 淺灰 |
+| 5 | 金融通路的身分驗證 | 規格表 | 段落圖 `sec-identity`（#187）。適用的金融業務排成兩欄的短詞清單（`fact:gadodido-finance-uses`），認證一列（`fact:gadodido-fido-certified`） | 淺灰 |
 | 6 | 保險業務的專用模組 | 介面片段 | 片段 3：InsureRing 的規則設定，項目是商品上下架、核保規則、法令調整（`fact:insurering-automated-rules`）。兩則具名案例照紀錄格式放在片段旁，數字加粗（`fact:insurebrick-case-shin-kong`、`fact:insurering-case-shin-kong-life`）。子頁 InsureBrick、InsureRing 用索引列接在段末 | 白 |
-| 7 | 規劃與導入由同一家負責 | 色帶（淺紫） | 無 | 淺紫 |
+| 7 | 規劃與導入由同一家負責 | 色帶（淺紫） | 段落圖 `sec-planning`（#187） | 淺紫 |
 | 8 | 金融業成功案例 | 案例列 | 片段 4：第一則台新銀行的現金管理 API 平台示意（文字照 `fact:digirunner-case-taishin`）；證言若採用接在列後 | 白 |
 | 9 | 聯絡業務 | 色帶（深紫） | 無 | 深紫 |
 

@@ -215,8 +215,6 @@ const offering = defineCollection({
         // text about it; the facts are listed in `facts`
         casesIntro: text.optional(),
         caseNotes,
-        // A tall picture beside the cases (docs/design/image-prompts.md), decorative
-        casesImage: image().optional(),
         relatedPosts: z.array(ref('blog')).optional(),
         downloads: z.array(z.strictObject({ label: text, file: text })).optional(),
       })
@@ -245,7 +243,6 @@ const hub = defineCollection({
         // A line under the case studies' heading (#167): a fact text, listed in `facts`
         casesIntro: text.optional(),
         caseNotes,
-        casesImage: image().optional(),
         testimonial: z.strictObject({ quote: text, speaker: text }).optional(),
         featuredPosts: z.array(ref('blog')).optional(),
       })

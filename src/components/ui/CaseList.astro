@@ -6,12 +6,9 @@
 // with a fragment of the work beside it (the `fragment` slot of the first row, or each row's own
 // `fragment` given as a UiFragment props object).
 // A result without a fact is left out, never written in. `more` is the link to the full list.
-// `image` is a tall decorative picture beside the rows from --bp-lg-up (docs/design/image-prompts.md);
-// with it a row's fragment goes under the row's text instead of beside it.
 import UiFragment from './UiFragment.astro';
 import Link from './Link.astro';
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
+import { numbers } from '../../lib/content/emphasis';
 
 interface Fragment {
   title: string;
@@ -40,33 +37,37 @@ interface Props {
   mark: string;
   // The first row larger (cases); the results layout keeps every row the same
   lead?: boolean;
-  image?: ImageMetadata | undefined;
+  // Cases: the row's heading is its link, worded「客戶名：案例標題」(briefs「內部連結」), so the heading
+  // alone says whose case it is; a row without a link keeps its title as the heading
+  linkHeading?: boolean;
 }
 
-const { items, level = 3, more, mark, lead = true, image } = Astro.props;
+const { items, level = 3, more, mark, lead = true, linkHeading = false } = Astro.props;
 const Heading = `h${level}` as const;
-// Numbers in a result stand out; the text is the fact as it is
-const emphasize = (text: string) =>
-  text.split(/(\d[\d,.]*\s?%?)/).map((part, i) => (i % 2 === 1 ? { strong: true, part } : { strong: false, part }));
 ---
 
-<div class:list={['case-list', { 'with-image': image }]}>
-  {image && <Image class="picture" src={image} widths={[480, 960]} sizes="(width >= 64rem) 24rem, 100vw" alt="" loading="lazy" />}
+<div class="case-list">
   <ol class="rows">
     {
       items.map((c, i) => (
         <li class:list={['row', { lead: lead && i === 0, 'has-fragment': c.fragment }]}>
           <div class="text">
-            {c.title && <Heading class="title serif">{c.title}</Heading>}
+            {linkHeading && c.link ? (
+              <Heading class="title serif">
+                <a href={c.link.href}>{c.link.label}</a>
+              </Heading>
+            ) : (
+              c.title && <Heading class="title serif">{c.title}</Heading>
+            )}
             {c.sub && <p class="sub">{c.sub}</p>}
             {c.work && <p class="work">{c.work}</p>}
             {c.result && (
               <p class="result">
-                {emphasize(c.result).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}
+                {numbers(c.result).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}
               </p>
             )}
             {c.award && <p class="award">{c.award}</p>}
-            {c.link && (
+            {c.link && !linkHeading && (
               <Link href={c.link.href} variant="standalone">
                 {c.link.label}
               </Link>
@@ -131,11 +132,20 @@ const emphasize = (text: string) =>
     line-height: var(--line-height-snug);
   }
 
-  .sub,
-  .award {
+  .sub {
     margin: 0;
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
+  }
+
+  /* An award is outside proof, set like the result, not as a footnote */
+  .award {
+    margin: 0;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .title a {
+    color: var(--color-link);
   }
 
   .work,
@@ -147,53 +157,17 @@ const emphasize = (text: string) =>
     font-size: var(--font-size-text);
   }
 
-  .picture {
-    display: none;
-  }
-
   @media (--bp-lg-up) {
-    /* The picture holds the right-hand columns while the rows run down the left */
-    .with-image {
-      display: grid;
-      grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-      column-gap: var(--grid-gutter);
-      align-items: start;
-    }
-
-    .with-image > .rows,
-    .with-image > .more {
-      grid-column: 1 / 8;
-    }
-
-    .with-image > .more {
-      grid-row: 2;
-      margin-block-start: var(--space-10);
-    }
-
-    .with-image > .picture {
-      position: sticky;
-      inset-block-start: calc(var(--header-height) + var(--space-8));
-      display: block;
-      grid-row: 1 / span 2;
-      grid-column: 9 / -1;
-      inline-size: 100%;
-      block-size: auto;
-    }
-
-    .with-image .rows {
-      grid-row: 1;
-    }
-
-    .row.has-fragment:not(.with-image *) {
+    .row.has-fragment {
       grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
       gap: var(--grid-gutter);
     }
 
-    .has-fragment:not(.with-image *) .text {
+    .has-fragment .text {
       grid-column: 1 / 7;
     }
 
-    .has-fragment:not(.with-image *) .fragment {
+    .has-fragment .fragment {
       grid-column: 8 / -1;
     }
   }

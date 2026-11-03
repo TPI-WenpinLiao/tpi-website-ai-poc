@@ -128,7 +128,8 @@ const caseStudies = (
     ? data.relatedCaseStudies.flatMap((r) => linkedCases.filter((c) => c.id === r.id))
     : linkedCases.toSorted((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity))
 );
-// Rows of cases: the brief's caseNotes when the entry has them (client, work, result, award), else
+// Rows of cases: the brief's caseNotes when the entry has them (client, work, result, award; a case
+// without a client, the fraud platform, is headed by its work), else
 // the linked case studies with their client and title
 const caseHref = async (id: string) => {
   const c = linkedCases.find((e) => e.id === id) ?? (await getCollection('case-study', (e) => e.id === id))[0];
@@ -136,7 +137,7 @@ const caseHref = async (id: string) => {
 };
 const caseRows = data.caseNotes
   ? await Promise.all(
-      data.caseNotes.map(async (n) => ({ title: n.client, work: n.work, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? await caseHref(n.caseStudy.id) : undefined })),
+      data.caseNotes.map(async (n) => ({ title: n.client ?? n.work, work: n.client ? n.work : undefined, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? await caseHref(n.caseStudy.id) : undefined })),
     )
   : caseStudies.map((c) => ({ title: c.data.client.disclosed ? c.data.client.name : c.data.clientDescription, link: { label: caseLinkLabel(c), href: entryPath('case-study', c) } }));
 const successStories = localNode('success-stories', locale);
@@ -255,7 +256,7 @@ const blog = localNode('blog', locale);
     caseRows.length > 0 && (
       <Surface tone="light" id="cases" class="anchor-target">
         <SectionHeading title={successStories.title} description={data.caseNotes ? undefined : data.casesIntro} />
-        <CaseList items={caseRows} image={data.casesImage} mark={t.layout.mark} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
+        <CaseList items={caseRows} linkHeading mark={t.layout.mark} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
       </Surface>
     )
   }

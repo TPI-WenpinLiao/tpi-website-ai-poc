@@ -130,7 +130,7 @@ sections:
     id: regulations
     fill: subtle
     heading: 金融與政府的規範要求
-    body: 開放銀行、金融檢查與政府的共通性 API 規範，各自對應到 digiRunner 的功能。
+    body: 開放銀行與金融檢查的法規要求、政府的共通性 API 規範，已經做在 digiRunner 的功能裡。
     rows:
       - label: 台灣開放銀行
         values:
@@ -143,12 +143,13 @@ sections:
         values:
           - "針對金融檢查，完善 API 管理：\nAPI 生命週期作業\n訂定交易限制\n訂定連線識別名稱產製方式\n定期盤點作業及風險評估\n進行資源與服務監控作業\n完善之服務憑證管理規範\n進行分類分級管理\nAPI Key 識別認證\n採用 OAuth 2.0"
       - label: 政府共通性 API 規範
-        values: [符合國家發展委員會【共通性應用程式介面規範】。]
+        # The OAS fact goes with the government's spec (brief 第 6 段、取捨第 11 項): three rows
+        values:
+          - 符合國家發展委員會【共通性應用程式介面規範】。
+          - 符合國際 Open API Initiative 組織之 OpenAPI Specification（以下簡稱 OAS）標準來定義 RESTful APIs。
         link:
           label: 政府與公部門的共通性 API 規範
           node: industry-government
-      - label: OpenAPI 規格
-        values: [符合國際 Open API Initiative 組織之 OpenAPI Specification（以下簡稱 OAS）標準來定義 RESTful APIs。]
   - layout: junction
     id: availability
     heading: 尖峰流量與單點故障
@@ -237,7 +238,6 @@ useCases:
 # Section 10 of the brief: cases as rows (design-principles.md「案例列」). client, work, result
 # and award are fact texts; Taishin's award sits on its row (messaging.md DM-8). 安泰銀行 has no
 # work or result fact (brief「待確認」第 8 項), Pharmacity no zh-TW case page (第 9 項)
-casesImage: ../../../assets/design/sec-cases.webp
 caseNotes:
   - client: 台新銀行
     work: 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。

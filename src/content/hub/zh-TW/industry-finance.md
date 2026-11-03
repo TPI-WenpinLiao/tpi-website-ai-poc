@@ -3,7 +3,8 @@
 title: 金融
 # docs/strategy/briefs/finance.md「title 與 description 方向」: the h1 stays the node's name
 seoTitle: 金融業的開放銀行、API 管理與 AI 應用
-description: 昕力資訊替銀行、保險與證券業者，把開放銀行與金融檢查的 API 管理要求做進 digiRunner，並以 AI 處理理賠、建檔與阻詐，也提供身分驗證與導入規劃。
+# briefs/finance.md「description」: no AI for fraud, the platform's text names no AI (messaging「缺少證據的主張」第 15 項)
+description: 昕力資訊替銀行、保險與證券業者，把開放銀行與金融檢查的 API 管理要求做進 digiRunner，以 AI 處理理賠與文件建檔，也提供身分驗證與導入規劃。
 translationKey: industry-finance
 node: industry-finance
 industry: finance
@@ -28,7 +29,6 @@ sections:
   - layout: timeline
     id: regulations
     fill: subtle
-    image: ../../../assets/design/sec-open-banking.webp
     heading: 法規要求已做在產品裡
     body: 開放銀行的規範與金融檢查的 API 管理作業，都對應到 digiRunner 的功能。
     intro: Open Banking 起源於 2015 年歐盟的 The Revised Payment Services Directive (PSD2)，隔年（2016）八月，由英國率先要求其國內九家大型銀行要採用，並於 2018 年強制導入。2019 年，台灣金管會拍板定案，將台灣 Open Banking 導入分為三階段。
@@ -155,6 +155,8 @@ sections:
           state: "off"
     items:
       - body: InsureBrick是專為產壽險保險公司及保經代公司打造的保險科技平台，我們的系統採用了先進的微服務技術，每個功能都是獨立的模組
+      - body: 只需購買所需模組，也可串接客戶內外部系統
+      - body: 28個多元且彈性的模組
       - title: 新光金保代
         body: 新光金保代核心系統應用 InsureBrick 模組規劃設計，透過多元且彈性的模組，整合內部各項業務流程，縮短進件作業時間
       - body: 以建立新型態自動化檢核，滿足保險商品上下架彈性、核保規則調整及法令規範因應等需求
@@ -175,7 +177,6 @@ sections:
 # Section 8 (#187): cases as rows, the ones with a result first (brief「取捨」第 14 項). The fraud
 # platform has no client or case page, so no link (第 13 項); 安泰、國泰世華、臺灣銀行 have no work or
 # result fact (「待確認」第 8 項). The testimonial follows the rows (#186, user's decision)
-casesImage: ../../../assets/design/sec-cases.webp
 caseNotes:
   - client: 台新銀行
     work: 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。
@@ -200,6 +201,8 @@ testimonial:
   quote: 在這個平台上它提供IT人員可以做後台管理也考慮到很多安控，昕力在這個產品上已經蠻替IT人員想到蠻多; 昕力在一些新進的技術上面其實一直都走得蠻前面的，也很願意分享給我們，那整個團隊的服務都非常棒，我們一定會再繼續跟他們合作。
   speaker: Dora 徐靜婷 ｜新光銀行數位資訊部資深經理
 facts:
+  - insurebrick-buy-modules
+  - insurebrick-28-modules
   - smartclaim-nlp
   - smartfilling-template-free
   - digirunner-ai-governance

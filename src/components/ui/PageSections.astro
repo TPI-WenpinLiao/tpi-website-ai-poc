@@ -17,6 +17,7 @@ import Timeline from './Timeline.astro';
 import CaseList from './CaseList.astro';
 import IndexList from './IndexList.astro';
 import Link from './Link.astro';
+import { percentages } from '../../lib/content/emphasis';
 import { Image } from 'astro:assets';
 import { localNode, nodeHref } from '../../lib/ia/navigation';
 import type { Locale } from '../../lib/i18n/locales';
@@ -48,15 +49,15 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
     const link = to(sec.link);
     const surface = { id: sec.id, class: sec.id ? 'anchor-target' : undefined, fill: sec.layout === 'band' ? ('brand' as const) : sec.fill };
     const heading = <SectionHeading title={sec.heading} description={sec.body} />;
-    // A section's picture (decorative): beside the heading for spec and timeline, in the figure's
-    // place for a band without a fragment
+    // A section's picture (decorative, design-principles.md「內頁共用的規則」段落圖): beside the heading
+    // for spec and timeline, in the figure's place for a band without a fragment; not on phones
     const picture = sec.image && (
-      <div class="figure">
+      <div class="figure picture-figure">
         <Image class="picture" src={sec.image} widths={[640, 960, 1280]} sizes="(width >= 64rem) 36rem, 100vw" alt="" loading="lazy" />
       </div>
     );
     const head = picture ? (
-      <div class="split">
+      <div class="split with-picture">
         <div class="claim">{heading}</div>
         {picture}
       </div>
@@ -76,7 +77,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
               {items(sec.items).map((i) => (
                 <li>
                   {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                  <p class="item-body">{i.body}</p>
+                  <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
                 </li>
               ))}
             </FactRow>
@@ -99,7 +100,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                 {items(sec.items).map((i) => (
                   <li>
                     {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                    <p class="item-body">{i.body}</p>
+                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
                   </li>
                 ))}
               </ul>
@@ -121,7 +122,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                     {items(sec.items).map((i) => (
                       <li>
                         {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                        <p class="item-body">{i.body}</p>
+                        <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
                       </li>
                     ))}
                   </ul>
@@ -134,7 +135,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                 {items(sec.items).map((i) => (
                   <li>
                     {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                    <p class="item-body">{i.body}</p>
+                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
                   </li>
                 ))}
               </ul>
@@ -193,7 +194,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                     {items(sec.items).map((i) => (
                       <li>
                         {i.title && <h3 class="item-title">{i.title}</h3>}
-                        <p class="item-body">{i.body}</p>
+                        <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
                       </li>
                     ))}
                   </ul>
@@ -221,6 +222,17 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
     display: block;
     inline-size: 100%;
     block-size: auto;
+  }
+
+  /* A section picture only backs the claim up: phones skip it, so the facts come sooner */
+  .picture-figure {
+    display: none;
+  }
+
+  /* A fact's title linking on (DigiLism) reads as the page's other links */
+  .item-title a {
+    color: var(--color-link);
+    font-family: var(--font-sans);
   }
 
   .split {
@@ -289,6 +301,20 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
 
     .split > .figure {
       grid-column: 7 / -1;
+    }
+
+    /* The heading beside a section picture: the picture takes the last four columns, so the claim's
+       column isn't left short beside a tall picture */
+    .picture-figure {
+      display: block;
+    }
+
+    .split.with-picture > .claim {
+      grid-column: 1 / 8;
+    }
+
+    .split.with-picture > .figure {
+      grid-column: 9 / -1;
     }
 
     .split.ui > .figure {

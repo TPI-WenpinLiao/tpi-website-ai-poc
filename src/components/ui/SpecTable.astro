@@ -20,12 +20,15 @@ interface Props {
 }
 
 const { rows, head, caption, emphasis = 'none' } = Astro.props;
-// A fact text with this many lines or more is a lead line and a list (site-research 第 2 條): the
-// list goes in two columns from --bp-sm-up, so nine short items don't make one tall column
+// A fact text of this many lines or more is a list (site-research 第 2 條), led by its first line when
+// that line ends in a colon: the items go in two columns, so short items don't make one tall column
+// (design-principles.md「內頁共用的規則」375 寬: short-word lists in two columns)
 const LIST_LINES = 5;
 const asList = (v: string) => {
   const lines = v.split('\n');
-  return lines.length >= LIST_LINES ? { lead: lines[0], list: lines.slice(1) } : undefined;
+  if (lines.length < LIST_LINES) return undefined;
+  const led = /[:：]$/.test(lines[0] ?? '');
+  return { lead: led ? lines[0] : undefined, list: led ? lines.slice(1) : lines };
 };
 const hasLinks = rows.some((r) => r.link);
 ---
@@ -58,7 +61,7 @@ const hasLinks = rows.some((r) => r.link);
                 const split = asList(v);
                 return split ? (
                   <>
-                    <p class="lead">{split.lead}</p>
+                    {split.lead && <p class="lead">{split.lead}</p>}
                     <ul class="columns">
                       {split.list.map((item) => (
                         <li>{item}</li>
@@ -120,16 +123,11 @@ const hasLinks = rows.some((r) => r.link);
 
   .columns {
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-1) var(--grid-gutter);
     margin: 0;
     padding: 0;
     list-style: none;
-  }
-
-  @media (--bp-sm-up) {
-    .columns {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
   }
 
   .link a {

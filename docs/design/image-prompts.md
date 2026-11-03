@@ -8,16 +8,16 @@
 
 - 風格：首頁 3D 的「緞帶世界」：白色等角方塊、白底、平塗、只有緞帶有紫→品紅→橘的漸層，幾個方塊頂面塗紫、品紅或橘。圖裡不放文字；要說明接點時，由 `MapPicture` 一類的 HTML 標籤疊上去
 - 生成方式：使用者用 ChatGPT 產生，上傳 `src/assets/design/ribbon/page-finance.webp` 當風格參考圖。收到 1448×1086（直式 1086×1448）的 PNG，用 `scripts/design/import-image.mjs` 轉成 `src/assets/design/<檔名>.webp`
-- 接進頁面：段落的 `image` 欄位（spec、timeline 放在標題旁，沒有介面片段的 band 放在片段的位置，`PageSections`）、`casesImage`（案例列右側，`CaseList` 的 `image`）、產品家族 hub 的 `heroImage`（沒有 hero 圖的產品頁沿用所屬家族的圖，`OfferingTemplate`）。圖是裝飾，alt 留空
+- 接進頁面：段落的 `image` 欄位（spec 放在 h2 旁的最後 4 欄，沒有介面片段的 band 放在片段的位置，375 寬不顯示，`PageSections`）、產品家族 hub 的 `heroImage`（沒有 hero 圖的產品頁沿用所屬家族的圖，`OfferingTemplate`）。圖是裝飾，alt 留空；哪些段落能放、每頁幾張，見 `design-principles.md`「內頁共用的規則」段落圖
 
 | 檔名 | 用在 | 這張圖要表達的事 |
 |---|---|---|
 | `sec-deployment.webp` | digiRunner「部署環境由企業決定」 | 同一個產品放在三種環境 |
-| `sec-open-banking.webp` | 金融「法規要求已做在產品裡」 | 開放銀行分三階段推進 |
 | `sec-identity.webp` | 金融「金融通路的身分驗證」 | 一次驗證，跨多個通路 |
 | `sec-planning.webp` | 金融「規劃與導入由同一家負責」（淺紫色帶，圖的地面也是淺紫） | 規劃與導入是同一條線 |
-| `sec-cases.webp` | digiRunner、金融的案例列右側（直式） | 多個機構接上同一個平台 |
 | `family-dx.webp`、`family-ai.webp`、`family-security.webp`、`family-esg.webp` | 四個產品家族頁的 hero，以及家族底下沒有 hero 圖的產品頁 | 各產品家族一張識別圖，只換頂面的顏色 |
+
+另外產生過 `sec-open-banking`（三階段的台階）與 `sec-cases`（案例列旁的直式圖），第二輪重評時評審指出時間列旁與案例列旁的圖把內容推後、和案例搶焦點，使用者決定不用，圖檔已刪除。
 
 每張的提示詞是下面的共用風格接上主體，再接負面描述，整段一次貼上：
 
@@ -28,10 +28,8 @@ Isometric 3D render in a clean architectural-model style, landscape 4:3 (1600x12
 | 檔名 | 主體 |
 |---|---|
 | `sec-deployment` | three separate low platforms placed side by side: a dense square cluster of short white blocks (on-premise data center), a loose cluster of rounded white blocks floating slightly above the ground (cloud), and a neat grid of identical small white cubes in rows (container cluster). On top of each platform stands one identical block with a flat purple (#662e8d) top; one ribbon passes through all three |
-| `sec-open-banking` | three wide white terraces rising like steps from left to right; the ribbon climbs onto each terrace in turn; one block on each terrace has a flat top: purple (#662e8d), then magenta (#b824d1), then orange (#ff6329) |
 | `sec-identity` | one tall white block with a flat purple (#662e8d) top in the left third, like a single gate; from it the ribbon splits into four thinner branches fanning out to the right, each ending at a small cluster with one magenta (#b824d1) or orange (#ff6329) top |
 | `sec-planning` | the ground is a very pale lavender (#f6f1fa); a low site-plan layout on the left with one purple-topped block, the same layout built up taller on the right with one orange-topped block; one unbroken ribbon joins them; empty space in the upper left |
-| `sec-cases`（portrait 3:4, 1200x1600） | one purple-topped block at the bottom center, the shared platform; four separate clusters of white blocks stacked up the frame, each with one magenta or orange top; the ribbon rises from the platform and branches to each cluster |
 | `family-*` | a single compact cluster of white blocks centered, one taller block in the middle with a flat top in the family's color (dx purple #662e8d, ai magenta #b824d1, security purple with a thin orange edge, esg orange #ff6329); the ribbon enters from the lower left, wraps once around the cluster and exits to the right |
 
 ## M3-02：深色方向的素材

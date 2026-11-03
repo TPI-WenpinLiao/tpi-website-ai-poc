@@ -99,7 +99,7 @@ const caseLink = (id: string) => {
   return c && { label: caseLinkLabel(c), href: entryPath('case-study', c) };
 };
 const caseRows = data.caseNotes
-  ? data.caseNotes.map((n) => ({ title: n.client, work: n.work, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? caseLink(n.caseStudy.id) : undefined }))
+  ? data.caseNotes.map((n) => ({ title: n.client ?? n.work, work: n.client ? n.work : undefined, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? caseLink(n.caseStudy.id) : undefined }))
   : ordered.map((c) => ({ title: c.data.client.disclosed ? c.data.client.name : c.data.clientDescription, link: { label: caseLinkLabel(c), href: entryPath('case-study', c) } }));
 const featuredPosts = new Set(data.featuredPosts?.map((r) => r.id));
 const posts = (await getCollection('blog', (b) => inLocale(b) && featuredPosts.has(b.id))).map(postCard);
@@ -202,11 +202,11 @@ const jsonLd = hubJsonLd({
     caseRows.length > 0 && (
       <Surface tone="light" id="cases" class="anchor-target">
         <SectionHeading title={localNode('success-stories', locale).title} description={data.caseNotes ? undefined : data.casesIntro} />
-        <CaseList items={caseRows} image={data.casesImage} mark={t.layout.mark} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
+        <CaseList items={caseRows} linkHeading mark={t.layout.mark} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
         {
           data.testimonial && (
             <figure class="testimonial">
-              <blockquote class="serif">
+              <blockquote>
                 <p>{data.testimonial.quote}</p>
               </blockquote>
               <figcaption>{data.testimonial.speaker}</figcaption>
@@ -245,7 +245,8 @@ const jsonLd = hubJsonLd({
     block-size: auto;
   }
 
-  /* A customer's words after the cases: the lead size, the speaker under it, no portrait */
+  /* A customer's words after the cases, quieter than the cases themselves (new-finance D3, #187): body
+     text in the lead size, the speaker under it, no portrait */
   .testimonial {
     display: flex;
     flex-direction: column;
@@ -256,7 +257,8 @@ const jsonLd = hubJsonLd({
 
   .testimonial blockquote {
     margin: 0;
-    font-size: var(--font-size-text);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
     line-height: var(--line-height-snug);
   }
 
