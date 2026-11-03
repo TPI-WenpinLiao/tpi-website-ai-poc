@@ -4,7 +4,8 @@
 #
 #   groups[]   group: heading written as a comment; url, locale: defaults for its facts;
 #              comment: optional line written under the heading
-#     facts[]  id, type, quote (verbatim from the page); optional: text (defaults to quote), url,
+#     facts[]  id, type, quote (verbatim from the page); optional: text (defaults to quote; may add
+#              punctuation and line breaks, not words), url,
 #              locale, status (defaults to confirmed), note (required for to_confirm), comment
 #   ignore[]   match: a regex over a text block of docs/strategy/facts-candidates.md;
 #              reason: why blocks it matches are not facts (shown in the report)
@@ -505,7 +506,14 @@ groups:
         status: to_confirm
         note: 宣稱 100% 合規，現站沒有寫出依據
       - { id: digirunner-fhir, type: feature, quote: 實現國際 FHIR 格式轉換 促進電子病歷資料共享 }
-      - { id: digirunner-five-applications, type: feature, quote: API Gateway 一站式的 API 管理，確保資料交換的速度與安全。 既有系統重構 透過API化、微服務化，提升系統效能並確保長期維護的彈性。 企業中台建構 }
+      - id: digirunner-five-applications
+        type: feature
+        quote: API Gateway 一站式的 API 管理，確保資料交換的速度與安全。 既有系統重構 透過API化、微服務化，提升系統效能並確保長期維護的彈性。 企業中台建構
+        comment: text splits the run of items into list items, one per line (#186)
+        text: |-
+          API Gateway：一站式的 API 管理，確保資料交換的速度與安全。
+          既有系統重構：透過 API 化、微服務化，提升系統效能並確保長期維護的彈性。
+          企業中台建構
       - { id: digirunner-smart-caching, type: feature, quote: 有效評估後端系統的運行狀態，判斷後端運行狀況再進行執行快取 }
       - { id: digirunner-load-balancing, type: feature, quote: 內建原生負載平衡機制，透過平台介面直接設定、即時啟動 }
       - { id: digirunner-parallel-processing, type: feature, quote: 零阻塞式運行模式增強 API 處理的效率和速度，讓多支 API 之間的運行互不干擾 }
@@ -519,7 +527,21 @@ groups:
         quote: 國內唯一符合遵循金管會法令
         status: to_confirm
         note: 「國內唯一」是最高級宣稱，現站沒有寫出依據
-      - { id: digirunner-financial-inspection, type: feature, quote: 針對金融檢查，完善 API 管理： API 生命週期作業 訂定交易限制 訂定連線識別名稱產製方式 定期盤點作業及風險評估 進行資源與服務監控作業 完善之服務憑證管理規範 進行分類分級管理 API Key 識別認證 採用 OAuth 2.0 }
+      - id: digirunner-financial-inspection
+        type: feature
+        quote: 針對金融檢查，完善 API 管理： API 生命週期作業 訂定交易限制 訂定連線識別名稱產製方式 定期盤點作業及風險評估 進行資源與服務監控作業 完善之服務憑證管理規範 進行分類分級管理 API Key 識別認證 採用 OAuth 2.0
+        comment: text splits the run of nouns into list items, one per line (#186)
+        text: |-
+          針對金融檢查，完善 API 管理：
+          API 生命週期作業
+          訂定交易限制
+          訂定連線識別名稱產製方式
+          定期盤點作業及風險評估
+          進行資源與服務監控作業
+          完善之服務憑證管理規範
+          進行分類分級管理
+          API Key 識別認證
+          採用 OAuth 2.0
       - id: digirunner-case-taishin
         type: case
         quote: 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。
@@ -604,9 +626,21 @@ groups:
     facts:
       - { id: open-banking-history, type: metric, quote: Open Banking 起源於 2015 年歐盟的 The Revised Payment Services Directive (PSD2)，隔年（2016）八月，由英國率先要求其國內九家大型銀行要採用，並於 2018 年強制導入 }
       - { id: open-banking-taiwan-2019, type: metric, quote: 2019 年，台灣金管會拍板定案，將台灣 Open Banking 導入分為三階段。, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
-      - { id: open-banking-stage-1, type: metric, quote: 2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
-      - { id: open-banking-stage-2, type: metric, quote: 2020 第二階段 個人資訊開放 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
-      - { id: open-banking-stage-3, type: metric, quote: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。, note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180） }
+      - id: open-banking-stage-1
+        type: metric
+        quote: 2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。
+        text: 2019 第一階段：公開資訊開放。開放商品資訊，如：匯率、房貸利息等。
+        note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
+      - id: open-banking-stage-2
+        type: metric
+        quote: 2020 第二階段 個人資訊開放 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。
+        text: 2020 第二階段：個人資訊開放。可透過第三方 APP 整合個人銀行帳戶及查詢餘額等。
+        note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
+      - id: open-banking-stage-3
+        type: metric
+        quote: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。
+        text: 2021 Q1 第三階段：全面開放。可透過第三方產品進行支付、交易、轉帳等。
+        note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
       - { id: digirunner-open-banking-3-stages, type: feature, quote: 昕力資訊實現三階段開放銀行規範 }
       - { id: digirunner-open-banking-fsc, type: feature, quote: 昕力資訊 digiRunner API 管理平台反應台灣開放銀行金管會法規要求 }
       - { id: digirunner-hot-deploy-50, type: feature, quote: digiRunner API 管理平台擁有專利的服務不中斷熱部署特點，在跨平台開發速度以及與下游應用系統的對接效率提升高達 50%, status: to_confirm, note: 成效數字（提升高達 50%）沒有依據或比較基準，與 TCO 低 40% 等同類宣稱一致處理；專利的部分另收 digirunner-hot-deploy-patent }
@@ -654,7 +688,16 @@ groups:
       - { id: gadodido-mfa, type: feature, quote: gadoDIDO結合FIDO2和UAF的生物辨識驗證識別與多因子核身流程 }
       - { id: gadodido-industries, type: feature, quote: 金融業應用FIDO 壽險產險業 健康照護 企業安全 電子商務 }
       - { id: gadodido-finance-group, type: feature, quote: gadoDIDO 為金融機構提供集團式的統一身分驗證管理，實現虛實整合的無縫體驗。用戶僅需註冊一次，即可在集團內各通路輕鬆驗證身份，享受24小時不間斷的金融服務。 }
-      - { id: gadodido-finance-uses, type: feature, quote: 網路銀行/行動銀行 數位帳戶/數位信用卡 證券/期貨開戶 線上數位申辨 投信交易 }
+      - id: gadodido-finance-uses
+        type: feature
+        quote: 網路銀行/行動銀行 數位帳戶/數位信用卡 證券/期貨開戶 線上數位申辨 投信交易
+        comment: text splits the run of items into list items, one per line (#186)
+        text: |-
+          網路銀行/行動銀行
+          數位帳戶/數位信用卡
+          證券/期貨開戶
+          線上數位申辨
+          投信交易
       - { id: gadodido-insurance, type: feature, quote: gadoDIDO可實現集團統一管控，用戶只需驗證一次，即可使用於集團內所有應用，大幅簡化用戶申辦與投保流程。 }
       - { id: gadodido-standards, type: feature, quote: 支援包括FIDO2和UAF，提高解決方案的可擴展性和互通性。 }
       - { id: gadodido-owasp, type: feature, quote: 為 OWASP Top 10 / CWE Top 25 }
@@ -892,7 +935,13 @@ groups:
       - { id: systalk-ai-claim-patent, type: feature, quote: 醫療理賠資料自動建檔 智能理賠專利 }
       - { id: systalk-ai-chat-patent, type: feature, quote: SysTalk.Chat 7/24 智能語音、文字客服機器人 兩腦一流程專利 }
       - { id: systalk-ai-service, type: feature, quote: 打造企業 雲/地端 AI 完整解決方案 }
-      - { id: systalk-ai-onboarding, type: feature, quote: 導入前 AI應用規劃與導入 AI 導入情境分析 解決方案搭配建議 效益評估 AI 服務導入 導入中 模型評估、微調 }
+      - id: systalk-ai-onboarding
+        type: feature
+        quote: 導入前 AI應用規劃與導入 AI 導入情境分析 解決方案搭配建議 效益評估 AI 服務導入 導入中 模型評估、微調
+        comment: text keeps the two phases as two list items, the four steps under 導入前 (#186)
+        text: |-
+          導入前（AI 應用規劃與導入）：AI 導入情境分析、解決方案搭配建議、效益評估、AI 服務導入
+          導入中：模型評估、微調
       - { id: systalk-ai-quote-email, type: company, quote: 取得報價：aiagent@tpisoftware.com }
 
   - group: SysTalk.Chat

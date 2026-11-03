@@ -9,7 +9,8 @@
 #
 #   id      unique, lowercase letters, digits and `-`; en and vi entries end in `-en`, `-vi`
 #   type    metric | client | certification | award | feature | case | company
-#   text    the wording a page shows; may add U+200B break points or trim the quote
+#   text    the wording a page shows; may trim the quote or add punctuation, spaces, line breaks
+#           (list items) and U+200B break points, never change or add words (#186)
 #   source  url: the current-site page; quote: the verbatim excerpt on that page
 #   locale  zh-TW | en | vi (a page only uses facts in its own locale)
 #   status  confirmed | to_confirm (pages only use confirmed facts)
@@ -2371,9 +2372,13 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#186)
 - id: digirunner-five-applications
   type: feature
-  text: API Gateway 一站式的 API 管理，確保資料交換的速度與安全。 既有系統重構 透過API化、微服務化，提升系統效能並確保長期維護的彈性。 企業中台建構
+  text: |-
+    API Gateway：一站式的 API 管理，確保資料交換的速度與安全。
+    既有系統重構：透過 API 化、微服務化，提升系統效能並確保長期維護的彈性。
+    企業中台建構
   source:
     url: https://www.tpisoftware.com/products/digirunner
     quote: API Gateway 一站式的 API 管理，確保資料交換的速度與安全。 既有系統重構 透過API化、微服務化，提升系統效能並確保長期維護的彈性。 企業中台建構
@@ -2462,9 +2467,20 @@
   status: to_confirm
   note: 「國內唯一」是最高級宣稱，現站沒有寫出依據
 
+# text splits the run of nouns into list items, one per line (#186)
 - id: digirunner-financial-inspection
   type: feature
-  text: 針對金融檢查，完善 API 管理： API 生命週期作業 訂定交易限制 訂定連線識別名稱產製方式 定期盤點作業及風險評估 進行資源與服務監控作業 完善之服務憑證管理規範 進行分類分級管理 API Key 識別認證 採用 OAuth 2.0
+  text: |-
+    針對金融檢查，完善 API 管理：
+    API 生命週期作業
+    訂定交易限制
+    訂定連線識別名稱產製方式
+    定期盤點作業及風險評估
+    進行資源與服務監控作業
+    完善之服務憑證管理規範
+    進行分類分級管理
+    API Key 識別認證
+    採用 OAuth 2.0
   source:
     url: https://www.tpisoftware.com/products/digirunner
     quote: 針對金融檢查，完善 API 管理： API 生命週期作業 訂定交易限制 訂定連線識別名稱產製方式 定期盤點作業及風險評估 進行資源與服務監控作業 完善之服務憑證管理規範 進行分類分級管理 API Key 識別認證 採用 OAuth 2.0
@@ -2832,7 +2848,7 @@
 
 - id: open-banking-stage-1
   type: metric
-  text: 2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。
+  text: 2019 第一階段：公開資訊開放。開放商品資訊，如：匯率、房貸利息等。
   source:
     url: https://www.tpisoftware.com/products/open-banking
     quote: 2019 第一階段 公開資訊開放 開放商品資訊， 如：匯率、房貸利息等。
@@ -2842,7 +2858,7 @@
 
 - id: open-banking-stage-2
   type: metric
-  text: 2020 第二階段 個人資訊開放 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。
+  text: 2020 第二階段：個人資訊開放。可透過第三方 APP 整合個人銀行帳戶及查詢餘額等。
   source:
     url: https://www.tpisoftware.com/products/open-banking
     quote: 2020 第二階段 個人資訊開放 可透過第三方APP整合 個人銀行帳戶及查詢餘額等。
@@ -2852,7 +2868,7 @@
 
 - id: open-banking-stage-3
   type: metric
-  text: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。
+  text: 2021 Q1 第三階段：全面開放。可透過第三方產品進行支付、交易、轉帳等。
   source:
     url: https://www.tpisoftware.com/products/open-banking
     quote: 2021 Q1 第三階段 全面開放 可透過第三方產品 進行支付、交易、轉帳等。
@@ -3119,9 +3135,15 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#186)
 - id: gadodido-finance-uses
   type: feature
-  text: 網路銀行/行動銀行 數位帳戶/數位信用卡 證券/期貨開戶 線上數位申辨 投信交易
+  text: |-
+    網路銀行/行動銀行
+    數位帳戶/數位信用卡
+    證券/期貨開戶
+    線上數位申辨
+    投信交易
   source:
     url: https://www.tpisoftware.com/products/gadodido
     quote: 網路銀行/行動銀行 數位帳戶/數位信用卡 證券/期貨開戶 線上數位申辨 投信交易
@@ -4424,9 +4446,12 @@
   locale: zh-TW
   status: confirmed
 
+# text keeps the two phases as two list items, the four steps under 導入前 (#186)
 - id: systalk-ai-onboarding
   type: feature
-  text: 導入前 AI應用規劃與導入 AI 導入情境分析 解決方案搭配建議 效益評估 AI 服務導入 導入中 模型評估、微調
+  text: |-
+    導入前（AI 應用規劃與導入）：AI 導入情境分析、解決方案搭配建議、效益評估、AI 服務導入
+    導入中：模型評估、微調
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
     quote: 導入前 AI應用規劃與導入 AI 導入情境分析 解決方案搭配建議 效益評估 AI 服務導入 導入中 模型評估、微調

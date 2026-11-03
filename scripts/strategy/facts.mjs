@@ -4,6 +4,7 @@
 //
 //   node scripts/strategy/facts.mjs             offline, part of `npm run check`:
 //     - every entry matches the schema in src/data/facts.ts (fields listed in facts.yaml's header)
+//     - a confirmed fact's text keeps the quote's words: only punctuation, spaces and line breaks added
 //     - every fact a page uses exists, is confirmed and is in the page's locale
 //     - a page whose copy has an Arabic number (80%, 1,200, 3.5) or the name of a `client` fact
 //       uses a fact whose text has it; otherwise the number or name is not traceable and fails
@@ -14,7 +15,8 @@
 // Pages checked: src/data/home/<locale>.ts and src/data/site.ts (every exported string; facts used
 // via fact('<id>') in the source), and the Markdown entries of src/content that are not verbatim
 // migrations: `sourceUrl: []` or a `facts` field (frontmatter strings and body; facts listed in `facts`).
-// Strategy documents (#165, #166): docs/strategy/messaging.md, design-principles.md and briefs/*.md cite facts as
+// Strategy documents (#165, #166, #186): docs/strategy/messaging.md, design-principles.md, briefs/*.md and the
+// research documents competitors.md and search-intent.md cite facts as
 // `fact:<id>`; each must exist and be zh-TW, and confirmed unless it sits under a heading that names
 // it as missing evidence (缺少證據) or to confirm (待確認).
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -47,7 +49,13 @@ export function validateFacts(data) {
         f.status === 'confirmed'
           ? pending.filter((c) => c.locale === f.locale && f.text.includes(c.text)).map((c) => `${FACTS_FILE} ${f.id}: confirmed text names client ${c.text}, which is ${c.status} (${c.id})`)
           : [];
-      return [...extra, ...named];
+      // A readable `text` may add punctuation, spaces or line breaks to a fragment quote (#186), but
+      // keeps its words: without them, text is part of the quote. Only confirmed facts reach pages
+      const reworded =
+        f.status === 'confirmed' && !wording(f.source.quote).includes(wording(f.text))
+          ? [`${FACTS_FILE} ${f.id}: text changes or adds words of source.quote (only punctuation, spaces and line breaks may be added)`]
+          : [];
+      return [...extra, ...named, ...reworded];
     });
   }
   return result.error.issues.map((i) => {
@@ -57,6 +65,13 @@ export function validateFacts(data) {
     return `${FACTS_FILE} ${where}${field ? ` ${field}` : ''}: ${i.message}`;
   });
 }
+
+/**
+ * The words of a string: full-width folded, whitespace, U+200B and punctuation dropped
+ * 「2019 第一階段 公開資訊開放」and「2019 年第一階段：公開資訊開放」differ only by 年
+ * @param {string} s
+ */
+export const wording = (s) => s.normalize('NFKC').replace(/[\s​\p{P}]/gu, '');
 
 /**
  * Arabic numbers in a string, full-width digits folded, thousands separators dropped:
@@ -205,7 +220,8 @@ export function checkStrategyDoc(name, md, facts, locale = 'zh-TW') {
 
 function strategyDocs() {
   const briefs = join(ROOT, 'docs/strategy/briefs');
-  const files = [join(ROOT, 'docs/strategy/messaging.md'), join(ROOT, 'docs/strategy/design-principles.md'), ...(existsSync(briefs) ? readdirSync(briefs).filter((f) => f.endsWith('.md')).map((f) => join(briefs, f)) : [])];
+  const docs = ['messaging.md', 'design-principles.md', 'competitors.md', 'search-intent.md'];
+  const files = [...docs.map((f) => join(ROOT, 'docs/strategy', f)), ...(existsSync(briefs) ? readdirSync(briefs).filter((f) => f.endsWith('.md')).map((f) => join(briefs, f)) : [])];
   return files.filter((p) => existsSync(p)).map((p) => ({ name: relative(ROOT, p).split('\\').join('/'), md: readFileSync(p, 'utf8') }));
 }
 
