@@ -156,6 +156,19 @@ export const strings = {
     unsubscribeSubmit: '取消訂閱',
   },
   pages,
+  // Offering and hub sections laid out by their brief (#187): the 示意 mark of interface fragments,
+  // the states of a junction diagram's nodes, the column names of spec and mapping tables
+  layout: {
+    mark: '示意',
+    down: '故障',
+    standby: '待命',
+    item: '項目',
+    content: '內容',
+    requirement: '要求',
+    feature: '對應的功能',
+    more: '延伸閱讀',
+    allCases: '看所有成功案例',
+  },
   offering: {
     demo: '預約演示',
     seeFeatures: '看功能',

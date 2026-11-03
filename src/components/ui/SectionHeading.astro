@@ -1,36 +1,30 @@
 ---
-// Heading block that opens a page section: optional index ("01") and mono eyebrow on an energy
-// line, the heading, optional lead text. The level is set by the caller so headings never skip a
-// level (seo-checklist); `size="display"` is for the one statement section per page, `size="sm"` for a
+// Heading block that opens a page section: the heading and optional lead text, nothing above it (no
+// index, eyebrow or rule; design-principles.md「內頁共用的規則」, #187). The heading says the answer
+// to the section's question. The level is set by the caller so headings never skip a level
+// (seo-checklist); `size="display"` is for the one statement section per page, `size="sm"` for a
 // heading inside a panel (a form's error summary).
+// `weight="secondary"` is for the minor sections (related posts, sub-pages, related offerings): the
+// heading drops to --font-size-text, so it weighs less than the cases and facts above it.
 // The `action` slot puts links for the whole section (所有成功案例, 部落格) on the heading's row,
 // at its end on wide screens and below it when the row is too narrow.
 interface Props {
   title: string;
   level?: 2 | 3;
-  index?: string;
-  eyebrow?: string;
-  description?: string;
+  description?: string | undefined;
   size?: 'default' | 'display' | 'sm';
+  weight?: 'primary' | 'secondary';
   align?: 'start' | 'center';
 }
 
-const { title, level = 2, index, eyebrow, description, size = 'default', align = 'start' } = Astro.props;
+const { title, level = 2, description, size = 'default', weight = 'primary', align = 'start' } = Astro.props;
 const Heading = `h${level}` as const;
 const hasAction = Astro.slots.has('action');
 ---
 
 <header class:list={['section-heading', align, { 'has-action': hasAction }]}>
   <div class="copy">
-    {
-      (index || eyebrow) && (
-        <p class="eyebrow">
-          {index && <span class="index">{index}</span>}
-          {eyebrow && <span>{eyebrow}</span>}
-        </p>
-      )
-    }
-    <Heading class:list={['title', `level-${level}`, size]}>{title}</Heading>
+    <Heading class:list={['title', `level-${level}`, size, weight]}>{title}</Heading>
     {description && <p class="description text-phrase">{description}</p>}
   </div>
   {
@@ -70,30 +64,6 @@ const hasAction = Astro.slots.has('action');
     gap: var(--space-2);
   }
 
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin: 0;
-    color: var(--color-text-muted);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-xs);
-    letter-spacing: var(--letter-spacing-mono);
-    text-transform: uppercase;
-  }
-
-  .eyebrow::after {
-    content: '';
-    inline-size: var(--space-12);
-    block-size: var(--border-width);
-    background: var(--gradient-energy);
-  }
-
-  .index {
-    color: var(--color-text-accent);
-    font-weight: var(--font-weight-semibold);
-  }
-
   .title {
     margin: 0;
     color: var(--color-text);
@@ -117,8 +87,10 @@ const hasAction = Astro.slots.has('action');
     letter-spacing: var(--letter-spacing-display);
   }
 
-  .sm {
-    font-size: var(--font-size-h4);
+  .sm,
+  .secondary {
+    font-size: var(--font-size-text);
+    line-height: var(--line-height-snug);
   }
 
   .description {

@@ -35,7 +35,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | 層 | 位置 | 放什麼 |
 |---|---|---|
 | tokens | `src/styles/tokens.css`、`media.css` | design tokens（三層，見「Token 分層」）與斷點 |
-| base | `src/styles/base.css`（只由 `BaseLayout` import） | reset（`box-sizing`、`body`）、標題與 `.text-phrase` 的換行、`[data-surface='dark']` 的底色、`:focus-visible`、跨元件的工具類（`.sr-only`、`.anchor-target`、`.signal-dot`、`.ruled-list`） |
+| base | `src/styles/base.css`（只由 `BaseLayout` import） | reset（`box-sizing`、`body`）、標題與 `.text-phrase` 的換行、`[data-surface='dark']` 的底色、`:focus-visible`、跨元件的工具類（`.sr-only`、`.anchor-target`、`.row-list`） |
 | 元件 | `src/components/ui/*.astro` 的 scoped `<style>` | 跨頁共用的區塊：卡片格線（`CardGrid`）、表單面板（`FormPanel`）、標籤列（`TagList`）、長文排版（`Prose`）等 |
 | 模板與頁面 | `src/layouts/templates/`、`src/pages/` 的 scoped `<style>` | 只屬於這個模板或頁面的版面 |
 
@@ -73,7 +73,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 - 品牌色沿用現站（2026-10-21 審核確認）：紫 `--purple-700`（`#662e8d`）、品紅 `--magenta-500`（`#b824d1`）、橘 `--orange-500`（`#ff6329`）。橘 500 對白只有 2.97:1，只當裝飾（`--color-accent`）
 - glass（`--glass-bg`）是半透明面板，背後可能是 3D 場景最亮的地方。對比以 `--scene-worst`（該 surface 最不利的背景）合成後計算
-- 字型：`--font-sans` 是 Inter＋系統中文字；`--font-mono`（JetBrains Mono）只用在編號、eyebrow、資料標籤。兩者的 `@font-face` 只寫在 `base.css` 開頭，只宣告 latin、vietnamese、greek 三個 subset，不 import fontsource 的整包 CSS。中文 webfont 只有標題的 `--font-serif`（Noto Serif TC 700），每頁只載自己的字：`src/integrations/serif-fonts.ts` 在 build 後替每頁從來源檔 `src/assets/fonts/noto-serif-tc-700.woff2` 切出該頁 h1–h3 與 `.serif` 用到的字（10–40 KB），在 head 插入 inline `@font-face`；`base.css` 沒有這個字型的 `@font-face`。全站共用一個 200 KB 的檔會讓 Lighthouse performance 掉到 0.83–0.93（#167）。來源檔由 `node scripts/design/serif-subset.mjs` 從 `dist/` 收集全站的標題字合成，新標題用到新字時 `font-subsets.mjs` 失敗，要 build → 重跑這支 script → 再 build（需要 fonttools，用法寫在 script 開頭）；build 本身只用 npm 套件 `subset-font`，不需要 Python。頁面文字碰到哪個 subset，首次繪製前就下載哪個檔，contact 頁曾因一個「ō」多下載 83 KB（#143）。`npm run check` 的 `font-subsets.mjs` 在頁面出現這三個 subset 以外的字元、或範圍與套件的 `unicode.json` 不一致時失敗，例外列在它的 `ALLOWED`
+- 字型：`--font-sans` 是 Inter＋系統中文字；`--font-mono`（JetBrains Mono）只用在程式碼與網址（`Prose` 的 code、搜尋結果的網址），不用在標題、小標與標籤（#187）。兩者的 `@font-face` 只寫在 `base.css` 開頭，只宣告 latin、vietnamese、greek 三個 subset，不 import fontsource 的整包 CSS。中文 webfont 只有標題的 `--font-serif`（Noto Serif TC 700），每頁只載自己的字：`src/integrations/serif-fonts.ts` 在 build 後替每頁從來源檔 `src/assets/fonts/noto-serif-tc-700.woff2` 切出該頁 h1–h3 與 `.serif` 用到的字（10–40 KB），在 head 插入 inline `@font-face`；`base.css` 沒有這個字型的 `@font-face`。全站共用一個 200 KB 的檔會讓 Lighthouse performance 掉到 0.83–0.93（#167）。來源檔由 `node scripts/design/serif-subset.mjs` 從 `dist/` 收集全站的標題字合成，新標題用到新字時 `font-subsets.mjs` 失敗，要 build → 重跑這支 script → 再 build（需要 fonttools，用法寫在 script 開頭）；build 本身只用 npm 套件 `subset-font`，不需要 Python。頁面文字碰到哪個 subset，首次繪製前就下載哪個檔，contact 頁曾因一個「ō」多下載 83 KB（#143）。`npm run check` 的 `font-subsets.mjs` 在頁面出現這三個 subset 以外的字元、或範圍與套件的 `unicode.json` 不一致時失敗，例外列在它的 `ALLOWED`
 - 3D：緞帶世界的顏色只從 `--map-*`（地面、方塊、既有系統、核心系統）與 `--ribbon-*`（緞帶的三色）讀，live 版由 `src/lib/scene/ribbon/runtime.ts` 讀 computed style，靜態圖由 `scripts/design/ribbon-capture.mjs` 讀 `tokens.css`；TS 不寫色碼
 
 ## Token 命名
@@ -134,32 +134,40 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 | 元件 | 用途 | 重點 |
 |---|---|---|
-| `Surface` | 頁面區塊 | `tone` 切換亮暗；`pattern="grid"` 畫由上往下淡出的座標格線；`width="reading"` 收窄到閱讀寬度；同 tone 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
-| `PageHero` | 頁面開場 | 預設深色＋格線；輸出該頁唯一的 h1（display 字級）；`visual` slot 放 3D 場景或其靜態版本；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」）；待改（#187，依據 #168 的評審）：h1 上方的 eyebrow 違反 `design-principles.md` P1，見 `docs/strategy/evaluation.md`「新版還不夠好的地方」 |
-| `SectionHeading` | 區塊標題 | `index`（`01`）＋mono eyebrow＋漸層線；`level` 由呼叫端指定，避免跳級；`size="display"` 每頁最多一次，`size="sm"` 用在面板裡的標題（表單的錯誤摘要）；`action` slot 放整區的連結（同一列靠右）；待改（#187，依據 #168 的評審）：`01` 編號、mono 大寫 eyebrow 與短線違反 P1、P2，見 `docs/strategy/evaluation.md`「新版還不夠好的地方」 |
-| `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；小圓角（`--radius-md`）；primary 發光上浮、secondary 漸層外框、text；`disabled` 只存在於 `<button>` |
+| `Surface` | 頁面區塊 | `tone` 切換亮暗；`fill`（`subtle` 淺灰、`brand` 淺紫）把亮底加深一階，用來分開判斷組，不用分隔線或框（#187）；`width="reading"` 收窄到閱讀寬度；同 tone、同 fill 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
+| `PageHero` | 頁面開場 | 輸出該頁唯一的 h1，上方不放任何小標（上層節點只在麵包屑，`design-principles.md` P1，#187）；h1 下依序是 `description`、`lead`（一句說明）、`points`（事實原文的證據點，每則可帶一行緊貼的 `note` 條件）、`meta`（一行附註，例如案例的產業）、`actions` slot；`visual` slot 放同一個世界的靜態圖；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」） |
+| `SectionHeading` | 區塊標題 | 只有標題、`description` 與 `action` slot，不加編號、eyebrow 與短線（#187）；標題寫這段回答的問題的答案；`level` 由呼叫端指定，避免跳級；`weight="secondary"` 給次要段落（相關文章、子頁、相關產品），標題降到 `--font-size-text`；`size="display"` 每頁最多一次，`size="sm"` 用在面板裡的標題（表單的錯誤摘要）；`action` slot 放整區的連結（同一列靠右） |
+| `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；全部平塗、沒有陰影與上浮（#187）：primary 實心紫、secondary 淺紫底、text 沒有底；hover 只換顏色；`disabled` 只存在於 `<button>` |
 | `Link` | 內文連結、獨立連結 | 內文連結一律底線；`external` 加 ↗ 與「（外部網站）」螢幕閱讀器文字 |
-| `Tag` | 標籤 | `neutral`、`brand`、`node`（mono＋發光點，用於模組與技術關鍵字）；有 `href` 才是連結 |
-| `Card` | 列表卡片 | 玻璃面板，hover／focus 時傾斜、亮起漸層外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`size="sm"` 是只有標題、手機上一列兩張的短卡；`date` 在 meta 列顯示日期；沒有 `href` 是不能點的靜態面板（功能、應用情境），meta 裡的 `Tag` 連結各自可點；待改（#187，依據 #168 的評審）：細框與同尺寸卡片列違反 P2、P5，見 `docs/strategy/evaluation.md`「新版還不夠好的地方」 |
+| `Tag` | 標籤 | `neutral`、`brand`，淺底文字，沒有 mono 與光點（#187）；有 `href` 才是連結。產品頁連到產業頁要寫成看得出目的地的文字連結，不用 `Tag` |
+| `Card` | 列表卡片 | 比頁面深一階的底色，沒有框、玻璃、陰影與傾斜（#187）；hover／focus 只換標題的顏色與底線，focus 由整張卡畫外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`category`（分類、新聞類型、產業）與 `date` 放在 meta 列，不當 eyebrow；`size="sm"` 是只有標題、手機上一列兩張的短卡；沒有 `href` 是不能點的靜態面板，meta 裡的 `Tag` 連結各自可點。offering、hub 模板不用卡片 |
 | `FormField` | 表單欄位 | `kind` 區分 text／email／tel／textarea／select／checkbox；hint、error 以 `aria-describedby` 連到欄位，error 加 `aria-invalid`；有連結的說明（個資同意的隱私權政策）放 `hint` slot |
 | `FormGroup` | 多選題 | `fieldset`＋`legend`，選項是不帶 `required` 的 `FormField` checkbox，`--bp-sm-up` 起兩欄；`error` 屬於整組（至少選一項），以 `aria-describedby` 連到 fieldset，`id` 給錯誤摘要連結 |
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
-| `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的深色玻璃列；寬度小於 64rem 收進「選單」 |
+| `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的亮底列，沒有下框線（#187），展開的選單面板可以有陰影；寬度小於 64rem 收進「選單」 |
 | `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入） |
 | `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴 |
-| `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動 |
+| `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；和頁面用一階底色分開，不用下框線（#187）；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動 |
 | `Faq` | 常見問題 | 原生 `<details>`，零 JS |
-| `FactRow` | 論點與撐住它的事實 | 左邊 `SectionHeading`（`level`、`index`、`description`）加選填的 `link`，右邊是 default slot 的 `<li>` 事實清單，64rem 以上照 12 欄並排；offering 的功能與 hub 的 `sections` 用它（#167） |
+| `FactRow` | 論點與撐住它的事實 | `design-principles.md`「內頁的版型」的「主張與原文」：左邊 `SectionHeading`（`level`、`description`）加選填的 `link`，右邊是 default slot 的 `<li>` 事實清單，用間距分開，沒有線與編號（#187）；64rem 以上照 12 欄並排（1–5、7–12） |
+| `PageSections` | offering、hub 依 brief 排的段落 | 讀內容檔的 `sections`（`src/content.config.ts` 的 `pageSection`），每段一個 `Surface`，照 `layout` 用 `FactRow`（claim）、`JunctionDiagram`（junction）、`UiFragment`（ui，`flip` 左右對調，`index` 接 `IndexList`）、`SpecTable`（spec）、`Timeline`（timeline，可接對應表）、`CaseList`（results）或淺紫色帶（band）；版型依據是 `design-principles.md`「內頁的版型」，相鄰兩段不用同一種（#187）；有 `id` 的段落是 `InPageNav` 的錨點 |
+| `JunctionDiagram` | 接點圖 | 三欄：既有系統（中性）、產品（紫）、新的服務（橘），欄位相鄰用平塗色塊表示接上，不畫細線箭頭；節點可標 `down`（故障）、`standby`（待命），高可用架構用；HTML 畫，文字是事實的用詞；`caption` 一句話說圖在講什麼；窄螢幕三欄上下排 |
+| `UiFragment` | 介面片段 | HTML 畫的產品畫面局部，標「示意」（`mark`）、帶 `data-ui`；只畫事實寫得出的面板名稱、分頁、設定項目與狀態（`state`：on、off、down、next），不畫筆數、時間、曲線、客戶名單；同一頁的片段用同一個外框 |
+| `SpecTable` | 規格表、對應表 | 真的 `<table>`：一列一個項目（部署方式、標準、規範），事實原文一格，選填的 `link` 一格；可以有列線（house rules 對真表格的例外）；`emphasis="name"` 讓第一欄用襯線粗體（對應表的規範名稱）；欄名只給螢幕閱讀器 |
+| `Timeline` | 時間列 | 真的 `<ol>`：年份在前（襯線粗體、`tabular-nums`），事實原文在後，一列一則 |
+| `CaseList` | 案例列、成果列 | 一列一則，用間距分開，不做等大卡片：客戶（或作業名稱）用襯線粗體，接著作業、成果原文（數字加粗）、獎項、連結（錨點帶客戶或案例名）；`fragment` 在旁邊放這則作業的 `UiFragment`；`lead` 讓第一則的成果字級大一級；事實庫沒有成果時不放那一行；`more` 是「看所有成功案例」 |
+| `IndexList` | 索引列 | 次要段落（相關文章、子頁、相關產品、下載）的一列一項：名稱（`--font-size-text` 的襯線粗體）、一句、日期、選填小縮圖；沒有框，整列可點，hover 只換名稱的顏色與底線；搭配 `SectionHeading weight="secondary"` |
+| `MapPicture` | hero 的靜態圖加標籤 | 同一個世界渲染的靜態圖（`src/assets/design/ribbon/`），`labels` 依 `pictures.json` 的錨點（core、legacy、product、model、service、ai0–ai2）放 HTML 標籤，落在圖外的不放；位置由 `src/lib/scene/ribbon/labels.ts` 算（首頁的地圖標籤共用）；`priority` 給 hero |
 | `CardGrid` | 卡片列表 | 手機一欄、`--bp-sm-up` 兩欄、`--bp-lg-up` 三欄（`cols`）；同一列等高；`compact` 讓手機也一列兩張短卡 |
-| `ContactCta` | 每頁最後的聯絡區塊 | 文案取自現站；按鈕連到目前語系的聯絡我們，`label` 可換成「預約演示」 |
+| `ContactCta` | 每頁最後的聯絡區塊 | 整段是深紫帶（`tone="dark"`），平塗按鈕，沒有格線、框與光暈（#187）；按鈕連到目前語系的聯絡我們，`label` 可換成「預約演示」 |
 | `Prose` | 長文 | Markdown 內文的排版，`:global()` 只作用在自己內部 |
 | `FilterBar` | 列表篩選 | 有 `href` 的項目是連結（blog 分類），沒有的是標籤；窄螢幕在列內橫向捲動 |
 | `Pagination` | 列表分頁 | 第 2 頁起 `/page/n`（ADR 0002）；只有一頁不輸出 |
 | `EmptyState` | 沒有項目時 | 虛線框、標題、說明與 `action` slot |
 | `SearchResults` | `/search` 的搜尋結果 | Pagefind 的 island：`form` 是頁面 GET 搜尋表單的 id（欄位 `q`），第一次 focus 或網址有 `?q=` 才載入 `/pagefind/pagefind.js`，其他頁面不用。狀態 idle／loading／results／none／error 由 `data-state` 切換，每次顯示 10 筆加「顯示更多」；`level` 是結果標題與狀態標題的層級；`preview` 只給 `/design-system` 畫靜態狀態。索引範圍見 `PageLayout` 的 `searchTrail` |
-| `FormPanel` | 頁面唯一的表單 | 有標題的面板，表單以標題命名；送出按鈕放 `actions` slot。標題下方是送出後的狀態區（`role="alert"`、`tabindex="-1"`）：`errors` 是錯誤摘要（`SectionHeading size="sm"` 的編號 eyebrow，下面每個錯誤一列、連到欄位，錯誤色只用在編號，不用淡紅底與左側粗線），`message` 是整張表單的訊息（送出失敗、安全驗證未通過）；`challenge` 在按鈕上方預留 Turnstile 的高度（窄螢幕 compact、`--bp-sm-up` 起 flexible，`--challenge-height*`），`preview` 在展示頁畫出預留框；`busy` 加 `aria-busy`。要送出的表單傳 `form`（`src/lib/forms/rules.ts` 的 id）、`action`、`next`：script 用同一套規則驗證、填入錯誤、第一次 focus 時載入 Turnstile、成功後導到 `next`（ADR 0005）；錯誤元素預先 render，script 才不會失去 scoped 樣式 |
+| `FormPanel` | 頁面唯一的表單 | 有標題的面板，表單以標題命名；送出按鈕放 `actions` slot。標題下方是送出後的狀態區（`role="alert"`、`tabindex="-1"`）：`errors` 是錯誤摘要（`SectionHeading size="sm"` 的標題，下面的 `<ol>` 每個錯誤一列、連到欄位，錯誤色只用在編號，不用淡紅底與左側粗線），`message` 是整張表單的訊息（送出失敗、安全驗證未通過）；`challenge` 在按鈕上方預留 Turnstile 的高度（窄螢幕 compact、`--bp-sm-up` 起 flexible，`--challenge-height*`），`preview` 在展示頁畫出預留框；`busy` 加 `aria-busy`。要送出的表單傳 `form`（`src/lib/forms/rules.ts` 的 id）、`action`、`next`：script 用同一套規則驗證、填入錯誤、第一次 focus 時載入 Turnstile、成功後導到 `next`（ADR 0005）；錯誤元素預先 render，script 才不會失去 scoped 樣式 |
 | `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
 | `VideoFacade` | 影片 | `video` 是 `{ kind: 'youtube', id }` 或 `{ kind: 'file', src }`（自架 MP4）；初始只有本機 `poster` 與原生 `<button>`，播放器在 `<template>` 裡，點擊後才換上並取得焦點，首次載入不請求第三方資源；`poster` 不用 YouTube 縮圖；`title` 是圖說、按鈕的 accessible name 與播放器的 `title`；`node scripts/design/video-facade.mjs` 檢查（`npm run check`） |
 | `ConsentBanner` | cookie 同意 | 固定在視窗底部、不擋操作的深色橫幅，加上原生 `<dialog>` 的偏好設定（`showModal()` 鎖住焦點、Esc 關閉，關閉後焦點回到打開它的按鈕）；接受與拒絕同一個視覺層級；必要類別固定開啟，其他類別是 `role="switch"` 的 checkbox。只由 `PageLayout` 在 build 有 `PUBLIC_GTM_ID` 時放在 `body` 層級（放進有 transform 或 stacking context 的容器會被蓋住），內部頁不放；顯示時以 `scroll-padding-block-end` 與頁尾後的 spacer 留出橫幅高度，焦點不會被蓋住（WCAG 2.4.11），類別與文案來自 `src/data/consent.ts`，`config` 交給 script 儲存選擇與載入 GTM（ADR 0007）；任何帶 `data-consent-open="<id>-dialog"` 的按鈕都能打開對話框。`preview` 只給 `/design-system`，不儲存也不載入 |

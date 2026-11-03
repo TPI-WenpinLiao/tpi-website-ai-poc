@@ -84,7 +84,7 @@ const jsonLd = props.kind === 'not-found' ? undefined : graph(breadcrumbList(tra
     {
       props.kind === 'download' && (
         <section>
-          <SectionHeading eyebrow="Downloads" title={u.downloads} />
+          <SectionHeading title={u.downloads} />
           <CardGrid cols={1}>
             {(props.offering.data.downloads ?? []).map((d) => (
               <li>
@@ -98,7 +98,7 @@ const jsonLd = props.kind === 'not-found' ? undefined : graph(breadcrumbList(tra
     {
       (props.kind === 'thanks' || props.kind === 'subscribe-result' || props.kind === 'not-found') && (
         <section>
-          <SectionHeading eyebrow="Next" title={props.kind === 'not-found' ? u.commonLinks : u.recommended} />
+          <SectionHeading title={props.kind === 'not-found' ? u.commonLinks : u.recommended} />
           <CardGrid cols={2}>
             {onward.map((n) => (
               <li>

@@ -92,7 +92,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   jsonLd={jsonLd}
   translations={translations}
 >
-  <PageHero tone="light" size="compact" eyebrow={section} title={data.title}>
+  <PageHero tone="light" size="compact" title={data.title}>
     <Breadcrumb slot="breadcrumb" node={nodeId} current={data.title} />
     <dl slot="actions" class="meta">
       {
@@ -134,7 +134,7 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   {
     offerings.length > 0 && (
       <Surface tone="light">
-        <SectionHeading eyebrow="Related" title={t.offering.related} />
+        <SectionHeading title={t.offering.related} />
         <CardGrid>
           {offerings.map((o) => (
             <li>
@@ -149,12 +149,12 @@ const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
   {
     more.length > 0 && (
       <Surface tone="light" class="more">
-        <SectionHeading eyebrow="More" title={props.kind === 'blog' ? t.relatedPosts : t.article.moreNews} />
+        <SectionHeading title={props.kind === 'blog' ? t.relatedPosts : t.article.moreNews} />
         <CardGrid>
           {more.map((p, i) => (
             <li>
               <Reveal delay={stagger(i)}>
-                <Card title={p.title} href={p.href} eyebrow={p.eyebrow} image={p.image} date={p.date} />
+                <Card title={p.title} href={p.href} category={p.category} image={p.image} date={p.date} />
               </Reveal>
             </li>
           ))}

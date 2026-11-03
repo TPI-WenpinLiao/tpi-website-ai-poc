@@ -1,0 +1,64 @@
+---
+// Facts in their order (#187, design-principles.md「內頁的版型」時間列): a real <ol>, one row a step,
+// the year first (bold serif, tabular figures), the fact text after it. The year is the label of the
+// row; the fact text keeps its own year too, verbatim.
+interface Props {
+  steps: readonly { year: string; body: string }[];
+}
+
+const { steps } = Astro.props;
+---
+
+<ol class="timeline">
+  {
+    steps.map((s) => (
+      <li>
+        <span class="year serif">{s.year}</span>
+        <span class="body">{s.body}</span>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  @import '../../styles/media.css';
+
+  .timeline {
+    display: grid;
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .year {
+    font-size: var(--font-size-text);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--line-height-snug);
+  }
+
+  .body {
+    white-space: pre-line;
+  }
+
+  @media (--bp-lg-up) {
+    li {
+      grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+      gap: var(--grid-gutter);
+      align-items: baseline;
+    }
+
+    .year {
+      grid-column: span 2;
+    }
+
+    .body {
+      grid-column: span 8;
+    }
+  }
+</style>

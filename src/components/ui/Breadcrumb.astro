@@ -77,8 +77,7 @@ const trail = breadcrumb(node, locale).map((n, i, all) => (current && i === all.
   /* Separator: a slash in the accent color, with empty alt text so screen readers skip it */
   li + li::before {
     content: '/' / '';
-    color: var(--color-text-accent);
-    font-family: var(--font-mono);
+    color: var(--color-text-muted);
   }
 
   /* Links keep the touch-target height; the row wraps between items, never inside a name */

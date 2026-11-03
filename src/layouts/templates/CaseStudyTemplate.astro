@@ -64,9 +64,6 @@ const jsonLd = caseStudyJsonLd({
   offerings: offerings.map((o) => ({ kind: o.data.kind, name: o.data.title, url: new URL(nodeEntryPath(o), site).href })),
 });
 const stagger = (i: number) => (i % 3) as 0 | 1 | 2;
-// Migrated cases have only the Markdown body (M5-03, #28), so the challenge part is left out and
-// the approach part is numbered 01
-const approachIndex = data.challenge ? '02' : '01';
 ---
 
 <PageLayout
@@ -78,7 +75,7 @@ const approachIndex = data.challenge ? '02' : '01';
   jsonLd={jsonLd}
   translations={translations}
 >
-  <PageHero eyebrow={industryTitle(data.industry, locale)} title={data.title} description={client}>
+  <PageHero title={data.title} description={client} meta={industryTitle(data.industry, locale)}>
     <Breadcrumb slot="breadcrumb" node="case-study" current={data.title} />
     {
       data.client.disclosed && data.client.logo && (
@@ -90,8 +87,8 @@ const approachIndex = data.challenge ? '02' : '01';
 
   {
     results.length > 0 && (
-      <Surface tone="light" pattern="grid">
-        <SectionHeading eyebrow="Results" title={t.caseStudy.results} />
+      <Surface tone="light">
+        <SectionHeading title={t.caseStudy.results} />
         <CardGrid>
           {results.map((r, i) => (
             <li>
@@ -109,13 +106,13 @@ const approachIndex = data.challenge ? '02' : '01';
     {
       data.challenge && (
         <section class="part">
-          <SectionHeading index="01" eyebrow="Challenge" title={t.caseStudy.challenge} />
+          <SectionHeading title={t.caseStudy.challenge} />
           <Prose><p>{data.challenge}</p></Prose>
         </section>
       )
     }
     <section class="part">
-      <SectionHeading index={approachIndex} eyebrow="Approach" title={t.caseStudy.solution} />
+      <SectionHeading title={t.caseStudy.solution} />
       <Prose>
         {data.solution && <p>{data.solution}</p>}
         <Content />
@@ -126,7 +123,7 @@ const approachIndex = data.challenge ? '02' : '01';
   {
     offerings.length > 0 && (
       <Surface tone="light">
-        <SectionHeading eyebrow="Used" title={t.caseStudy.offerings} />
+        <SectionHeading title={t.caseStudy.offerings} />
         <CardGrid>
           {offerings.map((o) => (
             <li>
@@ -140,13 +137,13 @@ const approachIndex = data.challenge ? '02' : '01';
 
   {
     others.length > 0 && (
-      <Surface tone="light" pattern="grid">
-        <SectionHeading eyebrow="More stories" title={t.caseStudy.others} />
+      <Surface tone="light">
+        <SectionHeading title={t.caseStudy.others} />
         <CardGrid>
           {others.map((c, i) => (
             <li>
               <Reveal delay={stagger(i)}>
-                <Card title={c.title} href={c.href} eyebrow={c.eyebrow} description={c.description} image={c.image} />
+                <Card title={c.title} href={c.href} category={c.category} description={c.description} image={c.image} />
               </Reveal>
             </li>
           ))}

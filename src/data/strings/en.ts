@@ -145,6 +145,17 @@ export const strings: Strings = {
     unsubscribeSubmit: 'Unsubscribe',
   },
   pages,
+  layout: {
+    mark: 'Illustration',
+    down: 'Down',
+    standby: 'Standby',
+    item: 'Item',
+    content: 'Details',
+    requirement: 'Requirement',
+    feature: 'How it is met',
+    more: 'Read more',
+    allCases: 'See all success stories',
+  },
   offering: {
     demo: 'Book a demo',
     seeFeatures: 'See features',

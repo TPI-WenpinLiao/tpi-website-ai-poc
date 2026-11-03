@@ -1,0 +1,123 @@
+---
+// A real table of facts (#187, design-principles.md「內頁的版型」規格表、對應表): one row an item (a
+// deployment, a standard, a regulation), its fact texts in the next cell, and an optional link to
+// the page that goes deeper, its label saying where it goes. Rows may have row lines: a real table is
+// the house rules' exception to no thin rules. Several fact texts in a cell are a list; a fact text
+// with line breaks keeps them (a fact split into items, site-research 第 2 條).
+// `head` names the columns for screen readers (the row's own labels say it on screen); `emphasis="name"`
+// sets the first column in the bold serif, for a mapping table (規範名稱).
+interface Row {
+  label: string;
+  values: readonly string[];
+  link?: { label: string; href: string } | undefined;
+}
+
+interface Props {
+  rows: readonly Row[];
+  head: readonly [string, string] | readonly [string, string, string];
+  caption?: string | undefined;
+  emphasis?: 'name' | 'none';
+}
+
+const { rows, head, caption, emphasis = 'none' } = Astro.props;
+const hasLinks = rows.some((r) => r.link);
+---
+
+<table class:list={['spec-table', { 'emphasis-name': emphasis === 'name' }]}>
+  {caption && <caption class="sr-only">{caption}</caption>}
+  <thead class="sr-only">
+    <tr>
+      <th scope="col">{head[0]}</th>
+      <th scope="col">{head[1]}</th>
+      {hasLinks && <th scope="col">{head[2]}</th>}
+    </tr>
+  </thead>
+  <tbody>
+    {
+      rows.map((r) => (
+        <tr>
+          <th scope="row" class:list={['name', { serif: emphasis === 'name' }]}>
+            {r.label}
+          </th>
+          <td class="values">
+            {r.values.length > 1 ? (
+              <ul class="row-list">
+                {r.values.map((v) => (
+                  <li>{v}</li>
+                ))}
+              </ul>
+            ) : (
+              r.values[0]
+            )}
+          </td>
+          {hasLinks && <td class="link">{r.link && <a href={r.link.href}>{r.link.label}</a>}</td>}
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  @import '../../styles/media.css';
+
+  .spec-table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    text-align: start;
+  }
+
+  tr {
+    display: grid;
+    gap: var(--space-2);
+    padding-block: var(--space-4);
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  th,
+  td {
+    padding: 0;
+    text-align: start;
+    vertical-align: top;
+  }
+
+  .name {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .emphasis-name .name {
+    font-size: var(--font-size-text);
+    line-height: var(--line-height-snug);
+  }
+
+  .values {
+    white-space: pre-line;
+  }
+
+  .link a {
+    color: var(--color-link);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  @media (--bp-lg-up) {
+    tr {
+      grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+      gap: var(--grid-gutter);
+    }
+
+    tr > :nth-child(1) {
+      grid-column: span 4;
+    }
+
+    tr > :nth-child(2) {
+      grid-column: span 6;
+    }
+
+    tr > :nth-child(3) {
+      grid-column: span 2;
+    }
+
+    tr:not(:has(> :nth-child(3))) > :nth-child(2) {
+      grid-column: span 8;
+    }
+  }
+</style>

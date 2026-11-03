@@ -63,7 +63,7 @@ const jsonLd = personJsonLd({
   jsonLd={jsonLd}
   translations={translations}
 >
-  <PageHero eyebrow={team.title} title={data.title} description={role}>
+  <PageHero title={data.title} description={role}>
     <Breadcrumb slot="breadcrumb" node="esg-advisor" current={data.title} />
     {data.photo && <Image slot="visual" class="photo" src={data.photo} alt={data.title} widths={[320, 640]} sizes="20rem" loading="eager" />}
   </PageHero>
@@ -72,8 +72,8 @@ const jsonLd = personJsonLd({
     {
       data.expertise && (
         <section class="expertise">
-          <SectionHeading eyebrow="Expertise" title={t.person.expertise} />
-          <TagList items={data.expertise} tone="node" />
+          <SectionHeading title={t.person.expertise} />
+          <TagList items={data.expertise} />
         </section>
       )
     }

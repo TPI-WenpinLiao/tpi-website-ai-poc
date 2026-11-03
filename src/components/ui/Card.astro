@@ -1,7 +1,10 @@
 ---
-// Link card for listings (products, case studies, articles): a glass panel that tilts toward the
-// viewer, lights an energy-gradient rim and glows on hover. The whole card is clickable through the
-// title link's ::after, so there is exactly one link per card and its name is the title.
+// Link card for listings (articles, news, case studies): a panel one step darker than the paper, no
+// frame, glass, shadow or tilt (design-principles.md「和新寫法衝突的共用元件」, #187); on hover only the
+// title changes color and gets an underline. The whole card is clickable through the title link's
+// ::after, so there is exactly one link per card and its name is the title.
+// `category` (a blog category, news type, industry) is a plain line in the meta row, not an eyebrow.
+// Offering and hub pages don't use cards: cases go in CaseList, related pages in IndexList.
 // Image alt is required; pass alt="" only when the image is purely decorative.
 // Without href the card is a static panel (offering features and use cases): no link, no hover or
 // focus state; links in the meta slot (a Tag) stay their own.
@@ -16,8 +19,7 @@ interface Props {
   title: string;
   href?: string;
   level?: 2 | 3 | 4;
-  index?: string;
-  eyebrow?: string;
+  category?: string | undefined;
   description?: string;
   image?: { src: ImageMetadata; alt: string };
   size?: 'md' | 'sm';
@@ -30,8 +32,7 @@ const {
   title,
   href,
   level = 3,
-  index,
-  eyebrow,
+  category,
   description,
   image,
   size = 'md',
@@ -44,20 +45,13 @@ const Heading = `h${level}` as const;
 <article class:list={['card', size, { linked: href }]} data-pagefind-ignore={href ? '' : undefined} data-preview-state={previewState}>
   {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes="(width >= 64rem) 22rem, 100vw" />}
   <div class="body">
-    {
-      (index || eyebrow) && (
-        <p class="eyebrow">
-          {index && <span class="index">{index}</span>}
-          {eyebrow}
-        </p>
-      )
-    }
     <Heading class="title">{href ? <a href={href}>{title}</a> : title}</Heading>
     {description && <p class="description text-phrase">{description}</p>}
     {
-      (date || Astro.slots.has('meta')) && (
+      (date || category || Astro.slots.has('meta')) && (
         <div class="meta">
           {date && <time datetime={date}>{date.replaceAll('-', '/')}</time>}
+          {category && <span>{category}</span>}
           <slot name="meta" />
         </div>
       )
@@ -74,46 +68,10 @@ const Heading = `h${level}` as const;
     flex-direction: column;
     block-size: 100%;
     overflow: hidden;
-    border: var(--border-width) solid var(--glass-border);
-    border-radius: var(--radius-xl);
-    background: var(--glass-bg);
-    box-shadow: var(--shadow-sm);
-    backdrop-filter: blur(var(--glass-blur));
-    transform: perspective(var(--perspective));
-    transition:
-      transform var(--duration-slow) var(--ease-out-expo),
-      box-shadow var(--duration-slow) var(--ease-out-expo);
-  }
-
-  /* Energy-gradient rim, masked down to the border ring; shown on hover and focus */
-  .card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: var(--z-raised);
-    padding: var(--border-width);
-    border-radius: inherit;
-    background: var(--gradient-energy);
-    mask:
-      linear-gradient(black, black) content-box exclude,
-      linear-gradient(black, black);
-    opacity: 0;
-    transition: opacity var(--duration-base) var(--ease-standard);
-    pointer-events: none;
+    background: var(--color-bg-subtle);
   }
 
   /* :has(:focus-visible), not :focus-within, so a mouse click on the title draws no ring */
-  .linked:is(:hover, [data-preview-state='hover']),
-  .linked:is(:has(.title a:focus-visible), [data-preview-state='focus']) {
-    box-shadow: var(--shadow-md), var(--glow-brand);
-    transform: perspective(var(--perspective)) rotateX(var(--tilt)) translateY(var(--lift));
-  }
-
-  .linked:is(:hover, [data-preview-state='hover'])::before,
-  .linked:is(:has(.title a:focus-visible), [data-preview-state='focus'])::before {
-    opacity: 1;
-  }
-
   .linked:is(:has(.title a:focus-visible), [data-preview-state='focus']) {
     outline: var(--focus-ring-width) solid var(--color-focus);
     outline-offset: var(--focus-ring-offset);
@@ -134,21 +92,6 @@ const Heading = `h${level}` as const;
     flex-direction: column;
     gap: var(--space-3);
     padding: var(--space-6);
-  }
-
-  .eyebrow {
-    display: flex;
-    gap: var(--space-3);
-    margin: 0;
-    color: var(--color-text-muted);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-xs);
-    letter-spacing: var(--letter-spacing-mono);
-    text-transform: uppercase;
-  }
-
-  .index {
-    color: var(--color-text-accent);
   }
 
   .title {
@@ -192,6 +135,8 @@ const Heading = `h${level}` as const;
 
   .linked:is(:hover, [data-preview-state='hover']) .title a {
     color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: var(--underline-offset);
   }
 
   .description {
@@ -202,7 +147,10 @@ const Heading = `h${level}` as const;
   .meta {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
     margin-block-start: auto;
     padding-block-start: var(--space-2);
   }

@@ -74,7 +74,7 @@ const jsonLd = pageJsonLd({
 ---
 
 <PageLayout title={entry?.data.seoTitle ?? title} description={description} jsonLd={jsonLd} translations={translations}>
-  <PageHero eyebrow="Contact" title={title} description={contactCta.description}>
+  <PageHero title={title} description={contactCta.description}>
     <Breadcrumb slot="breadcrumb" node="contact" />
   </PageHero>
 
@@ -118,7 +118,7 @@ const jsonLd = pageJsonLd({
       </FormPanel>
 
       <section class="offices">
-        <SectionHeading level={2} eyebrow="Offices" title={t.contact.offices} />
+        <SectionHeading level={2} title={t.contact.offices} />
         <ul>
           {
             org.data.offices.map((o) => (

@@ -73,7 +73,7 @@ const jsonLd = graph(breadcrumbList(breadcrumb(id, locale), Astro.site));
           <h2 id="featured-title" class="sr-only">
             {t.listing.featured}
           </h2>
-          <Card level={3} title={featured.title} href={featured.href} eyebrow={featured.eyebrow} description={featured.description} image={featured.image} date={featured.date} />
+          <Card level={3} title={featured.title} href={featured.href} category={featured.category} description={featured.description} image={featured.image} date={featured.date} />
         </article>
       )
     }
@@ -84,7 +84,7 @@ const jsonLd = graph(breadcrumbList(breadcrumb(id, locale), Astro.site));
           {items.map((p, i) => (
             <li>
               <Reveal delay={stagger(i)}>
-                <Card level={2} title={p.title} href={p.href} eyebrow={p.eyebrow} description={p.description} image={p.image} date={p.date} />
+                <Card level={2} title={p.title} href={p.href} category={p.category} description={p.description} image={p.image} date={p.date} />
               </Reveal>
             </li>
           ))}

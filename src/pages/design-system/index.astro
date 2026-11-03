@@ -31,6 +31,15 @@ import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import InPageNav from '../../components/ui/InPageNav.astro';
 import Faq from '../../components/ui/Faq.astro';
 import FactRow from '../../components/ui/FactRow.astro';
+import PageSections from '../../components/ui/PageSections.astro';
+import JunctionDiagram from '../../components/ui/JunctionDiagram.astro';
+import UiFragment from '../../components/ui/UiFragment.astro';
+import SpecTable from '../../components/ui/SpecTable.astro';
+import Timeline from '../../components/ui/Timeline.astro';
+import CaseList from '../../components/ui/CaseList.astro';
+import IndexList from '../../components/ui/IndexList.astro';
+import MapPicture from '../../components/ui/MapPicture.astro';
+import pageDigirunner from '../../assets/design/ribbon/page-digirunner.webp';
 import VideoFacade from '../../components/ui/VideoFacade.astro';
 import SearchResults from '../../components/ui/SearchResults.astro';
 import ConsentBanner, { type ConsentCategory, type ConsentCopy } from '../../components/ui/ConsentBanner.astro';
@@ -78,9 +87,9 @@ const contrast = surfaces.flatMap(({ name, tokens }) => checkPairs(tokens, PAIRS
 const failed = contrast.filter((r) => !r.ok).length;
 
 const principles = [
-  { title: '場景與圖層', body: '深色 surface 是 3D 捲動場景的舞台，內容是浮在上面的玻璃圖層。閱讀為主的頁面改用亮色 surface。' },
-  { title: '光標示資料與互動', body: '紫、品紅、橘的能量漸層與光點只用來標示流動、焦點與 hover，不當文字的底色。' },
-  { title: '動態跟著捲動', body: '進場、圖層分離與進度條都由捲動驅動，不需要 client JS；偏好減少動態時全部靜止。' },
+  { title: '文字說出對象與做的事', body: '第一屏由 h1、說明句與證據點承擔，影像只幫腔；h1 與區塊標題上方不放小標、編號與短線（design-principles.md P1）。' },
+  { title: '證據長得像紀錄', body: '事實原文、條件與出處擺在一起，跟表述分開；數字只加粗，不放大成主視覺（P2）。' },
+  { title: '平塗與間距', body: '沒有框線、陰影、光暈與漸層；段落之間用間距與一階底色分開，深紫帶只給聯絡段（P4、P5）。' },
 ];
 
 // The deployment video on the current site's /products/digirunner/awsmarketplace
@@ -116,7 +125,6 @@ const localeDemo = (tone: 'dark' | 'light', preview?: PreviewState) => [
 const tagTones = [
   { tone: 'neutral', label: '中性標籤' },
   { tone: 'brand', label: '品牌標籤' },
-  { tone: 'node', label: 'Node label' },
 ] as const;
 
 // ConsentBanner sample data. The categories and all of the copy are needs-input (#36: the rules
@@ -161,7 +169,6 @@ const description =
 <BaseLayout title={title} description={description}>
   <ScrollProgress />
   <PageHero
-    eyebrow="Design system"
     title="有景深的設計系統"
     description="為 3D 捲動場景設計的 tokens 與元件。本頁的標題區就是 PageHero，背後是方向 A 的靜態主視覺，3D 場景載入前與減少動態時都顯示這張圖。"
   >
@@ -177,7 +184,7 @@ const description =
   <main>
     <Surface tone="dark" id="principles">
       <Backdrop slot="backdrop" image={ambientGlow} fade="bottom" strength="soft" />
-      <SectionHeading index="01" eyebrow="Principles" title="三個設計原則" />
+      <SectionHeading title="三個設計原則" />
       <ol class="principles">
         {
           principles.map((p, i) => (
@@ -197,8 +204,6 @@ const description =
 
     <Surface tone="light" id="tokens">
       <SectionHeading
-        index="02"
-        eyebrow="Tokens · Primitives"
         title="Tokens：原始色階"
         description="tokens.css 的三層：primitive 是原始色值，只在 tokens.css 內被引用；元件用 semantic 與 scale。本頁的 token 清單在 build 時從 tokens.css 讀出。"
       />
@@ -207,10 +212,8 @@ const description =
 
     {
       semantic.map((s) => (
-        <Surface tone={s.tone} pattern={s.tone === 'dark' ? 'grid' : 'none'} id={`tokens-${s.name}`}>
+        <Surface tone={s.tone} id={`tokens-${s.name}`}>
           <SectionHeading
-            index={s.tone === 'dark' ? '03' : undefined}
-            eyebrow={`Tokens · Semantic · ${s.name} surface`}
             title={s.tone === 'dark' ? 'Tokens：語意（深色 surface）' : 'Tokens：語意（亮色 surface）'}
             description={
               s.tone === 'dark'
@@ -262,8 +265,6 @@ const description =
 
     <Surface tone="dark" id="tokens-scale">
       <SectionHeading
-        index="04"
-        eyebrow="Tokens · Scale"
         title="Tokens：尺度"
         description="字體、間距、圓角、線寬、動態、3D 場景與版面。兩個 surface 共用；偏好減少動態時，動態與傾斜相關的值歸零。"
       />
@@ -273,10 +274,8 @@ const description =
 
     {
       (['dark', 'light'] as const).map((tone) => (
-        <Surface tone={tone} pattern={tone === 'dark' ? 'grid' : 'none'} id={`components-${tone}`}>
+        <Surface tone={tone} id={`components-${tone}`}>
           <SectionHeading
-            index={tone === 'dark' ? '05' : undefined}
-            eyebrow={`Components · ${tone} surface`}
             title={tone === 'dark' ? '元件：深色 surface' : '元件：亮色 surface'}
             description="同一組元件，不需要變體，顏色跟著 surface 切換。hover 與 focus 欄是靜態畫出的狀態（data-preview-state），樣式和實際操作時同一份；示意欄不能操作，請用「預設」欄實際操作。範例文字只用來看版面，不是網站內容。"
           />
@@ -404,37 +403,37 @@ const description =
 
           <h3>SectionHeading</h3>
           <div class="demo">
-            <SectionHeading level={3} index="07" eyebrow="Eyebrow" title="編號式區塊標題" description="標題層級由呼叫端指定，避免跳級。" />
+            <SectionHeading level={3} title="區塊標題寫這段回答的問題" description="標題層級由呼叫端指定，避免跳級；標題上方不放小標、編號與短線。" />
           </div>
           <div class="demo">
-            <SectionHeading level={3} title="沒有編號與 eyebrow 的區塊標題" />
+            <SectionHeading level={3} weight="secondary" title="次要段落的標題（weight=&quot;secondary&quot;）" />
           </div>
 
           <h3>Card</h3>
           <ul class="cards">
-            {linkStates.map((st, i) => (
+            {linkStates.map((st) => (
               <li class="state" inert={st.preview !== undefined}>
                 <span class="state-label">{st.label}</span>
                 <Card
                   level={4}
                   href={`#components-${tone}`}
-                  index={`0${i + 1}`}
-                  eyebrow="分類"
                   title="有圖片的卡片標題"
-                  description="hover 與 focus 時往前傾、亮起漸層外框。整張卡可點，但只有標題一個連結。"
+                  category="分類"
+                  date="2026-11-03"
+                  description="比頁面深一階的底色，沒有框與陰影；hover 只換標題的顏色與底線。整張卡可點，但只有標題一個連結。"
                   image={{ src: coverIntegration, alt: '' }}
                   data-preview-state={st.preview}
                 >
                   <Fragment slot="meta">
-                    <Tag tone="node">Tag one</Tag>
-                    <Tag tone="node">Tag two</Tag>
+                    <Tag>Tag one</Tag>
+                    <Tag>Tag two</Tag>
                   </Fragment>
                 </Card>
               </li>
             ))}
             <li class="state">
               <span class="state-label">沒有圖片</span>
-              <Card level={4} href={`#components-${tone}`} index="04" title="沒有圖片的卡片" description="玻璃面板，背景的格線與 3D 場景會透出來。" />
+              <Card level={4} href={`#components-${tone}`} title="沒有圖片的卡片" description="沒有圖片時只有標題、說明與 meta。" />
             </li>
             <li class="state">
               <span class="state-label">size="sm"</span>
@@ -442,7 +441,7 @@ const description =
             </li>
             <li class="state">
               <span class="state-label">沒有 href</span>
-              <Card level={4} index="06" title="不能點的卡片" description="功能、應用情境等不是連結的項目：沒有 hover 與 focus，meta 裡的標籤連結各自可點。">
+              <Card level={4} title="不能點的卡片" description="功能、應用情境等不是連結的項目：沒有 hover 與 focus，meta 裡的標籤連結各自可點。">
                 <Tag slot="meta" href={`#components-${tone}`} tone="brand">產業標籤連結</Tag>
               </Card>
             </li>
@@ -451,8 +450,6 @@ const description =
               <Card
                 level={4}
                 href={`#components-${tone}`}
-                index="05"
-                eyebrow="分類"
                 title="標題較長時換行的卡片標題範例，用來確認行高與間距"
                 image={{ src: coverData, alt: '' }}
               />
@@ -484,15 +481,83 @@ const description =
           </CardGrid>
 
           <h3>SectionHeading：action slot</h3>
-          <SectionHeading level={3} eyebrow="Insights" title="區塊標題與整區連結">
+          <SectionHeading level={3} title="區塊標題與整區連結">
             <Button slot="action" href={`#components-${tone}`} variant="text">看全部</Button>
           </SectionHeading>
 
           <h3>FactRow</h3>
-          <FactRow level={3} index="01" title="一個論點" description="一句回答。右邊是撐住它的事實原文，64rem 以上並排。" link={{ label: '接著看的頁面', href: `#components-${tone}` }}>
+          <FactRow level={3} title="一個論點" description="一句回答。右邊是撐住它的事實原文，64rem 以上並排。" link={{ label: '接著看的頁面', href: `#components-${tone}` }}>
             <li>第一則事實原文</li>
             <li>第二則事實原文</li>
           </FactRow>
+
+          <h3>JunctionDiagram</h3>
+          <JunctionDiagram
+            caption="接點圖：既有系統、產品、新的服務三欄相鄰；故障與待命的節點用文字標出。"
+            states={{ down: '故障', standby: '待命' }}
+            columns={[
+              { title: '既有系統', tone: 'legacy', nodes: [{ label: '資料庫' }, { label: '檔案傳輸' }] },
+              { title: '產品', tone: 'product', nodes: [{ label: '節點一', state: 'down' }, { label: '節點二' }] },
+              { title: '新的服務', tone: 'new', nodes: [{ label: '服務', state: 'standby' }] },
+            ]}
+          />
+
+          <h3>UiFragment</h3>
+          <div class="demo">
+            <UiFragment
+              title="面板名稱"
+              mark="示意"
+              tabs={['分頁一', '分頁二']}
+              rows={[
+                { label: '設定項目（on）', state: 'on' },
+                { label: '設定項目（off）', state: 'off' },
+                { label: '故障的項目（down）', state: 'down' },
+                { label: '下一個狀態（next）', state: 'next' },
+              ]}
+              note="片段只畫事實寫得出的名稱與狀態。"
+            />
+          </div>
+
+          <h3>SpecTable</h3>
+          <SpecTable head={['項目', '內容']} rows={[{ label: '規格一', values: ['事實原文'] }, { label: '規格二', values: ['第一項', '第二項'] }]} />
+          <SpecTable
+            head={['要求', '對應的功能', '延伸閱讀']}
+            emphasis="name"
+            rows={[{ label: '規範名稱', values: ['對應功能的事實原文'], link: { label: '目標頁的內容', href: `#components-${tone}` } }]}
+          />
+
+          <h3>Timeline</h3>
+          <Timeline steps={[{ year: '第一年', body: '第一則事實原文' }, { year: '第二年', body: '第二則事實原文' }]} />
+
+          <h3>CaseList</h3>
+          <CaseList
+            mark="示意"
+            more={{ label: '看所有成功案例', href: `#components-${tone}` }}
+            items={[
+              { title: '客戶名稱', work: '作業的事實原文', result: '成果原文，數字加粗', award: '獎項', link: { label: '案例名稱', href: `#components-${tone}` }, fragment: { title: '作業的片段', rows: [{ label: '狀態', state: 'on' }] } },
+              { title: '沒有成果的客戶', work: '作業的事實原文', link: { label: '案例名稱', href: `#components-${tone}` } },
+            ]}
+          />
+
+          <h3>IndexList</h3>
+          <IndexList
+            level={4}
+            items={[
+              { title: '有縮圖的項目', body: '一句說明', href: `#components-${tone}`, image: coverIntegration, date: '2026-11-03' },
+              { title: '沒有縮圖的項目', href: `#components-${tone}` },
+            ]}
+          />
+
+          <h3>MapPicture</h3>
+          <div class="demo">
+            <MapPicture image={pageDigirunner} picture="page-digirunner" labels={{ core: '核心系統', legacy: '既有系統', product: '產品' }} />
+          </div>
+
+          <h3>PageSections</h3>
+          <PageSections
+            locale="zh-TW"
+            sections={[{ layout: 'band', heading: '色帶：一句主張', body: '淺紫底，一兩則事實與一個動作。', items: [{ body: '事實原文' }] }]}
+          />
 
           <h3>CardGrid compact</h3>
           <CardGrid compact>
@@ -505,7 +570,7 @@ const description =
 
           <h3>TagList</h3>
           <TagList items={['AI 應用', '數位轉型', '永續發展']} label={`標籤（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
-          <TagList items={['碳盤查', '能源轉型']} tone="node" label={`專長（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
+          <TagList items={['碳盤查', '能源轉型']} label={`專長（${tone === 'dark' ? '深色' : '亮色'} surface 範例）`} />
 
           <h3>FormPanel</h3>
           <div class="form-states">
@@ -692,7 +757,6 @@ const description =
 
     <Surface tone="dark" id="chrome">
       <SectionHeading
-        eyebrow="Site chrome"
         title="頁首與頁尾"
         description="選單是原生的 details 展開，共用同一個 name，一次只開一個；點選單外或按 Esc 會收起（一小段 script）。寬度小於 64rem 時第一層收進「選單」。搜尋按鈕打開的搜尋框送到 /search，頁首本身不載入 Pagefind。"
       />
@@ -744,10 +808,8 @@ const description =
       <p class="note">每頁最後的聯絡區塊；文案取自現站聯絡我們頁，按鈕連到目前語系的聯絡我們。offering 的 cta 為 demo 時以 label 換成「預約演示」。</p>
     </Surface>
 
-    <Surface tone="dark" pattern="grid" id="imagery">
+    <Surface tone="dark" id="imagery">
       <SectionHeading
-        index="06"
-        eyebrow="Imagery"
         title="影像"
         description="抽象 3D 渲染，只用品牌色，不放文字、人物或真實產品。素材與提示詞見 docs/design/image-prompts.md。"
       />
@@ -797,7 +859,7 @@ const description =
 
     <Surface tone="light" width="reading" id="reading">
       <Backdrop slot="backdrop" image={readingHeader} fade="bottom" focus="top" />
-      <SectionHeading eyebrow="Reading" title="長文閱讀" />
+      <SectionHeading title="長文閱讀" />
       <div class="reading-demo">
         <Prose>
           <p>

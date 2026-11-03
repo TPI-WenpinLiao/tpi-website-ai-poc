@@ -146,6 +146,17 @@ export const strings: Strings = {
     unsubscribeSubmit: 'Hủy đăng ký',
   },
   pages,
+  layout: {
+    mark: 'Minh họa',
+    down: 'Gặp sự cố',
+    standby: 'Dự phòng',
+    item: 'Hạng mục',
+    content: 'Chi tiết',
+    requirement: 'Yêu cầu',
+    feature: 'Cách đáp ứng',
+    more: 'Xem thêm',
+    allCases: 'Xem tất cả câu chuyện thành công',
+  },
   offering: {
     demo: 'Đặt lịch demo',
     seeFeatures: 'Xem tính năng',

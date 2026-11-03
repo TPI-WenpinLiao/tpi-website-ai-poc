@@ -1,11 +1,11 @@
 ---
-// Label for a category, topic or data point. `node` is the data-flow label: mono text with a
-// glowing signal dot, for product modules and technical keywords. With href it links to the
-// filtered listing.
+// Label for a category or topic, in plain text on a pale fill (no mono type or glowing dot,
+// design-principles.md「和新寫法衝突的共用元件」, #187). With href it links to the filtered listing.
+// A link to an industry page from an offering is a text link that says where it goes, not a Tag.
 // data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
 interface Props {
   href?: string;
-  tone?: 'neutral' | 'brand' | 'node';
+  tone?: 'neutral' | 'brand';
   'data-preview-state'?: 'hover' | 'focus';
 }
 
@@ -13,7 +13,7 @@ const { href, tone = 'neutral', 'data-preview-state': previewState } = Astro.pro
 const Element = href ? 'a' : 'span';
 ---
 
-<Element class:list={['tag', 'text-phrase', tone, { 'signal-dot': tone === 'node' }]} href={href} data-preview-state={previewState}><slot /></Element>
+<Element class:list={['tag', 'text-phrase', tone]} href={href} data-preview-state={previewState}><slot /></Element>
 
 <style>
   .tag {
@@ -21,7 +21,6 @@ const Element = href ? 'a' : 'span';
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-1) var(--space-3);
-    border: var(--border-width) solid transparent;
     border-radius: var(--radius-pill);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-tight);
@@ -38,18 +37,7 @@ const Element = href ? 'a' : 'span';
     color: var(--color-text-brand);
   }
 
-  .node {
-    border-color: var(--color-border);
-    background: var(--color-bg-subtle);
-    color: var(--color-text);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-xs);
-    letter-spacing: var(--letter-spacing-mono);
-    text-transform: uppercase;
-  }
-
   a.tag:is(:hover, [data-preview-state='hover']) {
-    border-color: var(--color-border-brand);
     text-decoration: underline;
   }
 </style>

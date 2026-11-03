@@ -184,6 +184,15 @@ ui:utility.recommended,ui,推薦內容,Recommended,Đề xuất,draft,src/data/s
 ui:utility.downloads,ui,下載檔案,Downloads,Tệp tải xuống,draft,src/data/strings/zh-TW.ts,
 ui:utility.subscribeSubmit,ui,訂閱,Subscribe,Đăng ký,draft,src/data/strings/zh-TW.ts,
 ui:utility.unsubscribeSubmit,ui,取消訂閱,Unsubscribe,Hủy đăng ký,draft,src/data/strings/zh-TW.ts,
+ui:layout.mark,ui,示意,Illustration,Minh họa,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.down,ui,故障,Down,Gặp sự cố,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.standby,ui,待命,Standby,Dự phòng,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.item,ui,項目,Item,Hạng mục,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.content,ui,內容,Details,Chi tiết,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.requirement,ui,要求,Requirement,Yêu cầu,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.feature,ui,對應的功能,How it is met,Cách đáp ứng,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.more,ui,延伸閱讀,Read more,Xem thêm,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
+ui:layout.allCases,ui,看所有成功案例,See all success stories,Xem tất cả câu chuyện thành công,draft,src/data/strings/zh-TW.ts,AI 草擬（#187）
 ui:offering.demo,ui,預約演示,Book a demo,Đặt lịch demo,draft,src/data/strings/zh-TW.ts,
 ui:offering.seeFeatures,ui,看功能,See features,Xem tính năng,draft,src/data/strings/zh-TW.ts,
 ui:offering.features,ui,功能,Features,Tính năng,draft,src/data/strings/zh-TW.ts,

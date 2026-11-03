@@ -65,7 +65,7 @@ const jsonLd = whitepaperJsonLd({
   jsonLd={jsonLd}
   translations={translations}
 >
-  <PageHero eyebrow={localNode(self.parent, locale).title} title={data.title}>
+  <PageHero title={data.title}>
     <Breadcrumb slot="breadcrumb" node={self.id} />
   </PageHero>
 
@@ -77,7 +77,7 @@ const jsonLd = whitepaperJsonLd({
         {
           data.summary && (
             <div class="summary">
-              <SectionHeading level={2} eyebrow="Inside" title={t.download.summary} />
+              <SectionHeading level={2} title={t.download.summary} />
               <ul>
                 {data.summary.map((s) => (
                   <li>{s}</li>
@@ -103,10 +103,10 @@ const jsonLd = whitepaperJsonLd({
   </Surface>
 
   <Surface tone="light">
-    <SectionHeading eyebrow="Related" title={t.offering.related} />
+    <SectionHeading title={t.offering.related} />
     <CardGrid cols={1}>
       <li>
-        <Card title={offering.title} href={offeringHref} eyebrow={localNode(offering.parent, locale).title} size="sm" />
+        <Card title={offering.title} href={offeringHref} category={localNode(offering.parent, locale).title} size="sm" />
       </li>
     </CardGrid>
   </Surface>

@@ -142,27 +142,14 @@ body {
   white-space: nowrap;
 }
 
-/* The glowing signal dot before a label (PageHero eyebrow, Tag tone="node"): the accent marker of
-   direction B. The element lays the dot out with its own display and gap. */
-.signal-dot::before {
-  content: '';
-  inline-size: var(--space-2);
-  block-size: var(--space-2);
-  border-radius: var(--radius-pill);
-  background: var(--color-accent);
-  box-shadow: var(--glow-accent);
-}
-
-/* A list of rows between hairlines (FormPanel's error summary, ConsentBanner's categories) */
-.ruled-list {
+/* A list of rows set apart by space, no rules between them (FormPanel's error summary,
+   ConsentBanner's categories; house rule: no thin rules, #187) */
+.row-list {
+  display: grid;
+  gap: var(--space-2);
   margin: 0;
   padding: 0;
-  border-block-start: var(--border-width) solid var(--color-border);
   list-style: none;
-}
-
-.ruled-list > li {
-  border-block-end: var(--border-width) solid var(--color-border);
 }
 
 /* An in-page anchor target (a section InPageNav links to): it lands below the sticky header, and
