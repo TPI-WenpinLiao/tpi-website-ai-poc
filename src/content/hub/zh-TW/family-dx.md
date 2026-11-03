@@ -4,6 +4,7 @@ title: DigiLism 企業服務中台
 description: DigiLism 結合 DevOps 與 CI/CD 流程，整合 API 管理、BPM、日誌管理，支援地端、雲端、雲地混合與多雲架構，可介接大型企業的傳統 ESB，達到資料串流與服務整合。
 translationKey: family-dx
 node: family-dx
+heroImage: ../../../assets/design/family-dx.webp
 tagline: 專為關鍵應用設計的高可用性數位中台
 # 「DigiLism 為何與眾不同？」
 highlights:

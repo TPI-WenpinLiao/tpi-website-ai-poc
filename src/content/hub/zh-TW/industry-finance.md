@@ -27,6 +27,7 @@ sections:
   - layout: timeline
     id: regulations
     fill: subtle
+    image: ../../../assets/design/sec-open-banking.webp
     heading: 法規要求已做在產品裡
     body: 開放銀行的規範與金融檢查的 API 管理作業，都對應到 digiRunner 的功能。
     intro: Open Banking 起源於 2015 年歐盟的 The Revised Payment Services Directive (PSD2)，隔年（2016）八月，由英國率先要求其國內九家大型銀行要採用，並於 2018 年強制導入。2019 年，台灣金管會拍板定案，將台灣 Open Banking 導入分為三階段。
@@ -123,6 +124,7 @@ sections:
   - layout: spec
     id: identity
     fill: subtle
+    image: ../../../assets/design/sec-identity.webp
     heading: 金融通路的身分驗證
     body: 金融集團的各個通路共用一套身分驗證，客戶註冊一次就能跨通路使用。
     rows:
@@ -162,6 +164,7 @@ sections:
       - node: insurering
   - layout: band
     id: planning
+    image: ../../../assets/design/sec-planning.webp
     heading: 規劃與導入由同一家負責
     body: 產品與導入不必分兩家找：昕力的顧問協助規劃架構，AI 導入從情境分析到模型微調。
     items:
@@ -171,6 +174,7 @@ sections:
 # Section 8 (#187): cases as rows, the ones with a result first (brief「取捨」第 14 項). The fraud
 # platform has no client or case page, so no link (第 13 項); 安泰、國泰世華、臺灣銀行 have no work or
 # result fact (「待確認」第 8 項). The testimonial follows the rows (#186, user's decision)
+casesImage: ../../../assets/design/sec-cases.webp
 caseNotes:
   - client: 台新銀行
     work: 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。

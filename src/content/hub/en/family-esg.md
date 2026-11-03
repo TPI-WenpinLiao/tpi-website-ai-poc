@@ -4,6 +4,7 @@ title: ESGswift AI-Powered Sustainability
 description: ESGswift includes GreenSwift for smart carbon management and ElectriSwift smart energy management, enabling GHG reduction strategies and energy optimization.
 translationKey: family-esg
 node: family-esg
+heroImage: ../../../assets/design/family-esg.webp
 tagline: Smart Carbon and Energy Management Toward Greener Future
 # The four cards under 「Integrated Management of GHG Emissions and Energy」
 highlights:

@@ -86,6 +86,7 @@ sections:
   - layout: spec
     id: deployment
     fill: subtle
+    image: ../../../assets/design/sec-deployment.webp
     heading: 部署環境由企業決定
     body: 地端、雲端、Kubernetes、多雲與混合雲都能部署；要用雲端版，可以直接從雲端市集開始。
     rows:
@@ -235,6 +236,7 @@ useCases:
 # Section 10 of the brief: cases as rows (design-principles.md「案例列」). client, work, result
 # and award are fact texts; Taishin's award sits on its row (messaging.md DM-8). 安泰銀行 has no
 # work or result fact (brief「待確認」第 8 項), Pharmacity no zh-TW case page (第 9 項)
+casesImage: ../../../assets/design/sec-cases.webp
 caseNotes:
   - client: 台新銀行
     work: 與台新銀行合作，以 digiRunner 模組開發 API 管理平台，整合複雜的現金管理業務模組，讓企業客戶在整合多元通路的收付款作業更為便利，帳務處理更輕鬆。

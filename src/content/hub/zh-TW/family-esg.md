@@ -4,6 +4,7 @@ title: ESGswift 碳管理與能源管理雙平台
 description: ESGswift 提供 GreenSwift 智慧碳管理與 ElectriSwift 智慧能源管理雙平台，整合碳盤查、能源監控與 AI 報表生成，兼顧合規與營運效益，助企業加速永續轉型。
 translationKey: family-esg
 node: family-esg
+heroImage: ../../../assets/design/family-esg.webp
 tagline: 碳管理 × 能源管理，助企業邁向低碳永續
 # The four items under 「永續轉型生態系： 碳管理 x 能源管理」
 highlights:

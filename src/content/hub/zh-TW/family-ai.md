@@ -4,6 +4,7 @@ title: SysTalk.ai 企業級 AI Agent 應用平台
 description: SysTalk.ai 完整 AI Agent 應用平台，協助企業數位轉型與營運智慧化，打造從內部學習到外部服務的全方位 AI 應用平台，提供雲端與地端 AI 完整解決方案。
 translationKey: family-ai
 node: family-ai
+heroImage: ../../../assets/design/family-ai.webp
 tagline: 企業級 AI Agent 應用平台 從整合到應用，全面升級企業服務
 # The three benefits of the AI 一體機 on /products/systalk-ai-phison, merged here (page-map.csv)
 highlights:

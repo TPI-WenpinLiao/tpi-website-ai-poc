@@ -202,7 +202,7 @@ const jsonLd = hubJsonLd({
     caseRows.length > 0 && (
       <Surface tone="light" id="cases" class="anchor-target">
         <SectionHeading title={localNode('success-stories', locale).title} description={data.caseNotes ? undefined : data.casesIntro} />
-        <CaseList items={caseRows} mark={t.layout.mark} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
+        <CaseList items={caseRows} image={data.casesImage} mark={t.layout.mark} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
         {
           data.testimonial && (
             <figure class="testimonial">

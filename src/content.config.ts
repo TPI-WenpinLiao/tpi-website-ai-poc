@@ -121,7 +121,7 @@ const resultItem = z.strictObject({
   link: nodeLink.optional(),
   fragment: uiFragment.optional(),
 });
-const sectionCommon = {
+const sectionCommon = (image: ImageFn) => ({
   // The in-page anchor (InPageNav lists sections that have one), lowercase-slug
   id: z.string().regex(SLUG).optional(),
   heading: text,
@@ -129,36 +129,39 @@ const sectionCommon = {
   link: nodeLink.optional(),
   // One step of fill to mark a change of question group (Surface fill)
   fill: z.enum(['subtle', 'brand']).optional(),
-};
-const pageSection = z.discriminatedUnion('layout', [
+  // A picture of the ribbon world beside the claim (docs/design/image-prompts.md), decorative (alt
+  // ""): for the layouts without a figure of their own (spec, timeline, band without a fragment)
+  image: image().optional(),
+});
+const pageSection = (image: ImageFn) => z.discriminatedUnion('layout', [
   // 主張與原文: claim on the start side, fact items on the end side (FactRow)
-  z.strictObject({ layout: z.literal('claim'), ...sectionCommon, items: z.array(sectionItem).min(1) }),
+  z.strictObject({ layout: z.literal('claim'), ...sectionCommon(image), items: z.array(sectionItem).min(1) }),
   // 接點圖: the diagram beside the claim, fact items under it in two columns, spec rows after them
-  z.strictObject({ layout: z.literal('junction'), ...sectionCommon, diagram, items: z.array(sectionItem).optional(), rows: z.array(specRow).optional() }),
+  z.strictObject({ layout: z.literal('junction'), ...sectionCommon(image), diagram, items: z.array(sectionItem).optional(), rows: z.array(specRow).optional() }),
   // 介面片段: the fragment takes the larger side; `flip` puts it on the end side; `index` lists the
   // pages the section leads on to (IndexList)
   z.strictObject({
     layout: z.literal('ui'),
-    ...sectionCommon,
+    ...sectionCommon(image),
     fragment: uiFragment,
     items: z.array(sectionItem).optional(),
     flip: z.boolean().optional(),
     index: z.array(z.strictObject({ body: text.optional(), node: anyNode })).optional(),
   }),
   // 規格表 and 對應表: a real table, one row a label (a regulation) and its fact texts
-  z.strictObject({ layout: z.literal('spec'), ...sectionCommon, rows: z.array(specRow).min(1) }),
+  z.strictObject({ layout: z.literal('spec'), ...sectionCommon(image), rows: z.array(specRow).min(1) }),
   // 時間列: ordered steps with their year, then (optionally) the 對應表 rows
   z.strictObject({
     layout: z.literal('timeline'),
-    ...sectionCommon,
+    ...sectionCommon(image),
     intro: text.optional(),
     steps: z.array(z.strictObject({ year: text, body: text })).min(2),
     rows: z.array(specRow).optional(),
   }),
   // 成果: one work a row, its result and a fragment of it; `record` is a line closing the section
-  z.strictObject({ layout: z.literal('results'), ...sectionCommon, items: z.array(resultItem).min(1), record: text.optional() }),
+  z.strictObject({ layout: z.literal('results'), ...sectionCommon(image), items: z.array(resultItem).min(1), record: text.optional() }),
   // 色帶: the claim, a few facts and the action on a pale purple band, a fragment beside them
-  z.strictObject({ layout: z.literal('band'), ...sectionCommon, items: z.array(sectionItem).optional(), fragment: uiFragment.optional() }),
+  z.strictObject({ layout: z.literal('band'), ...sectionCommon(image), items: z.array(sectionItem).optional(), fragment: uiFragment.optional() }),
 ]);
 // Cases as rows (CaseList, design-principles.md「案例列」): client, the work, its result when the
 // fact library has one, the case study it links to; all fact texts
@@ -195,7 +198,7 @@ const offering = defineCollection({
         heroPoints: z.array(heroPoint).optional(),
         heroLabels,
         secondaryCta: z.strictObject({ label: text, node: anyNode }).optional(),
-        sections: z.array(pageSection).optional(),
+        sections: z.array(pageSection(image)).optional(),
         // `points` are fact texts listed under the body, `link` a page the feature leads on to (#167)
         features: z
           .array(z.strictObject({ title: text, body: text, icon: image().optional(), points: z.array(text).optional(), link: nodeLink.optional() }))
@@ -212,6 +215,8 @@ const offering = defineCollection({
         // text about it; the facts are listed in `facts`
         casesIntro: text.optional(),
         caseNotes,
+        // A tall picture beside the cases (docs/design/image-prompts.md), decorative
+        casesImage: image().optional(),
         relatedPosts: z.array(ref('blog')).optional(),
         downloads: z.array(z.strictObject({ label: text, file: text })).optional(),
       })
@@ -235,11 +240,12 @@ const hub = defineCollection({
         heroLabels,
         heroCta: z.literal('contact').optional(),
         // The page's sections when its brief asks for more than highlights (#167, laid out per #187)
-        sections: z.array(pageSection).optional(),
+        sections: z.array(pageSection(image)).optional(),
         featuredCaseStudies: z.array(ref('case-study')).optional(),
         // A line under the case studies' heading (#167): a fact text, listed in `facts`
         casesIntro: text.optional(),
         caseNotes,
+        casesImage: image().optional(),
         testimonial: z.strictObject({ quote: text, speaker: text }).optional(),
         featuredPosts: z.array(ref('blog')).optional(),
       })
