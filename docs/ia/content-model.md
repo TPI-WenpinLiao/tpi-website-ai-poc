@@ -190,7 +190,7 @@ JSON-LD：`CollectionPage`，`name` ← `title`、`description` ← `description
 
 | `layout` | 版型 | 自己的欄位 |
 |---|---|---|
-| `claim` | 主張與原文（`FactRow`） | `items`：`{ title?; body; node? }`，`body` 是事實原文 |
+| `claim` | 主張與原文（`FactRow`） | `items`：`{ title?; body; node? }`，`body` 是事實原文；`node` 的連結掛在 `title` 上，有 `node` 就要有 `title`（schema 擋下）。`junction`、`ui`、`band` 的 `items` 同一個型別 |
 | `junction` | 接點圖（`JunctionDiagram`） | `diagram`：三欄 `{ title; tone: legacy\|product\|new; nodes: { label; state?: down\|standby }[] }` 與 `caption`；`items`；`rows`（規格表的列） |
 | `ui` | 介面片段（`UiFragment`） | `fragment`：`{ title; tabs?; rows: { label; value?; state?: on\|off\|down\|next }[]; note? }`，只寫事實寫得出的名稱與狀態；`items`；`flip` 左右對調；`index` 接索引列 |
 | `spec` | 規格表、對應表（`SpecTable`） | `rows`：`{ label; values: string[]; link? }`，有 `link` 時是對應表 |
