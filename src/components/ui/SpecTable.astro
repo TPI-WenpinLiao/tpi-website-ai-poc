@@ -20,6 +20,13 @@ interface Props {
 }
 
 const { rows, head, caption, emphasis = 'none' } = Astro.props;
+// A fact text with this many lines or more is a lead line and a list (site-research 第 2 條): the
+// list goes in two columns from --bp-sm-up, so nine short items don't make one tall column
+const LIST_LINES = 5;
+const asList = (v: string) => {
+  const lines = v.split('\n');
+  return lines.length >= LIST_LINES ? { lead: lines[0], list: lines.slice(1) } : undefined;
+};
 const hasLinks = rows.some((r) => r.link);
 ---
 
@@ -47,7 +54,21 @@ const hasLinks = rows.some((r) => r.link);
                 ))}
               </ul>
             ) : (
-              r.values[0]
+              r.values.map((v) => {
+                const split = asList(v);
+                return split ? (
+                  <>
+                    <p class="lead">{split.lead}</p>
+                    <ul class="columns">
+                      {split.list.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  v
+                );
+              })
             )}
           </td>
           {hasLinks && <td class="link">{r.link && <a href={r.link.href}>{r.link.label}</a>}</td>}
@@ -91,6 +112,24 @@ const hasLinks = rows.some((r) => r.link);
 
   .values {
     white-space: pre-line;
+  }
+
+  .lead {
+    margin: 0 0 var(--space-2);
+  }
+
+  .columns {
+    display: grid;
+    gap: var(--space-1) var(--grid-gutter);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (--bp-sm-up) {
+    .columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   .link a {

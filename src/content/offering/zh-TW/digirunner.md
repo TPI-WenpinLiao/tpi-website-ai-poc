@@ -25,6 +25,7 @@ heroLabels:
   core: 核心系統
   legacy: 既有系統
   product: digiRunner
+  model: AI 模型
 secondaryCta:
   label: 試用 digiRunner on Cloud
   node: digirunner-cloud

@@ -31,6 +31,10 @@ interface Props {
 
 const { sections, locale } = Astro.props;
 const t = strings(locale).layout;
+// An interface fragment's section keeps up to this many facts beside the fragment
+// (design-principles.md「內頁的版型」介面片段: 2–4); more go under both, two to a row, so the claim's
+// column doesn't run far past the fragment and leave the other side empty
+const SIDE_FACTS = 3;
 const to = (link: { label: string; node: string } | undefined) => link && { label: link.label, href: nodeHref(link.node, locale) };
 const rowsOf = (rows: readonly { label: string; values: readonly string[]; link?: { label: string; node: string } | undefined }[] = []) =>
   rows.map((r) => ({ label: r.label, values: r.values, link: to(r.link) }));
@@ -112,7 +116,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
               </div>
               <div class="claim">
                 {heading}
-                {sec.items && (
+                {sec.items && sec.items.length <= SIDE_FACTS && (
                   <ul class="facts">
                     {items(sec.items).map((i) => (
                       <li>
@@ -125,6 +129,16 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                 {more}
               </div>
             </div>
+            {sec.items && sec.items.length > SIDE_FACTS && (
+              <ul class="facts two">
+                {items(sec.items).map((i) => (
+                  <li>
+                    {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
+                    <p class="item-body">{i.body}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
             {sec.index && (
               <IndexList
                 items={sec.index.map((i) => ({ title: localNode(i.node, locale).title, body: i.body, href: nodeHref(i.node, locale) }))}

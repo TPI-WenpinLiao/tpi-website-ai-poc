@@ -25,7 +25,7 @@ import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import InPageNav from '../../components/ui/InPageNav.astro';
 import Faq from '../../components/ui/Faq.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
-import { breadcrumb, children, hasPage, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumb, children, contactAction, hasPage, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
 import type { PictureName } from '../../lib/scene/ribbon/labels';
 import { linkedNodes } from '../../lib/content/sections';
 import { entryLocale, isPublished } from '../../lib/content/entries';
@@ -50,9 +50,8 @@ const href = localeHref(locale);
 const self = localNode(data.node, locale);
 
 const title = data.seoTitle ?? data.title;
-const contact = localNode('contact', locale);
 // Main call to action by the entry's cta (content-model.md); 預約演示 is the current site's wording
-const ctaLabel = data.cta === 'demo' ? t.offering.demo : contact.title;
+const ctaLabel = data.cta === 'demo' ? t.offering.demo : contactAction(locale);
 
 const sections = data.sections ?? [];
 const heroPoints = (data.heroPoints ?? []).map((p) => (typeof p === 'string' ? { text: p } : p));

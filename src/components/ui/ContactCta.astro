@@ -8,7 +8,7 @@ import Surface from './Surface.astro';
 import SectionHeading from './SectionHeading.astro';
 import Button from './Button.astro';
 import { home } from '../../data/home';
-import { localNode, nodeHref } from '../../lib/ia/navigation';
+import { contactAction, nodeHref } from '../../lib/ia/navigation';
 import { localeFromPath } from '../../lib/i18n/paths';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const locale = localeFromPath(Astro.url.pathname);
-const { label = localNode('contact', locale).title } = Astro.props;
+const { label = contactAction(locale) } = Astro.props;
 const { contactCta } = home(locale);
 const href = nodeHref('contact', locale);
 ---

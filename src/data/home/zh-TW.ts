@@ -32,7 +32,9 @@ export const home: Home = {
     items: [
       { node: 'smartclaim', name: fact('smartclaim-title'), result: fact('smartclaim-result'), link: '看 AI 智慧理賠方案' },
       { node: 'smartfilling', name: fact('smartfilling-title'), result: fact('smartfilling-result'), link: '看 AI 智慧建檔方案' },
-      { node: 'success-stories', name: fact('fraud-platform-title'), result: fact('fraud-platform-result'), link: '看所有成功案例' },
+      // The third AI result names AI and its result in its own text (briefs/home.md「取捨」第 9 項, #187);
+      // the fraud platform's text names no AI, so it moved to the finance page's cases
+      { node: 'industry-finance', name: fact('smartfilling-case-bank-title'), result: fact('smartfilling-case-bank'), link: '金融業的 AI 應用' },
     ],
   },
   products: {

@@ -25,7 +25,7 @@ import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
 import FactRow from '../../components/ui/FactRow.astro';
 import InPageNav from '../../components/ui/InPageNav.astro';
-import { breadcrumb, children, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
+import { breadcrumb, children, contactAction, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
 import type { PictureName } from '../../lib/scene/ribbon/labels';
 import { entryPath } from '../../lib/content/urls';
 import { linkedNodes } from '../../lib/content/sections';
@@ -139,7 +139,7 @@ const jsonLd = hubJsonLd({
       data.heroCta && (
         <Fragment slot="actions">
           <Button href={nodeHref('contact', locale)} size="lg">
-            {localNode('contact', locale).title}
+            {contactAction(locale)}
           </Button>
         </Fragment>
       )

@@ -19,7 +19,7 @@
 // While the 選單 sheet is open the page behind it does not scroll (CSS :has, no client JS).
 // `open` draws one menu open (a first-level label, 'search' or 'mobile'), for the /design-system
 // page only.
-import { localizedNav, localNode, nodeHref, type NavItem } from '../../lib/ia/navigation';
+import { contactAction, localizedNav, localNode, nodeHref, type NavItem } from '../../lib/ia/navigation';
 import type { LocaleLink } from '../../lib/i18n/alternates';
 import { LOCALE_NAMES } from '../../lib/i18n/locales';
 import { localeFromPath, normalizePath } from '../../lib/i18n/paths';
@@ -50,7 +50,7 @@ const menuGroup = `site-menu-${navLabel}`;
 const header = localizedNav('header', currentLocale);
 // The link to the page being shown (docs/ia/navigation.md「無障礙」)
 const current = (href: string | undefined) => (href === path ? 'page' : undefined);
-const contact = localNode('contact', currentLocale);
+const contactLabel = contactAction(currentLocale);
 const search = localNode('search', currentLocale);
 // The search field's id, unique per header like menuGroup (navLabel may hold spaces and CJK)
 const searchId = `site-search-${Array.from(navLabel, (c) => c.codePointAt(0)?.toString(36)).join('')}`;
@@ -169,7 +169,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
         )
       }
       <div class="cta">
-        <Button href={nodeHref('contact', currentLocale)} size="sm">{contact.title}</Button>
+        <Button href={nodeHref('contact', currentLocale)} size="sm">{contactLabel}</Button>
       </div>
       <details class="mobile" name={menuGroup} open={open === 'mobile'}>
         <summary class="icon">
@@ -211,7 +211,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
               </div>
             )
           }
-          <Button href={nodeHref('contact', currentLocale)}>{contact.title}</Button>
+          <Button href={nodeHref('contact', currentLocale)}>{contactLabel}</Button>
         </nav>
       </details>
     </div>

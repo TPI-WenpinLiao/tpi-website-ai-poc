@@ -7,7 +7,8 @@ description: 昕力資訊替銀行、保險與證券業者，把開放銀行與�
 translationKey: industry-finance
 node: industry-finance
 industry: finance
-tagline: 銀行、保險與證券的法規要求做在產品裡，AI 用在核心作業
+# Comma after 要求, so a 375px line breaks there, not after 銀行、 (new-finance D6, #187)
+tagline: 銀行、保險與證券的法規要求，做在產品裡；AI 用在核心作業
 # brief 第 1 段的說明句（30–50 字）: what TPIsoftware sells, so the first screen says it. Wording
 heroLead: 昕力資訊提供 API 管理平台、AI 應用與身分驗證，也負責規劃與導入，替金融業者把法規要求與 AI 接進既有系統。
 heroPoints:
@@ -16,10 +17,10 @@ heroCta: contact
 heroImage: ../../../assets/design/ribbon/page-finance.webp
 # The blocks on the hero picture that land in its frame (src/lib/scene/ribbon/pictures.json)
 heroLabels:
-  model: AI 模型
-  ai0: 理賠
+  core: 核心銀行系統
+  ai1: 理賠
   ai2: 建檔
-  service: 新的服務
+  service: 第三方服務業者（TSP）
 # Sections 2–7 of the brief (#187), each in the layout design-principles.md「hub：金融產業頁」gives
 # it. Headings, bodies, labels and diagram words are wording; items, rows, steps and results are
 # fact texts verbatim (facts below)

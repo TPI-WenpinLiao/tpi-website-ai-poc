@@ -24,6 +24,7 @@ import { hasPage, localeHref, localNode, nodeHref } from '../../lib/ia/navigatio
 import type { Locale } from '../../lib/i18n/locales';
 import { homeJsonLd } from '../../lib/seo/jsonld/home';
 import { LIVE } from '../../lib/scene/tiers';
+import { builtNodes } from '../../lib/ia/built';
 import pictures from '../../lib/scene/ribbon/pictures.json';
 import { labelsOn, type Where } from '../../lib/scene/ribbon/labels';
 import heroWide from '../../assets/design/ribbon/hero-wide.webp';
@@ -119,7 +120,9 @@ const orient = localNode(copy.orientAi.node, locale);
 const org = await getEntry('organization', locale);
 if (!org) throw new Error(`src/content/organization/${locale}.yaml is missing`);
 if (!Astro.site) throw new Error('astro.config.mjs must set site for JSON-LD URLs');
-const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(org.data.logo.src, Astro.site).href, inLanguage: locale });
+// The SearchAction points at this locale's search page, only where it is built (src/lib/ia/built.ts)
+const searchUrl = builtNodes.get(locale)?.has('search') ? new URL(nodeHref('search', locale), Astro.site).href : undefined;
+const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(org.data.logo.src, Astro.site).href, inLanguage: locale, searchUrl });
 ---
 
 <PageLayout title={copy.meta.title} titleSuffix={false} description={copy.meta.description} jsonLd={jsonLd}>
@@ -679,12 +682,13 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
       grid-column: 1 / 8;
     }
 
+    /* The result is the row's first look, the picture backs it up (new-home D3, #187) */
     .case-text {
-      grid-column: 1 / 7;
+      grid-column: 1 / 8;
     }
 
     .case-fig {
-      grid-column: 8 / -1;
+      grid-column: 9 / -1;
     }
   }
 

@@ -1,6 +1,7 @@
 id,category,zh-TW,en,vi,status,source,note
 brand:tpisoftware,brand,昕力資訊,TPIsoftware,TPIsoftware,confirmed,https://www.tpisoftware.com/en/solutions https://www.tpisoftware.com/vn,現站 en、vi 頁面 title 的公司名；zh-TW 現站也常寫成「昕力資訊 TPIsoftware」
 nav:搜尋,nav,搜尋,Search,Tìm kiếm,draft,docs/ia/navigation.csv,
+nav:聯絡業務,nav,聯絡業務,Contact sales,Liên hệ kinh doanh,draft,docs/ia/navigation.csv,AI 草擬（#187）；header、hero、頁尾的聯絡按鈕；聯絡頁本身仍是 node:contact
 nav:產品,nav,產品,Products,Sản Phẩm,draft,docs/ia/navigation.csv,現站 en 第一層是 Product & Services（產品與服務合併），vi 是 Sản Phẩm
 nav:服務,nav,服務,Services,Dịch Vụ,draft,docs/ia/navigation.csv,現站 en 的服務在 Product & Services 底下的 Services，vi 第一層是 Dịch Vụ
 nav:資源總覽,nav,資源總覽,All Resources,Tất cả tài nguyên,draft,docs/ia/navigation.csv,
