@@ -3095,9 +3095,10 @@
   locale: en
   status: confirmed
 
+# text stops before "with proven adoption and effectiveness", a claim with no basis (like systalk-rpa-proven)
 - id: digirunner-oss-console-en
   type: feature
-  text: Ready-to-use console for cloud collaboration with proven adoption and effectiveness in real-world scenarios.
+  text: Ready-to-use console for cloud collaboration
   source:
     url: https://tpi.dev/
     quote: Ready-to-use console for cloud collaboration with proven adoption and effectiveness in real-world scenarios.

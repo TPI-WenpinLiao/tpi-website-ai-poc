@@ -747,6 +747,8 @@ groups:
         locale: en
       - id: digirunner-oss-console-en
         type: feature
+        text: Ready-to-use console for cloud collaboration
+        comment: text stops before "with proven adoption and effectiveness", a claim with no basis (like systalk-rpa-proven)
         quote: Ready-to-use console for cloud collaboration with proven adoption and effectiveness in real-world scenarios.
         url: https://tpi.dev/
         locale: en
