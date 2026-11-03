@@ -16,7 +16,7 @@ tools: Read, Grep, Glob, Bash, WebFetch
 
 只看產出物與評審依據，見 `.claude/skills/site-review/SKILL.md`「輸入」：
 
-- 評審對象：頁面網址、`dist/` 的 HTML、原型檔案、375 與 1280 寬的截圖（主 session 給的，或用 Playwright 的 chromium 自己截）
+- 評審對象：頁面網址、`dist/` 的 HTML、原型檔案、375 與 1280 寬的截圖（主 session 給的，或用 Playwright 的 chromium 自己截）。主 session 給的是 `eval-shots.mjs` 的匿名目錄時（`blind/<代號>/`），整頁看 `page-<寬度>-partNN.jpg`，不要猜這一組是哪個版本
 - 依據：`docs/strategy/` 的 messaging、brief、設計原則、事實庫
 - rubric：`.claude/skills/site-review/rubrics/`
 
@@ -31,6 +31,7 @@ tools: Read, Grep, Glob, Bash, WebFetch
 1. 讀 `.claude/skills/site-review/SKILL.md` 與要用的 rubric
 2. 照 `site-review`「做法」評分，每項寫理由並指到具體位置
 3. 照「門檻」判斷通過與否
+4. 寫「評審依據不足」（`site-review`「做法」第 5 步）
 
 ## 不做的事
 

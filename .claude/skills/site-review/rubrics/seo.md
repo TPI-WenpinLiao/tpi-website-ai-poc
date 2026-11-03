@@ -15,3 +15,6 @@
 
 - S3、S4、S6 看 `dist/` 的 HTML，不看截圖
 - 沒有搜尋量資料，S1、S2 只依 `search-intent.md` 記錄的公開搜尋結果判斷
+- S2 的「競品沒有的資訊」對照 `search-intent.md` 記錄的「前幾名都沒有的子題」
+- S6 的類型與欄位以 `content-model.md` 為準：少了規定的整個類型（例如首頁沒有 `Organization`）最多 2 分；規定的欄位都有、和可見內容一致才給 5
+- brief 的取捨決定不承接某個查詢時，S1 照 brief 的決定評，不扣分

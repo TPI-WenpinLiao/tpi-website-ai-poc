@@ -28,6 +28,8 @@ description: 分階段流程的設計概念階段使用：從 messaging 推出�
 
 關卡：`reviewer` 依 `site-review` 的設計 rubric 為三個方向評分，結果附在 PR；人選定方向後加 `design-approved`，選定結果寫回 `design-system` skill 的「設計方向」。
 
+寫回 `design-system` 時，逐一對照它的元件表與「不會怎麼呈現」，列出衝突的元件（例如元件表規定的 eyebrow、編號、框線）與要怎麼改，寫進製作 issue 的範圍，並在元件表該列註明待改。#167 只重寫了首頁模板，offering、hub 模板沿用 `PageHero`、`SectionHeading`、`Card` 的 eyebrow 與編號，評審時兩頁的 D2 都只有 2 分（#168）。
+
 ## 1. 設計原則
 
 寫 3–5 條。每條：
@@ -39,6 +41,10 @@ description: 分階段流程的設計概念階段使用：從 messaging 推出�
 
 原則要能用來否決設計。「簡潔現代」否決不了任何東西，不算原則。
 
+「會怎麼呈現」要涵蓋 `site-profile.md` 列的每個試點模板，不只首頁：每個模板寫第一屏要有什麼、段落用哪些版型、影像放什麼（產品頁的介面片段畫哪幾個接點）。#166 的原則只用首頁舉例，評審產品頁與產業頁時有 6 份評審寫依據不足（#168）。
+
+原則定案後，逐份對照 brief：brief 的做法和原則衝突時（例如 brief 決定保留原則禁止的 eyebrow），在 brief 的「取捨」寫明以哪一份為準，並在 brief 段落表的「影像」欄填入該段的圖（`content-strategy`「2. Content brief」）。
+
 文件提到事實時照 `content-strategy` 的寫法用 `` `fact:<id>` ``，`node scripts/strategy/facts.mjs`（`npm run check`）也檢查 `design-principles.md`，規則同 messaging。
 
 ## 2. 參考對照
@@ -49,7 +55,7 @@ description: 分階段流程的設計概念階段使用：從 messaging 推出�
 
 ## 3. 三個方向的原型
 
-1. 只做首頁原型，文案用 brief 寫的段落結構與 messaging 的主張；事實照事實庫，不編數字
+1. 只做首頁原型，文案用 brief 寫的段落結構與 messaging 的主張；事實照事實庫，不編數字。其他模板不做原型，由原則的「會怎麼呈現」規定
 2. 方向之間要有明顯差異，至少兩項不同：版面結構、字體、影像策略、色彩、動態。只換顏色不算不同方向
 3. 每個方向寫一段說明：
    - 主要視覺決定，每個指到一條設計原則
