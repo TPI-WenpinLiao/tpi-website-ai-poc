@@ -57,10 +57,10 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 ## 亮暗 surface
 
-`:root` 是亮色 surface。任何元素加上 `data-surface="dark"`，底下所有語意色彩 token 都換成深色值，`BaseLayout` 也會替它畫上底色與文字色。元件不寫深色變體，一律用語意 token。
+`:root` 是亮色 surface。任何元素加上 `data-surface="dark"`，底下所有語意色彩 token 都換成深色值，`BaseLayout` 也會替它畫上底色與文字色；`data-surface="light"` 在深色裡換回亮色值（`SiteHeader` 在紫色段落上時的選單面板）。元件不寫深色變體，一律用語意 token。
 
 - 頁面區塊用 `Surface`（`tone="dark" | "light"`）切換，不要自己寫 `data-surface`
-- 新增語意色彩 token 時，`:root` 與 `[data-surface="dark"]` 兩邊都要給值
+- 語意色彩 token 寫在 `tokens.css` 的 `:root, [data-surface="light"]` 區塊（primitives 與尺寸類留在 `:root`）；新增時這個區塊與 `[data-surface="dark"]` 兩邊都要給值
 - 新增會疊在一起使用的色彩 token 時，把前景／背景配對加進 `scripts/design/contrast.mjs` 的 `PAIRS`；兩個 surface 都會檢查
 
 ## Token 分層
@@ -146,7 +146,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
-| `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的亮底列，沒有下框線（#187），展開的選單面板可以有陰影；寬度小於 64rem 收進「選單」 |
+| `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的亮底列，沒有下框線（#187），展開的選單面板可以有陰影；下緣經過 `data-surface="dark"` 的段落時，script 把 header 的 `data-surface` 換成 `dark`（`IntersectionObserver`，#179），選單面板、搜尋框與「選單」固定 `data-surface="light"`；`surface` 固定成一種，只給 `/design-system` 的預覽用；寬度小於 64rem 收進「選單」 |
 | `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入） |
 | `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴 |
 | `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；和頁面用一階底色分開，不用下框線（#187）；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動 |

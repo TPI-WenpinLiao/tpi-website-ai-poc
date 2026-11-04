@@ -109,6 +109,6 @@ test('flags IA nodes at or below an internal page, not paths that only share the
 });
 
 test('token names include ones declared only on the dark surface', () => {
-  const css = ':root { --space-1: 1px; }\n[data-surface="dark"] { --space-1: 2px; --glow-dark: none; }';
-  assert.deepEqual(tokenNames(css), ['--space-1', '--glow-dark']);
+  const css = ':root { --space-1: 1px; }\n:root,\n[data-surface="light"] { --color-bg: #fff; }\n[data-surface="dark"] { --space-1: 2px; --glow-dark: none; }';
+  assert.deepEqual(tokenNames(css), ['--space-1', '--color-bg', '--glow-dark']);
 });

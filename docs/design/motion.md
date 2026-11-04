@@ -42,6 +42,7 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 | 展開符號旋轉 | `Faq`、`SiteHeader` 的 caret | offering 模板的 FAQ、header 選單 | 展開、收合 | 直接換成展開或收合的角度 |
 | 開關滑動 | `ConsentBanner` 的類別開關 | 設定 GTM ID 時的每一頁 | 切換 | 直接換位置 |
 | 顏色與底線變化 | `Breadcrumb`、`FilterBar`、`Pagination`、`SiteHeader` 等 | 全站 | hover、選取 | 直接換顏色 |
+| 頁首換色 | `SiteHeader` | 全站 | 頁首下緣經過紫色段落（`data-surface="dark"`）時換成深色 surface，離開時換回（#179）；`--duration-fast` | 直接換色 |
 
 只有 hover、focus 與展開時改變狀態的效果，減少動態時保留狀態的差異、拿掉過場（`--duration-*` 歸零）。狀態本身（箭頭的位置、展開的角度）是操作的回饋，不算動態。
 

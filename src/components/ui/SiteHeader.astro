@@ -1,8 +1,13 @@
 ---
 // Site header (M3-04, #17): brand, the first-level menu, search, locale and the 聯絡我們 button,
 // all from docs/ia/navigation.csv (src/lib/ia/navigation.ts). Sticky on the white paper of the page
-// (ribbon-route, #167), a hairline below it. The symbol logo keeps the bar's measured widths
-// (docs/design/nav-fit.md); the footer shows the full logo.
+// (ribbon-route, #167). The symbol logo keeps the bar's measured widths (docs/design/nav-fit.md);
+// the footer shows the full logo.
+// While a purple band (any data-surface="dark" section: OrientAI, contact, ContactCta, the footer)
+// is under the header's bottom edge, the header switches to the dark surface too (#179): the script
+// sets its data-surface, so every token below it, the focus ring included, follows; the logo swaps to
+// the white symbol. The dropdowns, search box and 選單 sheet stay light panels (data-surface="light").
+// `surface` fixes the header to one surface instead, for the /design-system previews.
 // Menus are native <details> disclosures sharing one `name`, so opening one closes the others
 // without client JS. A small script closes the open menu on a click outside it, and on Esc (focus
 // goes back to its summary). The rest of the keyboard model is M4-04's.
@@ -18,7 +23,7 @@
 // showing more than one header, like /design-system, pass skipTo={false} on the extra ones.
 // While the 選單 sheet is open the page behind it does not scroll (CSS :has, no client JS).
 // `open` draws one menu open (a first-level label, 'search' or 'mobile'), for the /design-system
-// page only.
+// page only, like `surface`.
 import { contactAction, localizedNav, localNode, nodeHref, type NavItem } from '../../lib/ia/navigation';
 import type { LocaleLink } from '../../lib/i18n/alternates';
 import { LOCALE_NAMES } from '../../lib/i18n/locales';
@@ -29,6 +34,7 @@ import Button from './Button.astro';
 import FormField from './FormField.astro';
 import { Image } from 'astro:assets';
 import logo from '../../assets/brand/logo-symbol-color.svg';
+import logoWhite from '../../assets/brand/logo-symbol-white.svg';
 
 interface Props {
   // Accessible name of the <nav>; must be unique when several headers share a page
@@ -37,12 +43,14 @@ interface Props {
   skipTo?: `#${string}` | false;
   open?: string;
   locales?: readonly LocaleLink[];
+  // Fixed surface; omitted, the header follows the bands under it
+  surface?: 'light' | 'dark';
 }
 
 const path = normalizePath(Astro.url.pathname);
 const currentLocale = localeFromPath(path);
 const t = strings(currentLocale);
-const { navLabel = t.mainNav, skipTo = '#main', open, locales = pageLocales(path) } = Astro.props;
+const { navLabel = t.mainNav, skipTo = '#main', open, locales = pageLocales(path), surface } = Astro.props;
 // Rendered height in px; matches --logo-height (2rem)
 const LOGO_HEIGHT = 32;
 // One exclusive group per header; /design-system shows several headers, each with its own navLabel
@@ -60,11 +68,12 @@ const groups = (item: NavItem) => item.children.filter((c) => c.children.length 
 const isMega = (item: NavItem) => groups(item).length > 0;
 ---
 
-<header class="site-header">
+<header class="site-header" data-surface={surface ?? 'light'} data-follow-surface={surface ? undefined : ''}>
   {skipTo && <a class="skip" href={skipTo}>{t.skipToMain}</a>}
   <div class="bar">
     <a class="brand" href={nodeHref('home', currentLocale)}>
-      <Image class="logo" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} loading="eager" layout="none" />
+      <Image class="logo on-light" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} loading="eager" layout="none" />
+      <Image class="logo on-dark" src={logoWhite} alt={t.homeLogoAlt} height={LOGO_HEIGHT} loading="eager" layout="none" />
     </a>
 
     <nav class="desktop-nav" aria-label={navLabel}>
@@ -77,7 +86,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
                   {item.label}
                   <span class="caret" aria-hidden="true" />
                 </summary>
-                <div class="menu">
+                <div class="menu" data-surface="light">
                   {isMega(item) ? (
                     <>
                       <ul class="overview">
@@ -140,7 +149,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6"></circle><path d="m15 15 5 5"></path></svg>
           <span class="sr-only">{search.title}</span>
         </summary>
-        <form class="menu search-box" role="search" action={nodeHref('search', currentLocale)}>
+        <form class="menu search-box" data-surface="light" role="search" action={nodeHref('search', currentLocale)}>
           <FormField kind="text" id={searchId} name="q" label={t.utility.searchLabel} />
           <Button type="submit">{t.utility.searchSubmit}</Button>
         </form>
@@ -156,7 +165,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
               <span class="sr-only">{t.languagePrefix}</span>
               {LOCALE_NAMES[currentLocale]}
             </summary>
-            <ul class="menu">
+            <ul class="menu" data-surface="light">
               {locales.map((l) => (
                 <li>
                   <a class="menu-link" href={l.href} lang={l.locale} hreflang={l.locale} aria-current={l.current ? 'page' : undefined}>
@@ -176,7 +185,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
           <span class="sr-only">{t.menu}</span>
         </summary>
-        <nav class="sheet" aria-label={`${navLabel}${t.mobileNavSuffix}`}>
+        <nav class="sheet" data-surface="light" aria-label={`${navLabel}${t.mobileNavSuffix}`}>
           {
             header.map((item) => (
               <div>
@@ -253,6 +262,41 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     });
   }
 
+  // The header takes the surface of the band under its bottom edge (#179). The observer's root is
+  // that one-pixel line of the viewport; while any data-surface="dark" section crosses it, the header
+  // is dark. Rebuilt on resize: the header's height and the viewport's change the line.
+  for (const header of [...document.querySelectorAll<HTMLElement>('.site-header[data-follow-surface]')].filter(live)) {
+    let observer: IntersectionObserver | undefined;
+    const watch = () => {
+      observer?.disconnect();
+      const height = header.offsetHeight;
+      const under = new Set<Element>();
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) under.add(e.target);
+            else under.delete(e.target);
+          }
+          header.dataset.surface = under.size > 0 ? 'dark' : 'light';
+        },
+        { rootMargin: `${1 - height}px 0px ${height - innerHeight}px 0px` },
+      );
+      for (const band of document.querySelectorAll('[data-surface="dark"]')) {
+        if (!band.closest('.site-header') && live(band)) observer.observe(band);
+      }
+    };
+    let queued = false;
+    addEventListener('resize', () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        watch();
+      });
+    });
+    watch();
+  }
+
   // Everything on the page outside `sheet`: the siblings of the sheet and of each of its ancestors
   function outside(sheet: Element): Element[] {
     const out: Element[] = [];
@@ -295,6 +339,11 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     inset-block-start: 0;
     z-index: var(--z-overlay);
     background: var(--color-bg);
+    color: var(--color-text);
+    /* The switch to and from the purple band (#179); a cut under reduced motion */
+    transition-property: background-color, color;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
     /* Makes the header the containing block of fixed descendants (the mobile sheet) */
     contain: layout;
     /* Closed menus still have boxes; at the edge of a phone screen they would widen the page.
@@ -357,12 +406,17 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     min-block-size: var(--touch-target);
   }
 
-  /* The white symbol only: the header is always the dark surface, and the bar has no room to spare
-     for the full logo's two lines of text; the footer shows the full logo */
+  /* The symbol only: the bar has no room to spare for the full logo's two lines of text; the footer
+     shows the full logo. Color on the paper, white on the purple band. */
   .logo {
     display: block;
     inline-size: auto;
     block-size: var(--logo-height);
+  }
+
+  .site-header[data-surface='light'] .on-dark,
+  .site-header[data-surface='dark'] .on-light {
+    display: none;
   }
 
   /* First-level menu: desktop only. Not named .primary: Button's variant class would match it */

@@ -758,23 +758,27 @@ const description =
     <Surface tone="dark" id="chrome">
       <SectionHeading
         title="頁首與頁尾"
-        description="選單是原生的 details 展開，共用同一個 name，一次只開一個；點選單外或按 Esc 會收起（一小段 script）。寬度小於 64rem 時第一層收進「選單」。搜尋按鈕打開的搜尋框送到 /search，頁首本身不載入 Pagefind。"
+        description="選單是原生的 details 展開，共用同一個 name，一次只開一個；點選單外或按 Esc 會收起（一小段 script）。寬度小於 64rem 時第一層收進「選單」。頁首下緣經過紫色段落時換成深色 surface，展開的選單維持白底。搜尋按鈕打開的搜尋框送到 /search，頁首本身不載入 Pagefind。"
       />
       <h3>SiteHeader</h3>
       <div class="chrome-demo">
-        <SiteHeader navLabel="主選單（展示：預設）" skipTo={false} />
+        <SiteHeader navLabel="主選單（展示：預設）" skipTo={false} surface="light" />
+      </div>
+      <h3>SiteHeader：紫色段落上</h3>
+      <div class="chrome-demo">
+        <SiteHeader navLabel="主選單（展示：紫色段落上）" skipTo={false} surface="dark" />
       </div>
       <h3>SiteHeader：產品 mega menu 展開（示意）</h3>
       <div class="chrome-demo open" inert>
-        <SiteHeader navLabel="主選單（展示：產品展開）" skipTo={false} open="產品" />
+        <SiteHeader navLabel="主選單（展示：產品展開）" skipTo={false} surface="light" open="產品" />
       </div>
       <h3>SiteHeader：下拉選單展開（示意）</h3>
       <div class="chrome-demo open-short" inert>
-        <SiteHeader navLabel="主選單（展示：公司展開）" skipTo={false} open="公司" />
+        <SiteHeader navLabel="主選單（展示：公司展開）" skipTo={false} surface="light" open="公司" />
       </div>
       <h3>SiteHeader：搜尋框展開（示意）</h3>
       <div class="chrome-demo open-short" inert>
-        <SiteHeader navLabel="主選單（展示：搜尋展開）" skipTo={false} open="search" />
+        <SiteHeader navLabel="主選單（展示：搜尋展開）" skipTo={false} surface="light" open="search" />
       </div>
       <h3>InPageNav</h3>
       <div class="chrome-demo">
