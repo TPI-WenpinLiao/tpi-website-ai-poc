@@ -163,7 +163,7 @@ JSON-LD：
 | `heroCta` | `'contact'` | 否 | hero 放「聯絡業務」按鈕（#187） | — |
 | `heroImage` | `image` | 否 | hero 主圖；產品家族頁的圖也是家族底下沒有 hero 圖的產品頁的 hero（#187） | 現站 hero 區 |
 | `industry` | `'finance' \| 'government' \| 'manufacturing'` | 產業頁必填 | 產業頁用這個值反查 `offering.useCases[].industry` 與 `case-study.industry`，列出相關產品與案例 | — |
-| `highlights` | `{ title: string; body: string }[]` | 否 | 介紹區塊。金融、政府頁承接開放銀行、開放政府頁的內容 | `/products/open-banking`、`/products/open-government` |
+| `highlights` | `{ title: string; body: string; link?: { label: string; node: string } }[]` | 否 | 介紹區塊。金融、政府頁承接開放銀行、開放政府頁的內容；`link` 是這一則接著要看的頁面（#178） | `/products/open-banking`、`/products/open-government` |
 | `sections` | `{ heading: string; body?: string; items?: { title: string; body?: string; node?: string }[]; link?: { label: string; node: string } }[]` | 否 | brief 要求比 highlights 多的段落（#167）：標題、一句說明、事實項目（`body` 是事實原文，`node` 連到該頁）、接著要看的頁面。段落已連到的子頁不再列在子頁卡片 | — |
 | `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句，是事實原文，要列進 `facts`（#167）；有 `caseNotes` 時不輸出 | — |
 | `caseNotes` | 同 offering | 否 | 案例列（#187）；有 `caseNotes` 時取代 `featuredCaseStudies` | — |

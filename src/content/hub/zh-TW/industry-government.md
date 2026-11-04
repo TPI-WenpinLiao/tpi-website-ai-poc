@@ -11,6 +11,10 @@ tagline: 智慧政府 Open API 開放資料應用
 highlights:
   - title: digiRunner - 100% 合規、智慧政府的推手
     body: digiRunner API 管理平台的設計完全滿足現行服務與未來業務開發需求，提供便利及彈性開發、使用者操作便利，合乎作業管理需求，並確保資料傳輸安全及機敏資料保密原則。
+    # briefs/digirunner.md「連入」(#178)
+    link:
+      label: digiRunner API 管理平台
+      node: digirunner
   - title: API開發評估
     body: Open API 供民間加值創新應用之可行性、考量服務使用之便利性。
   - title: 單位申請使用平台服務

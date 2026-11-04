@@ -4,6 +4,7 @@ description: API 管理平台（APIM）是連接傳統基礎設施與前瞻技�
 translationKey: enterprise-grade-apim
 category: enterprise-management
 tags: [api-management]
+relatedOfferings: [zh-TW/digirunner]
 publishedAt: 2026-01-26
 author: 陳瑞泰 John Chen
 authorType: Person
@@ -73,3 +74,5 @@ sourceUpdatedAt: 2026-01-26
 ## 六、 結語
 
 透過 APIM 整合量子運算，企業不僅能提前佈局次世代運算技術，更能有效控管風險與預算。這不僅是技術的串接，更是將「量子能力」轉化為「商業資產」的標準化過程。
+
+想看一套 API 管理平台的部署方式與導入案例，見 [digiRunner API 管理平台](/products/digirunner)。
