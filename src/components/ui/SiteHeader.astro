@@ -281,8 +281,12 @@ const isMega = (item: NavItem) => groups(item).length > 0;
       const under = new Set<Element>();
       observer = new IntersectionObserver(
         (entries) => {
+          // Decided on the band's own box, not on isIntersecting: the root margin is in px from
+          // the viewport's height, so between a resize and the rebuild (a full-page screenshot, a
+          // phone's address bar) the root is no longer the one-pixel line
           for (const e of entries) {
-            if (e.isIntersecting) under.add(e.target);
+            const box = e.boundingClientRect;
+            if (box.top < line && box.bottom > line - 1) under.add(e.target);
             else under.delete(e.target);
           }
           const surface = under.size > 0 ? 'dark' : 'light';
@@ -292,9 +296,10 @@ const isMega = (item: NavItem) => groups(item).length > 0;
         { rootMargin: `${1 - line}px 0px ${line - innerHeight}px 0px` },
       );
       // Every band, inert ones too: the 選單 sheet makes the page inert while open, and a resize
-      // then must not drop the bands for good (#179 review)
+      // then must not drop the bands for good. Not the nav: it is dark itself while it follows the
+      // header, and would keep both dark after a resize (#179 review)
       for (const band of document.querySelectorAll('[data-surface="dark"]')) {
-        if (!band.closest('.site-header')) observer.observe(band);
+        if (band !== nav && !band.closest('.site-header')) observer.observe(band);
       }
     };
     let queued = false;

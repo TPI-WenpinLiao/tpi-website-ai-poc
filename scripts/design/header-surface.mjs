@@ -8,7 +8,9 @@
 // and the header's text must reach 4.5:1 on its background. On the desktop the keyboard focus ring of
 // the header's first link must show and reach 3:1 on both surfaces; under reduced motion the header's
 // color change must not be animated. On the phone, a resize while the 選單 sheet is open must not
-// stop the header from following the bands afterwards.
+// stop the header from following the bands afterwards; on the desktop a resize inside a band must
+// not leave the header dark, and a viewport that grows before the observer is rebuilt must not turn
+// it dark.
 // --shots <dir> also saves the top of the viewport before and after the OrientAI band on the three
 // home pages, at 1280 and 375 px, for a design review in a PR.
 // Part of `npm run check`, after the build: node scripts/design/header-surface.mjs [--shots <dir>]
@@ -98,7 +100,7 @@ const readStop = (page) =>
     const found = /** @type {HTMLElement | null} */ (header.parentElement?.querySelector(':scope > .in-page-nav.header') ?? null);
     const nav = found && getComputedStyle(found).position === 'sticky' ? found : null;
     const bands = [...document.querySelectorAll('[data-surface="dark"]')]
-      .filter((el) => !el.closest('.site-header'))
+      .filter((el) => !el.closest('.site-header, .in-page-nav'))
       .map((el) => {
         const r = el.getBoundingClientRect();
         const name = el.className.toString().split(' ')[0] || el.tagName.toLowerCase();
@@ -169,7 +171,7 @@ async function afterSheetResize(page, mode) {
   await settle(page);
   await page.evaluate(() => {
     const header = /** @type {HTMLElement} */ (document.querySelector('.site-header'));
-    const bands = [...document.querySelectorAll('[data-surface="dark"]')].filter((el) => !el.closest('.site-header'));
+    const bands = [...document.querySelectorAll('[data-surface="dark"]')].filter((el) => !el.closest('.site-header, .in-page-nav'));
     const last = bands.at(-1);
     if (last) scrollTo(0, last.getBoundingClientRect().top + scrollY - header.offsetHeight + 40);
   });
@@ -177,6 +179,50 @@ async function afterSheetResize(page, mode) {
   const s = await readStop(page);
   const expected = expectedSurface(s.bands, s.line);
   return s.actual === expected ? [] : [`after a resize with the 選單 sheet open: header is ${s.actual}, expected ${expected}`];
+}
+
+/**
+ * A resize while the bar is dark (inside the last band): the rebuilt observer must not take the
+ * InPageNav, dark at that moment, for a band. Back at the top the header must be light again.
+ * @param {import('puppeteer-core').Page} page
+ * @param {(typeof MODES)[number]} mode
+ * @returns {Promise<string[]>}
+ */
+async function afterDarkResize(page, mode) {
+  const at = await readStop(page);
+  const last = at.bands.at(-1);
+  if (!last) return [];
+  await page.evaluate((y) => scrollTo(0, y), last.top + at.scrollY - at.line + OFFSET);
+  await settle(page);
+  await page.setViewport({ width: mode.width, height: mode.height + 1 });
+  await settle(page);
+  await page.evaluate(() => scrollTo(0, 0));
+  await settle(page);
+  const s = await readStop(page);
+  const expected = expectedSurface(s.bands, s.line);
+  return s.actual === expected ? [] : [`after a resize inside a band, back at the top: header is ${s.actual}, expected ${expected}`];
+}
+
+/**
+ * A viewport that grows before the observer is rebuilt (a full-page screenshot, a phone's address bar
+ * hiding): with requestAnimationFrame held, make the viewport as tall as the page while at the top.
+ * The header must stay on the surface of what is under it, not of everything in the taller viewport.
+ * @param {import('puppeteer-core').Page} page
+ * @param {(typeof MODES)[number]} mode
+ * @returns {Promise<string[]>}
+ */
+async function afterGrow(page, mode) {
+  await page.evaluate(() => scrollTo(0, 0));
+  await settle(page);
+  const tall = await page.evaluate(() => {
+    window.requestAnimationFrame = () => 0;
+    return document.documentElement.scrollHeight;
+  });
+  await page.setViewport({ width: mode.width, height: Math.min(tall, 16000) });
+  await new Promise((done) => setTimeout(done, SETTLE_MS));
+  const s = await readStop(page);
+  const expected = expectedSurface(s.bands, s.line);
+  return s.actual === expected ? [] : [`after the viewport grew before the rebuild: header is ${s.actual}, expected ${expected}`];
 }
 
 /**
@@ -211,6 +257,7 @@ async function check(browser, url, mode) {
     }
     if (!surfaces.has('dark')) out.push('no stop put a band under the header');
     if (mode.name === 'phone') out.push(...(await afterSheetResize(page, mode)));
+    if (mode.name === 'desktop') out.push(...(await afterDarkResize(page, mode)), ...(await afterGrow(page, mode)));
   } finally {
     await page.close();
   }
