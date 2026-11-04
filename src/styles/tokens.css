@@ -4,9 +4,9 @@
  * Direction ribbon-route (#166, rebuilt in #167): white paper everywhere, a white isometric system map
  * with one purple → magenta → orange ribbon on the home page, flat color, no shadows, no glow. The
  * gradient lives only in the ribbon's three.js render; every CSS token here is flat.
- * `:root` is the light surface; any element with data-surface="dark" switches every semantic color
- * token below it to the purple brand band (contact band, OrientAI band, footer), so components work
- * on both without variants.
+ * The light surface is `:root` (and data-surface="light"); any element with data-surface="dark"
+ * switches every semantic color token below it to the purple brand band (contact band, OrientAI
+ * band, footer), so components work on both without variants.
  *
  * Layers:
  * - Primitives (--purple-*, --magenta-*, --orange-*, --ink-*, --red-*, --green-*): raw values,
@@ -69,55 +69,7 @@
   --green-700: #22672a;
   --green-950: #0f2414;
 
-  /* Color: text */
-  --color-text: var(--ink-900);
-  --color-text-muted: var(--ink-600);
-  --color-text-brand: var(--purple-700);
-  --color-text-accent: var(--orange-700);
-
-  /* Color: surfaces */
-  --color-bg: var(--ink-0);
-  --color-bg-subtle: var(--ink-50);
-  --color-bg-muted: var(--ink-100);
-  --color-bg-brand-subtle: var(--purple-50);
-  --color-bg-accent-subtle: var(--orange-50);
-  /* Dims the page behind a modal dialog (ConsentBanner's preferences) */
-  --color-bg-overlay: rgb(18 15 29 / 0.55);
-
-  /* Color: lines. border is decorative; border-strong marks form controls (3:1). */
-  --color-border: var(--ink-200);
-  --color-border-strong: var(--ink-500);
-  --color-border-brand: var(--purple-200);
-  --color-grid-line: rgb(18 15 29 / 0.06);
-
-  /* Color: interactive */
-  --color-action: var(--purple-700);
-  --color-action-hover: var(--purple-800);
-  --color-action-text: var(--ink-0);
-  --color-action-subtle-hover: var(--purple-100);
-  --color-link: var(--purple-700);
-  --color-link-hover: var(--purple-900);
-  --color-disabled-bg: var(--ink-100);
-  --color-disabled-text: var(--ink-500);
-  --color-focus: var(--orange-700);
-
-  /* Color: decoration only (never text or the only cue of a control) */
-  --color-accent: var(--orange-500);
-  --color-brand: var(--purple-700);
-  --color-brand-soft: var(--purple-300);
-
-  /* Color: status */
-  --color-error: var(--red-700);
-  --color-error-bg: var(--red-50);
-  --color-success: var(--green-700);
-  --color-success-bg: var(--green-50);
-
-  /* Glass: translucent panels floating over the scene. --scene-worst is the backdrop color that
-     gives the lowest contrast on this surface; contrast.mjs composites glass over it. */
-  --glass-bg: rgb(255 255 255 / 0.9);
-  --glass-border: rgb(18 15 29 / 0.08);
   --glass-blur: 16px;
-  --scene-worst: var(--ink-950);
 
   /* Lines that mark a section, a card edge or the scroll progress bar. ribbon-route keeps the
      brand gradient for the ribbon only (#167), so this is one flat color in gradient form: the
@@ -278,6 +230,63 @@
   --offscreen-section-height: 60rem;
   --icon-stroke: 1.75;
 
+}
+
+/* Light surface: the white paper. :root sets it for the page; data-surface="light" sets it back
+   inside a dark one, for a light panel in a dark band (SiteHeader's menus while the header is on the
+   purple band, #179). */
+:root,
+[data-surface="light"] {
+  /* Color: text */
+  --color-text: var(--ink-900);
+  --color-text-muted: var(--ink-600);
+  --color-text-brand: var(--purple-700);
+  --color-text-accent: var(--orange-700);
+
+  /* Color: surfaces */
+  --color-bg: var(--ink-0);
+  --color-bg-subtle: var(--ink-50);
+  --color-bg-muted: var(--ink-100);
+  --color-bg-brand-subtle: var(--purple-50);
+  --color-bg-accent-subtle: var(--orange-50);
+  /* Dims the page behind a modal dialog (ConsentBanner's preferences) */
+  --color-bg-overlay: rgb(18 15 29 / 0.55);
+
+  /* Color: lines. border is decorative; border-strong marks form controls (3:1). */
+  --color-border: var(--ink-200);
+  --color-border-strong: var(--ink-500);
+  --color-border-brand: var(--purple-200);
+  --color-grid-line: rgb(18 15 29 / 0.06);
+
+  /* Color: interactive */
+  --color-action: var(--purple-700);
+  --color-action-hover: var(--purple-800);
+  --color-action-text: var(--ink-0);
+  --color-action-subtle-hover: var(--purple-100);
+  --color-link: var(--purple-700);
+  --color-link-hover: var(--purple-900);
+  --color-disabled-bg: var(--ink-100);
+  --color-disabled-text: var(--ink-500);
+  --color-focus: var(--orange-700);
+
+  /* Color: decoration only (never text or the only cue of a control) */
+  --color-accent: var(--orange-500);
+  --color-brand: var(--purple-700);
+  --color-brand-soft: var(--purple-300);
+
+  /* Color: status */
+  --color-error: var(--red-700);
+  --color-error-bg: var(--red-50);
+  --color-success: var(--green-700);
+  --color-success-bg: var(--green-50);
+
+  /* Glass: translucent panels floating over the scene. --scene-worst is the backdrop color that
+     gives the lowest contrast on this surface; contrast.mjs composites glass over it. */
+  --glass-bg: rgb(255 255 255 / 0.9);
+  --glass-border: rgb(18 15 29 / 0.08);
+  --scene-worst: var(--ink-950);
+
+  color-scheme: light;
 }
 
 /* Dark surface: the purple brand band (contact, OrientAI, footer). Only semantic tokens change. */

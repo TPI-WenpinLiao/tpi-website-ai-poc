@@ -10,14 +10,17 @@ const CSS = `
   --white: #fff;
   --ink: #1b1a1f;
   --orange: #ff6329;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+  --loop-a: var(--loop-b);
+  --loop-b: var(--loop-a);
+}
+:root,
+[data-surface="light"] {
   --color-text: var(--ink);
   --color-bg: var(--white);
   --color-accent: var(--orange);
   --glass-bg: rgb(255 255 255 / 0.5);
   --scene-worst: #000000;
-  --shadow: 0 1px 2px rgb(0 0 0 / 0.1);
-  --loop-a: var(--loop-b);
-  --loop-b: var(--loop-a);
 }
 [data-surface="dark"] {
   --color-text: var(--white);
@@ -25,16 +28,18 @@ const CSS = `
 }
 @media (prefers-reduced-motion: reduce) { :root { --color-bg: #ff0000; } }
 `;
-const tokens = parseTokens(CSS);
+const tokens = parseSurfaces(CSS)[0].tokens;
 
 test('parseTokens reads only the top-level block for the selector and skips comments', () => {
-  assert.equal(tokens.get('--color-bg'), 'var(--white)');
+  assert.equal(parseTokens(CSS).get('--white'), '#fff');
+  assert.equal(parseTokens(CSS).has('--color-bg'), false);
+  assert.equal(parseTokens(CSS, ':root,\n[data-surface="light"]').get('--color-bg'), 'var(--white)');
   assert.equal(tokens.has('--ignored'), false);
   assert.equal(parseTokens(CSS, '[data-surface="dark"]').get('--color-bg'), 'var(--ink)');
   assert.throws(() => parseTokens(CSS, '.missing'), /no top-level/);
 });
 
-test('parseSurfaces lets the dark surface override :root and inherit the rest', () => {
+test('parseSurfaces stacks :root, the light block and the dark block', () => {
   const [light, dark] = parseSurfaces(CSS);
   assert.equal(resolveColor(light.tokens, '--color-bg'), '#fff');
   assert.equal(resolveColor(dark.tokens, '--color-bg'), '#1b1a1f');

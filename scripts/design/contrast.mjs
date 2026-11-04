@@ -1,7 +1,7 @@
 // Checks the semantic color pairs in src/styles/tokens.css against WCAG 2.2 AA contrast:
 // 4.5:1 for text (1.4.3), 3:1 for UI components and focus indicators (1.4.11).
-// Every pair is checked on both surfaces: light (:root) and dark ([data-surface="dark"], which
-// overrides :root). PAIRS is the single list of foreground/background combinations components are
+// Every pair is checked on both surfaces: light (the `:root, [data-surface="light"]` block over
+// :root's primitives) and dark ([data-surface="dark"], which overrides the light one). PAIRS is the single list of foreground/background combinations components are
 // allowed to use; adding a color token that pairs with another means adding the pair here.
 // Translucent backgrounds (glass) are composited over `over` (default --color-bg); glass pairs use
 // --scene-worst, the backdrop that gives the lowest contrast on that surface.
@@ -44,7 +44,7 @@ export const PAIRS = [
 ];
 
 export const SURFACES = [
-  { name: 'light', selector: ':root' },
+  { name: 'light', selector: ':root,\n[data-surface="light"]' },
   { name: 'dark', selector: '[data-surface="dark"]' },
 ];
 
@@ -74,13 +74,17 @@ export function parseTokens(css, selector = ':root') {
   throw new Error(`no top-level "${selector}" block found`);
 }
 
-/** Tokens per surface; later surfaces override the first. @param {string} css */
+/**
+ * Tokens per surface: the primitives and scales of :root, then each surface's color block. The dark
+ * surface starts from the light one, so tokens it doesn't set keep their light value.
+ * @param {string} css
+ */
 export function parseSurfaces(css) {
-  const base = parseTokens(css, SURFACES[0].selector);
-  return SURFACES.map(({ name, selector }, i) => ({
-    name,
-    tokens: i === 0 ? base : new Map([...base, ...parseTokens(css, selector)]),
-  }));
+  let tokens = parseTokens(css, ':root');
+  return SURFACES.map(({ name, selector }) => {
+    tokens = new Map([...tokens, ...parseTokens(css, selector)]);
+    return { name, tokens };
+  });
 }
 
 /**
