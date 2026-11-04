@@ -1,14 +1,15 @@
-// Checks that the sticky header follows the purple bands on the three home pages (#179): SiteHeader's
-// script sets the header's data-surface to "dark" while a data-surface="dark" section (OrientAI,
-// contact, the footer) is under the header's bottom edge, and back to "light" elsewhere.
-// Per home page, on a phone (static layout), a desktop (the live 3D layout, html.want-3d) and a
-// desktop that prefers reduced motion: scroll to the top, to just above and just inside each band,
+// Checks that the sticky header follows the purple bands (#179): SiteHeader's script sets the header's
+// data-surface to "dark" while a data-surface="dark" section (OrientAI, contact, ContactCta, the
+// footer) is under the header's bottom edge, and back to "light" elsewhere.
+// On the three home pages and one inner page (an offering page: ContactCta and the footer), on a
+// phone, a desktop (on the home pages the live 3D layout, html.want-3d) and a desktop that prefers
+// reduced motion: scroll to the top, to just above and just inside each band,
 // then back to the top. At every stop the header's data-surface must match what the bands' boxes say,
 // and the header's text must reach 4.5:1 on its background. On the desktop the keyboard focus ring of
 // the header's first link must show and reach 3:1 on both surfaces; under reduced motion the header's
 // color change must not be animated.
-// --shots <dir> also saves the top of the viewport before and after the OrientAI band, at 1280 and
-// 375 px, for the PR (#179 stage 1).
+// --shots <dir> also saves the top of the viewport before and after the OrientAI band on the three
+// home pages, at 1280 and 375 px, for a design review in a PR.
 // Part of `npm run check`, after the build: node scripts/design/header-surface.mjs [--shots <dir>]
 // Uses CHROME_PATH (set by the SessionStart hook), else CHROME_BIN (set on GitHub's runners), else the installed Chrome.
 
@@ -21,7 +22,8 @@ import { contrastRatio } from './contrast.mjs';
 import { LAUNCH_ARGS } from './scene-wait.mjs';
 
 const DIST = resolve(import.meta.dirname, '../../dist');
-export const PATHS = ['/', '/en', '/vi'];
+export const HOMES = ['/', '/en', '/vi'];
+export const PATHS = [...HOMES, '/products/digirunner'];
 export const MODES = [
   { name: 'phone', width: 375, height: 760, reduced: false },
   { name: 'desktop', width: 1280, height: 800, reduced: false },
@@ -160,7 +162,7 @@ async function check(browser, url, mode) {
     await page.goto(url, { waitUntil: 'load' });
     await settle(page);
     const live = await page.evaluate(() => document.documentElement.classList.contains('want-3d'));
-    if (mode.name === 'desktop' && !live) out.push('the live 3D layout did not start');
+    if (mode.name === 'desktop' && HOMES.includes(new URL(url).pathname) && !live) out.push('the live 3D layout did not start');
     const surfaces = new Set();
     for (const { label, y } of await stops(page)) {
       await page.evaluate((top) => scrollTo(0, top), y);
@@ -189,7 +191,7 @@ async function check(browser, url, mode) {
  */
 async function shots(browser, origin, dir) {
   mkdirSync(dir, { recursive: true });
-  for (const path of PATHS) {
+  for (const path of HOMES) {
     for (const { width, height } of [MODES[1], MODES[0]]) {
       const page = await browser.newPage();
       await page.setViewport({ width, height, deviceScaleFactor: 2 });
@@ -235,7 +237,7 @@ async function main() {
     await browser.close();
     server.close();
   }
-  console.log(`${PATHS.length * MODES.length} home page and viewport combinations checked, ${failing} with problems`);
+  console.log(`${PATHS.length * MODES.length} page and viewport combinations checked, ${failing} with problems`);
   if (failing) process.exitCode = 1;
 }
 
