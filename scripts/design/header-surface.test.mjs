@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { cssToHex, expectedSurface, focusProblems, stopProblems } from './header-surface.mjs';
 
-test('the header is dark only while a band crosses its bottom pixel row', () => {
+test('the header is dark only while a band crosses the bar\'s bottom pixel row', () => {
   assert.equal(expectedSurface([], 64), 'light');
   assert.equal(expectedSurface([{ top: 200, bottom: 900 }], 64), 'light');
   assert.equal(expectedSurface([{ top: -100, bottom: 400 }], 64), 'dark');
@@ -13,6 +13,9 @@ test('the header is dark only while a band crosses its bottom pixel row', () => 
   assert.equal(expectedSurface([{ top: 63, bottom: 900 }], 64), 'dark');
   // A band that ended above it no longer counts
   assert.equal(expectedSurface([{ top: -900, bottom: 63 }], 64), 'light');
+  // With an InPageNav stuck under the header the line is the nav's bottom edge
+  assert.equal(expectedSurface([{ top: 100, bottom: 900 }], 64 + 52), 'dark');
+  assert.equal(expectedSurface([{ top: 100, bottom: 900 }], 64), 'light');
 });
 
 test('cssToHex reads computed rgb() and rgba() colors', () => {
@@ -27,6 +30,7 @@ test('a stop fails on the wrong surface and on low text contrast', () => {
   assert.deepEqual(stopProblems(ok), []);
   assert.match(stopProblems({ ...ok, actual: 'light' })[0] ?? '', /is light, expected dark/);
   assert.match(stopProblems({ ...ok, actual: undefined })[0] ?? '', /is unset/);
+  assert.match(stopProblems({ ...ok, actual: 'light', name: 'in-page nav' })[0] ?? '', /^in-page nav is light/);
   assert.match(stopProblems({ ...ok, text: 'rgb(118, 118, 118)', bg: 'rgb(56, 24, 80)' })[0] ?? '', /below 4\.5:1/);
 });
 

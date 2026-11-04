@@ -7,6 +7,7 @@
 // is under the header's bottom edge, the header switches to the dark surface too (#179): the script
 // sets its data-surface, so every token below it, the focus ring included, follows; the logo swaps to
 // the white symbol. The dropdowns, search box and 選單 sheet stay light panels (data-surface="light").
+// From 64rem a page's InPageNav stuck under the header switches with it, as one bar.
 // `surface` fixes the header to one surface instead, for the /design-system previews.
 // Menus are native <details> disclosures sharing one `name`, so opening one closes the others
 // without client JS. A small script closes the open menu on a click outside it, and on Esc (focus
@@ -265,11 +266,18 @@ const isMega = (item: NavItem) => groups(item).length > 0;
   // The header takes the surface of the band under its bottom edge (#179). The observer's root is
   // that one-pixel line of the viewport; while any data-surface="dark" section crosses it, the header
   // is dark. Rebuilt on resize: the header's height and the viewport's change the line.
+  // From 64rem a page's InPageNav (stick="header", after the header in PageLayout) is stuck right
+  // under the header, so the two read as one bar: the line moves to the bar's bottom edge and the
+  // nav switches with the header. The bands all come after the nav, so by the time one reaches that
+  // line the nav is stuck. Below 64rem the nav scrolls with the page and stays light.
+  const wide = matchMedia('(width >= 64rem)');
   for (const header of [...document.querySelectorAll<HTMLElement>('.site-header[data-follow-surface]')].filter(live)) {
+    const nav = header.parentElement?.querySelector<HTMLElement>(':scope > .in-page-nav.header') ?? null;
     let observer: IntersectionObserver | undefined;
     const watch = () => {
       observer?.disconnect();
-      const height = header.offsetHeight;
+      const bar = wide.matches ? nav : null;
+      const line = header.offsetHeight + (bar?.offsetHeight ?? 0);
       const under = new Set<Element>();
       observer = new IntersectionObserver(
         (entries) => {
@@ -277,9 +285,11 @@ const isMega = (item: NavItem) => groups(item).length > 0;
             if (e.isIntersecting) under.add(e.target);
             else under.delete(e.target);
           }
-          header.dataset.surface = under.size > 0 ? 'dark' : 'light';
+          const surface = under.size > 0 ? 'dark' : 'light';
+          header.dataset.surface = surface;
+          if (nav) nav.dataset.surface = bar ? surface : 'light';
         },
-        { rootMargin: `${1 - height}px 0px ${height - innerHeight}px 0px` },
+        { rootMargin: `${1 - line}px 0px ${line - innerHeight}px 0px` },
       );
       // Every band, inert ones too: the 選單 sheet makes the page inert while open, and a resize
       // then must not drop the bands for good (#179 review)
