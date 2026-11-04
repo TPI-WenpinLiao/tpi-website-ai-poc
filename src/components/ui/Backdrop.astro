@@ -121,7 +121,8 @@ const fallback = await getImage({ src: image, width: Math.min(1440, image.width)
     }
 
     /* The 4:5 mobile image keeps its own aspect at the top instead of cover-scaling to the hero's
-       height; its lower half is dark by design and fades out, and PageHero starts the copy there */
+       height; it fades out by the end of PageHero's visual area (--hero-narrow-visual), where the
+       copy starts, so the copy sits on plain --color-bg */
     .fade-hero.has-mobile picture,
     .fade-hero.has-mobile img {
       block-size: auto;
@@ -133,7 +134,7 @@ const fallback = await getImage({ src: image, width: Math.min(1440, image.width)
       max-inline-size: var(--hero-narrow-image-max);
       margin-inline: auto;
       translate: 0 var(--hero-image-drop);
-      mask-image: linear-gradient(to bottom, black 55%, transparent);
+      mask-image: linear-gradient(to bottom, black calc(var(--hero-narrow-visual) - var(--space-section)), transparent var(--hero-narrow-visual));
     }
 
     .fade-hero:not(.has-mobile)::after {
