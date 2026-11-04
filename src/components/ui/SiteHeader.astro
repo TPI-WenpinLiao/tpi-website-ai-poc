@@ -281,8 +281,10 @@ const isMega = (item: NavItem) => groups(item).length > 0;
         },
         { rootMargin: `${1 - height}px 0px ${height - innerHeight}px 0px` },
       );
+      // Every band, inert ones too: the 選單 sheet makes the page inert while open, and a resize
+      // then must not drop the bands for good (#179 review)
       for (const band of document.querySelectorAll('[data-surface="dark"]')) {
-        if (!band.closest('.site-header') && live(band)) observer.observe(band);
+        if (!band.closest('.site-header')) observer.observe(band);
       }
     };
     let queued = false;

@@ -7,7 +7,8 @@
 // then back to the top. At every stop the header's data-surface must match what the bands' boxes say,
 // and the header's text must reach 4.5:1 on its background. On the desktop the keyboard focus ring of
 // the header's first link must show and reach 3:1 on both surfaces; under reduced motion the header's
-// color change must not be animated.
+// color change must not be animated. On the phone, a resize while the 選單 sheet is open must not
+// stop the header from following the bands afterwards.
 // --shots <dir> also saves the top of the viewport before and after the OrientAI band on the three
 // home pages, at 1280 and 375 px, for a design review in a PR.
 // Part of `npm run check`, after the build: node scripts/design/header-surface.mjs [--shots <dir>]
@@ -132,19 +133,48 @@ const stops = (page) =>
   }, OFFSET);
 
 /**
- * Tab to the header's first link (past the skip link) and read its focus ring.
+ * Tab to the header's first link: focus the skip link (the first focusable element) and press Tab
+ * once, so every call reads the same element.
  * @param {import('puppeteer-core').Page} page
  */
 async function focusRing(page) {
-  await page.evaluate(() => /** @type {HTMLElement} */ (document.activeElement)?.blur());
-  for (let i = 0; i < 2; i++) await page.keyboard.press('Tab');
+  await page.evaluate(() => /** @type {HTMLElement | null} */ (document.querySelector('.site-header .skip'))?.focus());
+  await page.keyboard.press('Tab');
   return page.evaluate(() => {
     const el = document.activeElement;
     const header = document.querySelector('.site-header');
-    if (!el || !header?.contains(el)) return { style: 'none', color: 'rgb(0, 0, 0)', bg: 'rgb(0, 0, 0)' };
+    if (!el?.matches('.site-header .brand') || !header) return { style: 'none', color: 'rgb(0, 0, 0)', bg: 'rgb(0, 0, 0)' };
     const s = getComputedStyle(el);
     return { style: s.outlineStyle, color: s.outlineColor, bg: getComputedStyle(header).backgroundColor };
   });
+}
+
+/**
+ * On a phone: open the 選單 sheet (the page goes inert), rotate the viewport while it is open, close
+ * it and, still rotated, scroll the last band under the header. The header must still turn dark (#179 review).
+ * @param {import('puppeteer-core').Page} page
+ * @param {(typeof MODES)[number]} mode
+ * @returns {Promise<string[]>}
+ */
+async function afterSheetResize(page, mode) {
+  await page.evaluate(() => scrollTo(0, 0));
+  await page.click('.site-header .mobile summary');
+  await settle(page);
+  if (!(await page.evaluate(() => document.querySelector('main')?.inert))) return ['the 選單 sheet did not make the page inert'];
+  await page.setViewport({ width: mode.height, height: mode.width });
+  await settle(page);
+  await page.click('.site-header .mobile summary');
+  await settle(page);
+  await page.evaluate(() => {
+    const header = /** @type {HTMLElement} */ (document.querySelector('.site-header'));
+    const bands = [...document.querySelectorAll('[data-surface="dark"]')].filter((el) => !el.closest('.site-header'));
+    const last = bands.at(-1);
+    if (last) scrollTo(0, last.getBoundingClientRect().top + scrollY - header.offsetHeight + 40);
+  });
+  await settle(page);
+  const s = await readStop(page);
+  const expected = expectedSurface(s.bands, s.height);
+  return s.actual === expected ? [] : [`after a resize with the 選單 sheet open: header is ${s.actual}, expected ${expected}`];
 }
 
 /**
@@ -177,6 +207,7 @@ async function check(browser, url, mode) {
       }
     }
     if (!surfaces.has('dark')) out.push('no stop put a band under the header');
+    if (mode.name === 'phone') out.push(...(await afterSheetResize(page, mode)));
   } finally {
     await page.close();
   }
