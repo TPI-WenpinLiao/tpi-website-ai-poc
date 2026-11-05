@@ -156,11 +156,13 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 政府頁、digiRunner on Cloud 與 `/blog/enterprise-grade-apim` 連到 digiRunner 產品頁完成（#178）：照 `briefs/digirunner.md`「連入」各加一個內文連結，錨點都帶「API 管理平台」。hub 的 `highlights[]` 加 `link`（跟 offering `features[].link` 同形），政府頁「digiRunner - 100% 合規、智慧政府的推手」那一則連過去；雲端版在「靈活的業務擴展」連到「digiRunner API 管理平台的地端與 Kubernetes 版本」；文章是 `migrate.mjs` 的產出，`relatedOfferings: [zh-TW/digirunner]` 寫在 `overrides.yaml`（發布日比另外三篇早，產品頁相關文章仍列原本 3 則），結語後那句連結用 `overrides.yaml` 新增的 `append`（接在轉換後內文最後的 Markdown，`docs/content/migration.md`「人工修正」）。只改 zh-TW
 - 決定其他頁面照分階段流程分批重做完成（#188）：依使用者決定，第一批是 `messaging.md` 或 `search-intent.md` 已點名的 7 頁（`/solutions/smartclaim`、`/solutions/smartfilling`、`/products/systalk-ai`、`/orient-ai`、`/aiso`、`/products/greenswift`、`/products/digilism`），只做 zh-TW。研究併進策略 issue、不重做設計概念，一批開研究與策略一張（#199，`strategy-approved`）與製作每 2–3 頁一張（#200–#202，`needs-design`，評審在製作 issue 裡），寫進 `docs/workflow.md`「分階段流程」的「後續批次」與 `site-profile.md`「後續批次」。決定與試點的成本依據在 #188 的留言
 - 第一批 7 頁的研究與 brief 完成（#199，`strategy-approved`）：事實庫補 59 筆（7 頁的功能句、`/aiso` 頁、新聞 457、559、580 的標題與 575、585 的內文；依使用者決定，新聞可以當事實來源，`source-pages.mjs` 也比對新聞內文），`unmigrated.md`、`search-intent.md` 補 7 頁（52 組查詢，「對應到頁面」定案），`messaging.md` 新增 `DM-9`–`DM-13`、`IT-9`–`IT-11`（AISO 的軟體核心是 OrientAI；群聯合作頁的事實改由 SysTalk.ai hub 承接），`docs/strategy/briefs/` 新增 smartclaim、smartfilling、systalk-ai、orient-ai、aiso、greenswift、digilism 7 份 brief（段數依各頁 confirmed 事實數）
+- 第一批的 AI 理賠、AI 建檔與 SysTalk.ai 產品家族頁完成（#200，`design-approved`）：`/solutions/smartclaim`、`/solutions/smartfilling`、`/products/systalk-ai` 照 brief 改用 `sections` 逐段排版（只改 zh-TW），三張新的 hero 靜態圖（`page-smartclaim`、`page-smartfilling`、`page-systalk-ai`）。`pageSection` 新增 `index`（索引列），spec 加 `compare`（兩個機型並排）、`items`、`record`，ui 加 `itemsBelow`，hub 加 `partsTitle`，offering 與 hub 加 `contactTitle`（`ContactCta` 的 `title`）；5 行以上的事實排成兩欄清單（`src/lib/content/lists.ts`）。`/templates/offering`、`/templates/hub` 的預覽固定取試點頁。三頁由新的 `reviewer` 評三份 rubric 都通過（`evaluation.md`「第一批（#200）」），`eval-shots.mjs` 加 `--pages` 給後續批次用
 
 ## 下一步
 
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
-- #200–#202 可以開始（第一批 7 頁的製作，照 `docs/strategy/briefs/` 的 brief），可以平行做
+- #201、#202 可以開始（第一批 7 頁的製作，照 `docs/strategy/briefs/` 的 brief），可以平行做
+- `evaluation.md`「第一批（#200）」的「還不夠好的地方」與「評審依據不足」（`design-principles.md` 沒有方案頁與產品家族 hub 的寫法、brief 交給設計概念的例外沒有回寫、`SiteFooter` 的細線）還沒開 issue，要做時另開
 - 回覆 #199 PR 的「待確認」：GreenSwift 試用網址與報告語言、`interactivehealth` 是否列進 DigiLism 子頁、改舊文章的連結文字、建議的 blog（ICR／OCR／IDP、主權 AI、中台／ESB、MCP）要不要開 issue、還沒收的事實（`messaging.md`「缺少證據的主張」第 18、23、24 項）
 - digiRunner 頁要不要加產品獎（`DM-8` 的台灣精品獎 2023、2024，創新商務獎 2022）：#183 只放了 hero 的專利數與台新的 Global Finance 2020，`DM-8` 把 digiRunner 列為主要用途頁，要放的話另開 issue
 - #173 的延伸事項（兩份 blog brief 文末「延伸事項」），要做時另開 issue：`/products/systalk-ai` 與 `/industries/finance` 的 `featuredPosts` 加上 AI 導入篇（金融頁要先改 `finance.md` 取捨第 5 項）、既有文章連回兩篇新文章、`ArticleTemplate` 文末加聯絡 CTA、`search-intent.md`「對應到頁面」的 `API 管理平台` 補次要承接頁、兩篇的 en、vi 版

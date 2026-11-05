@@ -44,6 +44,11 @@ export const ROWS = [
   ['第二輪（#187）', '首頁', 'r2-new-home'],
   ['第二輪（#187）', 'digiRunner', 'r2-new-digirunner'],
   ['第二輪（#187）', '金融', 'r2-new-finance'],
+  // The first later batch (#200): pages rebuilt from their briefs, each scored once it passed
+  // (evaluation.md「第一批（#200）」)
+  ['第一批（#200）', 'AI 智能理賠', 'b1-new-smartclaim'],
+  ['第一批（#200）', 'AI 智慧建檔', 'b1-new-smartfilling'],
+  ['第一批（#200）', 'SysTalk.ai 產品家族', 'b1-new-systalk-ai'],
 ];
 
 /**

@@ -1,0 +1,58 @@
+---
+// A fact text as it reads on the page (#200): split into items one per line (factList,
+// site-research 第 2 條), it is a list, led by its first line when that ends in a colon, the short
+// items in two columns (design-principles.md「內頁共用的規則」375 寬); otherwise a paragraph keeping its
+// line breaks. `emphasis="percentages"` bolds the outcome figures (emphasis.ts). `inline` leaves a
+// one-paragraph text bare, for a table cell that already keeps line breaks (SpecTable).
+// PageSections and SpecTable use it, so a fact reads the same in every layout.
+import { factList } from '../../lib/content/lists';
+import { percentages } from '../../lib/content/emphasis';
+
+interface Props {
+  text: string;
+  emphasis?: 'percentages' | 'none';
+  inline?: boolean;
+}
+
+const { text, emphasis = 'none', inline = false } = Astro.props;
+const list = factList(text);
+const parts = emphasis === 'percentages' ? percentages(text) : [{ part: text, strong: false }];
+---
+
+{
+  list ? (
+    <>
+      {list.lead && <p class="lead">{list.lead}</p>}
+      <ul class="fact-list">
+        {list.items.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </>
+  ) : inline ? (
+    parts.map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))
+  ) : (
+    <p class="text">{parts.map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
+  )
+}
+
+<style>
+  .text {
+    max-inline-size: var(--reading-max-width);
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  .lead {
+    margin: 0 0 var(--space-2);
+  }
+
+  .fact-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-1) var(--grid-gutter);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

@@ -4,8 +4,9 @@
 // The listing preview is the blog's real first page (published posts only, PAGE_SIZE of them);
 // the contact preview uses the contact page entry when there is one and shows the form after a failed
 // submit (`preview="errors"`); the default form is the real /contact-us.
-// The offering and hub previews take the first entry laid out by `sections` (#187, the pilot pages:
-// between them every section layout), so a change to a layout shows in the visual regression.
+// The offering and hub previews take the pilot pages (#187: between them every section layout), so a
+// change to a layout shows in the visual regression; other pages laid out by `sections` later (#200)
+// don't change the preview. Without a pilot page, the first entry laid out by `sections`.
 // Internal page (src/lib/seo/indexing.ts); PageLayout marks it as a preview. The home template
 // is the home page itself, so it has no preview here.
 import type { GetStaticPaths } from 'astro';
@@ -31,10 +32,14 @@ export const getStaticPaths = (() => templates.filter((t) => t.id !== 'home').ma
 const { template } = Astro.params;
 const locale = DEFAULT_LOCALE;
 const inLocale = (e: { id: string }) => entryLocale(e.id) === locale;
+const PILOTS = ['digirunner', 'industry-finance'];
 // The first sample entry of a collection, drafts included; a template without one fails the build
 async function sample<T extends { data: object }>(entries: Promise<T[]>): Promise<T> {
   const all = await entries;
-  const first = all.find((e) => 'sections' in e.data && Array.isArray(e.data.sections) && e.data.sections.length > 0) ?? all[0];
+  const first =
+    all.find((e) => 'node' in e.data && PILOTS.includes(String(e.data.node))) ??
+    all.find((e) => 'sections' in e.data && Array.isArray(e.data.sections) && e.data.sections.length > 0) ??
+    all[0];
   if (!first) throw new Error(`no zh-TW sample entry for the ${template} template`);
   return first;
 }

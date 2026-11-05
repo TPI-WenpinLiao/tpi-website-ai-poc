@@ -3,7 +3,8 @@
 // grid, frame or glow, as the home page's last section (design-principles.md「內頁的版型」色帶, #187),
 // with the contact copy of src/data/home/<locale>.ts (`contactCta`;
 // zh-TW rewritten in #167 to say the next step) and one button to 聯絡我們 in the page's locale. `label` replaces the button text (an offering
-// whose cta is demo says 預約演示). The same on every page, so the site search leaves it out.
+// whose cta is demo says 預約演示); `title` replaces the heading with the page's own next step (#200).
+// The same on every page, so the site search leaves it out.
 import Surface from './Surface.astro';
 import SectionHeading from './SectionHeading.astro';
 import Button from './Button.astro';
@@ -12,18 +13,19 @@ import { contactAction, nodeHref } from '../../lib/ia/navigation';
 import { localeFromPath } from '../../lib/i18n/paths';
 
 interface Props {
-  label?: string;
+  label?: string | undefined;
+  title?: string | undefined;
 }
 
 const locale = localeFromPath(Astro.url.pathname);
-const { label = contactAction(locale) } = Astro.props;
+const { label = contactAction(locale), title } = Astro.props;
 const { contactCta } = home(locale);
 const href = nodeHref('contact', locale);
 ---
 
 <Surface tone="dark">
   <div class="contact-cta" data-pagefind-ignore>
-    <SectionHeading title={contactCta.title} description={contactCta.description} align="center" />
+    <SectionHeading title={title ?? contactCta.title} description={contactCta.description} align="center" />
     <Button href={href} size="lg">{label}</Button>
   </div>
 </Surface>
