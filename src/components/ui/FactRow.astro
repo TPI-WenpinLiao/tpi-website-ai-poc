@@ -1,6 +1,6 @@
 ---
 // A claim and the facts that back it (#167): the heading, a short answer and an optional link on
-// the start side (columns 1–5), the facts as a list set apart by space on the end side (7–12), side
+// the start side (columns 1–5; `links` when there are two, #202), the facts as a list set apart by space on the end side (7–12), side
 // by side on the 12-column grid from --bp-lg-up, stacked below. No rules or numbers (#187). This is
 // the「主張與原文」layout of design-principles.md「內頁的版型」: at most twice a page, never twice in a
 // row on a page laid out by sections; the offering and hub templates fall back to it for pages
@@ -14,20 +14,21 @@ interface Props {
   level?: 2 | 3;
   description?: string | undefined;
   link?: { label: string; href: string } | undefined;
+  links?: readonly { label: string; href: string }[] | undefined;
 }
 
-const { title, level = 2, description, link } = Astro.props;
+const { title, level = 2, description, link, links = link ? [link] : [] } = Astro.props;
 ---
 
 <div class="fact-row">
   <div class="claim">
     <SectionHeading level={level} title={title} description={description} />
     {
-      link && (
-        <Link href={link.href} variant="standalone">
-          {link.label}
+      links.map((l) => (
+        <Link href={l.href} variant="standalone">
+          {l.label}
         </Link>
-      )
+      ))
     }
   </div>
   {

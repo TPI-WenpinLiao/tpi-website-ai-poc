@@ -91,6 +91,10 @@ test('copyStrings skips functions, ids, paths and URLs', () => {
   assert.deepEqual(copyStrings(mod), ['標題', '一']);
 });
 
+test('copyStrings skips the ids of linked entries (#202: a section linking news 559)', () => {
+  assert.deepEqual(copyStrings({ label: '聯盟的新聞', news: 'zh-TW/559', caseStudy: 'zh-TW/case-2024' }), ['聯盟的新聞']);
+});
+
 test('copyStrings skips blog and news dates, which the yaml parser leaves as strings', () => {
   assert.deepEqual(copyStrings({ title: '標題', publishedAt: '2026-11-03', updatedAt: '2026-11-04' }), ['標題']);
 });

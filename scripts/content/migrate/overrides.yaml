@@ -39,10 +39,14 @@ blog/zh-TW/carbonfootprint:
 
 blog/zh-TW/carbonfootprint-quick-implementation-sme:
   frontmatter:
+    # Related posts on GreenSwift's page (docs/strategy/briefs/greenswift.md「取捨」第 12 項, #202)
+    relatedOfferings: [zh-TW/greenswift]
     description: 中小企業不必一次完成複雜的碳管理。透過碳足跡輕量導入與數位工具，免高額顧問費即可建立符合 ISO 標準的碳數據能力，回應綠色供應鏈需求。
 
 blog/zh-TW/cbam-carbon-compliance-guide:
   frontmatter:
+    # Related posts on GreenSwift's page (docs/strategy/briefs/greenswift.md「取捨」第 12 項, #202)
+    relatedOfferings: [zh-TW/greenswift]
     description: 本文整理台灣出口企業準備 CBAM 碳稅合規的重點，說明納管範圍、內含排放與申報需求，並比較產品碳足跡計算與 CBAM 排放計算的差異。
 
 blog/zh-TW/customer-complaint-ai-tool-selection-guide:
@@ -74,6 +78,8 @@ blog/zh-TW/what-is-ai-agent-management-platform:
 
 blog/zh-TW/what-is-scope3:
   frontmatter:
+    # Related posts on GreenSwift's page (docs/strategy/briefs/greenswift.md「取捨」第 12 項, #202)
+    relatedOfferings: [zh-TW/greenswift]
     description: 範疇三是什麼？本文拆解範疇一、二、三的分類與差異，說明中小企業面對供應鏈碳排放時常見的數據收集難題，以及有效執行範疇三碳盤查的實務做法。
   alt:
     1f0e7847-7227-691a-81f6-0b7fa23ee3a6.webp: 中小企業常見排放源：圓餅圖顯示範疇三占大宗，表格列出範疇一至三的排放來源與盤查規範

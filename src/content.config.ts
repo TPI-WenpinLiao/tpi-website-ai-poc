@@ -66,7 +66,7 @@ function requireMigratedAt(data: { sourceUrl: string | string[]; migratedAt?: Da
 const TAGS_FILE = 'src/content/tags.yaml';
 const tagIds = () => new Set(z.array(z.object({ id: z.string() })).parse(parse(readFileSync(TAGS_FILE, 'utf8'))).map((t) => t.id));
 
-function ref<C extends 'offering' | 'case-study' | 'blog' | 'tag'>(collection: C) {
+function ref<C extends 'offering' | 'case-study' | 'blog' | 'news' | 'tag'>(collection: C) {
   return z
     .string()
     .superRefine((id, ctx) => {
@@ -81,6 +81,13 @@ const nodeOf = (template: string) => z.enum(nodeIds((n) => n.template === templa
 // A link to any page node by its nodes.csv id; the template resolves the path per locale
 const anyNode = z.enum(nodeIds(() => true, 'any'));
 const nodeLink = z.strictObject({ label: text, node: anyNode });
+// A section's link (#202): a page node, a news article (a case or news the section points to), or an
+// off-site page (a trial sign-up); an off-site link is only an <a>, nothing loads from it
+const sectionLink = z.union([
+  nodeLink,
+  z.strictObject({ label: text, news: ref('news') }),
+  z.strictObject({ label: text, href: z.string().regex(/^https:\/\/[^\s]+$/) }),
+]);
 const parentOf = (id: string) => nodes.find((n) => n.id === id)?.parent;
 
 // Offering and hub pages laid out by their brief (#187): one section per brief paragraph, each with
@@ -129,7 +136,8 @@ const sectionCommon = (image: ImageFn) => ({
   id: z.string().regex(SLUG).optional(),
   heading: text,
   body: text.optional(),
-  link: nodeLink.optional(),
+  // Two links when the section leads on to two places (#202: AISO's software page and the news of its alliance)
+  link: z.union([sectionLink, z.array(sectionLink).length(2)]).optional(),
   // One step of fill to mark a change of question group (Surface fill)
   fill: z.enum(['subtle', 'brand']).optional(),
   // A picture of the ribbon world beside the claim (docs/design/image-prompts.md), decorative (alt
@@ -200,14 +208,17 @@ const caseNotes = z
       result: text.optional(),
       award: text.optional(),
       caseStudy: ref('case-study').optional(),
+      // A case without a case study, told in a news article (#202): linked by the article's title
+      news: ref('news').optional(),
       fragment: uiFragment.optional(),
-    }),
+    })
+    .refine((c) => !(c.caseStudy && c.news), { message: 'a case links to a case study or a news article, not both' }),
   )
   .optional();
 // A hero point is a fact text, with the condition that goes with it (#187)
 const heroPoint = z.union([text, z.strictObject({ text, note: text })]);
 // Labels on the hero's static picture, by the picture's anchor (src/lib/scene/ribbon/pictures.json)
-const heroLabels = z.partialRecord(z.enum(['core', 'legacy', 'product', 'model', 'service', 'ai0', 'ai1', 'ai2']), text).optional();
+const heroLabels = z.partialRecord(z.enum(['core', 'legacy', 'product', 'greenswift', 'model', 'service', 'ai0', 'ai1', 'ai2']), text).optional();
 
 const offering = defineCollection({
   loader: localizedGlob('offering'),
@@ -224,7 +235,10 @@ const offering = defineCollection({
         // Fact texts shown with the hero (#167); the second action, to another page (a trial)
         heroPoints: z.array(heroPoint).optional(),
         heroLabels,
-        secondaryCta: z.strictObject({ label: text, node: anyNode }).optional(),
+        // The second action: another page (a trial), or a section of this page by its `id` (#202)
+        secondaryCta: z
+          .union([z.strictObject({ label: text, node: anyNode }), z.strictObject({ label: text, href: z.string().regex(/^#[a-z0-9]+(?:-[a-z0-9]+)*$/) })])
+          .optional(),
         sections: z.array(pageSection(image)).optional(),
         // `points` are fact texts listed under the body, `link` a page the feature leads on to (#167)
         features: z
@@ -247,7 +261,13 @@ const offering = defineCollection({
         relatedPosts: z.array(ref('blog')).optional(),
         downloads: z.array(z.strictObject({ label: text, file: text })).optional(),
       })
-      .superRefine(requireMigratedAt),
+      .superRefine(requireMigratedAt)
+      .superRefine((data, ctx) => {
+        const cta = data.secondaryCta;
+        if (cta && 'href' in cta && !data.sections?.some((s) => `#${s.id}` === cta.href)) {
+          ctx.addIssue({ code: 'custom', path: ['secondaryCta', 'href'], message: `no section has the id of ${cta.href}` });
+        }
+      }),
 });
 
 const hub = defineCollection({
@@ -271,6 +291,9 @@ const hub = defineCollection({
         sections: z.array(pageSection(image)).optional(),
         // Heading of the child pages' index rows (#200), by default 「探索」
         partsTitle: text.optional(),
+        // Child pages left out of the index rows (#202: a page not known to be on sale); JSON-LD
+        // hasPart still lists every child page
+        omitParts: z.array(anyNode).optional(),
         // The heading of the closing contact band (#200), as offering's contactTitle
         contactTitle: text.optional(),
         featuredCaseStudies: z.array(ref('case-study')).optional(),
@@ -283,6 +306,9 @@ const hub = defineCollection({
       .superRefine(requireMigratedAt)
       .superRefine((data, ctx) => {
         // Industry hubs (industry-finance, …) look up offerings and case studies by `industry`
+        for (const [i, id] of (data.omitParts ?? []).entries()) {
+          if (parentOf(id) !== data.node) ctx.addIssue({ code: 'custom', path: ['omitParts', i], message: `${id} is not a child of ${data.node}` });
+        }
         if (parentOf(data.node) !== 'industries') return;
         const expected = data.node.replace(/^industry-/, '');
         if (data.industry !== expected) {

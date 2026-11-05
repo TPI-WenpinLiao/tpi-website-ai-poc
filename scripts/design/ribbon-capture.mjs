@@ -77,6 +77,11 @@ export const JOBS = [
   // (on-premises AI platform) close, from the other side, with the AI blocks dim
   { name: 'page-orient-ai', w: 1600, h: 1200, view: { kind: 'cases', p: 1 }, override: { halfW: 9, pitch: 44, yaw: 14, sx: 0.8 }, levels: [1, 1, 1] },
   { name: 'page-aiso', w: 1600, h: 1200, view: { kind: 'cases', p: 0.5 }, override: { halfW: 8.4, pitch: 38, yaw: 18, sx: 0.6, sy: 0.15 }, levels: [0, 0, 0] },
+  // #202: GreenSwift's page sees its own block on the far side of the route (the label names its
+  // three plans); DigiLism's family page sees the core system, the existing systems and the product
+  // the route runs between, with the AI blocks dim
+  { name: 'page-greenswift', w: 1600, h: 1200, view: { kind: 'product', name: 'greenswift' }, override: { halfW: 6, pitch: 36 } },
+  { name: 'page-digilism', w: 1600, h: 1200, view: { kind: 'product', name: 'digirunner' }, override: { halfW: 8, pitch: 40, yaw: 20, sx: 0 } },
 ];
 
 /** The fork pictures: a plan whose top edge is the city edge, the trunk entering at the hero's exit */

@@ -67,7 +67,7 @@ const heroImage = data.heroImage ?? familyImage;
 // The hero picture's labels need the picture's name in pictures.json: the file's base name
 const heroPicture = data.heroImage && data.heroLabels ? (data.heroImage.src.split('/').pop()?.split('.')[0] as PictureName | undefined) : undefined;
 const features = (sections.length ? [] : (data.features ?? [])).map((f) => ({ ...f, href: f.link ? href(node(f.link.node)) : undefined }));
-const secondary = data.secondaryCta && { label: data.secondaryCta.label, href: href(node(data.secondaryCta.node)) };
+const secondary = data.secondaryCta && { label: data.secondaryCta.label, href: 'node' in data.secondaryCta ? href(node(data.secondaryCta.node)) : data.secondaryCta.href };
 // The use cases block sits after this many features (useCasesAfter, #167), else after all of them
 const splitAt = Math.min(data.useCasesAfter ?? features.length, features.length);
 const useCasesTitle = data.useCasesTitle ?? t.offering.useCases;
@@ -135,9 +135,14 @@ const caseHref = async (id: string) => {
   const c = linkedCases.find((e) => e.id === id) ?? (await getCollection('case-study', (e) => e.id === id))[0];
   return c && { label: caseLinkLabel(c), href: entryPath('case-study', c) };
 };
+// A case told in a news article (#202): the link's label is the article's title, which names the client
+const newsLink = async (id: string) => {
+  const n = (await getCollection('news', (e) => e.id === id))[0];
+  return n && { label: n.data.title, href: entryPath('news', n) };
+};
 const caseRows = data.caseNotes
   ? await Promise.all(
-      data.caseNotes.map(async (n) => ({ title: n.client ?? n.work, work: n.client ? n.work : undefined, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? await caseHref(n.caseStudy.id) : undefined })),
+      data.caseNotes.map(async (n) => ({ title: n.client ?? n.work, work: n.client ? n.work : undefined, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? await caseHref(n.caseStudy.id) : n.news ? await newsLink(n.news.id) : undefined })),
     )
   : caseStudies.map((c) => ({ title: c.data.client.disclosed ? c.data.client.name : c.data.clientDescription, link: { label: caseLinkLabel(c), href: entryPath('case-study', c) } }));
 const successStories = localNode('success-stories', locale);

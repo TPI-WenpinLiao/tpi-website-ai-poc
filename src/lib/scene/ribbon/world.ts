@@ -224,7 +224,8 @@ interface Block {
 }
 
 /** The blocks the HTML labels hang from */
-export type AnchorName = 'core' | 'legacy' | 'product' | 'model' | 'service';
+// `product` is the viki block (the home page's product label); `greenswift` its own block, for its page (#202)
+export type AnchorName = 'core' | 'legacy' | 'product' | 'greenswift' | 'model' | 'service';
 export const PRODUCTS = ['digirunner', 'viki', 'gadodido', 'greenswift'] as const;
 export type ProductName = (typeof PRODUCTS)[number];
 
@@ -445,7 +446,15 @@ export function buildWorld(palette: MapPalette): World {
     ground,
     ribbon,
     exit,
-    anchors: { core: top(named.core), legacy: top(named.legacy), product: top(named.product), model: top(named.model), service: top(service), ai: aiSpecials.map(top) },
+    anchors: {
+      core: top(named.core),
+      legacy: top(named.legacy),
+      product: top(named.product),
+      greenswift: top(specials.find((b) => b.kind === 'product' && b.name === 'greenswift')),
+      model: top(named.model),
+      service: top(service),
+      ai: aiSpecials.map(top),
+    },
     lightAi(levels) {
       aiTops.forEach((m, i) => m.color.copy(palette.ground).lerp(palette.mid, levels[i] ?? 0));
     },

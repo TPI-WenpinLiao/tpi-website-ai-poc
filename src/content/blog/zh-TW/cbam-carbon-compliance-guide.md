@@ -9,8 +9,9 @@ authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1a1c74-9003-6f1b-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/zh-TW/cbam-carbon-compliance-guide/cover.webp
 sourceUrl: https://www.tpisoftware.com/blog/smartm/cbam-carbon-compliance-guide
-migratedAt: 2026-10-23
+migratedAt: 2026-11-06
 sourceUpdatedAt: 2026-09-02
+relatedOfferings: [zh-TW/greenswift]
 ---
 
 「CBAM 碳稅合規」是許多出口企業用來理解歐盟碳邊境調整機制的搜尋方式，但嚴格來說，CBAM 並不是單純對進口商品課徵固定碳稅，是要求符合條件的歐盟進口商依進口商品的內含碳排放量申報，並繳交相對應的 CBAM 憑證。

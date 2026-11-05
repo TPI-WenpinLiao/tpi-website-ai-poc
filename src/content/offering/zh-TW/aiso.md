@@ -55,9 +55,12 @@ sections:
       - body: "此系列方案以昕力自主研發的企業級 Agentic AI 平台 OrientAI 為軟體核心"
       # The two facts read as the one answer they are on the current site (因此 follows the first)
       - body: "OrientAI 只會部署於企業端，資料掌控權為企業所有。因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。"
+    # The alliance's news carries what this page leaves out: its members and contracts (brief 取捨第 12 項)
     link:
-      label: AISO 的軟體核心：OrientAI 企業級 Agentic AI 平台
-      node: orient-ai
+      - label: AISO 的軟體核心：OrientAI 企業級 Agentic AI 平台
+        node: orient-ai
+      - label: AISO 主權 AI 產業聯盟成軍的新聞
+        news: zh-TW/559
   - layout: ui
     id: governance
     heading: AI Agent 與算力管得住

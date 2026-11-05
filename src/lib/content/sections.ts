@@ -9,7 +9,7 @@ type Section = NonNullable<CollectionEntry<'offering'>['data']['sections']>[numb
 export function linkedNodes(sections: readonly Section[]): Set<string> {
   return new Set(
     sections.flatMap((sec) => [
-      sec.link?.node,
+      ...[sec.link ?? []].flat().map((l) => ('node' in l ? l.node : undefined)),
       ...('items' in sec && sec.items ? sec.items.map((i) => ('node' in i ? i.node : 'link' in i ? i.link?.node : undefined)) : []),
       ...('index' in sec && sec.index ? sec.index.map((i) => i.node) : []),
       ...('rows' in sec && sec.rows ? sec.rows.map((r) => r.link?.node) : []),
