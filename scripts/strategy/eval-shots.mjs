@@ -30,7 +30,10 @@
 // site given as --new is shot into docs/strategy/evaluation/<name>/ instead of new/, so the first
 // round's pictures stay as the report quoted them.
 //
-// Usage: node scripts/strategy/eval-shots.mjs --new <dist> --old <old dist> [--work <dir>] [--only new,current] [--group <name>]
+// A later batch of other pages (docs/workflow.md「分階段流程」的後續批次, #200) passes --pages
+// <slug>=<path>,…: the --new site is shot on those pages instead of the pilot pages.
+//
+// Usage: node scripts/strategy/eval-shots.mjs --new <dist> --old <old dist> [--work <dir>] [--only new,current] [--group <name>] [--pages <slug>=<path>,…]
 import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -79,8 +82,17 @@ const { values } = parseArgs({
     work: { type: 'string', default: join(tmpdir(), 'eval-work') },
     only: { type: 'string' },
     group: { type: 'string', default: 'new' },
+    pages: { type: 'string' },
   },
 });
+// The pages the --new (and --old) site is shot on: the pilot pages, or the ones --pages names
+const BUILT = values.pages
+  ? values.pages.split(',').map((pair) => {
+      const [slug, path] = pair.split('=');
+      if (!slug || !path?.startsWith('/')) throw new Error(`--pages: expected <slug>=<path>, got "${pair}"`);
+      return { slug, path };
+    })
+  : PILOT;
 // The directory the --new site's pictures go into
 const outGroup = (group) => (group === 'new' ? values.group : group);
 const want = (group) => !values.only || values.only.split(',').includes(group);
@@ -208,7 +220,7 @@ for (const group of ['new', 'old']) {
   await mkdir(join(values.work, out), { recursive: true });
   const server = await serve(root);
   const { port } = /** @type {import('node:net').AddressInfo} */ (server.address());
-  for (const { slug, path } of PILOT) {
+  for (const { slug, path } of BUILT) {
     const file = servedFile(path, fileKind(root));
     const html = await shootBoth(browser, out, slug, `http://localhost:${port}${path}`);
     if (html === undefined || !file) {
