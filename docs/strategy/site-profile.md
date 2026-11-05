@@ -42,7 +42,7 @@ zh-TW 優先。分階段流程的產出物（事實庫、messaging、brief、文
 
 ## 後續批次
 
-試點頁以外分批重做，做法見 `docs/workflow.md`「分階段流程」的「後續批次」。各 skill 寫給「試點頁面」的規則（未搬內容、搜尋意圖、brief、評審）也套用在批次的頁面。只做 zh-TW。
+試點頁以外分批重做，做法見 `docs/workflow.md`「分階段流程」的「後續批次」。各 skill 寫給「試點頁面」的規則（未搬內容、搜尋意圖、brief、評審）也套用在批次的頁面，但只在這批自己的 issue 裡：研究與策略 issue 為這批頁面補研究、寫 brief，製作 issue 轉 ready 前評這批頁面的三份 rubric。其他 issue 要評的頁面（`site-review` 的評審對象，以及 `issue-ship` 第 8 步改到共用元件時的 D2 重評）仍然只有上面的試點頁面。只做 zh-TW。
 
 ### 第一批（#188）
 
