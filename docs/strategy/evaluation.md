@@ -84,7 +84,7 @@ node scripts/strategy/eval-shots.mjs --new <scratch>/new-dist --old <scratch>/ol
 | 第一批（#200） | [AI 智慧建檔](evaluation/reviews/b1-new-smartfilling.md) | 4.0 通過 | 4.7 通過 | 4.7 通過 |
 | 第一批（#200） | [SysTalk.ai 產品家族](evaluation/reviews/b1-new-systalk-ai.md) | 4.2 通過 | 4.5 通過 | 5.0 通過 |
 | 第一批（#201） | [OrientAI 企業級 Agentic AI 平台](evaluation/reviews/b1-new-orient-ai.md) | 4.2 通過 | 4.5 通過 | 4.8 通過 |
-| 第一批（#201） | [AISO 主權 AI](evaluation/reviews/b1-new-aiso.md) | 4.0 通過 | 4.2 通過 | 4.8 通過 |
+| 第一批（#201） | [AISO 主權 AI](evaluation/reviews/b1-new-aiso.md) | 4.2 通過 | 4.2 通過 | 4.3 通過 |
 <!-- eval-scores:end -->
 
 ## 各組的主要差異
@@ -330,10 +330,10 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 
 ### 結果
 
-| 頁面 | 第一次（`9121f11`） | 第二次（`4fa09f0`） |
+| 頁面 | 第一次（`9121f11`） | 第二次 |
 |---|---|---|
-| OrientAI 企業級 Agentic AI 平台 | 3.7（D2、D4、D5 = 3）／4.3／4.7 | 4.2／4.5／4.8 |
-| AISO 主權 AI | 4.0（D2 = 3）／4.2（C6 = 3）／4.8 | — |
+| OrientAI 企業級 Agentic AI 平台 | 3.7（D2、D4、D5 = 3）／4.3／4.7 | 4.2／4.5／4.8（`4fa09f0`） |
+| AISO 主權 AI | 4.0（D2 = 3）／4.2（C6 = 3）／4.8 | 4.2／4.2（C6 = 3）／4.3（`0a07bcd`） |
 
 分數依序是設計／文案與行銷／SEO。OrientAI 第一次之後修的是：
 
@@ -343,7 +343,9 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 - 頁尾標題用「你」（C6，`messaging.md`「語氣」不用「你」）：改成 brief 的「自己的系統」
 - 第 2、6 段 h2 沒帶出查詢用詞（S4）：改成「RAG 問答與 Agent 任務」「監控、日誌與異常告警」
 
-AISO 評完之後（`4fa09f0`）改了三處，沒有重評：第 3 段 h2 縮到兩行內、說明句改寫（D2、C6），介面片段「自動出帳」和其他列同樣是已啟用（D2），以及上面那項「因此」的合併。
+AISO 第一次三份都通過，但 D2、C6 是 3 分。`4fa09f0` 改了這兩項扣分的地方：第 3 段 h2 縮到兩行內、說明句改寫，介面片段「自動出帳」和其他列同樣是已啟用，以及上面那項「因此」的合併。PR 審查第 1 輪指出評審檔評的是改之前的版本、截圖也已被覆蓋，所以由新的 `reviewer` 在 `0a07bcd` 重評。D2 升到 4，C6 仍是 3：hero 證據點照引新聞片段、第一屏重複「軟硬體一起交付」、第 4 段說明句和原文、片段說同一串機制。
+
+兩次評審的 SEO 差了 0.5（4.8、4.3），差在 S1、S5 是否因為沒有連到新聞 559 扣分，頁面在這兩處沒有改動。和「第一批（#200）」一樣，評審之間的落差比門檻的間距大。
 
 ### 還不夠好的地方
 
@@ -352,7 +354,7 @@ AISO 評完之後（`4fa09f0`）改了三處，沒有重評：第 3 段 h2 縮�
 - 介面片段的狀態方塊每一列都一樣，畫面上看不出代表什麼（D2、D5，兩頁都提到，`UiFragment` 共用）
 - h2 下方的說明句用次要文字色，P4 寫內文不用淺灰（D2，兩頁都提到，共用）；h1 和 h2 字級接近（D3）
 - 1280 寬的 `InPageNav` 放不下 OrientAI 的 8 項，桌機上看不出還有（階段一的設計預評提到）
-- hero 證據點：OrientAI 只有功能名（D5）；AISO 照引新聞片段，「此次產品組合…」和用空格斷句的原文放在第一屏讀起來不通順（C6）
+- hero 證據點：OrientAI 只有功能名（D5）；AISO 照引新聞片段，「此次產品組合…」和用空格斷句的原文放在第一屏讀起來不通順，第一屏重複「軟硬體一起交付」（C6，兩次都是 3）
 - AISO 沒有路徑通往聯盟新聞 559（S2）：`nodeLink` 只能指節點，等 #202 加 news ref
 - 375 寬 OrientAI 第 3 段（接點圖加 5 則事實）約 1.7 屏（D6）
 - 相關文章的封面縮圖有發光方塊、觸控平板這類 P3 不用的科技圖（D2，縮圖來自文章封面）
@@ -364,8 +366,8 @@ AISO 評完之後（`4fa09f0`）改了三處，沒有重評：第 3 段 h2 縮�
 | 規格表「整段墊淺灰」和「判斷組之間換底色」在規格表緊接淺灰組時衝突，沒寫哪條優先 | `design-principles.md`「內頁的版型」「段落的分隔」、`briefs/orient-ai.md` 第 7 段 | orient-ai 兩次 |
 | brief 把介面片段降到 1 張（aiso）、寫「交設計概念階段」，原則沒有回寫確認結果；也沒寫事實較多時片段段落的事實放哪裡 | `design-principles.md`、`briefs/aiso.md` 取捨第 5 項 | aiso、orient-ai 第一次 |
 | 「各模板怎麼呈現」只寫 digiRunner，沒有沒案例、沒數字的產品頁 | `design-principles.md` | 每一份 |
-| P2「事實原文、條件與出處擺在一起」沒寫內頁要不要、怎麼顯示出處 | `design-principles.md` | aiso |
-| brief 要求 h2 與說明句寫「金融與政府」，旁邊的產業原文沒有政府；證據點照引不適合單獨放的原文時怎麼辦 | `briefs/aiso.md` 第 1、3 段、`content-strategy` | aiso |
+| P2「事實原文、條件與出處擺在一起」沒寫內頁要不要、怎麼顯示出處；brief 把聯盟查詢交給新聞 559，連結卻寫成有條件的 | `design-principles.md`、`briefs/aiso.md` 取捨第 12 項與「內部連結」 | aiso 兩次 |
+| brief 要求 h2 與說明句寫「金融與政府」，旁邊的產業原文沒有政府；證據點照引不適合單獨放的原文時怎麼辦 | `briefs/aiso.md` 第 1、3 段、`content-strategy` | aiso 兩次 |
 | D5、C3 的 5 分錨點以數字、案例、客戶為證據，沒寫只有功能事實的頁面最高幾分 | `rubrics/design.md`、`rubrics/copy-marketing.md` | 每一份 |
 | `messaging.md`「統一用詞」寫主要按鈕都叫「聯絡業務」，brief 指定這頁用「預約演示」 | `messaging.md`、`briefs/orient-ai.md`「CTA」 | orient-ai 第一次 |
 | 照引「支援雲地靈活部署架構」時怎麼避免和「只會部署於企業端」讀成矛盾；公司名並列的規則是否適用內頁 | `briefs/orient-ai.md` 第 2 段、`messaging.md` `IT-1`「產品與公司名寫法」 | orient-ai 第二次 |
