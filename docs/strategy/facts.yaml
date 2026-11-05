@@ -1859,6 +1859,56 @@
   locale: zh-TW
   status: confirmed
 
+- id: digilism-bfsi
+  type: feature
+  text: 昕力資訊能為 BFSI 全應用場景提供安全可靠、高效運作的服務應用中台， 滿足企業 API 治理需求，以軟體創新實現差異化戰略。
+  source:
+    url: https://www.tpisoftware.com/products/digilism
+    quote: 昕力資訊能為 BFSI 全應用場景提供安全可靠、高效運作的服務應用中台， 滿足企業 API 治理需求，以軟體創新實現差異化戰略。
+  locale: zh-TW
+  status: confirmed
+
+- id: digilism-compatibility
+  type: feature
+  text: 新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。
+  source:
+    url: https://www.tpisoftware.com/products/digilism
+    quote: 新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。
+  locale: zh-TW
+  status: confirmed
+
+- id: digilism-api-first
+  type: feature
+  text: 基於 API 優先（API First）與雲原生架構，並具備全場景應用的特性，滿足企業打造企業整合中台所需，協助企業組織活用數位科技，靈活地適應不同的市場使用場景。
+  source:
+    url: https://www.tpisoftware.com/products/digilism
+    quote: 基於 API 優先（API First）與雲原生架構，並具備全場景應用的特性，滿足企業打造企業整合中台所需，協助企業組織活用數位科技，靈活地適應不同的市場使用場景。
+  locale: zh-TW
+  status: confirmed
+
+- id: digilism-five-capabilities
+  type: feature
+  text: |-
+    服務能力：微服務、DevOps開發達到快速上線。
+    數位治理：異質整合與資料轉化增加服務彈性。
+    可連接性：簡化系統介接、資料轉換和服務建置。
+    高安全性：核身授權及多種機制式全盤防護安全。
+    可擴展性：平台化及混合架構以利擴展系統性能。
+  source:
+    url: https://www.tpisoftware.com/products/digilism
+    quote: 服務能力 微服務、DevOps開發達到快速上線。 數位治理 異質整合與資料轉化增加服務彈性。 可連接性 簡化系統介接、資料轉換和服務建置。 高安全性 核身授權及多種機制式全盤防護安全。 可擴展性 平台化及混合架構以利擴展系統性能。
+  locale: zh-TW
+  status: confirmed
+
+- id: digilism-family-digirunner-ai
+  type: feature
+  text: 協助企業落實 AI 治理與流量控管，從 API 管理邁向 AI 驅動整合。
+  source:
+    url: https://www.tpisoftware.com/products/digilism
+    quote: 協助企業落實 AI 治理與流量控管，從 API 管理邁向 AI 驅動整合。
+  locale: zh-TW
+  status: confirmed
+
 # --- digiLogs ---
 - id: digilogs-claim-2-minutes
   type: feature
@@ -3810,6 +3860,98 @@
   locale: zh-TW
   status: confirmed
 
+- id: greenswift-file-center
+  type: feature
+  text: 透過一站整合盤查數據，不僅過往所有資料得以方便查詢及管理，新年度更可自行帶入過往資料，不須擔心人員變動造成管理不善等問題，讓資料具連續性，確保每次盤查順利完成。
+  source:
+    url: https://www.tpisoftware.com/products/greenswift
+    quote: 透過一站整合盤查數據，不僅過往所有資料得以方便查詢及管理，新年度更可自行帶入過往資料，不須擔心人員變動造成管理不善等問題，讓資料具連續性，確保每次盤查順利完成。
+  locale: zh-TW
+  status: confirmed
+
+- id: greenswift-scopes
+  type: feature
+  text: 範疇一：可全面追蹤源頭排放，精確管理直接 GHG 排放量。 範疇二：聚焦進口能源產生的間接 GHG 排放。 範疇三：覆蓋其他間接排放，為您提供全方位的環境影響洞察。
+  source:
+    url: https://www.tpisoftware.com/products/greenswift
+    quote: 範疇一：可全面追蹤源頭排放，精確管理直接 GHG 排放量。 範疇二：聚焦進口能源產生的間接 GHG 排放。 範疇三：覆蓋其他間接排放，為您提供全方位的環境影響洞察。
+  locale: zh-TW
+  status: confirmed
+
+# text keeps the feature, drops the question and「最佳幫手」
+- id: greenswift-cloud-consultants
+  type: feature
+  text: GreenSwift 為您於雲端整合碳數據、ESG 顧問團隊
+  source:
+    url: https://www.tpisoftware.com/products/greenswift
+    quote: 不知道如何下手寫報告書？GreenSwift 為您於雲端整合碳數據、ESG 顧問團隊，並讓 AI 成為您最佳幫手！
+  locale: zh-TW
+  status: confirmed
+
+- id: greenswift-report-method
+  type: feature
+  text: 根據ISO 14064-1:2018規範，我們會在溫室氣體盤查報告中詳細描述數據鑑別、收集過程及計算方法。報告還包括數據品質評分表與不確定性分析等內容。
+  source:
+    url: https://www.tpisoftware.com/products/greenswift
+    quote: 根據ISO 14064-1:2018規範，我們會在溫室氣體盤查報告中詳細描述數據鑑別、收集過程及計算方法。報告還包括數據品質評分表與不確定性分析等內容。
+  locale: zh-TW
+  status: confirmed
+
+- id: greenswift-accounts
+  type: feature
+  text: 對企業而言，系統分為主要管理者帳號和子管理者帳號，且沒有使用者數量的上限。主要管理者帳號可以審核和管理該公司申請的所有子帳號。系統也不限制使用者設立的組織邊界數量，支持靈活配置和擴展。
+  source:
+    url: https://www.tpisoftware.com/products/greenswift
+    quote: 對企業而言，系統分為主要管理者帳號和子管理者帳號，且沒有使用者數量的上限。主要管理者帳號可以審核和管理該公司申請的所有子帳號。系統也不限制使用者設立的組織邊界數量，支持靈活配置和擴展。
+  locale: zh-TW
+  status: confirmed
+
+- id: greenswift-collaboration
+  type: feature
+  text: GreenSwift 特別強調權責分工、系統主動提醒、數據分析、儀表板設置及減碳計劃自訂，確保各部門能有效協作完成數據收集。
+  source:
+    url: https://www.tpisoftware.com/products/greenswift
+    quote: GreenSwift 特別強調權責分工、系統主動提醒、數據分析、儀表板設置及減碳計劃自訂，確保各部門能有效協作完成數據收集。
+  locale: zh-TW
+  status: confirmed
+
+- id: greenswift-consultant-access
+  type: feature
+  text: 顧問能夠查看所輔導客戶的所有資料，同一顧問公司內的不同顧問帳號可以根據需要進行分權設定，確保資料的安全與私密性，除非是共同輔導，否則彼此間的資料無法互通。
+  source:
+    url: https://www.tpisoftware.com/products/greenswift
+    quote: 顧問能夠查看所輔導客戶的所有資料，同一顧問公司內的不同顧問帳號可以根據需要進行分權設定，確保資料的安全與私密性，除非是共同輔導，否則彼此間的資料無法互通。
+  locale: zh-TW
+  status: confirmed
+
+- id: greenswift-trial
+  type: feature
+  text: 你可以直接在 GreenSwift 上透過 Gmail 登入進行試用。試用期間可使用系統所有功能，惟下載報告書時會有浮水印。
+  source:
+    url: https://www.tpisoftware.com/products/greenswift
+    quote: 你可以直接在 GreenSwift 上透過 Gmail 登入進行試用。試用期間可使用系統所有功能，惟下載報告書時會有浮水印。
+  locale: zh-TW
+  status: confirmed
+
+# News headline (#199); the article body is only in the Nuxt payload
+- id: greenswift-case-hedinglong
+  type: case
+  text: 昕力資訊 GreenSwift 智慧碳管理平台助和鼎隆建築打造永續競爭力
+  source:
+    url: https://www.tpisoftware.com/media-center/580
+    quote: 昕力資訊 GreenSwift 智慧碳管理平台助和鼎隆建築打造永續競爭力
+  locale: zh-TW
+  status: confirmed
+
+- id: client-hedinglong
+  type: client
+  text: 和鼎隆建築
+  source:
+    url: https://www.tpisoftware.com/media-center/580
+    quote: 和鼎隆建築
+  locale: zh-TW
+  status: confirmed
+
 # --- ESGswift ---
 - id: esgswift-standards
   type: certification
@@ -4364,6 +4506,62 @@
   locale: zh-TW
   status: confirmed
 
+- id: smartclaim-review-engine
+  type: feature
+  text: 資料紀錄完整存取後，輕鬆連接自動理賠引擎，進行理賠審核及判讀，降低人工作業時間。
+  source:
+    url: https://www.tpisoftware.com/solutions/smartclaim
+    quote: 資料紀錄完整存取後，輕鬆連接自動理賠引擎，進行理賠審核及判讀，降低人工作業時間。
+  locale: zh-TW
+  status: confirmed
+
+- id: smartclaim-quality
+  type: feature
+  text: AI 再訓練機制使模型維持高準確率，不僅審核效率提升，更具備高品質理賠決定。
+  source:
+    url: https://www.tpisoftware.com/solutions/smartclaim
+    quote: AI 再訓練機制使模型維持高準確率，不僅審核效率提升，更具備高品質理賠決定。
+  locale: zh-TW
+  status: confirmed
+
+- id: smartclaim-flow
+  type: feature
+  text: 業者獲取保戶診斷書及單據資料證明後，只需要進行掃描建檔，系統自動分析後，由理賠人員進行最後的確認即可。
+  source:
+    url: https://www.tpisoftware.com/solutions/smartclaim
+    quote: 業者獲取保戶診斷書及單據資料證明後，只需要進行掃描建檔，系統自動分析後，由理賠人員進行最後的確認即可。
+  locale: zh-TW
+  status: confirmed
+
+- id: smartclaim-ensemble
+  type: feature
+  text: 不僅能解析多樣語意、敘述情境，並可進行多模型之集成學習。
+  source:
+    url: https://www.tpisoftware.com/solutions/smartclaim
+    quote: 不僅能解析多樣語意、敘述情境，並可進行多模型之集成學習。
+  locale: zh-TW
+  status: confirmed
+
+- id: smartclaim-one-click-retraining
+  type: feature
+  text: 同時，獨家 AI 進化系統以直覺的介面，讓 AI 再訓練機制「一鍵優化」持續提高模型精準度，随時輕鬆維運 AI 模型。
+  source:
+    url: https://www.tpisoftware.com/solutions/smartclaim
+    quote: 同時，獨家 AI 進化系統以直覺的介面，讓 AI 再訓練機制「一鍵優化」持續提高模型精準度，随時輕鬆維運 AI 模型。
+  locale: zh-TW
+  status: confirmed
+
+# News headline (#199); the article body is only in the Nuxt payload, which extract-facts does not read
+- id: award-golden-yang-2024-smartclaim
+  type: award
+  text: 昕力資訊 AI 智能理賠解決方案獲 2024 金漾獎
+  source:
+    url: https://www.tpisoftware.com/media-center/457
+    quote: 昕力資訊 AI 智能理賠解決方案獲 2024 金漾獎
+  locale: zh-TW
+  status: confirmed
+  note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
+
 # --- AI smart filling ---
 - id: smartfilling-icr-puzzle
   type: feature
@@ -4444,6 +4642,33 @@
   source:
     url: https://www.tpisoftware.com/solutions/smartfilling
     quote: 金融業應用－傳統文件數位化管理第一步
+  locale: zh-TW
+  status: confirmed
+
+- id: smartfilling-documents
+  type: feature
+  text: 透過 AI + OCR 的前沿技術，協助金融業如基金配息單、居留證等收件流程應用，提升判讀精準度。
+  source:
+    url: https://www.tpisoftware.com/solutions/smartfilling
+    quote: 透過 AI + OCR 的前沿技術，協助金融業如基金配息單、居留證等收件流程應用，提升判讀精準度。
+  locale: zh-TW
+  status: confirmed
+
+- id: smartfilling-less-keying
+  type: feature
+  text: 透過 AI 機器辨識，精簡手動登打文件人力與誤差，擴大員工產值，提升服務效率。
+  source:
+    url: https://www.tpisoftware.com/solutions/smartfilling
+    quote: 透過 AI 機器辨識，精簡手動登打文件人力與誤差，擴大員工產值，提升服務效率。
+  locale: zh-TW
+  status: confirmed
+
+- id: smartfilling-flow
+  type: feature
+  text: SysTalk.ICR 加上再訓練機制，高辨識、高精準度，協助您輕鬆自主維運優化模型、擴展應用場景。
+  source:
+    url: https://www.tpisoftware.com/solutions/smartfilling
+    quote: SysTalk.ICR 加上再訓練機制，高辨識、高精準度，協助您輕鬆自主維運優化模型、擴展應用場景。
   locale: zh-TW
   status: confirmed
 
@@ -4779,6 +5004,52 @@
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
     quote: 取得報價：aiagent@tpisoftware.com
+  locale: zh-TW
+  status: confirmed
+
+# One row of the「一日應用情境」; the Coach and Audit rows are separate entries (#199)
+- id: systalk-ai-day-scenarios
+  type: feature
+  text: SysTalk.VIKI 新產品知識學習 跨部門會議紀錄、摘要總結
+  source:
+    url: https://www.tpisoftware.com/products/systalk-ai
+    quote: SysTalk.VIKI 新產品知識學習 跨部門會議紀錄、摘要總結
+  locale: zh-TW
+  status: confirmed
+
+- id: systalk-ai-day-coach
+  type: feature
+  text: SysTalk.Coach 員工知識與應對測驗 員工專業季度考核
+  source:
+    url: https://www.tpisoftware.com/products/systalk-ai
+    quote: SysTalk.Coach 員工知識與應對測驗 員工專業季度考核
+  locale: zh-TW
+  status: confirmed
+
+- id: systalk-ai-day-audit
+  type: feature
+  text: SysTalk.Audit 智能客服語音質檢報告
+  source:
+    url: https://www.tpisoftware.com/products/systalk-ai
+    quote: SysTalk.Audit 智能客服語音質檢報告
+  locale: zh-TW
+  status: confirmed
+
+- id: systalk-ai-onboarding-finetune
+  type: feature
+  text: 協助評估及選擇企業最適合模型 針對企業專業領域fine-tune，打造貼近業務需求的專屬 AI
+  source:
+    url: https://www.tpisoftware.com/products/systalk-ai
+    quote: 協助評估及選擇企業最適合模型 針對企業專業領域fine-tune，打造貼近業務需求的專屬 AI
+  locale: zh-TW
+  status: confirmed
+
+- id: systalk-ai-after-onboarding
+  type: feature
+  text: 導入後 AI大腦健檢優化 回答品質與準確率檢測 Prompt健檢 提供問題診斷報告與優化建議
+  source:
+    url: https://www.tpisoftware.com/products/systalk-ai
+    quote: 導入後 AI大腦健檢優化 回答品質與準確率檢測 Prompt健檢 提供問題診斷報告與優化建議
   locale: zh-TW
   status: confirmed
 
@@ -5795,6 +6066,136 @@
   locale: zh-TW
   status: confirmed
 
+- id: aiso-hw-sw-integrated
+  type: feature
+  text: 軟硬一體消除相容性風險；私密資料不上公有雲，杜絕資安疑慮與合規風險。
+  source:
+    url: https://www.tpisoftware.com/products/systalk-ai-phison
+    quote: 軟硬一體消除相容性風險；私密資料不上公有雲，杜絕資安疑慮與合規風險。
+  locale: zh-TW
+  status: confirmed
+
+# text drops the closing「最懂您產業語言」(a superlative,
+- id: aiso-systalk-platform
+  type: feature
+  text: 搭載昕力資訊的 SysTalk.ai 企業級 AI 應用平台，透過多元功能模組，因應各產業隨選搭配應用
+  source:
+    url: https://www.tpisoftware.com/products/systalk-ai-phison
+    quote: 搭載 昕力資訊的 SysTalk.ai 企業級 AI 應用平台 ，透過多元功能模組，因應各產業隨選搭配應用，建置最懂您產業語言的 AI 助理。
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-local-audit
+  type: feature
+  text: 讓 AI 運算在地化、數據不出門， 防堵外洩風險；內建權限管理、存取控管與稽核紀錄，每筆操作有跡可查，同時兼顧資安與效能。
+  source:
+    url: https://www.tpisoftware.com/products/systalk-ai-phison
+    quote: 讓 AI 運算在地化、數據不出門， 防堵外洩風險；內建權限管理、存取控管與稽核紀錄，每筆操作有跡可查，同時兼顧資安與效能。
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-use-cases
+  type: feature
+  text: 適用場景 專攻特定領域任務 / 內部單一部門應用、PoC 概念驗證 具備多樣化 AI 需求 / 跨部門 AI 中台
+  source:
+    url: https://www.tpisoftware.com/products/systalk-ai-phison
+    quote: 適用場景 專攻特定領域任務 / 內部單一部門應用、PoC 概念驗證 具備多樣化 AI 需求 / 跨部門 AI 中台
+  locale: zh-TW
+  status: confirmed
+
+# --- AISO sovereign AI (#199) ---
+# The page has no numbers; each card is one feature, title and body together. The AISO benchmarks are under SysTalk.ai with PHISON aiDAPTIV
+- id: aiso-ecosystem
+  type: feature
+  text: 集結 AI 軟體與硬體廠商打造的 AI 整合生態系 協助企業快速建置可落地、可擴充、可合規的地端 AI 平台
+  source:
+    url: https://www.tpisoftware.com/aiso
+    quote: 集結 AI 軟體與硬體廠商打造的 AI 整合生態系 協助企業快速建置可落地、可擴充、可合規的地端 AI 平台
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-legal-contract
+  type: feature
+  text: 法務 AI 合約審閱 整合合約審閱、擬約與條款檢索，於企業內部完成合約全流程處理。
+  source:
+    url: https://www.tpisoftware.com/aiso
+    quote: 法務 AI 合約審閱 整合合約審閱、擬約與條款檢索，於企業內部完成合約全流程處理。
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-hr-labor-law
+  type: feature
+  text: 人資 AI 勞動法遵 整合勞動法令與薪資試算，協助企業正確執行離職、資遣與調薪作業。
+  source:
+    url: https://www.tpisoftware.com/aiso
+    quote: 人資 AI 勞動法遵 整合勞動法令與薪資試算，協助企業正確執行離職、資遣與調薪作業。
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-hr-employee-service
+  type: feature
+  text: 人資 AI 員工服務 以企業制度為依據即時回應員工提問，降低人資重複性作業負擔。
+  source:
+    url: https://www.tpisoftware.com/aiso
+    quote: 人資 AI 員工服務 以企業制度為依據即時回應員工提問，降低人資重複性作業負擔。
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-agent-governance
+  type: feature
+  text: 企業 AI Agent 治理 統一納管不同來源的 AI Agent，全面掌握企業內部 AI 使用狀況。
+  source:
+    url: https://www.tpisoftware.com/aiso
+    quote: 企業 AI Agent 治理 統一納管不同來源的 AI Agent，全面掌握企業內部 AI 使用狀況。
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-compute-control
+  type: feature
+  text: 企業 AI 算力管控 以租戶隔離、分層用量上限與自動出帳，精準分攤或計費算力資源。
+  source:
+    url: https://www.tpisoftware.com/aiso
+    quote: 企業 AI 算力管控 以租戶隔離、分層用量上限與自動出帳，精準分攤或計費算力資源。
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-talent
+  type: feature
+  text: AI 人才培育 以多模型比對與 RAG 知識庫，培育掌握 AI 的人才。
+  source:
+    url: https://www.tpisoftware.com/aiso
+    quote: AI 人才培育 以多模型比對與 RAG 知識庫，培育掌握 AI 的人才。
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-teaching
+  type: feature
+  text: 教學備課 AI 整合備課、命題與行政文書，建立校內共用的教學知識庫。
+  source:
+    url: https://www.tpisoftware.com/aiso
+    quote: 教學備課 AI 整合備課、命題與行政文書，建立校內共用的教學知識庫。
+  locale: zh-TW
+  status: confirmed
+
+- id: aiso-medical-records
+  type: feature
+  text: 醫療 AI 病歷整合 整合 HIS、EMR、LIS 與 PACS 資料，轉換為 FHIR 標準格式，支援跨院資料交換。
+  source:
+    url: https://www.tpisoftware.com/aiso
+    quote: 醫療 AI 病歷整合 整合 HIS、EMR、LIS 與 PACS 資料，轉換為 FHIR 標準格式，支援跨院資料交換。
+  locale: zh-TW
+  status: confirmed
+
+# News headline (#199); members and date are only in the Nuxt payload
+- id: aiso-alliance
+  type: company
+  text: AISO 主權 AI 產業聯盟成軍，主打整合式交付
+  source:
+    url: https://www.tpisoftware.com/media-center/559
+    quote: AISO 主權 AI 產業聯盟成軍 主打整合式交付 加速企業 AI 導入
+  locale: zh-TW
+  status: confirmed
+
 # --- OrientAI ---
 # /orient-aI serves the same page
 - id: orientai-five-features
@@ -5876,6 +6277,132 @@
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: 不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-token-transparency
+  type: feature
+  text: 精準掌握 Token 消耗率，設定用量上限避免 Token 濫用與預算失控
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 精準掌握 Token 消耗率，設定用量上限避免 Token 濫用與預算失控
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-risk-insight
+  type: feature
+  text: 即時檢視 AI 回覆品質、任務執行狀態、使用行為，建立異常預警機制
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 即時檢視 AI 回覆品質、任務執行狀態、使用行為，建立異常預警機制
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-task-intake
+  type: feature
+  text: 對話式任務發起 理解自然語意與資料需求，轉化為可執行任務
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 對話式任務發起 理解自然語意與資料需求，轉化為可執行任務
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-agent-dispatch
+  type: feature
+  text: AI Agent 分派與執行 自動拆解任務、調用合適的 AI Agent，跨系統協作完成工作
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: AI Agent 分派與執行 自動拆解任務、調用合適的 AI Agent，跨系統協作完成工作
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-agent-management
+  type: feature
+  text: Agent 管理與治理 統一控管 Agent 權限、成本與資安，可降低風險並確保可擴展性
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: Agent 管理與治理 統一控管 Agent 權限、成本與資安，可降低風險並確保可擴展性
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-execution-scenarios
+  type: feature
+  text: 應用場景 企業知識查詢 專業分析 流程自動化 智慧決策輔助
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 應用場景 企業知識查詢 專業分析 流程自動化 智慧決策輔助
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-governance-scenarios
+  type: feature
+  text: 應用場景 AI 資源管理 跨部門工具共享 權限審核 模型與成本控管
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 應用場景 AI 資源管理 跨部門工具共享 權限審核 模型與成本控管
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-collaboration
+  type: feature
+  text: Agent 協作無間 整合現有業務系統與流程 即時查看 Agent 狀態與行為 自動分派 Agent 執行任務 避免運行衝突或誤觸發 Agent
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: Agent 協作無間 整合現有業務系統與流程 即時查看 Agent 狀態與行為 自動分派 Agent 執行任務 避免運行衝突或誤觸發 Agent
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-governance-controls
+  type: feature
+  text: 強化 AI 治理 精細化角色權限控管 日誌追蹤與稽核 偵測異常行為 即時告警
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 強化 AI 治理 精細化角色權限控管 日誌追蹤與稽核 偵測異常行為 即時告警
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-roi-controls
+  type: feature
+  text: 優化 ROI 效益 設定 Token 用量上限 彈性切換 AI 模型 有效控制 Token 成本
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 優化 ROI 效益 設定 Token 用量上限 彈性切換 AI 模型 有效控制 Token 成本
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-privacy-industries
+  type: feature
+  text: 因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-shadow-ai-lifecycle
+  type: feature
+  text: 對 AI 模型與 Agent 實施全週期管理，將影子 AI 統一納管，建立身分驗證機制與資料存取邊界，避免越權存取、異常行為等資安破口。
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 對 AI 模型與 Agent 實施全週期管理，將影子 AI 統一納管，建立身分驗證機制與資料存取邊界，避免越權存取、異常行為等資安破口。
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-data-silos
+  type: feature
+  text: 透過標準化架構整合多套系統，打通跨部門、跨團隊間的數據孤島，促進資料共享與無縫協作，優化作業流程與效率。
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 透過標準化架構整合多套系統，打通跨部門、跨團隊間的數據孤島，促進資料共享與無縫協作，優化作業流程與效率。
+  locale: zh-TW
+  status: confirmed
+
+- id: orientai-token-allocation
+  type: feature
+  text: 針對 AI Token 消耗量進行即時監測與額度設定，讓系統依據任務複雜度自動分派模型與 Agent，將運算資源作最佳化配置。
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 針對 AI Token 消耗量進行即時監測與額度設定，讓系統依據任務複雜度自動分派模型與 Agent，將運算資源作最佳化配置。
   locale: zh-TW
   status: confirmed
 
