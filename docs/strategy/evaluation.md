@@ -4,6 +4,7 @@
 
 ## 結論
 
+- 第一批（#200）：照 brief 重做的 AI 理賠、AI 建檔與 SysTalk.ai 產品家族頁，三頁三份 rubric 都通過（見「第一批（#200）」）
 - 第二輪（#187）：試點三頁依本報告修正後重評，三頁三份 rubric 都通過（見「第二輪（#187）」），兩輪用的 rubric 版本不同，分數不能直接比較
 - 新版首頁三份 rubric 都通過（設計 4.2、文案與行銷 4.3、SEO 4.2）。舊版、現站、競品的首頁三份都沒過，最高的是舊版的 SEO 3.2
 - 新版 digiRunner 與金融頁沒過。兩頁的設計都是 3.0，卡在 D2 = 2：offering 與 hub 模板沿用 M3 的元件，留著設計原則明列不做的 mono 大寫 eyebrow、`01` 編號、細線與框線卡片。文案分別是 3.8、3.7，差在幾處做得不完整：製作備註式的句子、hero 的「免費」沒寫條件、brief 要的事實沒放、錨點沒照 brief
@@ -78,6 +79,9 @@ node scripts/strategy/eval-shots.mjs --new <scratch>/new-dist --old <scratch>/ol
 | 第二輪（#187） | [首頁](evaluation/reviews/r2-new-home.md) | 4.0 通過 | 4.5 通過 | 4.5 通過 |
 | 第二輪（#187） | [digiRunner](evaluation/reviews/r2-new-digirunner.md) | 4.3 通過 | 4.7 通過 | 4.7 通過 |
 | 第二輪（#187） | [金融](evaluation/reviews/r2-new-finance.md) | 4.2 通過 | 4.2 通過 | 4.7 通過 |
+| 第一批（#200） | [AI 智能理賠](evaluation/reviews/b1-new-smartclaim.md) | 4.2 通過 | 4.5 通過 | 4.8 通過 |
+| 第一批（#200） | [AI 智慧建檔](evaluation/reviews/b1-new-smartfilling.md) | 4.0 通過 | 4.7 通過 | 4.7 通過 |
+| 第一批（#200） | [SysTalk.ai 產品家族](evaluation/reviews/b1-new-systalk-ai.md) | 4.2 通過 | 4.5 通過 | 5.0 通過 |
 <!-- eval-scores:end -->
 
 ## 各組的主要差異
@@ -255,6 +259,61 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 | meta description 與 JSON-LD 的文字算不算 C3 的主張 | `rubrics/copy-marketing.md` C3 | 金融 |
 
 這些是規則文件之間的衝突，不是單頁的修正，#187 不改，列在 PR 的後續事項。
+
+## 第一批（#200）
+
+`docs/workflow.md`「分階段流程」的後續批次第一張製作 issue：`/solutions/smartclaim`、`/solutions/smartfilling`、`/products/systalk-ai` 照 #199 的 brief 重做後，每頁由新的 `reviewer` 用三份 rubric 評分。評審檔是 [`b1-new-smartclaim`](evaluation/reviews/b1-new-smartclaim.md)、[`b1-new-smartfilling`](evaluation/reviews/b1-new-smartfilling.md)、[`b1-new-systalk-ai`](evaluation/reviews/b1-new-systalk-ai.md)，分數在上方「分數」表的「第一批（#200）」三列。
+
+### 方法
+
+- 用的 rubric 與 `site-review` 和第二輪（#187）相同。素材由 `node scripts/strategy/eval-shots.mjs --only new --group <組> --pages <slug>=<path>,…` 產生（`--pages` 是本批加的，讓後續批次的頁面也能用同一支 script），prompt 只給匿名代號的截圖、`dist/` 的 HTML 與 `docs/strategy/`，不給上一次的分數與製作過程
+- 一頁沒過就修正，修正後由新的 `reviewer` 重評。同一頁較早的評審檔放在 [`evaluation/b1-attempt1/`](evaluation/b1-attempt1/)，截圖依次在 `evaluation/b1-new/`、`b1b-new/`、`b1c-new/`
+
+### 結果
+
+| 頁面 | 第一次（`c4ce310`） | 第二次（`c835b72`） | 第三次（`6e3ca36`） |
+|---|---|---|---|
+| AI 智能理賠 | 4.2／4.2／4.8 | 3.8（D4 = 3）／4.3／4.8 | 4.2／4.5／4.8 |
+| AI 智慧建檔 | 4.0（D4 = 3）／4.5／4.5 | 4.0／4.7／4.7 | — |
+| SysTalk.ai 產品家族 | 3.8（D2 = 3）／4.2／4.8 | 4.2／4.5／5.0 | — |
+
+分數依序是設計／文案與行銷／SEO。第一次之後修的是：
+
+- SysTalk.ai 第 2 段的事實原文用空白接成一行，讀起來像錯字（D2）：在 `facts-source.yaml` 把產品名與各項拆成分行，只加換行
+- 介面片段那一側半欄空白（D2、D4）：ui 段加 `itemsBelow`，事實排到片段與主張下方兩欄；拆行的清單在兩欄裡佔滿一列
+- 三位評審都指出頁尾聯絡段的標題是全站通用句，沒照 brief 寫這一頁的下一步（C4）：`ContactCta` 加 `title`，內容檔加 `contactTitle`
+- smartclaim、smartfilling 全頁白底，看不出判斷組（D2、D4）：用 `fill: subtle` 分組
+- tagline 與第 2 段 h2 重複、第 3 段 h2 沒點出地端（D3、S4）、說明句「給…：」的開頭與 ICR 索引列的交代版面句子（C6）
+
+第二次之後修 smartclaim 的 D4：索引列改成標題在左、清單在右，h2 改成每個分句放得進一行（「引擎」「解析」不再被拆開），第 6 段的事實排到下方，第 3 段說明句不再重講掃描建檔。smartfilling 的索引列跟著變成左右排，這是它第二次評審之後的改動，沒有再評
+
+同一頁兩次評審的設計分數差了 0.4（smartclaim 第一次 4.2、第二次 3.8，中間的修正沒有動到第二次扣分的地方）。評審之間的落差比門檻的間距大，這一批每頁只評到通過為止，分數接近 4.0 的頁面（smartfilling 設計 4.0）換一位評審可能不通過
+
+### 還不夠好的地方
+
+評審給 4 分的扣分處，沒有低於門檻，留給之後的 issue：
+
+- 成果段只有一則（smartclaim）或成果原文用內文字級時，旁邊介面片段的黑色標題列比成果搶眼（D3、D5，三頁都提到）
+- 介面片段把旁邊的事實清單原樣再列一次（SysTalk.ai 第 4、5 段），沒有畫出清單以外的東西（D2）；狀態只用色塊表示，畫面上沒有文字（D5）
+- 375 寬保留每一張片段，沒照「介面片段只留主要的一塊」；說明句照詞組斷行時拆開「AI 進化系統」這類名稱
+- SysTalk.ai hero 的證據點「打造企業 雲/地端 AI 完整解決方案」讀起來像口號；說明句的「金融與政府」沒有事實支撐（C3）
+- `SiteFooter` 在深紫聯絡帶下方與版權列上方各有一條細線（D2，全站共用）
+
+### 評審依據不足
+
+九份評審（smartclaim 三次、另兩頁各兩次）的「評審依據不足」裡重複出現的：
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| 「各模板怎麼呈現」只寫 digiRunner 與金融頁，沒有 `kind: solution` 的方案頁與產品家族 hub | `design-principles.md` | 每一份 |
+| brief 把介面片段降到 3 張、色帶放 3 則事實，寫「交設計概念階段」，原則沒有回寫確認結果 | `design-principles.md`、三份 brief 的取捨 | 每一份 |
+| 「P5 的判斷組之間換底色」沒寫內頁怎麼分組，brief 的段落表也沒有底色欄 | `design-principles.md`「段落的分隔」、brief | smartclaim、smartfilling |
+| 成果版型一則一張片段時，375 寬要不要只留一張；只有一則成果時左欄的留白 | `design-principles.md`「內頁的版型」「375 寬」 | smartclaim、smartfilling |
+| 索引列在 1280 寬佔幾欄、另一側空著怎麼處理 | `design-principles.md`「內頁的版型」 | smartclaim |
+| `search-intent.md` 的共同子題（導入步驟、手寫準確率、地端部署）事實庫沒有，brief 沒說是刻意不寫 | `search-intent.md`、brief、`rubrics/seo.md` S2 | smartclaim、smartfilling |
+| DM-2 規定成果的 h3 用案例標題原文，和 S4「heading 自己說得出內容」衝突 | `messaging.md` DM-2、`rubrics/seo.md` S4 | smartfilling |
+
+本 issue 只改頁面，這些規則文件之間的衝突列在 PR 的後續事項。
 
 ## 限制
 
