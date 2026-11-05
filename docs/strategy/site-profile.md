@@ -40,6 +40,24 @@ zh-TW 優先。分階段流程的產出物（事實庫、messaging、brief、文
 | digiRunner 產品頁 | `/products/digirunner` | offering |
 | 金融產業頁 | `/industries/finance` | hub |
 
+## 後續批次
+
+試點頁以外分批重做，做法見 `docs/workflow.md`「分階段流程」的「後續批次」。各 skill 寫給「試點頁面」的規則（未搬內容、搜尋意圖、brief、評審）也套用在批次的頁面，但只在這批自己的 issue 裡：研究與策略 issue 為這批頁面補研究、寫 brief，製作 issue 轉 ready 前評這批頁面的三份 rubric。其他 issue 要評的頁面（`site-review` 的評審對象，以及 `issue-ship` 第 8 步改到共用元件時的 D2 重評）仍然只有上面的試點頁面。只做 zh-TW。
+
+### 第一批（#188）
+
+挑 `messaging.md` 或 `search-intent.md`「對應到頁面」已點名的頁。研究與 brief 是 #199，製作是 #200–#202。
+
+| 頁面 | 路徑 | 模板 | 製作 |
+|---|---|---|---|
+| AI 智能理賠解決方案 | `/solutions/smartclaim` | offering | #200 |
+| AI 智慧建檔解決方案 | `/solutions/smartfilling` | offering | #200 |
+| AI（SysTalk.ai）產品家族 | `/products/systalk-ai` | hub | #200 |
+| OrientAI | `/orient-ai` | offering | #201 |
+| AISO 主權 AI | `/aiso` | offering | #201 |
+| GreenSwift | `/products/greenswift` | offering | #202 |
+| 數位轉型（DigiLism）產品家族 | `/products/digilism` | hub | #202 |
+
 ## 限制
 
 - 不上線、不可被搜尋引擎收錄（`CLAUDE.md`「專案目標」）
