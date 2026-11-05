@@ -5912,7 +5912,7 @@
   locale: zh-TW
   status: confirmed
 
-# --- SysTalk.ai with PHISON aiDAPTIV (merged into /products/systalk-ai; not AISO, ---
+# --- SysTalk.ai with PHISON aiDAPTIV, merged into /products/systalk-ai, not AISO (#199) ---
 # The benchmarks are PHISON's (aiDAPTIV); the survey numbers are CIO's
 - id: aiso-100-percent-control
   type: feature
@@ -6104,7 +6104,7 @@
   status: confirmed
 
 # --- AISO sovereign AI (#199) ---
-# The page has no numbers; each card is one feature, title and body together. The AISO benchmarks are under SysTalk.ai with PHISON aiDAPTIV
+# The page has no numbers; each card is one feature, title and body together. The PHISON aiDAPTIV page (SysTalk.ai with PHISON aiDAPTIV group) is another offering, not AISO (#199)
 - id: aiso-ecosystem
   type: feature
   text: 集結 AI 軟體與硬體廠商打造的 AI 整合生態系 協助企業快速建置可落地、可擴充、可合規的地端 AI 平台
