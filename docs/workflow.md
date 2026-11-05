@@ -134,6 +134,15 @@ quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighth
 
 判斷不了時，在 issue 寫明，`/issue-start` 的計畫會列為待決。
 
+### 後續批次
+
+試點頁以外的頁面分批走這條流程，範圍與批次列在 [`strategy/site-profile.md`](strategy/site-profile.md)「後續批次」。設計概念與事實庫已經完成時，一批只開兩種 issue（#188 決定）：
+
+- 研究與策略一張：研究只補這批頁面的搜尋意圖與未搬內容，事實庫缺的才補，接著寫每頁的 brief。issue 帶「## 關卡」`strategy-approved`
+- 製作每 2–3 頁一張，帶 `needs-design`，依賴研究與策略那一張。評審放在製作 issue 裡，轉 ready 前每頁由新的 `reviewer` 評三份 rubric，都要達到 `site-review` 的門檻
+
+設計原則沒寫到這批頁面需要的呈現方式時，寫進 brief 的「取捨」，由使用者在策略關卡確認，不另開設計概念的 issue。
+
 ### 呼叫角色
 
 主 session 用 Agent tool 呼叫 agent，prompt 寫目標、這張 issue 的範圍與要讀的輸入檔。子代理不能再開子代理，所以兩個角色要合作時（策略階段的 `content-strategist` 與 `seo-strategist`），由主 session 依序呼叫，把前一個的產出路徑交給下一個。
