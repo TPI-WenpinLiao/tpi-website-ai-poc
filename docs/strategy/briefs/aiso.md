@@ -85,7 +85,7 @@
 
 - 第 2 段：8 張卡片的原文是「方案名稱 說明」一串，表格的兩欄把名稱與說明分開，字不改
 - 第 5 段：`fact:orientai-hardware-small`、`fact:orientai-hardware-large` 的原文是「規模 用途 首選或必備的設備」一串，表格的項目欄放規模（1-5人團隊、5人以上），原文欄放其餘的字，字不改；第 3 列項目欄寫「記憶體擴充」（表述），原文欄放 `fact:orientai-aidaptiv`。排法同 `/orient-ai` 第 7 段
-- 第 3 段：`fact:orientai-on-prem-data` 的原文以 FAQ 的「不會。」開頭。`orient-ai.md`「schema 缺口」第 5 段已列在 `scripts/strategy/facts-source.yaml` 裁掉這兩個字，裁一次兩頁共用
+- 第 3 段：`fact:orientai-on-prem-data` 的原文以 FAQ 的「不會。」開頭。`orient-ai.md`「schema 缺口」第 5 段新增了裁掉這兩個字的 `fact:orientai-on-prem-data-statement`，兩頁共用
 - 說明句寫讀者得到什麼，不寫「以下列出」這類交代版面的句子（`content-strategy` skill「3. 頁面文案」）
 
 ### 不能寫的句子
@@ -188,7 +188,7 @@ offering schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`
 |---|---|---|---|
 | 全頁 | 內容檔沒有 `facts` 欄位 | 補 `facts`（共用欄位已有），照段落表的 17 則 | — |
 | 3 | 連到新聞 559 要 `ref('news')` 的欄位 | 見「內部連結」連出第 3 段；不加欄位就不放這個連結 | `ref('news')`，形狀同 `greenswift.md`「schema 缺口」第 8 段 |
-| 3 | `fact:orientai-on-prem-data` 以「不會。」開頭 | 不是 schema 缺口：照 `orient-ai.md`「schema 缺口」第 5 段裁 `text` | — |
+| 3 | `fact:orientai-on-prem-data` 以「不會。」開頭 | 不是 schema 缺口：照 `orient-ai.md`「schema 缺口」第 5 段，改用 `fact:orientai-on-prem-data-statement` | — |
 | 6 | 相關文章由 `blog.relatedOfferings` 反查，`/blog/why-enterprises-need-ai-appliance` 沒填 | 不是 schema 缺口：在文章的內容檔補 `relatedOfferings: [zh-TW/aiso]` | — |
 | 1 | hero 的靜態圖還沒有 | 不是 schema 缺口：設計概念階段產生新圖，`heroImage` 指過去 | — |
 

@@ -105,7 +105,7 @@ facts:
   - aiso-medical-records
   - aiso-talent
   - aiso-software-orientai
-  - orientai-on-prem-data
+  - orientai-on-prem-data-statement
   - orientai-privacy-industries
   - aiso-agent-governance
   - aiso-compute-control

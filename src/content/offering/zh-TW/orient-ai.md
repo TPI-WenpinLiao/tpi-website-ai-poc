@@ -186,7 +186,7 @@ facts:
   - orientai-governance-layer
   - orientai-shadow-ai-lifecycle
   - orientai-governance-scenarios
-  - orientai-on-prem-data
+  - orientai-on-prem-data-statement
   - orientai-privacy-industries
   - orientai-governance-controls
   - orientai-risk-insight
