@@ -14,7 +14,7 @@ hub 的事實段只放這頁自己的事實，子頁的事實不搬上來，子�
 | `https://www.tpisoftware.com/products/systalk-ai` | 11 | 9 |
 | `https://www.tpisoftware.com/products/systalk-ai-phison`（併入本頁，`docs/research/content-audit.md` 第 79 行） | 12 | 6 |
 
-沒用的 8 則與理由見「取捨」第 3 項。hero 另放一則出自關於我們頁的獎項，見「取捨」第 4 項。
+沒用的 8 則與理由見「取捨」第 3 項。hero 另放一則出自關於我們頁的獎項，使用者決定採用（#199），見「取捨」第 4 項。
 
 子節點（`docs/ia/nodes.csv`）：SysTalk.Chat、SysTalk.VIKI、SysTalk.Coach、SysTalk.Audit、SysTalk.ICR、SysTalk.RPA、AI 智能理賠解決方案、AI 智慧建檔解決方案、SysTalk.Detect（備註「待確認：不在導覽，是否仍銷售」）、OrientAI。第 2 段的對應表連到其中 5 個，其餘由第 6 段的索引列列出。
 
@@ -67,7 +67,7 @@ hub 的事實段只放這頁自己的事實，子頁的事實不搬上來，子�
 
 | # | 段落 | 目的 | 依據（受眾任務／主張 id） | 搜尋子題 | 事實 | 預估長度 | 版型（`layout`） | 影像 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | Hero：SysTalk.ai 處理哪些 AI 工作 | h1 見「取捨」第 5 項。上方不放小標，上層「產品」由麵包屑表示。tagline 寫家族處理的工作類別（客服、培訓、知識、文件），說明句寫對象（金融與政府的部門）與部署方式。證據點兩則：雲地端方案、SysTalk.ai 的獎項（寫年份）。主要動作「聯絡業務」實心按鈕 | 決策者任務「確認這是不是我要找的產品家族」；`DM-9`、`IT-1`、`DM-8`；主要轉換 | `SysTalk.ai`：品牌導航，英文名跟相近名稱的產品混在一起；`SysTalk 昕力 AI 產品`：昕力的 AI 產品有哪些；`台灣 AI 解決方案 公司`（次要） | `fact:systalk-ai-service`、`fact:award-taiwan-excellence-2024`（後者見「取捨」第 4 項） | tagline 20–35 字；說明 30–50 字；證據點 2 則 | 第一屏（不屬於 10 種版型，照「內頁共用的規則」的第一屏） | 同一個世界渲染的靜態圖，要新做 `page-systalk-ai.webp`（`scripts/design/ribbon-capture.mjs`），取代現有的 `family-ai.webp`。HTML 標籤用第 2 段事實的用詞：客服機器人、語音質檢、會議紀錄、理賠資料自動建檔（`ai0`–`ai2`、`service`），SysTalk.ai（`product`）。不載 3D |
+| 1 | Hero：SysTalk.ai 處理哪些 AI 工作 | h1 見「取捨」第 5 項。上方不放小標，上層「產品」由麵包屑表示。tagline 寫家族處理的工作類別（客服、培訓、知識、文件），說明句寫對象（金融與政府的部門）與部署方式。證據點兩則：雲地端方案、SysTalk.ai 的獎項（寫年份）。主要動作「聯絡業務」實心按鈕 | 決策者任務「確認這是不是我要找的產品家族」；`DM-9`、`IT-1`、`DM-8`；主要轉換 | `SysTalk.ai`：品牌導航，英文名跟相近名稱的產品混在一起；`SysTalk 昕力 AI 產品`：昕力的 AI 產品有哪些；`台灣 AI 解決方案 公司`（次要） | `fact:systalk-ai-service`、`fact:award-taiwan-excellence-2024`（後者使用者決定採用，見「取捨」第 4 項） | tagline 20–35 字；說明 30–50 字；證據點 2 則 | 第一屏（不屬於 10 種版型，照「內頁共用的規則」的第一屏） | 同一個世界渲染的靜態圖，要新做 `page-systalk-ai.webp`（`scripts/design/ribbon-capture.mjs`），取代現有的 `family-ai.webp`。HTML 標籤用第 2 段事實的用詞：客服機器人、語音質檢、會議紀錄、理賠資料自動建檔（`ai0`–`ai2`、`service`），SysTalk.ai（`product`）。不載 3D |
 | 2 | 每個部門的 AI 工作，各有一個產品 | 一列一個工作：工作名稱（表述，例如「客服中心」「員工培訓與考核」「客服質檢」「產品知識與會議紀錄」「單據辨識與建檔」）在左，對應產品的原文在中，連到子頁在右。原文出自現站這頁的「一日應用情境」，每則寫出產品名與它處理的工作；「智能理賠專利」「兩腦一流程專利」照原文，不改寫成「多項專利」（`DM-9` 寫法） | 決策者任務「了解產品與方案」；`DM-9` | `SysTalk.ai`：前幾名沒有家族裡 Chat 以外的產品；`SysTalk 昕力 AI 產品`：各產品分工的一頁整理（前幾名沒有）；`AI 智能客服 推薦 台灣 企業`、`AI 語音質檢 客服中心`、`AI 業務培訓 對練 保險`（次要，主要在子頁） | 客服 `fact:systalk-ai-chat-patent`；培訓 `fact:systalk-ai-day-coach`；質檢 `fact:systalk-ai-day-audit`；知識與會議 `fact:systalk-ai-day-scenarios`；單據辨識 `fact:systalk-ai-claim-patent` | 引言 30–50 字；5 列，每列照原文 | 對應表（`spec`，每列帶 `link` 到子頁），`fill: subtle` | 無（對應表不放圖，同金融頁第 2 段） |
 | 3 | 資料與權限留在企業內 | 地端 AI 不限 Token 流量；軟硬一體，私密資料不上公有雲；內建權限管理、存取控管與稽核紀錄。說明句寫的是地端方案，不寫成 SysTalk.ai 每一種部署都在地端（hero 的證據點寫的是雲地端都有） | 決策者任務「確認風險在哪裡被處理掉」；`DM-3`；稽核紀錄也支撐 IT 主管「維運得動」 | `企業 生成式 AI 平台 地端部署 RAG`：地端的理由是資料不離開企業、不限 Token、權限控管（前幾名缺台灣廠商的地端方案，次要，主要在 `/products/systalk-viki`）；`企業主權 AI 地端部署 方案`（次要，主要在 `/aiso`） | `fact:aiso-no-token-limit`、`fact:aiso-hw-sw-integrated`、`fact:aiso-local-audit` | 說明 40–60 字；事實 3 則 | 介面片段（`ui`） | 介面片段 1：權限與稽核的設定面板，列是權限管理、存取控管、稽核紀錄（`on`），用詞取自 `fact:aiso-local-audit`。不畫使用者名單與操作筆數 |
 | 4 | 導入前、中、後都由昕力負責 | 三階段各一列：導入前的情境分析、方案搭配建議、效益評估；導入中的模型評估、選擇與 fine-tune；導入後的 AI 大腦健檢、回答品質與準確率檢測、Prompt 健檢。動作「聯絡業務」 | 決策者任務「決定要不要聯絡業務」；`DM-4` | `SysTalk.ai`：前幾名沒有導入流程；`企業 AI 導入`（主要是 `/blog/enterprise-ai-adoption`，這段是文章連過來的目的地） | `fact:systalk-ai-onboarding`、`fact:systalk-ai-onboarding-finetune`、`fact:systalk-ai-after-onboarding` | 主張一句 15–25 字；三階段照原文 | 色帶（`band`，淺紫，`fill: brand`），`link` 到 `contact` | 介面片段 2：導入後的健檢面板，列是 AI 大腦健檢優化、回答品質與準確率檢測、Prompt 健檢、問題診斷報告（用詞取自 `fact:systalk-ai-after-onboarding`）。有片段，不另放段落圖 |
@@ -125,7 +125,7 @@ hub 的事實段只放這頁自己的事實，子頁的事實不搬上來，子�
 | 2（知識與會議列） | `/products/systalk-viki` | SysTalk.VIKI 企業生成式 AI 應用平台 | 節點名。`企業 生成式 AI 平台 地端部署 RAG` 的主要承接頁 |
 | 2（單據辨識列） | `/products/systalk-icr` | SysTalk.ICR AI 智慧光學字元辨識 | 節點名。原文 `fact:systalk-ai-claim-patent` 出自家族頁 SysTalk.ICR 那一列 |
 | 6 | `/products/systalk-rpa`、`/solutions/smartclaim`、`/solutions/smartfilling`、`/orient-ai` | 節點名 | 索引列，模板排除第 2 段已連的 5 個節點（「schema 缺口」第 1 列）。SysTalk.Detect（`/solutions/textualanalysis`）仍產生頁面時也會列出（「待確認」第 6 項） |
-| 3 | 不連 `/aiso` | — | 取捨第 12 項：一體機的軟體核心確認前，SysTalk.ai 的地端段落不連 AISO |
+| 3 | 不連 `/aiso` | — | 取捨第 12 項：AISO 的軟體是 OrientAI（第 17 項已結算，#199），第 3 段是 SysTalk.ai 搭配 aiDAPTIV 的地端方案，不是 AISO，不連 |
 
 ### 連入
 
@@ -178,14 +178,14 @@ hub schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`heroL
 
 ## 取捨
 
-第 1–10 項是 content-strategist 寫的，第 11–13 項是 seo-strategist 加的（`search-intent.md`「待 seo-strategist 決定的事」跟這頁有關的條目）。兩方意見相同的項目，最後決定照 content-strategist 的立場；第 4 項要使用者決定；第 11–13 項由 seo-strategist 定案。
+第 1–10 項是 content-strategist 寫的，第 11–13 項是 seo-strategist 加的（`search-intent.md`「待 seo-strategist 決定的事」跟這頁有關的條目）。兩方意見相同的項目，最後決定照 content-strategist 的立場；第 4 項由使用者決定採用（#199，PR #204 的回覆）；第 11–13 項由 seo-strategist 定案。
 
 | # | 項目 | content-strategist 的立場 | 理由 | seo-strategist 的意見 | 最後決定 |
 |---|---|---|---|---|---|
 | 1 | 段數 | 7 段：hero、4 個事實段、子頁索引列、聯絡色帶 | 這頁自己的 zh-TW confirmed 事實有 23 則（現站家族頁 11 則、併入頁 12 則），用了 15 則；hero 另放 1 則關於我們頁的獎項，共引用 16 則。hero 放 2 則；其餘 14 則分成 4 段：工作與產品的對應 5 則、資料與權限 3 則、導入三階段 3 則、平台與模型 3 則，每段至少 2 則。子頁的事實（各產品頁的功能與案例）不搬上來，由第 2 段的連結與第 6 段的索引列連過去 | 同意。兩組品牌詞前幾名缺的子題（Chat 以外的產品、雲地端、導入流程、各產品分工）都在第 1、2、4 段；子頁的類別詞由子頁承接，hub 不必為它們加段 | 採納，7 段 |
 | 2 | 介面片段只有 3 張，不到「內頁共用的規則」的 4 張 | 3 張（第 3 段、第 4 段色帶、第 5 段） | 第 2 段是對應表，照版型表不放圖。第 4 張要嘛畫子頁產品的介面（那是子頁的事實），要嘛把對應表改成介面片段，兩種都不符合這頁的範圍 | 對搜尋沒有影響。第 2 段維持表格：產品名與連結是純文字，比畫在片段裡更容易被讀到 | 採納，3 張 |
 | 3 | 這頁自己的事實沒用的 8 則 | 不用 | `fact:systalk-ai-products`：原文把 SysTalk.Coach 與 SysTalk.ICR 接在同一句，`fact:systalk-ai-day-coach` 與 `fact:systalk-ai-claim-patent` 已涵蓋兩列的主要內容，同一列不重複。`fact:systalk-ai-quote-email`：見第 6 項。`fact:aiso-bundled`、`fact:aiso-onboarding`：回答軟硬體一起交付，是 `/aiso` 的 `DM-10`。`fact:aiso-servers`、`fact:aiso-use-cases`、`fact:aiso-memory-optimization`：硬體規格，messaging 把 `IT-10` 指給 `/aiso` 與 `/orient-ai`，沒指給這頁。`fact:aiso-industries`：產業清單含製造業（`messaging.md`「定位不說的事」），也沒有主張需要它 | 同意。不用的 8 則對應的查詢（`地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用`）主要由 `/aiso` 承接，這頁放了會跟 `/aiso` 搶同一組詞 | 採納 |
-| 4 | hero 的獎項 `fact:award-taiwan-excellence-2024` 出自關於我們頁，不是這頁的來源頁 | 放 hero 的證據點，需要使用者確認 | 使用者的規則管的是事實段，hero 不算事實段；這則點名的是 SysTalk.ai 家族本身，不是某個子頁的產品，搬上來不會把子頁的事實帶到家族頁。`DM-8` 寫法也把 2023、2024 台灣精品獎與創新商務獎指給這頁，但 2023 與 2022 的兩則點名的是 SysTalk.Chat（子頁的產品），照使用者的規則不放。使用者不同意時，hero 只留 `fact:systalk-ai-service` 一則 | 從 SEO 看放了比較好：`SysTalk.ai` 前幾名的第一筆就是台灣精品獎的頁面，從那裡點進來的讀者第一屏就對得上。但這則算不算「這頁自己的事實」是使用者規則的解讀，SEO 不能代為決定；不放也不影響兩組品牌詞的承接 | 待使用者決定，暫定放 |
+| 4 | hero 的獎項 `fact:award-taiwan-excellence-2024` 出自關於我們頁，不是這頁的來源頁 | 放 hero 的證據點（使用者已確認，見最後決定） | 使用者的規則管的是事實段，hero 不算事實段；這則點名的是 SysTalk.ai 家族本身，不是某個子頁的產品，搬上來不會把子頁的事實帶到家族頁。`DM-8` 寫法也把 2023、2024 台灣精品獎與創新商務獎指給這頁，但 2023 與 2022 的兩則點名的是 SysTalk.Chat（子頁的產品），照使用者的規則不放。使用者不同意時，hero 只留 `fact:systalk-ai-service` 一則 | 從 SEO 看放了比較好：`SysTalk.ai` 前幾名的第一筆就是台灣精品獎的頁面，從那裡點進來的讀者第一屏就對得上。但這則算不算「這頁自己的事實」是使用者規則的解讀，SEO 不能代為決定；不放也不影響兩組品牌詞的承接 | 使用者決定採用（#199，PR #204 的回覆）：不是本頁來源頁的獎項可以放，hero 放 `fact:award-taiwan-excellence-2024`，寫年份 |
 | 5 | h1 用什麼 | 「SysTalk.ai 產品家族」（`title` 跟著改），`<title>` 由 seo-strategist 用 `seoTitle` 處理 | 節點名「AI（SysTalk.ai）」是選單用的欄標題；現有 title 的「企業級 AI Agent 應用平台」不在事實庫。「產品家族」是 `messaging.md`「統一用詞」的說法，跟首頁與 `/products/digilism` 一致 | 同意。title 見第 13 項 | 採納，h1「SysTalk.ai 產品家族」 |
 | 6 | 報價信箱 `fact:systalk-ai-quote-email` 不放 | 不放 | 主要轉換是聯絡業務，`audience-and-goals.md` 規定所有產品線的轉換統一；頁尾另放一個信箱會把詢問分到兩個入口 | 同意，對搜尋沒有影響 | 採納 |
 | 7 | 第 3、5 段用了併入頁的事實，和 `/aiso` 的分工還沒定 | 第 3 段用 `DM-3` 的三則、第 5 段用原文點名 SysTalk.ai 的兩則與模組清單；軟硬體交付與硬體規格留給 `/aiso` | `messaging.md`「缺少證據的主張」第 17 項：AISO 一體機的軟體核心是 SysTalk.ai 還是 OrientAI 未確認，`/aiso` 與這頁誰承接併入頁的事實跟著定。這頁先只用原文寫明 SysTalk.ai 的事實（`fact:aiso-systalk-platform`、`fact:aiso-llm-support`）與 `DM-3` 指給這頁的三則；確認後若改由 `/aiso` 承接，第 3 段要改用別的事實或併進第 5 段 | 同意。查詢分工不跟著軟體核心變：`企業 生成式 AI 平台 地端部署 RAG` 次要給這頁（第 3、5 段），`地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用` 主要給 `/aiso`（`aiso.md`「取捨」第 11 項）。第 17 項確認後若第 3 段的事實改由 `/aiso` 承接，RAG 那組的次要承接只剩第 5 段，仍然夠 | 採納 |
@@ -193,7 +193,7 @@ hub schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`heroL
 | 9 | 相關文章（`featuredPosts`）不放 | 不放 | `/blog/enterprise-ai-adoption` 已在內文連到這頁；放成一段索引列會和第 6 段的子頁索引列相鄰，違反「內頁共用的規則」的相鄰版型規則。這頁的讀者要找的是產品入口 | 同意。`企業 AI 導入` 由文章主要承接，文章結語已連到這頁，這頁不必反連來分擔這組查詢 | 採納 |
 | 10 | 子頁索引列的一句讀各 offering 的 `description` | 照模板做法，這份 brief 不改子頁的 description | 子頁的 description 有些含未確認或本站不用的說法（例如「一站式」「高準確率」），是各子頁 brief 的範圍（`DM-9` 寫法：子頁卡片的文字由 hub 模板讀各 offering 的 description） | 同意。這兩頁在本批改寫：`smartclaim.md`、`smartfilling.md` 的 description 示例已不含這些說法；其他子頁（例如 `/products/systalk-viki` 的「一站式」）在各自改版時處理 | 採納 |
 | 11 | 客服類查詢（`AI 智能客服 推薦 台灣 企業`、`AI 客服機器人 怎麼選`）由哪頁承接（`search-intent.md` 待決條目） | 第 2 段的客服列把 `AI 智能客服 推薦 台灣 企業` 列為次要子題 | — | 主要給 `/products/systalk-chat`。`nodes.csv` 備註「併入 /genai-solution 導入服務」說的是現站 `/genai-solution` 併入這個節點（`docs/ia/page-map.csv`），`systalk-chat` 本身會產生頁面（`src/content/offering/zh-TW/systalk-chat.md`），節點名「SysTalk.Chat AI 智能客服」就含查詢用詞。這頁第 2 段客服列連過去，次要承接 `AI 智能客服 推薦 台灣 企業`。`AI 客服機器人 怎麼選` 沒有主要承接頁，次要給 `/products/systalk-chat`，不另寫文章：前幾名已有繁中選購指南，產品比較的事實沒有 | 定案 |
-| 12 | 第 3 段要不要連到 `/aiso` | 沒有提（第 7 項只決定事實的分工） | — | 不連，第 17 項確認後再決定。連過去對 `企業主權 AI 地端部署 方案` 有幫助，但放在 SysTalk.ai 的地端段落裡，讀者會讀成 AISO 用的是 SysTalk.ai，正是第 17 項還不能寫的事 | 定案：暫不連 |
+| 12 | 第 3 段要不要連到 `/aiso` | 沒有提（第 7 項只決定事實的分工） | — | 不連，第 17 項確認後再決定。連過去對 `企業主權 AI 地端部署 方案` 有幫助，但放在 SysTalk.ai 的地端段落裡，讀者會讀成 AISO 用的是 SysTalk.ai，正是第 17 項還不能寫的事 | 定案：不連。第 17 項已結算（#199）：AISO 的軟體是 OrientAI，第 3 段講的是 SysTalk.ai 搭配群聯 aiDAPTIV 的地端方案，連到 `/aiso` 會讓讀者以為 AISO 搭載 SysTalk.ai |
 | 13 | title 用什麼 | `<title>` 由 seo-strategist 用 `seoTitle` 處理（第 5 項） | — | `seoTitle`「SysTalk.ai 企業 AI 產品家族」。不放子頁的類別詞，避免 hub 跟子頁搶同一組詞 | 定案，見「title 與 description 方向」 |
 
 ## 待確認
@@ -206,7 +206,7 @@ hub schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`heroL
 | 2 | 「100% AI 主控權」與 CIO 調查數字（`fact:aiso-100-percent-control`、`fact:aiso-cio-survey`） | `to_confirm`：口號式的 100%；第三方調查沒有年份（`messaging.md`「缺少證據的主張」第 18 項） | 3 |
 | 3 | 搭配群聯 aiDAPTIV 的效能比較（`fact:aiso-phison-patent`、`fact:aiso-finetune-benchmark`、`fact:aiso-70b-on-4-gpus`、`fact:aiso-10x-dell-hpe`、`fact:aiso-25x-response`、`fact:aiso-52-to-2-seconds`） | `to_confirm`：合作夥伴的估算與點名競品的比較（`messaging.md`「缺少證據的主張」第 9 項） | 3、5 |
 | 4 | 2025 AI AWARD | 只在併入頁的 meta description，查不到獎項全名與頒發單位，不在事實庫（`messaging.md`「缺少證據的主張」第 20 項） | 1 |
-| 5 | AISO 一體機的軟體核心，以及併入頁的事實由 `/aiso` 還是這頁承接 | `messaging.md`「缺少證據的主張」第 17 項 | 3、5 |
+| 5 | AISO 一體機的軟體核心，以及併入頁的事實由 `/aiso` 還是這頁承接（已結算） | 使用者決定（#199）：AISO 的軟體是 OrientAI（`fact:aiso-software-orientai`、`fact:aiso-orientai-hardware`，`messaging.md`「缺少證據的主張」第 17 項）。併入頁是 SysTalk.ai 搭配群聯 aiDAPTIV 的方案，點名 SysTalk.ai 的 `fact:aiso-systalk-platform`、`fact:aiso-llm-support`、`fact:aiso-modules` 由這頁承接，`/aiso` 不引用；`aiDAPTIV SysTalk.ai` 這組查詢改由這頁承接（`search-intent.md`「對應到頁面」） | 3、5 |
 | 6 | SysTalk.Detect 是否仍在銷售 | `nodes.csv` 備註「待確認：不在導覽，是否仍銷售」。仍產生頁面時會出現在第 6 段的索引列 | 6 |
 
 ## 後續

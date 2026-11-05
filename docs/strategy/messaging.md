@@ -7,6 +7,7 @@
 - 定位句與主張是表述，可以改寫；主張裡不放數字、客戶名或最高級說法，這些只能出現在引用的事實裡
 - #186 依 #168 的評審改了 `DM-2` 的證據點，新增「一句話的產品描述算事實」與「缺少證據的主張」第 15 項
 - #199 為第一批 7 頁補了既有主張的證據點與「用在」，新增 `DM-9` 到 `DM-13`、`IT-9` 到 `IT-11`，以及「缺少證據的主張」第 16 到 22 項
+- #199 依使用者在 PR #204 的回覆（2026-11-05）改了：AISO 的軟體核心確定是 OrientAI（第 17 項結算，`DM-10` 加兩筆新聞內文的證據點）；新聞可以當事實來源（第 18 項）；OrientAI 的部署寫法（`DM-3`、`IT-1`）與新增的第 23 項
 - 受眾依 `docs/research/audience-and-goals.md`：主要受眾是金融、政府與公部門、製造業的決策者與 IT 主管，主要轉換是聯絡業務。定位句只點名金融與政府（使用者決定，#165），理由見「定位不說的事」
 
 ## 定位
@@ -93,7 +94,8 @@ OrientAI、SysTalk.VIKI 與地端一體機方案把 AI 留在企業端，資料�
 寫法（#199）：
 
 - `fact:orientai-privacy-industries` 的原文點名醫療、金融、製造業。照原文引用，但不把製造業寫進標題或產業入口（「定位不說的事」）
-- `fact:aiso-hw-sw-integrated` 的來源是 SysTalk.ai 搭配群聯 aiDAPTIV 的頁面。`/aiso` 引用時不寫出軟體名稱，理由見「缺少證據的主張」第 17 項
+- `fact:aiso-hw-sw-integrated` 的來源是 SysTalk.ai 搭配群聯 aiDAPTIV 的頁面，原文沒點名軟體。`/aiso` 引用時只寫原文的軟硬一體與資料不上公有雲，不把它寫成 SysTalk.ai 或 OrientAI 的功能；AISO 的軟體核心另用 `fact:aiso-software-orientai` 說（`DM-10`，第 17 項已結算）
+- OrientAI 的部署位置（#199 使用者說明）：OrientAI 本身部署在企業端（`fact:orientai-on-prem-data`）；`fact:orientai-execution-layer` 的「支援雲地靈活部署架構」跟在「彈性整合多種大語言模型」後面，指的是接的模型可以在雲端或地端，兩筆不矛盾。表述不寫 OrientAI 本身可以部署在雲端。「可以使用雲端 LLM API」現站沒有原文，頁面不寫（「缺少證據的主張」第 23 項）
 
 用在：`/`、`/orient-ai`、`/aiso`、`/products/systalk-ai`。對應 `search-intent.md` 的「企業主權 AI 地端部署 方案」（共同子題：資料主權、部署形式）、「AI Agent 治理 影子 AI 企業」、「AI Agent 地端部署 Token 成本」、「地端 AI 伺服器 企業 LLM」。
 
@@ -222,16 +224,20 @@ digiRunner、SysTalk 與 AI 智能理賠解決方案等自有產品經過外部�
 - `fact:aiso-hw-sw-integrated`：軟硬一體消除相容性風險
 - `fact:aiso-onboarding`：昕力資訊提供導入規劃、模型設定、建置與應用模組設計服務
 - `fact:aiso-alliance`：AISO 主權 AI 產業聯盟成軍，主打整合式交付（新聞 559 的標題）
+- `fact:aiso-software-orientai`：此系列方案以昕力自主研發的企業級 Agentic AI 平台 OrientAI 為軟體核心（新聞 575 的內文，#199 使用者確認）
+- `fact:aiso-orientai-hardware`：產品組合結合自研 OrientAI 系列軟體與地端硬體（新聞 585 的內文，#199 使用者確認）
 
-新增的理由：`/aiso` 是方案頁，`DM-3` 回答「資料留不留在企業端」，回答不了 `search-intent.md`「AI 一體機 企業 地端 交機即用」「企業 地端 LLM 建置 成本」的共同子題（軟硬體預先整合、自建伺服器的維運門檻）。四筆原文都直接寫出軟硬體整合或導入服務。
+新增的理由：`/aiso` 是方案頁，`DM-3` 回答「資料留不留在企業端」，回答不了 `search-intent.md`「AI 一體機 企業 地端 交機即用」「企業 地端 LLM 建置 成本」的共同子題（軟硬體預先整合、自建伺服器的維運門檻）。每筆原文都直接寫出軟硬體整合、整合式交付、軟體核心或導入服務。
 
 寫法：
 
-- 不寫軟體核心是哪一套。`fact:aiso-bundled`、`fact:aiso-hw-sw-integrated` 的來源頁寫的是 SysTalk.ai，新聞寫的是 OrientAI，確認前只寫「軟體」「平台」（「缺少證據的主張」第 17 項）
+- 可以寫出軟體核心是 OrientAI（第 17 項已結算，使用者決定，#199）。照 `fact:aiso-software-orientai` 的原文寫「以 OrientAI 為軟體核心」，或照 `fact:aiso-orientai-hardware` 寫「OrientAI 系列軟體與地端硬體」；寫到 OrientAI 時連到 `/orient-ai`
+- `fact:aiso-bundled`、`fact:aiso-hw-sw-integrated` 的來源頁是 SysTalk.ai 搭配群聯 aiDAPTIV 的方案（`/products/systalk-ai-phison`），原文沒點名軟體。引用時只寫原文的軟硬體整合，不和 OrientAI 寫成同一句，讓讀者以為這兩筆原文講的是 OrientAI
+- 同一個來源頁裡點名 SysTalk.ai 或列出 SysTalk.ai 模組的 `fact:aiso-llm-support`、`fact:aiso-systalk-platform`、`fact:aiso-modules`，講的是另一個方案（SysTalk.ai 加群聯 aiDAPTIV，IA 上併入 `/products/systalk-ai`），不是 AISO，`/aiso` 不引用
 - 原文「可落地、可擴充、可合規」照引；表述不用「落地」（「統一用詞」），也不把「可合規」擴寫成符合哪條法規
 - 不寫 AISO 聯盟的成員、成立日期與簽約客戶（「缺少證據的主張」第 18 項）
 
-用在：`/aiso`。對應 `search-intent.md` 的「AISO 主權 AI」「AI 一體機 企業 地端 交機即用」「企業 地端 LLM 建置 成本」。
+用在：`/aiso`、`/orient-ai`（只用 `fact:aiso-software-orientai`，寫在第 7 段連到 `/aiso` 的錨點）。對應 `search-intent.md` 的「AISO 主權 AI」「AI 一體機 企業 地端 交機即用」「企業 地端 LLM 建置 成本」。
 
 ### DM-11 法務、人資、教育、醫療與 AI 治理，各有對應的 AI 方案
 
@@ -301,7 +307,7 @@ API 管理、日誌、資料庫維運、表單流程與醫療資料交換，都�
 
 ### IT-1 部署環境由企業決定
 
-digiRunner 與 DigiLism 可裝在地端、雲端或 Kubernetes，多雲與混合雲都支援；SysTalk.ai 與 OrientAI 也能雲地部署。
+digiRunner 與 DigiLism 可裝在地端、雲端或 Kubernetes，多雲與混合雲都支援；SysTalk.ai 有雲端與地端的方案，OrientAI 部署在企業端，接的模型可以在雲端或地端。
 
 - `fact:digirunner-deployment`：支援地端、雲端部署及 K8s 微服務架構
 - `fact:digirunner-multi-cloud`：支援多雲和混合雲，整合 Kubernetes
@@ -310,7 +316,12 @@ digiRunner 與 DigiLism 可裝在地端、雲端或 Kubernetes，多雲與混合
 - `fact:digilism-system-integration`：支援地端、雲端、混合與多雲架構，介接傳統 ESB
 - `fact:digirunner-case-pharmacity`：為 Pharmacity 在雲端建構 API 管理平台（具名案例）
 - `fact:systalk-ai-service`：SysTalk.ai 提供雲端與地端的 AI 方案（#199）
-- `fact:orientai-execution-layer`：OrientAI 支援雲地部署架構（#199）
+- `fact:orientai-execution-layer`：OrientAI 整合多種大語言模型，支援雲地部署架構（#199）
+
+寫法（#199 使用者說明）：
+
+- `fact:orientai-execution-layer` 的「雲地」指 OrientAI 接的模型可以在雲端或地端，OrientAI 本身部署在企業端（`fact:orientai-on-prem-data`），兩筆不矛盾。引用時照原文，表述不寫 OrientAI 本身可以部署在雲端，也不把 OrientAI 和 digiRunner、DigiLism 寫成同一種「部署環境自選」
+- 「OrientAI 可以使用雲端 LLM API」現站沒有原文，頁面不寫（「缺少證據的主張」第 23 項）
 
 用在：`/products/digirunner`、`/products/digilism`、`/products/systalk-ai`、`/orient-ai`。
 
@@ -424,7 +435,7 @@ GreenSwift 的試用沒有「免費」字樣。頁面寫試用時，三筆的條
 - `fact:smartfilling-template-free`：不需依文件版型建立模板
 - `fact:smartfilling-preprocessing`：自研的前處理技術，自動校正文件影像瑕疵（#199）
 
-`fact:aiso-llm-support` 的原文點名 SysTalk.ai，`/aiso` 不引用這筆（「缺少證據的主張」第 17 項）。
+`fact:aiso-llm-support` 的來源是 SysTalk.ai 搭配群聯 aiDAPTIV 的方案（`/products/systalk-ai-phison`），講的是另一個方案，不是 AISO，`/aiso` 不引用這筆（`DM-10` 寫法）。`fact:orientai-execution-layer` 的「雲地」寫法見 `IT-1`。
 
 用在：`/`、`/industries/finance`、`/solutions/smartclaim`、`/solutions/smartfilling`、`/orient-ai`、`/products/systalk-ai`。
 
@@ -462,7 +473,7 @@ IT 主管可以照團隊大小、知識庫規模與要跑的模型級距挑機�
 
 寫法：
 
-- `fact:aiso-servers`、`fact:aiso-use-cases`、`fact:aiso-memory-optimization` 的來源是 SysTalk.ai 搭配 aiDAPTIV 的頁面，`fact:orientai-hardware-small`、`fact:orientai-hardware-large` 的來源是 OrientAI 頁。兩組各寫在自己的產品底下，不合併成同一張規格表（軟體核心未確認，「缺少證據的主張」第 17 項）
+- `fact:aiso-servers`、`fact:aiso-use-cases`、`fact:aiso-memory-optimization` 的來源是 SysTalk.ai 搭配 aiDAPTIV 的頁面，`fact:orientai-hardware-small`、`fact:orientai-hardware-large` 的來源是 OrientAI 頁。兩組各寫在自己的產品底下，不合併成同一張規格表（兩個來源頁講的是不同的產品組合；AISO 的軟體核心雖然是 OrientAI，OrientAI 頁的硬體建議不是 AISO 的機型規格）
 - 群聯提供的效能比較數字還沒確認（「缺少證據的主張」第 9 項），`fact:aiso-memory-optimization` 只寫機制，不寫快幾倍
 
 用在：`/aiso`、`/orient-ai`。
@@ -503,7 +514,7 @@ IT 主管可以照團隊大小、知識庫規模與要跑的模型級距挑機�
 | DM-7 碳盤查與 CBAM 工具 | `fact:greenswift-scope`、`fact:greenswift-cbam-plan`、`fact:greenswift-standards`、`fact:cert-greenswift-aup`、`fact:greenswift-footprint-plan`、`fact:greenswift-epa-format`、`fact:greenswift-case-hedinglong` 與 `fact:client-hedinglong` | 7 | 首頁、GreenSwift |
 | DM-8 產品經過外部評選 | `fact:award-taiwan-excellence-2023`、`fact:award-taiwan-excellence-2024`、`fact:award-innovative-business-2022`、`fact:award-global-finance-2020`、`fact:award-golden-yang-2024-smartclaim` | 5 | digiRunner、首頁、理賠、SysTalk.ai、DigiLism |
 | DM-9 SysTalk.ai 各部門有產品 | `fact:systalk-ai-chat-patent`、`fact:systalk-ai-day-coach`、`fact:systalk-ai-products`、`fact:systalk-ai-day-audit`、`fact:systalk-ai-day-scenarios` | 5 | SysTalk.ai、建檔 |
-| DM-10 地端 AI 軟硬體一起交付 | `fact:aiso-ecosystem`、`fact:aiso-bundled`、`fact:aiso-hw-sw-integrated`、`fact:aiso-onboarding` | 4 | AISO |
+| DM-10 地端 AI 軟硬體一起交付 | `fact:aiso-ecosystem`、`fact:aiso-bundled`、`fact:aiso-hw-sw-integrated`、`fact:aiso-onboarding`、`fact:aiso-alliance`、`fact:aiso-software-orientai`、`fact:aiso-orientai-hardware` | 7 | AISO、OrientAI |
 | DM-11 部門各有 AI 方案 | `fact:aiso-legal-contract`、`fact:aiso-hr-labor-law`、`fact:aiso-hr-employee-service`、`fact:aiso-teaching`、`fact:aiso-medical-records`、`fact:aiso-talent`、`fact:aiso-agent-governance`、`fact:aiso-compute-control` | 8 | AISO |
 | DM-12 部門與顧問同平台協作 | `fact:greenswift-cloud-collaboration`、`fact:greenswift-collaboration`、`fact:greenswift-consultant-accounts`、`fact:greenswift-consultant-access`、`fact:greenswift-accounts`、`fact:greenswift-consulting-partners` | 6 | GreenSwift |
 | DM-13 整合中台各塊有產品 | `fact:digilism-solution-areas`、`fact:digilism-api-first`、`fact:digilism-bfsi`、`fact:digilism-family-digirunner`、`fact:digilism-family-digimars`、`fact:digilism-family-digiflexis`、`fact:digilism-family-digicare` | 7 | DigiLism |
@@ -529,7 +540,7 @@ IT 主管可以照團隊大小、知識庫規模與要跑的模型級距挑機�
 | `/solutions/smartclaim` | DM-2、IT-9 | DM-8、IT-8 |
 | `/solutions/smartfilling` | DM-2、IT-8、IT-9 | DM-9 |
 | `/products/systalk-ai` | DM-9、DM-4 | DM-2、DM-3、DM-8、IT-1、IT-8 |
-| `/orient-ai` | DM-3、IT-11 | IT-1、IT-5、IT-8、IT-10 |
+| `/orient-ai` | DM-3、IT-11 | DM-10、IT-1、IT-5、IT-8、IT-10 |
 | `/aiso` | DM-10、DM-11 | DM-3、DM-4、IT-5、IT-10 |
 | `/products/greenswift` | DM-7、DM-12 | IT-2、IT-7 |
 | `/products/digilism` | DM-13、IT-4 | DM-8、IT-1、IT-2、IT-3、IT-5、IT-6 |
@@ -620,9 +631,10 @@ IT 主管可以照團隊大小、知識庫規模與要跑的模型級距挑機�
 | 14 | 聯絡後多久回覆 | `audience-and-goals.md` 問題 3 未回答。`competitors.md`「本站缺」第 3 項：FPT 在聯絡頁寫明回覆時間。現站沒有資料，不處理；聯絡段不寫回覆時間（使用者決定，#180） | 無 |
 | 15 | 金融聯防阻詐平台用 AI 偵測或共享詐騙事件 | 已確認的 `fact:fraud-platform-title`、`fact:fraud-platform-result` 只寫聯防流程、詐騙事件即時共享與跨行交換，沒有提到 AI，所以 #186 把它移出 `DM-2`。現站也沒有這個平台的案例頁與客戶名稱。要放回 AI 的段落，要先從現站或內容負責人取得寫出 AI 的原文 | 無 |
 | 16 | AI 智能理賠解決方案有自己的成效數字與具名客戶案例（#199） | 理賠頁的「人力成本節省達 80% 以上」沒有量測方式與基準（第 7 項同類）。已確認的成果只有首頁案例 `fact:smartclaim-title` 與 `fact:smartclaim-result`，沒有客戶名。`search-intent.md`「壽險 理賠 AI 案例 台灣」要有具名案例才接得住，事實庫沒有。`fact:award-golden-yang-2024-smartclaim` 只收了新聞 457 的標題，媒體寫的組別不在事實庫。要先收：80% 的量測方式與比較基準、可具名的理賠客戶案例、新聞 457 內文寫的組別 | `fact:smartclaim-80-percent` |
-| 17 | `/aiso` 寫出一體機的軟體核心（#199） | 事實庫的 `fact:aiso-systalk-platform`（來源 `/products/systalk-ai-phison`）寫 SysTalk.ai；`search-intent.md`「AI 一體機 企業 地端 交機即用」記下新聞寫的是 OrientAI，現站新聞 559 只收了標題 `fact:aiso-alliance`。`/products/systalk-ai-phison` 在 IA 上又併入 `/products/systalk-ai`。確認前 `/aiso` 不點名軟體，也不引用原文點名 SysTalk.ai 的 `fact:aiso-llm-support`、`fact:aiso-systalk-platform`；`DM-3`、`DM-10`、`IT-8`、`IT-10` 已照這個限制寫。要先收：現站或內容負責人確認 AISO 一體機的軟體是 SysTalk.ai、OrientAI 或兩者，兩者都有時各負責哪一塊；`/aiso` 與 `/products/systalk-ai` 誰承接 `systalk-ai-phison` 的事實跟著定 | 無（缺的是確認，不是 `to_confirm`） |
-| 18 | AISO 聯盟的成員、成立日期與簽約客戶；AISO 給企業 100% 的 AI 主控權（#199） | 「整合式交付」已補進 `fact:aiso-alliance` 的 text，列為 `DM-10` 的證據點。成員、日期、國泰金控與台達電簽約只在新聞 559 的 Nuxt payload，`extract-facts.mjs` 不讀。「100% AI 主控權」是口號，CIO 調查沒寫年份。要先收：新聞 559 內文的成員、日期與簽約 | `fact:aiso-100-percent-control`、`fact:aiso-cio-survey` |
+| 17 | `/aiso` 寫出一體機的軟體核心（#199） | 已結算（使用者決定，#199）：AISO 一體機的軟體是 OrientAI。依據是新聞內文的兩筆 confirmed 事實：`fact:aiso-software-orientai`（新聞 575：「以昕力自主研發的企業級 Agentic AI 平台 OrientAI 為軟體核心」）與 `fact:aiso-orientai-hardware`（新聞 585：「結合自研 OrientAI 系列軟體與地端硬體」），已列為 `DM-10` 的證據點。`/products/systalk-ai-phison` 是 SysTalk.ai 加群聯 aiDAPTIV 的另一個方案（IA 上併入 `/products/systalk-ai`），原文點名 SysTalk.ai 或列出其模組的 `fact:aiso-llm-support`、`fact:aiso-systalk-platform`、`fact:aiso-modules` 講的是那個方案，`/aiso` 不引用；`DM-3`、`DM-10`、`IT-8`、`IT-10` 已照這個分法改寫 | 無 |
+| 18 | AISO 聯盟的成員、成立日期與簽約客戶；AISO 給企業 100% 的 AI 主控權（#199） | 「整合式交付」已補進 `fact:aiso-alliance` 的 text，列為 `DM-10` 的證據點。新聞可以當事實來源（使用者決定，#199），新聞內文也收得到（`fact:aiso-software-orientai` 就取自新聞 575 的內文）；但新聞 559 內文的成員、日期、國泰金控與台達電簽約還沒收進事實庫，頁面仍不能寫。「100% AI 主控權」是口號，CIO 調查沒寫年份。要收的事實：新聞 559 內文的成員家數、成立日期與簽約客戶，改 `scripts/strategy/facts-source.yaml` 後重跑 `extract-facts.mjs` | `fact:aiso-100-percent-control`、`fact:aiso-cio-survey` |
 | 19 | 智慧建檔讓企業 100% 自主維運（#199） | 100% 沒有依據（#164 的宣稱規則）。`IT-9` 只寫「自己再訓練」「自主維運」，不加百分比 | `fact:smartfilling-self-maintained` |
 | 20 | SysTalk.ai 一體機獲 2025 AI AWARD（#199） | 只出現在 `/products/systalk-ai-phison` 的 meta description，內文沒有，查不到獎項全名與頒發單位，不在事實庫（`unmigrated.md`「第一批 7 頁沒收的句子」）。要先收：寫出獎項全名、頒發單位與得獎產品的現站原文 | 無 |
 | 21 | GreenSwift 支援 ISO 14067、產出越南文報告與多場所報告書，並公開方案價格與合作的查證機構（#199） | ISO 14067 現站寫「未來還將整合」；越南文只在新聞，`fact:greenswift-languages` 寫繁中與英文；多場所報告書現站寫開發中；`/carbon` 的價格與查證機構名稱沒有收；`fact:cert-greenswift-aup` 的機構與效期待確認。`search-intent.md`「產品碳足跡 計算 軟體」因此不能用標準名承接，「碳盤查 費用 中小企業」也沒有價格可寫。要先收：現站確認 14067 與報告語言的現況、多場所報告書是否上線、價格與查證機構名稱能否對外寫 | `fact:greenswift-roadmap-iso14067` |
 | 22 | DigiLism 確保 100% 符合 SLA；digiLogs 用業界唯一的鏈路追蹤技術（#199） | 100% 與「業界唯一」都沒有依據（#164 的宣稱規則）。`IT-3` 只用 DigiLism 專利機制的事實，`DM-13` 寫 digiLogs 時只用節點名稱 | `fact:digilism-sla-100`、`fact:digilism-patent-sla`、`fact:digilism-family-digilogs` |
+| 23 | OrientAI 部署在企業端，但可以使用雲端 LLM API（#199） | 使用者說明了 OrientAI 的部署方式（PR #204 的回覆），但現站沒有原文寫「雲端 LLM API」。已確認的只有 `fact:orientai-execution-layer` 的「彈性整合多種大語言模型 支援雲地靈活部署架構」與 `fact:orientai-on-prem-data` 的「只會部署於企業端」，`IT-1`、`DM-3` 照這兩筆寫，表述不寫 OrientAI 本身可以部署在雲端。要先收：現站寫出 OrientAI 可以呼叫雲端 LLM API 的原文，收進事實庫後才能寫 | 無（缺的是原文，不是 `to_confirm`） |

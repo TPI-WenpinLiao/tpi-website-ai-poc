@@ -3,7 +3,7 @@
 - 模板：`offering`（`kind: product`）；內容檔：`src/content/offering/zh-TW/orient-ai.md`；節點 `orient-ai`，parent `family-ai`（zh-TW 導覽是獨立的 Agentic AI 群組）
 - 主張 id 指 `docs/strategy/messaging.md`；事實的寫法見 `content-strategy` skill「引用事實的寫法」，只用 `docs/strategy/facts.yaml` 裡 zh-TW、`status: confirmed` 的條目
 - 版型與 `layout` 值照 `docs/strategy/design-principles.md`「內頁的版型」與 `src/content.config.ts` 的 `pageSection`
-- 狀態：#199 策略階段。content-strategist 初稿，seo-strategist 補了「搜尋意圖」「內部連結」「title 與 description 方向」與「取捨」的意見欄、最後決定，之後等 `strategy-approved`
+- 狀態：#199 策略階段。content-strategist 初稿，seo-strategist 補了「搜尋意圖」「內部連結」「title 與 description 方向」與「取捨」的意見欄、最後決定，之後等 `strategy-approved`。使用者在 PR #204 回覆（2026-11-05）後，改了第 7 段連到 `/aiso` 的錨點（雙向）、部署的寫法（取捨第 4 項）與待確認第 3、4 項
 
 ## 受眾與任務
 
@@ -46,7 +46,7 @@
 
 ## 這頁要讓讀者相信什麼
 
-使用者用一句對話發起任務，OrientAI 拆解後分派給合適的 Agent，在現有的多個業務系統之間完成（`IT-11`）；同時 Agent 的權限、影子 AI、使用行為與 Token 用量都在企業的管控內，資料掌控權歸企業（`DM-3`）。模型可以選、能用 MCP 擴充（`IT-8`），支援雲地部署（`IT-1`），硬體依團隊規模選（`IT-10`），操作有日誌與稽核（`IT-5`）。
+使用者用一句對話發起任務，OrientAI 拆解後分派給合適的 Agent，在現有的多個業務系統之間完成（`IT-11`）；同時 Agent 的權限、影子 AI、使用行為與 Token 用量都在企業的管控內，資料掌控權歸企業（`DM-3`）。模型可以選、能用 MCP 擴充（`IT-8`），OrientAI 部署在企業端、接的模型可以在雲端或地端（`IT-1`），硬體依團隊規模選（`IT-10`），操作有日誌與稽核（`IT-5`）。
 
 ## 段落結構
 
@@ -57,12 +57,12 @@
 | # | 段落 | 目的 | 依據（受眾任務／主張 id） | 搜尋子題 | 事實 | 預估長度 | 版型（`layout`） | 影像 |
 |---|---|---|---|---|---|---|---|---|
 | 1 | Hero：讓 AI Agent 做事，也管得住 | h1 是節點名「OrientAI 企業級 Agentic AI 平台」，頁面最大的字，上方不放小標。tagline 寫用途（AI Agent 跨系統執行任務，並由企業統一管控），說明句寫對象（對資料隱私要求高的金融與政府單位）。三則證據點是現站首頁 OrientAI 段的三個功能名。主要動作「預約演示」 | 決策者任務「確認是不是我要找的平台」；`IT-11`、`DM-3`；主要轉換 | `OrientAI`：品牌導航，英文名跟同名產品撞名；`企業級 Agentic AI 平台`：節點名就是這組詞 | `fact:orientai-multi-agent`、`fact:orientai-governance`、`fact:orientai-token-cost` | tagline 20–35 字；說明 30–50 字；證據點 3 則 | 第一屏（不屬於 10 種版型，照「內頁共用的規則」的第一屏） | 同一個世界渲染的靜態圖。已有首頁用的 `orientai.webp`，是否沿用或新做 `page-orient-ai.webp` 由設計概念階段決定（「取捨」第 7 項）。HTML 標籤用第 3 段事實的用詞：業務系統（`legacy`）、OrientAI（`product`）、AI Agent（`ai0`–`ai2`）。不載 3D |
-| 2 | 執行層：知識問答、跨系統任務與多種模型 | OrientAI 讓 AI 做什麼：RAG 知識問答與文件解析、AI Agent 跨系統任務自動化、整合多種大語言模型、雲地部署；四個應用場景；用 MCP 擴充功能模組 | IT 主管任務「確認平台做得到什麼、模型能不能選」；`IT-8`、`IT-1` | `企業級 Agentic AI 平台`：多 Agent 協調、系統整合；`MCP 企業 導入 AI Agent 整合`：MCP 跟權限、Token 監控放在同一個平台（前幾名沒有繁中來源） | `fact:orientai-execution-layer`、`fact:orientai-execution-scenarios`、`fact:orientai-mcp` | 說明 40–60 字；事實 3 則 | 介面片段（`ui`） | 介面片段 1：執行層的設定面板，列是 RAG 知識問答與文件解析、AI Agent 跨系統任務自動化、彈性整合多種大語言模型、MCP 擴充應用（用詞取自本段事實）。畫出的接點：模型與工具接在 OrientAI 底下 |
+| 2 | 執行層：知識問答、跨系統任務與多種模型 | OrientAI 讓 AI 做什麼：RAG 知識問答與文件解析、AI Agent 跨系統任務自動化、整合多種大語言模型、雲地部署架構（原文照引；「雲地」指接的模型，說明句不寫 OrientAI 本身可以部署在雲端，`messaging.md` `IT-1` 寫法）；四個應用場景；用 MCP 擴充功能模組 | IT 主管任務「確認平台做得到什麼、模型能不能選」；`IT-8`、`IT-1` | `企業級 Agentic AI 平台`：多 Agent 協調、系統整合；`MCP 企業 導入 AI Agent 整合`：MCP 跟權限、Token 監控放在同一個平台（前幾名沒有繁中來源） | `fact:orientai-execution-layer`、`fact:orientai-execution-scenarios`、`fact:orientai-mcp` | 說明 40–60 字；事實 3 則 | 介面片段（`ui`） | 介面片段 1：執行層的設定面板，列是 RAG 知識問答與文件解析、AI Agent 跨系統任務自動化、彈性整合多種大語言模型、MCP 擴充應用（用詞取自本段事實）。畫出的接點：模型與工具接在 OrientAI 底下 |
 | 3 | 一句對話發起，Agent 跨系統完成 | 三步驟寫成接點：對話式任務發起，理解語意與資料需求；自動拆解任務、調用合適的 Agent，跨系統協作；統一控管 Agent 的權限、成本與資安。說明句寫 Agent 接進現有業務系統與流程，打通跨部門的數據孤島 | IT 主管任務「確認接不接得進現有系統」；`IT-11` | `多代理協作 AI Agent 平台 企業 導入`：Agent 跨企業內部系統執行任務的具體例子（前幾名沒有）；`企業級 Agentic AI 平台`：多 Agent 協調、系統整合；`Agentic AI 是什麼`（次要，主要給 blog）：代理式 AI 自主規劃、用工具 | `fact:orientai-task-intake`、`fact:orientai-agent-dispatch`、`fact:orientai-agent-management`、`fact:orientai-collaboration`、`fact:orientai-data-silos` | 說明 40–60 字；事實 5 則 | 接點圖（`junction`） | SVG 三欄：左（`legacy`）現有業務系統與流程；中（`product`）OrientAI，節點是對話式任務發起、AI Agent 分派與執行、Agent 管理與治理；右（`new`）AI Agent（用詞取自本段事實）。caption 寫跨系統協作完成工作 |
 | 4 | Agent 與影子 AI 統一納管 | Agent 統一管控與授權、消除影子 AI、跨部門權限與資料治理；對 AI 模型與 Agent 全週期管理，建立身分驗證與資料存取邊界；四個治理應用場景 | 決策者任務「確認風險在哪裡被處理掉」；`DM-3` | `AI Agent 治理 影子 AI 企業`：把治理做成平台功能（統一納管、授權、跨部門權限，前幾名全英文）；`Agentic AI 是什麼`：企業導入時的治理（前幾名沒有） | `fact:orientai-governance-layer`、`fact:orientai-shadow-ai-lifecycle`、`fact:orientai-governance-scenarios` | 說明 40–60 字；事實 3 則 | 介面片段（`ui`，`flip: true`，和第 2 段左右對調） | 介面片段 2：Agent 管理面板，列是 AI Agent 統一管控與授權標準化、消除影子 AI、跨部門統一權限管理與資料治理（用詞取自 `fact:orientai-governance-layer`）。不畫 Agent 名單與使用者 |
-| 5 | 資料掌控權歸企業 | OrientAI 部署於企業端，資料掌控權為企業所有；適用於對數據隱私要求高的產業。原文點名製造業，照原文引用，標題與說明句只寫金融與政府（`DM-3` 寫法）。和第 2 段的「雲地部署」怎麼並存見「取捨」第 4 項 | 決策者任務「確認資料會不會外流」；`DM-3` | `OrientAI 昕力 群聯 Agentic AI`：資料是否離開企業（前幾名沒有）；`企業主權 AI 地端部署 方案`（次要，主要在 `/aiso`） | `fact:orientai-on-prem-data`、`fact:orientai-privacy-industries` | 說明 30–50 字；原文 2 則 | 主張與原文（`claim`） | 無 |
+| 5 | 資料掌控權歸企業 | OrientAI 部署於企業端，資料掌控權為企業所有；適用於對數據隱私要求高的產業。原文點名製造業，照原文引用，標題與說明句只寫金融與政府（`DM-3` 寫法）。和第 2 段的「雲地部署」不矛盾，寫法見「取捨」第 4 項 | 決策者任務「確認資料會不會外流」；`DM-3` | `OrientAI 昕力 群聯 Agentic AI`：資料是否離開企業（前幾名沒有）；`企業主權 AI 地端部署 方案`（次要，主要在 `/aiso`） | `fact:orientai-on-prem-data`、`fact:orientai-privacy-industries` | 說明 30–50 字；原文 2 則 | 主張與原文（`claim`） | 無 |
 | 6 | 使用行為與異常看得到 | 角色權限控管、日誌追蹤與稽核、異常行為即時告警；即時檢視 AI 回覆品質、任務執行狀態與使用行為 | IT 主管任務「確認上線後維運得動、稽核拿得出紀錄」；`IT-5` | `AI Agent 治理 影子 AI 企業`：可見性、問責；`企業級 Agentic AI 平台`：可觀測性 | `fact:orientai-governance-controls`、`fact:orientai-risk-insight` | 說明 40–60 字；事實 2 則 | 介面片段（`ui`） | 介面片段 3：監控面板，分頁是 AI 回覆品質、任務執行狀態、使用行為；列是角色權限控管、日誌追蹤與稽核、異常行為即時告警（用詞取自本段事實）。只畫分頁與列名，不畫筆數與曲線 |
-| 7 | 硬體依團隊規模選 | 1–5 人團隊、5 人以上的跨部門應用各配什麼設備；結合群聯 aiDAPTIV 記憶體擴充，地端架構離線仍可運行。aiDAPTIV 只寫機制，不寫效能提升多少（「不能寫的句子」）。段末連到 `/aiso` | IT 主管任務「確認要配什麼硬體」；`IT-10`、`DM-3` | `OrientAI`：前幾名缺硬體規格建議（幾人團隊配什麼設備）；`企業級 Agentic AI 平台`：地端部署與硬體搭配（前幾名沒有）；`OrientAI 昕力 群聯 Agentic AI`：群聯 aiDAPTIV 在 OrientAI 裡的作用 | `fact:orientai-hardware-small`、`fact:orientai-hardware-large`、`fact:orientai-aidaptiv` | 說明 30–50 字；表 3 列 | 規格表（`spec`），`fill: subtle`；`link` 到 `aiso` | 表的列是 1-5 人團隊、5 人以上、記憶體擴充。可在 h2 旁放段落圖（沿用 `sec-deployment` 或新做，由設計概念階段決定） |
+| 7 | 硬體依團隊規模選 | 1–5 人團隊、5 人以上的跨部門應用各配什麼設備；結合群聯 aiDAPTIV 記憶體擴充，地端架構離線仍可運行。aiDAPTIV 只寫機制，不寫效能提升多少（「不能寫的句子」）。段末連到 `/aiso`，錨點寫出 AISO 以 OrientAI 為軟體核心（引用 `fact:aiso-software-orientai`，見「內部連結」）；AISO 的機型規格不搬上來（取捨第 8 項） | IT 主管任務「確認要配什麼硬體」；`IT-10`、`DM-3`；連結的錨點 `DM-10` | `OrientAI`：前幾名缺硬體規格建議（幾人團隊配什麼設備）；`企業級 Agentic AI 平台`：地端部署與硬體搭配（前幾名沒有）；`OrientAI 昕力 群聯 Agentic AI`：群聯 aiDAPTIV 在 OrientAI 裡的作用 | `fact:orientai-hardware-small`、`fact:orientai-hardware-large`、`fact:orientai-aidaptiv`；連結的錨點 `fact:aiso-software-orientai` | 說明 30–50 字；表 3 列 | 規格表（`spec`），`fill: subtle`；`link` 到 `aiso` | 表的列是 1-5 人團隊、5 人以上、記憶體擴充。可在 h2 旁放段落圖（沿用 `sec-deployment` 或新做，由設計概念階段決定） |
 | 8 | Token 用量與成本控得住 | 掌握 Token 消耗率、設定用量上限；依任務複雜度自動分派模型與 Agent。不寫省下多少成本（「待確認」第 1 項）。這段在頁尾聯絡前，主張一句後接動作「預約演示」，讓讀到成本的決策者直接進到下一步 | 決策者任務「確認成本管得住」「決定要不要約 demo」；`DM-3`；主要轉換 | `AI Agent 地端部署 Token 成本`：部門層級的用量監控、設用量上限（前幾名沒有部門層級）；`企業級 Agentic AI 平台`：Token 成本（前幾名沒有） | `fact:orientai-token-transparency`、`fact:orientai-token-allocation` | 主張一句 15–25 字；事實 2 則 | 色帶（`band`，淺紫，`fill: brand`），`fragment` 放片段，`link` 到 `contact` | 介面片段 4（色帶的 `fragment`）：Token 額度設定面板，列是設定 Token 用量上限（`on`）、依據任務複雜度自動分派模型與 Agent（`next`），用詞取自本段兩則事實。不畫 Token 數與金額 |
 | 9 | 相關文章 | Agentic AI、AI Agent 管理平台、Token 成本與企業 AI 導入的延伸閱讀，給要先弄清楚概念或導入步驟的讀者。模板依 `blog.relatedOfferings` 反查，順序照新到舊，最多 3 則，不寫文案 | IT 主管與決策者評估前需要的前置知識；`search-intent.md` 把 `Agentic AI 是什麼` 交給 blog | `Agentic AI 是什麼`、`企業 AI 導入`（主要在 blog） | 無（文章的事實由文章管） | 3 則 | 索引列（模板的相關文章區） | 文章自己的封面縮圖 |
 | 10 | 預約演示 | 頁尾的主要轉換，標題寫下一步（看 Agent 怎麼在自己的系統裡跑） | 主要轉換：預約演示 | — | 無 | 標題 10–20 字，說明 30–50 字 | 色帶（深紫），模板的 `ContactCta` | 無 |
@@ -79,9 +79,10 @@
 |---|---|---|
 | 1、8 | 「作業效率提升 40–60%」「營運成本降低 20–30%」「治理風險降低 90%」 | 現站的效益數字沒有量測方式與基準（「待確認」第 1 項） |
 | 7 | 「同級模型 AI 推論效能與回應速度大幅提升」 | `fact:orientai-aidaptiv` 原文的後半句，沒有比較基準，不在事實庫（`unmigrated.md`「第一批 7 頁沒收的句子」） |
-| 5 | 「OrientAI 只能裝在地端」「可以用公有雲」 | 原文一處寫「只會部署於企業端」，一處寫「支援雲地靈活部署架構」，企業端包不包含私有雲沒有原文（「待確認」第 3 項）。兩句都照原文，表述不替原文下結論 |
+| 2、5 | 「OrientAI 可以部署在雲端」「可以裝在公有雲」 | OrientAI 本身部署在企業端（`fact:orientai-on-prem-data`）；第 2 段原文的「雲地」指接的模型（使用者說明，#199，「待確認」第 3 項已結算，`messaging.md` `IT-1` 寫法） |
+| 2、5 | 「可以使用雲端 LLM API」「可以接雲端的模型服務」 | 使用者說明可以，但現站沒有原文（`messaging.md`「缺少證據的主張」第 23 項）。收進事實庫前不寫 |
 | 1、5 | 「適用醫療、金融、製造業」寫在標題、tagline 或產業入口 | 製造業不寫進標題與產業入口（`messaging.md`「定位不說的事」），原文只在第 5 段照引 |
-| 1 | 「AISO 一體機以 OrientAI 為軟體核心」 | 新聞的說法，事實庫沒有（`messaging.md`「缺少證據的主張」第 17 項） |
+| 1 | 「AISO 一體機以 OrientAI 為軟體核心」寫在 hero 或 title | 事實已確認（`fact:aiso-software-orientai`），但 AISO 是 `/aiso` 的主題（取捨第 11 項），本頁只在第 7 段連到 `/aiso` 的錨點寫出關係 |
 
 ### 與現有頁面的差異
 
@@ -101,7 +102,7 @@
 | CTA | 文案方向 | 位置 | 連到 |
 |---|---|---|---|
 | 主要：預約演示 | 沿用 `cta: demo` 的「預約演示」；第 10 段的標題寫看 Agent 在自己的系統裡怎麼跑 | 第 1 段 hero（實心按鈕）、第 8 段色帶的動作、第 10 段 | `/contact-us`（`contact`） |
-| 次要：看地端 AI 方案 | 錨點寫目標頁的內容（軟硬體一起規劃的地端方案），不只寫「AISO」；錨點由 seo-strategist 定 | 第 7 段段末 | `/aiso`（`aiso`） |
+| 次要：看以 OrientAI 為軟體核心的地端一體機 | 錨點寫出兩者的關係與目標頁的節點名（「以 OrientAI 為軟體核心的地端 AI 一體機：AISO 主權 AI」），引用 `fact:aiso-software-orientai`；不只寫「AISO」 | 第 7 段段末 | `/aiso`（`aiso`） |
 
 hero 不放次要按鈕：OrientAI 沒有試用的事實；地端硬體是 IT 主管讀到第 7 段才需要的下一步。
 
@@ -114,7 +115,7 @@ hero 不放次要按鈕：OrientAI 沒有試用的事實；地端硬體是 IT �
 | 段落 | 連到 | 建議錨點文字 | 說明 |
 |---|---|---|---|
 | 1、8、10 | `/contact-us` | 預約演示 | 主要轉換（`cta: demo`）；第 8 段是色帶的動作 |
-| 7 | `/aiso` | 軟硬體一起交付的地端 AI：AISO 主權 AI | 第 7 段 `spec` 的 `link`。錨點寫目的地是地端方案，帶 `/aiso` 的節點名，不寫兩者的關係（「待確認」第 4 項）。和 `aiso.md`「內部連結」連入表的建議同一串文字。`/aiso` 不反連本頁（`aiso.md`「取捨」第 9 項），這條是單向的 |
+| 7 | `/aiso` | 以 OrientAI 為軟體核心的地端 AI 一體機：AISO 主權 AI | 第 7 段 `spec` 的 `link`。錨點寫出兩者的關係，帶 `/aiso` 的節點名，依據 `fact:aiso-software-orientai`（「待確認」第 4 項已結算，使用者決定，#199）。內容檔的 `facts` 要列這筆。和 `aiso.md`「內部連結」連入表同一串文字。`/aiso` 第 3 段反連本頁，雙向（`aiso.md`「取捨」第 9 項） |
 | 9 | `/blog/enterprise-ai-adoption`、`/blog/ai-token-cost-management`、`/blog/what-is-agentic-ai-platform` | 文章標題（模板產生） | 後兩篇補 `relatedOfferings: [zh-TW/orient-ai]`（取捨第 13 項）；依新到舊排序就是這三篇 |
 
 ### 連入
@@ -128,7 +129,7 @@ hero 不放次要按鈕：OrientAI 沒有試用的事實；地端硬體是 IT �
 | `/blog/ai-token-cost-management` | 立即探索 OrientAI，打造企業級 AI Token 治理機制 | 已有 |
 | `/blog/what-is-agentic-ai-platform`、`/blog/what-is-ai-agent-management-platform` | 建議「OrientAI 企業級 Agentic AI 平台」 | 兩篇都有一節標題寫 OrientAI，但內文沒有連到本頁。前一篇補 `relatedOfferings` 後由本頁第 9 段連過去；文章內文要不要加連結，見取捨第 13 項 |
 | `/media-center/571`、`/media-center/575`、`/media-center/582`、`/media-center/585` | OrientAI 或「企業級 Agentic AI 平台 OrientAI」 | 已有。新聞是照現站搬的原文，錨點不改 |
-| `/aiso` | 不連 | `aiso.md`「取捨」第 9、11 項 |
+| `/aiso` 第 3 段 | 「AISO 的軟體核心：OrientAI 企業級 Agentic AI 平台」 | `aiso.md` 已改（「取捨」第 9 項）：第 17 項結算後雙向連結 |
 
 ### 建議新增
 
@@ -152,13 +153,13 @@ hero 不放次要按鈕：OrientAI 沒有試用的事實；地端硬體是 IT �
 
 ### description
 
-- 要涵蓋：一句對話發起、任務拆解與 Agent 跨系統執行；Agent 統一納管與影子 AI；Token 用量上限；MCP 擴充；資料掌控權歸企業或雲地部署；日誌與稽核
+- 要涵蓋：一句對話發起、任務拆解與 Agent 跨系統執行；Agent 統一納管與影子 AI；Token 用量上限；MCP 擴充；資料掌控權歸企業；日誌與稽核
 - 傳達的主張：`IT-11`、`DM-3`、`IT-8`、`IT-5`
 - 依據的事實：`fact:orientai-task-intake`、`fact:orientai-agent-dispatch`、`fact:orientai-governance-layer`、`fact:orientai-token-transparency`、`fact:orientai-token-allocation`、`fact:orientai-mcp`、`fact:orientai-execution-layer`、`fact:orientai-on-prem-data`、`fact:orientai-governance-controls`
-- 不寫：效益數字（「待確認」第 1 項）、「降低治理風險」（現行 description 有，沒有依據寫成結果，要重寫）、「只能裝在地端」或「可以用公有雲」（「待確認」第 3 項）、「一體機」「AISO」
+- 不寫：效益數字（「待確認」第 1 項）、「降低治理風險」（現行 description 有，沒有依據寫成結果，要重寫）、「OrientAI 可以部署在雲端」「可以使用雲端 LLM API」（取捨第 4 項、`messaging.md`「缺少證據的主張」第 23 項）、只寫「支援雲地部署」而沒有前後文（讀者會讀成 OrientAI 本身裝在雲端）、「一體機」「AISO」
 - 示例：
   - `OrientAI 企業級 Agentic AI 平台把一句對話拆成任務，分派 AI Agent 跨系統完成；Agent 統一納管、消除影子 AI，可設定 Token 用量上限，並以 MCP 擴充，資料掌控權歸企業。`
-  - `企業導入 AI Agent 時，OrientAI 統一控管 Agent 的權限、成本與資安：角色權限、日誌追蹤與稽核、異常即時告警，掌握 Token 消耗並依任務複雜度分派模型，支援雲地部署。`
+  - `企業導入 AI Agent 時，OrientAI 統一控管 Agent 的權限、成本與資安：角色權限、日誌追蹤與稽核、異常即時告警，掌握 Token 消耗並依任務複雜度分派模型，資料掌控權歸企業。`（#199 把原本結尾的「支援雲地部署」改掉，見取捨第 4 項）
 
 ## schema 缺口
 
@@ -168,7 +169,7 @@ offering schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`
 |---|---|---|---|
 | 9 | 只有 `/blog/enterprise-ai-adoption` 填了 `relatedOfferings: [zh-TW/orient-ai]`；`/blog/what-is-agentic-ai-platform`、`/blog/ai-token-cost-management`、`/blog/what-is-ai-agent-management-platform` 的內文都提到 OrientAI（`ai-token-cost-management` 另有連到本頁），但沒填 | 不加欄位 | 在要列出的文章內容檔補 `relatedOfferings: [zh-TW/orient-ai]`，本頁的 `relatedPosts` 不填（同 `briefs/digirunner.md`「取捨」第 9 項的做法）。哪三篇由 seo-strategist 依承接的查詢定 |
 | 5 | `fact:orientai-on-prem-data` 的原文以 FAQ 的「不會。」開頭，搬出 FAQ 後讀不通 | 不是 schema 缺口 | 在 `scripts/strategy/facts-source.yaml` 把 `text` 裁掉「不會。」（`facts.yaml` 檔頭：`text` 可以裁掉 quote 的一部分，不改字），重跑 `node scripts/strategy/extract-facts.mjs` |
-| — | 內容檔沒有 `facts` | `facts`（共用欄位已有） | 照段落表列出的 23 則補上 |
+| — | 內容檔沒有 `facts` | `facts`（共用欄位已有） | 照段落表列出的 24 則補上（OrientAI 頁與首頁的 23 則，加上第 7 段連結錨點用的 `fact:aiso-software-orientai`） |
 | — | `faq` 不用 | 不加欄位 | 內容檔改寫時刪 `faq` |
 
 ## 取捨
@@ -177,17 +178,17 @@ offering schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`
 
 | # | 項目 | content-strategist 的立場 | 理由 | seo-strategist 的意見 | 最後決定 |
 |---|---|---|---|---|---|
-| 1 | 段數 | 10 段：hero、7 個事實段（第 8 段是聯絡前的淺紫色帶）、相關文章、預約演示色帶 | 這頁有 25 則 zh-TW confirmed 事實（22 則來自現站 OrientAI 頁、3 則是現站首頁 OrientAI 段的功能名），用了 23 則。hero 放 3 則；其餘 20 則依回答的問題分成 7 段：執行層 3 則、任務流程 5 則、治理 3 則、資料歸屬 2 則、監控與稽核 2 則、硬體 3 則、Token 2 則，每段至少 2 則。沒用的 2 則：`fact:orientai-five-features` 原文把三張卡片接成一句，最後停在「Token 用量透明化」的標題，內容已由 `fact:orientai-governance-layer`、`fact:orientai-token-transparency`、`fact:orientai-collaboration` 涵蓋；`fact:orientai-roi-controls` 的「設定 Token 用量上限」與 `fact:orientai-token-transparency` 重複，拿掉後第 8 段的色帶照「內頁的版型」放 2 則（取捨第 2 項） | 同意。10 組查詢的子題都對得到第 2–8 段（段落表「搜尋子題」欄）；每個事實段各回答一組主要承接的查詢（治理、多 Agent、Token、硬體），沒有只為 SEO 存在的段 | 採納，10 段 |
+| 1 | 段數 | 10 段：hero、7 個事實段（第 8 段是聯絡前的淺紫色帶）、相關文章、預約演示色帶 | 這頁有 25 則 zh-TW confirmed 事實（22 則來自現站 OrientAI 頁、3 則是現站首頁 OrientAI 段的功能名），用了 23 則。hero 放 3 則；其餘 20 則依回答的問題分成 7 段：執行層 3 則、任務流程 5 則、治理 3 則、資料歸屬 2 則、監控與稽核 2 則、硬體 3 則、Token 2 則，每段至少 2 則。沒用的 2 則：`fact:orientai-five-features` 原文把三張卡片接成一句，最後停在「Token 用量透明化」的標題，內容已由 `fact:orientai-governance-layer`、`fact:orientai-token-transparency`、`fact:orientai-collaboration` 涵蓋；`fact:orientai-roi-controls` 的「設定 Token 用量上限」與 `fact:orientai-token-transparency` 重複，拿掉後第 8 段的色帶照「內頁的版型」放 2 則（取捨第 2 項）。#199 第 17 項結算後，第 7 段連到 `/aiso` 的錨點另引用新聞 575 的 `fact:aiso-software-orientai`，不是事實段，段數不變 | 同意。10 組查詢的子題都對得到第 2–8 段（段落表「搜尋子題」欄）；每個事實段各回答一組主要承接的查詢（治理、多 Agent、Token、硬體），沒有只為 SEO 存在的段 | 採納，10 段 |
 | 2 | 介面片段 4 張，但 `ui` 版型全頁最多 3 次 | 第 2、4、6 段用 `ui`；第 8 段 Token 改成聯絡前的淺紫色帶（`band`），片段放在色帶的 `fragment` | 「至少 4 張介面片段」和「同一種版型最多 3 次」要同時守住。`results` 版型要有作業成果，OrientAI 的效益數字未確認，用不了；`band` 的用途包含聯絡，Token 成本是決策者約 demo 前最後一個疑問，放在聯絡前接上「預約演示」的動作最順。色帶照「內頁的版型」放 2 則事實（`fact:orientai-token-transparency`、`fact:orientai-token-allocation`），片段兩列 | 同意。第 8 段改成色帶後仍要有 h2，標題寫 Token 用量與成本，`AI Agent 地端部署 Token 成本` 的讀者在標題層級就讀得到；片段裡的設定名稱是 HTML 文字 | 採納 |
 | 3 | `IT-11` 是主要主張卻排在第 3 段 | 第 2 段先寫執行層，第 3 段寫任務怎麼跑 | 讀者先要知道 OrientAI 讓 AI 做什麼，才看得懂任務在系統間怎麼分派；兩段都屬於「讓 AI 做事」，合起來回答 `IT-11`。這個順序也讓相鄰兩段的版型不同（`ui`、`junction`、`ui`） | 同意。`IT-11` 由 hero 的 tagline 與證據點（`fact:orientai-multi-agent`）先在第一屏出現，description 也從任務拆解寫起，段落順序不影響承接 | 採納 |
-| 4 | 第 2 段「支援雲地靈活部署架構」和第 5 段「只會部署於企業端」 | 兩則都照原文，第 5 段的說明句寫資料掌控權歸企業，不寫部署位置的結論 | 兩則出自同一頁，看起來互相矛盾；新聞寫的是「私有雲與地端部署」，但新聞不在事實庫。確認前表述不替原文下結論（「待確認」第 3 項） | 同意。title、description 也不寫部署位置的結論：description 示例只寫「資料掌控權歸企業」或「支援雲地部署」其中一個，不並列兩句互相矛盾的說法 | 採納 |
+| 4 | 第 2 段「支援雲地靈活部署架構」和第 5 段「只會部署於企業端」 | 兩則都照原文。第 5 段的說明句寫 OrientAI 部署在企業端、資料掌控權歸企業；第 2 段的說明句不寫 OrientAI 本身可以部署在雲端 | 已結算（使用者說明，#199）：OrientAI 部署在企業端（地端），「雲地」指接的模型可以在雲端或地端，兩則不矛盾。使用者另說明 OrientAI 可以使用雲端 LLM API，但現站沒有原文，頁面不寫（`messaging.md`「缺少證據的主張」第 23 項） | 初稿時同意不寫部署位置的結論。結算後：title、description 不寫 OrientAI 可以部署在雲端；description 示例改寫「資料掌控權歸企業」，不單獨寫「支援雲地部署」，免得讀成 OrientAI 本身裝在雲端 | 採納；部署寫法照 `messaging.md` `IT-1` |
 | 5 | FAQ 不放 | 不放，答案裡已確認的事實移進第 4、5、8 段 | FAQ 的答案多是定義與背景（Agentic AI 是什麼、為什麼要統一平台），屬於 `Agentic AI 是什麼` 這類交給 blog 的資訊型查詢；答案裡的事實（影子 AI、數據孤島、Token 額度、資料歸屬）在段落裡寫一次就好。Google 只對知名政府與醫療網站顯示 FAQ 複合式結果（`briefs/digirunner.md`「取捨」第 4 項），加 `FAQPage` 拿不到展示。「OrientAI 跟 API 管理平台的差別」那題的答案不在事實庫 | 同意。定義由 `/blog/what-is-agentic-ai-platform` 承接，第 9 段列出它（第 10、13 項） | 採納，不放 |
 | 6 | 現站「實現人與 AI Agent 的協作」的 3 張儀表板截圖不沿用 | 改畫第 4、6、8 段的介面片段 | 截圖有 Token 數、曲線與 Agent 名單這類資料，`design-principles.md`「內頁共用的規則」不畫靠假資料成立的畫面；截圖也沒有文字，事實庫收不到 | 同意。截圖沒有文字，對搜尋沒有幫助；片段的文字搜尋引擎讀得到 | 採納 |
 | 7 | hero 的靜態圖 | 已有首頁用的 `orientai.webp`，沿用或新做由設計概念階段決定 | `design-principles.md`「各模板怎麼呈現」只寫了 digiRunner 與金融頁；原則沒寫到其他產品頁，也沒寫首頁的產品圖能不能當內頁 hero | 沒有 SEO 意見 | 交設計概念階段 |
-| 8 | 硬體段不和 `/aiso` 的機型規格合併 | 只寫 OrientAI 頁自己的兩則硬體事實與 aiDAPTIV，段末連到 `/aiso` | `IT-10` 寫法：兩組硬體事實出自不同產品頁，軟體核心未確認，不合併成同一張規格表 | 同意。合併了兩頁會搶 `地端 AI 伺服器 企業 LLM`，那組由 `/aiso` 主要承接（第 11 項）。段末連到 `/aiso` 的錨點見「內部連結」 | 採納 |
-| 9 | 新聞寫的「大型金控 POC」「鎖定高監管產業」 | 不寫 | 新聞的說法不在事實庫；`search-intent.md`「OrientAI」記下新聞的共同子題，但頁面只能用事實庫 | 同意。`OrientAI 昕力 群聯 Agentic AI` 由第 5、7 段回答前幾名缺的子題（資料是否離開企業、aiDAPTIV 的作用），不需要新聞的說法 | 採納 |
+| 8 | 硬體段不和 `/aiso` 的機型規格合併 | 只寫 OrientAI 頁自己的兩則硬體事實與 aiDAPTIV，段末連到 `/aiso` | `IT-10` 寫法：兩組硬體事實出自不同產品頁，不合併成同一張規格表。AISO 的軟體核心確定是 OrientAI（#199）之後也一樣：OrientAI 頁的硬體建議（依團隊人數）不是 AISO 的機型規格，各寫在自己的頁面，由第 7 段的連結接起來 | 同意。合併了兩頁會搶 `地端 AI 伺服器 企業 LLM`，那組由 `/aiso` 主要承接（第 11 項）。段末連到 `/aiso` 的錨點見「內部連結」 | 採納 |
+| 9 | 新聞寫的「大型金控 POC」「鎖定高監管產業」 | 不寫 | 新聞可以當事實來源（使用者決定，#199），但這兩句沒收進事實庫；`search-intent.md`「OrientAI」記下新聞的共同子題，頁面只能用事實庫裡 confirmed 的條目。要用時先收進 `scripts/strategy/facts-source.yaml` | 同意。`OrientAI 昕力 群聯 Agentic AI` 由第 5、7 段回答前幾名缺的子題（資料是否離開企業、aiDAPTIV 的作用），不需要新聞的說法 | 採納 |
 | 10 | `Agentic AI 是什麼` 與 `MCP 企業 導入 AI Agent 整合` 要不要用 blog 文章承接（`search-intent.md` 待決條目） | 第 9 段把 `Agentic AI 是什麼` 交給 blog；MCP 列為第 2 段的子題 | — | `Agentic AI 是什麼`：由既有的 `/blog/what-is-agentic-ai-platform` 主要承接，不另寫；文章有定義、核心能力、多 Agent 管理三節，前幾名缺的企業治理也寫了。`MCP 企業 導入 AI Agent 整合`：建議另寫一篇（「建議新增」），前幾名全英文，現有文章都沒有以 MCP 為主題；本頁第 2 段次要承接。只建議，另開 issue | 定案：Agentic AI 交既有文章；MCP 文章只建議 |
-| 11 | `/aiso` 與 `/orient-ai` 的查詢分工，OrientAI 這一半（`search-intent.md` 待決條目） | 第 8 項：硬體段只寫本頁事實，段末連到 `/aiso`；`不能寫的句子` 不寫一體機以 OrientAI 為核心 | 軟體核心未確認（`messaging.md`「缺少證據的主張」第 17 項） | 和 `aiso.md`「取捨」第 11 項一致，依查詢主題分，不依軟體核心。本頁主要承接 `OrientAI`、`OrientAI 昕力 群聯 Agentic AI`、`企業級 Agentic AI 平台`、`AI Agent 治理 影子 AI 企業`、`多代理協作 AI Agent 平台 企業 導入`、`AI Agent 地端部署 Token 成本`；`/aiso` 主要承接硬體、軟硬體交付與地端部署。本頁 title 不用「一體機」「主權 AI」，`/aiso` 的 title 不用「Agentic」「Agent」「Token」。連結：本頁第 7 段單向連到 `/aiso`，`/aiso` 不反連。另外，新站已搬的新聞 575、582、585（現站 `/media-center/575` 等）寫 AISO 一體機以 OrientAI 為軟體核心或可選搭載 OrientAI；這是第 17 項的線索，但事實庫沒收，頁面仍不寫。收進事實庫後，承接頁不變，只改第 7 段的錨點是否寫明關係、`/aiso` 是否反連 | 定案，分工如左 |
+| 11 | `/aiso` 與 `/orient-ai` 的查詢分工，OrientAI 這一半（`search-intent.md` 待決條目） | 第 8 項：硬體段只寫本頁事實，段末連到 `/aiso`；`不能寫的句子` 不寫一體機以 OrientAI 為核心 | 軟體核心未確認（`messaging.md`「缺少證據的主張」第 17 項） | 和 `aiso.md`「取捨」第 11 項一致，依查詢主題分，不依軟體核心。本頁主要承接 `OrientAI`、`OrientAI 昕力 群聯 Agentic AI`、`企業級 Agentic AI 平台`、`AI Agent 治理 影子 AI 企業`、`多代理協作 AI Agent 平台 企業 導入`、`AI Agent 地端部署 Token 成本`；`/aiso` 主要承接硬體、軟硬體交付與地端部署。本頁 title 不用「一體機」「主權 AI」，`/aiso` 的 title 不用「Agentic」「Agent」「Token」。連結：本頁第 7 段單向連到 `/aiso`，`/aiso` 不反連。另外，新站已搬的新聞 575、582、585（現站 `/media-center/575` 等）寫 AISO 一體機以 OrientAI 為軟體核心或可選搭載 OrientAI；這是第 17 項的線索，但事實庫沒收，頁面仍不寫。收進事實庫後，承接頁不變，只改第 7 段的錨點是否寫明關係、`/aiso` 是否反連 | 定案，分工如左。#199 使用者確認後已收進事實庫（`fact:aiso-software-orientai`、`fact:aiso-orientai-hardware`）：承接頁不變，第 7 段的錨點寫明關係，`/aiso` 第 3 段反連，雙向 |
 | 12 | title 用什麼 | 「與現有頁面的差異」：description 交 seo-strategist；h1 是節點名 | — | 節點名加後綴約 26 字，已涵蓋品牌詞與 `企業級 Agentic AI 平台`，不加 `seoTitle`，title 跟 h1 一致 | 定案，見「title 與 description 方向」 |
 | 13 | 第 9 段列哪三篇文章（「schema 缺口」第 9 段留給 seo-strategist） | 補 `relatedOfferings` 的文章由 seo-strategist 依承接的查詢定 | — | 列 `/blog/enterprise-ai-adoption`（`企業 AI 導入`，已填）、`/blog/ai-token-cost-management`（`AI Agent 地端部署 Token 成本` 的延伸閱讀）、`/blog/what-is-agentic-ai-platform`（`Agentic AI 是什麼` 的主要承接頁）。後兩篇補 `relatedOfferings: [zh-TW/orient-ai]`。`/blog/what-is-ai-agent-management-platform` 不補：主題跟 Agentic AI 那篇重疊，而且最舊，依新到舊也排不進三則。另外，`what-is-agentic-ai-platform` 與 `what-is-ai-agent-management-platform` 各有一節標題寫 OrientAI，內文卻沒連到本頁；建議在那一節加連結，錨點用節點名。兩篇是照現站搬的文章，改內文要使用者決定 | 定案：三篇如左；文章內文的連結待使用者決定 |
 
@@ -199,8 +200,9 @@ offering schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`
 |---|---|---|---|
 | 1 | OrientAI 的效益數字（`fact:orientai-benefits`） | `to_confirm`：沒有量測方式與基準（`messaging.md`「缺少證據的主張」第 7 項） | 1、8 |
 | 2 | 具名客戶或導入案例 | 事實庫沒有 OrientAI 的客戶案例，這頁不設案例段 | — |
-| 3 | 「企業端」包不包含私有雲 | 第 2、5 段的兩則原文看起來互相矛盾，要現站或內容負責人說明 | 2、5 |
-| 4 | AISO 一體機的軟體核心是不是 OrientAI | `messaging.md`「缺少證據的主張」第 17 項。確認後第 7 段連到 `/aiso` 的錨點可以寫明關係 | 7 |
+| 3 | 「企業端」包不包含私有雲（已結算） | 使用者說明（#199）：OrientAI 部署在企業端（地端），「雲地」指接的模型，兩則原文不矛盾。表述不寫 OrientAI 本身可以部署在雲端；「可以使用雲端 LLM API」現站沒有原文，收進事實庫前不寫（`messaging.md` `IT-1` 寫法、「缺少證據的主張」第 23 項，取捨第 4 項） | 2、5 |
+| 4 | AISO 一體機的軟體核心是不是 OrientAI（已結算） | 是（使用者決定，#199，`fact:aiso-software-orientai`、`fact:aiso-orientai-hardware`；`messaging.md`「缺少證據的主張」第 17 項）。第 7 段連到 `/aiso` 的錨點寫明關係，`/aiso` 反連本頁 | 7 |
+| 5 | OrientAI 可以使用雲端 LLM API 的現站原文 | `messaging.md`「缺少證據的主張」第 23 項。收進事實庫後，第 2 段可以寫出接雲端模型的方式 | 2 |
 
 ## 後續
 

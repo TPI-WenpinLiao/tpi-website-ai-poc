@@ -17,8 +17,8 @@
 | 來源 | 事實 | 在本頁 |
 |---|---|---|
 | 現站 `/products/digilism` | 22 筆，其中 19 筆 confirmed（含 5 張產品卡的說明 `digilism-family-*`） | 用 17 筆，不用 2 筆（取捨第 4 項） |
-| 現站 `/products/digirunner`，但主詞是家族 | `digilism-patents-7`（「DigiLism 產品系列擁有7項發明專利」） | hero 的證據點（取捨第 2 項） |
-| 現站 `/about-us` 的獎項，點名 digiRunner、digiLogs | `award-taiwan-excellence-2023`、`award-taiwan-excellence-2024`、`award-innovative-business-2022` | 第 7 段（取捨第 2 項，需要使用者決定） |
+| 現站 `/products/digirunner`，但主詞是家族 | `digilism-patents-7`（「DigiLism 產品系列擁有7項發明專利」） | hero 的證據點，使用者決定當家族事實（#199，取捨第 2 項） |
+| 現站 `/about-us` 的獎項，點名 digiRunner、digiLogs | `award-taiwan-excellence-2023`、`award-taiwan-excellence-2024`、`award-innovative-business-2022` | 第 7 段，使用者決定採用（#199，取捨第 2 項） |
 
 ## 受眾與任務
 
@@ -189,12 +189,12 @@ hub schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`heroC
 
 ## 取捨
 
-第 1–9 項是 content-strategist 寫的，第 10 項是 seo-strategist 加的。seo-strategist 填了意見欄後定案；第 2 項要使用者決定，第 7、9 項交設計概念階段。
+第 1–9 項是 content-strategist 寫的，第 10 項是 seo-strategist 加的。seo-strategist 填了意見欄後定案；第 2 項由使用者決定採用（#199，PR #204 的回覆），第 7、9 項交設計概念階段。
 
 | # | 可能的衝突 | content-strategist 的立場 | 理由 | seo-strategist 的意見 | 最後決定 |
 |---|---|---|---|---|---|
 | 1 | 段數 | 5 個事實段，加 hero、產品索引列、聯絡色帶共 8 段 | 家族本頁的 confirmed 事實 19 則，加上主詞是家族的專利數 1 則、點名家族產品的獎項 3 則，共 23 則，用 21 則：hero 2、整合中台 3、產品索引列 5、接上既有系統 3、驗身與日誌 2、尖峰與擴容 3、外部評選 3。事實段每段 2–3 則。子頁的事實（例如 digiLogs、digiMars 的案例）不上來，所以不設案例段 | 同意。8 組查詢的子題都對得到第 1–7 段（段落表「搜尋子題」欄）；單一產品的查詢由子頁承接，家族頁不必為它們加段 | 8 段 |
-| 2 | 哪些事實算「家族本頁的事實」 | 現站家族頁的 19 則 confirmed 都算；`fact:digilism-patents-7` 出自 digiRunner 頁，但主詞是 DigiLism 產品系列，算家族的事實，放 hero；3 則獎項出自關於我們頁，點名 digiRunner、digiLogs，放第 7 段 | 獎項不是從子頁搬來的，`messaging.md` `DM-8` 也指定家族頁引用點名 digiRunner、digiLogs 的獎。但獎項的主詞是單一產品，可能被讀成子頁的事實。使用者若認為不算，刪掉第 7 段，事實段剩 4 段，不影響其他段落 | 從 SEO 看保留比較好：`DigiLism 昕力` 的前幾名缺專利與認證；台灣精品獎的英文頁還用舊名 DigiFusion，本頁寫出 2023、2024 台灣精品獎與得獎產品名，品牌詞跟獎項就連在一起。但獎項算不算「家族本頁的事實」是使用者規則的解讀，SEO 不能代為決定；刪掉第 7 段，hero 的專利數仍回答「專利」這個子題，承接不受影響 | 待使用者決定，暫定保留第 7 段 |
+| 2 | 哪些事實算「家族本頁的事實」 | 現站家族頁的 19 則 confirmed 都算；`fact:digilism-patents-7` 出自 digiRunner 頁，但主詞是 DigiLism 產品系列，算家族的事實，放 hero；3 則獎項出自關於我們頁，點名 digiRunner、digiLogs，放第 7 段 | 獎項不是從子頁搬來的，`messaging.md` `DM-8` 也指定家族頁引用點名 digiRunner、digiLogs 的獎。但獎項的主詞是單一產品，可能被讀成子頁的事實。使用者若認為不算，刪掉第 7 段，事實段剩 4 段，不影響其他段落 | 從 SEO 看保留比較好：`DigiLism 昕力` 的前幾名缺專利與認證；台灣精品獎的英文頁還用舊名 DigiFusion，本頁寫出 2023、2024 台灣精品獎與得獎產品名，品牌詞跟獎項就連在一起。但獎項算不算「家族本頁的事實」是使用者規則的解讀，SEO 不能代為決定；刪掉第 7 段，hero 的專利數仍回答「專利」這個子題，承接不受影響 | 使用者決定採用（#199，PR #204 的回覆）：不是本頁來源頁的獎項可以放，保留第 7 段；`fact:digilism-patents-7` 當家族事實，放 hero |
 | 3 | 產品卡的一句用家族頁原文還是各 offering 的 description | 用家族頁原文，digiLogs 例外 | `DM-13` 的證據是家族頁的 5 張產品卡；子頁的 description 是子頁的文案，會在子頁改寫（#188 之後），不是家族的事實。digiLogs 的家族頁原文含「業界唯一」，照 `DM-13` 寫法只寫節點名稱，說明交給子頁卡片 | 同意。連結的錨點仍用節點名（「內部連結」第 3 段），原文是連結旁的一句；digiRunner 那一列的 AI Gateway、MCP 原文也讓家族頁有 AI 的用詞（第 8 項） | 用家族頁原文，digiLogs 例外；需要「schema 缺口」第 1 列 |
 | 4 | 兩則 confirmed 事實不用 | 不用 `fact:digilism-five-capabilities` 與 `fact:digilism-patent-load-balancing` | 服務能力 5 項是第 4–6 段的概括（「核身授權及多種機制式全盤防護安全」），放進來會讓讀者讀兩次同樣的事，卻沒有機制；`search-intent.md`「企業服務中台」列了它，但「中台包含哪些模組」已由第 2、5 段回答。`fact:digilism-patent-load-balancing` 是確認過的專利說法，但 `IT-3` 寫法規定 DigiLism 的高可用只用三筆，它不在其中；要用得先改 messaging | 同意。`企業服務中台` 前幾名缺的「中台包含哪些模組」由第 2、5 段的機制回答，比服務能力 5 項的概括說得具體；`ESB 替代 微服務 架構` 的高可用子題由第 6 段的三筆回答，不缺負載平衡那一筆 | 不用 |
 | 5 | h1 用節點名「數位轉型（DigiLism）」還是 `title`「DigiLism 企業服務中台」 | 用 `title` | 「DigiLism」單獨查會撞名（`search-intent.md`「DigiLism」），產品名要跟類別詞一起出現，比照 digiRunner 頁的「digiRunner API 管理平台」；「數位轉型」只當家族名稱，不當主張（`messaging.md`「本站不用的字」）。選單與麵包屑仍用節點名 | 同意。h1「DigiLism 企業服務中台」同時承接 `DigiLism` 的類別說明與 `企業服務中台`；title 用 `seoTitle` 再加「iPaaS 整合平台」（「title 與 description 方向」）。節點名「數位轉型（DigiLism）」的括號寫法不適合當 h1 或 title | h1 用 `title`「DigiLism 企業服務中台」；title 用 `seoTitle` |

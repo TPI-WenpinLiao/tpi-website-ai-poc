@@ -915,7 +915,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 | MCP 企業 導入 AI Agent 整合 | 沒有主要承接頁（建議寫 blog 文章）；次要 `/orient-ai` | #199 brief 定案（`briefs/orient-ai.md`「取捨」第 10 項）。前幾名全英文；文章只建議，另開 issue |
 | AISO 主權 AI | `/aiso` | #199 brief 定案（`briefs/aiso.md`）。品牌詞，就是這一頁的名稱 |
 | 昕力 群聯 AISO 聯盟 | `/aiso`，次要 `/media-center/559` | #199 brief 定案（`briefs/aiso.md`「取捨」第 12 項）。查的是合作與方案，`/aiso` 講方案本身；聯盟的成立、成員與簽約由新站已有的新聞 559 承接，`/aiso` 第 3 段連過去 |
-| aiDAPTIV SysTalk.ai | 沒有主要承接頁；次要 `/aiso` | #199 brief 定案。`/aiso` 寫得出 aiDAPTIV，軟體核心確認前不寫 SysTalk.ai（`messaging.md`「缺少證據的主張」第 17 項）；確認是 SysTalk.ai 後 `/aiso` 才接得住 |
+| aiDAPTIV SysTalk.ai | `/products/systalk-ai` | #199 brief 定案。AISO 的軟體是 OrientAI（`messaging.md`「缺少證據的主張」第 17 項已結算），SysTalk.ai 搭配 aiDAPTIV 是併入 `/products/systalk-ai` 的另一個方案（現站 `/products/systalk-ai-phison`），所以 `/aiso` 不寫 SysTalk.ai，這組改由 `/products/systalk-ai` 承接 |
 | 地端 AI 伺服器 企業 LLM | `/aiso` | #199 brief 定案。前幾名缺的規格與交付方式都在 `/aiso` |
 | AI 一體機 企業 地端 交機即用 | `/aiso`，`/blog/why-enterprises-need-ai-appliance` 輔助 | #199 brief 定案（`briefs/aiso.md`「取捨」第 11 項）。承接頁依查詢主題（硬體與交付），不隨軟體核心改變；問「為什麼需要」的交給文章 |
 | 主權 AI 是什麼 | 沒有主要承接頁（建議寫企業層級的 blog 文章）；次要 `/aiso` | #199 brief 定案（`briefs/aiso.md`「取捨」第 7 項）。前幾名從國家層級講；文章只建議，另開 issue |
@@ -945,7 +945,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 - 已決定（#199）：`Agentic AI 是什麼` 由既有的 `/blog/what-is-agentic-ai-platform` 承接，不另寫；`MCP 企業 導入 AI Agent 整合` 建議另寫一篇，只建議、另開 issue。見 `briefs/orient-ai.md`「取捨」第 10 項
 - 已決定（#199）：`/solutions/smartfilling` 與 `/products/systalk-icr` 的關鍵字分工，見 `briefs/smartfilling.md`「取捨」第 4 項
 - 已決定（#199）：客服類查詢由 `/products/systalk-chat` 主要承接，見 `briefs/systalk-ai.md`「取捨」第 11 項
-- 已決定（#199）：`/aiso` 與 `/orient-ai` 依查詢主題分工，不依軟體核心：`/aiso` 承接硬體、軟硬體交付與地端部署，`/orient-ai` 承接 Agent 平台、治理、Token 成本控管與 MCP。見 `briefs/aiso.md`「取捨」第 11 項與 `briefs/orient-ai.md`「取捨」第 11 項。AISO 一體機的軟體核心仍要跟現站確認（`messaging.md`「缺少證據的主張」第 17 項；新站已搬的新聞 575、582、585 寫的是 OrientAI，但事實庫沒收），確認後只影響兩頁要不要寫明關係與 `/aiso` 是否反連，不改承接頁
+- 已決定（#199）：`/aiso` 與 `/orient-ai` 依查詢主題分工，不依軟體核心：`/aiso` 承接硬體、軟硬體交付與地端部署，`/orient-ai` 承接 Agent 平台、治理、Token 成本控管與 MCP。見 `briefs/aiso.md`「取捨」第 11 項與 `briefs/orient-ai.md`「取捨」第 11 項。AISO 一體機的軟體核心已結算（使用者決定，#199）：是 OrientAI，依據新聞內文的 `fact:aiso-software-orientai`（新聞 575）與 `fact:aiso-orientai-hardware`（新聞 585），`messaging.md`「缺少證據的主張」第 17 項。承接頁不變；`/aiso` 第 1、3 段寫出 OrientAI，第 3 段連到 `/orient-ai`，`/orient-ai` 第 7 段的錨點寫明關係，兩頁雙向連結
 - 已決定（#199）：AISO 聯盟的消息由 `/media-center/559` 承接，見 `briefs/aiso.md`「取捨」第 12 項
 - 已決定（#199）：金漾獎放進 `/solutions/smartclaim` 的 hero 證據點，寫年份、不寫組別，見 `briefs/smartclaim.md`「取捨」第 10 項
 - 已決定（#199）：`碳盤查 費用 中小企業` 沒有主要承接頁，`/products/greenswift` 次要（`/whitepaper/greenswift` 依 #138 不產生頁面），見 `briefs/greenswift.md`「取捨」第 11 項
