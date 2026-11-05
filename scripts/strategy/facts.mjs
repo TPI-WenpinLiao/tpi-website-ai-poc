@@ -9,7 +9,7 @@
 //     - a page whose copy has an Arabic number (80%, 1,200, 3.5) or the name of a `client` fact
 //       uses a fact whose text has it; otherwise the number or name is not traceable and fails
 //   node scripts/strategy/facts.mjs --sources [--locales zh-TW,en]   fetches every source.url and fails when its
-//     source.quote is no longer on the page, nor in the Nuxt chunks it loads (needs www.tpisoftware.com
+//     source.quote is no longer on the page, its Nuxt chunks nor its news body (needs www.tpisoftware.com
 //     and .vn, not in `npm run check`); always fetches, the cache of extract-facts.mjs is only written
 //
 // Pages checked: src/data/home/<locale>.ts and src/data/site.ts (every exported string; facts used
@@ -257,7 +257,7 @@ function contentPages() {
 }
 
 async function checkSources(facts) {
-  // Same reader as extract-facts.mjs: a quote may be in the Nuxt chunks of a client-rendered page
+  // Same reader as extract-facts.mjs: a quote may be in the Nuxt chunks or the news body of a client-rendered page
   const { pageReader } = await import('./source-pages.mjs');
   const reader = await pageReader({ refresh: true });
   let failed = 0;

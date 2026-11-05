@@ -1,13 +1,15 @@
 // Current-site pages as the fact scripts read them (#164): fetched through the inventory HTTP client,
 // cached in .cache/facts so a re-run reads the same input, and turned into text blocks.
 // Used by scripts/strategy/extract-facts.mjs and scripts/strategy/facts.mjs --sources.
+import { payloadArticleBody } from '../lib/nuxt-payload.mjs';
 import { pageText, squash } from '../lib/page-text.mjs';
 
 export const CACHE_DIR = '.cache/facts';
 
 // Some pages render their data client-side: the success-story cards are only in a Nuxt JS chunk
 // (scripts/content/migrate/case-studies.mjs). A quote missing from the HTML is looked for in the
-// same-origin chunks the page loads, decoded from their JS string literals.
+// same-origin chunks the page loads, decoded from their JS string literals. Media-center news bodies are
+// only in the page's Nuxt payload (`newsHtml`), so a quote missing from both is looked for there (#199).
 const CHUNK = /<script[^>]+src="(\/_nuxt\/[^"]+\.js)"/g;
 
 /** JS string literals of a minified chunk, decoded (\uXXXX, \xXX, \n and the like) */
@@ -77,10 +79,12 @@ export async function pageReader({ offline = false, refresh = false } = {}) {
 
   return {
     html,
-    /** Whether a quote is on the page (HTML text first, then its chunks), ignoring whitespace and U+200B */
+    /** Whether a quote is on the page (HTML text, then its chunks, then a news body in the payload), ignoring whitespace and U+200B */
     async has(url, quote) {
-      if (quoteOnPage(await html(url), quote)) return true;
-      return squash(await chunkText(url)).includes(squash(quote));
+      const page = await html(url);
+      if (quoteOnPage(page, quote)) return true;
+      if (squash(await chunkText(url)).includes(squash(quote))) return true;
+      return quoteOnPage(payloadArticleBody(page, 'newsHtml') ?? '', quote);
     },
   };
 }

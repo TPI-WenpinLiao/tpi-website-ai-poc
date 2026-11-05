@@ -449,6 +449,19 @@ groups:
       - { id: digilism-family-digimars, type: feature, quote: 將 MongoDB 社群版升級至商用等級，提供效能監控、告警與備份還原，降低資料庫管理成本，並附 7×24 技術支援。 }
       - { id: digilism-family-digiflexis, type: feature, quote: 以零代碼設計快速建立數位表單與自動化流程，搭配智能報表即時洞察營運數據 }
       - { id: digilism-family-digicare, type: feature, quote: 以 HL7 FHIR 為核心架構，將異質系統的分散資料整併為可互通的標準格式，實現跨系統、跨院交換，並遵循衛福部 FHIR 實作指引。 }
+      - { id: digilism-bfsi, type: feature, quote: 昕力資訊能為 BFSI 全應用場景提供安全可靠、高效運作的服務應用中台， 滿足企業 API 治理需求，以軟體創新實現差異化戰略。 }
+      - { id: digilism-compatibility, type: feature, quote: 新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。 }
+      - { id: digilism-api-first, type: feature, quote: 基於 API 優先（API First）與雲原生架構，並具備全場景應用的特性，滿足企業打造企業整合中台所需，協助企業組織活用數位科技，靈活地適應不同的市場使用場景。 }
+      - id: digilism-five-capabilities
+        type: feature
+        quote: 服務能力 微服務、DevOps開發達到快速上線。 數位治理 異質整合與資料轉化增加服務彈性。 可連接性 簡化系統介接、資料轉換和服務建置。 高安全性 核身授權及多種機制式全盤防護安全。 可擴展性 平台化及混合架構以利擴展系統性能。
+        text: |-
+          服務能力：微服務、DevOps開發達到快速上線。
+          數位治理：異質整合與資料轉化增加服務彈性。
+          可連接性：簡化系統介接、資料轉換和服務建置。
+          高安全性：核身授權及多種機制式全盤防護安全。
+          可擴展性：平台化及混合架構以利擴展系統性能。
+      - { id: digilism-family-digirunner-ai, type: feature, quote: 協助企業落實 AI 治理與流量控管，從 API 管理邁向 AI 驅動整合。 }
 
   - group: digiLogs
     url: https://www.tpisoftware.com/products/digilogs
@@ -899,6 +912,24 @@ groups:
       - { id: greenswift-gwp-switch, type: feature, quote: 平台具備快速切換不同全球暖化潛勢（GWP）的功能 }
       - { id: greenswift-consultant-accounts, type: feature, quote: 是的，GreenSwift 支援顧問公司使用。顧問可以登入系統，針對所輔導的客戶進行線上盤點和協助。 }
       - { id: greenswift-no-erp-integration, type: feature, quote: 雖然目前不支援直接與 ERP、HR 系統或其他模組的整合，但如果貴公司已經整理好相關資料，可以直接透過 GreenSwift 的介面進行資料匯入並上傳佐證資料 }
+      - { id: greenswift-file-center, type: feature, quote: 透過一站整合盤查數據，不僅過往所有資料得以方便查詢及管理，新年度更可自行帶入過往資料，不須擔心人員變動造成管理不善等問題，讓資料具連續性，確保每次盤查順利完成。 }
+      - { id: greenswift-scopes, type: feature, quote: 範疇一：可全面追蹤源頭排放，精確管理直接 GHG 排放量。 範疇二：聚焦進口能源產生的間接 GHG 排放。 範疇三：覆蓋其他間接排放，為您提供全方位的環境影響洞察。 }
+      - id: greenswift-cloud-consultants
+        type: feature
+        quote: 不知道如何下手寫報告書？GreenSwift 為您於雲端整合碳數據、ESG 顧問團隊，並讓 AI 成為您最佳幫手！
+        text: GreenSwift 為您於雲端整合碳數據、ESG 顧問團隊
+        comment: text keeps the feature, drops the question and「最佳幫手」
+      - { id: greenswift-report-method, type: feature, quote: 根據ISO 14064-1:2018規範，我們會在溫室氣體盤查報告中詳細描述數據鑑別、收集過程及計算方法。報告還包括數據品質評分表與不確定性分析等內容。 }
+      - { id: greenswift-accounts, type: feature, quote: 對企業而言，系統分為主要管理者帳號和子管理者帳號，且沒有使用者數量的上限。主要管理者帳號可以審核和管理該公司申請的所有子帳號。系統也不限制使用者設立的組織邊界數量，支持靈活配置和擴展。 }
+      - { id: greenswift-collaboration, type: feature, quote: GreenSwift 特別強調權責分工、系統主動提醒、數據分析、儀表板設置及減碳計劃自訂，確保各部門能有效協作完成數據收集。 }
+      - { id: greenswift-consultant-access, type: feature, quote: 顧問能夠查看所輔導客戶的所有資料，同一顧問公司內的不同顧問帳號可以根據需要進行分權設定，確保資料的安全與私密性，除非是共同輔導，否則彼此間的資料無法互通。 }
+      - { id: greenswift-trial, type: feature, quote: 你可以直接在 GreenSwift 上透過 Gmail 登入進行試用。試用期間可使用系統所有功能，惟下載報告書時會有浮水印。 }
+      - id: greenswift-case-hedinglong
+        type: case
+        quote: 昕力資訊 GreenSwift 智慧碳管理平台助和鼎隆建築打造永續競爭力
+        url: https://www.tpisoftware.com/media-center/580
+        comment: News headline (#199)
+      - { id: client-hedinglong, type: client, quote: 和鼎隆建築, url: 'https://www.tpisoftware.com/media-center/580' }
 
   - group: ESGswift
     url: https://www.tpisoftware.com/products/esgswift
@@ -1007,6 +1038,17 @@ groups:
       - { id: smartclaim-80-percent, type: metric, quote: 為保險從業人員簡化工作流程、降低人為誤差，透過系統讓人力成本節省達 80% 以上。, status: to_confirm, note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則） }
       - { id: smartclaim-end-to-end, type: feature, quote: 跨系統運行具備彈性，可串接自動立案、自動理算、自動派件等功能 }
       - { id: smartclaim-case-medical-documents, type: case, quote: 藉由自然語言技術，分析診斷證明書、單據等文件，強化保險業智能理賠系統，解決傳統流程中大量人力需求，作業效率大幅的提升，並透過進化系統持續優化模型精準度，提供最佳化理賠給付計算結果。 }
+      - { id: smartclaim-review-engine, type: feature, quote: 資料紀錄完整存取後，輕鬆連接自動理賠引擎，進行理賠審核及判讀，降低人工作業時間。 }
+      - { id: smartclaim-quality, type: feature, quote: AI 再訓練機制使模型維持高準確率，不僅審核效率提升，更具備高品質理賠決定。 }
+      - { id: smartclaim-flow, type: feature, quote: 業者獲取保戶診斷書及單據資料證明後，只需要進行掃描建檔，系統自動分析後，由理賠人員進行最後的確認即可。 }
+      - { id: smartclaim-ensemble, type: feature, quote: 不僅能解析多樣語意、敘述情境，並可進行多模型之集成學習。 }
+      - { id: smartclaim-one-click-retraining, type: feature, quote: 同時，獨家 AI 進化系統以直覺的介面，讓 AI 再訓練機制「一鍵優化」持續提高模型精準度，随時輕鬆維運 AI 模型。 }
+      - id: award-golden-yang-2024-smartclaim
+        type: award
+        quote: 昕力資訊 AI 智能理賠解決方案獲 2024 金漾獎
+        url: https://www.tpisoftware.com/media-center/457
+        note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
+        comment: News headline (#199)
 
   - group: AI smart filling
     url: https://www.tpisoftware.com/solutions/smartfilling
@@ -1021,6 +1063,9 @@ groups:
       - { id: smartfilling-text-analysis, type: feature, quote: 依客戶需求量身打造，同時也將 AI 文本分析技術用其中，精準且快速校正資料。 }
       - { id: smartfilling-case-bank, type: case, quote: 以 AI 取代傳統二登流程，節省將近 52% 委外成本，於三校時反饋系統再學習訓練模型，不但讓辨識資訊無縫介接內部系統，更有效降低維運人力約 45%。 }
       - { id: smartfilling-case-bank-title, type: case, quote: 金融業應用－傳統文件數位化管理第一步 }
+      - { id: smartfilling-documents, type: feature, quote: 透過 AI + OCR 的前沿技術，協助金融業如基金配息單、居留證等收件流程應用，提升判讀精準度。 }
+      - { id: smartfilling-less-keying, type: feature, quote: 透過 AI 機器辨識，精簡手動登打文件人力與誤差，擴大員工產值，提升服務效率。 }
+      - { id: smartfilling-flow, type: feature, quote: SysTalk.ICR 加上再訓練機制，高辨識、高精準度，協助您輕鬆自主維運優化模型、擴展應用場景。 }
 
   - group: SysTalk.Detect text analysis
     url: https://www.tpisoftware.com/solutions/textualanalysis
@@ -1096,6 +1141,14 @@ groups:
           導入前（AI 應用規劃與導入）：AI 導入情境分析、解決方案搭配建議、效益評估、AI 服務導入
           導入中：模型評估、微調
       - { id: systalk-ai-quote-email, type: company, quote: 取得報價：aiagent@tpisoftware.com }
+      - id: systalk-ai-day-scenarios
+        type: feature
+        quote: SysTalk.VIKI 新產品知識學習 跨部門會議紀錄、摘要總結
+        comment: One row of the「一日應用情境」; the Coach and Audit rows are separate entries (#199)
+      - { id: systalk-ai-day-coach, type: feature, quote: SysTalk.Coach 員工知識與應對測驗 員工專業季度考核 }
+      - { id: systalk-ai-day-audit, type: feature, quote: SysTalk.Audit 智能客服語音質檢報告 }
+      - { id: systalk-ai-onboarding-finetune, type: feature, quote: 協助評估及選擇企業最適合模型 針對企業專業領域fine-tune，打造貼近業務需求的專屬 AI }
+      - { id: systalk-ai-after-onboarding, type: feature, quote: 導入後 AI大腦健檢優化 回答品質與準確率檢測 Prompt健檢 提供問題診斷報告與優化建議 }
 
   - group: SysTalk.Chat
     url: https://www.tpisoftware.com/products/systalk-chat
@@ -1259,7 +1312,7 @@ groups:
       - { id: vikibundle-api, type: feature, quote: SysTalk.VIKI 提供 API，可與企業 CRM、ERP、內部知識庫整合。 }
       - { id: vikibundle-standard-product, type: feature, quote: VIKI：SysTalk.VIKI 係以標準軟體產品的架構進行開發，可依據客戶需求快速完成進行安裝、佈署 }
 
-  - group: SysTalk.ai with PHISON aiDAPTIV (AISO)
+  - group: SysTalk.ai with PHISON aiDAPTIV, merged into /products/systalk-ai, not AISO (#199)
     url: https://www.tpisoftware.com/products/systalk-ai-phison
     locale: zh-TW
     comment: The benchmarks are PHISON's (aiDAPTIV); the survey numbers are CIO's
@@ -1308,6 +1361,45 @@ groups:
       - { id: aiso-memory-optimization, type: feature, quote: 關鍵在 PHISON 的 aiDAPTIV 專利技術。透過記憶體管理與資料調度優化，在相同 GPU 條件下，可支援更大模型規模並顯著提升推論速度 }
       - { id: aiso-llm-support, type: feature, quote: SysTalk.ai 支援主流開源與企業級 LLM（如 70B 模型），企業可依場景選擇最合適的模型 }
       - { id: aiso-onboarding, type: feature, quote: 昕力資訊提供完整的導入規劃、模型設定、建置與應用模組設計服務 }
+      - { id: systalk-phison-hw-sw-integrated, type: feature, quote: 軟硬一體消除相容性風險；私密資料不上公有雲，杜絕資安疑慮與合規風險。 }
+      - id: systalk-phison-platform
+        type: feature
+        quote: 搭載 昕力資訊的 SysTalk.ai 企業級 AI 應用平台 ，透過多元功能模組，因應各產業隨選搭配應用，建置最懂您產業語言的 AI 助理。
+        text: 搭載昕力資訊的 SysTalk.ai 企業級 AI 應用平台，透過多元功能模組，因應各產業隨選搭配應用
+        comment: text drops the closing「最懂您產業語言」(a superlative, #164)
+      - { id: systalk-phison-local-audit, type: feature, quote: 讓 AI 運算在地化、數據不出門， 防堵外洩風險；內建權限管理、存取控管與稽核紀錄，每筆操作有跡可查，同時兼顧資安與效能。 }
+      - { id: systalk-phison-use-cases, type: feature, quote: 適用場景 專攻特定領域任務 / 內部單一部門應用、PoC 概念驗證 具備多樣化 AI 需求 / 跨部門 AI 中台 }
+
+  - group: AISO sovereign AI (#199)
+    url: https://www.tpisoftware.com/aiso
+    locale: zh-TW
+    comment: The page has no numbers; each card is one feature, title and body together. The PHISON aiDAPTIV page (SysTalk.ai with PHISON aiDAPTIV group) is another offering, not AISO (#199)
+    facts:
+      - { id: aiso-ecosystem, type: feature, quote: 集結 AI 軟體與硬體廠商打造的 AI 整合生態系 協助企業快速建置可落地、可擴充、可合規的地端 AI 平台 }
+      - { id: aiso-legal-contract, type: feature, quote: 法務 AI 合約審閱 整合合約審閱、擬約與條款檢索，於企業內部完成合約全流程處理。 }
+      - { id: aiso-hr-labor-law, type: feature, quote: 人資 AI 勞動法遵 整合勞動法令與薪資試算，協助企業正確執行離職、資遣與調薪作業。 }
+      - { id: aiso-hr-employee-service, type: feature, quote: 人資 AI 員工服務 以企業制度為依據即時回應員工提問，降低人資重複性作業負擔。 }
+      - { id: aiso-agent-governance, type: feature, quote: 企業 AI Agent 治理 統一納管不同來源的 AI Agent，全面掌握企業內部 AI 使用狀況。 }
+      - { id: aiso-compute-control, type: feature, quote: 企業 AI 算力管控 以租戶隔離、分層用量上限與自動出帳，精準分攤或計費算力資源。 }
+      - { id: aiso-talent, type: feature, quote: AI 人才培育 以多模型比對與 RAG 知識庫，培育掌握 AI 的人才。 }
+      - { id: aiso-teaching, type: feature, quote: 教學備課 AI 整合備課、命題與行政文書，建立校內共用的教學知識庫。 }
+      - { id: aiso-medical-records, type: feature, quote: 醫療 AI 病歷整合 整合 HIS、EMR、LIS 與 PACS 資料，轉換為 FHIR 標準格式，支援跨院資料交換。 }
+      - id: aiso-alliance
+        type: company
+        quote: AISO 主權 AI 產業聯盟成軍 主打整合式交付 加速企業 AI 導入
+        text: AISO 主權 AI 產業聯盟成軍，主打整合式交付
+        url: https://www.tpisoftware.com/media-center/559
+        comment: News headline (#199); members and signings are in the news body, not collected yet
+      - id: aiso-software-orientai
+        type: feature
+        quote: 此系列方案以昕力自主研發的企業級 Agentic AI 平台 OrientAI 為軟體核心
+        url: https://www.tpisoftware.com/media-center/575
+        comment: News body (Nuxt payload newsHtml), read by source-pages.mjs since #199; settles which software AISO runs (user, #199)
+      - id: aiso-orientai-hardware
+        type: feature
+        quote: 此次產品組合結合自研 OrientAI 系列軟體與地端硬體
+        url: https://www.tpisoftware.com/media-center/585
+        comment: News body (Nuxt payload newsHtml)
 
   - group: OrientAI
     url: https://www.tpisoftware.com/orient-ai
@@ -1327,6 +1419,20 @@ groups:
       - { id: orientai-hardware-small, type: feature, quote: 1-5人團隊 輕量級運算 首選 AI PC Workstation }
       - { id: orientai-hardware-large, type: feature, quote: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server }
       - { id: orientai-on-prem-data, type: feature, quote: 不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。 }
+      - { id: orientai-token-transparency, type: feature, quote: 精準掌握 Token 消耗率，設定用量上限避免 Token 濫用與預算失控 }
+      - { id: orientai-risk-insight, type: feature, quote: 即時檢視 AI 回覆品質、任務執行狀態、使用行為，建立異常預警機制 }
+      - { id: orientai-task-intake, type: feature, quote: 對話式任務發起 理解自然語意與資料需求，轉化為可執行任務 }
+      - { id: orientai-agent-dispatch, type: feature, quote: AI Agent 分派與執行 自動拆解任務、調用合適的 AI Agent，跨系統協作完成工作 }
+      - { id: orientai-agent-management, type: feature, quote: Agent 管理與治理 統一控管 Agent 權限、成本與資安，可降低風險並確保可擴展性 }
+      - { id: orientai-execution-scenarios, type: feature, quote: 應用場景 企業知識查詢 專業分析 流程自動化 智慧決策輔助 }
+      - { id: orientai-governance-scenarios, type: feature, quote: 應用場景 AI 資源管理 跨部門工具共享 權限審核 模型與成本控管 }
+      - { id: orientai-collaboration, type: feature, quote: Agent 協作無間 整合現有業務系統與流程 即時查看 Agent 狀態與行為 自動分派 Agent 執行任務 避免運行衝突或誤觸發 Agent }
+      - { id: orientai-governance-controls, type: feature, quote: 強化 AI 治理 精細化角色權限控管 日誌追蹤與稽核 偵測異常行為 即時告警 }
+      - { id: orientai-roi-controls, type: feature, quote: 優化 ROI 效益 設定 Token 用量上限 彈性切換 AI 模型 有效控制 Token 成本 }
+      - { id: orientai-privacy-industries, type: feature, quote: 因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。 }
+      - { id: orientai-shadow-ai-lifecycle, type: feature, quote: 對 AI 模型與 Agent 實施全週期管理，將影子 AI 統一納管，建立身分驗證機制與資料存取邊界，避免越權存取、異常行為等資安破口。 }
+      - { id: orientai-data-silos, type: feature, quote: 透過標準化架構整合多套系統，打通跨部門、跨團隊間的數據孤島，促進資料共享與無縫協作，優化作業流程與效率。 }
+      - { id: orientai-token-allocation, type: feature, quote: 針對 AI Token 消耗量進行即時監測與額度設定，讓系統依據任務複雜度自動分派模型與 Agent，將運算資源作最佳化配置。 }
 
   - group: ChatGPT Enterprise (reseller service)
     url: https://www.tpisoftware.com/chatgpt-enterprise

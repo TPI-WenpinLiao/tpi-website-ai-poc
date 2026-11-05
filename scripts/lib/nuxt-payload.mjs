@@ -4,12 +4,17 @@
 
 import vm from 'node:vm';
 
-/** Longest `content:"…"` string in the page's `window.__NUXT__` payload, decoded; null when absent. @param {string} html */
-export function payloadArticleBody(html) {
+/**
+ * Longest `<key>:"…"` string in the page's `window.__NUXT__` payload, decoded; null when absent. Blog
+ * posts keep their body in `content`, media-center news in `newsHtml` (#199).
+ * @param {string} html
+ * @param {string} [key]
+ */
+export function payloadArticleBody(html, key = 'content') {
   const start = html.indexOf('window.__NUXT__');
   if (start < 0) return null;
   const payload = html.slice(start);
-  const strings = [...payload.matchAll(/content:"((?:[^"\\]|\\.)*)"/g)].map((m) => m[1]);
+  const strings = [...payload.matchAll(new RegExp(`${key}:"((?:[^"\\\\]|\\\\.)*)"`, 'g'))].map((m) => m[1]);
   if (!strings.length) return null;
   const raw = strings.reduce((a, b) => (b.length > a.length ? b : a));
   try {
