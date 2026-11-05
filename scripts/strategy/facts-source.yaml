@@ -1312,7 +1312,7 @@ groups:
       - { id: vikibundle-api, type: feature, quote: SysTalk.VIKI 提供 API，可與企業 CRM、ERP、內部知識庫整合。 }
       - { id: vikibundle-standard-product, type: feature, quote: VIKI：SysTalk.VIKI 係以標準軟體產品的架構進行開發，可依據客戶需求快速完成進行安裝、佈署 }
 
-  - group: SysTalk.ai with PHISON aiDAPTIV (AISO)
+  - group: SysTalk.ai with PHISON aiDAPTIV (merged into /products/systalk-ai; not AISO, #199)
     url: https://www.tpisoftware.com/products/systalk-ai-phison
     locale: zh-TW
     comment: The benchmarks are PHISON's (aiDAPTIV); the survey numbers are CIO's
@@ -1361,14 +1361,14 @@ groups:
       - { id: aiso-memory-optimization, type: feature, quote: 關鍵在 PHISON 的 aiDAPTIV 專利技術。透過記憶體管理與資料調度優化，在相同 GPU 條件下，可支援更大模型規模並顯著提升推論速度 }
       - { id: aiso-llm-support, type: feature, quote: SysTalk.ai 支援主流開源與企業級 LLM（如 70B 模型），企業可依場景選擇最合適的模型 }
       - { id: aiso-onboarding, type: feature, quote: 昕力資訊提供完整的導入規劃、模型設定、建置與應用模組設計服務 }
-      - { id: aiso-hw-sw-integrated, type: feature, quote: 軟硬一體消除相容性風險；私密資料不上公有雲，杜絕資安疑慮與合規風險。 }
-      - id: aiso-systalk-platform
+      - { id: systalk-phison-hw-sw-integrated, type: feature, quote: 軟硬一體消除相容性風險；私密資料不上公有雲，杜絕資安疑慮與合規風險。 }
+      - id: systalk-phison-platform
         type: feature
         quote: 搭載 昕力資訊的 SysTalk.ai 企業級 AI 應用平台 ，透過多元功能模組，因應各產業隨選搭配應用，建置最懂您產業語言的 AI 助理。
         text: 搭載昕力資訊的 SysTalk.ai 企業級 AI 應用平台，透過多元功能模組，因應各產業隨選搭配應用
         comment: text drops the closing「最懂您產業語言」(a superlative, #164)
-      - { id: aiso-local-audit, type: feature, quote: 讓 AI 運算在地化、數據不出門， 防堵外洩風險；內建權限管理、存取控管與稽核紀錄，每筆操作有跡可查，同時兼顧資安與效能。 }
-      - { id: aiso-use-cases, type: feature, quote: 適用場景 專攻特定領域任務 / 內部單一部門應用、PoC 概念驗證 具備多樣化 AI 需求 / 跨部門 AI 中台 }
+      - { id: systalk-phison-local-audit, type: feature, quote: 讓 AI 運算在地化、數據不出門， 防堵外洩風險；內建權限管理、存取控管與稽核紀錄，每筆操作有跡可查，同時兼顧資安與效能。 }
+      - { id: systalk-phison-use-cases, type: feature, quote: 適用場景 專攻特定領域任務 / 內部單一部門應用、PoC 概念驗證 具備多樣化 AI 需求 / 跨部門 AI 中台 }
 
   - group: AISO sovereign AI (#199)
     url: https://www.tpisoftware.com/aiso

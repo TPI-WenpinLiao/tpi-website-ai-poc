@@ -5912,7 +5912,7 @@
   locale: zh-TW
   status: confirmed
 
-# --- SysTalk.ai with PHISON aiDAPTIV (AISO) ---
+# --- SysTalk.ai with PHISON aiDAPTIV (merged into /products/systalk-ai; not AISO, ---
 # The benchmarks are PHISON's (aiDAPTIV); the survey numbers are CIO's
 - id: aiso-100-percent-control
   type: feature
@@ -6066,7 +6066,7 @@
   locale: zh-TW
   status: confirmed
 
-- id: aiso-hw-sw-integrated
+- id: systalk-phison-hw-sw-integrated
   type: feature
   text: 軟硬一體消除相容性風險；私密資料不上公有雲，杜絕資安疑慮與合規風險。
   source:
@@ -6076,7 +6076,7 @@
   status: confirmed
 
 # text drops the closing「最懂您產業語言」(a superlative,
-- id: aiso-systalk-platform
+- id: systalk-phison-platform
   type: feature
   text: 搭載昕力資訊的 SysTalk.ai 企業級 AI 應用平台，透過多元功能模組，因應各產業隨選搭配應用
   source:
@@ -6085,7 +6085,7 @@
   locale: zh-TW
   status: confirmed
 
-- id: aiso-local-audit
+- id: systalk-phison-local-audit
   type: feature
   text: 讓 AI 運算在地化、數據不出門， 防堵外洩風險；內建權限管理、存取控管與稽核紀錄，每筆操作有跡可查，同時兼顧資安與效能。
   source:
@@ -6094,7 +6094,7 @@
   locale: zh-TW
   status: confirmed
 
-- id: aiso-use-cases
+- id: systalk-phison-use-cases
   type: feature
   text: 適用場景 專攻特定領域任務 / 內部單一部門應用、PoC 概念驗證 具備多樣化 AI 需求 / 跨部門 AI 中台
   source:

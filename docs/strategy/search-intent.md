@@ -641,7 +641,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 - 意圖：資訊型帶商業型。前幾名一半是分析文，一半是廠商方案與展會新聞
 - 頁面類型：分析文（CIO Taiwan、Meta Intelligence）、廠商產品頁與 datasheet（Nutanix Enterprise AI、Ertas）、新聞與標籤頁（INSIDE、旺得富、癮科技）
 - 共同子題：「資料不出公司」的需求、敏感產業（半導體、醫療、金融、政府）、用量大時地端單位成本反超雲端 API、RAG 品質與量化部署、多 GPU 管理與維運、角色權限與稽核
-- 前幾名都沒有：伺服器規格與可跑模型大小的對照表（分析文只給一般級距）；軟硬體一起交付、免另外對接；不限 Token 用量。事實庫有 `fact:aiso-servers`、`fact:aiso-use-cases`、`fact:aiso-bundled`、`fact:aiso-hw-sw-integrated`、`fact:aiso-no-token-limit`、`fact:aiso-modules`
+- 前幾名都沒有：伺服器規格與可跑模型大小的對照表（分析文只給一般級距）；軟硬體一起交付、免另外對接；不限 Token 用量。事實庫有 `fact:aiso-servers`、`fact:systalk-phison-use-cases`、`fact:aiso-bundled`、`fact:systalk-phison-hw-sw-integrated`、`fact:aiso-no-token-limit`、`fact:aiso-modules`
 - 昕力現站：未出現。WebSearch 的摘要提到 AISO 聯盟（第三方頁面）
 - 來源：WebSearch（US）`地端 AI 伺服器 企業 LLM`。前幾名 https://www.cio.com.tw/95907/ 、https://wantrich.chinatimes.com/news/20260527900681-420101 、https://www.meta-intelligence.tech/insight-on-premise-llm-deployment 、https://www.nutanix.com/zh_tw/products/nutanix-enterprise-ai 、https://www.cool3c.com/article/249294
 
@@ -651,7 +651,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 - 意圖：商業型（找可買的一體機），前幾名是各家廠商的產品新聞
 - 頁面類型：新聞（工商時報、科技新報、DIGITIMES、遠見、T 客邦）、iThome 新聞稿
 - 共同子題：軟硬體預先整合、資料留在企業內、零程式碼的 Agent Builder、雲地混合調度、雲端訂閱費上升促使 AI 移回地端、自建伺服器的維運門檻
-- 前幾名都沒有：各機型的規格與適用的知識庫規模；內建的應用模組清單；導入時廠商做哪些工作。事實庫有 `fact:aiso-servers`、`fact:aiso-modules`、`fact:aiso-legal-contract` 等 `/aiso` 頁的 8 個方案、`fact:aiso-onboarding`、`fact:aiso-bundled`。另外：新聞寫 AISO 一體機以 OrientAI 為軟體核心，事實庫的 `aiso-*` 來源頁寫的是 SysTalk.ai 搭配 aiDAPTIV（`fact:aiso-systalk-platform`），`/aiso` 頁要寫哪一套軟體需要先跟現站確認；AI 筆電、「AISO 1」機型不在事實庫
+- 前幾名都沒有：各機型的規格與適用的知識庫規模；內建的應用模組清單；導入時廠商做哪些工作。事實庫有 `fact:aiso-servers`、`fact:aiso-modules`、`fact:aiso-legal-contract` 等 `/aiso` 頁的 8 個方案、`fact:aiso-onboarding`、`fact:aiso-bundled`。另外：新聞寫 AISO 一體機以 OrientAI 為軟體核心，事實庫的 `aiso-*` 來源頁寫的是 SysTalk.ai 搭配 aiDAPTIV（`fact:systalk-phison-platform`），`/aiso` 頁要寫哪一套軟體需要先跟現站確認；AI 筆電、「AISO 1」機型不在事實庫
 - 昕力現站：未出現。第三方新聞寫到昕力（https://finance.technews.tw/2026/08/17/aiso-1/ 、DIGITIMES）。現站有同主題文章 https://www.tpisoftware.com/blog/ai/why-enterprises-need-ai-appliance （新站 `/blog/why-enterprises-need-ai-appliance`）與新聞 https://www.tpisoftware.com/media-center/575
 - 來源：WebSearch（US）`AI 一體機 企業 地端 交機即用`。前幾名 https://www.ctee.com.tw/news/20260921700803-431202 、https://www.ithome.com.tw/pr/178180 、https://finance.technews.tw/2026/08/17/aiso-1/ 、https://www.digitimes.com.tw/tech/dt/n/shwnws.asp?CnlID=13&id=765406 、https://www.techbang.com/posts/129653-nexcom-hp-ai-smes-on-premise
 
@@ -661,7 +661,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 - 意圖：資訊型。前幾名是定義文與影音
 - 頁面類型：定義文（roo.cash、OpenText、Oracle 主權 AI 頁）、影音（數位時代）、評論（Substack）、新聞
 - 共同子題：定義（不依賴外國基礎設施、供應商與法律管轄）、開發、部署、控制三個面向、與數位主權的關係、國家層級的 GPU 投資（韓國）、台灣的資料在地化討論
-- 前幾名都沒有：企業層級（不是國家層級）怎麼做到主權 AI：哪些產業需要、地端部署後由誰導入與維運。前幾名多從國家戰略講。事實庫有 `fact:aiso-industries`、`fact:aiso-local-audit`、`fact:aiso-ecosystem`、`fact:aiso-medical-records`、`fact:aiso-teaching`、`fact:aiso-onboarding`、`fact:systalk-viki-on-prem`。`aiso-100-percent-control`（「100% AI 主控權」）是 `to_confirm`
+- 前幾名都沒有：企業層級（不是國家層級）怎麼做到主權 AI：哪些產業需要、地端部署後由誰導入與維運。前幾名多從國家戰略講。事實庫有 `fact:aiso-industries`、`fact:systalk-phison-local-audit`、`fact:aiso-ecosystem`、`fact:aiso-medical-records`、`fact:aiso-teaching`、`fact:aiso-onboarding`、`fact:systalk-viki-on-prem`。`aiso-100-percent-control`（「100% AI 主控權」）是 `to_confirm`
 - 昕力現站：未出現。科技新報的 AISO 新聞（https://technews.tw/2026/03/23/aiso/ ）在結果中
 - 來源：WebSearch（US）`主權 AI 是什麼`。前幾名 https://roo.cash/blog/sovereign-ai 、https://www.bnext.com.tw/video/1236 、https://www.oracle.com/tw/cloud/sovereign-ai/ 、https://www.opentext.com/tw/what-is/sovereign-ai 、https://www.ertas.ai/zh-Hant/blog/sovereign-ai-enterprise-guide
 
@@ -671,7 +671,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 - 意圖：資訊型（評估成本），帶比較型（地端與雲端）
 - 頁面類型：分析文（Meta Intelligence）、顧問公司的成本指南（TechAhead，美元報價）、學術論文（arXiv 的損益平衡分析）、整合商新聞稿（LLM.co）
 - 共同子題：地端與雲端 API 的損益平衡點（用量大且穩定時一至兩年反超）、模型大小與 GPU 級距、資料準備與工程人力占成本大宗、先用雲端驗證再地端化
-- 前幾名都沒有：台灣在地的方案與報價方式；Token 不計量的成本結構；軟硬體分開採購的時間成本。事實庫有 `fact:aiso-no-token-limit`、`fact:aiso-bundled`、`fact:aiso-hw-sw-integrated`、`fact:aiso-servers`。事實庫沒有價格，不補
+- 前幾名都沒有：台灣在地的方案與報價方式；Token 不計量的成本結構；軟硬體分開採購的時間成本。事實庫有 `fact:aiso-no-token-limit`、`fact:aiso-bundled`、`fact:systalk-phison-hw-sw-integrated`、`fact:aiso-servers`。事實庫沒有價格，不補
 - 昕力現站：未出現
 - 來源：WebSearch（US）`企業 地端 LLM 建置 成本`。前幾名 https://www.meta-intelligence.tech/insight-on-premise-llm-deployment 、https://techaheadcorp.com/blog/custom-llm-development-cost/ 、https://arxiv.org/html/2509.18101v2 、https://www.barchart.com/story/news/35599170/private-llm-integrator-llm-co-releases-cost-range-estimates-for-custom-hybrid-and-private-llm-deployments
 
@@ -681,7 +681,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 - 意圖：資訊型。前幾名全是英文的國外廠商內容
 - 頁面類型：廠商電子書與部落格（Cohere、ibl.ai、Elastic）、TechCrunch 影音、日本銀行案例新聞（常陽銀行）、研究機構（CB Insights）
 - 共同子題：合規與資料主權（SEC、FINRA、DORA、GDPR、歐盟 AI 法案）、部署形式（VPC、地端、氣隙）、延遲與營運連續性、混合架構、理賠與詐欺偵測等用途
-- 前幾名都沒有：中文內容；台灣法規（金管會的 AI 指引）；台灣金融機構的導入案例；AI 使用紀錄怎麼留給稽核。事實庫有 `fact:aiso-industries`、`fact:aiso-local-audit`、`fact:digirunner-ai-usage-log`、`fact:systalk-viki-on-prem`。國泰金控簽約加入 AISO（新聞）不在事實庫：`fact:aiso-alliance` 只有現站新聞 559 的標題，簽約內容只在該頁的 Nuxt payload；金管會指引不是本站事實，研究不補
+- 前幾名都沒有：中文內容；台灣法規（金管會的 AI 指引）；台灣金融機構的導入案例；AI 使用紀錄怎麼留給稽核。事實庫有 `fact:aiso-industries`、`fact:systalk-phison-local-audit`、`fact:digirunner-ai-usage-log`、`fact:systalk-viki-on-prem`。國泰金控簽約加入 AISO（新聞）不在事實庫：`fact:aiso-alliance` 只有現站新聞 559 的標題，簽約內容只在該頁的 Nuxt payload；金管會指引不是本站事實，研究不補
 - 昕力現站：未出現
 - 來源：WebSearch（US）`生成式 AI 私有化部署 金融業`。前幾名 https://cohere.com/lp/mastering-private-ai-deployments-cohere-ebook 、https://ibl.ai/blog/private-ai-for-financial-services-on-your-own-servers.md 、https://aeo.washinmura.jp/ai/%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE%E3%82%81%E3%81%B6%E3%81%8D%E3%83%95%E3%82%A3%E3%83%8A%E3%83%B3%E3%82%B7%E3%83%A3%E3%83%AB%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97/en/news/2026-03-26-joyo-4 、https://www.plushcap.com/content/cohere/blog/cohere-6-reasons-banks-opt-for-private-ai-deployments
 

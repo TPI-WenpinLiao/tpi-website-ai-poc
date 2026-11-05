@@ -100,7 +100,7 @@
 
 現站來源：https://www.tpisoftware.com/products/systalk-ai（對照日期 2026-11-05）。新站內容檔另外併入 https://www.tpisoftware.com/products/systalk-ai-phison（`docs/research/content-audit.md` 第 79 行，不在導覽的行銷 landing page），下表後半列出那頁的段落。
 
-新站有：title、description（現站 meta description）、tagline、hero 圖（`family-ai.webp`）、highlights 3 項（取自 systalk-ai-phison 的三項好處；第 3 項的原文收為 `aiso-hw-sw-integrated`），以及 hub 模板依 `nodes.csv` 產生的子頁卡片（systalk-chat 到 orient-ai 共 10 個子節點，卡片文字是各 offering 的 description）（`src/content/hub/zh-TW/family-ai.md`）。內容檔沒有 `facts` 欄位。紀錄在 `docs/content/products.md` 第 79 行（M5-01）：「主頁的「已為全球超過 1.4億用戶」、一日應用情境、SysTalk.Service 導入前中後未搬；`highlights` 取自併入的 `systalk-ai-phison`……該頁 FAQ 4 題、方案表、影片 2 支未搬」。
+新站有：title、description（現站 meta description）、tagline、hero 圖（`family-ai.webp`）、highlights 3 項（取自 systalk-ai-phison 的三項好處；第 3 項的原文收為 `systalk-phison-hw-sw-integrated`），以及 hub 模板依 `nodes.csv` 產生的子頁卡片（systalk-chat 到 orient-ai 共 10 個子節點，卡片文字是各 offering 的 description）（`src/content/hub/zh-TW/family-ai.md`）。內容檔沒有 `facts` 欄位。紀錄在 `docs/content/products.md` 第 79 行（M5-01）：「主頁的「已為全球超過 1.4億用戶」、一日應用情境、SysTalk.Service 導入前中後未搬；`highlights` 取自併入的 `systalk-ai-phison`……該頁 FAQ 4 題、方案表、影片 2 支未搬」。
 
 | 段落 | 事實 id | 沒搬的原因 |
 |---|---|---|
@@ -111,10 +111,10 @@
 | 「專業AI導入團隊 提供企業級 SysTalk.Service」：導入前、導入中、導入後三階段 | `systalk-ai-onboarding`、`systalk-ai-onboarding-finetune`（導入中後半）、`systalk-ai-after-onboarding` | 未搬（`docs/content/products.md` 第 79 行） |
 | 頁尾「探索更多 SysTalk.ai 人工智慧產品與解決方案……取得報價：aiagent@tpisoftware.com」 | `systalk-ai-quote-email` | 無紀錄 |
 | （併入頁）hero「別再受限於「通用型 AI」 打造真正由企業掌控的「私有 AI 核心」」：100% AI 主控權、CIO 調查三個數字（超過 60%、80%、24%） | `aiso-100-percent-control` ⚠、`aiso-cio-survey` ⚠ | 無紀錄（`docs/content/products.md` 第 79 行只寫了 highlights 的來源） |
-| （併入頁）「企業轉型不該卡在「硬體太貴」或「軟體太難」」：三個「怕」與對應說明（群聯 aiDAPTIV、搭載 SysTalk.ai、運算在地化） | `aiso-phison-patent` ⚠、`aiso-systalk-platform`、`aiso-local-audit` | 無紀錄 |
+| （併入頁）「企業轉型不該卡在「硬體太貴」或「軟體太難」」：三個「怕」與對應說明（群聯 aiDAPTIV、搭載 SysTalk.ai、運算在地化） | `aiso-phison-patent` ⚠、`systalk-phison-platform`、`systalk-phison-local-audit` | 無紀錄 |
 | （併入頁）「昕力資訊打造聚焦企業級 AI 應用功能模組」15 個模組；「各產業皆可用!」5 個產業 | `aiso-modules`、`aiso-industries` | 無紀錄 |
 | （併入頁）「PHISON 獨家專利技術 突破記憶體容量限制」：LLM fine-tune 效能比較、70B 模型、Dell／HPE 比較、回應快 25 倍、52 秒縮短到 2 秒，配 2 支自架 MP4 | `aiso-finetune-benchmark` ⚠、`aiso-70b-on-4-gpus` ⚠、`aiso-10x-dell-hpe` ⚠、`aiso-25x-response` ⚠、`aiso-52-to-2-seconds` ⚠ | 影片 2 支未搬（`docs/content/products.md` 第 79 行）；效能比較段落無紀錄 |
-| （併入頁）「AISO 打造 — All-in-one 訓練一體機方案」方案表：aiDAPTIV 4-GPU／8-GPU Server | `aiso-servers`、`aiso-use-cases`（適用場景）；「方案特色」列只有「高性價比」「高性能」，是表述 | 方案表未搬（`docs/content/products.md` 第 79 行） |
+| （併入頁）「AISO 打造 — All-in-one 訓練一體機方案」方案表：aiDAPTIV 4-GPU／8-GPU Server | `aiso-servers`、`systalk-phison-use-cases`（適用場景）；「方案特色」列只有「高性價比」「高性能」，是表述 | 方案表未搬（`docs/content/products.md` 第 79 行） |
 | （併入頁）「我們擁有豐富 AI 轉型經驗與實力」 | —（標題下沒有文字） | 無紀錄 |
 | （併入頁）FAQ 4 題：成本、為何能跑更大模型、支援哪些模型、沒有 AI 團隊能否導入 | `aiso-memory-optimization`、`aiso-llm-support`、`aiso-onboarding`；第 1 題（成本）沒有收（最後一節） | 未搬（`docs/content/products.md` 第 79 行） |
 
