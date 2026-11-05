@@ -156,7 +156,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `JunctionDiagram` | 接點圖 | 三欄：既有系統（中性）、產品（紫）、新的服務（橘），欄位相鄰用平塗色塊表示接上，不畫細線箭頭；節點可標 `down`（故障）、`standby`（待命），高可用架構用；HTML 畫，文字是事實的用詞；`caption` 一句話說圖在講什麼；窄螢幕三欄上下排 |
 | `UiFragment` | 介面片段 | HTML 畫的產品畫面局部，標「示意」、帶 `data-ui`；只畫事實寫得出的面板名稱、分頁、設定項目與狀態（`state`：on、off、down、next，on、off、down 另有給螢幕閱讀器的文字，不只靠顏色）；`words` 傳頁面的 `strings.layout`（「示意」與狀態名稱），不畫筆數、時間、曲線、客戶名單；同一頁的片段用同一個外框 |
 | `FactText` | 一則事實原文 | 拆成一行一項、5 行以上時排成兩欄清單（第一行以冒號結尾時當導言），否則是保留換行的段落；`emphasis="percentages"` 加粗成果數字；`inline` 讓單段文字不包 `<p>`（表格的格子）。`PageSections` 與 `SpecTable` 共用（#200） |
-| `SpecTable` | 規格表、對應表 | 真的 `<table>`：一格一則事實時用 `FactText`；一列一個項目（部署方式、標準、規範），事實原文一格，選填的 `link` 一格；可以有列線（house rules 對真表格的例外）；`emphasis="name"` 讓第一欄用襯線粗體（對應表的規範名稱）；欄名只給螢幕閱讀器 |
+| `SpecTable` | 規格表、對應表 | 真的 `<table>`：一格一則事實時用 `FactText`；一列一個項目（部署方式、標準、規範），事實原文一格，選填的 `link` 一格；可以有列線（house rules 對真表格的例外）；`emphasis="name"` 讓第一欄用襯線粗體（對應表的規範名稱）；欄名只給螢幕閱讀器；`compare`（`{ label; values: [兩個名稱] }`）把它變成兩樣東西並排的比較表，這一列是看得到的表頭，每列的兩個值各佔一格，不能有 `link`（#200） |
 | `Timeline` | 時間列 | 真的 `<ol>`：年份在前（襯線粗體、`tabular-nums`），事實原文在後，一列一則 |
 | `CaseList` | 案例列、成果列 | 一列一則，用間距分開，不做等大卡片：客戶（或作業名稱）用襯線粗體，接著作業、成果原文（數字加粗）、獎項、連結（錨點帶客戶或案例名）；`fragment` 在旁邊放這則作業的 `UiFragment`；`lead` 讓第一則的成果字級大一級；事實庫沒有成果時不放那一行；`more` 是「看所有成功案例」；`linkHeading` 讓每列的 heading 就是連到案例內頁的連結（「客戶名：案例標題」）；`words` 傳頁面的 `strings.layout` |
 | `IndexList` | 索引列 | 次要段落（相關文章、子頁、相關產品、下載）的一列一項：名稱（`--font-size-text` 的襯線粗體）、一句、日期、選填小縮圖；沒有框，整列可點，hover 只換名稱的顏色與底線；搭配 `SectionHeading weight="secondary"` |

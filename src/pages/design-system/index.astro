@@ -526,6 +526,11 @@ const description =
             emphasis="name"
             rows={[{ label: '規範名稱', values: ['對應功能的事實原文'], link: { label: '目標頁的內容', href: `#components-${tone}` } }]}
           />
+          <SpecTable
+            head={['項目', '內容']}
+            compare={{ label: '品名', values: ['機型一', '機型二'] }}
+            rows={[{ label: '規格', values: ['機型一的原文', '機型二的原文'] }]}
+          />
 
           <h3>FactText</h3>
           <div class="demo">
