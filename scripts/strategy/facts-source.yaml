@@ -1516,8 +1516,23 @@ groups:
           消除影子 AI，防止機敏資料外洩
           跨部門統一權限管理與資料治理
       - { id: orientai-aidaptiv, type: feature, quote: 結合群聯 aiDAPTIV 獨家記憶體擴充技術，突破算力與容量限制，地端架構確保離線仍可穩定運行 }
-      - { id: orientai-hardware-small, type: feature, quote: 1-5人團隊 輕量級運算 首選 AI PC Workstation }
-      - { id: orientai-hardware-large, type: feature, quote: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server }
+      - id: orientai-hardware-small
+        type: feature
+        quote: 1-5人團隊 輕量級運算 首選 AI PC Workstation
+        comment: text puts the team size, the use and the devices on lines of their own (#201)
+        text: |-
+          1-5人團隊
+          輕量級運算
+          首選 AI PC、Workstation
+      - id: orientai-hardware-large
+        type: feature
+        quote: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server
+        comment: text puts the team size, the use and the devices on lines of their own (#201)
+        text: |-
+          5人以上
+          跨部門應用
+          高併發流量 & 高強度推論
+          必備 Workstation、AI Server
       - { id: orientai-on-prem-data, type: feature, quote: 不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。 }
       - id: orientai-on-prem-data-statement
         type: feature

@@ -86,9 +86,9 @@ sections:
     body: 這是 OrientAI 建議的硬體配置，依使用的人數挑選。
     rows:
       - label: 1-5人團隊
-        values: ["輕量級運算 首選 AI PC Workstation"]
+        values: ["輕量級運算\n首選 AI PC、Workstation"]
       - label: 5人以上
-        values: ["跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server"]
+        values: ["跨部門應用\n高併發流量 & 高強度推論\n必備 Workstation、AI Server"]
       - label: 記憶體擴充
         values: ["結合群聯 aiDAPTIV 獨家記憶體擴充技術，突破算力與容量限制，地端架構確保離線仍可穩定運行"]
 cta: contact

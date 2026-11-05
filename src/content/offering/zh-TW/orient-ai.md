@@ -25,14 +25,15 @@ heroLabels:
   product: OrientAI
   ai1: AI Agent
 # Sections 2–8 of the brief, each in the layout its 段落表 gives. Fill marks the question groups (P5):
-# what it does (2, 3), how it is governed (4–6, subtle), hardware (7), cost (8, brand); section 9 is the template's related
-# posts (blog.relatedOfferings), section 10 its ContactCta. Headings, bodies, labels and diagram words
-# are wording; items, values and fragment rows are fact texts or words taken from them
+# what it does (2, 3), how it is governed (4–6, subtle), hardware (7), cost (8, brand). Section 9 is
+# the template's related posts (blog.relatedOfferings), section 10 its ContactCta. Headings, bodies,
+# labels and diagram words are wording; items, values and fragment rows are fact texts or words taken
+# from them. A fact a fragment lists in full is not listed again beside it (#201 design review)
 sections:
   - layout: ui
     id: execution
     itemsBelow: true
-    heading: 知識問答與跨系統任務，在同一個平台
+    heading: 問答、任務與模型
     body: 員工問企業知識、交辦跨系統的工作，都由 OrientAI 接手；模型可以換，功能模組用 MCP 接上。
     fragment:
       title: 執行層
@@ -43,10 +44,11 @@ sections:
           state: "on"
         - label: 彈性整合多種大語言模型
           state: "on"
+        - label: 支援雲地靈活部署架構
+          state: "on"
         - label: MCP 擴充應用
           state: next
     items:
-      - body: "RAG 知識問答與文件解析\nAI Agent 跨系統任務自動化\n彈性整合多種大語言模型\n支援雲地靈活部署架構"
       - body: "應用場景：\n企業知識查詢\n專業分析\n流程自動化\n智慧決策輔助"
       - title: "MCP 擴充應用"
         body: "標準化整合功能模組，彈性擴展業務，持續優化流程"
@@ -96,12 +98,13 @@ sections:
       rows:
         - label: AI Agent 統一管控與授權標準化
           state: "on"
-        - label: 消除影子 AI
+        - label: Token 用量監控與資源配置最佳化
+          state: "on"
+        - label: 消除影子 AI，防止機敏資料外洩
           state: "on"
         - label: 跨部門統一權限管理與資料治理
           state: "on"
     items:
-      - body: "AI Agent 統一管控與授權標準化\nToken 用量監控與資源配置最佳化\n消除影子 AI，防止機敏資料外洩\n跨部門統一權限管理與資料治理"
       - body: "對 AI 模型與 Agent 實施全週期管理，將影子 AI 統一納管，建立身分驗證機制與資料存取邊界，避免越權存取、異常行為等資安破口。"
       - body: "應用場景：\nAI 資源管理\n跨部門工具共享\n權限審核\n模型與成本控管"
   - layout: claim
@@ -114,7 +117,6 @@ sections:
       - body: "因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。"
   - layout: ui
     id: monitoring
-    itemsBelow: true
     fill: subtle
     heading: 使用與異常看得到
     body: 上線之後，AI 回覆的品質、任務跑到哪裡、誰在用，都看得到；操作留有日誌，異常行為會即時告警。
@@ -132,8 +134,6 @@ sections:
         - label: 偵測異常行為，即時告警
           state: "on"
     items:
-      - title: "強化 AI 治理"
-        body: "精細化角色權限控管\n日誌追蹤與稽核\n偵測異常行為，即時告警"
       - body: "即時檢視 AI 回覆品質、任務執行狀態、使用行為，建立異常預警機制"
   - layout: spec
     id: hardware
@@ -142,9 +142,9 @@ sections:
     body: 團隊人數決定要配的設備；搭配群聯 aiDAPTIV 的記憶體擴充，地端架構離線也能運作。
     rows:
       - label: 1-5人團隊
-        values: ["輕量級運算 首選 AI PC Workstation"]
+        values: ["輕量級運算\n首選 AI PC、Workstation"]
       - label: 5人以上
-        values: ["跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server"]
+        values: ["跨部門應用\n高併發流量 & 高強度推論\n必備 Workstation、AI Server"]
       - label: 記憶體擴充
         values: ["結合群聯 aiDAPTIV 獨家記憶體擴充技術，突破算力與容量限制，地端架構確保離線仍可穩定運行"]
     link:

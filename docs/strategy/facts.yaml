@@ -6339,18 +6339,27 @@
   locale: zh-TW
   status: confirmed
 
+# text puts the team size, the use and the devices on lines of their own (#201)
 - id: orientai-hardware-small
   type: feature
-  text: 1-5人團隊 輕量級運算 首選 AI PC Workstation
+  text: |-
+    1-5人團隊
+    輕量級運算
+    首選 AI PC、Workstation
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: 1-5人團隊 輕量級運算 首選 AI PC Workstation
   locale: zh-TW
   status: confirmed
 
+# text puts the team size, the use and the devices on lines of their own (#201)
 - id: orientai-hardware-large
   type: feature
-  text: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server
+  text: |-
+    5人以上
+    跨部門應用
+    高併發流量 & 高強度推論
+    必備 Workstation、AI Server
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server
