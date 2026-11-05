@@ -82,6 +82,7 @@ node scripts/strategy/eval-shots.mjs --new <scratch>/new-dist --old <scratch>/ol
 | 第一批（#200） | [AI 智能理賠](evaluation/reviews/b1-new-smartclaim.md) | 4.2 通過 | 4.5 通過 | 4.8 通過 |
 | 第一批（#200） | [AI 智慧建檔](evaluation/reviews/b1-new-smartfilling.md) | 4.0 通過 | 4.7 通過 | 4.7 通過 |
 | 第一批（#200） | [SysTalk.ai 產品家族](evaluation/reviews/b1-new-systalk-ai.md) | 4.2 通過 | 4.5 通過 | 5.0 通過 |
+| 第一批（#201） | [AISO 主權 AI](evaluation/reviews/b1-new-aiso.md) | 4.0 通過 | 4.2 通過 | 4.8 通過 |
 <!-- eval-scores:end -->
 
 ## 各組的主要差異
