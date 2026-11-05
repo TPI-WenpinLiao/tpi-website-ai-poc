@@ -152,7 +152,21 @@ const pageSection = (image: ImageFn) => z.discriminatedUnion('layout', [
     index: z.array(z.strictObject({ body: text.optional(), node: anyNode })).optional(),
   }),
   // 規格表 and 對應表: a real table, one row a label (a regulation) and its fact texts
-  z.strictObject({ layout: z.literal('spec'), ...sectionCommon(image), rows: z.array(specRow).min(1) }),
+  // `compare` turns it into a comparison of two things side by side (#200, two machines): its row heads
+  // the columns, and each row's two values go one to a column. `items` are fact texts above the table,
+  // `record` a fact text closing the section (#200)
+  z
+    .strictObject({
+      layout: z.literal('spec'),
+      ...sectionCommon(image),
+      rows: z.array(specRow).min(1),
+      items: z.array(sectionItem).optional(),
+      record: text.optional(),
+      compare: z.strictObject({ label: text, values: z.array(text).length(2) }).optional(),
+    })
+    .refine((s) => !s.compare || s.rows.every((r) => r.values.length === 2 && !r.link), {
+      message: 'a comparison table has two values a row and no links',
+    }),
   // 時間列: ordered steps with their year, then (optionally) the 對應表 rows
   z.strictObject({
     layout: z.literal('timeline'),
@@ -165,6 +179,13 @@ const pageSection = (image: ImageFn) => z.discriminatedUnion('layout', [
   z.strictObject({ layout: z.literal('results'), ...sectionCommon(image), items: z.array(resultItem).min(1), record: text.optional() }),
   // 色帶: the claim, a few facts and the action on a pale purple band, a fragment beside them
   z.strictObject({ layout: z.literal('band'), ...sectionCommon(image), items: z.array(sectionItem).optional(), fragment: uiFragment.optional() }),
+  // 索引列: a secondary section of its own, one page a row (IndexList), named by its node unless
+  // `label` says what the page answers (the link's text); `body` is wording (#200)
+  z.strictObject({
+    layout: z.literal('index'),
+    ...sectionCommon(image),
+    items: z.array(z.strictObject({ node: anyNode, label: text.optional(), body: text.optional() })).min(1),
+  }),
 ]);
 // Cases as rows (CaseList, design-principles.md「案例列」): client, the work, its result when the
 // fact library has one, the case study it links to; all fact texts
@@ -243,6 +264,8 @@ const hub = defineCollection({
         heroCta: z.literal('contact').optional(),
         // The page's sections when its brief asks for more than highlights (#167, laid out per #187)
         sections: z.array(pageSection(image)).optional(),
+        // Heading of the child pages' index rows (#200), by default 「探索」
+        partsTitle: text.optional(),
         featuredCaseStudies: z.array(ref('case-study')).optional(),
         // A line under the case studies' heading (#167): a fact text, listed in `facts`
         casesIntro: text.optional(),

@@ -5044,9 +5044,15 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#200)
 - id: systalk-ai-after-onboarding
   type: feature
-  text: 導入後 AI大腦健檢優化 回答品質與準確率檢測 Prompt健檢 提供問題診斷報告與優化建議
+  text: |-
+    導入後：
+    AI大腦健檢優化
+    回答品質與準確率檢測
+    Prompt健檢
+    提供問題診斷報告與優化建議
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
     quote: 導入後 AI大腦健檢優化 回答品質與準確率檢測 Prompt健檢 提供問題診斷報告與優化建議
@@ -5962,9 +5968,25 @@
   status: to_confirm
   note: 沒有依據或比較基準的成效數字或比較說法（#164 使用者決定的宣稱規則）
 
+# text splits the run of module names into list items, one per line (#200)
 - id: aiso-modules
   type: feature
-  text: Rerank 模組 RAG 模組 向量/混合檢索模組 同義詞模組 FAQ 模組 網站 URL 爬取模組 OCR 視覺解析模組 Prompt 管理模組 LLM 設置模組 Guardrail 模組 STT/TTS 模組 虛擬人模組 Agent Flow 模組 意圖判斷模組 視窗記憶模組
+  text: |-
+    Rerank 模組
+    RAG 模組
+    向量/混合檢索模組
+    同義詞模組
+    FAQ 模組
+    網站 URL 爬取模組
+    OCR 視覺解析模組
+    Prompt 管理模組
+    LLM 設置模組
+    Guardrail 模組
+    STT/TTS 模組
+    虛擬人模組
+    Agent Flow 模組
+    意圖判斷模組
+    視窗記憶模組
   source:
     url: https://www.tpisoftware.com/products/systalk-ai-phison
     quote: Rerank 模組 RAG 模組 向量/混合檢索模組 同義詞模組 FAQ 模組 網站 URL 爬取模組 OCR 視覺解析模組 Prompt 管理模組 LLM 設置模組 Guardrail 模組 STT/TTS 模組 虛擬人模組 Agent Flow 模組 意圖判斷模組 視窗記憶模組
@@ -6030,9 +6052,19 @@
   status: to_confirm
   note: 合作夥伴群聯提供的估算數字
 
+# text splits the flattened table into its cells, one per line (#200)
 - id: aiso-servers
   type: feature
-  text: 品名 aiDAPTIV 4-GPU Server aiDAPTIV 8-GPU Server VRAM 192GB 384GB 特性 中型知識庫 / 支援 100B 級別 LLM 超大型知識庫 / 支援 200B 級別 LLM
+  text: |-
+    品名
+    aiDAPTIV 4-GPU Server
+    aiDAPTIV 8-GPU Server
+    VRAM
+    192GB
+    384GB
+    特性
+    中型知識庫 / 支援 100B 級別 LLM
+    超大型知識庫 / 支援 200B 級別 LLM
   source:
     url: https://www.tpisoftware.com/products/systalk-ai-phison
     quote: 品名 aiDAPTIV 4-GPU Server aiDAPTIV 8-GPU Server VRAM 192GB 384GB 特性 中型知識庫 / 支援 100B 級別 LLM 超大型知識庫 / 支援 200B 級別 LLM
@@ -6094,9 +6126,13 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the flattened table row into its cells, one per line (#200)
 - id: systalk-phison-use-cases
   type: feature
-  text: 適用場景 專攻特定領域任務 / 內部單一部門應用、PoC 概念驗證 具備多樣化 AI 需求 / 跨部門 AI 中台
+  text: |-
+    適用場景
+    專攻特定領域任務 / 內部單一部門應用、PoC 概念驗證
+    具備多樣化 AI 需求 / 跨部門 AI 中台
   source:
     url: https://www.tpisoftware.com/products/systalk-ai-phison
     quote: 適用場景 專攻特定領域任務 / 內部單一部門應用、PoC 概念驗證 具備多樣化 AI 需求 / 跨部門 AI 中台

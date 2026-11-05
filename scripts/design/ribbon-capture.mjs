@@ -66,6 +66,12 @@ export const JOBS = [
   // existing systems, digiRunner and the AI model; finance's core system, the AI work and the services
   { name: 'page-digirunner', w: 1600, h: 1200, view: { kind: 'product', name: 'digirunner' }, override: { halfW: 9, pitch: 34 } },
   { name: 'page-finance', w: 1600, h: 1200, view: { kind: 'cases', p: 0 }, override: { halfW: 12, pitch: 36 }, levels: [1, 1, 1] },
+  // #200: the AI pages see the same stretch with only their own AI block lit (the finance page labels
+  // ai1 理賠, ai2 建檔), framed so the existing systems, the product and the services their briefs
+  // label are on the picture; the family page sees every AI block lit, closer in
+  { name: 'page-smartclaim', w: 1600, h: 1200, view: { kind: 'cases', p: 0.5 }, override: { halfW: 10.5, pitch: 34, yaw: -12, sx: 0.4 }, levels: [0, 1, 0] },
+  { name: 'page-smartfilling', w: 1600, h: 1200, view: { kind: 'cases', p: 0.5 }, override: { halfW: 10.5, pitch: 34, yaw: -24, sx: 0.3 }, levels: [0, 0, 1] },
+  { name: 'page-systalk-ai', w: 1600, h: 1200, view: { kind: 'cases', p: 1 }, override: { halfW: 6.4, pitch: 38, sx: 0.75 }, levels: [1, 1, 1] },
 ];
 
 /** The fork pictures: a plan whose top edge is the city edge, the trunk entering at the hero's exit */

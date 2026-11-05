@@ -556,7 +556,10 @@ const description =
           <h3>PageSections</h3>
           <PageSections
             locale="zh-TW"
-            sections={[{ layout: 'band', heading: '色帶：一句主張', body: '淺紫底，一兩則事實與一個動作。', items: [{ body: '事實原文' }] }]}
+            sections={[
+              { layout: 'band', heading: '色帶：一句主張', body: '淺紫底，一兩則事實與一個動作。', items: [{ body: '事實原文' }] },
+              { layout: 'index', heading: '索引列：相關產品', items: [{ node: 'digirunner', body: '一句表述，寫這一頁回答什麼。' }, { node: 'industry-finance' }] },
+            ]}
           />
 
           <h3>CardGrid compact</h3>

@@ -191,7 +191,7 @@ const jsonLd = hubJsonLd({
   {
     parts.length > 0 && (
       <Surface tone="light">
-        <SectionHeading title={t.hub.parts} weight={sections.length ? 'secondary' : 'primary'} />
+        <SectionHeading title={data.partsTitle ?? t.hub.parts} weight={sections.length ? 'secondary' : 'primary'} />
         <IndexList items={parts.map((p) => ({ title: p.title, href: p.href, body: p.description }))} />
       </Surface>
     )

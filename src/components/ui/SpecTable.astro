@@ -5,7 +5,10 @@
 // the house rules' exception to no thin rules. Several fact texts in a cell are a list; a fact text
 // with line breaks keeps them (a fact split into items, site-research 第 2 條).
 // `head` names the columns for screen readers (the row's own labels say it on screen); `emphasis="name"`
-// sets the first column in the bold serif, for a mapping table (規範名稱).
+// sets the first column in the bold serif, for a mapping table (規範名稱). `compare` compares two
+// things side by side (#200): its row is the visible head, and each row's two values go one to a cell.
+import { factList } from '../../lib/content/lists';
+
 interface Row {
   label: string;
   values: readonly string[];
@@ -17,34 +20,56 @@ interface Props {
   head: readonly [string, string] | readonly [string, string, string];
   caption?: string | undefined;
   emphasis?: 'name' | 'none';
+  compare?: { label: string; values: readonly string[] } | undefined;
 }
 
-const { rows, head, caption, emphasis = 'none' } = Astro.props;
-// A fact text of this many lines or more is a list (site-research 第 2 條), led by its first line when
-// that line ends in a colon: the items go in two columns, so short items don't make one tall column
-// (design-principles.md「內頁共用的規則」375 寬: short-word lists in two columns)
-const LIST_LINES = 5;
-const asList = (v: string) => {
-  const lines = v.split('\n');
-  if (lines.length < LIST_LINES) return undefined;
-  const led = /[:：]$/.test(lines[0] ?? '');
-  return { lead: led ? lines[0] : undefined, list: led ? lines.slice(1) : lines };
-};
+const { rows, head, caption, emphasis = 'none', compare } = Astro.props;
 const hasLinks = rows.some((r) => r.link);
 ---
 
-<table class:list={['spec-table', { 'emphasis-name': emphasis === 'name' }]}>
+<table class:list={['spec-table', { 'emphasis-name': emphasis === 'name', compare }]}>
   {caption && <caption class="sr-only">{caption}</caption>}
-  <thead class="sr-only">
-    <tr>
-      <th scope="col">{head[0]}</th>
-      <th scope="col">{head[1]}</th>
-      {hasLinks && <th scope="col">{head[2]}</th>}
-    </tr>
-  </thead>
+  {
+    compare ? (
+      <thead>
+        <tr>
+          <th scope="col" class="name">
+            {compare.label}
+          </th>
+          {compare.values.map((v) => (
+            <th scope="col" class="name serif">
+              {v}
+            </th>
+          ))}
+        </tr>
+      </thead>
+    ) : (
+      <thead class="sr-only">
+        <tr>
+          <th scope="col">{head[0]}</th>
+          <th scope="col">{head[1]}</th>
+          {hasLinks && <th scope="col">{head[2]}</th>}
+        </tr>
+      </thead>
+    )
+  }
   <tbody>
     {
-      rows.map((r) => (
+      compare &&
+        rows.map((r) => (
+          <tr>
+            <th scope="row" class="name">
+              {r.label}
+            </th>
+            {r.values.map((v) => (
+              <td class="values">{v}</td>
+            ))}
+          </tr>
+        ))
+    }
+    {
+      !compare &&
+        rows.map((r) => (
         <tr>
           <th scope="row" class:list={['name', { serif: emphasis === 'name' }]}>
             {r.label}
@@ -58,12 +83,12 @@ const hasLinks = rows.some((r) => r.link);
               </ul>
             ) : (
               r.values.map((v) => {
-                const split = asList(v);
+                const split = factList(v);
                 return split ? (
                   <>
                     {split.lead && <p class="lead">{split.lead}</p>}
                     <ul class="columns">
-                      {split.list.map((item) => (
+                      {split.items.map((item) => (
                         <li>{item}</li>
                       ))}
                     </ul>
@@ -134,6 +159,14 @@ const hasLinks = rows.some((r) => r.link);
     color: var(--color-link);
     font-weight: var(--font-weight-semibold);
   }
+  /* Two things side by side: the row's label above its two values on narrow screens */
+  .compare tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .compare tr > :first-child {
+    grid-column: 1 / -1;
+  }
 
   @media (--bp-lg-up) {
     tr {
@@ -155,6 +188,15 @@ const hasLinks = rows.some((r) => r.link);
 
     tr:not(:has(> :nth-child(3))) > :nth-child(2) {
       grid-column: span 8;
+    }
+
+    .compare tr {
+      grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    }
+
+    .compare tr > :first-child,
+    .compare tr > :nth-child(n) {
+      grid-column: span 4;
     }
   }
 </style>
