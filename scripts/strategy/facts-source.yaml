@@ -1497,21 +1497,94 @@ groups:
         quote: 作業效率 40-60% 營運成本 20-30% 治理風險 90%
         status: to_confirm
         note: 現站沒有寫出這組數字的量測方式與基準
-      - { id: orientai-execution-layer, type: feature, quote: RAG 知識問答與文件解析 AI Agent 跨系統任務自動化 彈性整合多種大語言模型 支援雲地靈活部署架構 }
-      - { id: orientai-governance-layer, type: feature, quote: AI Agent 統一管控與授權標準化 Token 用量監控與資源配置最佳化 消除影子 AI，防止機敏資料外洩 跨部門統一權限管理與資料治理 }
+      - id: orientai-execution-layer
+        type: feature
+        quote: RAG 知識問答與文件解析 AI Agent 跨系統任務自動化 彈性整合多種大語言模型 支援雲地靈活部署架構
+        comment: text splits the run of items into list items, one per line (#201)
+        text: |-
+          RAG 知識問答與文件解析
+          AI Agent 跨系統任務自動化
+          彈性整合多種大語言模型
+          支援雲地靈活部署架構
+      - id: orientai-governance-layer
+        type: feature
+        quote: AI Agent 統一管控與授權標準化 Token 用量監控與資源配置最佳化 消除影子 AI，防止機敏資料外洩 跨部門統一權限管理與資料治理
+        comment: text splits the run of items into list items, one per line (#201)
+        text: |-
+          AI Agent 統一管控與授權標準化
+          Token 用量監控與資源配置最佳化
+          消除影子 AI，防止機敏資料外洩
+          跨部門統一權限管理與資料治理
       - { id: orientai-aidaptiv, type: feature, quote: 結合群聯 aiDAPTIV 獨家記憶體擴充技術，突破算力與容量限制，地端架構確保離線仍可穩定運行 }
-      - { id: orientai-hardware-small, type: feature, quote: 1-5人團隊 輕量級運算 首選 AI PC Workstation }
-      - { id: orientai-hardware-large, type: feature, quote: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server }
+      - id: orientai-hardware-small
+        type: feature
+        quote: 1-5人團隊 輕量級運算 首選 AI PC Workstation
+        comment: text puts the team size, the use and the devices on lines of their own (#201)
+        text: |-
+          1-5人團隊
+          輕量級運算
+          首選 AI PC、Workstation
+      - id: orientai-hardware-large
+        type: feature
+        quote: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server
+        comment: text puts the team size, the use and the devices on lines of their own (#201)
+        text: |-
+          5人以上
+          跨部門應用
+          高併發流量 & 高強度推論
+          必備 Workstation、AI Server
       - { id: orientai-on-prem-data, type: feature, quote: 不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。 }
+      - id: orientai-on-prem-data-statement
+        type: feature
+        quote: 不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。
+        comment: >-
+          The same answer without the FAQ's leading 不會。, for pages that quote it outside the question
+          (#201); the home page asks the question and keeps orientai-on-prem-data
+        text: OrientAI 只會部署於企業端，資料掌控權為企業所有。
       - { id: orientai-token-transparency, type: feature, quote: 精準掌握 Token 消耗率，設定用量上限避免 Token 濫用與預算失控 }
       - { id: orientai-risk-insight, type: feature, quote: 即時檢視 AI 回覆品質、任務執行狀態、使用行為，建立異常預警機制 }
       - { id: orientai-task-intake, type: feature, quote: 對話式任務發起 理解自然語意與資料需求，轉化為可執行任務 }
       - { id: orientai-agent-dispatch, type: feature, quote: AI Agent 分派與執行 自動拆解任務、調用合適的 AI Agent，跨系統協作完成工作 }
       - { id: orientai-agent-management, type: feature, quote: Agent 管理與治理 統一控管 Agent 權限、成本與資安，可降低風險並確保可擴展性 }
-      - { id: orientai-execution-scenarios, type: feature, quote: 應用場景 企業知識查詢 專業分析 流程自動化 智慧決策輔助 }
-      - { id: orientai-governance-scenarios, type: feature, quote: 應用場景 AI 資源管理 跨部門工具共享 權限審核 模型與成本控管 }
-      - { id: orientai-collaboration, type: feature, quote: Agent 協作無間 整合現有業務系統與流程 即時查看 Agent 狀態與行為 自動分派 Agent 執行任務 避免運行衝突或誤觸發 Agent }
-      - { id: orientai-governance-controls, type: feature, quote: 強化 AI 治理 精細化角色權限控管 日誌追蹤與稽核 偵測異常行為 即時告警 }
+      - id: orientai-execution-scenarios
+        type: feature
+        quote: 應用場景 企業知識查詢 專業分析 流程自動化 智慧決策輔助
+        comment: text splits the run of items into list items, one per line (#201)
+        text: |-
+          應用場景：
+          企業知識查詢
+          專業分析
+          流程自動化
+          智慧決策輔助
+      - id: orientai-governance-scenarios
+        type: feature
+        quote: 應用場景 AI 資源管理 跨部門工具共享 權限審核 模型與成本控管
+        comment: text splits the run of items into list items, one per line (#201)
+        text: |-
+          應用場景：
+          AI 資源管理
+          跨部門工具共享
+          權限審核
+          模型與成本控管
+      - id: orientai-collaboration
+        type: feature
+        quote: Agent 協作無間 整合現有業務系統與流程 即時查看 Agent 狀態與行為 自動分派 Agent 執行任務 避免運行衝突或誤觸發 Agent
+        comment: text puts the heading and each item on a line of its own (#201)
+        text: |-
+          Agent 協作無間
+          整合現有業務系統與流程
+          即時查看 Agent 狀態與行為
+          自動分派 Agent 執行任務
+          避免運行衝突或誤觸發 Agent
+      - id: orientai-governance-controls
+        type: feature
+        quote: 強化 AI 治理 精細化角色權限控管 日誌追蹤與稽核 偵測異常行為 即時告警
+        comment: text puts the heading and each item on a line of its own (#201)
+        text: |-
+          強化 AI 治理
+          精細化角色權限控管
+          日誌追蹤與稽核
+          偵測異常行為，即時告警
       - { id: orientai-roi-controls, type: feature, quote: 優化 ROI 效益 設定 Token 用量上限 彈性切換 AI 模型 有效控制 Token 成本 }
       - { id: orientai-privacy-industries, type: feature, quote: 因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。 }
       - { id: orientai-shadow-ai-lifecycle, type: feature, quote: 對 AI 模型與 Agent 實施全週期管理，將影子 AI 統一納管，建立身分驗證機制與資料存取邊界，避免越權存取、異常行為等資安破口。 }

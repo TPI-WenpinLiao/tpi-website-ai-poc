@@ -169,7 +169,7 @@ offering schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`
 | 段落 | 缺什麼 | 新增的欄位或要改的地方 | 型別 |
 |---|---|---|---|
 | 9 | 只有 `/blog/enterprise-ai-adoption` 填了 `relatedOfferings: [zh-TW/orient-ai]`；`/blog/what-is-agentic-ai-platform`、`/blog/ai-token-cost-management`、`/blog/what-is-ai-agent-management-platform` 的內文都提到 OrientAI（`ai-token-cost-management` 另有連到本頁），但沒填 | 不加欄位 | 在要列出的文章內容檔補 `relatedOfferings: [zh-TW/orient-ai]`，本頁的 `relatedPosts` 不填（同 `briefs/digirunner.md`「取捨」第 9 項的做法）。哪三篇由 seo-strategist 依承接的查詢定 |
-| 5 | `fact:orientai-on-prem-data` 的原文以 FAQ 的「不會。」開頭，搬出 FAQ 後讀不通 | 不是 schema 缺口 | 在 `scripts/strategy/facts-source.yaml` 把 `text` 裁掉「不會。」（`facts.yaml` 檔頭：`text` 可以裁掉 quote 的一部分，不改字），重跑 `node scripts/strategy/extract-facts.mjs` |
+| 5 | `fact:orientai-on-prem-data` 的原文以 FAQ 的「不會。」開頭，搬出 FAQ 後讀不通 | 不是 schema 缺口 | 在 `scripts/strategy/facts-source.yaml` 新增 `orientai-on-prem-data-statement`：同一句 quote，`text` 裁掉「不會。」（`facts.yaml` 檔頭：`text` 可以裁掉 quote 的一部分，不改字），重跑 `node scripts/strategy/extract-facts.mjs`。原本那筆不改：首頁用它接在「資料會離開企業嗎？」之後（#201） |
 | — | 內容檔沒有 `facts` | `facts`（共用欄位已有） | 照段落表列出的 24 則補上（OrientAI 頁與首頁的 23 則，加上第 7 段連結錨點用的 `fact:aiso-software-orientai`） |
 | — | `faq` 不用 | 不加欄位 | 內容檔改寫時刪 `faq` |
 

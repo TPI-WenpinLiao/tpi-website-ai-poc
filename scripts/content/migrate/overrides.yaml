@@ -29,6 +29,8 @@ blog/zh-TW/ai-infrastructure-operations-governance:
 
 blog/zh-TW/ai-token-cost-management:
   frontmatter:
+    # Related posts on OrientAI's page (docs/strategy/briefs/orient-ai.md「取捨」第 13 項, #201)
+    relatedOfferings: [zh-TW/orient-ai]
     description: Token 是企業使用生成式 AI 的重要成本單位。本文解析 Token 經濟、傑文斯悖論、AI ROI 與管理策略，協助企業提升 AI 使用效率。
 
 blog/zh-TW/carbonfootprint:
@@ -62,6 +64,8 @@ blog/zh-TW/healthcare-fhir-data-platform-7-steps:
 
 blog/zh-TW/what-is-agentic-ai-platform:
   frontmatter:
+    # Related posts on the offering's page (docs/strategy/briefs/orient-ai.md「取捨」第 13 項, #201)
+    relatedOfferings: [zh-TW/orient-ai]
     description: 本文解析代理式 AI、AI Agent 與 Agentic AI 平台的差異，說明多 Agent 協作、治理機制與平台架構，並介紹 OrientAI 如何落地。
 
 blog/zh-TW/what-is-ai-agent-management-platform:
@@ -83,6 +87,8 @@ blog/zh-TW/why-companies-need-custom-ai-knowledge:
 
 blog/zh-TW/why-enterprises-need-ai-appliance:
   frontmatter:
+    # Related posts on the offering's page (docs/strategy/briefs/aiso.md「schema 缺口」第 6 段, #201)
+    relatedOfferings: [zh-TW/aiso]
     description: 本文揭示公有雲 AI 潛藏的資料外洩風險，說明企業 AI 主權與知識主權的重要性，以及企業為何需要部署「AI 一體機」，掌控內部知識資產並保障資料安全。
 
 news/zh-TW/559:

@@ -49,6 +49,9 @@ export const ROWS = [
   ['第一批（#200）', 'AI 智能理賠', 'b1-new-smartclaim'],
   ['第一批（#200）', 'AI 智慧建檔', 'b1-new-smartfilling'],
   ['第一批（#200）', 'SysTalk.ai 產品家族', 'b1-new-systalk-ai'],
+  // #201, the same batch: OrientAI and AISO (evaluation.md「第一批（#201）」)
+  ['第一批（#201）', 'OrientAI 企業級 Agentic AI 平台', 'b1-new-orient-ai'],
+  ['第一批（#201）', 'AISO 主權 AI', 'b1-new-aiso'],
 ];
 
 /**

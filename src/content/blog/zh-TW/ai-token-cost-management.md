@@ -10,8 +10,9 @@ authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f1a1147-40dc-62ce-81f6-0b7fa23ee3a6.jpeg
 coverImage: ../../../assets/blog/zh-TW/ai-token-cost-management/cover.webp
 sourceUrl: https://www.tpisoftware.com/blog/ai/ai-token-cost-management
-migratedAt: 2026-10-23
+migratedAt: 2026-11-05
 sourceUpdatedAt: 2026-08-18
+relatedOfferings: [zh-TW/orient-ai]
 ---
 
 生成式 AI 正快速改變企業的工作方式。從客服問答、文件摘要、程式開發到資料分析，愈來愈多企業開始將 AI 導入日常營運流程，甚至建立能自主執行任務的 AI Agent。AI 的能力持續進步，模型價格也逐漸下降，乍看之下，企業導入 AI 的門檻似乎越來越低。

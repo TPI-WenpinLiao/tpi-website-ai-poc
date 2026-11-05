@@ -72,6 +72,11 @@ export const JOBS = [
   { name: 'page-smartclaim', w: 1600, h: 1200, view: { kind: 'cases', p: 0.5 }, override: { halfW: 10.5, pitch: 34, yaw: -12, sx: 0.4 }, levels: [0, 1, 0] },
   { name: 'page-smartfilling', w: 1600, h: 1200, view: { kind: 'cases', p: 0.5 }, override: { halfW: 10.5, pitch: 34, yaw: -24, sx: 0.3 }, levels: [0, 0, 1] },
   { name: 'page-systalk-ai', w: 1600, h: 1200, view: { kind: 'cases', p: 1 }, override: { halfW: 6.4, pitch: 38, sx: 0.75 }, levels: [1, 1, 1] },
+  // #201: OrientAI sends the AI blocks out from the existing systems, so its page sees every AI block
+  // lit beside the systems and the product it labels; AISO's page sees the product and the service
+  // (on-premises AI platform) close, from the other side, with the AI blocks dim
+  { name: 'page-orient-ai', w: 1600, h: 1200, view: { kind: 'cases', p: 1 }, override: { halfW: 9, pitch: 44, yaw: 14, sx: 0.8 }, levels: [1, 1, 1] },
+  { name: 'page-aiso', w: 1600, h: 1200, view: { kind: 'cases', p: 0.5 }, override: { halfW: 8.4, pitch: 38, yaw: 18, sx: 0.6, sy: 0.15 }, levels: [0, 0, 0] },
 ];
 
 /** The fork pictures: a plan whose top edge is the city edge, the trunk entering at the hero's exit */

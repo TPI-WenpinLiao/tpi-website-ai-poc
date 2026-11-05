@@ -6302,18 +6302,28 @@
   status: to_confirm
   note: 現站沒有寫出這組數字的量測方式與基準
 
+# text splits the run of items into list items, one per line (#201)
 - id: orientai-execution-layer
   type: feature
-  text: RAG 知識問答與文件解析 AI Agent 跨系統任務自動化 彈性整合多種大語言模型 支援雲地靈活部署架構
+  text: |-
+    RAG 知識問答與文件解析
+    AI Agent 跨系統任務自動化
+    彈性整合多種大語言模型
+    支援雲地靈活部署架構
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: RAG 知識問答與文件解析 AI Agent 跨系統任務自動化 彈性整合多種大語言模型 支援雲地靈活部署架構
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#201)
 - id: orientai-governance-layer
   type: feature
-  text: AI Agent 統一管控與授權標準化 Token 用量監控與資源配置最佳化 消除影子 AI，防止機敏資料外洩 跨部門統一權限管理與資料治理
+  text: |-
+    AI Agent 統一管控與授權標準化
+    Token 用量監控與資源配置最佳化
+    消除影子 AI，防止機敏資料外洩
+    跨部門統一權限管理與資料治理
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: AI Agent 統一管控與授權標準化 Token 用量監控與資源配置最佳化 消除影子 AI，防止機敏資料外洩 跨部門統一權限管理與資料治理
@@ -6329,18 +6339,27 @@
   locale: zh-TW
   status: confirmed
 
+# text puts the team size, the use and the devices on lines of their own (#201)
 - id: orientai-hardware-small
   type: feature
-  text: 1-5人團隊 輕量級運算 首選 AI PC Workstation
+  text: |-
+    1-5人團隊
+    輕量級運算
+    首選 AI PC、Workstation
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: 1-5人團隊 輕量級運算 首選 AI PC Workstation
   locale: zh-TW
   status: confirmed
 
+# text puts the team size, the use and the devices on lines of their own (#201)
 - id: orientai-hardware-large
   type: feature
-  text: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server
+  text: |-
+    5人以上
+    跨部門應用
+    高併發流量 & 高強度推論
+    必備 Workstation、AI Server
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: 5人以上 跨部門應用 高併發流量 & 高強度推論 必備 Workstation AI Server
@@ -6350,6 +6369,16 @@
 - id: orientai-on-prem-data
   type: feature
   text: 不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。
+  source:
+    url: https://www.tpisoftware.com/orient-ai
+    quote: 不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。
+  locale: zh-TW
+  status: confirmed
+
+# The same answer without the FAQ's leading 不會。, for pages that quote it outside the question (#201); the home page asks the question and keeps orientai-on-prem-data
+- id: orientai-on-prem-data-statement
+  type: feature
+  text: OrientAI 只會部署於企業端，資料掌控權為企業所有。
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: 不會。OrientAI 只會部署於企業端，資料掌控權為企業所有。
@@ -6401,36 +6430,59 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#201)
 - id: orientai-execution-scenarios
   type: feature
-  text: 應用場景 企業知識查詢 專業分析 流程自動化 智慧決策輔助
+  text: |-
+    應用場景：
+    企業知識查詢
+    專業分析
+    流程自動化
+    智慧決策輔助
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: 應用場景 企業知識查詢 專業分析 流程自動化 智慧決策輔助
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#201)
 - id: orientai-governance-scenarios
   type: feature
-  text: 應用場景 AI 資源管理 跨部門工具共享 權限審核 模型與成本控管
+  text: |-
+    應用場景：
+    AI 資源管理
+    跨部門工具共享
+    權限審核
+    模型與成本控管
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: 應用場景 AI 資源管理 跨部門工具共享 權限審核 模型與成本控管
   locale: zh-TW
   status: confirmed
 
+# text puts the heading and each item on a line of its own (#201)
 - id: orientai-collaboration
   type: feature
-  text: Agent 協作無間 整合現有業務系統與流程 即時查看 Agent 狀態與行為 自動分派 Agent 執行任務 避免運行衝突或誤觸發 Agent
+  text: |-
+    Agent 協作無間
+    整合現有業務系統與流程
+    即時查看 Agent 狀態與行為
+    自動分派 Agent 執行任務
+    避免運行衝突或誤觸發 Agent
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: Agent 協作無間 整合現有業務系統與流程 即時查看 Agent 狀態與行為 自動分派 Agent 執行任務 避免運行衝突或誤觸發 Agent
   locale: zh-TW
   status: confirmed
 
+# text puts the heading and each item on a line of its own (#201)
 - id: orientai-governance-controls
   type: feature
-  text: 強化 AI 治理 精細化角色權限控管 日誌追蹤與稽核 偵測異常行為 即時告警
+  text: |-
+    強化 AI 治理
+    精細化角色權限控管
+    日誌追蹤與稽核
+    偵測異常行為，即時告警
   source:
     url: https://www.tpisoftware.com/orient-ai
     quote: 強化 AI 治理 精細化角色權限控管 日誌追蹤與稽核 偵測異常行為 即時告警
