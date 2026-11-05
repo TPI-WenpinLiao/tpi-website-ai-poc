@@ -35,6 +35,7 @@ import PageSections from '../../components/ui/PageSections.astro';
 import JunctionDiagram from '../../components/ui/JunctionDiagram.astro';
 import UiFragment from '../../components/ui/UiFragment.astro';
 import SpecTable from '../../components/ui/SpecTable.astro';
+import FactText from '../../components/ui/FactText.astro';
 import Timeline from '../../components/ui/Timeline.astro';
 import CaseList from '../../components/ui/CaseList.astro';
 import IndexList from '../../components/ui/IndexList.astro';
@@ -525,6 +526,12 @@ const description =
             emphasis="name"
             rows={[{ label: '規範名稱', values: ['對應功能的事實原文'], link: { label: '目標頁的內容', href: `#components-${tone}` } }]}
           />
+
+          <h3>FactText</h3>
+          <div class="demo">
+            <FactText text="一則事實原文，成果數字 52% 加粗" emphasis="percentages" />
+            <FactText text={'導言：\n第一項\n第二項\n第三項\n第四項'} />
+          </div>
 
           <h3>Timeline</h3>
           <Timeline steps={[{ year: '第一年', body: '第一則事實原文' }, { year: '第二年', body: '第二則事實原文' }]} />

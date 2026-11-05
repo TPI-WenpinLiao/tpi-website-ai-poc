@@ -17,9 +17,8 @@ import SpecTable from './SpecTable.astro';
 import Timeline from './Timeline.astro';
 import CaseList from './CaseList.astro';
 import IndexList from './IndexList.astro';
+import FactText from './FactText.astro';
 import Link from './Link.astro';
-import { percentages } from '../../lib/content/emphasis';
-import { factList } from '../../lib/content/lists';
 import { Image } from 'astro:assets';
 import { localNode, nodeHref } from '../../lib/ia/navigation';
 import type { Locale } from '../../lib/i18n/locales';
@@ -41,10 +40,9 @@ const SIDE_FACTS = 3;
 const to = (link: { label: string; node: string } | undefined) => link && { label: link.label, href: nodeHref(link.node, locale) };
 const rowsOf = (rows: readonly { label: string; values: readonly string[]; link?: { label: string; node: string } | undefined }[] = []) =>
   rows.map((r) => ({ label: r.label, values: r.values, link: to(r.link) }));
-// A fact item: its own title when it has one, its body (the fact text, a list when it is split into
-// items, factList), and the page it leads to
+// A fact item: its own title when it has one, its body (the fact text, FactText), and the page it leads to
 const items = (list: readonly { title?: string | undefined; body: string; node?: string | undefined }[] = []) =>
-  list.map((i) => ({ ...i, list: factList(i.body), href: i.node ? nodeHref(i.node, locale) : undefined }));
+  list.map((i) => ({ ...i, href: i.node ? nodeHref(i.node, locale) : undefined }));
 ---
 
 {
@@ -80,18 +78,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
               {items(sec.items).map((i) => (
                 <li>
                   {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                  {i.list ? (
-                    <>
-                      {i.list.lead && <p class="item-body">{i.list.lead}</p>}
-                      <ul class="item-list">
-                        {i.list.items.map((x) => (
-                          <li>{x}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
-                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
-                  )}
+                  <FactText text={i.body} emphasis="percentages" />
                 </li>
               ))}
             </FactRow>
@@ -114,18 +101,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                 {items(sec.items).map((i) => (
                   <li>
                     {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                    {i.list ? (
-                    <>
-                      {i.list.lead && <p class="item-body">{i.list.lead}</p>}
-                      <ul class="item-list">
-                        {i.list.items.map((x) => (
-                          <li>{x}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
-                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
-                  )}
+                    <FactText text={i.body} emphasis="percentages" />
                   </li>
                 ))}
               </ul>
@@ -147,18 +123,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                     {items(sec.items).map((i) => (
                       <li>
                         {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                        {i.list ? (
-                    <>
-                      {i.list.lead && <p class="item-body">{i.list.lead}</p>}
-                      <ul class="item-list">
-                        {i.list.items.map((x) => (
-                          <li>{x}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
-                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
-                  )}
+                        <FactText text={i.body} emphasis="percentages" />
                       </li>
                     ))}
                   </ul>
@@ -171,18 +136,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                 {items(sec.items).map((i) => (
                   <li>
                     {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                    {i.list ? (
-                    <>
-                      {i.list.lead && <p class="item-body">{i.list.lead}</p>}
-                      <ul class="item-list">
-                        {i.list.items.map((x) => (
-                          <li>{x}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
-                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
-                  )}
+                    <FactText text={i.body} emphasis="percentages" />
                   </li>
                 ))}
               </ul>
@@ -203,7 +157,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                 {items(sec.items).map((i) => (
                   <li>
                     {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
+                    <FactText text={i.body} emphasis="percentages" />
                   </li>
                 ))}
               </ul>
@@ -270,18 +224,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                     {items(sec.items).map((i) => (
                       <li>
                         {i.title && <h3 class="item-title">{i.href ? <a href={i.href}>{i.title}</a> : i.title}</h3>}
-                        {i.list ? (
-                    <>
-                      {i.list.lead && <p class="item-body">{i.list.lead}</p>}
-                      <ul class="item-list">
-                        {i.list.items.map((x) => (
-                          <li>{x}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
-                    <p class="item-body">{percentages(i.body).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>
-                  )}
+                        <FactText text={i.body} emphasis="percentages" />
                       </li>
                     ))}
                   </ul>
@@ -349,7 +292,6 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
     line-height: var(--line-height-snug);
   }
 
-  .item-body,
   .intro,
   .record {
     max-inline-size: var(--reading-max-width);
@@ -361,19 +303,9 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
     color: var(--color-text-muted);
   }
 
-  /* A fact split into items takes a whole row of a two-column list, its items in two columns */
-  .facts.two > li:has(.item-list) {
+  /* A fact split into items (FactText's list) takes a whole row of a two-column list */
+  .facts.two > li:has(ul) {
     grid-column: 1 / -1;
-  }
-
-  /* A fact split into items (factList): short items in two columns */
-  .item-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-1) var(--grid-gutter);
-    margin: var(--space-2) 0 0;
-    padding: 0;
-    list-style: none;
   }
 
   /* Narrow screens: an interface fragment follows the claim it illustrates (design-principles.md

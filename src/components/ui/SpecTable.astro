@@ -2,12 +2,12 @@
 // A real table of facts (#187, design-principles.md「內頁的版型」規格表、對應表): one row an item (a
 // deployment, a standard, a regulation), its fact texts in the next cell, and an optional link to
 // the page that goes deeper, its label saying where it goes. Rows may have row lines: a real table is
-// the house rules' exception to no thin rules. Several fact texts in a cell are a list; a fact text
-// with line breaks keeps them (a fact split into items, site-research 第 2 條).
+// the house rules' exception to no thin rules. Several fact texts in a cell are a list; one fact text
+// reads as FactText (split into items it is a two-column list, otherwise its line breaks are kept).
 // `head` names the columns for screen readers (the row's own labels say it on screen); `emphasis="name"`
 // sets the first column in the bold serif, for a mapping table (規範名稱). `compare` compares two
 // things side by side (#200): its row is the visible head, and each row's two values go one to a cell.
-import { factList } from '../../lib/content/lists';
+import FactText from './FactText.astro';
 
 interface Row {
   label: string;
@@ -82,21 +82,7 @@ const hasLinks = rows.some((r) => r.link);
                 ))}
               </ul>
             ) : (
-              r.values.map((v) => {
-                const split = factList(v);
-                return split ? (
-                  <>
-                    {split.lead && <p class="lead">{split.lead}</p>}
-                    <ul class="columns">
-                      {split.items.map((item) => (
-                        <li>{item}</li>
-                      ))}
-                    </ul>
-                  </>
-                ) : (
-                  v
-                );
-              })
+              r.values.map((v) => <FactText text={v} inline />)
             )}
           </td>
           {hasLinks && <td class="link">{r.link && <a href={r.link.href}>{r.link.label}</a>}</td>}
@@ -140,19 +126,6 @@ const hasLinks = rows.some((r) => r.link);
 
   .values {
     white-space: pre-line;
-  }
-
-  .lead {
-    margin: 0 0 var(--space-2);
-  }
-
-  .columns {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-1) var(--grid-gutter);
-    margin: 0;
-    padding: 0;
-    list-style: none;
   }
 
   .link a {
