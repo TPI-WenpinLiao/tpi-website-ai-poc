@@ -49,12 +49,12 @@ sections:
         values: ["以多模型比對與 RAG 知識庫，培育掌握 AI 的人才。"]
   - layout: claim
     id: software
-    heading: 軟體核心是 OrientAI，部署在企業端
-    body: AISO 裝的是昕力自研的 OrientAI。OrientAI 部署在企業端，金融與政府這類對資料隱私要求高的單位，資料留在自己手上。
+    heading: 軟體核心是 OrientAI
+    body: AISO 搭載昕力自研的 OrientAI，部署在企業端。金融與政府這類重視資料隱私的單位，資料留在自己手上。
     items:
       - body: "此系列方案以昕力自主研發的企業級 Agentic AI 平台 OrientAI 為軟體核心"
-      - body: "OrientAI 只會部署於企業端，資料掌控權為企業所有。"
-      - body: "因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。"
+      # The two facts read as the one answer they are on the current site (因此 follows the first)
+      - body: "OrientAI 只會部署於企業端，資料掌控權為企業所有。因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。"
     link:
       label: AISO 的軟體核心：OrientAI 企業級 Agentic AI 平台
       node: orient-ai
@@ -72,7 +72,7 @@ sections:
         - label: 分層用量上限
           state: "on"
         - label: 自動出帳
-          state: next
+          state: "on"
     items:
       - title: "企業 AI Agent 治理"
         body: "統一納管不同來源的 AI Agent，全面掌握企業內部 AI 使用狀況。"

@@ -32,8 +32,7 @@ heroLabels:
 sections:
   - layout: ui
     id: execution
-    itemsBelow: true
-    heading: 問答、任務與模型
+    heading: RAG 問答與 Agent 任務
     body: 員工問企業知識、交辦跨系統的工作，都由 OrientAI 接手；模型可以換，功能模組用 MCP 接上。
     fragment:
       title: 執行層
@@ -83,13 +82,12 @@ sections:
         body: "自動拆解任務、調用合適的 AI Agent，跨系統協作完成工作"
       - title: "Agent 管理與治理"
         body: "統一控管 Agent 權限、成本與資安，可降低風險並確保可擴展性"
+      - body: "透過標準化架構整合多套系統，打通跨部門、跨團隊間的數據孤島，促進資料共享與無縫協作，優化作業流程與效率。"
       - title: "Agent 協作無間"
         body: "整合現有業務系統與流程\n即時查看 Agent 狀態與行為\n自動分派 Agent 執行任務\n避免運行衝突或誤觸發 Agent"
-      - body: "透過標準化架構整合多套系統，打通跨部門、跨團隊間的數據孤島，促進資料共享與無縫協作，優化作業流程與效率。"
   - layout: ui
     id: governance
     flip: true
-    itemsBelow: true
     fill: subtle
     heading: Agent 與影子 AI 統一納管
     body: 各部門自己接的 AI 工具與 Agent，收進同一個平台授權；每個 Agent 能碰哪些資料、誰能用，都有邊界。
@@ -113,12 +111,12 @@ sections:
     heading: 資料掌控權歸企業
     body: OrientAI 部署在企業端，金融與政府這類對資料隱私要求高的單位，資料不必交給平台方。
     items:
-      - body: "OrientAI 只會部署於企業端，資料掌控權為企業所有。"
-      - body: "因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。"
+      # The two facts read as the one answer they are on the current site (因此 follows the first)
+      - body: "OrientAI 只會部署於企業端，資料掌控權為企業所有。因此，OrientAI 適用於醫療、金融、製造業等對數據隱私要求極高的產業。"
   - layout: ui
     id: monitoring
     fill: subtle
-    heading: 使用與異常看得到
+    heading: 監控、日誌與異常告警
     body: 上線之後，AI 回覆的品質、任務跑到哪裡、誰在用，都看得到；操作留有日誌，異常行為會即時告警。
     fragment:
       title: 監控
@@ -170,7 +168,7 @@ sections:
       node: contact
 cta: demo
 # brief 第 10 段: the band's heading is seeing agents run in the reader's own systems
-contactTitle: 看 Agent 在你的系統裡怎麼跑
+contactTitle: 看 Agent 在自己的系統裡怎麼跑
 facts:
   - orientai-multi-agent
   - orientai-governance
