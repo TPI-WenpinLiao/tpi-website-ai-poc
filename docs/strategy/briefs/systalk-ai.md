@@ -3,7 +3,7 @@
 - 模板：`hub`（產品家族 hub）；內容檔：`src/content/hub/zh-TW/family-ai.md`；節點 `family-ai`，parent `products`
 - 主張 id 指 `docs/strategy/messaging.md`；事實的寫法見 `content-strategy` skill「引用事實的寫法」，只用 `docs/strategy/facts.yaml` 裡 zh-TW、`status: confirmed` 的條目
 - 版型與 `layout` 值照 `docs/strategy/design-principles.md`「內頁的版型」與 `src/content.config.ts` 的 `pageSection`
-- 狀態：#199 策略階段。content-strategist 初稿，seo-strategist 補了「搜尋意圖」「內部連結」「title 與 description 方向」與「取捨」的意見欄、最後決定，之後等 `strategy-approved`。使用者在 PR #204 回覆（2026-11-05）決定 `/products/systalk-ai-phison` 講的不是 AISO，這頁的事實全部由本頁承接、`/aiso` 不再引用；本 brief 因此新增第 6 段（地端一體機），改成 8 段，搜尋意圖、內部連結、description、取捨第 1、3、7、12 項與待確認第 5 項跟著改。第 6 段與查詢分工的改動在 seo-strategist 定案之後，取捨第 1、3、7 項的 seo-strategist 意見待複核
+- 狀態：#199 策略階段。content-strategist 初稿，seo-strategist 補了「搜尋意圖」「內部連結」「title 與 description 方向」與「取捨」的意見欄、最後決定，之後等 `strategy-approved`。使用者在 PR #204 回覆（2026-11-05）決定 `/products/systalk-ai-phison` 講的不是 AISO，這頁的事實全部由本頁承接、`/aiso` 不再引用；本 brief 因此新增第 6 段（地端一體機），改成 8 段，搜尋意圖、內部連結、description、取捨第 1、3、7、12 項與待確認第 5 項跟著改。seo-strategist 複核了取捨第 1、3、7 項，並依新的承接改了 title（加「地端一體機」，取捨第 13 項）與 description
 
 ## 這頁的事實從哪裡來
 
@@ -160,24 +160,23 @@ hub 的事實段只放這頁自己的事實，子頁的事實不搬上來，子�
 
 ### title
 
-- 節點名「AI（SysTalk.ai）」是選單的欄標題，不適合當 title；h1 改成「SysTalk.ai 產品家族」（取捨第 5 項），加後綴約 20.5 字。建議用 `seoTitle` 加上「企業 AI」，讓 `SysTalk 昕力 AI 產品` 的「AI」「產品」都在 title 裡
-- 要涵蓋：「SysTalk.ai」照官方寫法（撞名）、「AI」、「產品」
-- 傳達的主張：`DM-9`
-- 不放：子頁的類別詞（「智能客服」「語音質檢」「業務培訓」「生成式 AI 平台」）：子頁的 title 已有，hub 放了會跟子頁搶同一組詞，分法同 digiRunner 頁與金融頁（`digirunner.md`「取捨」第 5 項）。也不放「企業級 AI Agent 應用平台」（不在事實庫）、「解決方案」「全方位」
+- 節點名「AI（SysTalk.ai）」是選單的欄標題，不適合當 title；h1 改成「SysTalk.ai 產品家族」（取捨第 5 項），加後綴約 20.5 字。用 `seoTitle` 加上「企業 AI」與「地端一體機」：`SysTalk 昕力 AI 產品` 的「AI」「產品」，以及 #199 使用者決定後由本頁主要承接的 `AI 一體機 企業 地端 交機即用`、`地端 AI 伺服器 企業 LLM` 的「地端」「一體機」都在 title 裡（取捨第 7、13 項）
+- 要涵蓋：「SysTalk.ai」照官方寫法（撞名）、「AI」、「產品」、「地端一體機」
+- 傳達的主張：`DM-9`、`DM-10`。「一體機」的依據是 `fact:aiso-bundled`（硬體內建軟體），出自併入本頁的 `/products/systalk-ai-phison`
+- 不放：子頁的類別詞（「智能客服」「語音質檢」「業務培訓」「生成式 AI 平台」）：子頁的 title 已有，hub 放了會跟子頁搶同一組詞，分法同 digiRunner 頁與金融頁（`digirunner.md`「取捨」第 5 項）。一體機不是子頁，沒有搶詞的問題。也不放「AISO」「OrientAI」「主權 AI」（`/aiso`、`/orient-ai` 的詞，本頁的一體機是 SysTalk.ai 搭配群聯 aiDAPTIV 的方案）、「企業級 AI Agent 應用平台」（不在事實庫）、「解決方案」「全方位」、效能倍數
 - 示例（含後綴）：
-  - `SysTalk.ai 企業 AI 產品家族｜TPIsoftware 昕力資訊`（約 24.5 字）
-  - `SysTalk.ai 產品家族：企業各部門的 AI 產品｜TPIsoftware 昕力資訊`（約 31.5 字，把 `DM-9` 寫進 title）
+  - `SysTalk.ai 企業 AI 產品家族與地端一體機｜TPIsoftware 昕力資訊`（約 30.5 字，建議用這個）
+  - `SysTalk.ai 企業 AI 產品家族｜TPIsoftware 昕力資訊`（約 24.5 字，不放一體機；一體機的查詢只靠 description 與第 6 段的 h2，主要承接偏弱）
 
 ### description
 
-- 要涵蓋：家族處理的工作（客服、員工培訓、語音質檢、知識整理、文件辨識）、雲端與地端部署、地端方案的資料與權限、導入前中後；字數夠時加地端一體機的機型（#199 使用者決定後，`地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用` 由本頁主要承接）
-- 傳達的主張：`DM-9`、`IT-1`、`DM-3`、`DM-4`，第三個示例加 `DM-10`、`IT-10`
-- 依據的事實：`fact:systalk-ai-chat-patent`、`fact:systalk-ai-day-coach`、`fact:systalk-ai-day-audit`、`fact:systalk-ai-day-scenarios`、`fact:systalk-ai-claim-patent`、`fact:systalk-ai-service`、`fact:aiso-hw-sw-integrated`、`fact:aiso-local-audit`、`fact:systalk-ai-onboarding`、`fact:systalk-ai-after-onboarding`；第三個示例另依 `fact:aiso-bundled`、`fact:aiso-servers`
-- 寫地端時寫明是地端方案，不寫成每一種部署都在地端（取捨第 8 項）。不寫累計用戶數（「待確認」第 1 項）、「100% AI 主控權」、2025 AI AWARD、AISO 或 OrientAI、「全方位」「協助企業數位轉型」（現行 description 有，要重寫）
+- 要涵蓋：家族處理的工作（客服、員工培訓、語音質檢、知識整理、文件辨識）、地端一體機（硬體內建軟體、機型依知識庫規模），有餘裕時帶地端方案的資料與權限、導入。title 已有「地端一體機」，description 要說出一體機是什麼，不能只在 title 出現
+- 傳達的主張：`DM-9`、`DM-10`、`IT-10`，有餘裕時帶 `DM-3`、`DM-4`
+- 依據的事實：`fact:systalk-ai-chat-patent`、`fact:systalk-ai-day-coach`、`fact:systalk-ai-day-audit`、`fact:systalk-ai-day-scenarios`、`fact:systalk-ai-claim-patent`、`fact:aiso-bundled`、`fact:aiso-servers`、`fact:aiso-onboarding`；第二個示例另依 `fact:aiso-hw-sw-integrated`、`fact:aiso-local-audit`
+- 寫地端時寫明是地端方案或一體機，不寫成每一種部署都在地端（取捨第 8 項）。不寫累計用戶數（「待確認」第 1 項）、「100% AI 主控權」、2025 AI AWARD、效能倍數、VRAM 數字（放不下條件，留給第 6 段的表）、AISO 或 OrientAI、「全方位」「協助企業數位轉型」（現行 description 有，要重寫）
 - 示例：
-  - `SysTalk.ai 是昕力資訊的 AI 產品家族，客服、員工培訓、語音質檢、知識整理與文件辨識各有產品；支援雲端與地端部署，導入前、中、後由昕力負責。`
-  - `客服、員工培訓、語音質檢、知識整理與文件辨識，SysTalk.ai 各有產品；地端方案的資料不上公有雲，權限與稽核內建，導入前、中、後由昕力資訊負責。`
-  - `SysTalk.ai 是昕力資訊的 AI 產品家族，客服、培訓、質檢、知識與文件辨識各有產品；地端一體機硬體內建軟體，機型依知識庫規模挑選，導入由昕力負責。`（#199 使用者決定後加的示例，寫出一體機）
+  - `SysTalk.ai 是昕力資訊的 AI 產品家族，客服、培訓、質檢、知識與文件辨識各有產品；地端一體機硬體內建軟體，機型依知識庫規模挑選，導入由昕力負責。`（建議用這個）
+  - `客服、員工培訓、語音質檢、知識整理與文件辨識，SysTalk.ai 各有產品；地端一體機硬體內建軟體，私密資料不上公有雲，權限與稽核內建，導入由昕力資訊負責。`
 
 ## schema 缺口
 
@@ -197,19 +196,19 @@ hub schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`heroL
 
 | # | 項目 | content-strategist 的立場 | 理由 | seo-strategist 的意見 | 最後決定 |
 |---|---|---|---|---|---|
-| 1 | 段數 | 8 段：hero、5 個事實段、子頁索引列、聯絡色帶 | 這頁自己的 zh-TW confirmed 事實有 23 則（現站家族頁 11 則、併入頁 12 則），用了 20 則；hero 另放 1 則關於我們頁的獎項，共引用 21 則。hero 放 2 則；其餘 19 則分成 5 段：工作與產品的對應 5 則、資料與權限 3 則、導入三階段 3 則、平台與模型 3 則、地端一體機 5 則，每段至少 2 則。第 6 段是 #199 使用者決定併入頁的事實全部由本頁承接後加的：原本留給 `/aiso` 的 5 則（`fact:aiso-bundled`、`fact:aiso-onboarding`、`fact:aiso-servers`、`fact:aiso-use-cases`、`fact:aiso-memory-optimization`）回答同一個問題「地端一體機長什麼樣、要買哪一台」，併成一段；導入服務沒有放進第 4 段，因為第 4 段是淺紫色帶，照「內頁的版型」最多放 1–2 則，已經放了 3 則。子頁的事實（各產品頁的功能與案例）不搬上來，由第 2 段的連結與第 7 段的索引列連過去 | 原意見（7 段時）：同意。兩組品牌詞前幾名缺的子題（Chat 以外的產品、雲地端、導入流程、各產品分工）都在第 1、2、4 段；子頁的類別詞由子頁承接，hub 不必為它們加段。第 6 段待複核 | 8 段（#199 使用者決定後加第 6 段） |
+| 1 | 段數 | 8 段：hero、5 個事實段、子頁索引列、聯絡色帶 | 這頁自己的 zh-TW confirmed 事實有 23 則（現站家族頁 11 則、併入頁 12 則），用了 20 則；hero 另放 1 則關於我們頁的獎項，共引用 21 則。hero 放 2 則；其餘 19 則分成 5 段：工作與產品的對應 5 則、資料與權限 3 則、導入三階段 3 則、平台與模型 3 則、地端一體機 5 則，每段至少 2 則。第 6 段是 #199 使用者決定併入頁的事實全部由本頁承接後加的：原本留給 `/aiso` 的 5 則（`fact:aiso-bundled`、`fact:aiso-onboarding`、`fact:aiso-servers`、`fact:aiso-use-cases`、`fact:aiso-memory-optimization`）回答同一個問題「地端一體機長什麼樣、要買哪一台」，併成一段；導入服務沒有放進第 4 段，因為第 4 段是淺紫色帶，照「內頁的版型」最多放 1–2 則，已經放了 3 則。子頁的事實（各產品頁的功能與案例）不搬上來，由第 2 段的連結與第 7 段的索引列連過去 | 原意見（7 段時）：同意。兩組品牌詞前幾名缺的子題（Chat 以外的產品、雲地端、導入流程、各產品分工）都在第 1、2、4 段；子頁的類別詞由子頁承接，hub 不必為它們加段。複核第 6 段：同意加。`地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用`、`aiDAPTIV SysTalk.ai` 改由本頁主要承接，前幾名缺的機型規格與模型級距、軟硬體一起交付、導入時廠商做的工作都只在這一段，沒有這段就接不住。這段是一個產品的細節放在家族頁，所以 h2 要自己說得出主題（現在的「地端一體機：硬體內建軟體，機型照知識庫規模挑」可以），並加 `id`（例如 `appliance`）讓 `InPageNav` 列出，讀者與搜尋結果的頁內連結都找得到。表頭用機型名稱（`aiDAPTIV 4-GPU Server`、`aiDAPTIV 8-GPU Server`），原本在 `aiso.md` 取捨第 10 項的意見移到這裡 | 8 段（#199 使用者決定後加第 6 段，seo-strategist 複核同意）；第 6 段加 `id` |
 | 2 | 介面片段只有 3 張，不到「內頁共用的規則」的 4 張 | 3 張（第 3 段、第 4 段色帶、第 5 段） | 第 2 段是對應表，照版型表不放圖。第 4 張要嘛畫子頁產品的介面（那是子頁的事實），要嘛把對應表改成介面片段，兩種都不符合這頁的範圍 | 對搜尋沒有影響。第 2 段維持表格：產品名與連結是純文字，比畫在片段裡更容易被讀到 | 採納，3 張 |
-| 3 | 這頁自己的事實沒用的 3 則 | 不用 | `fact:systalk-ai-products`：原文把 SysTalk.Coach 與 SysTalk.ICR 接在同一句，`fact:systalk-ai-day-coach` 與 `fact:systalk-ai-claim-patent` 已涵蓋兩列的主要內容，同一列不重複。`fact:systalk-ai-quote-email`：見第 6 項。`fact:aiso-industries`：產業清單含製造業（`messaging.md`「定位不說的事」），也沒有主張需要它。初稿另有 5 則不用（`fact:aiso-bundled`、`fact:aiso-onboarding`、`fact:aiso-servers`、`fact:aiso-use-cases`、`fact:aiso-memory-optimization`），理由是留給 `/aiso` 的 `DM-10`、`IT-10`；#199 使用者決定併入頁講的不是 AISO 後，這 5 則放進第 6 段 | 初稿意見（不用 8 則時）：不用的事實對應的查詢（`地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用`）主要由 `/aiso` 承接，這頁放了會跟 `/aiso` 搶同一組詞。#199 使用者決定後這兩組改由本頁主要承接（`search-intent.md`「對應到頁面」），不再有搶詞的問題；待複核 | 採納，不用 3 則（#199 使用者決定後從 8 則改成 3 則） |
+| 3 | 這頁自己的事實沒用的 3 則 | 不用 | `fact:systalk-ai-products`：原文把 SysTalk.Coach 與 SysTalk.ICR 接在同一句，`fact:systalk-ai-day-coach` 與 `fact:systalk-ai-claim-patent` 已涵蓋兩列的主要內容，同一列不重複。`fact:systalk-ai-quote-email`：見第 6 項。`fact:aiso-industries`：產業清單含製造業（`messaging.md`「定位不說的事」），也沒有主張需要它。初稿另有 5 則不用（`fact:aiso-bundled`、`fact:aiso-onboarding`、`fact:aiso-servers`、`fact:aiso-use-cases`、`fact:aiso-memory-optimization`），理由是留給 `/aiso` 的 `DM-10`、`IT-10`；#199 使用者決定併入頁講的不是 AISO 後，這 5 則放進第 6 段 | 初稿意見（不用 8 則時）：不用的事實對應的查詢（`地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用`）主要由 `/aiso` 承接，這頁放了會跟 `/aiso` 搶同一組詞。#199 使用者決定後這兩組改由本頁主要承接（`search-intent.md`「對應到頁面」），不再有搶詞的問題。複核：同意只剩 3 則不用。`fact:aiso-industries` 不用沒有損失：`企業主權 AI 地端部署 方案`、`主權 AI 是什麼` 要的「哪些產業需要」由 `/aiso` 第 3 段的 OrientAI 產業原文回答，本頁不必再寫一次 | 採納，不用 3 則（#199 使用者決定後從 8 則改成 3 則，seo-strategist 複核同意） |
 | 4 | hero 的獎項 `fact:award-taiwan-excellence-2024` 出自關於我們頁，不是這頁的來源頁 | 放 hero 的證據點（使用者已確認，見最後決定） | 使用者的規則管的是事實段，hero 不算事實段；這則點名的是 SysTalk.ai 家族本身，不是某個子頁的產品，搬上來不會把子頁的事實帶到家族頁。`DM-8` 寫法也把 2023、2024 台灣精品獎與創新商務獎指給這頁，但 2023 與 2022 的兩則點名的是 SysTalk.Chat（子頁的產品），照使用者的規則不放。使用者不同意時，hero 只留 `fact:systalk-ai-service` 一則 | 從 SEO 看放了比較好：`SysTalk.ai` 前幾名的第一筆就是台灣精品獎的頁面，從那裡點進來的讀者第一屏就對得上。但這則算不算「這頁自己的事實」是使用者規則的解讀，SEO 不能代為決定；不放也不影響兩組品牌詞的承接 | 使用者決定採用（#199，PR #204 的回覆）：不是本頁來源頁的獎項可以放，hero 放 `fact:award-taiwan-excellence-2024`，寫年份 |
 | 5 | h1 用什麼 | 「SysTalk.ai 產品家族」（`title` 跟著改），`<title>` 由 seo-strategist 用 `seoTitle` 處理 | 節點名「AI（SysTalk.ai）」是選單用的欄標題；現有 title 的「企業級 AI Agent 應用平台」不在事實庫。「產品家族」是 `messaging.md`「統一用詞」的說法，跟首頁與 `/products/digilism` 一致 | 同意。title 見第 13 項 | 採納，h1「SysTalk.ai 產品家族」 |
 | 6 | 報價信箱 `fact:systalk-ai-quote-email` 不放 | 不放 | 主要轉換是聯絡業務，`audience-and-goals.md` 規定所有產品線的轉換統一；頁尾另放一個信箱會把詢問分到兩個入口 | 同意，對搜尋沒有影響 | 採納 |
-| 7 | 併入頁的事實由本頁還是 `/aiso` 承接 | 全部由本頁承接：第 3 段用 `DM-3` 的三則，第 5 段用原文點名 SysTalk.ai 的兩則與模組清單，第 6 段用軟硬體交付、導入服務與硬體規格的五則 | 初稿時 AISO 一體機的軟體核心未確認（`messaging.md`「缺少證據的主張」第 17 項），這頁先只用原文寫明 SysTalk.ai 的事實與 `DM-3` 指給這頁的三則，軟硬體交付與硬體規格留給 `/aiso`。使用者決定（#199，PR #204，2026-11-05）：AISO 的軟體是 OrientAI，併入頁是 SysTalk.ai 搭配群聯 aiDAPTIV 的一體機方案，講的不是 AISO，所以併入頁的事實全部由本頁承接，`/aiso` 不再引用，不再有兩頁分工的問題 | 初稿意見：查詢分工不跟著軟體核心變，`企業 生成式 AI 平台 地端部署 RAG` 次要給這頁（第 3、5 段），`地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用` 主要給 `/aiso`。#199 使用者決定後，前幾名缺的機型規格、硬體內建軟體與導入服務都只在本頁，這兩組改由本頁主要承接，`/aiso` 次要（`aiso.md`「取捨」第 11 項）；待複核 | 全部由本頁承接（使用者決定，#199） |
+| 7 | 併入頁的事實由本頁還是 `/aiso` 承接 | 全部由本頁承接：第 3 段用 `DM-3` 的三則，第 5 段用原文點名 SysTalk.ai 的兩則與模組清單，第 6 段用軟硬體交付、導入服務與硬體規格的五則 | 初稿時 AISO 一體機的軟體核心未確認（`messaging.md`「缺少證據的主張」第 17 項），這頁先只用原文寫明 SysTalk.ai 的事實與 `DM-3` 指給這頁的三則，軟硬體交付與硬體規格留給 `/aiso`。使用者決定（#199，PR #204，2026-11-05）：AISO 的軟體是 OrientAI，併入頁是 SysTalk.ai 搭配群聯 aiDAPTIV 的一體機方案，講的不是 AISO，所以併入頁的事實全部由本頁承接，`/aiso` 不再引用，不再有兩頁分工的問題 | 初稿意見：查詢分工不跟著軟體核心變，`企業 生成式 AI 平台 地端部署 RAG` 次要給這頁（第 3、5 段），`地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用` 主要給 `/aiso`。#199 使用者決定後，前幾名缺的機型規格、硬體內建軟體與導入服務都只在本頁，這兩組改由本頁主要承接，`/aiso` 次要（`aiso.md`「取捨」第 11 項）。複核：同意。承接跟著事實走，機型規格只在本頁，`/aiso` 主要承接也接不住。代價是 hub 要多接一個產品類別的查詢，所以 title 加「地端一體機」（第 13 項），description 寫出一體機與機型；`/aiso` 的 title 不用「一體機」，`/orient-ai` 連到 `/aiso` 的錨點也改成「地端 AI 方案」，三頁不搶同一個詞。本頁第 3、6 段仍不連 `/aiso`（第 12 項），兩個一體機是不同方案 | 全部由本頁承接（使用者決定，#199，seo-strategist 複核同意）；title 加「地端一體機」 |
 | 8 | 第 3 段的「私密資料不上公有雲」和 hero 的「雲/地端」放在同一頁 | 第 3 段的說明句寫明講的是地端方案 | 兩則原文都對，但出自不同情境（家族頁寫雲地端都有，併入頁寫地端一體機）。不寫清楚，讀者會讀成兩句互相矛盾 | 同意。description 也照這樣寫「地端方案的資料不上公有雲」 | 採納 |
 | 9 | 相關文章（`featuredPosts`）不放 | 不放 | `/blog/enterprise-ai-adoption` 已在內文連到這頁；放成一段索引列會和第 7 段的子頁索引列相鄰，違反「內頁共用的規則」的相鄰版型規則。這頁的讀者要找的是產品入口 | 同意。`企業 AI 導入` 由文章主要承接，文章結語已連到這頁，這頁不必反連來分擔這組查詢 | 採納 |
 | 10 | 子頁索引列的一句讀各 offering 的 `description` | 照模板做法，這份 brief 不改子頁的 description | 子頁的 description 有些含未確認或本站不用的說法（例如「一站式」「高準確率」），是各子頁 brief 的範圍（`DM-9` 寫法：子頁卡片的文字由 hub 模板讀各 offering 的 description） | 同意。這兩頁在本批改寫：`smartclaim.md`、`smartfilling.md` 的 description 示例已不含這些說法；其他子頁（例如 `/products/systalk-viki` 的「一站式」）在各自改版時處理 | 採納 |
 | 11 | 客服類查詢（`AI 智能客服 推薦 台灣 企業`、`AI 客服機器人 怎麼選`）由哪頁承接（`search-intent.md` 待決條目） | 第 2 段的客服列把 `AI 智能客服 推薦 台灣 企業` 列為次要子題 | — | 主要給 `/products/systalk-chat`。`nodes.csv` 備註「併入 /genai-solution 導入服務」說的是現站 `/genai-solution` 併入這個節點（`docs/ia/page-map.csv`），`systalk-chat` 本身會產生頁面（`src/content/offering/zh-TW/systalk-chat.md`），節點名「SysTalk.Chat AI 智能客服」就含查詢用詞。這頁第 2 段客服列連過去，次要承接 `AI 智能客服 推薦 台灣 企業`。`AI 客服機器人 怎麼選` 沒有主要承接頁，次要給 `/products/systalk-chat`，不另寫文章：前幾名已有繁中選購指南，產品比較的事實沒有 | 定案 |
 | 12 | 第 3 段要不要連到 `/aiso` | 沒有提（第 7 項只決定事實的分工） | — | 不連，第 17 項確認後再決定。連過去對 `企業主權 AI 地端部署 方案` 有幫助，但放在 SysTalk.ai 的地端段落裡，讀者會讀成 AISO 用的是 SysTalk.ai，正是第 17 項還不能寫的事 | 定案：不連。第 17 項已結算（#199）：AISO 的軟體是 OrientAI，第 3 段講的是 SysTalk.ai 搭配群聯 aiDAPTIV 的地端方案，連到 `/aiso` 會讓讀者以為 AISO 搭載 SysTalk.ai。第 6 段（一體機的機型）同樣不連 |
-| 13 | title 用什麼 | `<title>` 由 seo-strategist 用 `seoTitle` 處理（第 5 項） | — | `seoTitle`「SysTalk.ai 企業 AI 產品家族」。不放子頁的類別詞，避免 hub 跟子頁搶同一組詞 | 定案，見「title 與 description 方向」 |
+| 13 | title 用什麼 | `<title>` 由 seo-strategist 用 `seoTitle` 處理（第 5 項） | — | `seoTitle`「SysTalk.ai 企業 AI 產品家族」。不放子頁的類別詞，避免 hub 跟子頁搶同一組詞。#199 使用者決定後改：`地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用` 由本頁主要承接，而且沒有子頁承接一體機（不是 `nodes.csv` 的節點），title 加「地端一體機」：「SysTalk.ai 企業 AI 產品家族與地端一體機」。子頁類別詞仍不放 | 定案（#199 使用者決定後改），見「title 與 description 方向」 |
 
 ## 待確認
 
