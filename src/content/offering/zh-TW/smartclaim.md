@@ -12,7 +12,7 @@ kind: solution
 # brief 第 1 段: what it is for (insurance claims). Wording, no facts
 tagline: 保險理賠的文件與流程，交給 AI 處理
 # brief 第 1 段的說明句: who it is for (an insurer's claims work). Wording, no facts
-heroLead: 給保險業的理賠作業：保戶的診斷書與單據掃描建檔後，由系統解析、立案與派件，理賠人員只做最後確認。
+heroLead: 保戶的診斷書與單據掃描建檔後，由系統解析、立案與派件，保險業的理賠人員只做最後確認。
 # Two proof points (brief 第 1 段): the technologies, and the award with its year only (DM-8)
 heroPoints:
   - "結合 NLP、AI OCR、RPA技術 讓保險理賠流程自動化"
@@ -28,6 +28,7 @@ heroLabels:
 sections:
   - layout: results
     id: results
+    fill: subtle
     heading: 理賠從立案到派件自動執行
     body: 理賠人員不必逐件登打與派件：診斷書由系統解析，案件接著立案、派件。
     items:
@@ -95,6 +96,7 @@ sections:
       - body: "可自動統整保戶診斷書及單據格式，即使各醫院格式大不相同也能迅速輸入對應欄位"
   - layout: claim
     id: medical
+    fill: subtle
     heading: 保險業的醫療文件解析
     body: 保險業用自然語言技術，分析理賠收到的診斷證明書與單據。
     items:
@@ -124,13 +126,15 @@ sections:
     heading: 相關產品
     items:
       - node: systalk-icr
-        body: 理賠文件用到的文字辨識技術，寫在這個產品頁。
+        body: 診斷書與單據背後的光學字元辨識技術。
       - node: systalk-rpa
         body: 跨系統執行理賠作業的流程自動化產品。
       - node: industry-finance
         label: 金融業的 AI 應用與法規對應
         body: 保險、銀行與證券業的 AI 應用、法規要求與案例。
 cta: contact
+# brief 第 8 段: the band's heading is the next step of claims work
+contactTitle: 談理賠作業的下一步
 facts:
   - smartclaim-technologies
   - award-golden-yang-2024-smartclaim

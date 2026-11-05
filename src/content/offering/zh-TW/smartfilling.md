@@ -12,7 +12,7 @@ kind: solution
 # brief 第 1 段: what it is for (recognising and filing paper documents). Wording, no facts
 tagline: 紙本文件辨識完，直接建檔進系統
 # brief 第 1 段的說明句: who it is for (a financial firm's intake and filing). Wording, no facts
-heroLead: 給金融業的收件與建檔流程：收進來的紙本文件由 AI 辨識、校正，再把資料介接到內部系統，減少人工登打。
+heroLead: 金融業收進來的紙本文件由 AI 辨識、校正，再把資料介接到內部系統，減少人工登打。
 # One proof point (brief 第 1 段): the in-house recognition model and its retraining
 heroPoints:
   - "獨家自建 AI 演算法模型，建構 SysTalk.ICR 智慧光學字元辨識和 SysTalk.PUZZLE 模型再訓練機制"
@@ -27,6 +27,7 @@ heroLabels:
 sections:
   - layout: results
     id: results
+    fill: subtle
     heading: 金融業與醫療單據的建檔成果
     body: 委外的二次登打換成 AI 辨識，辨識結果直接進內部系統；單據格式變了，也不必重做模板。
     items:
@@ -52,8 +53,9 @@ sections:
               state: "on"
   - layout: ui
     id: template-free
+    itemsBelow: true
     heading: 文件版型變了，不必重建模板
-    body: 傳統 OCR 靠座標定位，版型一變就要重建模板。昕力自建的 AI 演算法模型不依版型，模型也照企業的文件與需求建構。
+    body: 傳統 OCR 靠座標定位，版型一變就要重建模板。昕力資訊（TPIsoftware）自建的 AI 演算法模型不依版型，並照企業的文件與需求建構。
     fragment:
       title: 辨識設定
       rows:
@@ -66,6 +68,7 @@ sections:
       - body: "從企業需求角度出發，為客戶建構獨家 AI 模型，改善傳統 OCR 辨識困難，最大化資料再利用與維運"
   - layout: junction
     id: flow
+    fill: subtle
     heading: 從收件到內部系統：前處理、辨識、校正
     body: 基金配息單、居留證這類收件文件，先校正影像的瑕疵與色彩，辨識後再用 AI 文本分析校正資料，最後介接到內部系統。
     diagram:
@@ -112,11 +115,13 @@ sections:
     heading: 相關產品
     items:
       - node: systalk-icr
-        body: 辨識技術本身寫在這個產品頁，同屬 SysTalk.ai 家族。
+        body: 建檔用到的辨識技術：SysTalk.ICR 與模型再訓練。
       - node: industry-finance
         label: 金融業的 AI 應用
         body: 保險、銀行與證券業的 AI 應用、法規要求與案例。
 cta: contact
+# brief 第 7 段: the band's heading is the next step of document filing
+contactTitle: 談文件建檔的下一步
 facts:
   - smartfilling-icr-puzzle
   - smartfilling-case-bank-title

@@ -12,7 +12,7 @@ heroImage: ../../../assets/design/ribbon/page-systalk-ai.webp
 # brief 第 1 段: the kinds of AI work the family takes on. Wording, no facts
 tagline: 客服、培訓、知識與文件，每個部門的 AI 工作各有一個產品
 # brief 第 1 段的說明句: who it is for and how it deploys. Wording, no facts
-heroLead: 給金融與政府的客服、業務與作業部門：雲端或地端都能部署，從導入規劃到上線後的健檢由昕力負責。
+heroLead: 金融與政府的客服、業務與作業部門都用得上：雲端或地端都能部署，從導入規劃到上線後的健檢由昕力負責。
 # Two proof points (brief 第 1 段): cloud and on-premises, and the award with its year (取捨第 4 項)
 heroPoints:
   - "打造企業 雲/地端 AI 完整解決方案"
@@ -33,42 +33,43 @@ sections:
   - layout: spec
     id: products
     fill: subtle
-    heading: 每個部門的 AI 工作，各有一個產品
-    body: 客服、培訓、質檢、知識整理與單據建檔，各由 SysTalk.ai 家族裡的一個產品處理。
+    heading: 從客服中心到單據建檔，一個工作對應一個產品
+    body: 每一列寫出部門的工作與處理它的產品，產品頁有各自的功能細節。
     rows:
       - label: 客服中心
         values:
-          - "SysTalk.Chat 7/24 智能語音、文字客服機器人 兩腦一流程專利"
+          - "SysTalk.Chat\n7/24 智能語音、文字客服機器人\n兩腦一流程專利"
         link:
           label: SysTalk.Chat AI 智能客服
           node: systalk-chat
       - label: 員工培訓與考核
         values:
-          - "SysTalk.Coach 員工知識與應對測驗 員工專業季度考核"
+          - "SysTalk.Coach\n員工知識與應對測驗\n員工專業季度考核"
         link:
           label: SysTalk.Coach AI 業務培訓
           node: systalk-coach
       - label: 客服質檢
         values:
-          - "SysTalk.Audit 智能客服語音質檢報告"
+          - "SysTalk.Audit\n智能客服語音質檢報告"
         link:
           label: SysTalk.Audit AI 語音質檢
           node: systalk-audit
       - label: 產品知識與會議紀錄
         values:
-          - "SysTalk.VIKI 新產品知識學習 跨部門會議紀錄、摘要總結"
+          - "SysTalk.VIKI\n新產品知識學習\n跨部門會議紀錄、摘要總結"
         link:
           label: SysTalk.VIKI 企業生成式 AI 應用平台
           node: systalk-viki
       - label: 單據辨識與建檔
         values:
-          - "醫療理賠資料自動建檔 智能理賠專利"
+          - "醫療理賠資料自動建檔\n智能理賠專利"
         link:
           label: SysTalk.ICR AI 智慧光學字元辨識
           node: systalk-icr
   - layout: ui
     id: data
-    heading: 資料與權限留在企業內
+    itemsBelow: true
+    heading: 地端方案的資料與權限留在企業內
     body: 選擇地端方案時，AI 在企業自己的機房運算，不限 Token 用量；權限、存取控管與稽核紀錄都內建在系統裡。
     fragment:
       title: 權限與稽核
@@ -102,11 +103,12 @@ sections:
           state: next
     items:
       - body: "導入前（AI 應用規劃與導入）：AI 導入情境分析、解決方案搭配建議、效益評估、AI 服務導入\n導入中：模型評估、微調"
-      - body: "協助評估及選擇企業最適合模型 針對企業專業領域fine-tune，打造貼近業務需求的專屬 AI"
+      - body: "協助評估及選擇企業最適合模型\n針對企業專業領域fine-tune，打造貼近業務需求的專屬 AI"
       - body: "導入後：\nAI大腦健檢優化\n回答品質與準確率檢測\nPrompt健檢\n提供問題診斷報告與優化建議"
   - layout: ui
     id: platform
     flip: true
+    itemsBelow: true
     heading: 平台的模組與可選的模型
     body: SysTalk.ai 平台由功能模組組成，依產業挑選搭配；模型可以從主流的開源與企業級 LLM 中，依場景選擇。
     fragment:
@@ -124,8 +126,8 @@ sections:
           state: "on"
     items:
       - body: "搭載昕力資訊的 SysTalk.ai 企業級 AI 應用平台，透過多元功能模組，因應各產業隨選搭配應用"
-      - body: "Rerank 模組\nRAG 模組\n向量/混合檢索模組\n同義詞模組\nFAQ 模組\n網站 URL 爬取模組\nOCR 視覺解析模組\nPrompt 管理模組\nLLM 設置模組\nGuardrail 模組\nSTT/TTS 模組\n虛擬人模組\nAgent Flow 模組\n意圖判斷模組\n視窗記憶模組"
       - body: "SysTalk.ai 支援主流開源與企業級 LLM（如 70B 模型），企業可依場景選擇最合適的模型"
+      - body: "Rerank 模組\nRAG 模組\n向量/混合檢索模組\n同義詞模組\nFAQ 模組\n網站 URL 爬取模組\nOCR 視覺解析模組\nPrompt 管理模組\nLLM 設置模組\nGuardrail 模組\nSTT/TTS 模組\n虛擬人模組\nAgent Flow 模組\n意圖判斷模組\n視窗記憶模組"
   - layout: spec
     id: appliance
     fill: subtle
@@ -154,6 +156,8 @@ sections:
           - 具備多樣化 AI 需求 / 跨部門 AI 中台
     record: "關鍵在 PHISON 的 aiDAPTIV 專利技術。透過記憶體管理與資料調度優化，在相同 GPU 條件下，可支援更大模型規模並顯著提升推論速度"
 partsTitle: 其他產品與解決方案
+# brief 第 8 段: the band's heading is a department's AI needs
+contactTitle: 談部門的 AI 需求
 facts:
   - systalk-ai-service
   - award-taiwan-excellence-2024
@@ -169,8 +173,8 @@ facts:
   - systalk-ai-onboarding-finetune
   - systalk-ai-after-onboarding
   - systalk-phison-platform
-  - aiso-modules
   - aiso-llm-support
+  - aiso-modules
   - aiso-bundled
   - aiso-onboarding
   - aiso-memory-optimization

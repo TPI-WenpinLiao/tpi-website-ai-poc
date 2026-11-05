@@ -142,7 +142,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
               </div>
               <div class="claim">
                 {heading}
-                {sec.items && sec.items.length <= SIDE_FACTS && (
+                {sec.items && sec.items.length <= SIDE_FACTS && !sec.itemsBelow && (
                   <ul class="facts">
                     {items(sec.items).map((i) => (
                       <li>
@@ -166,7 +166,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
                 {more}
               </div>
             </div>
-            {sec.items && sec.items.length > SIDE_FACTS && (
+            {sec.items && (sec.items.length > SIDE_FACTS || sec.itemsBelow) && (
               <ul class="facts two">
                 {items(sec.items).map((i) => (
                   <li>
@@ -352,6 +352,11 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
 
   .record {
     color: var(--color-text-muted);
+  }
+
+  /* A fact split into items takes a whole row of a two-column list, its items in two columns */
+  .facts.two > li:has(.item-list) {
+    grid-column: 1 / -1;
   }
 
   /* A fact split into items (factList): short items in two columns */

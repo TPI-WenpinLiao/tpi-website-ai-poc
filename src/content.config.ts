@@ -149,6 +149,9 @@ const pageSection = (image: ImageFn) => z.discriminatedUnion('layout', [
     fragment: uiFragment,
     items: z.array(sectionItem).optional(),
     flip: z.boolean().optional(),
+    // The facts go under the fragment and the claim, two to a row, so long facts beside a short
+    // fragment don't leave its side half empty (#200)
+    itemsBelow: z.boolean().optional(),
     index: z.array(z.strictObject({ body: text.optional(), node: anyNode })).optional(),
   }),
   // 規格表 and 對應表: a real table, one row a label (a regulation) and its fact texts
@@ -234,6 +237,8 @@ const offering = defineCollection({
         useCasesAfter: z.number().int().min(0).optional(),
         faq: z.array(z.strictObject({ question: text, answer: text })).optional(),
         cta: z.enum(['contact', 'demo']),
+        // The heading of the closing contact band, the page's own next step (#200); by default the site's
+        contactTitle: text.optional(),
         relatedCaseStudies: z.array(ref('case-study')).optional(),
         // A line under the case studies' heading (#183): wording that names the case, then a fact
         // text about it; the facts are listed in `facts`
@@ -266,6 +271,8 @@ const hub = defineCollection({
         sections: z.array(pageSection(image)).optional(),
         // Heading of the child pages' index rows (#200), by default 「探索」
         partsTitle: text.optional(),
+        // The heading of the closing contact band (#200), as offering's contactTitle
+        contactTitle: text.optional(),
         featuredCaseStudies: z.array(ref('case-study')).optional(),
         // A line under the case studies' heading (#167): a fact text, listed in `facts`
         casesIntro: text.optional(),

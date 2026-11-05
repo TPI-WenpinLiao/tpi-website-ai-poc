@@ -106,6 +106,7 @@ sourceUrl: []
 | `useCasesAfter` | `number` | 否 | 應用情境區塊排在第幾項功能之後，預設在所有功能之後（#167） | — |
 | `faq` | `{ question: string; answer: string }[]` | 否 | 常見問題 | 現站 FAQ 區（少數頁有） |
 | `cta` | `'contact' \| 'demo'` | 是 | 主要 CTA：聯絡業務或預約 demo。表單端點由 M6 依此決定 | `features.md`「表單」 |
+| `contactTitle` | `string` | 否 | 頁尾聯絡色帶的標題，寫這頁的下一步，預設用全站的標題（#200） | — |
 | `relatedCaseStudies` | `ref(case-study)[]` | 否 | 精選案例與排序。留空時由 `case-study.offerings` 反查；關聯以 `case-study.offerings` 為準，這裡只列其中的項目 | — |
 | `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句：點名案例的表述，加上該案例的事實原文，事實要列進 `facts`（#183）；有 `caseNotes` 時不輸出 | — |
 | `caseNotes` | `{ client?: string; work?: string; result?: string; award?: string; caseStudy?: ref(case-study); fragment?: 介面片段 }[]` | 否 | 案例列（#187）：客戶、作業、成果、獎項都是事實原文，`caseStudy` 有就連到案例內頁（錨點「客戶名：案例標題」）；有填時取代反查出來的案例 | — |
@@ -170,6 +171,7 @@ JSON-LD：
 | `testimonial` | `{ quote: string; speaker: string }` | 否 | 接在案例列後的客戶證言，兩個都是事實原文（#187） | — |
 | `featuredCaseStudies` | `ref(case-study)[]` | 否 | 指定精選案例；沒填時用 `industry` 反查 | — |
 | `partsTitle` | `string` | 否 | 子頁索引列的標題，預設「探索」（#200） | — |
+| `contactTitle` | `string` | 否 | 頁尾聯絡色帶的標題，寫這頁的下一步，預設用全站的標題（#200） | — |
 | `featuredPosts` | `ref(blog)[]` | 否 | 指定精選文章 | — |
 
 範例（新頁，現站沒有內容）：
@@ -193,7 +195,7 @@ JSON-LD：`CollectionPage`，`name` ← `title`、`description` ← `description
 |---|---|---|
 | `claim` | 主張與原文（`FactRow`） | `items`：`{ title?; body; node? }`，`body` 是事實原文；`node` 的連結掛在 `title` 上，有 `node` 就要有 `title`（schema 擋下）。`junction`、`ui`、`band` 的 `items` 同一個型別 |
 | `junction` | 接點圖（`JunctionDiagram`） | `diagram`：三欄 `{ title; tone: legacy\|product\|new; nodes: { label; state?: down\|standby }[] }` 與 `caption`；`items`；`rows`（規格表的列） |
-| `ui` | 介面片段（`UiFragment`） | `fragment`：`{ title; tabs?; rows: { label; value?; state?: on\|off\|down\|next }[]; note? }`，只寫事實寫得出的名稱與狀態；`items`；`flip` 左右對調；`index` 接索引列 |
+| `ui` | 介面片段（`UiFragment`） | `fragment`：`{ title; tabs?; rows: { label; value?; state?: on\|off\|down\|next }[]; note? }`，只寫事實寫得出的名稱與狀態；`items`；`flip` 左右對調；`itemsBelow` 把事實排到片段與主張下方兩欄（#200）；`index` 接索引列 |
 | `spec` | 規格表、對應表（`SpecTable`） | `rows`：`{ label; values: string[]; link? }`，有 `link` 時是對應表；`compare`：`{ label; values: [string, string] }`，兩樣東西並排比較（#200），它是表頭列，每列的兩個值各佔一格，不能有 `link`；`items` 是表格上方的事實，`record` 是表格下方收尾的一則事實（#200） |
 | `timeline` | 時間列（`Timeline`），可接對應表 | `intro`；`steps`：`{ year; body }`；`rows` |
 | `results` | 成果（`CaseList`） | `items`：`{ title; sub?; result; client?; link?; fragment? }`；`record` 段末一列紀錄 |

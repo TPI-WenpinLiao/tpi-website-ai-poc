@@ -4959,18 +4959,25 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the product name and its items onto lines (#200)
 - id: systalk-ai-claim-patent
   type: feature
-  text: 醫療理賠資料自動建檔 智能理賠專利
+  text: |-
+    醫療理賠資料自動建檔
+    智能理賠專利
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
     quote: 醫療理賠資料自動建檔 智能理賠專利
   locale: zh-TW
   status: confirmed
 
+# text splits the product name and its items onto lines (#200)
 - id: systalk-ai-chat-patent
   type: feature
-  text: SysTalk.Chat 7/24 智能語音、文字客服機器人 兩腦一流程專利
+  text: |-
+    SysTalk.Chat
+    7/24 智能語音、文字客服機器人
+    兩腦一流程專利
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
     quote: SysTalk.Chat 7/24 智能語音、文字客服機器人 兩腦一流程專利
@@ -5007,37 +5014,50 @@
   locale: zh-TW
   status: confirmed
 
-# One row of the「一日應用情境」; the Coach and Audit rows are separate entries (#199)
+# One row of the「一日應用情境」; the Coach and Audit rows are separate entries (#199). text splits the product name and its items onto lines (#200)
 - id: systalk-ai-day-scenarios
   type: feature
-  text: SysTalk.VIKI 新產品知識學習 跨部門會議紀錄、摘要總結
+  text: |-
+    SysTalk.VIKI
+    新產品知識學習
+    跨部門會議紀錄、摘要總結
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
     quote: SysTalk.VIKI 新產品知識學習 跨部門會議紀錄、摘要總結
   locale: zh-TW
   status: confirmed
 
+# text splits the product name and its items onto lines (#200)
 - id: systalk-ai-day-coach
   type: feature
-  text: SysTalk.Coach 員工知識與應對測驗 員工專業季度考核
+  text: |-
+    SysTalk.Coach
+    員工知識與應對測驗
+    員工專業季度考核
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
     quote: SysTalk.Coach 員工知識與應對測驗 員工專業季度考核
   locale: zh-TW
   status: confirmed
 
+# text splits the product name and its items onto lines (#200)
 - id: systalk-ai-day-audit
   type: feature
-  text: SysTalk.Audit 智能客服語音質檢報告
+  text: |-
+    SysTalk.Audit
+    智能客服語音質檢報告
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
     quote: SysTalk.Audit 智能客服語音質檢報告
   locale: zh-TW
   status: confirmed
 
+# text splits the product name and its items onto lines (#200)
 - id: systalk-ai-onboarding-finetune
   type: feature
-  text: 協助評估及選擇企業最適合模型 針對企業專業領域fine-tune，打造貼近業務需求的專屬 AI
+  text: |-
+    協助評估及選擇企業最適合模型
+    針對企業專業領域fine-tune，打造貼近業務需求的專屬 AI
   source:
     url: https://www.tpisoftware.com/products/systalk-ai
     quote: 協助評估及選擇企業最適合模型 針對企業專業領域fine-tune，打造貼近業務需求的專屬 AI
