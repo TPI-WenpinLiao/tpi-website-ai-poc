@@ -867,7 +867,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 | 台灣 AI 解決方案 公司 | 次要 `/`、`/products/systalk-ai`，沒有主要承接頁（#186，`briefs/home.md`「取捨」第 14 項） | 類別詞，前幾名沒有廠商列表；首頁 title 不放類別詞 |
 | 企業 AI 導入 | `/blog/enterprise-ai-adoption`（文章，#173） | 前幾名是指南與教學，產品頁或首頁不符合資訊型意圖；現站同主題文章是 `drop`，#173 新寫一篇（`briefs/blog-enterprise-ai-adoption.md`） |
 | 系統整合 廠商 推薦 | `/cloudservice`（次要承接） | 比較型，結果是列表文；新站沒有對應的比較頁。原本建議的 `/services` 依 #138 不產生頁面，策略階段改交 `/cloudservice`，`/services` 建出後再改回（`briefs/home.md`「取捨」第 6 項） |
-| 企業主權 AI 地端部署 方案 | `/aiso`，次要 `/`、`/products/systalk-ai`、`/orient-ai` | #199 brief 定案（`briefs/aiso.md`「搜尋意圖」）。前幾名缺的硬體規格、Token 成本、內建方案都在 `/aiso` |
+| 企業主權 AI 地端部署 方案 | `/aiso`，次要 `/`、`/products/systalk-ai`、`/orient-ai` | #199 brief 定案（`briefs/aiso.md`「搜尋意圖」）。承接頁不變。#199 使用者決定 `/products/systalk-ai-phison` 不是 AISO 後：前幾名缺的內建方案在 `/aiso`；硬體規格與 Token 成本的事實（`fact:aiso-servers`、`fact:aiso-no-token-limit`）出自該頁，改在次要的 `/products/systalk-ai` |
 | digiRunner | `/products/digirunner` | 品牌導航 |
 | digiRunner API 管理平台 | `/products/digirunner`，次要 `/products/digirunner-cloud` | 前幾名有 AWS Marketplace，雲端版是 `digirunner-cloud` 節點 |
 | API 管理平台 | `/products/digirunner` | 類別詞；結果是定義文，產品頁要能回答「API 管理平台包含什麼」才接得住 |
@@ -911,15 +911,15 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 | Agentic AI 是什麼 | `/blog/what-is-agentic-ai-platform`，次要 `/orient-ai` | #199 brief 定案（`briefs/orient-ai.md`「取捨」第 10 項）。新站已有這篇，不另寫；`/orient-ai` 第 9 段列出它 |
 | AI Agent 治理 影子 AI 企業 | `/orient-ai` | #199 brief 定案。前幾名全英文；`/orient-ai` 把治理寫成平台功能 |
 | 多代理協作 AI Agent 平台 企業 導入 | `/orient-ai` | #199 brief 定案。`/orient-ai` 寫 Agent 跨企業內部系統執行任務 |
-| AI Agent 地端部署 Token 成本 | `/orient-ai`，次要 `/aiso`，`/blog/ai-token-cost-management` 輔助 | #199 brief 定案（`briefs/orient-ai.md`「取捨」第 11 項、`briefs/aiso.md`「取捨」第 11 項）。部門層級的用量監控在 `/orient-ai`，不限 Token 是 `/aiso` 的 |
+| AI Agent 地端部署 Token 成本 | `/orient-ai`，次要 `/aiso`、`/products/systalk-ai`，`/blog/ai-token-cost-management` 輔助 | #199 brief 定案（`briefs/orient-ai.md`「取捨」第 11 項、`briefs/aiso.md`「取捨」第 11 項）。部門層級的用量監控在 `/orient-ai`。#199 使用者決定：「不限 Token」（`fact:aiso-no-token-limit`）出自 `/products/systalk-ai-phison`，改由 `/products/systalk-ai` 次要承接；`/aiso` 留第 4 段的分層用量上限 |
 | MCP 企業 導入 AI Agent 整合 | 沒有主要承接頁（建議寫 blog 文章）；次要 `/orient-ai` | #199 brief 定案（`briefs/orient-ai.md`「取捨」第 10 項）。前幾名全英文；文章只建議，另開 issue |
 | AISO 主權 AI | `/aiso` | #199 brief 定案（`briefs/aiso.md`）。品牌詞，就是這一頁的名稱 |
 | 昕力 群聯 AISO 聯盟 | `/aiso`，次要 `/media-center/559` | #199 brief 定案（`briefs/aiso.md`「取捨」第 12 項）。查的是合作與方案，`/aiso` 講方案本身；聯盟的成立、成員與簽約由新站已有的新聞 559 承接，`/aiso` 第 3 段連過去 |
-| aiDAPTIV SysTalk.ai | `/products/systalk-ai` | #199 brief 定案。AISO 的軟體是 OrientAI（`messaging.md`「缺少證據的主張」第 17 項已結算），SysTalk.ai 搭配 aiDAPTIV 是併入 `/products/systalk-ai` 的另一個方案（現站 `/products/systalk-ai-phison`），所以 `/aiso` 不寫 SysTalk.ai，這組改由 `/products/systalk-ai` 承接 |
-| 地端 AI 伺服器 企業 LLM | `/aiso` | #199 brief 定案。前幾名缺的規格與交付方式都在 `/aiso` |
-| AI 一體機 企業 地端 交機即用 | `/aiso`，`/blog/why-enterprises-need-ai-appliance` 輔助 | #199 brief 定案（`briefs/aiso.md`「取捨」第 11 項）。承接頁依查詢主題（硬體與交付），不隨軟體核心改變；問「為什麼需要」的交給文章 |
+| aiDAPTIV SysTalk.ai | `/products/systalk-ai` | #199 brief 定案。AISO 的軟體是 OrientAI（`messaging.md`「缺少證據的主張」第 17 項已結算），SysTalk.ai 搭配 aiDAPTIV 是併入 `/products/systalk-ai` 的另一個方案（現站 `/products/systalk-ai-phison`），所以 `/aiso` 不寫 SysTalk.ai，這組改由 `/products/systalk-ai` 承接。#199 使用者決定該頁的事實全部由 `/products/systalk-ai` 承接後，前幾名缺的規格、模型與模組都在那頁（第 5、6 段） |
+| 地端 AI 伺服器 企業 LLM | `/products/systalk-ai`，次要 `/aiso` | #199 使用者決定（PR #204，2026-11-05）：`/products/systalk-ai-phison` 講的不是 AISO，前幾名缺的規格與模型大小對照、軟硬體一起交付（`fact:aiso-servers`、`fact:aiso-bundled`）都出自該頁，改由 `/products/systalk-ai` 第 6 段主要承接（`briefs/systalk-ai.md`「取捨」第 7 項）。原本是 `/aiso`；`/aiso` 留第 5 段的 OrientAI 硬體建議，次要 |
+| AI 一體機 企業 地端 交機即用 | `/products/systalk-ai`，次要 `/aiso`，`/blog/why-enterprises-need-ai-appliance` 輔助 | #199 使用者決定（PR #204，2026-11-05）：前幾名缺的機型規格與知識庫規模、導入時廠商做的工作（`fact:aiso-servers`、`fact:aiso-onboarding`）出自 `/products/systalk-ai-phison`，改由 `/products/systalk-ai` 第 6 段主要承接（`briefs/aiso.md`「取捨」第 11 項）。原本是 `/aiso`；`/aiso` 的部門方案清單與硬體建議次要承接；問「為什麼需要」的交給文章 |
 | 主權 AI 是什麼 | 沒有主要承接頁（建議寫企業層級的 blog 文章）；次要 `/aiso` | #199 brief 定案（`briefs/aiso.md`「取捨」第 7 項）。前幾名從國家層級講；文章只建議，另開 issue |
-| 企業 地端 LLM 建置 成本 | 沒有主要承接頁；次要 `/aiso` | #199 brief 定案。沒有價格事實，`/aiso` 只能談成本結構（不限 Token、軟硬體一起買） |
+| 企業 地端 LLM 建置 成本 | 沒有主要承接頁；次要 `/products/systalk-ai` | #199 使用者決定（PR #204，2026-11-05）：成本結構的事實（不限 Token、硬體內建軟體，`fact:aiso-no-token-limit`、`fact:aiso-bundled`）出自 `/products/systalk-ai-phison`，次要承接從 `/aiso` 改成 `/products/systalk-ai`（第 3、6 段）。沒有價格事實，只談成本結構 |
 | 生成式 AI 私有化部署 金融業 | `/industries/finance`，次要 `/aiso` | #199 brief 定案（`/aiso` 一側）。產業詞由產業頁承接 |
 | GreenSwift 碳盤查 | `/products/greenswift` | #199 brief 定案（`briefs/greenswift.md`）。品牌詞 |
 | 碳盤查 平台 系統 推薦 | `/products/greenswift` | #199 brief 定案。比較型，頁面寫選平台時會比的條件（試用、顧問協作、帳號限制、環保署格式），不做比較表 |
@@ -945,7 +945,7 @@ node scripts/strategy/serp.mjs "昕力資訊" "digiRunner" "開放銀行 API"
 - 已決定（#199）：`Agentic AI 是什麼` 由既有的 `/blog/what-is-agentic-ai-platform` 承接，不另寫；`MCP 企業 導入 AI Agent 整合` 建議另寫一篇，只建議、另開 issue。見 `briefs/orient-ai.md`「取捨」第 10 項
 - 已決定（#199）：`/solutions/smartfilling` 與 `/products/systalk-icr` 的關鍵字分工，見 `briefs/smartfilling.md`「取捨」第 4 項
 - 已決定（#199）：客服類查詢由 `/products/systalk-chat` 主要承接，見 `briefs/systalk-ai.md`「取捨」第 11 項
-- 已決定（#199）：`/aiso` 與 `/orient-ai` 依查詢主題分工，不依軟體核心：`/aiso` 承接硬體、軟硬體交付與地端部署，`/orient-ai` 承接 Agent 平台、治理、Token 成本控管與 MCP。見 `briefs/aiso.md`「取捨」第 11 項與 `briefs/orient-ai.md`「取捨」第 11 項。AISO 一體機的軟體核心已結算（使用者決定，#199）：是 OrientAI，依據新聞內文的 `fact:aiso-software-orientai`（新聞 575）與 `fact:aiso-orientai-hardware`（新聞 585），`messaging.md`「缺少證據的主張」第 17 項。承接頁不變；`/aiso` 第 1、3 段寫出 OrientAI，第 3 段連到 `/orient-ai`，`/orient-ai` 第 7 段的錨點寫明關係，兩頁雙向連結
+- 已決定（#199）：`/aiso` 與 `/orient-ai` 依查詢主題分工，不依軟體核心：`/aiso` 承接硬體、軟硬體交付與地端部署，`/orient-ai` 承接 Agent 平台、治理、Token 成本控管與 MCP。見 `briefs/aiso.md`「取捨」第 11 項與 `briefs/orient-ai.md`「取捨」第 11 項。AISO 一體機的軟體核心已結算（使用者決定，#199）：是 OrientAI，依據新聞內文的 `fact:aiso-software-orientai`（新聞 575）與 `fact:aiso-orientai-hardware`（新聞 585），`messaging.md`「缺少證據的主張」第 17 項。承接頁不變；`/aiso` 第 1、3 段寫出 OrientAI，第 3 段連到 `/orient-ai`，`/orient-ai` 第 7 段的錨點寫明關係，兩頁雙向連結。同一天使用者再決定（PR #204）：`/products/systalk-ai-phison` 講的不是 AISO，該頁的事實全部由 `/products/systalk-ai` 承接，所以 `地端 AI 伺服器 企業 LLM`、`AI 一體機 企業 地端 交機即用` 改由 `/products/systalk-ai` 主要承接、`/aiso` 次要，`企業 地端 LLM 建置 成本` 的次要承接改給 `/products/systalk-ai`（見上表）
 - 已決定（#199）：AISO 聯盟的消息由 `/media-center/559` 承接，見 `briefs/aiso.md`「取捨」第 12 項
 - 已決定（#199）：金漾獎放進 `/solutions/smartclaim` 的 hero 證據點，寫年份、不寫組別，見 `briefs/smartclaim.md`「取捨」第 10 項
 - 已決定（#199）：`碳盤查 費用 中小企業` 沒有主要承接頁，`/products/greenswift` 次要（`/whitepaper/greenswift` 依 #138 不產生頁面），見 `briefs/greenswift.md`「取捨」第 11 項
