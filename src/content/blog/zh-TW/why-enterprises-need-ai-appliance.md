@@ -10,8 +10,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f128ddf-e501-6d4f-81f6-0b7fa23ee3a6.png
 coverImage: ../../../assets/blog/zh-TW/why-enterprises-need-ai-appliance/cover.webp
 sourceUrl: https://www.tpisoftware.com/blog/ai/why-enterprises-need-ai-appliance
-migratedAt: 2026-10-23
+migratedAt: 2026-11-05
 sourceUpdatedAt: 2026-03-26
+relatedOfferings: [zh-TW/aiso]
 ---
 
 ## AI 商機與風險：企業為何需要「AI 一體機」守護知識主權？

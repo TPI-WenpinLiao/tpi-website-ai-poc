@@ -10,8 +10,9 @@ authorType: Organization
 # https://tpi.dev/tpi-dev/private/article/IMG/1f160bdc-651a-6c46-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/zh-TW/what-is-agentic-ai-platform/cover.webp
 sourceUrl: https://www.tpisoftware.com/blog/ai/what-is-agentic-ai-platform
-migratedAt: 2026-10-23
+migratedAt: 2026-11-05
 sourceUpdatedAt: 2026-06-12
+relatedOfferings: [zh-TW/orient-ai]
 ---
 
 ## 什麼是 Agentic AI（代理式 AI）？
