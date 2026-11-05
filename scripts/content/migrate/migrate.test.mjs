@@ -25,6 +25,9 @@ test('parseOverrides checks entry ids and keys', () => {
   assert.throws(() => parseOverrides('news/zh-TW/585:\n  title: x\n'), /unknown keys title/);
   assert.deepEqual(parseOverrides('blog/zh-TW/zta:\n  dropImagesFrom: [blog.tpisoftware.com]\n'), { 'blog/zh-TW/zta': { dropImagesFrom: ['blog.tpisoftware.com'] } });
   assert.throws(() => parseOverrides('blog/zh-TW/zta:\n  dropImagesFrom: blog.tpisoftware.com\n'), /must be a list of hosts or image URLs/);
+  assert.deepEqual(parseOverrides('blog/zh-TW/zta:\n  append: 見 [產品](/products/digirunner)。\n'), { 'blog/zh-TW/zta': { append: '見 [產品](/products/digirunner)。' } });
+  assert.throws(() => parseOverrides('blog/zh-TW/zta:\n  append: [x]\n'), /append must be non-empty Markdown text/);
+  assert.throws(() => parseOverrides("blog/zh-TW/zta:\n  append: ' '\n"), /append must be non-empty Markdown text/);
 });
 
 test('entryRows groups merge rows under their keep row, keep first', () => {
@@ -89,6 +92,12 @@ test('convert: overrides, a second run is unchanged, a failed download writes no
 
   assert.equal((await convert({ ...args(ok, override), date: '2026-11-03' })).status, 'unchanged');
   await assert.rejects(convert(args(ok, { alt: { 'missing.png': 'x' } })), /alt for images the entry does not have: missing\.png/);
+
+  // append: Markdown after the converted body, and a second run is unchanged
+  const appended = { ...override, append: '見 [產品](/products/digirunner)。\n' };
+  assert.equal((await convert(args(ok, appended))).status, 'written');
+  assert.match(await readFile('src/content/news/zh-TW/585.md', 'utf8'), /photo\.webp\)\n\n見 \[產品\]\(\/products\/digirunner\)。\n$/);
+  assert.equal((await convert({ ...args(ok, appended), date: '2026-11-04' })).status, 'unchanged');
 
   // dropImagesFrom: the image is never fetched, so a host that fails is no longer a failure
   const dropped = await convert(args(failing, { dropImagesFrom: ['www.tpisoftware.com'] }));

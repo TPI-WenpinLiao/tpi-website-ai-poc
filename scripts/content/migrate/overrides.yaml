@@ -49,9 +49,12 @@ blog/zh-TW/customer-complaint-ai-tool-selection-guide:
 
 blog/zh-TW/enterprise-grade-apim:
   frontmatter:
+    # An API management post; the inline link below is briefs/digirunner.md「連入」(#178)
+    relatedOfferings: [zh-TW/digirunner]
     description: API 管理平台（APIM）是連接傳統基礎設施與前瞻技術的樞紐。隨著量子技術走向雲端，本文探討企業如何透過 APIM 整合量子運算資源與導入策略。
   alt:
     1f0fa848-190c-6bd6-81f6-0b7fa23ee3a6.webp: APIM 整合量子服務流程圖：用戶端應用程式經 API 管理平台、身分驗證與成本控管、非同步任務佇列送至量子運算提供者 QCaaS，結果暫存區再回傳平台
+  append: 想看一套 API 管理平台的部署方式與導入案例，見 [digiRunner API 管理平台](/products/digirunner)。
 
 blog/zh-TW/healthcare-fhir-data-platform-7-steps:
   frontmatter:

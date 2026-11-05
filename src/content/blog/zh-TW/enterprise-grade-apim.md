@@ -4,15 +4,15 @@ description: API 管理平台（APIM）是連接傳統基礎設施與前瞻技�
 translationKey: enterprise-grade-apim
 category: enterprise-management
 tags: [api-management]
-relatedOfferings: [zh-TW/digirunner]
 publishedAt: 2026-01-26
 author: 陳瑞泰 John Chen
 authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0fa8d6-65ff-649a-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/zh-TW/enterprise-grade-apim/cover.webp
 sourceUrl: https://www.tpisoftware.com/blog/smartm/enterprise-grade-APIM
-migratedAt: 2026-10-23
+migratedAt: 2026-11-05
 sourceUpdatedAt: 2026-01-26
+relatedOfferings: [zh-TW/digirunner]
 ---
 
 ## 一、 APIM 整合量子運算的核心價值
