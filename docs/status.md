@@ -164,6 +164,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
 - #202 可以開始（第一批 7 頁的製作，照 `docs/strategy/briefs/` 的 brief）
 - `evaluation.md`「第一批（#200）」的「還不夠好的地方」與「評審依據不足」（`design-principles.md` 沒有方案頁與產品家族 hub 的寫法、brief 交給設計概念的例外沒有回寫、`SiteFooter` 的細線）還沒開 issue，要做時另開
+- `evaluation.md`「第一批（#201）」的「還不夠好的地方」與「評審依據不足」（介面片段的狀態方塊、h2 說明句的文字色、`InPageNav` 放不下 8 項等共用元件；規格表淺灰與判斷組分組的衝突、brief 寫「金融與政府」但產業原文沒有政府）還沒開 issue，要做時另開；AISO 第 3 段連到新聞 559 等 #202 加 news ref
 - 回覆 #199 PR 的「待確認」：GreenSwift 試用網址與報告語言、`interactivehealth` 是否列進 DigiLism 子頁、改舊文章的連結文字、建議的 blog（ICR／OCR／IDP、主權 AI、中台／ESB、MCP）要不要開 issue、還沒收的事實（`messaging.md`「缺少證據的主張」第 18、23、24 項）
 - digiRunner 頁要不要加產品獎（`DM-8` 的台灣精品獎 2023、2024，創新商務獎 2022）：#183 只放了 hero 的專利數與台新的 Global Finance 2020，`DM-8` 把 digiRunner 列為主要用途頁，要放的話另開 issue
 - #173 的延伸事項（兩份 blog brief 文末「延伸事項」），要做時另開 issue：`/products/systalk-ai` 與 `/industries/finance` 的 `featuredPosts` 加上 AI 導入篇（金融頁要先改 `finance.md` 取捨第 5 項）、既有文章連回兩篇新文章、`ArticleTemplate` 文末加聯絡 CTA、`search-intent.md`「對應到頁面」的 `API 管理平台` 補次要承接頁、兩篇的 en、vi 版
