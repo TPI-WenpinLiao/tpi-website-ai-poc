@@ -5,6 +5,7 @@ import { parse } from 'yaml';
 import { candidates, expand, render } from './extract-facts.mjs';
 import { chunkStrings, quoteOnPage, textBlocks } from './source-pages.mjs';
 import { validateFacts } from './facts.mjs';
+import { payloadArticleBody } from '../lib/nuxt-payload.mjs';
 
 const source = {
   groups: [
@@ -75,6 +76,14 @@ test('quoteOnPage ignores tags, whitespace and U+200B', () => {
   assert.ok(quoteOnPage(html, 'AI 智慧​理賠'));
   assert.ok(quoteOnPage(html, '節省逾80%人工'));
   assert.ok(!quoteOnPage(html, '節省逾90%人工'));
+});
+
+test('a news body in the Nuxt payload is found by its key (#199)', () => {
+  const html = '<html><body><h1>t</h1><script>window.__NUXT__=(function(a){return {newsHtml:"\\u003Cp\\u003E以 OrientAI 為軟體核心\\u003C\\u002Fp\\u003E",content:"x"}}(1))</script></body></html>';
+  assert.equal(quoteOnPage(html, '以 OrientAI 為軟體核心'), false);
+  assert.ok(quoteOnPage(payloadArticleBody(html, 'newsHtml') ?? '', '以 OrientAI 為軟體核心'));
+  assert.equal(payloadArticleBody(html), 'x');
+  assert.equal(payloadArticleBody('<html></html>', 'newsHtml'), null);
 });
 
 test('validateFacts rejects a confirmed fact that names a client still to_confirm', () => {

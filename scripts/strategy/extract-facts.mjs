@@ -4,7 +4,7 @@
 // (what was picked, verbatim); this script checks every pick against the live page and writes the
 // library, so facts.yaml is never edited by hand (.claude/skills/site-research「事實庫」).
 //
-//   1. every fact's quote must be on its source page (HTML text, or the Nuxt chunks it loads);
+//   1. every fact's quote must be on its source page (HTML text, the Nuxt chunks it loads, or a news body in its payload);
 //      one missing quote fails the run and nothing is written
 //   2. facts.yaml is written in the input's order, groups as comments; a re-run gives the same file
 //   3. docs/strategy/facts-candidates.md lists, for every zh-TW page in scope, the text blocks that

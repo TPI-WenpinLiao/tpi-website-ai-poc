@@ -928,7 +928,7 @@ groups:
         type: case
         quote: 昕力資訊 GreenSwift 智慧碳管理平台助和鼎隆建築打造永續競爭力
         url: https://www.tpisoftware.com/media-center/580
-        comment: News headline (#199); the article body is only in the Nuxt payload
+        comment: News headline (#199)
       - { id: client-hedinglong, type: client, quote: 和鼎隆建築, url: 'https://www.tpisoftware.com/media-center/580' }
 
   - group: ESGswift
@@ -1048,7 +1048,7 @@ groups:
         quote: 昕力資訊 AI 智能理賠解決方案獲 2024 金漾獎
         url: https://www.tpisoftware.com/media-center/457
         note: 有年份或時間點，頁面引用時寫出年份（使用者決定，#180）
-        comment: News headline (#199); the article body is only in the Nuxt payload, which extract-facts does not read
+        comment: News headline (#199)
 
   - group: AI smart filling
     url: https://www.tpisoftware.com/solutions/smartfilling
@@ -1389,7 +1389,17 @@ groups:
         quote: AISO 主權 AI 產業聯盟成軍 主打整合式交付 加速企業 AI 導入
         text: AISO 主權 AI 產業聯盟成軍，主打整合式交付
         url: https://www.tpisoftware.com/media-center/559
-        comment: News headline (#199); members and date are only in the Nuxt payload
+        comment: News headline (#199); members and signings are in the news body, not collected yet
+      - id: aiso-software-orientai
+        type: feature
+        quote: 此系列方案以昕力自主研發的企業級 Agentic AI 平台 OrientAI 為軟體核心
+        url: https://www.tpisoftware.com/media-center/575
+        comment: News body (Nuxt payload newsHtml), read by source-pages.mjs since #199; settles which software AISO runs (user, #199)
+      - id: aiso-orientai-hardware
+        type: feature
+        quote: 此次產品組合結合自研 OrientAI 系列軟體與地端硬體
+        url: https://www.tpisoftware.com/media-center/585
+        comment: News body (Nuxt payload newsHtml)
 
   - group: OrientAI
     url: https://www.tpisoftware.com/orient-ai

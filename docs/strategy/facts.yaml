@@ -3933,7 +3933,7 @@
   locale: zh-TW
   status: confirmed
 
-# News headline (#199); the article body is only in the Nuxt payload
+# News headline (#199)
 - id: greenswift-case-hedinglong
   type: case
   text: 昕力資訊 GreenSwift 智慧碳管理平台助和鼎隆建築打造永續競爭力
@@ -4551,7 +4551,7 @@
   locale: zh-TW
   status: confirmed
 
-# News headline (#199); the article body is only in the Nuxt payload, which extract-facts does not read
+# News headline (#199)
 - id: award-golden-yang-2024-smartclaim
   type: award
   text: 昕力資訊 AI 智能理賠解決方案獲 2024 金漾獎
@@ -6186,13 +6186,33 @@
   locale: zh-TW
   status: confirmed
 
-# News headline (#199); members and date are only in the Nuxt payload
+# News headline (#199); members and signings are in the news body, not collected yet
 - id: aiso-alliance
   type: company
   text: AISO 主權 AI 產業聯盟成軍，主打整合式交付
   source:
     url: https://www.tpisoftware.com/media-center/559
     quote: AISO 主權 AI 產業聯盟成軍 主打整合式交付 加速企業 AI 導入
+  locale: zh-TW
+  status: confirmed
+
+# News body (Nuxt payload newsHtml), read by source-pages.mjs since
+- id: aiso-software-orientai
+  type: feature
+  text: 此系列方案以昕力自主研發的企業級 Agentic AI 平台 OrientAI 為軟體核心
+  source:
+    url: https://www.tpisoftware.com/media-center/575
+    quote: 此系列方案以昕力自主研發的企業級 Agentic AI 平台 OrientAI 為軟體核心
+  locale: zh-TW
+  status: confirmed
+
+# News body (Nuxt payload newsHtml)
+- id: aiso-orientai-hardware
+  type: feature
+  text: 此次產品組合結合自研 OrientAI 系列軟體與地端硬體
+  source:
+    url: https://www.tpisoftware.com/media-center/585
+    quote: 此次產品組合結合自研 OrientAI 系列軟體與地端硬體
   locale: zh-TW
   status: confirmed
 
