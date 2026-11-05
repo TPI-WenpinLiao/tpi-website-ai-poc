@@ -15,6 +15,10 @@ features:
     body: 低程式碼設計，簡化 API Gateway 和管理流程，提升開發效率。
   - title: 靈活的業務擴展
     body: 靈活且自動擴展的容器化架構，可跨多雲環境部署和高效管理。
+    # briefs/digirunner.md「連入」(#178)
+    link:
+      label: digiRunner API 管理平台的地端與 Kubernetes 版本
+      node: digirunner
   - title: 輕鬆的可視化管理
     body: 統一管理平台，簡化 API 維護和監控，提升維運效率與可控性。
   - title: 最嚴謹的安全管控

@@ -141,10 +141,10 @@ hero 的次要按鈕從「看功能」（`#features`）改成試用：`IT-7` 是
 | header「產品」選單、`/products`、`/products/digilism` 的子頁卡片 | 節點名「digiRunner API 管理平台」 | 已有 |
 | 首頁第 4 段（DigiLism 家族的產品清單） | digiRunner API 管理平台 | 首頁 brief 已列 |
 | `/industries/finance` 第 2、3、4 段 | digiRunner API 管理平台的法規對應功能、digiRunner API 管理平台如何接上核心系統、digiRunner API 管理平台的 AI 使用歷程紀錄與 AI 治理 | 金融頁 brief 已列 |
-| `/industries/government` | digiRunner API 管理平台 | 建議補：現有內容多處提到 digiRunner，內文沒有連結（產品不是它的子節點，子頁卡片不會列） |
-| `/products/digirunner-cloud` | digiRunner 地端與 Kubernetes 版本 | 麵包屑已連；內文沒有連結，建議補一處 |
+| `/industries/government` | digiRunner API 管理平台 | 已有（#178）：「digiRunner - 100% 合規、智慧政府的推手」那一則（`highlights[].link`）。產品不是它的子節點，子頁卡片不會列 |
+| `/products/digirunner-cloud` | digiRunner API 管理平台的地端與 Kubernetes 版本 | 已有（#178）：「靈活的業務擴展」（`features[].link`）。錨點加上「API 管理平台」，不單寫產品名 |
 | `/blog/ai-gateway-for-enterprise-ai-security`、`/blog/ai-infrastructure-operations-governance` | digiRunner | 已有（內文連到 `/products/digirunner`） |
-| `/blog/enterprise-grade-apim` | digiRunner API 管理平台 | 建議補：文章主題是 API 管理平台（tag `api-management`），目前沒有連到本頁 |
+| `/blog/enterprise-grade-apim` | digiRunner API 管理平台 | 已有（#178）：結語後一句。文章也補了 `relatedOfferings`，發布日比第 11 段的三篇早，第 11 段仍列原本 3 則 |
 | 有 `offerings: [zh-TW/digirunner]` 的案例內頁 | 產品名 | 已有（案例頁列出使用的產品） |
 
 ### 建議新增

@@ -24,6 +24,7 @@ import PageSections from '../../components/ui/PageSections.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import ContactCta from '../../components/ui/ContactCta.astro';
 import FactRow from '../../components/ui/FactRow.astro';
+import Link from '../../components/ui/Link.astro';
 import InPageNav from '../../components/ui/InPageNav.astro';
 import { breadcrumb, children, contactAction, localeHref, localNode, node, nodeHref } from '../../lib/ia/navigation';
 import type { PictureName } from '../../lib/scene/ribbon/labels';
@@ -78,7 +79,7 @@ const industryOfferings =
         return to ? [{ title: n.title, href: to, body: described.get(n.id) }] : [];
       })
   : [];
-const highlights = data.highlights ?? [];
+const highlights = (data.highlights ?? []).map((h) => ({ ...h, href: h.link ? href(node(h.link.node)) : undefined }));
 const whitepapers = (await getCollection('whitepaper', (w) => inLocale(w) && w.data.offeringNode === self.id)).flatMap((w) => {
   const to = href(node(w.data.node));
   return to ? [{ title: w.data.title, image: w.data.coverImage, href: to }] : [];
@@ -164,6 +165,13 @@ const jsonLd = hubJsonLd({
             <li>
               <h3 class="item-title">{h.title}</h3>
               <p class="item-body">{h.body}</p>
+              {h.link && h.href && (
+                <p class="item-link">
+                  <Link href={h.href} variant="standalone">
+                    {h.link.label}
+                  </Link>
+                </p>
+              )}
             </li>
           ))}
         </FactRow>
@@ -238,6 +246,10 @@ const jsonLd = hubJsonLd({
 
   .item-body {
     margin: 0;
+  }
+
+  .item-link {
+    margin: var(--space-2) 0 0;
   }
 
   .hero-image {

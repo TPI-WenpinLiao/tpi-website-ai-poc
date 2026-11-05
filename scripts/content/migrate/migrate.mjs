@@ -70,15 +70,18 @@ export function latinPunctuation(value) {
 }
 
 /**
- * Overrides file: entry id → { frontmatter?: {...}, alt?: { <image file>: <alt> }, dropImagesFrom?: [<host or image URL>] }.
- * @returns {Record<string, { frontmatter?: Record<string, unknown>, alt?: Record<string, string>, dropImagesFrom?: string[] }>}
+ * Overrides file: entry id → { frontmatter?: {...}, alt?: { <image file>: <alt> }, dropImagesFrom?: [<host or image URL>], append?: <Markdown> }.
+ * `append` is Markdown added after the converted body, such as an internal link the current site has no copy for (#178).
+ * @returns {Record<string, { frontmatter?: Record<string, unknown>, alt?: Record<string, string>, dropImagesFrom?: string[], append?: string }>}
  */
 export function parseOverrides(text) {
   const all = parseYaml(text) ?? {};
   for (const [id, o] of Object.entries(all)) {
     if (!/^(?:blog|news)\/(?:zh-TW|en|vi)\/[a-z0-9-]+$/.test(id)) throw new Error(`${OVERRIDES}: "${id}" is not <blog|news>/<locale>/<slug>`);
-    const extra = Object.keys(o ?? {}).filter((k) => !['frontmatter', 'alt', 'dropImagesFrom'].includes(k));
-    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (frontmatter, alt, dropImagesFrom)`);
+    const extra = Object.keys(o ?? {}).filter((k) => !['frontmatter', 'alt', 'dropImagesFrom', 'append'].includes(k));
+    if (extra.length) throw new Error(`${OVERRIDES}: ${id} has unknown keys ${extra.join(', ')} (frontmatter, alt, dropImagesFrom, append)`);
+    const append = o?.append;
+    if (append !== undefined && !(typeof append === 'string' && append.trim())) throw new Error(`${OVERRIDES}: ${id} append must be non-empty Markdown text`);
     const drop = o?.dropImagesFrom;
     if (drop !== undefined && !(Array.isArray(drop) && drop.length && drop.every((h) => typeof h === 'string'))) throw new Error(`${OVERRIDES}: ${id} dropImagesFrom must be a list of hosts or image URLs`);
   }
@@ -154,6 +157,7 @@ export async function convert({ get, type, id, slug, coverUrl, html, base, front
     },
   });
   notes.push(...mdNotes);
+  const body = override?.append ? `${markdown}\n\n${override.append.trim()}` : markdown;
   for (const m of markdown.matchAll(/!\[\]\(([^)]+)\)/g)) missingAlt.push(m[1].split('/').pop());
   if (missingAlt.length) notes.push(`images without alt: ${missingAlt.length}`);
 
@@ -170,7 +174,7 @@ export async function convert({ get, type, id, slug, coverUrl, html, base, front
 
   const path = contentFile(type, id);
   const existing = existsSync(path) ? await readFile(path, 'utf8') : null;
-  const text = entryText(data, markdown, existing, date, locale);
+  const text = entryText(data, body, existing, date, locale);
   await syncImages(assetDir(type, id), placeholder ? images.slice(1) : images, names);
   const unique = [...new Set(notes)];
   if (text === existing) return { status: 'unchanged', notes: unique };

@@ -234,7 +234,8 @@ const hub = defineCollection({
         tagline: text.optional(),
         heroImage: image().optional(),
         industry: z.enum(INDUSTRIES).optional(),
-        highlights: z.array(z.strictObject({ title: text, body: text })).optional(),
+        // `link` a page the highlight leads on to (#178), as offering's features[].link
+        highlights: z.array(z.strictObject({ title: text, body: text, link: nodeLink.optional() })).optional(),
         // The hero's sentence, evidence and contact button (#187), as offering's heroLead, heroPoints
         heroLead: text.optional(),
         heroPoints: z.array(heroPoint).optional(),
