@@ -45,10 +45,10 @@ sections:
               state: next
   - layout: junction
     id: flow
-    heading: 從掃描建檔到理賠引擎，接進現有流程
-    body: 保戶的診斷書與單據掃描建檔後由系統分析，RPA 跨系統串起立案、理算與派件，資料再交給自動理賠引擎審核。
+    heading: 從掃描建檔到派件，接進現有流程
+    body: RPA 跨系統串起立案、理算與派件，資料再交給自動理賠引擎審核，理賠人員只看最後一步。
     diagram:
-      caption: 診斷書與單據掃描建檔後由系統自動分析，串接立案、理算、派件與理賠引擎，理賠人員做最後確認。
+      caption: 系統分析後串接立案、理算、派件與理賠引擎，理賠人員做最後確認。
       columns:
         - title: 保戶文件
           tone: legacy
@@ -97,7 +97,7 @@ sections:
   - layout: claim
     id: medical
     fill: subtle
-    heading: 保險業的醫療文件解析
+    heading: 保險業的診斷書解析
     body: 保險業用自然語言技術，分析理賠收到的診斷證明書與單據。
     items:
       - title: "保險業 - 醫療文件解析"
@@ -105,8 +105,9 @@ sections:
   - layout: ui
     id: retraining
     flip: true
-    heading: 文件格式變了，企業自己再訓練模型
-    body: 收據與發票的格式一直在變。AI 進化系統讓企業自己再訓練模型，維持辨識的準確率。
+    itemsBelow: true
+    heading: 格式不一，企業自己再訓練模型
+    body: 各醫院的收據與發票格式不一。AI 進化系統讓企業自己再訓練模型，維持辨識的準確率。
     fragment:
       title: AI 進化系統
       tabs:

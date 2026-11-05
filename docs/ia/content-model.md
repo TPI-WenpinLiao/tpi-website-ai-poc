@@ -200,7 +200,7 @@ JSON-LD：`CollectionPage`，`name` ← `title`、`description` ← `description
 | `timeline` | 時間列（`Timeline`），可接對應表 | `intro`；`steps`：`{ year; body }`；`rows` |
 | `results` | 成果（`CaseList`） | `items`：`{ title; sub?; result; client?; link?; fragment? }`；`record` 段末一列紀錄 |
 | `band` | 淺紫色帶 | `items`；`fragment` |
-| `index` | 索引列（次要段落，標題用 `SectionHeading` 的 `weight="secondary"`，#200） | `items`：`{ node; label?; body? }`，名稱取節點名，`label` 改寫連結文字（寫目的地回答什麼），`body` 是表述 |
+| `index` | 索引列（次要段落，標題用 `SectionHeading` 的 `weight="secondary"`，寬螢幕時標題在左、清單在右，#200） | `items`：`{ node; label?; body? }`，名稱取節點名，`label` 改寫連結文字（寫目的地回答什麼），`body` 是表述 |
 
 各段的字串不是表述（標題、說明句、片段與圖的用詞）就是事實原文（`items`、`rows`、`steps`、`result`），事實列進內容檔的 `facts`，`scripts/strategy/facts.mjs` 檢查數字與客戶名。
 
