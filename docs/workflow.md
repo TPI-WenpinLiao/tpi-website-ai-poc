@@ -141,7 +141,7 @@ quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighth
 - 研究與策略一張：研究只補這批頁面的搜尋意圖與未搬內容，事實庫缺的才補，接著寫每頁的 brief。issue 帶「## 關卡」`strategy-approved`
 - 製作每 2–3 頁一張，帶 `needs-design`，依賴研究與策略那一張。評審放在製作 issue 裡，轉 ready 前每頁由新的 `reviewer` 評三份 rubric，都要達到 `site-review` 的門檻
 
-設計原則沒寫到這批頁面需要的呈現方式時，寫進 brief 的「取捨」，由使用者在策略關卡確認，不另開設計概念的 issue。
+設計原則沒寫到這批頁面需要的呈現方式時，寫進 brief 的「取捨」，由使用者在策略關卡確認，不另開設計概念的 issue。確認的結果寫回 [`strategy/design-principles.md`](strategy/design-principles.md)，brief 的「最後決定」欄指回原則的段落，不寫「交設計概念階段」：後續批次沒有設計概念的 issue，交出去的取捨沒有人定案，製作與評審只能自己推論（#213，`design-concept`「1. 設計原則」）。
 
 ### 呼叫角色
 
