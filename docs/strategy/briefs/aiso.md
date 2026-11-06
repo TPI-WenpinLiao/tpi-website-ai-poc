@@ -187,7 +187,7 @@ offering schema（`src/content.config.ts`）已有 `heroLead`、`heroPoints`、`
 | 段落 | 缺什麼 | 處理 | 型別 |
 |---|---|---|---|
 | 全頁 | 內容檔沒有 `facts` 欄位 | 補 `facts`（共用欄位已有），照段落表的 17 則 | — |
-| 3 | 連到新聞 559 要 `ref('news')` 的欄位 | 見「內部連結」連出第 3 段；不加欄位就不放這個連結 | `ref('news')`，形狀同 `greenswift.md`「schema 缺口」第 8 段 |
+| 3 | 連到新聞 559 要 `ref('news')` 的欄位 | 見「內部連結」連出第 3 段。#202 已加（`sections[].link` 可連新聞），第 3 段的連結已放；#213 另定 hero 的聯盟證據點後面接同一篇新聞的出處連結（`design-principles.md`「內頁共用的規則」出處），頁面由實作的 issue 改 | `ref('news')`，形狀同 `greenswift.md`「schema 缺口」第 8 段 |
 | 3 | `fact:orientai-on-prem-data` 以「不會。」開頭 | 不是 schema 缺口：照 `orient-ai.md`「schema 缺口」第 5 段，改用 `fact:orientai-on-prem-data-statement` | — |
 | 6 | 相關文章由 `blog.relatedOfferings` 反查，`/blog/why-enterprises-need-ai-appliance` 沒填 | 不是 schema 缺口：在文章的內容檔補 `relatedOfferings: [zh-TW/aiso]` | — |
 | 1 | hero 的靜態圖還沒有 | 不是 schema 缺口：設計概念階段產生新圖，`heroImage` 指過去 | — |
