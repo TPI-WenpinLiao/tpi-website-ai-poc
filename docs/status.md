@@ -166,7 +166,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - `evaluation.md`「第一批（#200）」的「還不夠好的地方」與「評審依據不足」（`design-principles.md` 沒有方案頁與產品家族 hub 的寫法、brief 交給設計概念的例外沒有回寫、`SiteFooter` 的細線）還沒開 issue，要做時另開
 - `evaluation.md`「第一批（#201）」的「還不夠好的地方」與「評審依據不足」（介面片段的狀態方塊、h2 說明句的文字色、`InPageNav` 放不下 8 項等共用元件；規格表淺灰與判斷組分組的衝突、brief 寫「金融與政府」但產業原文沒有政府）還沒開 issue，要做時另開
 - `/blog/carbonfootprint`、`/blog/carbonfootprint-quick-implementation-sme` 結尾連到 GreenSwift 頁的錨點寫「經濟型方案」，新頁不寫經濟型方案（價格沒收，`briefs/greenswift.md` 取捨第 13 項）；#202 依使用者決定不改，等 `/carbon` 的價格收進事實庫再一起處理
-- 回覆 #199 PR 的「待確認」：GreenSwift 試用網址與報告語言、`interactivehealth` 是否列進 DigiLism 子頁、改舊文章的連結文字、建議的 blog（ICR／OCR／IDP、主權 AI、中台／ESB、MCP）要不要開 issue、還沒收的事實（`messaging.md`「缺少證據的主張」第 18、23、24 項）
+- 回覆 #199 PR 的「待確認」：GreenSwift 報告語言、`interactivehealth` 是否仍銷售（#202 先用 `omitParts` 不列進 DigiLism 家族頁；試用網址已確認，#202 連到現站的申請頁）、改舊文章的連結文字、建議的 blog（ICR／OCR／IDP、主權 AI、中台／ESB、MCP）要不要開 issue、還沒收的事實（`messaging.md`「缺少證據的主張」第 18、23、24 項）
 - digiRunner 頁要不要加產品獎（`DM-8` 的台灣精品獎 2023、2024，創新商務獎 2022）：#183 只放了 hero 的專利數與台新的 Global Finance 2020，`DM-8` 把 digiRunner 列為主要用途頁，要放的話另開 issue
 - #173 的延伸事項（兩份 blog brief 文末「延伸事項」），要做時另開 issue：`/products/systalk-ai` 與 `/industries/finance` 的 `featuredPosts` 加上 AI 導入篇（金融頁要先改 `finance.md` 取捨第 5 項）、既有文章連回兩篇新文章、`ArticleTemplate` 文末加聯絡 CTA、`search-intent.md`「對應到頁面」的 `API 管理平台` 補次要承接頁、兩篇的 en、vi 版
 - 回覆 #173 PR 的「待確認」：業界統計（API、AI 導入的 ROI 與失敗比例、成熟度調查）要不要收站外來源；OrientAI 部署方式的兩則事實說法不一（`orientai-execution-layer`、`orientai-on-prem-data`）；`digirunner-ai-usage-log` 原文漏「記」字
