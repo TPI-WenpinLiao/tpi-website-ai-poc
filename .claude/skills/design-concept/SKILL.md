@@ -45,6 +45,8 @@ description: 分階段流程的設計概念階段使用：從 messaging 推出�
 
 原則定案後，逐份對照 brief：brief 的做法和原則衝突時（例如 brief 決定保留原則禁止的 eyebrow），在 brief 的「取捨」寫明以哪一份為準，並在 brief 段落表的「影像」欄填入該段的圖（`content-strategy`「2. Content brief」）。
 
+brief 把呈現方式交給設計概念決定時（「取捨」寫「交設計概念階段」、片段張數不足、版型用法超出原則），定案後寫回 `design-principles.md` 的對應段落（多半是「各模板怎麼呈現」），再把 brief 該項的「最後決定」改成指回原則的段落。只寫在 brief 或 PR 留言的決定，下一批頁面與評審看不到（#213：#200–#202 的評審反覆寫「原則沒有回寫」）。後續批次沒有設計概念的 issue，這一步在策略關卡確認後做（`docs/workflow.md`「分階段流程」）。
+
 文件提到事實時照 `content-strategy` 的寫法用 `` `fact:<id>` ``，`node scripts/strategy/facts.mjs`（`npm run check`）也檢查 `design-principles.md`，規則同 messaging。
 
 ## 2. 參考對照

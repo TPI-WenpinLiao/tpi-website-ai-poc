@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-11-05
+最後更新：2026-11-06
 
 ## 目前 milestone
 
@@ -159,10 +159,12 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 第一批的 AI 理賠、AI 建檔與 SysTalk.ai 產品家族頁完成（#200，`design-approved`）：`/solutions/smartclaim`、`/solutions/smartfilling`、`/products/systalk-ai` 照 brief 改用 `sections` 逐段排版（只改 zh-TW），三張新的 hero 靜態圖（`page-smartclaim`、`page-smartfilling`、`page-systalk-ai`）。`pageSection` 新增 `index`（索引列），spec 加 `compare`（兩個機型並排）、`items`、`record`，ui 加 `itemsBelow`，hub 加 `partsTitle`，offering 與 hub 加 `contactTitle`（`ContactCta` 的 `title`）；5 行以上的事實排成兩欄清單（`src/lib/content/lists.ts`）。`/templates/offering`、`/templates/hub` 的預覽固定取試點頁。三頁由新的 `reviewer` 評三份 rubric 都通過（`evaluation.md`「第一批（#200）」），`eval-shots.mjs` 加 `--pages` 給後續批次用
 - 第一批的 OrientAI 與 AISO 頁完成（#201，`design-approved`）：`/orient-ai`（brief 10 段）、`/aiso`（brief 7 段）照 brief 改用 `sections` 逐段排版（只改 zh-TW），兩張新的 hero 靜態圖（`page-orient-ai`、`page-aiso`），段落圖沿用 `sec-deployment`、`sec-planning`。事實庫新增 `orientai-on-prem-data-statement`（裁掉「不會。」，原本那筆首頁的問答還在用），OrientAI 執行層、治理層與硬體建議等拆行；三篇文章補 `relatedOfferings`。兩頁由新的 `reviewer` 評三份 rubric 都通過（`evaluation.md`「第一批（#201）」）；AISO 第 3 段不連新聞 559（`nodeLink` 只能指節點），#202 補上
 - 第一批的 GreenSwift 與 DigiLism 頁完成（#202，`design-approved`）：`/products/greenswift`（brief 11 段）、`/products/digilism`（brief 8 段）照 brief 改用 `sections` 逐段排版（只改 zh-TW），兩張新的 hero 靜態圖（`page-greenswift`、`page-digilism`，ribbon 世界加 `greenswift` 標籤錨點）。段落的 `link` 可以連新聞、站外頁或兩個連結，`caseNotes` 加 `news`，offering `secondaryCta` 可以連頁內段落，hub 加 `omitParts`（DigiLism 不列互動式健康管理服務平台，使用者決定）；AISO 第 3 段補上新聞 559 的連結；三篇碳管理文章補 `relatedOfferings`。設計確認時使用者回報 zh-TW 標題斷在詞中間（申報格／式），`src/lib/content/phrases.ts` 由 `src/middleware.ts` 在標題的長串字裡、詞與詞之間加 `<wbr>`，全站 zh-TW 標題適用。兩頁由新的 `reviewer` 評三份 rubric 都通過，設計都是 4.0（`evaluation.md`「第一批（#202）」）
+- `design-principles.md` 補上內頁的缺口（#213），階段一，等待 design-approved
 
 ## 下一步
 
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
+- #213 定案的規則和現有頁面不一致之處（GreenSwift hero 構圖、案例列的 heading 與錨點、介面片段的事實排法、規格表與對應表的底色與 `<table>`、標題以外的斷行、AISO 出處連結、首頁近景圖與產品縮圖的取景、DigiLism 產品索引）：案例列由 #210 改，其餘對照 #208–#212，沒有涵蓋的要做時另開（清單在 #213 的 PR）
 - `evaluation.md`「第一批（#200）」「第一批（#201）」「第一批（#202）」的「還不夠好的地方」與「評審依據不足」：共用元件的問題已開 #208–#212，規則文件的缺口已開 #213–#215（都是 `needs-design`、依賴 #202；各 issue 的內文列出它涵蓋哪幾項）。其餘還沒開 issue 的以 `evaluation.md` 那三節為準，要做時另開，開之前先對照 #208–#215 避免重複
 - `/blog/carbonfootprint`、`/blog/carbonfootprint-quick-implementation-sme` 結尾連到 GreenSwift 頁的錨點寫「經濟型方案」，新頁不寫經濟型方案（價格沒收，`briefs/greenswift.md` 取捨第 13 項）；#202 依使用者決定不改，等 `/carbon` 的價格收進事實庫再一起處理
 - 回覆 #199 PR 的「待確認」：GreenSwift 報告語言、`interactivehealth` 是否仍銷售（#202 先用 `omitParts` 不列進 DigiLism 家族頁；試用網址已確認，#202 連到現站的申請頁）、改舊文章的連結文字、建議的 blog（ICR／OCR／IDP、主權 AI、中台／ESB、MCP）要不要開 issue、還沒收的事實（`messaging.md`「缺少證據的主張」第 18、23、24 項）
