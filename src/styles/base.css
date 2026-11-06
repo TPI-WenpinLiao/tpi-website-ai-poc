@@ -103,8 +103,8 @@ body {
    (數位轉／型, 與能／源): headings, and lead text or labels marked .text-phrase. A run too long for
    the line still breaks anywhere instead of overflowing; a line-start full-width opening bracket
    drops its blank half where the font supports it (PingFang TC, Noto Sans TC). Not for body
-   paragraphs, where breaks only at punctuation would leave ragged lines. A zh-TW run with no
-   punctuation gets <wbr> between its words (src/lib/content/phrases.ts, applied by src/middleware.ts),
+   paragraphs, where breaks only at punctuation would leave ragged lines. A long zh-TW run with no
+   punctuation in a heading gets <wbr> between its words (src/lib/content/phrases.ts, applied by src/middleware.ts),
    so it breaks between words instead of anywhere (申報格／式, #202). */
 :is(h1, h2, h3, h4, h5, h6),
 .text-phrase {

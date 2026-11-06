@@ -1,5 +1,5 @@
 // Page-wide HTML that the components can't give on their own (#202): <wbr> between the words of
-// zh-TW headings and .text-phrase text, so they break between words (src/lib/content/phrases.ts).
+// the long runs of zh-TW headings, so they break between words (src/lib/content/phrases.ts).
 // Runs on every rendered page, in `astro dev` and when the static build prerenders, so dev and dist/
 // read the same.
 import { defineMiddleware } from 'astro:middleware';
