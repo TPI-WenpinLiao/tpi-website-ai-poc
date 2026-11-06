@@ -103,7 +103,7 @@ API Gateway 是所有 API 呼叫的入口，認證、限流、快取與監控集
 | 9 | API Gateway 跟 API 管理平台差在哪 | 先寫通用概念：Gateway 管的是執行期的流量；API 管理平台在 Gateway 之外，還管 API 的生命週期（設計、發布、版本、下架）、開發者入口網站（一句解釋：讓要呼叫 API 的人申請與取得存取權限的地方）、使用紀錄與分析。企業開始用 AI 模型後，AI 的呼叫也是一種要管理的流量，這一句連到 `/blog/ai-infrastructure-operations-governance`。再用 digiRunner 當例子，照原文寫它把 API Gateway 列為應用之一，並提供 API 生命週期管理、即時主控台的 API 活動與軌跡、AI Gateway。例子不寫開發者入口網站，也不寫使用者自助註冊與登入（「取捨」第 12 項）。例子的最後一句連到 `/products/digirunner`，錨點寫例子提到的功能（「內部連結」） | IT 主管任務「評估要不要一套 API 管理平台」；決策者任務「知道要不要編預算」；`IT-5`、`IT-6` | 前幾名都沒有：Gateway 與完整 API 管理平台的差別（「API 管理 金融業」的共同子題）；繁中的在地產品例子。`API 管理平台` 的共同子題：生命週期、開發者入口網站、分析 | `fact:digirunner-five-applications`、`fact:digirunner-api-lifecycle`、`fact:digirunner-console`、`fact:digirunner-ai-gateway` | 通用 120–180 字，例子 80–130 字 | |
 | 10 | 結語：評估時先問的問題 | 用 3–5 個問題收尾，讓讀者帶回去評估：Gateway 要裝在哪裡、要接哪些既有系統、故障時誰處理、需不需要生命週期與使用紀錄、AI 模型的呼叫要不要一起管。問題是表述，不附答案，也不寫 digiRunner 的功能。接著放 CTA | IT 主管任務「決定下一步」；次要轉換：試用（`IT-7`） | — | 無（表述） | 問題 3–5 個，說明 40–80 字 | |
 
-第 8、9 段的例子由事實組成，製作階段用事實原文，不改寫成更強的說法。說明句寫讀者得到什麼答案（例如「故障時請求自動轉到另一台，不必有人值班切換」），不寫「以下是 digiRunner 的做法」這類交代版面的句子（`content-strategy` skill「3. 頁面文案」）。
+第 8、9 段的例子由事實組成，製作階段用事實原文，不改寫成更強的說法。說明句寫讀者得到什麼答案（例如「故障時請求自動轉到另一台，不必有人值班切換」），不寫「以下是 digiRunner 的做法」這類交代版面的句子（`content-strategy` skill「全頁的寫法」）。
 
 ### 共同子題對照
 

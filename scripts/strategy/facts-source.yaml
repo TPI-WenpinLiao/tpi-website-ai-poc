@@ -4,9 +4,11 @@
 #
 #   groups[]   group: heading written as a comment; url, locale: defaults for its facts;
 #              comment: optional line written under the heading
-#     facts[]  id, type, quote (verbatim from the page); optional: text (defaults to quote; may add
-#              punctuation and line breaks, not words), url,
-#              locale, status (defaults to confirmed), note (required for to_confirm), comment
+#     facts[]  id, type, quote (verbatim from the page); optional: text (defaults to quote; may cut
+#              the quote at punctuation and add punctuation and line breaks, not words; only the typos
+#              in facts.mjs's TYPOS may be fixed), url, locale, status (defaults to confirmed),
+#              note (required for to_confirm and partial), partial (true when text is not a whole
+#              sentence: never used alone as an item or hero point), comment
 #   ignore[]   match: a regex over a text block of docs/strategy/facts-candidates.md;
 #              reason: why blocks it matches are not facts (shown in the report)
 #
@@ -746,7 +748,7 @@ groups:
     facts:
       - { id: opentpi-program, type: company, quote: 昕力開源計劃 OpenTPI }
       - { id: digirunner-open-source, type: feature, quote: 開源版 digiRunner }
-      - { id: tpi-open-source-products, type: company, text: 開放自研軟體產品原始碼, quote: 不僅開放自研軟體產品原始碼 }
+      - { id: tpi-open-source-products, type: company, text: 開放自研軟體產品原始碼, quote: 不僅開放自研軟體產品原始碼, partial: true, note: 原句是「不僅…」的前半，text 去掉「不僅」，後半不在 quote 裡 }
       - id: digirunner-oss-license
         type: feature
         quote: Apache License Version 2.0
@@ -773,6 +775,8 @@ groups:
         quote: Ready-to-use console for cloud collaboration with proven adoption and effectiveness in real-world scenarios.
         url: https://tpi.dev/
         locale: en
+        partial: true
+        note: The sentence goes on with "with proven adoption and effectiveness in real-world scenarios", cut as a claim with no basis
       - id: digirunner-oss-api-policies-en
         type: feature
         quote: API policies for managing API client access, quotas and traffic control with token-based authentication.
@@ -979,6 +983,8 @@ groups:
         quote: 不知道如何下手寫報告書？GreenSwift 為您於雲端整合碳數據、ESG 顧問團隊，並讓 AI 成為您最佳幫手！
         text: GreenSwift 為您於雲端整合碳數據、ESG 顧問團隊
         comment: text keeps the feature, drops the question and「最佳幫手」
+        partial: true
+        note: 原句後半「並讓 AI 成為您最佳幫手」被裁掉，單獨一則會讀成顧問團隊在 GreenSwift 裡（#202 評審）
       - { id: greenswift-report-method, type: feature, quote: 根據ISO 14064-1:2018規範，我們會在溫室氣體盤查報告中詳細描述數據鑑別、收集過程及計算方法。報告還包括數據品質評分表與不確定性分析等內容。 }
       - { id: greenswift-accounts, type: feature, quote: 對企業而言，系統分為主要管理者帳號和子管理者帳號，且沒有使用者數量的上限。主要管理者帳號可以審核和管理該公司申請的所有子帳號。系統也不限制使用者設立的組織邊界數量，支持靈活配置和擴展。 }
       - { id: greenswift-collaboration, type: feature, quote: GreenSwift 特別強調權責分工、系統主動提醒、數據分析、儀表板設置及減碳計劃自訂，確保各部門能有效協作完成數據收集。 }
@@ -1544,6 +1550,8 @@ groups:
         quote: 此次產品組合結合自研 OrientAI 系列軟體與地端硬體
         url: https://www.tpisoftware.com/media-center/585
         comment: News body (Nuxt payload newsHtml)
+        partial: true
+        note: 新聞內文的半句，「此次產品組合」指新聞發表的組合，離開新聞讀不通（#201 評審 C6）
 
   - group: OrientAI
     url: https://www.tpisoftware.com/orient-ai

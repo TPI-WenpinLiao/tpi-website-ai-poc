@@ -24,9 +24,13 @@ export const factSchema = z
     status: z.enum(['confirmed', 'to_confirm']),
     // Why a fact is to_confirm (license, possibly outdated, locales disagree), or any other remark
     note: nonEmpty.optional(),
+    // The text is not a whole sentence: cut out of one, or the quote itself is half of one (#214).
+    // Pages use it as a label, a fragment row or a table cell, never as an item or hero point alone
+    partial: z.literal(true).optional(),
   })
   .strict()
-  .refine((f) => f.status !== 'to_confirm' || f.note, { path: ['note'], message: 'a to_confirm fact needs a note saying why' });
+  .refine((f) => f.status !== 'to_confirm' || f.note, { path: ['note'], message: 'a to_confirm fact needs a note saying why' })
+  .refine((f) => !f.partial || f.note, { path: ['note'], message: 'a partial fact needs a note saying what is cut off' });
 
 export type Fact = z.infer<typeof factSchema>;
 

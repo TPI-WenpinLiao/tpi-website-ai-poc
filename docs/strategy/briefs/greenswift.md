@@ -79,7 +79,7 @@
 
 - 第 2 段：`fact:greenswift-scope` 的原文是三個方案攤平成一串，`fact:greenswift-carbon-plan`、`fact:greenswift-cbam-plan`、`fact:greenswift-footprint-plan` 是一串名詞。製作階段照 `.claude/skills/site-research/SKILL.md` 第 2 條在 `scripts/strategy/facts-source.yaml` 把 `text` 拆成每行一項，重跑 `node scripts/strategy/extract-facts.mjs`
 - 第 3 段：`fact:greenswift-six-steps` 拆成每行一步，`fact:greenswift-scopes` 拆成範疇一到三各一行
-- 說明句寫讀者得到什麼（例如「三種盤查與申報各有方案，數據在同一個平台」），不寫「以下列出」
+- 說明句照 `content-strategy` skill「全頁的寫法」：寫讀者得到什麼，清單是事實原文（例如「三種盤查與申報各有方案，數據在同一個平台」）
 
 ### 不能寫的句子
 
