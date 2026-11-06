@@ -130,7 +130,7 @@
 | 8 | `/success-story` | 看所有成功案例 | 列表頁沒有產業篩選，錨點不能寫「金融業案例」，見「取捨」第 9 項。第 4 段不再連這裡：阻詐平台移到第 8 段且不加連結（取捨第 13 項），#168 評審指出它連到列表頁不對（new-finance S5） |
 | 5 | `/products/gadodido` | gadoDIDO 無密碼身分驗證 | |
 | 6 | `/products/insurebrick`、`/solutions/insurering` | 節點名稱 | 第 6 段段末的索引列 |
-| 8 | 精選案例內頁（`/success-story/{slug}`） | 客戶名稱加案例標題：`<a>` 的文字是案例檔的 `client.name`、全形冒號、案例檔的 `title`；`title` 已經以客戶名開頭時只用 `title`。4 則是「台新銀行：現金業務API管理平台」「安泰銀行：API 管理平台」「國泰世華銀行：AI智能客服」「臺灣銀行 RPA 流程自動化」 | `featuredCaseStudies` 照段落結構第 8 段的 4 則。客戶名要在 `<a>` 裡面，不是只排在連結旁邊（new-finance S5）。案例列若每列有 heading，heading 也用同一串文字（new-finance S4：h3「AI智能客服」「API 管理平台」看不出客戶）。案例標題的中英文間空格是案例檔的問題，錨點照檔案組，不另寫一份 |
+| 8 | 精選案例內頁（`/success-story/{slug}`） | 客戶名稱加案例標題：`<a>` 的文字是案例檔的 `client.name`、全形冒號、案例檔的 `title`；`title` 已經以客戶名開頭時只用 `title`。4 則是「台新銀行：現金業務API管理平台」「安泰銀行：API 管理平台」「國泰世華銀行：AI智能客服」「臺灣銀行 RPA 流程自動化」。#213 改：客戶名稱與案例標題分兩行放在同一個 h3 與 `<a>`（第一行客戶名稱、第二行案例檔的 `title`），不再用全形冒號接成一行，標題已含客戶名也照放，見 `design-principles.md`「案例列」的「heading 與錨點」；頁面與 `CaseList` 由 #210 改 | `featuredCaseStudies` 照段落結構第 8 段的 4 則。客戶名要在 `<a>` 裡面，不是只排在連結旁邊（new-finance S5）。案例列若每列有 heading，heading 也用同一串文字（new-finance S4：h3「AI智能客服」「API 管理平台」看不出客戶）。案例標題的中英文間空格是案例檔的問題，錨點照檔案組，不另寫一份 |
 | 8 | 不加連結 | — | 金融聯防阻詐平台那一列：沒有案例頁也沒有產品頁，這列不加連結，也不連到 `/success-story`（取捨第 13 項）。錨點寫「金融聯防阻詐平台」卻連到列表頁，讀者會以為是平台的頁面（new-finance S5） |
 | 1、9 | `/contact-us` | 聯絡業務 | 主要轉換；第 9 段的標題寫談金融業的需求。production 第 9 段的連結寫「聯絡我們」（new-finance S5），按鈕統一成「聯絡業務」（`home.md`「取捨」第 10 項） |
 
