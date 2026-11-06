@@ -68,4 +68,4 @@ en、vi 頁面除了上表，還要注意：
 1. `npm run check` 通過（`scripts/seo/meta.mjs` 檢查每頁 head 與 sitemap，結尾輸出各語系頁數；`headings.mjs` 檢查 heading；`scripts/i18n/routes.mjs` 檢查語系與連結；`scripts/seo/links.mjs` 檢查站內連結；Lighthouse SEO = 1；html-validate 無錯誤）。頁數和預期不同時，先查是不是少了某個語系的內容檔或 `translationKey` 對不上
 2. 用瀏覽器檢視原始碼，確認上表各項存在且值正確
 3. JSON-LD 貼到 [Schema Markup Validator](https://validator.schema.org/) 無錯誤
-4. PR 的 preview 檢查重點列出新增 / 變更頁面的 title 與 description
+4. PR 的頁面檢查重點列出新增 / 變更頁面的 title 與 description

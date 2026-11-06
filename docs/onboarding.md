@@ -45,13 +45,17 @@
   export LHCI_SETTINGS__CHROME_FLAGS="--no-sandbox --headless=new"
   ```
 
-## 4. 本機開發（選用）
+## 4. 本機開發與看頁面
+
+PR 不會自動部署 Cloudflare preview，只有設計確認或你要求時，Claude 才把 PR 推到 `preview` branch（[ADR 0008](decisions/0008-preview-branch.md)）。其他時候 review 頁面要在本機看，所以做 review 的人需要這一步。
 
 ```bash
 nvm use
 npm ci
 npm run dev
 ```
+
+看 PR 的頁面時先切到 PR 的 head branch，什麼時候改用 `npm run build && npm run preview` 見 `docs/workflow.md`「看頁面」。
 
 推送前執行 `npm run check`（需要本機有 Chrome）。視覺回歸在本機與雲端 session 都會 skip，只在 CI 比對，見 `docs/workflow.md`「視覺回歸」。
 

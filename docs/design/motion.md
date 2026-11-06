@@ -80,7 +80,7 @@ M3-08（#55）依 M3-07 選定的方向 B Modular Stack 整理。
 
 2026-11-02，#167 階段二（ribbon-route）。行動版量到的是靜態版；桌機的長任務落在 3D 上頁後 1.2 秒的緞帶畫出動畫，細節見 ADR 0003「ribbon-route」的「結果（#167 階段二）」。產品頁不再有 3D。
 
-headless Chromium 的 TBT 偏高，當成上限看；真機待 preview 部署後量測（ADR 0003「結果」）。
+headless Chromium 的 TBT 偏高，當成上限看；真機待 `main` 部署到 `*.pages.dev` 後量測（ADR 0003「結果」）。
 
 ### 行動版降級
 

@@ -70,7 +70,7 @@ git diff --stat
 git push -u origin <工作 branch>
 ```
 
-工作 branch 由 [`issue-start` 第 1 步](../issue-start/SKILL.md#1-同步-branch)決定。只在網路錯誤時重試，最多 4 次（間隔 2s、4s、8s、16s）。不得 push `main`、不得 force push 到他人的 branch。
+工作 branch 由 [`issue-start` 第 1 步](../issue-start/SKILL.md#1-同步-branch)決定。只在網路錯誤時重試，最多 4 次（間隔 2s、4s、8s、16s）。不得 push `main`、不得 force push 到他人的 branch。`preview` 是例外，時機只限「`needs-design` 的兩個階段」寫的階段一與使用者要求時。
 
 第 4 步合併過 `wip:` commit 時，改用 `git push --force-with-lease -u origin <branch>`。這時還沒開 PR，branch 只有本 session 在用，改寫歷史不影響別人。PR 開了之後就不再 force push。
 
@@ -92,8 +92,8 @@ Closes #N
 - 證據在 CI 裡的（CI 綠燈、CI log 的內容）寫「待 CI」
 - `npm run check` 通過
 
-## Preview 檢查重點
-- 要看的頁面路徑與斷點（375／768／1280）；沒有頁面變更時寫「無頁面變更」，改列 review 時要看的文件段落
+## 頁面檢查重點
+- 要看的頁面路徑與斷點（375／768／1280）。PR 不會自動部署 preview（ADR 0008）：推了 `preview` 時寫 `https://preview.tpi-website-ai-poc.pages.dev` 與推的短 SHA，沒推時寫「在本機看」；沒有頁面變更時寫「無頁面變更」，改列 review 時要看的文件段落
 
 ## 待確認
 - 不確定的內容、與計畫不同之處（沒有就省略）
@@ -107,7 +107,7 @@ Closes #N
 
 `needs-design` 的兩個階段各執行一次本 skill。issue 本身有「## 關卡」段落時（分階段流程的策略 issue，關卡是 `strategy-approved`）也一樣，approved label 取該段落寫的。`CLAUDE.md` 的兩階段流程、`issue-start` 的計畫、`checkpoint` 都連到這裡，做法不另外寫。
 
-- 階段一：照第 1–6 步做，不跳步。第 4 步照常合併 `wip:` commit，第 5 步照常 `--force-with-lease`。body 另列「設計決策」與「待確認問題」。開完 draft PR 後**停下**，告知使用者等待設計確認，不進第 7 步的審查迴圈，不得進入階段二
+- 階段一：照第 1–6 步做，不跳步。第 4 步照常合併 `wip:` commit，第 5 步照常 `--force-with-lease`。body 另列「設計決策」與「待確認問題」。開完 draft PR 後執行 `git push --force origin HEAD:preview`（ADR 0008，網路錯誤的重試同第 5 步），在「頁面檢查重點」寫上 `https://preview.tpi-website-ai-poc.pages.dev` 與推的短 SHA，然後**停下**（階段一依設計意見修改、push 到 PR 後，同樣重推 `preview` 並更新 SHA），告知使用者等待設計確認，不進第 7 步的審查迴圈，不得進入階段二
 - 階段二：使用者告知已加上 approved label 後，補齊 SEO、無障礙、內容（「## 關卡」的 issue 改為依使用者確認時的意見修正產出物），再從第 1 步走到第 9 步。這時 PR 已經開了，所以第 4 步只照一般格式 commit、不做 `wip:` 合併（階段二的 checkpoint 不用 `wip:`，見 [`checkpoint` 第 3 步](../checkpoint/SKILL.md#3-commit-與-push)），第 5 步不 force push，第 6 步不另開 PR，只更新 body
 
 ## 7. 審查迴圈
@@ -167,7 +167,7 @@ Closes #N
 - <項目>：<一行理由>（沒有就寫「無」）
 
 ### 你要看的地方
-- <preview 頁面與斷點，或要讀的文件段落>
+- <要看的頁面與斷點，或要讀的文件段落>
 ```
 
 ## 9. 回報

@@ -55,7 +55,7 @@ ADR 0001 的原則不變：頁面預設沒有 client JS。3D 場景是明確選�
 |---|---|---|
 | `/prototypes/modular-stack` | 0.99（TBT 73 ms） | 1（TBT 0 ms） |
 
-LCP 都是 hero 靜態圖，3D chunk 在實測 LCP 與 `load` 之後請求。同一頁的 SEO、accessibility、best-practices 在行動版與桌機都是 1。headless Chromium 用 SwiftShader 軟體算圖，TBT 偏高；真機待 preview 部署後量測。
+LCP 都是 hero 靜態圖，3D chunk 在實測 LCP 與 `load` 之後請求。同一頁的 SEO、accessibility、best-practices 在行動版與桌機都是 1。headless Chromium 用 SwiftShader 軟體算圖，TBT 偏高；真機待 `main` 部署到 `*.pages.dev` 後量測。
 
 `a11y-smoke.mjs` 的 3D 文字對比 10 個量測點都通過。拿掉 scrim 與面板玻璃再量，375×800 的 25% 位置與 1280×860 的 100% 位置會失敗（例如 eyebrow 1.14:1），確認這項檢查量得到場景的影響。
 
@@ -190,4 +190,4 @@ LCP 都是 hero 靜態圖，3D chunk 都在實測 LCP 與 `load` 之後請求。
 - 行動版不載 three.js，量到的是靜態版
 - 桌機的長任務有 11 個，110–230 ms，落在 3D 上頁後 1.2 秒的緞帶畫出動畫：每個 frame 的繪製在 SwiftShader 上要 100 ms 以上。陰影貼圖改成只在緞帶改變時重算（`shadowMap.autoUpdate = false`）後，TBT 從 1,218 ms 降到 1,102 ms；實驗關掉 antialias 只到 0.72（TBT 892 ms），沒有採用
 - 3D chunk 在實測 LCP 與 `load` 之後才請求（169 ms／180 ms／206 ms），初始化的時序照本 ADR
-- 方向 B 在同一環境的桌機 TBT 是 0 ms（上方「結果」）。headless 的軟體算圖會放大每個 frame 的成本，真機的數字待 preview 部署後量；`npm run check` 的 Lighthouse 只量行動版，不擋這個差異（ADR 0004）
+- 方向 B 在同一環境的桌機 TBT 是 0 ms（上方「結果」）。headless 的軟體算圖會放大每個 frame 的成本，真機的數字待 `main` 部署到 `*.pages.dev` 後量；`npm run check` 的 Lighthouse 只量行動版，不擋這個差異（ADR 0004）

@@ -65,7 +65,7 @@ description: 分階段流程的評審階段使用，設計概念階段評三個�
 
 | 給 | 不給 |
 |---|---|
-| 頁面網址（PR preview 或 `npm run preview`）、`dist/` 的 HTML、原型檔案 | PR 對話、issue 留言、進度檔、製作者的說明或自評 |
+| 頁面網址（`npm run build` 後 `npm run preview`）、`dist/` 的 HTML、原型檔案 | PR 對話、issue 留言、進度檔、製作者的說明或自評 |
 | 375、1280 寬的截圖 | 上一輪或其他組的評分 |
 | `docs/strategy/` 的 messaging、brief、設計原則、事實庫（評「有沒有做到」要對照的依據） | |
 | 本 skill 與 rubric | |

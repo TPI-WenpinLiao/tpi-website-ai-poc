@@ -29,7 +29,7 @@ M6-01 只接 `/contact-us`（三語）。白皮書 4 篇都是 `draft: true`、`
 
 ## 設定（正式上線前）
 
-本專案是 PoC，目前不做這些設定（使用者 2026-10-27 決定），preview 上的表單送出一律失敗，表單的行為由「驗證」的兩支檢查確認。正式上線時由使用者在 Cloudflare 完成：
+本專案是 PoC，目前不做這些設定（使用者 2026-10-27 決定），`*.pages.dev` 上的表單送出一律失敗，表單的行為由「驗證」的兩支檢查確認。正式上線時由使用者在 Cloudflare 完成：
 
 1. 在 Cloudflare dashboard 建立 Turnstile widget，網域加上 `*.pages.dev` 的專案網域（之後加正式網域）
 2. 在 Pages 專案的 Settings → Environment variables，production 與 preview 都設定：
