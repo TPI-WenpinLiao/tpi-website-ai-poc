@@ -433,7 +433,15 @@ groups:
       - { id: digilism-patent-resource-scheduling, type: feature, text: 專利技術的運算資源調度機制、靈活調配，以提高資訊系統可用性。, quote: '專利技術的運算資源調度機制、靈活調配，,以提高資訊系統可用性。' }
       - { id: digilism-patent-sla, type: feature, quote: 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。, status: to_confirm, note: 「確保100% 符合 SLA」沒有依據或比較基準，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）；專利的部分另收 digilism-patent-load-balancing }
       - { id: digilism-patent-load-balancing, type: feature, quote: 自適應負載平衡機制及紅黑佈署策略的專利技術, comment: 功能層級的專利說法統一 confirmed（#165 使用者決定） }
-      - { id: digilism-system-integration, type: feature, quote: 結合 DevOps 與 CI/CD 流程、整合 API 管理、BPM、日誌管理，支援地端、雲端、雲地混合與多雲架構，介接大型企業的傳統 ESB }
+      - id: digilism-system-integration
+        type: feature
+        quote: 結合 DevOps 與 CI/CD 流程、整合 API 管理、BPM、日誌管理，支援地端、雲端、雲地混合與多雲架構，介接大型企業的傳統 ESB
+        comment: text splits the run of clauses one per line (#202)
+        text: |-
+          結合 DevOps 與 CI/CD 流程
+          整合 API 管理、BPM、日誌管理
+          支援地端、雲端、雲地混合與多雲架構
+          介接大型企業的傳統 ESB
       - { id: digilism-microservice-framework, type: feature, quote: DigiLism 以 K8S 滿足系統高可用性，直接實踐微服務架構的 BFF （Backend for Frontend），並以自有自動擴容 （Auto-scaling）研發專利技術，讓系統具備佈署彈性。 }
       - { id: digilism-auth-module, type: feature, quote: 提供多元身分驗證、驗身機制及安控機制的整合，包含訪問控制、資料加密和單一登入（SSO）等，同時內建組織階層管理 }
       - { id: digilism-log-audit, type: feature, quote: 記錄分散於各系統或 AP 的所有日誌，透過集中控管、即時監控告警，提供第一線 IT 人員精確即時查找、分析系統問題來源 }
@@ -889,17 +897,62 @@ groups:
     locale: zh-TW
     facts:
       - { id: cert-greenswift-aup, type: certification, quote: 通過國際查證機構核發AUP認證 }
-      - { id: greenswift-scope, type: feature, quote: 碳盤查 盤查企業自身碳排放 包括跨地區/廠區/設備/系統 CBAM 自動文件資訊化碳排 並產出申報清冊 碳足跡 計算企業產品碳足跡 計算相關供應鏈碳足跡 }
-      - { id: greenswift-six-steps, type: feature, quote: 盤查計畫 組織邊界 排放源鑑別 排放量計算 盤查報告 查證作業 }
-      - { id: greenswift-ai-report, type: feature, quote: AI 協力 一鍵生成溫室氣體報告 }
+      - id: greenswift-scope
+        type: feature
+        quote: 碳盤查 盤查企業自身碳排放 包括跨地區/廠區/設備/系統 CBAM 自動文件資訊化碳排 並產出申報清冊 碳足跡 計算企業產品碳足跡 計算相關供應鏈碳足跡
+        comment: text splits the three plans one per line, the name before a colon (#202)
+        text: |-
+          碳盤查：盤查企業自身碳排放，包括跨地區/廠區/設備/系統
+          CBAM：自動文件資訊化碳排，並產出申報清冊
+          碳足跡：計算企業產品碳足跡，計算相關供應鏈碳足跡
+      - id: greenswift-six-steps
+        type: feature
+        quote: 盤查計畫 組織邊界 排放源鑑別 排放量計算 盤查報告 查證作業
+        comment: text splits the run of items into list items, one per line (#202)
+        text: |-
+          盤查計畫
+          組織邊界
+          排放源鑑別
+          排放量計算
+          盤查報告
+          查證作業
+      - id: greenswift-ai-report
+        type: feature
+        quote: AI 協力 一鍵生成溫室氣體報告
+        comment: text puts a comma where the slogan has a space, so it reads as a sentence in body text (#202)
+        text: AI 協力，一鍵生成溫室氣體報告
       - { id: greenswift-seven-ghg, type: feature, quote: 可整合七大溫室氣體排放 }
       - { id: greenswift-epa-format, type: feature, quote: 系統內建碳排計算公式 ，自動計算完整碳排放量，並可一鍵下載為符合環保署登錄平台之表單格式(3.0.0) }
       - { id: greenswift-standards, type: feature, quote: 系統內建最新的碳盤查標準和國際係數，可自由切換使用 GHG Protocol 及 ISO 14064-1:2018 標準，並定期更新 IPCC 的最新係數 }
       - { id: greenswift-cloud-collaboration, type: feature, quote: 企業內部人員、及外部顧問團隊皆可在雲端上，共同編輯各項指標文稿 }
       - { id: greenswift-plans, type: feature, quote: 碳盤查會員 CBAM會員 }
-      - { id: greenswift-carbon-plan, type: feature, quote: 支援ISO14064-1標準的碳盤查流程 提供碳排放清單編制工具 AI生成碳盤查報告 數據進度即時追蹤功能 無組織邊界數量限制 無帳號數量限制 }
-      - { id: greenswift-cbam-plan, type: feature, quote: CBAM（碳邊境調整機制）報表格式下載 提供進出口供應鏈符合CBAM要求的數據支持 }
-      - { id: greenswift-footprint-plan, type: feature, quote: 專注於產品碳足跡計算 提供產品生命周期碳排放報告 支援國際及地方排放係數的自動更新 無產品碳足跡盤查報告數量限制 }
+      - id: greenswift-carbon-plan
+        type: feature
+        quote: 支援ISO14064-1標準的碳盤查流程 提供碳排放清單編制工具 AI生成碳盤查報告 數據進度即時追蹤功能 無組織邊界數量限制 無帳號數量限制
+        comment: text splits the run of items into list items, one per line (#202)
+        text: |-
+          支援ISO14064-1標準的碳盤查流程
+          提供碳排放清單編制工具
+          AI生成碳盤查報告
+          數據進度即時追蹤功能
+          無組織邊界數量限制
+          無帳號數量限制
+      - id: greenswift-cbam-plan
+        type: feature
+        quote: CBAM（碳邊境調整機制）報表格式下載 提供進出口供應鏈符合CBAM要求的數據支持
+        comment: text splits the run of items into list items, one per line (#202)
+        text: |-
+          CBAM（碳邊境調整機制）報表格式下載
+          提供進出口供應鏈符合CBAM要求的數據支持
+      - id: greenswift-footprint-plan
+        type: feature
+        quote: 專注於產品碳足跡計算 提供產品生命周期碳排放報告 支援國際及地方排放係數的自動更新 無產品碳足跡盤查報告數量限制
+        comment: text splits the run of items into list items, one per line (#202)
+        text: |-
+          專注於產品碳足跡計算
+          提供產品生命周期碳排放報告
+          支援國際及地方排放係數的自動更新
+          無產品碳足跡盤查報告數量限制
       - { id: greenswift-categories, type: feature, quote: 以六大步驟系統化管理類別一至類別四溫室氣體排放源盤查流程 }
       - { id: greenswift-trial-30-days, type: feature, quote: 審核通過後即開始30天試用，試用到期將自動關閉帳號權限。 }
       - { id: greenswift-review-one-day, type: feature, quote: 註冊成功後，您的申請將於一個工作日進行審核。 }
@@ -913,7 +966,14 @@ groups:
       - { id: greenswift-consultant-accounts, type: feature, quote: 是的，GreenSwift 支援顧問公司使用。顧問可以登入系統，針對所輔導的客戶進行線上盤點和協助。 }
       - { id: greenswift-no-erp-integration, type: feature, quote: 雖然目前不支援直接與 ERP、HR 系統或其他模組的整合，但如果貴公司已經整理好相關資料，可以直接透過 GreenSwift 的介面進行資料匯入並上傳佐證資料 }
       - { id: greenswift-file-center, type: feature, quote: 透過一站整合盤查數據，不僅過往所有資料得以方便查詢及管理，新年度更可自行帶入過往資料，不須擔心人員變動造成管理不善等問題，讓資料具連續性，確保每次盤查順利完成。 }
-      - { id: greenswift-scopes, type: feature, quote: 範疇一：可全面追蹤源頭排放，精確管理直接 GHG 排放量。 範疇二：聚焦進口能源產生的間接 GHG 排放。 範疇三：覆蓋其他間接排放，為您提供全方位的環境影響洞察。 }
+      - id: greenswift-scopes
+        type: feature
+        quote: 範疇一：可全面追蹤源頭排放，精確管理直接 GHG 排放量。 範疇二：聚焦進口能源產生的間接 GHG 排放。 範疇三：覆蓋其他間接排放，為您提供全方位的環境影響洞察。
+        comment: text splits the run of items into list items, one per line (#202)
+        text: |-
+          範疇一：可全面追蹤源頭排放，精確管理直接 GHG 排放量。
+          範疇二：聚焦進口能源產生的間接 GHG 排放。
+          範疇三：覆蓋其他間接排放，為您提供全方位的環境影響洞察。
       - id: greenswift-cloud-consultants
         type: feature
         quote: 不知道如何下手寫報告書？GreenSwift 為您於雲端整合碳數據、ESG 顧問團隊，並讓 AI 成為您最佳幫手！

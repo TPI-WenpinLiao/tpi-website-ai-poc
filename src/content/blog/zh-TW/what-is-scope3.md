@@ -9,8 +9,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f0e7844-3698-6199-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/zh-TW/what-is-scope3/cover.webp
 sourceUrl: https://www.tpisoftware.com/blog/smartm/what-is-scope3
-migratedAt: 2026-10-23
+migratedAt: 2026-11-06
 sourceUpdatedAt: 2026-01-02
+relatedOfferings: [zh-TW/greenswift]
 ---
 
 許多中小企業在啟動**碳盤查**時，往往抱著「先做做看」的心態。起初，收集電費單、計算公務車油錢等等（範疇一與範疇二）似乎並不困難。然而，當進展到<strong>範疇三（Scope 3）</strong>時，高達 80% 的企業會因為數據過於龐雜、無法取得供應商資料而感到挫折，甚至導致專案停擺。

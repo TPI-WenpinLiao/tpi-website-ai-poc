@@ -96,8 +96,8 @@ sourceUrl: []
 | `tagline` | `string` | 否 | hero 標語 | 現站 hero 區 |
 | `heroLead` | `string` | 否 | tagline 下方的一句說明，寫類別與用途，是表述、不夾帶事實（#167） | — |
 | `heroPoints` | `(string \| { text: string; note: string })[]` | 否 | hero 說明下方的證據點，每項是事實原文（#167）；`note` 是緊貼在下方的條件原文（#187） | — |
-| `heroLabels` | `Partial<Record<'core' \| 'legacy' \| 'product' \| 'model' \| 'service' \| 'ai0' \| 'ai1' \| 'ai2', string>>` | 否 | hero 靜態圖上的 HTML 標籤，鍵是 `src/lib/scene/ribbon/pictures.json` 的錨點，落在圖外的不輸出（#187） | — |
-| `secondaryCta` | `{ label: string; node: string }` | 否 | hero 的第二個動作，連到另一個節點（例如試用雲端版），#167 | — |
+| `heroLabels` | `Partial<Record<'core' \| 'legacy' \| 'product' \| 'greenswift' \| 'model' \| 'service' \| 'ai0' \| 'ai1' \| 'ai2', string>>` | 否 | hero 靜態圖上的 HTML 標籤，鍵是 `src/lib/scene/ribbon/pictures.json` 的錨點，落在圖外的不輸出（#187）；`greenswift` 是 GreenSwift 自己的方塊（#202） | — |
+| `secondaryCta` | `{ label: string; node: string }` 或 `{ label: string; href: string }` | 否 | hero 的第二個動作，連到另一個節點（例如試用雲端版，#167），或用 `href` 連到本頁某段的 `id`（`#` 開頭，例如 GreenSwift 的 `#trial`，#202）；`href` 指到不存在的段落時 build 失敗 | — |
 | `heroImage` | `image` | 否 | hero 主圖；沒填時沿用所屬產品家族 hub 的 `heroImage`（#187） | 現站 hero 區 |
 | `sections` | 見下方「依 brief 排的段落」 | 否 | brief 要求比 highlights 多的段落（#167），照 brief 逐段排版（#187）。段落已連到的子頁不再列在子頁的索引列，`hasPart` 不受影響；有 `sections` 的產業頁不輸出依 `industry` 反查的產品列（`briefs/finance.md`「取捨」第 12 項） | — |
 | `features` | `{ title: string; body: string; icon?: image; points?: string[]; link?: { label: string; node: string } }[]` | 否 | 功能或服務項目。`points` 是列在說明下方的事實原文，`link` 是這項功能接著要看的頁面（`node` 取 `nodes.csv` 的 id），#167 | 現站功能區 |
@@ -109,7 +109,7 @@ sourceUrl: []
 | `contactTitle` | `string` | 否 | 頁尾聯絡色帶的標題，寫這頁的下一步，預設用全站的標題（#200） | — |
 | `relatedCaseStudies` | `ref(case-study)[]` | 否 | 精選案例與排序。留空時由 `case-study.offerings` 反查；關聯以 `case-study.offerings` 為準，這裡只列其中的項目 | — |
 | `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句：點名案例的表述，加上該案例的事實原文，事實要列進 `facts`（#183）；有 `caseNotes` 時不輸出 | — |
-| `caseNotes` | `{ client?: string; work?: string; result?: string; award?: string; caseStudy?: ref(case-study); fragment?: 介面片段 }[]` | 否 | 案例列（#187）：客戶、作業、成果、獎項都是事實原文，`caseStudy` 有就連到案例內頁（錨點「客戶名：案例標題」）；有填時取代反查出來的案例 | — |
+| `caseNotes` | `{ client?: string; work?: string; result?: string; award?: string; caseStudy?: ref(case-study); news?: ref(news); fragment?: 介面片段 }[]` | 否 | 案例列（#187）：客戶、作業、成果、獎項都是事實原文，`caseStudy` 有就連到案例內頁（錨點「客戶名：案例標題」）；沒有案例頁、只有新聞的案例用 `news`，錨點是新聞標題（#202），兩者只能填一個。有填時取代反查出來的案例 | — |
 | `relatedPosts` | `ref(blog)[]` | 否 | 精選文章與排序。留空時由 `blog.relatedOfferings` 反查；關聯以 `blog.relatedOfferings` 為準，這裡只列其中的項目 | — |
 | `downloads` | `{ label: string; file: string }[]` | 否 | 下載檔（例如 `digirunner-aws-guide` 的 PDF），也是 `download` 中繼頁的資料來源。白皮書不列在這裡，由 `whitepaper.offeringNode` 反查 | 現站下載按鈕 |
 
@@ -171,6 +171,7 @@ JSON-LD：
 | `testimonial` | `{ quote: string; speaker: string }` | 否 | 接在案例列後的客戶證言，兩個都是事實原文（#187） | — |
 | `featuredCaseStudies` | `ref(case-study)[]` | 否 | 指定精選案例；沒填時用 `industry` 反查 | — |
 | `partsTitle` | `string` | 否 | 子頁索引列的標題，預設「探索」（#200） | — |
+| `omitParts` | `string[]` | 否 | 不列進子頁索引列的子節點（#202：還沒確認是否仍銷售的頁面），只能填本 hub 的子節點；JSON-LD 的 `hasPart` 仍列全部子節點 | — |
 | `contactTitle` | `string` | 否 | 頁尾聯絡色帶的標題，寫這頁的下一步，預設用全站的標題（#200） | — |
 | `featuredPosts` | `ref(blog)[]` | 否 | 指定精選文章 | — |
 
@@ -189,7 +190,7 @@ JSON-LD：`CollectionPage`，`name` ← `title`、`description` ← `description
 
 ## 依 brief 排的段落（offering、hub 共用）
 
-`sections` 每段一個版型（`layout`），版型的長相與用法見 `docs/strategy/design-principles.md`「內頁的版型」，型別是 `src/content.config.ts` 的 `pageSection`，由 `PageSections` 輸出（#187）。共用欄位：`id`（頁內導覽的錨點）、`heading`、`body`、`link`、`fill`（`subtle`／`brand` 底色）、`image`（緞帶世界的段落圖，放在 spec 的 h2 旁或沒有片段的 band，規則見 `design-principles.md`「內頁共用的規則」段落圖）。
+`sections` 每段一個版型（`layout`），版型的長相與用法見 `docs/strategy/design-principles.md`「內頁的版型」，型別是 `src/content.config.ts` 的 `pageSection`，由 `PageSections` 輸出（#187）。共用欄位：`id`（頁內導覽的錨點）、`heading`、`body`、`link`（`{ label; node }` 連到節點、`{ label; news }` 連到新聞、`{ label; href }` 連到 `https://` 開頭的站外頁，只是連結，頁面載入時不連站外；要連兩個地方時寫成兩個連結的清單，#202）、`fill`（`subtle`／`brand` 底色）、`image`（緞帶世界的段落圖，放在 spec 的 h2 旁或沒有片段的 band，規則見 `design-principles.md`「內頁共用的規則」段落圖）。
 
 | `layout` | 版型 | 自己的欄位 |
 |---|---|---|

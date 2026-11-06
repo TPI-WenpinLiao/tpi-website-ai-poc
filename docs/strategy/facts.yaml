@@ -1749,9 +1749,14 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the run of clauses one per line (#202)
 - id: digilism-system-integration
   type: feature
-  text: 結合 DevOps 與 CI/CD 流程、整合 API 管理、BPM、日誌管理，支援地端、雲端、雲地混合與多雲架構，介接大型企業的傳統 ESB
+  text: |-
+    結合 DevOps 與 CI/CD 流程
+    整合 API 管理、BPM、日誌管理
+    支援地端、雲端、雲地混合與多雲架構
+    介接大型企業的傳統 ESB
   source:
     url: https://www.tpisoftware.com/products/digilism
     quote: 結合 DevOps 與 CI/CD 流程、整合 API 管理、BPM、日誌管理，支援地端、雲端、雲地混合與多雲架構，介接大型企業的傳統 ESB
@@ -3652,27 +3657,39 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the three plans one per line, the name before a colon (#202)
 - id: greenswift-scope
   type: feature
-  text: 碳盤查 盤查企業自身碳排放 包括跨地區/廠區/設備/系統 CBAM 自動文件資訊化碳排 並產出申報清冊 碳足跡 計算企業產品碳足跡 計算相關供應鏈碳足跡
+  text: |-
+    碳盤查：盤查企業自身碳排放，包括跨地區/廠區/設備/系統
+    CBAM：自動文件資訊化碳排，並產出申報清冊
+    碳足跡：計算企業產品碳足跡，計算相關供應鏈碳足跡
   source:
     url: https://www.tpisoftware.com/products/greenswift
     quote: 碳盤查 盤查企業自身碳排放 包括跨地區/廠區/設備/系統 CBAM 自動文件資訊化碳排 並產出申報清冊 碳足跡 計算企業產品碳足跡 計算相關供應鏈碳足跡
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#202)
 - id: greenswift-six-steps
   type: feature
-  text: 盤查計畫 組織邊界 排放源鑑別 排放量計算 盤查報告 查證作業
+  text: |-
+    盤查計畫
+    組織邊界
+    排放源鑑別
+    排放量計算
+    盤查報告
+    查證作業
   source:
     url: https://www.tpisoftware.com/products/greenswift
     quote: 盤查計畫 組織邊界 排放源鑑別 排放量計算 盤查報告 查證作業
   locale: zh-TW
   status: confirmed
 
+# text puts a comma where the slogan has a space, so it reads as a sentence in body text (#202)
 - id: greenswift-ai-report
   type: feature
-  text: AI 協力 一鍵生成溫室氣體報告
+  text: AI 協力，一鍵生成溫室氣體報告
   source:
     url: https://www.tpisoftware.com/products/greenswift
     quote: AI 協力 一鍵生成溫室氣體報告
@@ -3724,27 +3741,42 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#202)
 - id: greenswift-carbon-plan
   type: feature
-  text: 支援ISO14064-1標準的碳盤查流程 提供碳排放清單編制工具 AI生成碳盤查報告 數據進度即時追蹤功能 無組織邊界數量限制 無帳號數量限制
+  text: |-
+    支援ISO14064-1標準的碳盤查流程
+    提供碳排放清單編制工具
+    AI生成碳盤查報告
+    數據進度即時追蹤功能
+    無組織邊界數量限制
+    無帳號數量限制
   source:
     url: https://www.tpisoftware.com/products/greenswift
     quote: 支援ISO14064-1標準的碳盤查流程 提供碳排放清單編制工具 AI生成碳盤查報告 數據進度即時追蹤功能 無組織邊界數量限制 無帳號數量限制
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#202)
 - id: greenswift-cbam-plan
   type: feature
-  text: CBAM（碳邊境調整機制）報表格式下載 提供進出口供應鏈符合CBAM要求的數據支持
+  text: |-
+    CBAM（碳邊境調整機制）報表格式下載
+    提供進出口供應鏈符合CBAM要求的數據支持
   source:
     url: https://www.tpisoftware.com/products/greenswift
     quote: CBAM（碳邊境調整機制）報表格式下載 提供進出口供應鏈符合CBAM要求的數據支持
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#202)
 - id: greenswift-footprint-plan
   type: feature
-  text: 專注於產品碳足跡計算 提供產品生命周期碳排放報告 支援國際及地方排放係數的自動更新 無產品碳足跡盤查報告數量限制
+  text: |-
+    專注於產品碳足跡計算
+    提供產品生命周期碳排放報告
+    支援國際及地方排放係數的自動更新
+    無產品碳足跡盤查報告數量限制
   source:
     url: https://www.tpisoftware.com/products/greenswift
     quote: 專注於產品碳足跡計算 提供產品生命周期碳排放報告 支援國際及地方排放係數的自動更新 無產品碳足跡盤查報告數量限制
@@ -3869,9 +3901,13 @@
   locale: zh-TW
   status: confirmed
 
+# text splits the run of items into list items, one per line (#202)
 - id: greenswift-scopes
   type: feature
-  text: 範疇一：可全面追蹤源頭排放，精確管理直接 GHG 排放量。 範疇二：聚焦進口能源產生的間接 GHG 排放。 範疇三：覆蓋其他間接排放，為您提供全方位的環境影響洞察。
+  text: |-
+    範疇一：可全面追蹤源頭排放，精確管理直接 GHG 排放量。
+    範疇二：聚焦進口能源產生的間接 GHG 排放。
+    範疇三：覆蓋其他間接排放，為您提供全方位的環境影響洞察。
   source:
     url: https://www.tpisoftware.com/products/greenswift
     quote: 範疇一：可全面追蹤源頭排放，精確管理直接 GHG 排放量。 範疇二：聚焦進口能源產生的間接 GHG 排放。 範疇三：覆蓋其他間接排放，為您提供全方位的環境影響洞察。

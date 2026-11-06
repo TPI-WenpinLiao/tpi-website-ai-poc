@@ -9,8 +9,9 @@ authorType: Person
 # https://tpi.dev/tpi-dev/private/article/IMG/1f154ee8-3f93-6411-81f6-0b7fa23ee3a6.jpg
 coverImage: ../../../assets/blog/zh-TW/carbonfootprint-quick-implementation-sme/cover.webp
 sourceUrl: https://www.tpisoftware.com/blog/smartm/carbonfootprint-quick-implementation-sme
-migratedAt: 2026-10-23
+migratedAt: 2026-11-06
 sourceUpdatedAt: 2026-05-21
+relatedOfferings: [zh-TW/greenswift]
 ---
 
 **從「第一支產品」開始，建立可落地的碳足跡能力**

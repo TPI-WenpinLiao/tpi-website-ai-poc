@@ -67,7 +67,8 @@ const childPages = children(self.id, locale)
     const to = href(n);
     return to ? [{ ...n, href: to, description: described.get(n.id) }] : [];
   });
-const parts = childPages.filter((n) => !linkedInSections.has(n.id));
+const omitted = new Set(data.omitParts);
+const parts = childPages.filter((n) => !linkedInSections.has(n.id) && !omitted.has(n.id));
 // Industry hubs: the offerings whose use cases name the industry, in nodes.csv order
 const industryOfferings =
   data.industry && !sections.length
@@ -99,8 +100,14 @@ const caseLink = (id: string) => {
   const c = allCases.find((e) => e.id === id);
   return c && { label: caseLinkLabel(c), href: entryPath('case-study', c) };
 };
+// A case told in a news article (#202): linked by the article's title
+const allNews = data.caseNotes?.some((n) => n.news) ? await getCollection('news') : [];
+const newsLink = (id: string) => {
+  const n = allNews.find((e) => e.id === id);
+  return n && { label: n.data.title, href: entryPath('news', n) };
+};
 const caseRows = data.caseNotes
-  ? data.caseNotes.map((n) => ({ title: n.client ?? n.work, work: n.client ? n.work : undefined, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? caseLink(n.caseStudy.id) : undefined }))
+  ? data.caseNotes.map((n) => ({ title: n.client ?? n.work, work: n.client ? n.work : undefined, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? caseLink(n.caseStudy.id) : n.news ? newsLink(n.news.id) : undefined }))
   : ordered.map((c) => ({ title: c.data.client.disclosed ? c.data.client.name : c.data.clientDescription, link: { label: caseLinkLabel(c), href: entryPath('case-study', c) } }));
 const featuredPosts = new Set(data.featuredPosts?.map((r) => r.id));
 const posts = (await getCollection('blog', (b) => inLocale(b) && featuredPosts.has(b.id))).map(postCard);

@@ -4,6 +4,7 @@
 
 ## 結論
 
+- 第一批（#202）：照 brief 重做的 GreenSwift 與 DigiLism 產品家族頁，兩頁三份 rubric 都通過，設計都剛好 4.0（見「第一批（#202）」）
 - 第一批（#201）：照 brief 重做的 OrientAI 與 AISO 頁，兩頁三份 rubric 都通過（見「第一批（#201）」）
 - 第一批（#200）：照 brief 重做的 AI 理賠、AI 建檔與 SysTalk.ai 產品家族頁，三頁三份 rubric 都通過（見「第一批（#200）」）
 - 第二輪（#187）：試點三頁依本報告修正後重評，三頁三份 rubric 都通過（見「第二輪（#187）」），兩輪用的 rubric 版本不同，分數不能直接比較
@@ -85,6 +86,8 @@ node scripts/strategy/eval-shots.mjs --new <scratch>/new-dist --old <scratch>/ol
 | 第一批（#200） | [SysTalk.ai 產品家族](evaluation/reviews/b1-new-systalk-ai.md) | 4.2 通過 | 4.5 通過 | 5.0 通過 |
 | 第一批（#201） | [OrientAI 企業級 Agentic AI 平台](evaluation/reviews/b1-new-orient-ai.md) | 4.2 通過 | 4.5 通過 | 4.8 通過 |
 | 第一批（#201） | [AISO 主權 AI](evaluation/reviews/b1-new-aiso.md) | 4.2 通過 | 4.2 通過 | 4.3 通過 |
+| 第一批（#202） | [GreenSwift 智慧碳管理平台](evaluation/reviews/b1-new-greenswift.md) | 4.0 通過 | 4.7 通過 | 4.8 通過 |
+| 第一批（#202） | [DigiLism 企業服務中台](evaluation/reviews/b1-new-digilism.md) | 4.0 通過 | 4.5 通過 | 4.7 通過 |
 <!-- eval-scores:end -->
 
 ## 各組的主要差異
@@ -371,6 +374,61 @@ AISO 第一次三份都通過，但 D2、C6 是 3 分。`4fa09f0` 改了這兩�
 | D5、C3 的 5 分錨點以數字、案例、客戶為證據，沒寫只有功能事實的頁面最高幾分 | `rubrics/design.md`、`rubrics/copy-marketing.md` | 每一份 |
 | `messaging.md`「統一用詞」寫主要按鈕都叫「聯絡業務」，brief 指定這頁用「預約演示」 | `messaging.md`、`briefs/orient-ai.md`「CTA」 | orient-ai 第一次 |
 | 照引「支援雲地靈活部署架構」時怎麼避免和「只會部署於企業端」讀成矛盾；公司名並列的規則是否適用內頁 | `briefs/orient-ai.md` 第 2 段、`messaging.md` `IT-1`「產品與公司名寫法」 | orient-ai 第二次 |
+
+本 issue 只改頁面，這些規則文件之間的衝突列在 PR 的後續事項。
+
+## 第一批（#202）
+
+同一批的第三張製作 issue：`/products/greenswift`、`/products/digilism` 照 #199 的 brief 重做後，每頁由新的 `reviewer` 用三份 rubric 評分。評審檔是 [`b1-new-greenswift`](evaluation/reviews/b1-new-greenswift.md)、[`b1-new-digilism`](evaluation/reviews/b1-new-digilism.md)，分數在上方「分數」表的「第一批（#202）」兩列。
+
+### 方法
+
+- 用的 rubric、素材的產生方式與 prompt 和「第一批（#200）」相同：`node scripts/strategy/eval-shots.mjs --only new --group b1-202-new --pages greenswift=/products/greenswift,digilism=/products/digilism`，截圖在 `evaluation/b1-202-new/`
+- 第一次評審後兩頁都通過，但設計都剛好 4.0、文案的 C6 都是 3，DigiLism 的 D2 是 3。依計畫只修內容檔能修的地方，再由新的 `reviewer` 重評。第一次的評審檔放在 [`evaluation/b1-202-attempt1/`](evaluation/b1-202-attempt1/)，截圖在重評時覆蓋
+- 評審前的設計確認時，使用者回報標題換行斷在詞的中間（申報格／式）。原因是標題的 `word-break: keep-all` 讓沒有標點的長串字沒有斷點，本 issue 加上 `src/lib/content/phrases.ts`，兩次評審的截圖都是修正後的
+
+### 結果
+
+| 頁面 | 第一次（`15d7198`） | 第二次（`fe1174e`） |
+|---|---|---|
+| GreenSwift 智慧碳管理平台 | 4.0／4.2（C6 = 3）／4.5 | 4.0（D5 = 3）／4.7／4.8 |
+| DigiLism 企業服務中台 | 4.0（D2 = 3）／4.2（C6 = 3）／5.0 | 4.0（D3 = 3）／4.5／4.7 |
+
+分數依序是設計／文案與行銷／SEO。第一次之後修的是：
+
+- GreenSwift：第 4、6、9 段的說明句重述下方的流程、指著頁面講話（「期限與限制都寫在這裡」）或和三列內容對不上（C6、C2），改成寫讀者得到什麼；「同一個平台」出現五次以上，減少；第 3、5、7 段 h2 帶進 ISO 14064-1、GHG Protocol 與帳號的用詞（S4）；拿掉從原句中間截出的 `greenswift-cloud-consultants`，單獨成一則會讀成 GreenSwift 提供 ESG 顧問（C6）；`greenswift-ai-report` 的空格斷句加上逗號
+- DigiLism：第 2 段說明句重述右欄第一則原文，第 3、7 段說明句描述清單本身、把「照原文列出」寫進畫面（C6），都改寫；第 3 段 digiLogs 那一列原本借用 digiLogs 頁的 description，不是事實又有「一站式」（C3、C6），改成只寫節點名
+
+第二次文案都升到 4 以上。設計仍是 4.0，扣到 3 的兩項都來自共用元件，不是本頁內容能改的：GreenSwift 的 D5 是數字沒有加粗、只有新聞標題的案例列不像一筆紀錄；DigiLism 的 D3 是 hero 證據點整句加粗壓過 tagline、產品索引的標題用內文字級。
+
+### 還不夠好的地方
+
+評審給 3、4 分的扣分處，沒有低於門檻，留給之後的 issue：
+
+- 介面片段的狀態方塊旁沒有文字（D2，兩頁兩次都提到，`UiFragment` 共用；#201 也提到）
+- hero 的證據點整句黑色粗體，視線從 h1 跳過 tagline（D3，兩頁都提到，`PageHero` 共用）
+- 事實裡的數字沒有加粗（GreenSwift 的 99%、一個工作日、30天，D5），內頁共用規則寫「數字只加粗」
+- 只有新聞標題的案例列：客戶名不在最前面，視覺重量比下方的相關文章輕（GreenSwift D3、D5，`CaseList`）
+- 產品索引段（`index` 版型）在 1280 寬左欄只有標題，下方大片空白；標題字級和產品名一樣（DigiLism D2、D3、D4）
+- 介面片段段落的事實較多時排到片段下方，標題欄空出一塊（GreenSwift 第 3 段，D2、D4）
+- 375 寬 GreenSwift 第 4 段（接點圖加 6 則事實）約兩屏、DigiLism 第 4 段約 1.6 屏（D6）；`InPageNav` 在 375 寬右緣沒露出下一項（DigiLism D6）
+- DigiLism：description 沒寫出銀行與保險業（S3）；第 2 段說明句「不必各自找工具再串起來」比原文多走一步（C3）。重評後沒有再改，評審檔對得上目前的頁面
+- GreenSwift：頁尾 `ContactCta` 的共用說明「系統現況」對碳盤查讀者不貼切（C4）。同一項扣分的另一點「第 9 段的試用連結沒標出會離開本站」，在 PR #207 審查第 1 輪後修好（段落的站外連結帶 ↗ 與「外部網站」），評審檔評的是修正前的版本
+- 兩篇碳足跡文章的連入錨點寫「經濟型方案」，本頁沒有（S5，兩次都提到）；使用者決定本 issue 不改
+
+### 評審依據不足
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| 「各模板怎麼呈現」沒有產品家族 hub，也沒有 GreenSwift 這種沒有既有系統可畫的產品頁 hero；brief 交給設計概念階段的取捨（片段張數、索引列標題字級、試用片段的天數、色帶裡放片段）沒有回寫 | `design-principles.md`、`briefs/greenswift.md` 取捨第 7、10 項、`briefs/digilism.md` 取捨第 7、9 項 | 每一份 |
+| 「至少 4 張介面片段」和 brief 降到 1 張（DigiLism）衝突，原則沒寫例外 | `design-principles.md`「內頁共用的規則」、`briefs/digilism.md` 取捨第 7 項 | digilism 兩次 |
+| 「案例列」要客戶名在最前面、襯線粗體，brief 寫客戶名已在新聞標題裡、不再前綴 | `design-principles.md`「案例列」、`briefs/greenswift.md`「內部連結」第 8 段 | greenswift 第二次 |
+| 介面片段版型寫「2–4 則事實在 9–12 欄」，沒寫原文太長放不進時能不能移到片段下方；片段的狀態要不要有看得到的文字 | `design-principles.md`「內頁的版型」「內頁共用的規則」 | greenswift 兩次 |
+| 事實照原文引用和 `messaging.md`「語氣」（用您、不用我們開頭、不留 FAQ 的「是的，」）衝突，沒寫能不能裁掉開頭的語氣詞；截斷的原文能不能單獨成一則 | `messaging.md`、`design-principles.md` P2、`content-strategy` | greenswift 兩次 |
+| brief 讓 digiLogs 那一列借用產品頁的 description，和 messaging「一句話的產品描述算事實」「本站不用的字」衝突（#202 改成只寫節點名，brief 已同步） | `briefs/digilism.md` 第 3 段、`messaging.md` | digilism 第一次 |
+| `omitParts` 規定 `hasPart` 仍列全部子節點，S6 寫「和可見內容一致才給 5」 | `content-model.md`「hub」、`rubrics/seo.md` S6 | digilism 第二次 |
+| 連入錨點的問題 brief 已列「待使用者決定」時，S5 要不要扣分 | `rubrics/seo.md` S5、`briefs/greenswift.md` 取捨第 13 項 | greenswift 兩次 |
+| brief「說明句寫讀者得到什麼」放在「照原文列清單的段落」底下，看不出是否管全頁 | `briefs/digilism.md` | digilism 第一次 |
 
 本 issue 只改頁面，這些規則文件之間的衝突列在 PR 的後續事項。
 

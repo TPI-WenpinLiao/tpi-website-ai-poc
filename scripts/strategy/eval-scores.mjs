@@ -52,6 +52,8 @@ export const ROWS = [
   // #201, the same batch: OrientAI and AISO (evaluation.md「第一批（#201）」)
   ['第一批（#201）', 'OrientAI 企業級 Agentic AI 平台', 'b1-new-orient-ai'],
   ['第一批（#201）', 'AISO 主權 AI', 'b1-new-aiso'],
+  ['第一批（#202）', 'GreenSwift 智慧碳管理平台', 'b1-new-greenswift'],
+  ['第一批（#202）', 'DigiLism 企業服務中台', 'b1-new-digilism'],
 ];
 
 /**

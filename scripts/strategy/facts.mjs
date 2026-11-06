@@ -122,6 +122,10 @@ export function checkPage(page, facts) {
 
 // Frontmatter fields that hold ids, paths, URLs or dates rather than copy
 const NOT_COPY = new Set(['translationKey', 'node', 'sourceUrl', 'migratedAt', 'sourceUpdatedAt', 'publishedAt', 'updatedAt', 'facts', 'tags', 'industry', 'href', 'url', 'image', 'cover', 'ogImage', 'logo', 'file', 'slug', 'id']);
+// Keys that hold a content entry's id (`zh-TW/559`); only the id itself is skipped, so copy nested under
+// them is still checked (#202)
+const ENTRY_REF = new Set(['news', 'caseStudy']);
+const ENTRY_ID = /^[a-z]{2}(?:-[A-Z]{2})?\/[a-z0-9-]+$/;
 const PATH_OR_URL = /^(?:\.{0,2}\/|https?:|mailto:|tel:)/;
 
 /**
@@ -133,7 +137,7 @@ export function copyStrings(value) {
   if (typeof value === 'string') return PATH_OR_URL.test(value) ? [] : [value];
   if (Array.isArray(value)) return value.flatMap(copyStrings);
   if (value && typeof value === 'object' && !(value instanceof Date)) {
-    return Object.entries(value).flatMap(([k, v]) => (NOT_COPY.has(k) ? [] : copyStrings(v)));
+    return Object.entries(value).flatMap(([k, v]) => (NOT_COPY.has(k) || (ENTRY_REF.has(k) && typeof v === 'string' && ENTRY_ID.test(v)) ? [] : copyStrings(v)));
   }
   return [];
 }
