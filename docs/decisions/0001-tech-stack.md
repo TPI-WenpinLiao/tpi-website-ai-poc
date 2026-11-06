@@ -16,7 +16,7 @@
 | 樣式 | CSS custom properties 作為 design tokens；不使用 UI framework 或 utility CSS framework |
 | 套件管理 | npm，`package-lock.json` 入版控，CI 與雲端 session 用 `npm ci` |
 | Node | `.nvmrc` 固定為目前的 LTS major（2026-10-28 為 26） |
-| 部署 | Cloudflare Pages Git integration，只用 `*.pages.dev` 與 PR preview |
+| 部署 | Cloudflare Pages Git integration，只用 `*.pages.dev`。preview 2026-11-06 起只在需要時部署到 `preview` branch（ADR 0008） |
 | 動態功能 | Cloudflare Pages Functions（M6 表單） |
 | 品質關卡 | `astro check` → build → html-validate → Lighthouse CI |
 | 搜尋 | Pagefind（M6，靜態索引） |
@@ -27,7 +27,7 @@
 - **零 JS 預設**：效能預算由架構保證，而不是事後優化
 - **CSS custom properties**：沒有 build-time 依賴，tokens 可直接在展示頁呈現；避免 UI framework 的樣式與元件鎖定，讓設計系統由本專案定義
 - **npm**：Cloudflare Pages 與雲端 session 原生支援，不需額外設定
-- **Cloudflare Pages**：PR preview 自動產生，Pages Functions 可處理表單，`_headers` 可統一加上 `X-Robots-Tag`
+- **Cloudflare Pages**：PR preview 自動產生（2026-11-06 起改成只部署 `preview` branch，ADR 0008），Pages Functions 可處理表單，`_headers` 可統一加上 `X-Robots-Tag`
 
 ## 影響
 

@@ -8,7 +8,7 @@ body:
     attributes:
       label: 頁面
       description: 發生問題的網址
-      placeholder: "https://<preview>.pages.dev/..."
+      placeholder: "https://tpi-website-ai-poc.pages.dev/..."
     validations:
       required: true
   - type: input

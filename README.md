@@ -4,7 +4,7 @@ TPIsoftware（昕力資訊）官方網站的完整改版專案，素材來源為
 
 本專案同時是「AI 輔助開發工作流程」的實證：需求以 GitHub issue 管理，開發人員在 Claude Code 雲端 session 中讓 Claude 實作，人工負責設計確認與 review。GitHub Actions 只負責品質關卡與專案管理自動化。
 
-- 部署：Cloudflare Pages（僅 `*.pages.dev` 與 PR preview）。本專案驗證 AI 開發官網的品質，不上線，不設正式網域，不做 Search Console、GTM 的實際設定
+- 部署：Cloudflare Pages，`main` 合併後部署到 `*.pages.dev`；PR 不自動部署 preview，設計確認時才推到 `preview` branch（[ADR 0008](docs/decisions/0008-preview-branch.md)）。本專案驗證 AI 開發官網的品質，不上線，不設正式網域，不做 Search Console、GTM 的實際設定
 - 本站不可被搜尋引擎收錄（`X-Robots-Tag: noindex, nofollow` + `robots.txt` Disallow all）
 - 技術棧：Astro static、TypeScript strict、CSS custom properties，詳見 [ADR 0001](docs/decisions/0001-tech-stack.md)
 - 目前進度：[docs/status.md](docs/status.md)
@@ -25,11 +25,11 @@ flowchart TD
   E -->|確認，其他| G
   E -->|確認，needs-design 或「## 關卡」| H
   H[階段一：視覺與結構<br/>/issue-ship 開 draft PR<br/>列出設計決策與待確認問題]
-  H --> P[Claude 停下等待<br/>人工看 Cloudflare preview]
+  H --> P[Claude 停下等待<br/>人工看 preview branch 的網址]
   P -->|要修改：在 session 告訴 Claude| H
   P -->|通過| Q[人工在 issue 加上 design-approved<br/>並在 session 告訴 Claude 繼續]
   Q --> J[階段二：SEO / 無障礙 / 內容<br/>同一個 PR 跑審查迴圈 → 轉 ready]
-  G --> K[quality-gate + Cloudflare preview]
+  G --> K[quality-gate]
   J --> K
   G -.->|停下找人| N[needs-decision label<br/>留言與推播<br/>人在 session 回覆]
   N -.-> G
@@ -87,7 +87,7 @@ npm run check
 
 1. **Claude GitHub App**：安裝在本 repo（雲端 session clone / push 與 Auto-fix 需要）
 2. **雲端環境**：在 claude.ai/code 建立名為 `tpi-website-ai-poc` 的 environment，network access 與 Allowed domains 照 [docs/onboarding.md](docs/onboarding.md) 第 3 步
-3. **Cloudflare Pages**：連接本 repo，build command `npm run build`、output `dist`、環境變數 `NODE_VERSION` 與 `.nvmrc` 一致；production branch `main`，啟用 preview deployments
+3. **Cloudflare Pages**：連接本 repo，build command `npm run build`、output `dist`、環境變數 `NODE_VERSION` 與 `.nvmrc` 一致；production branch `main`；Preview deployments 只建 `preview` branch（Custom branches，include `preview`；Free plan 每月 500 次 build，[ADR 0008](docs/decisions/0008-preview-branch.md)）。`preview` 不設 branch protection
 4. **Branch protection**：`main` 要求 PR 與 `quality-gate / check` 通過
 5. **Bootstrap**：Actions → `bootstrap` → Run workflow，建立 labels、milestones 與 issues（可重複執行，已存在者略過）
 

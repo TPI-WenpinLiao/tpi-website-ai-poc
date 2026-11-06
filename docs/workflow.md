@@ -59,7 +59,7 @@ Claude 會依序：
 
 每完成一個階段，以及停下等你回覆之前，Claude 會執行 `/checkpoint`：
 
-- 把工作以 `wip:` commit push 到工作 branch。還沒開 PR，所以不會跑 CI，也不會出現 preview
+- 把工作以 `wip:` commit push 到工作 branch。還沒開 PR，所以不會跑 CI。PR 開了也不會自動部署 preview（「看頁面」）
 - 更新 `.claude/progress/<N>.md`，記錄階段計畫、目前狀態、待你決定的事項。每個階段完成了沒，由 commit message 推算（`node scripts/checkpoint/status.mjs <N>`），進度檔不手動維護
 
 雲端容器閒置太久會被回收，checkpoint 過的工作不會消失。session 中斷後，開新 session 輸入 `/issue-start <N>`，Claude 會在 remote 找到進度檔，回報進度後從下一個階段繼續，不再重新提計畫。你也可以隨時輸入 `/checkpoint` 要求保存。`wip:` commit 與進度檔會在 `/issue-ship` 時整理掉，不會進入 `main`。規則見 [`checkpoint/SKILL.md`](../.claude/skills/checkpoint/SKILL.md)。
@@ -68,7 +68,7 @@ Claude 會依序：
 
 | 情況 | Claude 的行為 | 你要做的事 |
 |---|---|---|
-| issue 帶 `needs-design` 或本身有「## 關卡」段落，階段一完成 | 執行 `/issue-ship` 到開 draft PR 為止（`wip:` commit 一樣先合併），列出設計決策與待確認問題，不跑審查迴圈 | 看 preview，確認後在 issue 加上 `design-approved`（M2、M3 的關卡用 `ia-approved`、`wireframe-approved`，分階段流程的策略用 `strategy-approved`），再告訴 Claude 繼續 |
+| issue 帶 `needs-design` 或本身有「## 關卡」段落，階段一完成 | 執行 `/issue-ship` 到開 draft PR 為止（`wip:` commit 一樣先合併），列出設計決策與待確認問題，不跑審查迴圈 | 開 `https://preview.tpi-website-ai-poc.pages.dev` 看頁面（Claude 開完 draft PR 會把 head 推到 `preview`，見「看頁面」），確認後在 issue 加上 `design-approved`（M2、M3 的關卡用 `ia-approved`、`wireframe-approved`，分階段流程的策略用 `strategy-approved`），再告訴 Claude 繼續 |
 | issue 帶 `needs-input`、計畫外的取捨、審查跑滿輪數上限還沒過 | checkpoint，在 PR（還沒開 PR 時在 issue）留言寫問題與推薦，加上 `needs-decision`，推播通知 | 到 session 回覆。Claude 會拿掉 label 繼續 |
 
 ## 4. 收尾與審查迴圈
@@ -111,6 +111,42 @@ PR 開了之後 session 會持續監看，CI 失敗、review 留言都會自動�
 quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighthouse-scope.mjs` 的 `DOCS_ONLY` 白名單內）跳過 Lighthouse，改跑 `node scripts/ci/lighthouse-scope.mjs --verify` 確認這些檔案不影響 `dist/`，job summary 寫明原因。開 PR 前本機的 `npm run check` 照樣包含 Lighthouse。
 
 `npm run lighthouse` 通過後，把量過的頁面與量測設定的 key 記在 `.lighthouseci/passed-dist.sha256`。下次 key 相同就跳過並印出 key，例如審查迴圈裡只改 `scripts/` 或測試的修正。quality-gate 用同一個 key 做 cache，同一個 PR 量過且通過的 `dist/` 不重量，job summary 寫明。要強制重量時加 `LIGHTHOUSE_FORCE=1`。兩條規則都見 [ADR 0004](decisions/0004-lighthouse-scope.md)「例外」。
+
+## 看頁面
+
+Cloudflare Pages 在 `main` 合併後部署到 `https://tpi-website-ai-poc.pages.dev`。PR 不會自動部署 preview，也沒有 `Cloudflare Pages` check；Preview deployments 只建 `preview` 一個 branch（[ADR 0008](decisions/0008-preview-branch.md)）。PR body 的「頁面檢查重點」寫明要看哪些頁面、在哪裡看。
+
+### `preview` branch
+
+以下兩種情況，Claude 把 PR head 推到 `preview`（`git push --force origin HEAD:preview`），Cloudflare build 完就能在 `https://preview.tpi-website-ai-poc.pages.dev` 看：
+
+- `needs-design` 或本身有「## 關卡」段落的 issue，階段一開完 draft PR 時，以及依你的設計意見修改後
+- 你在 session 裡要求時，例如「把 PR 推到 preview」
+
+`preview` 每次都重設成一個 PR 的 head，只有一個位置：兩個 PR 同時要看時，後推的蓋掉先推的。看之前對一下 Cloudflare 的 Deployments 列的 commit 和 PR body 寫的短 SHA。手機真機、`_headers`、`_redirects`、聯絡表單送出（Pages Function）都要在這裡看。
+
+### 在本機看
+
+其他時候在本機切到 PR 的 head branch：
+
+```bash
+git fetch origin <head branch>
+git switch <head branch>
+npm ci
+npm run dev
+```
+
+`npm run dev` 開在 `http://localhost:4321`，改檔案會自動重新載入。以下情況改用 build 後的版本：
+
+```bash
+npm run build && npm run preview
+```
+
+- 站內搜尋：`astro dev` 沒有 Pagefind 索引（[ADR 0006](decisions/0006-site-search.md)）
+- 標題襯線字：每頁的字型在 build 時切出（`src/integrations/serif-fonts.ts`），`npm run dev` 看到的字和上線不同
+- 要確認的是上線的樣子，例如效能、載入時機
+
+兩種都看不到 Cloudflare 上才有的行為：`_headers`、`_redirects` 不套用，`functions/` 不執行，聯絡表單送不出去。要看這些就請 Claude 推 `preview`。本機開發環境的設定見 [`onboarding.md`](onboarding.md) 第 4 步。
 
 ## 分階段流程
 
@@ -182,7 +218,7 @@ baseline 只在 CI 產生、只在 CI 比對，兩者都在同版本的 Playwrig
 1. 在 PR 加上 `update-visual-baseline` label。`visual-baseline.yml` 會在 Playwright image 裡 build、執行 `npm run test:visual:update`，把有變的截圖 commit 回 PR branch，再拿掉 label。畫面沒變的檔案內容不變，不會出現在 diff。刪除或改名模板時，舊的截圖不會被刪掉，要自己 `git rm`；留著的話 `tests/visual/pages.spec.ts` 的「every baseline belongs to a page」測試會失敗（這個測試在雲端 session 也會跑）
 2. 確認 commit 改到的截圖只限這次變更影響的頁面（workflow 的 job summary 會列出檔名）。雲端 session 先 `git pull`，再用 Read 看改動的截圖
 3. GitHub token 推的 commit 不會觸發 quality-gate。下一次 push 程式碼時 CI 才會用新的 baseline 比對；沒有其他要改的東西時，在 GitHub 上對 quality-gate 按 Re-run 不會生效（它跑的是舊的 head），要等下一個 commit
-4. PR body 的「preview 檢查重點」列出改動的截圖檔名與原因。reviewer 在 PR 的 Files changed 用 GitHub 的圖片 diff（2-up、Swipe、Onion skin）確認
+4. PR body 的「頁面檢查重點」列出改動的截圖檔名與原因。reviewer 在 PR 的 Files changed 用 GitHub 的圖片 diff（2-up、Swipe、Onion skin）確認
 
 不要為了讓檢查通過而更新 baseline。差異不是這次變更想要的，就要修程式碼。
 
