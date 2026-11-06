@@ -13,8 +13,8 @@ interface Props {
   title: string;
   level?: 2 | 3;
   description?: string | undefined;
-  link?: { label: string; href: string } | undefined;
-  links?: readonly { label: string; href: string }[] | undefined;
+  link?: { label: string; href: string; external?: boolean } | undefined;
+  links?: readonly { label: string; href: string; external?: boolean }[] | undefined;
 }
 
 const { title, level = 2, description, link, links = link ? [link] : [] } = Astro.props;
@@ -25,7 +25,7 @@ const { title, level = 2, description, link, links = link ? [link] : [] } = Astr
     <SectionHeading level={level} title={title} description={description} />
     {
       links.map((l) => (
-        <Link href={l.href} variant="standalone">
+        <Link href={l.href} variant="standalone" external={l.external}>
           {l.label}
         </Link>
       ))

@@ -4,7 +4,7 @@
 title: GreenSwift 智慧碳管理平台
 seoTitle: GreenSwift 碳盤查平台：碳足跡與 CBAM 申報
 # brief「description」: no trial days, no 免費, no ISO 14067
-description: GreenSwift 智慧碳管理平台處理碳盤查、產品碳足跡與 CBAM 申報資料，內建 GHG Protocol 與 ISO 14064-1:2018 標準，可下載環保署登錄平台的表單格式，審核通過後可以申請試用。
+description: GreenSwift 智慧碳管理平台處理碳盤查、產品碳足跡與 CBAM 申報資料，內建 GHG Protocol 與 ISO 14064-1:2018 標準，可下載環保署登錄平台的表單格式，申請經審核通過後可以試用。
 translationKey: greenswift
 node: greenswift
 kind: product

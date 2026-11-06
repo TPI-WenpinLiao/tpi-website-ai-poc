@@ -43,6 +43,8 @@ const to = (link: { label: string; node: string } | undefined) => link && { labe
 const sectionTo = (link: Extract<NonNullable<Section['link']>, { label: string }>) => ({
   label: link.label,
   href: 'node' in link ? nodeHref(link.node, locale) : 'news' in link ? entryPath('news', link.news) : link.href,
+  // An off-site page (a trial sign-up) is marked as leaving the site
+  external: 'href' in link,
 });
 const rowsOf = (rows: readonly { label: string; values: readonly string[]; link?: { label: string; node: string } | undefined }[] = []) =>
   rows.map((r) => ({ label: r.label, values: r.values, link: to(r.link) }));
@@ -74,7 +76,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
     const more =
       links.length > 0 &&
       links.map((l) => (
-        <Link href={l.href} variant="standalone">
+        <Link href={l.href} variant="standalone" external={l.external}>
           {l.label}
         </Link>
       ));

@@ -96,7 +96,7 @@ sourceUrl: []
 | `tagline` | `string` | 否 | hero 標語 | 現站 hero 區 |
 | `heroLead` | `string` | 否 | tagline 下方的一句說明，寫類別與用途，是表述、不夾帶事實（#167） | — |
 | `heroPoints` | `(string \| { text: string; note: string })[]` | 否 | hero 說明下方的證據點，每項是事實原文（#167）；`note` 是緊貼在下方的條件原文（#187） | — |
-| `heroLabels` | `Partial<Record<'core' \| 'legacy' \| 'product' \| 'model' \| 'service' \| 'ai0' \| 'ai1' \| 'ai2', string>>` | 否 | hero 靜態圖上的 HTML 標籤，鍵是 `src/lib/scene/ribbon/pictures.json` 的錨點，落在圖外的不輸出（#187） | — |
+| `heroLabels` | `Partial<Record<'core' \| 'legacy' \| 'product' \| 'greenswift' \| 'model' \| 'service' \| 'ai0' \| 'ai1' \| 'ai2', string>>` | 否 | hero 靜態圖上的 HTML 標籤，鍵是 `src/lib/scene/ribbon/pictures.json` 的錨點，落在圖外的不輸出（#187）；`greenswift` 是 GreenSwift 自己的方塊（#202） | — |
 | `secondaryCta` | `{ label: string; node: string }` 或 `{ label: string; href: string }` | 否 | hero 的第二個動作，連到另一個節點（例如試用雲端版，#167），或用 `href` 連到本頁某段的 `id`（`#` 開頭，例如 GreenSwift 的 `#trial`，#202）；`href` 指到不存在的段落時 build 失敗 | — |
 | `heroImage` | `image` | 否 | hero 主圖；沒填時沿用所屬產品家族 hub 的 `heroImage`（#187） | 現站 hero 區 |
 | `sections` | 見下方「依 brief 排的段落」 | 否 | brief 要求比 highlights 多的段落（#167），照 brief 逐段排版（#187）。段落已連到的子頁不再列在子頁的索引列，`hasPart` 不受影響；有 `sections` 的產業頁不輸出依 `industry` 反查的產品列（`briefs/finance.md`「取捨」第 12 項） | — |
