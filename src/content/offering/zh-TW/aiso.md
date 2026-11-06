@@ -11,11 +11,11 @@ node: aiso
 kind: product
 # brief 第 1 段: what it is for (OrientAI software and on-premises hardware delivered together). Wording
 tagline: OrientAI 軟體與地端硬體，一起交付
-# brief 第 1 段的說明句: who it is for and what it does. Wording, no facts
-heroLead: 給要把 AI 放在自己機房的企業：軟硬體廠商一起交付，法務、人資等部門的工作有現成的 AI 方案。
-# Three proof points (brief 第 1 段), the facts verbatim (DM-10)
+# brief 第 1 段的說明句: who it is for and what it does. Wording around fact:aiso-orientai-hardware, which is
+# half a news sentence (partial) and so goes inside this sentence, not alone as a proof point (#214)
+heroLead: 給要把 AI 放在自己機房的企業：結合自研 OrientAI 系列軟體與地端硬體，法務、人資等部門的工作有現成的 AI 方案。
+# Two proof points (brief 第 1 段), the facts verbatim (DM-10)
 heroPoints:
-  - "此次產品組合結合自研 OrientAI 系列軟體與地端硬體"
   - "AISO 主權 AI 產業聯盟成軍，主打整合式交付"
   - "集結 AI 軟體與硬體廠商打造的 AI 整合生態系 協助企業快速建置可落地、可擴充、可合規的地端 AI 平台"
 heroImage: ../../../assets/design/ribbon/page-aiso.webp

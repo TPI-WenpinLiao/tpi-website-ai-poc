@@ -9,12 +9,15 @@
 #
 #   id      unique, lowercase letters, digits and `-`; en and vi entries end in `-en`, `-vi`
 #   type    metric | client | certification | award | feature | case | company
-#   text    the wording a page shows; may trim the quote or add punctuation, spaces, line breaks
-#           (list items) and U+200B break points, never change or add words (#186)
+#   text    the wording a page shows; may trim the quote at punctuation or add punctuation, spaces,
+#           line breaks (list items) and U+200B break points, never change or add words (#186);
+#           only the typos in facts.mjs's TYPOS may be fixed (#214)
 #   source  url: the current-site page; quote: the verbatim excerpt on that page
 #   locale  zh-TW | en | vi (a page only uses facts in its own locale)
 #   status  confirmed | to_confirm (pages only use confirmed facts)
 #   note    optional; required for to_confirm: why (license, possibly outdated, locales disagree)
+#   partial true when text is not a whole sentence (cut mid-sentence, or the quote is half of one);
+#           pages never use it alone as an item or hero point, note says what is cut off (#214)
 
 # --- Company (src/data/site.ts, every locale's footer) ---
 - id: company-email
@@ -1702,9 +1705,10 @@
   status: confirmed
 
 # --- DigiLism ---
+# text fixes 混和 and 佈署 from TYPOS and drops the stray spaces (#214)
 - id: digilism-ipaas
   type: feature
-  text: 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。
+  text: 兼具高度擴充、延展能耐的應用整合服務平台（iPaaS），可在雲端、地端及地雲混合環境中部署，適於金融、保險及各領域應用。
   source:
     url: https://www.tpisoftware.com/products/digilism
     quote: 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。
@@ -1873,9 +1877,10 @@
   locale: zh-TW
   status: confirmed
 
+# text puts a comma for the space (#214)
 - id: digilism-compatibility
   type: feature
-  text: 新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。
+  text: 新舊兼容，弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。
   source:
     url: https://www.tpisoftware.com/products/digilism
     quote: 新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。
@@ -3113,6 +3118,8 @@
     quote: 不僅開放自研軟體產品原始碼
   locale: zh-TW
   status: confirmed
+  note: 原句是「不僅…」的前半，text 去掉「不僅」，後半不在 quote 裡
+  partial: true
 
 - id: digirunner-oss-license
   type: feature
@@ -3159,6 +3166,8 @@
     quote: Ready-to-use console for cloud collaboration with proven adoption and effectiveness in real-world scenarios.
   locale: en
   status: confirmed
+  note: The sentence goes on with "with proven adoption and effectiveness in real-world scenarios", cut as a claim with no basis
+  partial: true
 
 - id: digirunner-oss-api-policies-en
   type: feature
@@ -3923,6 +3932,8 @@
     quote: 不知道如何下手寫報告書？GreenSwift 為您於雲端整合碳數據、ESG 顧問團隊，並讓 AI 成為您最佳幫手！
   locale: zh-TW
   status: confirmed
+  note: 原句後半「並讓 AI 成為您最佳幫手」被裁掉，單獨一則會讀成顧問團隊在 GreenSwift 裡（#202 評審）
+  partial: true
 
 - id: greenswift-report-method
   type: feature
@@ -6307,6 +6318,8 @@
     quote: 此次產品組合結合自研 OrientAI 系列軟體與地端硬體
   locale: zh-TW
   status: confirmed
+  note: 新聞內文的半句，「此次產品組合」指新聞發表的組合，離開新聞讀不通（#201 評審 C6）
+  partial: true
 
 # --- OrientAI ---
 # /orient-aI serves the same page

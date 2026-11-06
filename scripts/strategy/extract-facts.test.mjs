@@ -36,6 +36,12 @@ test('expand rejects unknown fields', () => {
   assert.throws(() => expand({ groups: [{ group: 'g', url: 'https://x.test/', locale: 'zh-TW', facts: [{ id: 'a', type: 'metric', quote: 'q', txt: 'typo' }] }] }), /unknown field txt/);
 });
 
+test('expand keeps partial only when true (#214)', () => {
+  const group = (f) => ({ groups: [{ group: 'g', url: 'https://x.test/', locale: 'zh-TW', facts: [f] }] });
+  assert.equal(expand(group({ id: 'a', type: 'feature', quote: 'q', partial: true, note: 'half' }))[0].fact.partial, true);
+  assert.equal('partial' in expand(group({ id: 'a', type: 'feature', quote: 'q' }))[0].fact, false);
+});
+
 test('render writes comments above entries and parses back to the facts', () => {
   const entries = expand(source);
   const out = render(entries);

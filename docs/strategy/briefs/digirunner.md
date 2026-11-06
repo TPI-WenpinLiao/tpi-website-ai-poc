@@ -72,7 +72,7 @@ digiRunner 接得上既有系統（`IT-4`），部署環境由企業決定（`IT
 
 第 2、3、5、6、7 段的清單是事實原文，說明句是表述（#168 new-digirunner「評審依據不足」第 6 項）。寫法：
 
-- 說明句寫讀者讀完這段得到什麼答案（例如「既有系統不必先汰換，digiRunner 在前面做組合、轉換與串接」），不寫「以下列出」這類交代版面的句子（`content-strategy` skill「3. 頁面文案」）
+- 說明句寫讀者讀完這段得到什麼答案（例如「既有系統不必先汰換，digiRunner 在前面做組合、轉換與串接」），不寫「以下列出」這類交代版面的句子（`content-strategy` skill「全頁的寫法」）
 - 清單只放回答這段問題的事實，不把同一頁所有相關事實都列進來；每段 2–6 項
 - 原文是一串名詞的事實，照 `.claude/skills/site-research/SKILL.md` 第 2 條在 `scripts/strategy/facts-source.yaml` 把 `text` 拆成每行一項，再重跑 `node scripts/strategy/extract-facts.mjs`；模板把多行的 `text` 排成清單。#186 已拆好：`fact:digirunner-financial-inspection`（第 6 段）與 `fact:digirunner-five-applications`（第 2 段，API Gateway、既有系統重構、企業中台建構各一行）；製作階段只需要讓模板把多行的 `text` 排成清單
 - 評 C2 時，說明句看的是有沒有寫出讀者得到什麼；清單是 brief 要求的事實原文，清單本身不扣 C2，但清單的項目要能回答段落標題的問題
