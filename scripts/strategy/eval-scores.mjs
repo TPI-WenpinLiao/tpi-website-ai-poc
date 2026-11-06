@@ -10,6 +10,9 @@
 //   3. each rubric must list all six items, scored or 不適用
 //   4. the table between <!-- eval-scores:start --> and <!-- eval-scores:end --> in the report must equal
 //      the generated one; --write rewrites it
+//   5. a second review near the threshold (`<name>-2.md`, site-review「門檻附近加評」) holds only the rubrics
+//      reviewed again, checked like the first one. Its page must have a first review; the table cell then
+//      shows the lower average, passes only if both passed, and is marked 加評
 //
 // Five-second test files (five-second-*.md) have no scores and are skipped.
 //
@@ -22,6 +25,8 @@ const REVIEWS = 'docs/strategy/evaluation/reviews';
 const REPORT = 'docs/strategy/evaluation.md';
 const START = '<!-- eval-scores:start -->';
 const END = '<!-- eval-scores:end -->';
+/** Suffix of a second review near the threshold. */
+const AGAIN = '-2';
 
 export const RUBRICS = /** @type {const} */ (['設計', '文案與行銷', 'SEO']);
 const ITEM_PREFIX = { 設計: 'D', 文案與行銷: 'C', SEO: 'S' };
@@ -88,13 +93,17 @@ export function score(items) {
   return { average, pass: average >= 4 && low.length === 0, low };
 }
 
-/** Problems in one review: missing rubrics or items, and headings that disagree with the scores. */
-export function checkReview(name, sections) {
+/**
+ * Problems in one review: missing rubrics or items, and headings that disagree with the scores.
+ * A second review (`partial`) needs only the rubrics it has, at least one.
+ */
+export function checkReview(name, sections, { partial = false } = {}) {
   const problems = [];
+  if (partial && sections.length === 0) problems.push(`${name}: no「## <rubric>：平均 …」section`);
   for (const rubric of RUBRICS) {
     const section = sections.find((s) => s.rubric === rubric);
     if (!section) {
-      problems.push(`${name}: no「## ${rubric}：平均 …」section`);
+      if (!partial) problems.push(`${name}: no「## ${rubric}：平均 …」section`);
       continue;
     }
     const ids = section.items.map((i) => i.id).join(',');
@@ -111,18 +120,34 @@ export function checkReview(name, sections) {
   return problems;
 }
 
-function cell({ average, pass, low }) {
-  if (pass) return `${average.toFixed(1)} 通過`;
-  if (low.length === 0) return `${average.toFixed(1)} 未通過`;
-  return `${average.toFixed(1)} 未通過（${low.length <= 2 ? low.join('、') : `${low.length} 項低於 3`}）`;
+/**
+ * One rubric of a page: the first review alone, or combined with the second one — the lower average,
+ * a pass only when both passed, the items below 3 of either.
+ */
+export function combine(first, second) {
+  if (!second) return first;
+  const low = [...new Set([...first.low, ...second.low])];
+  return { average: Math.min(first.average, second.average), pass: first.pass && second.pass, low, again: true };
 }
 
-/** The markdown table for the report. */
-export function table(reviews) {
+export function cell({ average, pass, low, again = false }) {
+  const notes = [];
+  if (!pass && low.length > 0) notes.push(low.length <= 2 ? low.join('、') : `${low.length} 項低於 3`);
+  if (again) notes.push('加評');
+  return `${average.toFixed(1)} ${pass ? '通過' : '未通過'}${notes.length ? `（${notes.join('，')}）` : ''}`;
+}
+
+/** The markdown table for the report; `again` holds the second reviews by the name of the first. */
+export function table(reviews, again = new Map()) {
   const lines = ['| 組 | 頁面 | 設計 | 文案與行銷 | SEO |', '|---|---|---|---|---|'];
   for (const [group, page, file] of ROWS) {
     const sections = reviews.get(file);
-    const cells = RUBRICS.map((r) => cell(score(sections.find((s) => s.rubric === r).items)));
+    const second = again.get(file) ?? [];
+    const result = (sections, r) => {
+      const section = sections.find((s) => s.rubric === r);
+      return section && score(section.items);
+    };
+    const cells = RUBRICS.map((r) => cell(combine(result(sections, r), result(second, r))));
     lines.push(`| ${group} | [${page}](evaluation/reviews/${file}.md) | ${cells.join(' | ')} |`);
   }
   return lines.join('\n');
@@ -132,15 +157,21 @@ async function main() {
   const write = process.argv.includes('--write');
   const files = (await readdir(REVIEWS)).filter((f) => f.endsWith('.md') && !f.startsWith('five-second-'));
   const reviews = new Map();
+  const again = new Map();
   const problems = [];
   for (const file of files) {
     const name = file.replace(/\.md$/, '');
+    const partial = name.endsWith(AGAIN);
     const sections = parseReview(await readFile(join(REVIEWS, file), 'utf8'));
-    problems.push(...checkReview(name, sections));
-    reviews.set(name, sections);
+    problems.push(...checkReview(name, sections, { partial }));
+    if (partial) again.set(name.slice(0, -AGAIN.length), sections);
+    else reviews.set(name, sections);
   }
   for (const [, , file] of ROWS) if (!reviews.has(file)) problems.push(`${REVIEWS}/${file}.md is missing`);
   for (const name of reviews.keys()) if (!ROWS.some((r) => r[2] === name)) problems.push(`${name}.md is not in ROWS`);
+  for (const name of again.keys()) {
+    if (!reviews.has(name)) problems.push(`${name}${AGAIN}.md has no first review ${name}.md`);
+  }
   if (problems.length) {
     for (const p of problems) console.error(`FAIL ${p}`);
     process.exit(1);
@@ -153,7 +184,7 @@ async function main() {
     console.error(`FAIL ${REPORT}: no ${START} … ${END} block`);
     process.exit(1);
   }
-  const block = `${START}\n${table(reviews)}\n${END}`;
+  const block = `${START}\n${table(reviews, again)}\n${END}`;
   const next = report.slice(0, start) + block + report.slice(end + END.length);
   if (next === report) {
     console.log(`eval-scores: ${reviews.size} reviews, table in ${REPORT} is current`);
