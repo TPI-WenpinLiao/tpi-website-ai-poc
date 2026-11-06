@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { checkReview, parseReview, score } from './eval-scores.mjs';
+import { cell, checkReview, combine, parseReview, score } from './eval-scores.mjs';
 
 const rubric = (name, prefix, scores, heading) =>
   [
@@ -63,4 +63,24 @@ test('a missing rubric or item is reported', () => {
     'x 設計: items are D1,D2,D3,D4,D5, want D1,D2,D3,D4,D5,D6',
     'x: no「## SEO：平均 …」section',
   ]);
+});
+
+test('a second review needs only the rubrics it has', () => {
+  const second = ['# 加評', rubric('設計', 'D', [4, 4, 4, 4, 4, 4], '平均 4.0，通過')].join('\n');
+  assert.deepEqual(checkReview('x-2', parseReview(second), { partial: true }), []);
+  assert.deepEqual(checkReview('x-2', parseReview('# 加評'), { partial: true }), [
+    'x-2: no「## <rubric>：平均 …」section',
+  ]);
+  const wrong = ['# 加評', rubric('設計', 'D', [4, 4, 4, 4, 4, 4], '平均 4.1，通過')].join('\n');
+  assert.deepEqual(checkReview('x-2', parseReview(wrong), { partial: true }), [
+    'x-2 設計: heading says 4.1, the items average 4.0',
+  ]);
+});
+
+test('a second review shows the lower average and passes only if both passed', () => {
+  const pass = { average: 4.2, pass: true, low: [] };
+  assert.equal(cell(combine(pass, undefined)), '4.2 通過');
+  assert.equal(cell(combine(pass, { average: 4.0, pass: true, low: [] })), '4.0 通過（加評）');
+  assert.equal(cell(combine(pass, { average: 3.8, pass: false, low: [] })), '3.8 未通過（加評）');
+  assert.equal(cell(combine(pass, { average: 4.3, pass: false, low: ['D2 = 2'] })), '4.2 未通過（D2 = 2，加評）');
 });
