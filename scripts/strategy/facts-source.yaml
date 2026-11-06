@@ -916,7 +916,11 @@ groups:
           排放量計算
           盤查報告
           查證作業
-      - { id: greenswift-ai-report, type: feature, quote: AI 協力 一鍵生成溫室氣體報告 }
+      - id: greenswift-ai-report
+        type: feature
+        quote: AI 協力 一鍵生成溫室氣體報告
+        comment: text puts a comma where the slogan has a space, so it reads as a sentence in body text (#202)
+        text: AI 協力，一鍵生成溫室氣體報告
       - { id: greenswift-seven-ghg, type: feature, quote: 可整合七大溫室氣體排放 }
       - { id: greenswift-epa-format, type: feature, quote: 系統內建碳排計算公式 ，自動計算完整碳排放量，並可一鍵下載為符合環保署登錄平台之表單格式(3.0.0) }
       - { id: greenswift-standards, type: feature, quote: 系統內建最新的碳盤查標準和國際係數，可自由切換使用 GHG Protocol 及 ISO 14064-1:2018 標準，並定期更新 IPCC 的最新係數 }

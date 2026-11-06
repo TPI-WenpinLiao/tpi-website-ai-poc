@@ -11,7 +11,7 @@ kind: product
 # brief 第 1 段: what it is for, the three plans in one place. Wording, no facts
 tagline: 碳盤查、碳足跡與 CBAM 申報，在同一個平台
 # brief 第 1 段的說明句: how it works (standards built in, departments and consultants together)
-heroLead: 盤查標準與係數已經內建，企業各部門與合作的顧問在同一個平台收數據、算排放、出報告。
+heroLead: 盤查標準與係數已經內建，負責碳盤查的部門與合作的顧問一起收數據、算排放、出報告。
 heroPoints:
   - "通過國際查證機構核發AUP認證"
   - "可整合七大溫室氣體排放"
@@ -31,7 +31,7 @@ sections:
     id: plans
     fill: subtle
     heading: 碳盤查、CBAM 與碳足跡，各有方案
-    body: 組織的碳盤查、出口要的 CBAM 數據和產品碳足跡各有方案，數據放在同一個平台，不必分開找工具。
+    body: 組織的碳盤查、出口要的 CBAM 數據和產品碳足跡各有方案，數據不必分散在不同工具裡。
     image: ../../../assets/design/sec-planning.webp
     # A row is a plan: its scope (fact:greenswift-scope) leads, what the plan has follows
     rows:
@@ -61,8 +61,8 @@ sections:
             無產品碳足跡盤查報告數量限制
   - layout: ui
     id: standards
-    heading: 盤查標準與步驟已內建
-    body: 系統照六個步驟帶著做，GHG Protocol 和 ISO 14064-1:2018 可以切換，係數會跟著 IPCC 更新，不必自己查表。
+    heading: ISO 14064-1 與 GHG Protocol 的盤查步驟已內建
+    body: 系統照六個步驟帶著做，兩種標準可以切換，係數會跟著 IPCC 更新，不必自己查表。
     fragment:
       title: 盤查流程
       rows:
@@ -78,7 +78,7 @@ sections:
           value: 未開始
         - label: 查證作業
           value: 未開始
-        - label: 盤查標準
+        - label: 標準
           value: GHG Protocol／ISO 14064-1:2018
     items:
       - body: "以六大步驟系統化管理類別一至類別四溫室氣體排放源盤查流程"
@@ -91,7 +91,7 @@ sections:
   - layout: junction
     id: output
     heading: 自動計算，產出清冊與申報格式
-    body: 整理好的資料從介面匯入，系統算出排放量，產出盤查清冊、申報格式與溫室氣體報告。目前不直接串接 ERP、HR 系統。
+    body: 不必先改動現有系統，資料整理好就能開始算排放，年度之間的資料也接得起來。目前不直接串接 ERP、HR 系統。
     diagram:
       caption: 企業已整理好的資料與佐證資料從介面匯入，系統內建的公式計算碳排放量，產出環保署登錄平台的表單格式、盤查清冊與溫室氣體報告。
       columns:
@@ -114,14 +114,14 @@ sections:
       - body: "雖然目前不支援直接與 ERP、HR 系統或其他模組的整合，但如果貴公司已經整理好相關資料，可以直接透過 GreenSwift 的介面進行資料匯入並上傳佐證資料"
       - body: "系統內建碳排計算公式 ，自動計算完整碳排放量，並可一鍵下載為符合環保署登錄平台之表單格式(3.0.0)"
       - body: "在完成全廠活動數據的收集與計算後，我們將得到年度總排放量，單位為每公噸二氧化碳當量（tCO2e）。此外，我們會整理所有活動數據，形成活動數據總表，並將計算結果以盤查清冊的形式呈現。"
-      - body: "AI 協力 一鍵生成溫室氣體報告"
+      - body: "AI 協力，一鍵生成溫室氣體報告"
       - body: "根據ISO 14064-1:2018規範，我們會在溫室氣體盤查報告中詳細描述數據鑑別、收集過程及計算方法。報告還包括數據品質評分表與不確定性分析等內容。"
       - body: "透過一站整合盤查數據，不僅過往所有資料得以方便查詢及管理，新年度更可自行帶入過往資料，不須擔心人員變動造成管理不善等問題，讓資料具連續性，確保每次盤查順利完成。"
   - layout: ui
     id: departments
     flip: true
-    heading: 各部門在同一個平台分工
-    body: 各部門照權責收數據，系統主動提醒；內部人員和外部顧問在雲端編同一份文稿，帳號與組織邊界不設上限。
+    heading: 部門分工收數據，帳號與組織邊界不設上限
+    body: 各部門照權責收數據，系統會主動提醒；內部人員和外部顧問在雲端編同一份文稿。
     fragment:
       title: 帳號管理
       rows:
@@ -141,7 +141,7 @@ sections:
     id: security
     fill: subtle
     heading: 資安、可用性與語言
-    body: 資安單位上線前會問的三件事：架構、可用性，以及系統用哪些語言。
+    body: 導入前要確認的三件事：資安架構、服務可用性，以及介面與支援用的語言。
     image: ../../../assets/design/sec-identity.webp
     rows:
       - label: 資安
@@ -152,7 +152,7 @@ sections:
         values: ["系統支援繁體中文與英文兩種語言。系統導入後，如有操作上的問題，我們提供英文支援服務。"]
   - layout: ui
     id: consultants
-    heading: 顧問公司登入同一個平台輔導
+    heading: 合作的顧問公司登入平台輔導
     body: 合作的顧問公司可以登入平台，替輔導的客戶線上盤點；顧問帳號可以分權，沒有共同輔導的資料彼此看不到。
     fragment:
       title: 顧問帳號權限
@@ -167,7 +167,6 @@ sections:
       - body: "是的，GreenSwift 支援顧問公司使用。顧問可以登入系統，針對所輔導的客戶進行線上盤點和協助。"
       - body: "顧問能夠查看所輔導客戶的所有資料，同一顧問公司內的不同顧問帳號可以根據需要進行分權設定，確保資料的安全與私密性，除非是共同輔導，否則彼此間的資料無法互通。"
       - body: "GreenSwift 提供操作教學影片，專業的碳盤查輔導則由合作的顧問公司執行。GreenSwift 與多家顧問機構合作"
-      - body: "GreenSwift 為您於雲端整合碳數據、ESG 顧問團隊"
     # A sentence of its own, apart from the partner consultants (brief 取捨第 4 項)
     link:
       label: 昕力的 ESG 永續發展與顧問服務
@@ -175,7 +174,7 @@ sections:
   - layout: band
     id: trial
     heading: 先試用再決定
-    body: 註冊後經過審核就能試用全部功能，期限與限制都寫在這裡。
+    body: 審核通過就能用全部功能試用，先在自己的資料上跑過一輪再決定。
     items:
       - body: "註冊成功後，您的申請將於一個工作日進行審核。"
       - body: "審核通過後即開始30天試用，試用到期將自動關閉帳號權限。"
@@ -228,7 +227,6 @@ facts:
   - greenswift-consultant-accounts
   - greenswift-consultant-access
   - greenswift-consulting-partners
-  - greenswift-cloud-consultants
   - client-hedinglong
   - greenswift-case-hedinglong
   - greenswift-review-one-day

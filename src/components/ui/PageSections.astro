@@ -7,7 +7,7 @@
 // schema is `pageSection` in src/content.config.ts. Links go through the page's locale; a section with
 // an `id` is an in-page anchor target (the template lists it in InPageNav). A section's `image` (a
 // picture of the ribbon world) sits beside the heading of a spec or timeline, or in a band's figure.
-import { getCollection, type CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import Surface from './Surface.astro';
 import SectionHeading from './SectionHeading.astro';
 import FactRow from './FactRow.astro';
@@ -22,7 +22,6 @@ import Link from './Link.astro';
 import { Image } from 'astro:assets';
 import { localNode, nodeHref } from '../../lib/ia/navigation';
 import { entryPath } from '../../lib/content/urls';
-import { entryLocale, isPublished } from '../../lib/content/entries';
 import type { Locale } from '../../lib/i18n/locales';
 import { strings } from '../../data/strings';
 
@@ -45,12 +44,6 @@ const sectionTo = (link: Extract<NonNullable<Section['link']>, { label: string }
   label: link.label,
   href: 'node' in link ? nodeHref(link.node, locale) : 'news' in link ? entryPath('news', link.news) : link.href,
 });
-// An index row without its own line reads the page's description (#202: digiLogs on DigiLism's page)
-const indexed = sections.some((s) => s.layout === 'index' && s.items.some((i) => i.body === undefined));
-const inLocale = (e: { id: string; data: { draft: boolean } }) => entryLocale(e.id) === locale && isPublished(e);
-const described = new Map(
-  indexed ? [...(await getCollection('offering', inLocale)), ...(await getCollection('hub', inLocale))].map((e) => [e.data.node, e.data.description]) : [],
-);
 const rowsOf = (rows: readonly { label: string; values: readonly string[]; link?: { label: string; node: string } | undefined }[] = []) =>
   rows.map((r) => ({ label: r.label, values: r.values, link: to(r.link) }));
 // A fact item: its own title when it has one, its body (the fact text, FactText), and the page it leads to
@@ -158,7 +151,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
             )}
             {sec.index && (
               <IndexList
-                items={sec.index.map((i) => ({ title: localNode(i.node, locale).title, body: i.body ?? described.get(i.node), href: nodeHref(i.node, locale) }))}
+                items={sec.index.map((i) => ({ title: localNode(i.node, locale).title, body: i.body, href: nodeHref(i.node, locale) }))}
               />
             )}
           </Surface>
@@ -222,7 +215,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
               </div>
               <div class="figure">
                 <IndexList
-                  items={sec.items.map((i) => ({ title: i.label ?? localNode(i.node, locale).title, body: i.body ?? described.get(i.node), href: nodeHref(i.node, locale) }))}
+                  items={sec.items.map((i) => ({ title: i.label ?? localNode(i.node, locale).title, body: i.body, href: nodeHref(i.node, locale) }))}
                 />
               </div>
             </div>

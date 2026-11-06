@@ -3686,9 +3686,10 @@
   locale: zh-TW
   status: confirmed
 
+# text puts a comma where the slogan has a space, so it reads as a sentence in body text (#202)
 - id: greenswift-ai-report
   type: feature
-  text: AI 協力 一鍵生成溫室氣體報告
+  text: AI 協力，一鍵生成溫室氣體報告
   source:
     url: https://www.tpisoftware.com/products/greenswift
     quote: AI 協力 一鍵生成溫室氣體報告

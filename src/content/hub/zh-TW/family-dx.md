@@ -27,17 +27,17 @@ sections:
   - layout: claim
     id: areas
     heading: 一個中台管 API、日誌與大數據
-    body: DigiLism 涵蓋 API、日誌與大數據管理三個面向，以 API 優先與雲原生架構，替銀行、金融服務與保險業（BFSI）建立服務應用中台。
+    body: 銀行、金融服務與保險業（BFSI）要接的 API、要追的日誌與要管的資料，由同一套中台處理，不必各自找工具再串起來。
     items:
       - body: "DigiLism 系列提供 API 管理、日誌管理及大數據管理三大面向解決方案"
       - body: "基於 API 優先（API First）與雲原生架構，並具備全場景應用的特性，滿足企業打造企業整合中台所需，協助企業組織活用數位科技，靈活地適應不同的市場使用場景。"
       - body: "昕力資訊能為 BFSI 全應用場景提供安全可靠、高效運作的服務應用中台， 滿足企業 API 治理需求，以軟體創新實現差異化戰略。"
-  # The family page's product cards (brief 取捨第 3 項); digiLogs' card says 業界唯一, so its row reads
-  # its own page's description (「待確認」第 1 項)
+  # The family page's product cards (brief 取捨第 3 項); digiLogs' card says 業界唯一 (「待確認」第 1 項)
+  # and its page's description is not a fact, so its row has the name only (#202 評審)
   - layout: index
     id: products
     heading: DigiLism 的產品
-    body: 每個產品各有一頁，寫它的功能、部署方式與案例。
+    body: 依要處理的事挑產品：API 與 AI 流量、日誌、資料庫、表單流程，或醫療資料交換。
     items:
       - node: digirunner
         body: "整合 MCP 協定與 AI Gateway 架構，讓 AI 模型安全串接企業 API、資料與業務流程。協助企業落實 AI 治理與流量控管，從 API 管理邁向 AI 驅動整合。"
@@ -119,7 +119,7 @@ sections:
   - layout: claim
     id: awards
     heading: 家族產品的外部評選
-    body: 外部單位評選給家族產品的獎項，年份與得獎產品照原文列出。
+    body: 這些評選來自昕力以外的單位，得獎的是家族裡的 digiRunner 與 digiLogs。
     items:
       - body: "digiRunner、digiLogs、SysTalk.ai 獲得「2024 台灣精品獎」"
       - body: "digiRunner、digiLogs、SysTalk.Chat 獲得「2023 台灣精品獎」"
