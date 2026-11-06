@@ -164,7 +164,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
 - `evaluation.md`「第一批（#200）」的「還不夠好的地方」與「評審依據不足」（`design-principles.md` 沒有方案頁與產品家族 hub 的寫法、brief 交給設計概念的例外沒有回寫、`SiteFooter` 的細線）還沒開 issue，要做時另開
-- `evaluation.md`「第一批（#202）」的共用元件問題已開 issue（#208–#212，都是 `needs-design`、依賴 #202）：hero 證據點字重與說明句文字色（#208）、介面片段的狀態文字（#209）、數字加粗與只有新聞標題的案例列（#210）、索引列與頁內導覽（#211）、頁尾分隔線與深紫連片（#212）。規則文件的缺口（產品家族 hub 與沒有既有系統的產品頁沒寫進「各模板怎麼呈現」、片段少於 4 張的例外、事實原文的語氣詞、`omitParts` 與 S6）還沒開 issue，要做時另開
+- `evaluation.md`「第一批（#202）」的共用元件問題已開 issue（#208–#212，都是 `needs-design`、依賴 #202）：hero 證據點字重與說明句文字色（#208）、介面片段的狀態文字（#209）、數字加粗與只有新聞標題的案例列（#210）、索引列與頁內導覽（#211）、頁尾分隔線與深紫連片（#212）。規則文件的缺口也已開 issue（同樣依賴 #202）：`design-principles.md` 補內頁的缺口（#213）、事實原文與 messaging、brief 寫法的衝突（#214）、`site-review` rubric 的判斷依據（#215），#200、#201 留下的同類缺口也併進這三張
 - `evaluation.md`「第一批（#201）」的「還不夠好的地方」與「評審依據不足」（介面片段的狀態方塊、h2 說明句的文字色、`InPageNav` 放不下 8 項等共用元件；規格表淺灰與判斷組分組的衝突、brief 寫「金融與政府」但產業原文沒有政府）還沒開 issue，要做時另開
 - `/blog/carbonfootprint`、`/blog/carbonfootprint-quick-implementation-sme` 結尾連到 GreenSwift 頁的錨點寫「經濟型方案」，新頁不寫經濟型方案（價格沒收，`briefs/greenswift.md` 取捨第 13 項）；#202 依使用者決定不改，等 `/carbon` 的價格收進事實庫再一起處理
 - 回覆 #199 PR 的「待確認」：GreenSwift 報告語言、`interactivehealth` 是否仍銷售（#202 先用 `omitParts` 不列進 DigiLism 家族頁；試用網址已確認，#202 連到現站的申請頁）、改舊文章的連結文字、建議的 blog（ICR／OCR／IDP、主權 AI、中台／ESB、MCP）要不要開 issue、還沒收的事實（`messaging.md`「缺少證據的主張」第 18、23、24 項）
