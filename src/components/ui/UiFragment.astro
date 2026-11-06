@@ -165,8 +165,10 @@ const { title, tabs = [], rows, note, words } = Astro.props;
     font-weight: var(--font-weight-semibold);
   }
 
+  /* The caption under the fragment is body copy in the full text colour (design-principles.md
+     「說明句的文字色」, #208); the muted tabs and values are part of the drawn interface */
   .note {
-    color: var(--color-text-muted);
+    color: var(--color-text);
     font-size: var(--font-size-sm);
     white-space: pre-line;
   }

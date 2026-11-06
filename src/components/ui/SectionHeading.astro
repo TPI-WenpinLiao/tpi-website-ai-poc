@@ -3,7 +3,8 @@
 // index, eyebrow or rule; design-principles.md「內頁共用的規則」, #187). The heading says the answer
 // to the section's question. The level is set by the caller so headings never skip a level
 // (seo-checklist); `size="display"` is for the one statement section per page, `size="sm"` for a
-// heading inside a panel (a form's error summary).
+// heading inside a panel (a form's error summary). The description is body copy in the full text
+// colour, not muted (design-principles.md P4, #208).
 // `weight="secondary"` is for the minor sections (related posts, sub-pages, related offerings): the
 // heading drops to --font-size-text, so it weighs less than the cases and facts above it.
 // The `action` slot puts links for the whole section (所有成功案例, 部落格) on the heading's row,
@@ -95,7 +96,7 @@ const hasAction = Astro.slots.has('action');
 
   .description {
     margin: 0;
-    color: var(--color-text-muted);
+    color: var(--color-text);
     font-size: var(--font-size-lg);
   }
 </style>

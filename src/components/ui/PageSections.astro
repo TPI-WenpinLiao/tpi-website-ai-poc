@@ -309,10 +309,6 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
     white-space: pre-line;
   }
 
-  .record {
-    color: var(--color-text-muted);
-  }
-
   /* A fact split into items (FactText's list) takes a whole row of a two-column list */
   .facts.two > li:has(ul) {
     grid-column: 1 / -1;

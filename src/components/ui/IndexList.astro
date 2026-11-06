@@ -106,8 +106,16 @@ const Heading = `h${level}` as const;
   .body,
   time {
     margin: 0;
-    color: var(--color-text-muted);
     font-size: var(--font-size-sm);
+  }
+
+  /* The sentence is read; the date is meta and stays muted (design-principles.md「說明句的文字色」, #208) */
+  .body {
+    color: var(--color-text);
+  }
+
+  time {
+    color: var(--color-text-muted);
   }
 
   @media (--bp-lg-up) {

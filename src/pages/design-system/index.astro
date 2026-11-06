@@ -172,6 +172,10 @@ const description =
   <PageHero
     title="有景深的設計系統"
     description="為 3D 捲動場景設計的 tokens 與元件。本頁的標題區就是 PageHero，背後是方向 A 的靜態主視覺，3D 場景載入前與減少動態時都顯示這張圖。"
+    points={[
+      { text: '證據點用內文字重，只有獨立的數字加粗，例如 12 欄格線、100% 的寬度', note: '條件緊貼在證據點下方，小一級字、完整文字色' },
+      { text: '名稱裡的數字不加粗，例如 ISO27001、K8s' },
+    ]}
   >
     <Backdrop slot="backdrop" image={heroDataFlow} mobile={heroDataFlowMobile} fade="hero" focus="end" priority />
     <Fragment slot="actions">
