@@ -12,7 +12,7 @@ tagline: 金融與保險業的整合中台，接得上核心系統
 # brief 第 1 段的說明句: the products the family is made of
 heroLead: DigiLism 由 API 管理、日誌、資料庫與流程等產品組成，把既有系統和新的服務接在同一個中台上。
 heroPoints:
-  - "兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。"
+  - "兼具高度擴充、延展能耐的應用整合服務平台（iPaaS），可在雲端、地端及地雲混合環境中部署，適於金融、保險及各領域應用。"
   - "DigiLism 產品系列擁有7項發明專利"
 heroCta: contact
 heroImage: ../../../assets/design/ribbon/page-digilism.webp
@@ -78,7 +78,7 @@ sections:
           整合 API 管理、BPM、日誌管理
           支援地端、雲端、雲地混合與多雲架構
           介接大型企業的傳統 ESB
-      - body: "新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。"
+      - body: "新舊兼容，弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。"
     # brief 取捨第 10 項: the finance page carries the bank side of this
     link:
       label: 金融業如何接上核心銀行系統

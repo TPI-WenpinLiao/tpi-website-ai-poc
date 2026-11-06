@@ -72,7 +72,7 @@
 
 ### 照原文列清單的段落
 
-第 2、3、4、6、8 段的事實原文多是功能名接成一行（例如 `fact:orientai-execution-layer`、`fact:orientai-governance-layer`、`fact:orientai-governance-controls`），排成清單前要照 `.claude/skills/site-research/SKILL.md` 第 2 條在 `scripts/strategy/facts-source.yaml` 拆成每行一項，再重跑 `node scripts/strategy/extract-facts.mjs`。說明句寫讀者讀完得到的答案，不寫「以下列出」。
+第 2、3、4、6、8 段的事實原文多是功能名接成一行（例如 `fact:orientai-execution-layer`、`fact:orientai-governance-layer`、`fact:orientai-governance-controls`），排成清單前要照 `.claude/skills/site-research/SKILL.md` 第 2 條在 `scripts/strategy/facts-source.yaml` 拆成每行一項，再重跑 `node scripts/strategy/extract-facts.mjs`。說明句照 `content-strategy` skill「全頁的寫法」。
 
 ### 不能寫的句子
 

@@ -83,7 +83,7 @@
 
 - 第 4 段：`fact:digilism-system-integration` 是一串名詞（DevOps 與 CI/CD、API 管理、BPM、日誌管理、部署環境、ESB），製作階段照 `.claude/skills/site-research/SKILL.md` 第 2 條在 `scripts/strategy/facts-source.yaml` 拆成每行一項，重跑 `node scripts/strategy/extract-facts.mjs`
 - 第 3 段的每一句照原文，不加長、不合併成「多項產品」的概括
-- 說明句寫讀者得到什麼，不寫「以下列出」
+- 說明句照 `content-strategy` skill「全頁的寫法」：寫讀者得到什麼，清單是事實原文
 
 ### 不能寫的句子
 

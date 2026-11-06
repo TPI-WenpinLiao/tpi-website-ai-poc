@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { bodyCopy, checkPage, checkStrategyDoc, copyStrings, factCalls, markdownPage, numbers, validateFacts, wording } from './facts.mjs';
+import { bodyCopy, checkPage, checkStrategyDoc, copyStrings, cutAtPunctuation, factCalls, fixTypos, markdownPage, numbers, standaloneStrings, validateFacts, wording } from './facts.mjs';
 
 const entry = (over = {}) => ({
   id: 'smartclaim-result',
@@ -144,4 +144,59 @@ test('a strategy document cites confirmed zh-TW facts, and pending ones only und
   assert.match(doc('## 價值主張 `fact:nope`')[0], /messaging\.md:1: fact nope is not in/);
   // Plain backticked ids (paths, nodes, labels) are not citations
   assert.deepEqual(checkStrategyDoc('b.md', '`industry-finance` `pending-award`', facts).cited, []);
+});
+
+test('a trimmed text is cut at punctuation, or marked partial with a note (#214)', () => {
+  const faq = entry({ id: 'faq', type: 'feature', text: 'GreenSwift 支援顧問公司使用。', source: { url: 'https://www.tpisoftware.com/', quote: '是的，GreenSwift 支援顧問公司使用。顧問可以登入系統。' } });
+  assert.deepEqual(validateFacts([faq]), []);
+  // The site writes a space for a comma between two Han characters
+  const title = entry({ id: 'title', type: 'company', text: '聯盟成軍，主打整合式交付', source: { url: 'https://www.tpisoftware.com/', quote: '聯盟成軍 主打整合式交付 加速導入' } });
+  assert.deepEqual(validateFacts([title]), []);
+  const cut = entry({ id: 'cut', type: 'company', text: '開放自研軟體產品原始碼', source: { url: 'https://www.tpisoftware.com/', quote: '不僅開放自研軟體產品原始碼' } });
+  assert.match(validateFacts([cut])[0], /cut: text is cut out of source.quote mid-sentence/);
+  assert.match(validateFacts([{ ...cut, partial: true }])[0], /\(cut\) note: a partial fact needs a note/);
+  assert.deepEqual(validateFacts([{ ...cut, partial: true, note: 'drops 不僅' }]), []);
+  // 「你可以」 has no punctuation after it: dropping it is a cut mid-sentence (content-strategy「照原文引用事實」)
+  const you = entry({ id: 'you', type: 'feature', text: '直接在 GreenSwift 上透過 Gmail 登入進行試用。', source: { url: 'https://www.tpisoftware.com/', quote: '你可以直接在 GreenSwift 上透過 Gmail 登入進行試用。' } });
+  assert.match(validateFacts([you])[0], /you: text is cut out of source.quote mid-sentence/);
+  // en: a space is not a break
+  const en = entry({ id: 'en', type: 'feature', locale: 'en', text: 'Ready-to-use console', source: { url: 'https://tpi.dev/', quote: 'Ready-to-use console with proven adoption.' } });
+  assert.match(validateFacts([en])[0], /en: text is cut out of source.quote mid-sentence/);
+  // to_confirm facts never reach pages
+  assert.deepEqual(validateFacts([{ ...cut, status: 'to_confirm', note: 'license' }]), []);
+});
+
+test('cutAtPunctuation tries every place the text occurs and needs a break at both ends', () => {
+  assert.equal(cutAtPunctuation('系統', '系統管理，系統', 'zh-TW'), true);
+  assert.equal(cutAtPunctuation('系統管', '系統管理，系統', 'zh-TW'), false);
+  assert.equal(cutAtPunctuation('主權 AI', '主權 AI 產業', 'zh-TW'), false);
+  assert.equal(cutAtPunctuation('A, B', 'A, B, C', 'en'), true);
+});
+
+test('a text may fix only the typos in TYPOS (#214)', () => {
+  const ipaas = entry({ id: 'ipaas', type: 'feature', text: '可在地雲混合環境中部署。', source: { url: 'https://www.tpisoftware.com/', quote: '可在地雲混和環境中佈署。' } });
+  assert.equal(fixTypos('地雲混和環境中佈署'), '地雲混合環境中部署');
+  assert.deepEqual(validateFacts([ipaas]), []);
+  assert.deepEqual(validateFacts([{ ...ipaas, text: '可在地雲混和環境中部署。' }]), []);
+  assert.match(validateFacts([{ ...ipaas, text: '可在雲地混合環境中部署。' }])[0], /ipaas: text changes or adds words/);
+});
+
+test('a partial fact is never a whole item or hero point on a page (#214)', () => {
+  const half = entry({ id: 'half', type: 'feature', text: '此次產品組合結合自研軟體與地端硬體', partial: true, note: 'half a news sentence' });
+  const lib = library(half);
+  assert.match(checkPage(page({ uses: ['half'], standalone: ['此次產品組合結合自研軟體與地端硬體'] }), lib)[0], /whole text of partial fact half/);
+  assert.match(checkPage(page({ uses: ['half'], standalone: ['此次產品組合，結合自研軟體與地端硬體。'] }), lib)[0], /partial fact half/);
+  // Inside a sentence, as a label or not used at all: fine
+  assert.deepEqual(checkPage(page({ uses: ['half'], standalone: ['給企業：此次產品組合結合自研軟體與地端硬體'] }), lib), []);
+  assert.deepEqual(checkPage(page({ uses: [], standalone: ['此次產品組合結合自研軟體與地端硬體'] }), lib), []);
+});
+
+test('standaloneStrings finds hero points and item bodies at any depth', () => {
+  const data = {
+    tagline: 't',
+    heroPoints: ['a', { text: 'b', note: 'n' }],
+    sections: [{ heading: 'h', items: [{ title: 'x', body: 'c' }, { body: 'd' }], rows: [{ label: 'l', values: ['v'] }] }],
+  };
+  assert.deepEqual(standaloneStrings(data), ['a', 'b', 'c', 'd']);
+  assert.deepEqual(markdownPage('src/content/offering/zh-TW/p.md', '---\nsourceUrl: []\nheroPoints:\n  - a\n---\n').standalone, ['a']);
 });

@@ -4,10 +4,13 @@
 //
 //   node scripts/strategy/facts.mjs             offline, part of `npm run check`:
 //     - every entry matches the schema in src/data/facts.ts (fields listed in facts.yaml's header)
-//     - a confirmed fact's text keeps the quote's words: only punctuation, spaces and line breaks added
+//     - a confirmed fact's text keeps the quote's words: only punctuation, spaces and line breaks added,
+//       and only the typos in TYPOS fixed; a text cut out of its quote ends at punctuation unless it is
+//       marked `partial` (#214)
 //     - every fact a page uses exists, is confirmed and is in the page's locale
 //     - a page whose copy has an Arabic number (80%, 1,200, 3.5) or the name of a `client` fact
 //       uses a fact whose text has it; otherwise the number or name is not traceable and fails
+//     - a Markdown page's item (`items[].body`) or hero point is not, as a whole, the text of a partial fact
 //   node scripts/strategy/facts.mjs --sources [--locales zh-TW,en]   fetches every source.url and fails when its
 //     source.quote is no longer on the page, its Nuxt chunks nor its news body (needs www.tpisoftware.com
 //     and .vn, not in `npm run check`); always fetches, the cache of extract-facts.mjs is only written
@@ -51,11 +54,16 @@ export function validateFacts(data) {
           : [];
       // A readable `text` may add punctuation, spaces or line breaks to a fragment quote (#186), but
       // keeps its words: without them, text is part of the quote. Only confirmed facts reach pages
-      const reworded =
-        f.status === 'confirmed' && !wording(f.source.quote).includes(wording(f.text))
-          ? [`${FACTS_FILE} ${f.id}: text changes or adds words of source.quote (only punctuation, spaces and line breaks may be added)`]
-          : [];
-      return [...extra, ...named, ...reworded];
+      const reworded = f.status === 'confirmed' && !wording(fixTypos(f.source.quote)).includes(wording(fixTypos(f.text)));
+      // A trimmed text ends at punctuation, so it still reads as a whole; one cut mid-sentence is
+      // marked partial and kept out of items and hero points (checkPage, #214)
+      const cut = f.status === 'confirmed' && !reworded && !f.partial && !cutAtPunctuation(f.text, f.source.quote, f.locale);
+      return [
+        ...extra,
+        ...named,
+        ...(reworded ? [`${FACTS_FILE} ${f.id}: text changes or adds words of source.quote (only punctuation, spaces and line breaks may be added, and the typos in TYPOS fixed)`] : []),
+        ...(cut ? [`${FACTS_FILE} ${f.id}: text is cut out of source.quote mid-sentence; cut it at punctuation or mark it partial with a note`] : []),
+      ];
     });
   }
   return result.error.issues.map((i) => {
@@ -74,6 +82,54 @@ export function validateFacts(data) {
 export const wording = (s) => s.normalize('NFKC').replace(/[\s​\p{P}]/gu, '');
 
 /**
+ * Typos of the current site that a fact's text may fix (#214). source.quote keeps them, so --sources still
+ * finds it; to fix another one, add it here and give the reason in the PR. Pairs keep the length
+ */
+export const TYPOS = [
+  ['混和', '混合'],
+  ['佈署', '部署'],
+];
+
+/** @param {string} s */
+export const fixTypos = (s) => TYPOS.reduce((t, [from, to]) => t.replaceAll(from, to), s);
+
+const NOT_WORD = /[\s\u200b\p{P}]/u;
+const HAN = /\p{Script=Han}/u;
+
+/**
+ * Whether text, found in quote, starts and ends at the quote's edges or at punctuation. In zh-TW a space
+ * between two Han characters also counts: the current site often writes「成軍 主打」for「成軍，主打」
+ * 「是的，GreenSwift 支援顧問公司使用。」→「GreenSwift 支援顧問公司使用。」is cut at punctuation;
+ * 「不僅開放自研軟體產品原始碼」→「開放自研軟體產品原始碼」is not
+ * @param {string} text
+ * @param {string} quote
+ * @param {string} locale
+ */
+export function cutAtPunctuation(text, quote, locale) {
+  const q = fixTypos(quote.normalize('NFKC'));
+  const t = wording(fixTypos(text));
+  /** quote index of every word character, in order */
+  const at = [];
+  let words = '';
+  for (let i = 0; i < q.length; i += 1) {
+    if (!NOT_WORD.test(q[i])) {
+      at.push(i);
+      words += q[i];
+    }
+  }
+  /** @param {number} a @param {number} b quote indices of two word characters in a row */
+  const breaks = (a, b) => {
+    const between = q.slice(a + 1, b);
+    return /\p{P}/u.test(between) || (locale === 'zh-TW' && /\s/.test(between) && HAN.test(q[a]) && HAN.test(q[b]));
+  };
+  for (let k = words.indexOf(t); k >= 0; k = words.indexOf(t, k + 1)) {
+    const end = k + t.length;
+    if ((k === 0 || breaks(at[k - 1], at[k])) && (end === words.length || breaks(at[end - 1], at[end]))) return true;
+  }
+  return false;
+}
+
+/**
  * Arabic numbers in a string, full-width digits folded, thousands separators dropped:
  * 「節省逾80%」→ ['80%'], 'NT$1,200 and 3.5x' → ['1200', '3.5']
  * @param {string} s
@@ -90,8 +146,9 @@ const covers = (n, factNumbers) => factNumbers.some((f) => f === n || (!n.endsWi
 
 /**
  * Problems of one page: facts it uses that don't exist, aren't confirmed or are in another locale,
- * and numbers or client names in its copy that none of its facts has
- * @param {{ name: string, locale?: string, strings: string[], uses: string[] }} page
+ * numbers or client names in its copy that none of its facts has, and items or hero points that are
+ * a partial fact's whole text
+ * @param {{ name: string, locale?: string, strings: string[], uses: string[], standalone?: string[] }} page
  * @param {Map<string, { type: string, text: string, locale: string, status: string }>} facts
  * @returns {string[]}
  */
@@ -117,6 +174,12 @@ export function checkPage(page, facts) {
       if (s.toLowerCase().includes(name) && !usedText.includes(name)) errors.push(`${page.name}: client ${c.text} in "${s}" is in none of the page's facts`);
     }
   }
+  // A partial fact is half a sentence: alone as an item or hero point it reads as a whole one (#214)
+  for (const f of used.filter((f) => f.partial)) {
+    for (const s of page.standalone ?? []) {
+      if (wording(fixTypos(s)) === wording(fixTypos(f.text))) errors.push(`${page.name}: "${s}" is the whole text of partial fact ${f.id}; use it as a label, fragment row or table cell, or inside a sentence`);
+    }
+  }
   return errors;
 }
 
@@ -140,6 +203,21 @@ export function copyStrings(value) {
     return Object.entries(value).flatMap(([k, v]) => (NOT_COPY.has(k) || (ENTRY_REF.has(k) && typeof v === 'string' && ENTRY_ID.test(v)) ? [] : copyStrings(v)));
   }
   return [];
+}
+
+/**
+ * Copy that stands alone as one statement: hero points and the bodies of section items, at any depth
+ * @param {unknown} value
+ * @returns {string[]}
+ */
+export function standaloneStrings(value) {
+  if (Array.isArray(value)) return value.flatMap(standaloneStrings);
+  if (!value || typeof value !== 'object' || value instanceof Date) return [];
+  return Object.entries(value).flatMap(([k, v]) => {
+    if (k === 'heroPoints' && Array.isArray(v)) return v.map((p) => (typeof p === 'string' ? p : p?.text)).filter((p) => typeof p === 'string');
+    if (k === 'items' && Array.isArray(v)) return [...v.map((i) => i?.body).filter((b) => typeof b === 'string'), ...standaloneStrings(v)];
+    return standaloneStrings(v);
+  });
 }
 
 /**
@@ -172,6 +250,7 @@ export function markdownPage(name, source) {
     locale: LOCALES.includes(locale) ? locale : undefined,
     strings: [...copyStrings(data), ...bodyCopy(m[2]).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)],
     uses: Array.isArray(data.facts) ? data.facts.map(String) : [],
+    standalone: standaloneStrings(data),
   };
 }
 
