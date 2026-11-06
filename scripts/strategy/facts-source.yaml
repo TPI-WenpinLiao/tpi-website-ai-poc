@@ -430,7 +430,11 @@ groups:
     url: https://www.tpisoftware.com/products/digilism
     locale: zh-TW
     facts:
-      - { id: digilism-ipaas, type: feature, quote: 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。 }
+      - id: digilism-ipaas
+        type: feature
+        quote: 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。
+        text: 兼具高度擴充、延展能耐的應用整合服務平台（iPaaS），可在雲端、地端及地雲混合環境中部署，適於金融、保險及各領域應用。
+        comment: text fixes 混和 and 佈署 from TYPOS and drops the stray spaces (#214)
       - { id: digilism-patent-background-processing, type: feature, quote: 具備專利技術的背景服務運算處理，支援處理瞬間大量的數據或請求，達到零阻塞式運行。 }
       - { id: digilism-patent-resource-scheduling, type: feature, text: 專利技術的運算資源調度機制、靈活調配，以提高資訊系統可用性。, quote: '專利技術的運算資源調度機制、靈活調配，,以提高資訊系統可用性。' }
       - { id: digilism-patent-sla, type: feature, quote: 自適應負載平衡機制及紅黑佈署策略的專利技術，確保100% 符合服務水平協議（SLA）。, status: to_confirm, note: 「確保100% 符合 SLA」沒有依據或比較基準，與 digirunner-hot-deploy-50、TCO 低 40% 同類（#164 使用者決定）；專利的部分另收 digilism-patent-load-balancing }
@@ -460,7 +464,7 @@ groups:
       - { id: digilism-family-digiflexis, type: feature, quote: 以零代碼設計快速建立數位表單與自動化流程，搭配智能報表即時洞察營運數據 }
       - { id: digilism-family-digicare, type: feature, quote: 以 HL7 FHIR 為核心架構，將異質系統的分散資料整併為可互通的標準格式，實現跨系統、跨院交換，並遵循衛福部 FHIR 實作指引。 }
       - { id: digilism-bfsi, type: feature, quote: 昕力資訊能為 BFSI 全應用場景提供安全可靠、高效運作的服務應用中台， 滿足企業 API 治理需求，以軟體創新實現差異化戰略。 }
-      - { id: digilism-compatibility, type: feature, quote: 新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。 }
+      - { id: digilism-compatibility, type: feature, text: 新舊兼容，弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。, quote: 新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。, comment: text puts a comma for the space (#214) }
       - { id: digilism-api-first, type: feature, quote: 基於 API 優先（API First）與雲原生架構，並具備全場景應用的特性，滿足企業打造企業整合中台所需，協助企業組織活用數位科技，靈活地適應不同的市場使用場景。 }
       - id: digilism-five-capabilities
         type: feature

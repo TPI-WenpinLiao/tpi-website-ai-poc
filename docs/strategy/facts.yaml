@@ -1705,9 +1705,10 @@
   status: confirmed
 
 # --- DigiLism ---
+# text fixes 混和 and 佈署 from TYPOS and drops the stray spaces (#214)
 - id: digilism-ipaas
   type: feature
-  text: 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。
+  text: 兼具高度擴充、延展能耐的應用整合服務平台（iPaaS），可在雲端、地端及地雲混合環境中部署，適於金融、保險及各領域應用。
   source:
     url: https://www.tpisoftware.com/products/digilism
     quote: 兼具高度擴充、延展能耐的應用整合服務平台 （iPaaS），可在雲端、地端及地雲混和環境中佈署， 適於金融、保險及各領域應用。
@@ -1876,9 +1877,10 @@
   locale: zh-TW
   status: confirmed
 
+# text puts a comma for the space (#214)
 - id: digilism-compatibility
   type: feature
-  text: 新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。
+  text: 新舊兼容，弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。
   source:
     url: https://www.tpisoftware.com/products/digilism
     quote: 新舊兼容 弭平既有系統與現代化框架之差異，企業可更輕易採用新興技術。

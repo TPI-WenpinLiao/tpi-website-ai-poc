@@ -156,6 +156,9 @@ test('a trimmed text is cut at punctuation, or marked partial with a note (#214)
   assert.match(validateFacts([cut])[0], /cut: text is cut out of source.quote mid-sentence/);
   assert.match(validateFacts([{ ...cut, partial: true }])[0], /\(cut\) note: a partial fact needs a note/);
   assert.deepEqual(validateFacts([{ ...cut, partial: true, note: 'drops 不僅' }]), []);
+  // 「你可以」 has no punctuation after it: dropping it is a cut mid-sentence (content-strategy「照原文引用事實」)
+  const you = entry({ id: 'you', type: 'feature', text: '直接在 GreenSwift 上透過 Gmail 登入進行試用。', source: { url: 'https://www.tpisoftware.com/', quote: '你可以直接在 GreenSwift 上透過 Gmail 登入進行試用。' } });
+  assert.match(validateFacts([you])[0], /you: text is cut out of source.quote mid-sentence/);
   // en: a space is not a break
   const en = entry({ id: 'en', type: 'feature', locale: 'en', text: 'Ready-to-use console', source: { url: 'https://tpi.dev/', quote: 'Ready-to-use console with proven adoption.' } });
   assert.match(validateFacts([en])[0], /en: text is cut out of source.quote mid-sentence/);
