@@ -31,7 +31,8 @@ tools: Read, Grep, Glob, Bash, WebFetch
 1. 讀 `.claude/skills/site-review/SKILL.md` 與要用的 rubric
 2. 照 `site-review`「做法」評分，每項寫理由並指到具體位置
 3. 照「門檻」判斷通過與否
-4. 寫「評審依據不足」（`site-review`「做法」第 5 步）
+4. 扣分來自共用元件時，寫「共用元件的扣分」（`site-review`「做法」第 5 步）
+5. 寫「評審依據不足」（`site-review`「做法」第 6 步）
 
 ## 不做的事
 
