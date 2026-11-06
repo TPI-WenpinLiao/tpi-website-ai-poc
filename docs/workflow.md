@@ -155,7 +155,7 @@ quality-gate 對只改文件的 PR（變更的檔案全部在 `scripts/ci/lighth
 - 策略：issue 帶「## 關卡」段落寫 `strategy-approved`，不進自動模式，走兩階段流程：階段一開 draft PR 後停下，你看完 messaging 與 brief，在 issue 加上 `strategy-approved` 再告訴 Claude 繼續
 - 設計概念：issue 帶 `needs-design`，同樣走兩階段流程。PR 附 `reviewer` 對各方向的評分，你選定方向後加 `design-approved`
 - 製作：照一般的 `/issue-ship` 與審查迴圈。製作 issue 改到試點頁用的模板、元件或內容時，轉 ready 前每頁由新的 `reviewer` 評設計 rubric，D2（與設計原則一致）低於 3 就先修；只因共用元件的扣分低於 3 時不擋，PR 列出對應的元件 issue（`site-review`「共用元件的扣分」）。#167 只過了 `npm run check`，offering 與 hub 模板留著原則禁止的 eyebrow 與編號，到 #168 才被抓到（[`issue-ship` 第 8 步](../.claude/skills/issue-ship/SKILL.md#8-完成條件轉-ready)）
-- 評審：rubric 的門檻寫在 `site-review`。沒過時，「要改的地方」回到製作，修正後由新的 `reviewer` 重評。平均在 4.0–4.2 或有一項 3 分時，再由另一個新的 `reviewer` 加評那份 rubric，兩次都通過才算通過；只因共用元件的扣分沒過時不退回製作（`site-review`「門檻」）。比較多組頁面（新版、舊版、現站、競品）時，素材用 `scripts/strategy/eval-shots.mjs` 準備，報告寫在 `docs/strategy/evaluation.md`（`site-review`「評審對象的準備」）。評審的「評審依據不足」整理成流程缺口，改回對應階段的 skill
+- 評審：rubric 的門檻寫在 `site-review`。沒過時，「要改的地方」回到製作，修正後由新的 `reviewer` 重評。平均在 4.0–4.2 時，再由另一個新的 `reviewer` 加評那份 rubric，兩次都通過才算通過；只因共用元件的扣分沒過時不退回製作（`site-review`「門檻」）。比較多組頁面（新版、舊版、現站、競品）時，素材用 `scripts/strategy/eval-shots.mjs` 準備，報告寫在 `docs/strategy/evaluation.md`（`site-review`「評審對象的準備」）。評審的「評審依據不足」整理成流程缺口，改回對應階段的 skill
 
 ## 視覺回歸
 
