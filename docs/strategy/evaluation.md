@@ -85,6 +85,7 @@ node scripts/strategy/eval-shots.mjs --new <scratch>/new-dist --old <scratch>/ol
 | 第一批（#200） | [SysTalk.ai 產品家族](evaluation/reviews/b1-new-systalk-ai.md) | 4.2 通過 | 4.5 通過 | 5.0 通過 |
 | 第一批（#201） | [OrientAI 企業級 Agentic AI 平台](evaluation/reviews/b1-new-orient-ai.md) | 4.2 通過 | 4.5 通過 | 4.8 通過 |
 | 第一批（#201） | [AISO 主權 AI](evaluation/reviews/b1-new-aiso.md) | 4.2 通過 | 4.2 通過 | 4.3 通過 |
+| 第一批（#202） | [DigiLism 企業服務中台](evaluation/reviews/b1-new-digilism.md) | 4.0 通過 | 4.5 通過 | 4.7 通過 |
 <!-- eval-scores:end -->
 
 ## 各組的主要差異
