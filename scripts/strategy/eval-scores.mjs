@@ -161,7 +161,8 @@ async function main() {
   const problems = [];
   for (const file of files) {
     const name = file.replace(/\.md$/, '');
-    const partial = name.endsWith(AGAIN);
+    // A page whose own name ends in -2 is a first review, not a second one
+    const partial = name.endsWith(AGAIN) && !ROWS.some((r) => r[2] === name);
     const sections = parseReview(await readFile(join(REVIEWS, file), 'utf8'));
     problems.push(...checkReview(name, sections, { partial }));
     if (partial) again.set(name.slice(0, -AGAIN.length), sections);

@@ -164,7 +164,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 ## 下一步
 
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
-- `evaluation.md`「第一批（#200）」「第一批（#201）」「第一批（#202）」的「還不夠好的地方」與「評審依據不足」：共用元件的問題已開 #208–#212，規則文件的缺口已開 #213–#215（都是 `needs-design`、依賴 #202；各 issue 的內文列出它涵蓋哪幾項）。其餘還沒開 issue 的以 `evaluation.md` 那三節為準，要做時另開，開之前先對照 #208–#215 避免重複
+- `evaluation.md`「第一批（#200）」「第一批（#201）」「第一批（#202）」的「還不夠好的地方」與「評審依據不足」：共用元件的問題已開 #208–#212，規則文件的缺口已開 #213–#215（都是 `needs-design`、依賴 #202；各 issue 的內文列出它涵蓋哪幾項，#215 已完成）。其餘還沒開 issue 的以 `evaluation.md` 那三節為準，要做時另開，開之前先對照 #208–#215 避免重複
 - `/blog/carbonfootprint`、`/blog/carbonfootprint-quick-implementation-sme` 結尾連到 GreenSwift 頁的錨點寫「經濟型方案」，新頁不寫經濟型方案（價格沒收，`briefs/greenswift.md` 取捨第 13 項）；#202 依使用者決定不改，等 `/carbon` 的價格收進事實庫再一起處理
 - 回覆 #199 PR 的「待確認」：GreenSwift 報告語言、`interactivehealth` 是否仍銷售（#202 先用 `omitParts` 不列進 DigiLism 家族頁；試用網址已確認，#202 連到現站的申請頁）、改舊文章的連結文字、建議的 blog（ICR／OCR／IDP、主權 AI、中台／ESB、MCP）要不要開 issue、還沒收的事實（`messaging.md`「缺少證據的主張」第 18、23、24 項）
 - digiRunner 頁要不要加產品獎（`DM-8` 的台灣精品獎 2023、2024，創新商務獎 2022）：#183 只放了 hero 的專利數與台新的 Global Finance 2020，`DM-8` 把 digiRunner 列為主要用途頁，要放的話另開 issue
