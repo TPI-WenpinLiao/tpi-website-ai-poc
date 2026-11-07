@@ -22,6 +22,8 @@ test('a number inside a name stays plain', () => {
   assert.deepEqual(strong('符合 RFC-7519 標準'), []);
   assert.deepEqual(strong('通過 ISO 27001 認證'), []);
   assert.deepEqual(strong('依 ISO 14064-1:2018 標準盤查'), []);
+  assert.deepEqual(strong('符合國際標準 BPMN 2.0 規範'), []);
+  assert.deepEqual(strong('a top FT 500 Asia-Pacific company'), []);
 });
 
 test('a range stands out whole, and a unit after the number does not stop it', () => {
@@ -30,6 +32,8 @@ test('a range stands out whole, and a unit after the number does not stop it', (
   assert.deepEqual(strong('在 2008 年。'), ['2008']);
   assert.deepEqual(strong('It began in 2008.'), ['2008']);
   assert.deepEqual(strong('Over 20 years of experience'), ['20']);
+  assert.deepEqual(strong('透過 AI 24 小時監控設備運行狀態'), ['24']);
+  assert.deepEqual(strong('GRI、SASB 和 TCFD 3 種國際通用準則'), ['3']);
 });
 
 test('the parts put back together are the text unchanged', () => {
