@@ -59,6 +59,8 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 `:root` 是亮色 surface。任何元素加上 `data-surface="dark"`，底下所有語意色彩 token 都換成深色值，`BaseLayout` 也會替它畫上底色與文字色；`data-surface="light"` 在深色裡換回亮色值（`SiteHeader` 在紫色段落上時的選單面板）。元件不寫深色變體，一律用語意 token。
 
+讀者要讀的文字（說明句、圖說、卡片與索引列的一句、答案、引言、摘要）用 `--color-text`，層級靠字級與字重分；`--color-text-muted` 只給讀者不讀也不影響理解的附屬資訊：日期、分類、meta 行、麵包屑與頁內導覽的連結、表單提示、說話者（`design-principles.md`「說明句的文字色」，#208）。
+
 - 頁面區塊用 `Surface`（`tone="dark" | "light"`）切換，不要自己寫 `data-surface`
 - 語意色彩 token 寫在 `tokens.css` 的 `:root, [data-surface="light"]` 區塊（primitives 與尺寸類留在 `:root`）；新增時這個區塊與 `[data-surface="dark"]` 兩邊都要給值
 - 新增會疊在一起使用的色彩 token 時，把前景／背景配對加進 `scripts/design/contrast.mjs` 的 `PAIRS`；兩個 surface 都會檢查
@@ -135,7 +137,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | 元件 | 用途 | 重點 |
 |---|---|---|
 | `Surface` | 頁面區塊 | `tone` 切換亮暗；`fill`（`subtle` 淺灰、`brand` 淺紫）把亮底加深一階，用來分開判斷組，不用分隔線或框（#187）；`width="reading"` 收窄到閱讀寬度；同 tone、同 fill 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
-| `PageHero` | 頁面開場 | 輸出該頁唯一的 h1，上方不放任何小標（上層節點只在麵包屑，`design-principles.md` P1，#187）；h1 下依序是 `description`、`lead`（一句說明）、`points`（事實原文的證據點，每則可帶一行緊貼的 `note` 條件）、`meta`（一行附註，例如案例的產業）。h1 之後的第二眼是 `description`：證據點用內文字重，只有獨立的數字加粗（`quantities()`，ISO27001、K8s 這類名稱裡的數字不加粗）；`description`、`lead`、`note` 用完整文字色，只有 `meta` 用 muted（#208）、`actions` slot；`visual` slot 放同一個世界的靜態圖；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」） |
+| `PageHero` | 頁面開場 | 輸出該頁唯一的 h1，上方不放任何小標（上層節點只在麵包屑，`design-principles.md` P1，#187）；h1 下依序是 `description`、`lead`（一句說明）、`points`（事實原文的證據點，每則可帶一行緊貼的 `note` 條件）、`meta`（一行附註，例如案例的產業）、`actions` slot；`visual` slot 放同一個世界的靜態圖；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」）；h1 之後的第二眼是 `description`：證據點用內文字重，只有獨立的數字加粗（`quantities()`，ISO27001、K8s 這類名稱裡的數字不加粗）；`description`、`lead`、`note` 用完整文字色，只有 `meta` 用 muted（#208） |
 | `SectionHeading` | 區塊標題 | 只有標題、`description` 與 `action` slot，不加編號、eyebrow 與短線（#187）；`description` 用完整文字色，不用 muted（#208）；標題寫這段回答的問題的答案；`level` 由呼叫端指定，避免跳級；`weight="secondary"` 給次要段落（相關文章、子頁、相關產品），標題降到 `--font-size-text`；`size="display"` 每頁最多一次，`size="sm"` 用在面板裡的標題（表單的錯誤摘要）；`action` slot 放整區的連結（同一列靠右） |
 | `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；全部平塗、沒有陰影與上浮（#187）：primary 實心紫、secondary 淺紫底、text 沒有底；hover 只換顏色；`disabled` 只存在於 `<button>` |
 | `Link` | 內文連結、獨立連結 | 內文連結一律底線；`external` 加 ↗ 與「（外部網站）」螢幕閱讀器文字 |
