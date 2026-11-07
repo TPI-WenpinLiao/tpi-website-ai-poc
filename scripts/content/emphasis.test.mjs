@@ -20,6 +20,16 @@ test('a number inside a name stays plain', () => {
   assert.deepEqual(strong('通過 ISO27001 資訊安全認證'), []);
   assert.deepEqual(strong('支援地、雲端部署及 K8s 微服務架構'), []);
   assert.deepEqual(strong('符合 RFC-7519 標準'), []);
+  assert.deepEqual(strong('通過 ISO 27001 認證'), []);
+  assert.deepEqual(strong('依 ISO 14064-1:2018 標準盤查'), []);
+});
+
+test('a range stands out whole, and a unit after the number does not stop it', () => {
+  assert.deepEqual(strong('效能可達 300-1000 TPS'), ['300-1000']);
+  assert.deepEqual(strong('建議 2 Core CPU'), ['2']);
+  assert.deepEqual(strong('在 2008 年。'), ['2008']);
+  assert.deepEqual(strong('It began in 2008.'), ['2008']);
+  assert.deepEqual(strong('Over 20 years of experience'), ['20']);
 });
 
 test('the parts put back together are the text unchanged', () => {

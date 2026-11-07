@@ -14,8 +14,11 @@ export const numbers = (text: string): Part[] => split(text, /(\d[\d,.]*\s?%?)/)
  * where only the outcome figures should stand out (PageSections). */
 export const percentages = (text: string): Part[] => split(text, /(\d[\d,.]*\s?%)/);
 
-/** Counts, years and percentages that stand on their own: a number touching a Latin letter or another
- * digit is part of a name (ISO27001, K8s, RFC-7519) and stays plain. For short fact texts where
- * every quantity should stand out (PageHero's evidence). */
+/** Counts, years, ranges and percentages that stand on their own. A number that is part of a name
+ * stays plain: one touching a Latin letter, a digit or a joining mark (ISO27001, K8s, RFC-7519,
+ * 14064-1:2018), and one right after an all-caps abbreviation (ISO 27001); after an ordinary word it
+ * is a quantity again (in 2008, Over 20 years). A Latin word after the number is its unit and does not
+ * stop it (300-1000 TPS, 2 Core). For short fact texts where every quantity should stand out
+ * (PageHero's evidence). */
 export const quantities = (text: string): Part[] =>
-  split(text, /(?<![A-Za-z\d.-])(\d[\d,.]*(?:\s?%)?)(?![A-Za-z\d])/);
+  split(text, /(?<![A-Za-z\d.,:/-])(?<![A-Z]{2,}\s)(\d(?:[\d,.]*\d)?(?:\s?[-–~]\s?\d(?:[\d,.]*\d)?)?(?:\s?%)?)(?![A-Za-z\d])/);
