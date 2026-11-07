@@ -4,8 +4,8 @@
 // header, and the stuck InPageNav, must have the footer's background, not the purple of the bands
 // (#212).
 // On the three home pages and one inner page (an offering page: ContactCta, the footer, and from
-// 64rem the InPageNav stuck under the header, which has to switch with it), on a phone, a desktop (on the home pages the live 3D layout, html.want-3d) and a desktop that prefers
-// reduced motion: scroll to the top, to just above and just inside each band,
+// 64rem the InPageNav stuck under the header, which has to switch with it), on a phone, a desktop (on the home pages the live 3D layout, html.want-3d), a desktop that prefers
+// reduced motion and a short desktop (1280×450, where the footer reaches the stuck InPageNav): scroll to the top, to just above and just inside each band,
 // then back to the top. At every stop the header's data-surface must match what the bands' boxes say,
 // and the header's text must reach 4.5:1 on its background. On the desktop the keyboard focus ring of
 // the header's first link must show and reach 3:1 on both surfaces; under reduced motion the header's
@@ -30,9 +30,13 @@ const DIST = resolve(import.meta.dirname, '../../dist');
 export const HOMES = ['/', '/en', '/vi'];
 export const PATHS = [...HOMES, '/products/digirunner'];
 export const MODES = [
-  { name: 'phone', width: 375, height: 760, reduced: false },
-  { name: 'desktop', width: 1280, height: 800, reduced: false },
-  { name: 'desktop, reduced motion', width: 1280, height: 800, reduced: true },
+  // `footer`: the page scrolls far enough for the footer to reach the bar's bottom edge, so some stop
+  // must check the bar against the footer (#212). At 1280×800 it never does; the short desktop is
+  // the one where the stuck InPageNav meets the footer
+  { name: 'phone', width: 375, height: 760, reduced: false, footer: true },
+  { name: 'desktop', width: 1280, height: 800, reduced: false, footer: false },
+  { name: 'desktop, reduced motion', width: 1280, height: 800, reduced: true, footer: false },
+  { name: 'short desktop', width: 1280, height: 450, reduced: false, footer: true },
 ];
 // How far above and below a band's top edge the header's bottom edge is put
 const OFFSET = 80;
@@ -275,6 +279,7 @@ async function check(browser, url, mode) {
       }
     }
     if (!surfaces.has('dark')) out.push('no stop put a band under the header');
+    if (mode.footer && !surfaces.has('deep')) out.push('no stop put the footer under the bar');
     if (mode.name === 'phone') out.push(...(await afterSheetResize(page, mode)));
     if (mode.name === 'desktop') out.push(...(await afterDarkResize(page, mode)), ...(await afterGrow(page, mode)));
   } finally {
