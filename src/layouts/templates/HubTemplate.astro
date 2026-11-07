@@ -265,7 +265,8 @@ const jsonLd = hubJsonLd({
   }
 
   /* A customer's words after the cases, quieter than the cases themselves (new-finance D3, #187): body
-     text in the lead size, the speaker under it, no portrait */
+     text in the lead size and the full text colour (#208), the speaker under it as muted meta, no
+     portrait */
   .testimonial {
     display: flex;
     flex-direction: column;
@@ -276,7 +277,7 @@ const jsonLd = hubJsonLd({
 
   .testimonial blockquote {
     margin: 0;
-    color: var(--color-text-muted);
+    color: var(--color-text);
     font-size: var(--font-size-lg);
     line-height: var(--line-height-snug);
   }

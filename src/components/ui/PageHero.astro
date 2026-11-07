@@ -3,7 +3,10 @@
 // nothing above it (no eyebrow: where the page sits shows in the breadcrumb; design-principles.md
 // P1,「內頁共用的規則」, #187), then the description, an optional `lead` sentence, the evidence
 // (`points`: fact texts, each with an optional `note` set tight under it, the condition that goes
-// with the fact), an optional `meta` line, the actions, and a `visual` slot. The visual is where the 3D scroll
+// with the fact), an optional `meta` line, the actions, and a `visual` slot. After the h1 the
+// description (the tagline) is the second thing read: the evidence is body weight with only its
+// numbers bold (quantities), and every sentence of copy, the condition too, is full text colour;
+// only `meta` is muted (design-principles.md「內頁共用的規則」, #208). The visual is where the 3D scroll
 // scene mounts (M3-07); until it loads it must show a static fallback, which is also the LCP
 // candidate, so never fade the hero in. Breadcrumbs go in the `breadcrumb` slot: their own row at
 // the top of the hero, outside the copy, at every width.
@@ -18,6 +21,7 @@
 // Headings break Chinese only at spaces and punctuation (BaseLayout). A title with neither, such as
 // 以頂尖科技為企業賦能, marks where it may break with U+200B (zero-width space): '以頂尖科技\u200b為企業賦能'.
 import Surface from './Surface.astro';
+import { quantities } from '../../lib/content/emphasis';
 
 interface Props {
   title: string;
@@ -65,7 +69,7 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
             <ul class="points">
               {points.map((p) => (
                 <li>
-                  <span class="point">{p.text}</span>
+                  <span class="point">{quantities(p.text).map((q) => (q.strong ? <strong>{q.part}</strong> : q.part))}</span>
                   {p.note && <span class="note">{p.note}</span>}
                 </li>
               ))}
@@ -129,18 +133,18 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
   .description {
     max-width: var(--reading-max-width);
     margin: 0;
-    color: var(--color-text-muted);
+    color: var(--color-text);
     font-size: var(--font-size-xl);
   }
 
   .lead {
     max-width: var(--reading-max-width);
     margin: 0;
-    color: var(--color-text-muted);
+    color: var(--color-text);
   }
 
-  /* The evidence: fact texts as a list spaced apart, no markers or rules (P2); a fact's condition
-     sits tight under it in the small size */
+  /* The evidence: fact texts as a list spaced apart, no markers or rules (P2), body weight with only
+     the numbers bold; a fact's condition sits tight under it in the small size */
   .points {
     display: grid;
     gap: var(--space-3);
@@ -157,12 +161,11 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
   }
 
   .point {
-    font-weight: var(--font-weight-semibold);
     white-space: pre-line;
   }
 
   .note {
-    color: var(--color-text-muted);
+    color: var(--color-text);
     font-size: var(--font-size-sm);
   }
 
