@@ -6,7 +6,8 @@
  * gradient lives only in the ribbon's three.js render; every CSS token here is flat.
  * The light surface is `:root` (and data-surface="light"); any element with data-surface="dark"
  * switches every semantic color token below it to the purple brand band (contact band, OrientAI
- * band, footer), so components work on both without variants.
+ * band) and the footer, whose background is --color-bg-deep (#212), so components work on both
+ * without variants.
  *
  * Layers:
  * - Primitives (--purple-*, --magenta-*, --orange-*, --ink-*, --red-*, --green-*): raw values,
@@ -249,6 +250,9 @@
   --color-bg-muted: var(--ink-100);
   --color-bg-brand-subtle: var(--purple-50);
   --color-bg-accent-subtle: var(--orange-50);
+  /* The site frame under the purple band: SiteFooter's background (#212). Only the dark surface gives
+     it its own color; on the light surface it is the page background. */
+  --color-bg-deep: var(--ink-0);
   /* Dims the page behind a modal dialog (ConsentBanner's preferences) */
   --color-bg-overlay: rgb(18 15 29 / 0.55);
 
@@ -289,7 +293,8 @@
   color-scheme: light;
 }
 
-/* Dark surface: the purple brand band (contact, OrientAI, footer). Only semantic tokens change. */
+/* Dark surface: the purple brand band (contact, OrientAI) and the footer, whose background is the
+   near-black --color-bg-deep so it doesn't join the band above it (#212). Only semantic tokens change. */
 [data-surface="dark"] {
   --color-text: var(--ink-0);
   --color-text-muted: var(--purple-100);
@@ -301,6 +306,7 @@
   --color-bg-muted: var(--purple-800);
   --color-bg-brand-subtle: var(--purple-800);
   --color-bg-accent-subtle: var(--purple-800);
+  --color-bg-deep: var(--ink-900);
   --color-bg-overlay: rgb(0 0 0 / 0.65);
 
   --color-border: var(--purple-500);

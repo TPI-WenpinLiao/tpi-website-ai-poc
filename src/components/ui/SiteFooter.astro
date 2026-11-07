@@ -2,7 +2,10 @@
 // Site footer (M3-04, #17): brand and contact details, the link columns and the legal row, all
 // from docs/ia/navigation.csv (src/lib/ia/navigation.ts); the phone is the headquarters office of
 // the organization data file (src/content/organization), Email and copyright come from the current
-// site (src/data/site.ts). Dark surface, so it closes every page the same way.
+// site (src/data/site.ts). Dark surface, so it closes every page the same way, on the near-black
+// --color-bg-deep: the site frame, not a second purple band, so it stays apart from ContactCta above
+// it by color alone. No rules: the legal row is set apart by space (#212). data-depth="deep" tells
+// SiteHeader to take the same near-black while the footer is under it.
 // `consentSettings` adds a button at the end of the legal row that reopens ConsentBanner's
 // preferences dialog (`dialog` is its id); PageLayout passes it when the build has a GTM ID.
 import { contactAction, localizedNav, nodeHref } from '../../lib/ia/navigation';
@@ -32,7 +35,7 @@ const phone = org?.data.offices.find((o) => o.headquarters)?.phone;
 if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a headquarters phone for the footer`);
 ---
 
-<footer class="site-footer" data-surface="dark">
+<footer class="site-footer" data-surface="dark" data-depth="deep">
   <div class="inner">
     <div class="top">
       <div class="company">
@@ -103,7 +106,7 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
   @import '../../styles/media.css';
 
   .site-footer {
-    border-block-start: var(--border-width) solid var(--glass-border);
+    background: var(--color-bg-deep);
   }
 
   .inner {
@@ -204,9 +207,7 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
     gap: var(--space-4) var(--space-8);
     align-items: center;
     justify-content: space-between;
-    margin-block-start: var(--space-12);
-    padding-block-start: var(--space-6);
-    border-block-start: var(--border-width) solid var(--glass-border);
+    margin-block-start: var(--space-16);
     color: var(--color-text-muted);
     font-size: var(--font-size-xs);
   }
