@@ -6,7 +6,8 @@
  * gradient lives only in the ribbon's three.js render; every CSS token here is flat.
  * The light surface is `:root` (and data-surface="light"); any element with data-surface="dark"
  * switches every semantic color token below it to the purple brand band (contact band, OrientAI
- * band, footer), so components work on both without variants.
+ * band) and the footer, whose background is --color-bg-deep (#212), so components work on both
+ * without variants.
  *
  * Layers:
  * - Primitives (--purple-*, --magenta-*, --orange-*, --ink-*, --red-*, --green-*): raw values,

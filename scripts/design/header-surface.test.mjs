@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { cssToHex, expectedSurface, focusProblems, stopProblems } from './header-surface.mjs';
+import { cssToHex, deepBackground, expectedSurface, focusProblems, stopProblems } from './header-surface.mjs';
 
 test('the header is dark only while a band crosses the bar\'s bottom pixel row', () => {
   assert.equal(expectedSurface([], 64), 'light');
@@ -16,6 +16,15 @@ test('the header is dark only while a band crosses the bar\'s bottom pixel row',
   // With an InPageNav stuck under the header the line is the nav's bottom edge
   assert.equal(expectedSurface([{ top: 100, bottom: 900 }], 64 + 52), 'dark');
   assert.equal(expectedSurface([{ top: 100, bottom: 900 }], 64), 'light');
+});
+
+test('the bar has to match the footer only while the footer crosses its bottom pixel row', () => {
+  const band = { top: -100, bottom: 400, bg: 'rgb(56, 24, 80)' };
+  const footer = { top: -100, bottom: 400, deep: true, bg: 'rgb(18, 15, 29)' };
+  assert.equal(deepBackground([], 64), null);
+  assert.equal(deepBackground([band], 64), null);
+  assert.equal(deepBackground([footer], 64), 'rgb(18, 15, 29)');
+  assert.equal(deepBackground([band, { ...footer, top: 200, bottom: 900 }], 64), null);
 });
 
 test('cssToHex reads computed rgb() and rgba() colors', () => {
@@ -32,6 +41,9 @@ test('a stop fails on the wrong surface and on low text contrast', () => {
   assert.match(stopProblems({ ...ok, actual: undefined })[0] ?? '', /is unset/);
   assert.match(stopProblems({ ...ok, actual: 'light', name: 'in-page nav' })[0] ?? '', /^in-page nav is light/);
   assert.match(stopProblems({ ...ok, text: 'rgb(118, 118, 118)', bg: 'rgb(56, 24, 80)' })[0] ?? '', /below 4\.5:1/);
+  // Over the footer the purple bar is wrong (#212)
+  assert.deepEqual(stopProblems({ ...ok, bg: 'rgb(18, 15, 29)', deep: 'rgb(18, 15, 29)' }), []);
+  assert.match(stopProblems({ ...ok, deep: 'rgb(18, 15, 29)' })[0] ?? '', /#381850 over the footer, expected its #120f1d/);
 });
 
 test('the focus ring has to show and reach 3:1 on the header', () => {

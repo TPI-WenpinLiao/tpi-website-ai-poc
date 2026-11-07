@@ -434,7 +434,7 @@ AISO 第一次三份都通過，但 D2、C6 是 3 分。`4fa09f0` 改了這兩�
 
 ## 頁尾（#212）
 
-`SiteFooter` 拿掉兩條細線、底色改近黑（`--color-bg-deep`）之後，三個試點頁各由新的 `reviewer` 只評設計 rubric，確認 D2 不再因 footer 扣分（`issue-ship` 第 8 步）。這是共用元件的確認，不是評審階段，評審結果貼在 PR #222，不另存評審檔、不進上方的分數表。
+`SiteFooter` 拿掉兩條細線、底色改近黑（`--color-bg-deep`）之後，三個試點頁各由新的 `reviewer` 只評設計 rubric，確認 D2 不再因 footer 扣分（`issue-ship` 第 8 步）。這是共用元件的確認，不是評審階段，摘要在 PR #222 的 body，不另存評審檔、不進上方的分數表。
 
 ### 方法
 

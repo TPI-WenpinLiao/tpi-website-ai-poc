@@ -7,7 +7,7 @@
 // alone stays on screen. `stick="top"` sticks to the top at every width (pages without a header).
 // The page gives its section targets a scroll-margin-block-start so they land below the bars.
 // Stuck under SiteHeader, the bar takes the header's surface: SiteHeader's script sets its
-// data-surface while a purple band is under the bar (#179).
+// data-surface while a purple band is under the bar (#179), and data-depth over the footer (#212).
 interface Props {
   items: { href: string; label: string }[];
   label: string;
@@ -40,6 +40,11 @@ const { items, label, stick = 'header' } = Astro.props;
     transition-property: background-color;
     transition-duration: var(--duration-fast);
     transition-timing-function: var(--ease-standard);
+  }
+
+  /* With the header over the footer: its near-black (#212) */
+  .in-page-nav[data-depth] {
+    background: var(--color-bg-deep);
   }
 
   .top {

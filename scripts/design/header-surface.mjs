@@ -1,6 +1,8 @@
 // Checks that the sticky header follows the purple bands (#179): SiteHeader's script sets the header's
 // data-surface to "dark" while a data-surface="dark" section (OrientAI, contact, ContactCta, the
-// footer) is under the header's bottom edge, and back to "light" elsewhere.
+// footer) is under the header's bottom edge, and back to "light" elsewhere. Over the footer the
+// header, and the stuck InPageNav, must have the footer's background, not the purple of the bands
+// (#212).
 // On the three home pages and one inner page (an offering page: ContactCta, the footer, and from
 // 64rem the InPageNav stuck under the header, which has to switch with it), on a phone, a desktop (on the home pages the live 3D layout, html.want-3d) and a desktop that prefers
 // reduced motion: scroll to the top, to just above and just inside each band,
@@ -49,6 +51,18 @@ export function expectedSurface(bands, line) {
 }
 
 /**
+ * The background the bar must match: that of the footer (found by its <footer> element, not by the
+ * data-depth it sets, so a footer that lost the attribute still fails) crossing the
+ * bar's bottom pixel row, else null (the bands' purple is the dark surface's own --color-bg).
+ * @param {{ top: number, bottom: number, deep?: boolean, bg?: string }[]} bands
+ * @param {number} line the bar's bottom edge
+ * @returns {string | null}
+ */
+export function deepBackground(bands, line) {
+  return bands.find((b) => b.deep && b.top < line && b.bottom > line - 1)?.bg ?? null;
+}
+
+/**
  * A computed CSS color (rgb() or rgba(), comma or space separated) as #rrggbb; alpha is dropped.
  * @param {string} css
  */
@@ -59,13 +73,15 @@ export function cssToHex(css) {
 }
 
 /**
- * Problems at one scroll stop, for the header or the stuck InPageNav (`name`).
- * @param {{ actual: string | undefined, expected: string, text: string, bg: string, name?: string }} stop
+ * Problems at one scroll stop, for the header or the stuck InPageNav (`name`). `deep` is the
+ * footer's background while it is under the bar (deepBackground).
+ * @param {{ actual: string | undefined, expected: string, text: string, bg: string, deep?: string | null, name?: string }} stop
  * @returns {string[]}
  */
-export function stopProblems({ actual, expected, text, bg, name = 'header' }) {
+export function stopProblems({ actual, expected, text, bg, deep = null, name = 'header' }) {
   const out = [];
   if (actual !== expected) out.push(`${name} is ${actual ?? 'unset'}, expected ${expected}`);
+  if (deep && cssToHex(bg) !== cssToHex(deep)) out.push(`${name} background ${cssToHex(bg)} over the footer, expected its ${cssToHex(deep)}`);
   const ratio = contrastRatio(cssToHex(text), cssToHex(bg));
   if (ratio < 4.5) out.push(`${name} text ${ratio.toFixed(2)}:1 on its background, below 4.5:1`);
   return out;
@@ -104,7 +120,8 @@ const readStop = (page) =>
       .map((el) => {
         const r = el.getBoundingClientRect();
         const name = el.className.toString().split(' ')[0] || el.tagName.toLowerCase();
-        return { name, top: r.top, bottom: r.bottom };
+        const deep = el.tagName === 'FOOTER';
+        return { name, top: r.top, bottom: r.bottom, deep, bg: getComputedStyle(el).backgroundColor };
       });
     const style = getComputedStyle(header);
     const link = nav?.querySelector('a');
@@ -247,9 +264,11 @@ async function check(browser, url, mode) {
       await settle(page);
       const s = await readStop(page);
       const expected = expectedSurface(s.bands, s.line);
+      const deep = deepBackground(s.bands, s.line);
       surfaces.add(expected);
-      out.push(...stopProblems({ ...s, expected }).map((p) => `${label}: ${p}`));
-      if (s.nav) out.push(...stopProblems({ ...s.nav, expected, name: 'in-page nav' }).map((p) => `${label}: ${p}`));
+      if (deep) surfaces.add('deep');
+      out.push(...stopProblems({ ...s, expected, deep }).map((p) => `${label}: ${p}`));
+      if (s.nav) out.push(...stopProblems({ ...s.nav, expected, deep, name: 'in-page nav' }).map((p) => `${label}: ${p}`));
       if (mode.reduced && !/^0m?s$/.test(s.transition)) out.push(`${label}: color change animated (${s.transition}) under reduced motion`);
       if (mode.name === 'desktop' && (label === 'top' || label.startsWith('inside'))) {
         out.push(...focusProblems(await focusRing(page)).map((p) => `${label} (${s.actual}): ${p}`));
