@@ -303,7 +303,7 @@ SEO 的差距最小。舊版首頁的 S5、S6 是 4 分，金融頁的 S6 是 5 
 - 介面片段把旁邊的事實清單原樣再列一次（SysTalk.ai 第 4、5 段），沒有畫出清單以外的東西（D2）；狀態只用色塊表示，畫面上沒有文字（D5）
 - 375 寬保留每一張片段，沒照「介面片段只留主要的一塊」；說明句照詞組斷行時拆開「AI 進化系統」這類名稱
 - SysTalk.ai hero 的證據點「打造企業 雲/地端 AI 完整解決方案」讀起來像口號；說明句的「金融與政府」沒有事實支撐（C3）
-- `SiteFooter` 在深紫聯絡帶下方與版權列上方各有一條細線（D2，全站共用）
+- `SiteFooter` 在深紫聯絡帶下方與版權列上方各有一條細線（D2，全站共用）。#212 已改，見「頁尾（#212）」
 
 ### 評審依據不足
 
@@ -431,6 +431,38 @@ AISO 第一次三份都通過，但 D2、C6 是 3 分。`4fa09f0` 改了這兩�
 | brief「說明句寫讀者得到什麼」放在「照原文列清單的段落」底下，看不出是否管全頁 | `briefs/digilism.md` | digilism 第一次 |
 
 本 issue 只改頁面，這些規則文件之間的衝突列在 PR 的後續事項。
+
+## 頁尾（#212）
+
+`SiteFooter` 拿掉兩條細線、底色改近黑（`--color-bg-deep`）之後，三個試點頁各由新的 `reviewer` 只評設計 rubric，確認 D2 不再因 footer 扣分（`issue-ship` 第 8 步）。這是共用元件的確認，不是評審階段，評審結果貼在 PR #222，不另存評審檔、不進上方的分數表。
+
+### 方法
+
+- 用的 rubric 與 prompt 和「第一批（#200）」相同，只評設計。素材由 `node scripts/strategy/eval-shots.mjs --only new --group b212-pilot` 產生，截圖不進版控
+- 比較基準是 PR #207 的試點頁重評。digiRunner 比基準低，照「門檻附近加評」另開一位 `reviewer` 加評
+
+### 結果
+
+| 頁面 | PR #207 | #212 | D2 |
+|---|---|---|---|
+| 首頁 | 4.0（D2 3） | 4.2 | 4 |
+| digiRunner | 4.2（D2 4） | 4.0；加評 4.0 | 3；3 |
+| 金融 | 4.0（D2 3） | 4.0 | 3 |
+
+四份評審都寫 footer 是近黑、沒有細線、和深紫帶分得開，沒有因 footer 扣分。digiRunner 低 0.2，兩位評審扣在同樣的地方，都不是 footer：`CaseList` 的一行 heading 與整句加粗的獎項（#213 的案例列規則，#210 改），第 7 段 TPS 沒加粗（#208 的規則），hero 圖少「新的服務」標籤。這些規則在 PR #207 重評之後才定，PR #222 列為待確認，建議接受。
+
+### 評審依據不足
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| 案例列的 heading：原則寫兩行、不組「客戶名：標題」，元件表的 `CaseList` 仍寫 `linkHeading` 輸出「客戶名：案例標題」 | `design-principles.md`「案例列」、`design-system` 元件表 | digiRunner 兩次、金融 |
+| 375 寬「一段不超過約 1.5 個螢幕高」沒寫螢幕高用哪個 viewport，brief 要的字數與原文長度又很難壓進去 | `design-principles.md`「內頁共用的規則」 | digiRunner 兩次 |
+| 「全頁最多一條深紫帶」只寫在內頁，首頁可以有幾條沒寫；P5 三組判斷換底色，首頁 brief 卻讓兩組都用深紫 | `design-principles.md` P5、`briefs/home.md` 第 4、5 段 | 首頁 |
+| 時間列「年份在前」與 brief「年份寫在原文裡，標題不重複」衝突，原文以年份開頭時畫面出現兩次 | `design-principles.md`「內頁的版型」、`briefs/finance.md` 第 2 段 | 金融 |
+| 色帶要「一個動作」，brief 沒替金融第 7 段指定動作；索引列的「一句」brief 沒給來源 | `design-principles.md`「內頁的版型」、`briefs/finance.md` 第 6、7 段 | 金融 |
+| 1280 寬頁內導覽放不下時怎麼排、片段內的狀態色（故障紅）算不算一種顏色 | `design-principles.md`「頁內導覽」、P4「色彩」 | digiRunner |
+
+本 issue 只改 footer，這些缺口不在範圍內。
 
 ## 限制
 
