@@ -19,7 +19,7 @@ const UI = 3;
 /** @param {string} fg @param {string[]} bgs @param {number} min @param {string} [over] */
 const pair = (fg, bgs, min, over) => bgs.map((bg) => ({ fg, bg, min, over }));
 
-const BACKGROUNDS = ['--color-bg', '--color-bg-subtle', '--color-bg-muted', '--color-bg-brand-subtle', '--color-bg-accent-subtle'];
+const BACKGROUNDS = ['--color-bg', '--color-bg-subtle', '--color-bg-muted', '--color-bg-brand-subtle', '--color-bg-accent-subtle', '--color-bg-deep'];
 
 export const PAIRS = [
   ...pair('--color-text', BACKGROUNDS, TEXT),
@@ -33,13 +33,13 @@ export const PAIRS = [
   ...pair('--color-link', ['--glass-bg'], TEXT, '--scene-worst'),
   ...pair('--color-action-text', ['--color-action', '--color-action-hover'], TEXT),
   ...pair('--color-action', ['--color-bg', '--color-bg-subtle', '--color-bg-brand-subtle', '--color-action-subtle-hover'], TEXT),
-  ...pair('--color-link', ['--color-bg', '--color-bg-subtle', '--color-bg-muted', '--color-bg-brand-subtle'], TEXT),
-  ...pair('--color-link-hover', ['--color-bg', '--color-bg-subtle'], TEXT),
+  ...pair('--color-link', ['--color-bg', '--color-bg-subtle', '--color-bg-muted', '--color-bg-brand-subtle', '--color-bg-deep'], TEXT),
+  ...pair('--color-link-hover', ['--color-bg', '--color-bg-subtle', '--color-bg-deep'], TEXT),
   ...pair('--color-error', ['--color-bg', '--color-bg-subtle', '--color-error-bg'], TEXT),
   ...pair('--color-success', ['--color-bg', '--color-success-bg'], TEXT),
   ...pair('--color-border-strong', ['--color-bg', '--color-bg-subtle'], UI),
   // Focus rings use outline-offset, so they sit on the surrounding surface, not on the control fill
-  ...pair('--color-focus', ['--color-bg', '--color-bg-subtle', '--color-bg-muted', '--color-bg-brand-subtle'], UI),
+  ...pair('--color-focus', ['--color-bg', '--color-bg-subtle', '--color-bg-muted', '--color-bg-brand-subtle', '--color-bg-deep'], UI),
   ...pair('--color-focus', ['--glass-bg'], UI, '--scene-worst'),
 ];
 

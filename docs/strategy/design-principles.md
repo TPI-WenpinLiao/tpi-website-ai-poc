@@ -13,6 +13,8 @@
 
 **補上內頁的缺口（#213，2026-11-06，使用者決定）**：第一批（#200–#202）與 PR #207 的試點頁重評，「評審依據不足」反覆指到本檔沒寫或互相衝突的地方（`evaluation.md`「第一批（#200）」「第一批（#201）」「第一批（#202）」）。改了這幾處：「各模板怎麼呈現」加三種頁面（產品家族 hub、沒有既有系統可畫的產品頁、只有功能事實的產品頁）；「內頁共用的規則」的段落的分隔（底色跟版型走）、影像（片段張數的例外、hero 圖一頁一張）、新增斷行與出處兩列；「內頁的版型」的介面片段、規格表、對應表、色帶；「案例列」的客戶與連結；P4「色彩」加首頁近景圖與產品縮圖的對應。brief 交給設計概念階段的取捨都已回寫，brief 的「最後決定」欄指回本檔的段落。P1–P5 的原則本身沒改。
 
+**頁尾（#212，2026-11-07，使用者決定）**：第一批（#201、#202）與 PR #207 的試點頁重評指出 `SiteFooter` 的兩條細線，以及 footer 和頁尾的深紫聯絡帶同色、連成一大片。「內頁共用的規則」的段落的分隔寫明 footer 是站框，用近黑和深紫帶分開，不算那一條深紫帶；「和新寫法衝突的共用元件」表補上 `SiteFooter`。P1–P5 的原則本身沒改。
+
 本檔是分階段流程設計概念階段的第一份產出（`.claude/skills/design-concept/SKILL.md`「1. 設計原則」「2. 參考對照」）。它決定試點頁（`docs/strategy/site-profile.md`「試點頁面」）在畫面上要傳達什麼，用來否決不符合的設計。各方向的首頁原型（`docs/strategy/concepts/<direction>/`），每個主要視覺決定都要指到這裡的一條原則（P1…P5）；`reviewer` 的設計 rubric D2「與設計原則一致」也拿本檔評分。P1–P5 的「會怎麼呈現」以首頁舉例，產品頁與產業頁的做法在「各模板怎麼呈現」，評內頁的 D2 時兩處一起看。首頁的文案在 `docs/strategy/concepts/copy-deck.md`；`argument.md` 是第二輪的論點紀錄。
 
 - 輸入：`docs/strategy/messaging.md`（#165，`strategy-approved`）的定位句、`DM-1`～`DM-7`、`IT-1`～`IT-8` 與「語氣與用詞」；`docs/strategy/briefs/home.md` 的段落結構與 CTA，另兩份 brief（`digirunner.md`、`finance.md`）；`docs/strategy/competitors.md` 與 `docs/strategy/competitors/*.png`；現有設計系統（`design-system` skill、`src/styles/tokens.css`、`docs/design/motion.md`、ADR 0003、`docs/design/brand-assets.md`）
@@ -165,7 +167,7 @@ P1–P5 的「會怎麼呈現」以首頁（home 模板，定案的原型是 `co
 | 第一屏 | h1 是頁面最大的字，兩行以內，上方沒有任何小標。上層節點（DigiLism、產業方案）只出現在麵包屑。h1 下方依序是說明句、證據點、動作，影像在文字旁邊或按鈕下方，換掉影像第一屏的意思不變。h1 之後的第二眼是 tagline（回答給誰、做什麼）：tagline 比內文大一級、一般字重；證據點照「事實」用內文字級與字重，只有數字加粗，不整句加粗，否則視線會從 h1 直接跳到證據點（#208，DigiLism D3） | P1；new-digirunner D2 第 1 項、new-finance D2 第 1 項；Apigee 的 h1 是小字（「競品的觀察」）；b1-new-digilism D3 |
 | 說明句的文字色 | hero 的 tagline、說明句、證據點的條件、h2 下方的說明句，以及接點圖、介面片段與影片的圖說、索引列與卡片的一句、成果列作業名稱下的附註、段末的紀錄、證言與文章裡的引言、FAQ 的答案、搜尋結果的摘要都算內文，用完整的文字色（P4「色彩」），不用次要文字色（muted）。層級靠字級與字重分，不靠把文字調淡。次要文字色只用在讀者不讀也不影響理解的附屬資訊，本列是完整清單：日期、分類、案例的產業這類 meta 行，證言的說話者，表單欄位的提示；導覽與介面元素：麵包屑、頁內導覽與選單的連結和標題、標籤與篩選鈕、表單的圖示、搜尋結果的筆數與網址、同意設定的狀態；畫出來的介面：介面片段裡的分頁與設定值，接點圖上表示停用的節點狀態。頁尾另依頁尾的規則（#208） | P4；#201、#202 評審與 PR #207 金融頁重評的 D2 |
 | 段落的輪替 | 相鄰兩段不用同一種版型（下方「內頁的版型」）；同一種版型全頁最多 3 次。現在的「左標題、右條列」雙欄（`FactRow`）是其中一種，不再是預設 | P5；new-digirunner D4、new-finance D4 |
-| 段落的分隔 | 不用分隔線、框線、背景格線。段落之間只有 `--space-section` 的間距。底色跟版型走，不跟判斷組：規格表與對應表墊淺灰（`--color-bg-subtle`），色帶墊淺紫（`--color-bg-brand-subtle`）或深紫，其他版型白底；全頁最多一條深紫帶（`data-surface="dark"`），放在聯絡段。相鄰兩段不同時墊淺灰：規格表緊接對應表或另一個規格表時，後一段改白底，靠表格的列線和前一段分開。P5 的「三組判斷換底色」只用在首頁；內頁的段落多、每頁的組不同，改由版型的輪替與這條底色規則帶出節奏，brief 的段落表不必另列底色（#213，回答 `briefs/orient-ai.md` 第 7 段與 #200「判斷組沒寫內頁怎麼分組」） | P2、P4、P5；house rules：no thin rules、no shadows |
+| 段落的分隔 | 不用分隔線、框線、背景格線。段落之間只有 `--space-section` 的間距。底色跟版型走，不跟判斷組：規格表與對應表墊淺灰（`--color-bg-subtle`），色帶墊淺紫（`--color-bg-brand-subtle`）或深紫，其他版型白底；全頁最多一條深紫帶（`data-surface="dark"`），放在聯絡段。footer 是每頁都有的站框，不算這一條：它也是深色 surface，底色是近黑（`--color-bg-deep`，`--ink-900`），和上方的深紫帶靠色相與明度的差分開，中間不畫線；版權列和連結欄之間只用間距（#212）。相鄰兩段不同時墊淺灰：規格表緊接對應表或另一個規格表時，後一段改白底，靠表格的列線和前一段分開。P5 的「三組判斷換底色」只用在首頁；內頁的段落多、每頁的組不同，改由版型的輪替與這條底色規則帶出節奏，brief 的段落表不必另列底色（#213，回答 `briefs/orient-ai.md` 第 7 段與 #200「判斷組沒寫內頁怎麼分組」） | P2、P4、P5；house rules：no thin rules、no shadows |
 | 段落標題 | 每段一個 h2，寫這段回答的問題的答案，兩行以內，中文；不加英文小標、編號與短線。主要段落的 h2 用 `--font-size-h2`，次要段落（相關文章、相關產品、子頁）的標題用 `--font-size-text` 的襯線粗體，權重低於案例與規範。h1 可以比 h2 大一級，全頁仍不超過五種字級 | P4、P5；new-digirunner D3 |
 | 事實 | 照 P2 的紀錄格式：事實原文用內文字級，放在表述的下方或右側；數字只加粗，不放大成主視覺，名稱裡的數字（ISO27001、ISO 27001、K8s）不算；條件緊貼在數字下方。清單項目用間距分開，不畫底線。照引的事實原文在畫面上是片段時，用清單或表格的一格呈現，不硬接成一段 | P2；new-finance C6 第 1 項 |
 | 斷行 | h1、h2 照「段落標題」兩行以內、在詞之間斷行（`src/lib/content/phrases.ts`）。標題以外分兩類：名稱與標籤（產品名、作業名稱、索引列名稱、規範名稱、圖上標籤、短詞清單的一格）整個詞不拆開，放不下就整個詞換到下一行；說明句、事實原文與長的清單項目照瀏覽器的中文斷行，但最後一行不能只剩一個字或一個標點（例如 `text-wrap: pretty`，做法由實作的 issue 決定）。tagline 照詞組斷行（hub：金融產業頁「說明句」） | P1、P4；首頁、金融頁重評（PR #207）的「管理平／台」「金融檢查」清單；#213 |
@@ -358,7 +360,7 @@ rubric D5、C3 的 5 分錨點以數字、案例為證據，沒寫只有功能�
 
 ### 和新寫法衝突的共用元件（#187 要改的）
 
-`design-system` 元件表的 `PageHero`、`SectionHeading`、`Card` 已標「待改（#187）」。逐一對照本節與 P1–P5 的「不會怎麼呈現」，衝突的元件與要改成的樣子如下。這些元件也用在其他 8 個模板（`ArticleTemplate`、`CaseStudyTemplate`、`ContactTemplate`、`ContentTemplate`、`GatedDownloadTemplate`、`ListingTemplate`、`PersonTemplate`、`UtilityTemplate`），改了之後要照 `docs/workflow.md`「視覺回歸」更新 baseline，並寫回 `design-system` 的元件表。
+`design-system` 元件表的 `PageHero`、`SectionHeading`、`Card` 已標「待改（#187）」。`SiteFooter` 一列是後來由 #212 補上、由 #212 改的。逐一對照本節與 P1–P5 的「不會怎麼呈現」，衝突的元件與要改成的樣子如下。這些元件也用在其他 8 個模板（`ArticleTemplate`、`CaseStudyTemplate`、`ContactTemplate`、`ContentTemplate`、`GatedDownloadTemplate`、`ListingTemplate`、`PersonTemplate`、`UtilityTemplate`），改了之後要照 `docs/workflow.md`「視覺回歸」更新 baseline，並寫回 `design-system` 的元件表。
 
 | 元件或位置 | 現在 | 違反 | #187 改成 |
 |---|---|---|---|
@@ -374,6 +376,7 @@ rubric D5、C3 的 5 分錨點以數字、案例為證據，沒寫只有功能�
 | `Surface` 的 `pattern="grid"` | `OfferingTemplate`、`HubTemplate`、`PageHero`、`ContactCta` 都用 | house rule：no thin rules（格線） | offering 與 hub 不用；其他模板也不用時連同 prop 一起刪 |
 | `InPageNav`、`SiteHeader` 的下框線 | 1px `--color-border` | house rule：no thin rules | 改成底色的一階色差。`SiteHeader` 展開選單的陰影可以保留（house rules 允許真的浮起來的東西有陰影） |
 | 模板裡的分隔線與列表底線 | `OfferingTemplate`、`HubTemplate` 段落之間與條列之間的 `border` | house rule：no thin rules | 拿掉，用間距與底色 |
+| `SiteFooter` | 上緣與版權列上方各一條 1px `--glass-border`；底色和 `ContactCta` 同為深紫（`--purple-900`），兩者相接成一大片 | P4、P5；house rule：no thin rules；「內頁共用的規則」全頁最多一條深紫帶 | （#212）拿掉兩條線，版權列用間距分開；仍是 `data-surface="dark"`，底色改近黑 `--color-bg-deep`，不算深紫帶 |
 
 ## 原則與現有限制
 

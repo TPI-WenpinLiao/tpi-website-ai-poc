@@ -13,7 +13,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 原型、方向說明與評分在 `docs/strategy/concepts/ribbon-route/`（`README.md` 的「主要視覺決定」逐條指到原則），原則在 `docs/strategy/design-principles.md`。#167 把它做進 production：
 
-- 全站亮底（白紙），平塗，沒有陰影、光暈與圓角（`--radius-*`、`--shadow-*`、`--glow-*` 都是 0 或 none）。`data-surface="dark"` 是紫色品牌帶（聯絡段、OrientAI 段、footer），不是深色場景
+- 全站亮底（白紙），平塗，沒有陰影、光暈與圓角（`--radius-*`、`--shadow-*`、`--glow-*` 都是 0 或 none）。`data-surface="dark"` 是紫色品牌帶（聯絡段、OrientAI 段），不是深色場景。footer 也是 `data-surface="dark"`，但底色是近黑的 `--color-bg-deep`，不算紫色帶，和上方的聯絡段不畫線就分得開（#212）
 - 標題（h1–h3 與 `.serif`）用 Noto Serif TC 700，只取全站標題用到的字（`scripts/design/serif-subset.mjs`，見「Token 分層」的字型）；拉丁字與內文用 Inter
 - 首頁：亮底的白色等角系統地圖，一條紫→品紅→橘的緞帶從核心系統出發串起各接點，捲動時鏡頭從斜角升到俯視，同一條緞帶延伸進產業段、分叉到兩個入口（`HomeTemplate`，見「3D 場景」）。漸層只在緞帶的 three.js 頂點色，CSS 不寫漸層（`--gradient-energy` 是平塗的品牌色）
 - 首頁 5 段（hero、產業入口、AI 成果、產品與 OrientAI、紀錄與聯絡），每段一句標題、最多再一句說明或一則事實；一套 12 欄格線（`--grid-*`）；字級 4 種：`--font-size-display`（只有首頁 h1）、`--font-size-h2`、`--font-size-text`、`--font-size-base`
@@ -149,7 +149,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
 | `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的亮底列，沒有下框線（#187），展開的選單面板可以有陰影；下緣經過 `data-surface="dark"` 的段落時，script 把 header 的 `data-surface` 換成 `dark`（`IntersectionObserver`，#179），選單面板、搜尋框與「選單」固定 `data-surface="light"`；`--bp-lg-up` 有 `InPageNav` 黏在下方時，觸發線改在目錄列下緣，目錄列一起換色；`surface` 固定成一種，只給 `/design-system` 的預覽用；寬度小於 64rem 收進「選單」 |
-| `SiteFooter` | 頁尾 | 連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入） |
+| `SiteFooter` | 頁尾 | 深色 surface、近黑底（`--color-bg-deep`），不用分隔線；連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入） |
 | `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴 |
 | `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；和頁面用一階底色分開，不用下框線（#187）；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；固定在 header 下方時跟 header 算同一條 bar，紫色段落經過時由 `SiteHeader` 的 script 一起換成深色（#179）；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動 |
 | `Faq` | 常見問題 | 原生 `<details>`，零 JS |
