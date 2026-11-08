@@ -217,7 +217,9 @@ const { items, label, stick = 'header' } = Astro.props;
     // 'nearest' ignores scroll-padding; one under the fade is scrolled clear of the strips that
     // scroll-padding marks
     list.addEventListener('focusin', (event) => {
-      if (!(event.target instanceof HTMLElement)) return;
+      // Keyboard focus only: a click focuses the link on mousedown, and scrolling it then would move
+      // it from under the pointer before mouseup, so the click would not follow it
+      if (!(event.target instanceof HTMLElement) || !event.target.matches(':focus-visible')) return;
       const style = getComputedStyle(list);
       const box = list.getBoundingClientRect();
       const link = event.target.getBoundingClientRect();
@@ -227,6 +229,8 @@ const { items, label, stick = 'header' } = Astro.props;
       if (by !== 0) list.scrollBy({ left: by, behavior: smooth.matches ? 'smooth' : 'auto' });
     });
     for (const arrow of nav.querySelectorAll<HTMLButtonElement>('.arrow')) {
+      // The arrows are aria-hidden, so a click must not leave focus on one
+      arrow.addEventListener('mousedown', (event) => event.preventDefault());
       arrow.addEventListener('click', () => {
         list.scrollBy({ left: Number(arrow.dataset.step) * list.clientWidth * 0.75, behavior: smooth.matches ? 'smooth' : 'auto' });
       });
