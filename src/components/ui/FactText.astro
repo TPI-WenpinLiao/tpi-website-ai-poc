@@ -2,30 +2,32 @@
 // A fact text as it reads on the page (#200): split into items one per line (factList,
 // site-research 第 2 條), it is a list, led by its first line when that ends in a colon, the short
 // items in two columns (design-principles.md「內頁共用的規則」375 寬); otherwise a paragraph keeping its
-// line breaks. `emphasis="percentages"` bolds the outcome figures (emphasis.ts). `inline` leaves a
+// line breaks. Its quantities are bold, list items too, names' numbers not (emphasis.ts, #210;
+// design-principles.md「內頁共用的規則」事實); `emphasis="none"` leaves it plain. `inline` leaves a
 // one-paragraph text bare, for a table cell that already keeps line breaks (SpecTable).
 // PageSections and SpecTable use it, so a fact reads the same in every layout.
 import { factList } from '../../lib/content/lists';
-import { percentages } from '../../lib/content/emphasis';
+import { quantities, type Part } from '../../lib/content/emphasis';
 
 interface Props {
   text: string;
-  emphasis?: 'percentages' | 'none';
+  emphasis?: 'quantities' | 'none';
   inline?: boolean;
 }
 
-const { text, emphasis = 'none', inline = false } = Astro.props;
+const { text, emphasis = 'quantities', inline = false } = Astro.props;
 const list = factList(text);
-const parts = emphasis === 'percentages' ? percentages(text) : [{ part: text, strong: false }];
+const partsOf = (t: string): Part[] => (emphasis === 'quantities' ? quantities(t) : [{ part: t, strong: false }]);
+const parts = partsOf(text);
 ---
 
 {
   list ? (
     <>
-      {list.lead && <p class="lead">{list.lead}</p>}
+      {list.lead && <p class="lead">{partsOf(list.lead).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>}
       <ul class="fact-list">
         {list.items.map((item) => (
-          <li>{item}</li>
+          <li>{partsOf(item).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</li>
         ))}
       </ul>
     </>

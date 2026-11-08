@@ -46,3 +46,28 @@ test('the parts put back together are the text unchanged', () => {
   );
   assert.deepEqual(strong(text), ['2024']);
 });
+
+test('fact texts on the offering pages (#210)', () => {
+  assert.deepEqual(strong('GreenSwift保證所提供之雲端服務系統可用性可達到 99% 以上之服務水準。'), ['99%']);
+  assert.deepEqual(strong('審核通過後即開始30天試用，試用到期將自動關閉帳號權限。'), ['30']);
+  assert.deepEqual(strong('建議硬體規格為 2 Core CPU / 4GB RAM'), ['2', '4GB']);
+  assert.deepEqual(strong('提供效能監控、告警與備份還原，並附 7×24 技術支援。'), ['7×24']);
+});
+
+test('a version is a name', () => {
+  assert.deepEqual(strong('一鍵下載為符合環保署登錄平台之表單格式(3.0.0)'), []);
+  assert.deepEqual(strong('支援 v2.1.3 以上版本'), []);
+});
+
+test('Chinese numerals count only before a unit of time', () => {
+  assert.deepEqual(strong('註冊成功後，您的申請將於一個工作日進行審核。'), ['一個工作日']);
+  assert.deepEqual(strong('最快三天上線，兩年保固'), ['三天', '兩年']);
+  assert.deepEqual(strong('一個平台、一站式服務，一次到位'), []);
+  assert.deepEqual(strong('第一年免費'), []);
+});
+
+test('a protocol version, a pair and a date', () => {
+  assert.deepEqual(strong('digiRunner 支援 OAuth 2.0 認證'), []);
+  assert.deepEqual(strong('7/24 智能語音、文字客服'), ['7/24']);
+  assert.deepEqual(strong('於 2024/10/01 上線'), []);
+});

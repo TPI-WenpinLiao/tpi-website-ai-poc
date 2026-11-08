@@ -32,7 +32,7 @@ import { entryPath } from '../../lib/content/urls';
 import { linkedNodes } from '../../lib/content/sections';
 import { nodes } from '../../lib/ia/nodes';
 import { entryLocale, isPublished } from '../../lib/content/entries';
-import { caseLinkLabel, postCard } from '../../lib/content/cards';
+import { postCard } from '../../lib/content/cards';
 import { hubJsonLd } from '../../lib/seo/jsonld/hub';
 import { canonicalUrl } from '../../lib/seo/meta';
 import { strings } from '../../data/strings';
@@ -94,11 +94,12 @@ const caseEntries = await getCollection(
 // featuredCaseStudies order, when given
 const ordered = featured.size ? [...featured].flatMap((id) => caseEntries.filter((c) => c.id === id)) : caseEntries;
 // Rows of cases: the brief's caseNotes when the entry has them (client, work, result, award), else
-// the case studies with their client and title
+// the case studies. A row's title is its client and its link's label the case's or news article's own
+// title: CaseList puts the two on two lines of one heading link (design-principles.md「案例列」, #210)
 const allCases = await getCollection('case-study');
 const caseLink = (id: string) => {
   const c = allCases.find((e) => e.id === id);
-  return c && { label: caseLinkLabel(c), href: entryPath('case-study', c) };
+  return c && { label: c.data.title, href: entryPath('case-study', c) };
 };
 // A case told in a news article (#202): linked by the article's title
 const allNews = data.caseNotes?.some((n) => n.news) ? await getCollection('news') : [];
@@ -108,7 +109,7 @@ const newsLink = (id: string) => {
 };
 const caseRows = data.caseNotes
   ? data.caseNotes.map((n) => ({ title: n.client ?? n.work, work: n.client ? n.work : undefined, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? caseLink(n.caseStudy.id) : n.news ? newsLink(n.news.id) : undefined }))
-  : ordered.map((c) => ({ title: c.data.client.disclosed ? c.data.client.name : c.data.clientDescription, link: { label: caseLinkLabel(c), href: entryPath('case-study', c) } }));
+  : ordered.map((c) => ({ title: c.data.client.disclosed ? c.data.client.name : c.data.clientDescription, link: { label: c.data.title, href: entryPath('case-study', c) } }));
 const featuredPosts = new Set(data.featuredPosts?.map((r) => r.id));
 const posts = (await getCollection('blog', (b) => inLocale(b) && featuredPosts.has(b.id))).map(postCard);
 

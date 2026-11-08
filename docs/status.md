@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-11-07
+最後更新：2026-11-08
 
 ## 目前 milestone
 
@@ -165,6 +165,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - preview 改成只在需要時部署到 `preview` branch 完成（#219）：Cloudflare Pages Free plan 每月 500 次 build、帳號共用，原本每次 push 到任何 branch 都 build。依使用者決定，Preview deployments 只建 `preview` branch，`needs-design` 或「## 關卡」的 issue 階段一開完 draft PR 時、依設計意見修改後與使用者要求時，Claude 把 PR head force push 到 `preview`（`https://preview.tpi-website-ai-poc.pages.dev`），其他時候在本機看（ADR 0008，`CLAUDE.md` 第 3 條、`issue-ship`「`needs-design` 的兩個階段」）。PR body 的「preview 檢查重點」改成「頁面檢查重點」，`docs/workflow.md` 新增「看頁面」，`onboarding.md` 第 4 步跟著改。寫著「待 preview 部署後量測」的地方改成 `*.pages.dev`
 - hero 證據點的字重與說明句的文字色完成（#208，`design-approved`）：`PageHero` 的證據點改用內文字重，只加粗獨立的數字（`src/lib/content/emphasis.ts` 的 `quantities()`，ISO27001、K8s 這類名稱裡的數字不加粗）；讀者要讀的文字（hero 與 h2 下方的說明句、圖說、卡片與索引列的一句、證言、FAQ 答案等）都改用完整文字色，次要文字色只留給附屬資訊。規則寫進 `design-principles.md`「內頁共用的規則」的「第一屏」與「說明句的文字色」，`design-system` skill 補上通則。試點頁的設計重評 D3 都不低於原分數，D2 的扣分歸 #210–#212
 - 頁尾的分隔線與深紫連片完成（#212，`design-approved`）：`SiteFooter` 拿掉兩條細線，版權列用間距分開；footer 仍是深色 surface，底色改近黑 `--color-bg-deep`（`--ink-900`），和 `ContactCta` 的深紫帶分開，不算「全頁最多一條深紫帶」。`design-principles.md` 寫入規則並把 `SiteFooter` 補進衝突元件表，`contrast.mjs` 補 pair。試點三頁設計重評都沒有因 footer 扣分（`evaluation.md`「頁尾（#212）」）
+- 事實裡的數字加粗、只有新聞標題的案例列（#210），階段一，等待 design-approved
 
 ## 下一步
 

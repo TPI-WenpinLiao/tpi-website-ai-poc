@@ -33,7 +33,7 @@ import { COLLECTION_NODES, entryPath } from '../../lib/content/urls';
 import { offeringJsonLd } from '../../lib/seo/jsonld/offering';
 import { canonicalUrl, titleSeparator } from '../../lib/seo/meta';
 import { defaultOgImage } from '../../lib/seo/og';
-import { caseLinkLabel, postCard } from '../../lib/content/cards';
+import { postCard } from '../../lib/content/cards';
 import { newest } from '../../lib/content/listings';
 import { strings } from '../../data/strings';
 
@@ -129,13 +129,14 @@ const caseStudies = (
     : linkedCases.toSorted((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity))
 );
 // Rows of cases: the brief's caseNotes when the entry has them (client, work, result, award; a case
-// without a client, the fraud platform, is headed by its work), else
-// the linked case studies with their client and title
+// without a client, the fraud platform, is headed by its work), else the linked case studies. A row's
+// title is its client and its link's label the case's or news article's own title: CaseList puts
+// the two on two lines of one heading link (design-principles.md「案例列」, #210)
 const caseHref = async (id: string) => {
   const c = linkedCases.find((e) => e.id === id) ?? (await getCollection('case-study', (e) => e.id === id))[0];
-  return c && { label: caseLinkLabel(c), href: entryPath('case-study', c) };
+  return c && { label: c.data.title, href: entryPath('case-study', c) };
 };
-// A case told in a news article (#202): the link's label is the article's title, which names the client
+// A case told in a news article (#202): the link's label is the article's title
 const newsLink = async (id: string) => {
   const n = (await getCollection('news', (e) => e.id === id))[0];
   return n && { label: n.data.title, href: entryPath('news', n) };
@@ -144,7 +145,7 @@ const caseRows = data.caseNotes
   ? await Promise.all(
       data.caseNotes.map(async (n) => ({ title: n.client ?? n.work, work: n.client ? n.work : undefined, result: n.result, award: n.award, fragment: n.fragment, link: n.caseStudy ? await caseHref(n.caseStudy.id) : n.news ? await newsLink(n.news.id) : undefined })),
     )
-  : caseStudies.map((c) => ({ title: c.data.client.disclosed ? c.data.client.name : c.data.clientDescription, link: { label: caseLinkLabel(c), href: entryPath('case-study', c) } }));
+  : caseStudies.map((c) => ({ title: c.data.client.disclosed ? c.data.client.name : c.data.clientDescription, link: { label: c.data.title, href: entryPath('case-study', c) } }));
 const successStories = localNode('success-stories', locale);
 const faq = data.faq ?? [];
 const hasDownloads = whitepapers.length + downloads.length > 0;

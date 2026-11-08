@@ -4,10 +4,12 @@
 // the page that goes deeper, its label saying where it goes. Rows may have row lines: a real table is
 // the house rules' exception to no thin rules. Several fact texts in a cell are a list; one fact text
 // reads as FactText (split into items it is a two-column list, otherwise its line breaks are kept).
+// Quantities are bold in every cell, names' numbers not (emphasis.ts, #210).
 // `head` names the columns for screen readers (the row's own labels say it on screen); `emphasis="name"`
 // sets the first column in the bold serif, for a mapping table (規範名稱). `compare` compares two
 // things side by side (#200): its row is the visible head, and each row's two values go one to a cell.
 import FactText from './FactText.astro';
+import { quantities } from '../../lib/content/emphasis';
 
 interface Row {
   label: string;
@@ -62,7 +64,7 @@ const hasLinks = rows.some((r) => r.link);
               {r.label}
             </th>
             {r.values.map((v) => (
-              <td class="values">{v}</td>
+              <td class="values">{quantities(v).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</td>
             ))}
           </tr>
         ))
@@ -78,7 +80,7 @@ const hasLinks = rows.some((r) => r.link);
             {r.values.length > 1 ? (
               <ul class="row-list">
                 {r.values.map((v) => (
-                  <li>{v}</li>
+                  <li>{quantities(v).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</li>
                 ))}
               </ul>
             ) : (
