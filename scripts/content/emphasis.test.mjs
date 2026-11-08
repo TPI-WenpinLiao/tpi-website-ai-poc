@@ -71,3 +71,10 @@ test('a protocol version, a pair and a date', () => {
   assert.deepEqual(strong('7/24 智能語音、文字客服'), ['7/24']);
   assert.deepEqual(strong('於 2024/10/01 上線'), []);
 });
+
+test('an order and a dashed date are not counts (#210 review)', () => {
+  assert.deepEqual(strong('第十二個月起續約'), []);
+  assert.deepEqual(strong('第二十天到期'), []);
+  assert.deepEqual(strong('於 2024-10-01 上線'), []);
+  assert.deepEqual(strong('效能可達 300-1000 TPS'), ['300-1000']);
+});
