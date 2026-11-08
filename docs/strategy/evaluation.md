@@ -464,6 +464,42 @@ AISO 第一次三份都通過，但 D2、C6 是 3 分。`4fa09f0` 改了這兩�
 
 本 issue 只改 footer，這些缺口不在範圍內。
 
+## 數字加粗與案例列（#210）
+
+事實原文的數字改成加粗（`quantities()`）、`CaseList` 的 heading 改成客戶名與標題原文兩行之後，GreenSwift 與兩個用 `CaseList` 的試點頁各由新的 `reviewer` 只評設計 rubric，確認 D5 不低於原分數（#210 驗收）。這是共用元件的確認，不是評審階段，摘要在 PR #223 的 body，不另存評審檔、不進上方的分數表。
+
+### 方法
+
+- 用的 rubric 與 prompt 和「第一批（#200）」相同，只評設計。素材由 `node scripts/strategy/eval-shots.mjs --new dist --only new --group b210 --pages greenswift=/products/greenswift,digirunner=/products/digirunner,finance=/industries/finance` 產生，截圖不進版控
+- 比較基準：GreenSwift 是「第一批（#202）」的第二次（設計 4.0、D5 3），digiRunner 與金融是「頁尾（#212）」（設計都是 4.0，D5 單項沒有存檔）
+
+### 結果
+
+| 頁面 | 基準 | #210 | D5 | D2 |
+|---|---|---|---|---|
+| GreenSwift | 4.0（D5 3） | 3.5（D2、D3、D6 = 3） | 4 | 3 |
+| digiRunner | 4.0 | 4.3 | 5 | 4 |
+| 金融 | 4.0 | 4.0 | 4 | 3 |
+
+D5 三頁都沒有因數字或案例列扣分：GreenSwift 的評審寫「99%」「一個工作日」「30」加粗、條件緊貼，客戶名在最前面；digiRunner 的評審寫 TPS 規格列加粗，獎項用內文字重、只有 2020 加粗。
+
+GreenSwift 的設計平均比基準低 0.5，和 #210 有關的只有 D3：只有一則、沒有成果的案例列，份量仍比下方有縮圖的相關文章輕。評審建議縮小相關文章的縮圖或加重案例列。依推薦交給 #211（`IndexList` 的版面），原則的「案例列」不改。其他扣分在本次之前就有：hero 圖少資料來源與產出的標籤、第 5、7 段介面片段旁的空白（「內頁的版型」介面片段）、`UiFragment` 的狀態只有色塊（#209）、375 寬的單字斷行、案例段 h2 用分類名「成功案例」。金融的評審把沒有片段的案例列右半邊空著算成 `CaseList` 的扣分（D2、D4），這是 #187 起的排法，不算這項時分數不變。
+
+### 評審依據不足
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| 375 寬「一段不超過約 1.5 個螢幕高」和 brief 要的事實量互相拉扯，又不能收進 `<details>` | `design-principles.md`「內頁共用的規則」、`briefs/digirunner.md` 第 2、7 段 | digiRunner、GreenSwift |
+| 文章封面算不算在 P3、P4 的禁令內（AI 擬人化、光暈、樹葉與地球） | `design-principles.md` P3、P4、「索引列」 | digiRunner、GreenSwift |
+| 頁內導覽沒寫位置與 1280 寬放不下時怎麼辦（#211 第 3 項） | `design-principles.md`「頁內導覽」 | digiRunner、GreenSwift |
+| hero 圖能不能多加 brief 沒列的標籤，少一個算不算違反；GreenSwift brief 與原則的 hero 標籤要求不同 | `design-principles.md`「offering」兩節、`briefs/digirunner.md`、`briefs/greenswift.md` 第 1 段 | digiRunner、GreenSwift |
+| 只有一則、沒有成果的案例段怎麼做到「份量不低於相關文章」，縮圖最大多大 | `design-principles.md`「案例列」、`design-system` 元件表 `IndexList` | GreenSwift |
+| 案例段的 h2 能不能用分類名 | `design-principles.md`「段落標題」、brief 第 8 段 | GreenSwift |
+| 案例列只有第一則配片段時，其他列的右側怎麼處理 | `design-principles.md`「案例列」排法、P5 | 金融 |
+| 介面片段版型「超過 4 則排到下方」和 brief「具名案例放片段旁」衝突；片段裡的「未啟用」狀態代表什麼；色帶與索引列的動作、一句由誰給 | `design-principles.md`「內頁的版型」、`briefs/finance.md` 第 6、7 段 | 金融 |
+
+本 issue 只改數字加粗與案例列，這些缺口不在範圍內。
+
 ## 限制
 
 - 每頁只有一位評審評一次，沒有量評審之間的一致性。新版 digiRunner 的 C 平均 3.8、金融的 SEO 3.8，接近門檻，換一位評審可能翻轉

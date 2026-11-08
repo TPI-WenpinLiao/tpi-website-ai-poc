@@ -538,7 +538,7 @@ const description =
 
           <h3>FactText</h3>
           <div class="demo">
-            <FactText text="一則事實原文，成果數字 52% 加粗" emphasis="percentages" />
+            <FactText text="一則事實原文，數字 52%、30天、一個工作日加粗，ISO 27001 這類名稱裡的數字不加粗" />
             <FactText text={'導言：\n第一項\n第二項\n第三項\n第四項'} />
           </div>
 
@@ -549,9 +549,11 @@ const description =
           <CaseList
             words={{ mark: '示意', on: '已啟用', off: '未啟用', down: '故障' }}
             more={{ label: '看所有成功案例', href: `#components-${tone}` }}
+            linkHeading
             items={[
-              { title: '客戶名稱', work: '作業的事實原文', result: '成果原文，數字加粗', award: '獎項', link: { label: '案例名稱', href: `#components-${tone}` }, fragment: { title: '作業的片段', rows: [{ label: '狀態', state: 'on' }] } },
-              { title: '沒有成果的客戶', work: '作業的事實原文', link: { label: '案例名稱', href: `#components-${tone}` } },
+              { title: '客戶名稱', work: '作業的事實原文', result: '成果原文，節省 52% 作業時間', award: '獎項原文，「年度 2020 獎項」', link: { label: '案例內頁的標題原文', href: `#components-${tone}` }, fragment: { title: '作業的片段', rows: [{ label: '狀態', state: 'on' }] } },
+              { title: '只有新聞的客戶', link: { label: '報導這則案例的新聞標題原文', href: `#components-${tone}` } },
+              { title: '沒有案例頁也沒有新聞的作業', work: '作業的事實原文' },
             ]}
           />
 

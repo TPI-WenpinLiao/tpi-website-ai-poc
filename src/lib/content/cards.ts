@@ -43,15 +43,6 @@ export const newsCard = (e: CollectionEntry<'news'>): EntryCard => ({
   date: isoDate(e.data.publishedAt),
 });
 
-// A case's link text: the client's name, a full-width colon and the case title, so the anchor says
-// whose case it is (briefs/digirunner.md「連出」第 10 段, #187); a title that starts with the client's
-// name stays as it is, and an undisclosed client is never named
-// (zh-TW's full-width colon, ': ' in en and vi)
-export const caseLinkLabel = (e: CollectionEntry<'case-study'>) => {
-  const colon = entryLocale(e.id) === 'zh-TW' ? '：' : ': ';
-  return e.data.client.disclosed && !e.data.title.startsWith(e.data.client.name) ? `${e.data.client.name}${colon}${e.data.title}` : e.data.title;
-};
-
 // An undisclosed client is never named (content-model.md「case-study」)
 export const caseCard = (e: CollectionEntry<'case-study'>): EntryCard => ({
   title: e.data.title,

@@ -1,14 +1,13 @@
 ---
 // Cases as rows (#187, design-principles.md「案例列」and the「成果」layout): one row a case, the client
 // first in the bold serif, the work, its result when the fact library has one (numbers in bold, the
-// condition tight under it), an award on the row of the case that won it, and the link, its label
-// naming the client. Rows are set apart by space, no frames or equal cards; the first can be larger,
+// condition tight under it), an award on the row of the case that won it, and the link. Rows are set apart by space, no frames or equal cards; the first can be larger,
 // with a fragment of the work beside it (the `fragment` slot of the first row, or each row's own
 // `fragment` given as a UiFragment props object).
 // A result without a fact is left out, never written in. `more` is the link to the full list.
 import UiFragment from './UiFragment.astro';
 import Link from './Link.astro';
-import { numbers } from '../../lib/content/emphasis';
+import { quantities } from '../../lib/content/emphasis';
 
 interface Fragment {
   title: string;
@@ -37,8 +36,10 @@ interface Props {
   words: { mark: string; on: string; off: string; down: string };
   // The first row larger (cases); the results layout keeps every row the same
   lead?: boolean;
-  // Cases: the row's heading is its link, worded「客戶名：案例標題」(briefs「內部連結」), so the heading
-  // alone says whose case it is; a row without a link keeps its title as the heading
+  // Cases: the row's heading is its link on two lines, the client (title) in the bold serif, then the
+  // case's or news article's own title (link.label) in the text weight, so heading and anchor both
+  // say whose case it is, and a row that is only a title still reads as a record (design-principles.md
+  //「案例列」heading 與錨點, #210). A row without a link keeps its title as the heading
   linkHeading?: boolean;
 }
 
@@ -53,8 +54,13 @@ const Heading = `h${level}` as const;
         <li class:list={['row', { lead: lead && i === 0, 'has-fragment': c.fragment }]}>
           <div class="text">
             {linkHeading && c.link ? (
-              <Heading class="title serif">
-                <a href={c.link.href}>{c.link.label}</a>
+              <Heading class="title">
+                <a href={c.link.href}>
+                  {c.title && <span class="client serif">{c.title}</span>}
+                  {/* A space keeps the two apart in the link's accessible name; a flex container drops it on screen */}
+                  {c.title && ' '}
+                  <span class="case">{c.link.label}</span>
+                </a>
               </Heading>
             ) : (
               c.title && <Heading class="title serif">{c.title}</Heading>
@@ -63,10 +69,10 @@ const Heading = `h${level}` as const;
             {c.work && <p class="work">{c.work}</p>}
             {c.result && (
               <p class="result">
-                {numbers(c.result).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}
+                {quantities(c.result).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}
               </p>
             )}
-            {c.award && <p class="award">{c.award}</p>}
+            {c.award && <p class="award">{quantities(c.award).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>}
             {c.link && !linkHeading && (
               <Link href={c.link.href} variant="standalone">
                 {c.link.label}
@@ -138,14 +144,33 @@ const Heading = `h${level}` as const;
     font-size: var(--font-size-sm);
   }
 
-  /* An award is outside proof, set like the result, not as a footnote */
+  /* An award is outside proof, set like the result (its numbers bold), not as a footnote */
   .award {
     margin: 0;
-    font-weight: var(--font-weight-semibold);
   }
 
+  /* Two lines in one link: the client in the bold serif and the text colour, the case's own title
+     a step smaller in the text weight and the link colour, underlined, so the client leads and the
+     row reads as a record and as a link */
   .title a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .case {
     color: var(--color-link);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-regular);
+    text-decoration: underline;
+    text-underline-offset: var(--underline-offset);
+  }
+
+  .title a:hover .case {
+    color: var(--color-link-hover);
   }
 
   .work,
