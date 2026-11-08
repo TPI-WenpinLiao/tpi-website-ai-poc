@@ -36,6 +36,7 @@ sections:
   # and its page's description is not a fact, so its row has the name only (#202 評審)
   - layout: index
     id: products
+    weight: primary
     heading: DigiLism 的產品
     body: 依要處理的事挑產品：API 與 AI 流量、日誌、資料庫、表單流程，或醫療資料交換。
     items:
