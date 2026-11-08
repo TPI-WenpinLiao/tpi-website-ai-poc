@@ -4,8 +4,8 @@
 // Set apart from the page by one step of fill, not a rule (#187). Scrolls sideways inside the bar,
 // never the page, with no scroll bar drawn (#211): the side that has more items fades out, so the
 // last one in view isn't cut off mid-word, and at --bp-lg-up with a mouse an arrow on that side
-// scrolls on. Its script marks the sides with data-more-start / data-more-end; without it the row
-// still scrolls, unfaded. The arrows are a mouse convenience only (tabindex="-1", aria-hidden):
+// scrolls on. Its script marks the sides with data-more-start / data-more-end, and scrolls a focused
+// link out from under the fade; without it the row still scrolls, unfaded. The arrows are a mouse convenience only (tabindex="-1", aria-hidden):
 // tabbing to a link scrolls it into view, and the list reads the same to a screen reader.
 // `stick="header"` is for pages with SiteHeader: the bar sticks under the header from --bp-lg-up
 // only, so on phones the header alone stays on screen. `stick="top"` sticks to the top at every
@@ -102,8 +102,8 @@ const { items, label, stick = 'header' } = Astro.props;
     padding: var(--space-1) var(--space-gutter);
     overflow-x: auto;
     scroll-snap-type: x proximity;
-    /* A focused link scrolls clear of the faded edge */
-    scroll-padding-inline: calc(var(--touch-target) + var(--space-16));
+    /* A focused link scrolls clear of the faded edge (the script scrolls it in on focus) */
+    scroll-padding-inline: calc(var(--space-gutter) + var(--space-16));
     scrollbar-width: none;
     list-style: none;
     /* Only the mask's alpha counts; currentColor is any opaque colour */
@@ -190,6 +190,10 @@ const { items, label, stick = 'header' } = Astro.props;
     [data-more-end] .track {
       --clear-end: var(--touch-target);
     }
+
+    ul {
+      scroll-padding-inline: calc(var(--touch-target) + var(--space-16));
+    }
   }
 </style>
 
@@ -209,6 +213,19 @@ const { items, label, stick = 'header' } = Astro.props;
     list.addEventListener('scroll', update, { passive: true });
     new ResizeObserver(update).observe(list);
     void document.fonts.ready.then(update);
+    // The browser scrolls a focused link in only when it is out of view, and scrollIntoView's
+    // 'nearest' ignores scroll-padding; one under the fade is scrolled clear of the strips that
+    // scroll-padding marks
+    list.addEventListener('focusin', (event) => {
+      if (!(event.target instanceof HTMLElement)) return;
+      const style = getComputedStyle(list);
+      const box = list.getBoundingClientRect();
+      const link = event.target.getBoundingClientRect();
+      const start = box.left + parseFloat(style.scrollPaddingInlineStart);
+      const end = box.right - parseFloat(style.scrollPaddingInlineEnd);
+      const by = link.left < start ? link.left - start : link.right > end ? Math.min(link.right - end, link.left - start) : 0;
+      if (by !== 0) list.scrollBy({ left: by, behavior: smooth.matches ? 'smooth' : 'auto' });
+    });
     for (const arrow of nav.querySelectorAll<HTMLButtonElement>('.arrow')) {
       arrow.addEventListener('click', () => {
         list.scrollBy({ left: Number(arrow.dataset.step) * list.clientWidth * 0.75, behavior: smooth.matches ? 'smooth' : 'auto' });
