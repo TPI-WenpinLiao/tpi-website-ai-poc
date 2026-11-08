@@ -500,6 +500,42 @@ GreenSwift 的設計平均比基準低 0.5，和 #210 有關的只有 D3：只�
 
 本 issue 只改數字加粗與案例列，這些缺口不在範圍內。
 
+## 索引列與頁內導覽（#211）
+
+`IndexList` 的連結樣式、固定縮圖與兩欄，`index` 段落改成標題在上，`InPageNav` 改成淡出加箭頭之後，四頁各由新的 `reviewer` 只評設計 rubric，確認 #211 的驗收：digiRunner、金融的 D2 不低於 #210，DigiLism 的 D3 不低於「第一批（#202）」，加看 GreenSwift 的 D3。這和 #210 一樣是共用元件的確認，不是評審階段：摘要在 PR #224 的 body，不另存評審檔、不進上方的分數表，也不套「門檻附近加評」。
+
+### 方法
+
+- rubric 與 prompt 同 #210，只評設計。素材由 `node scripts/strategy/eval-shots.mjs --new dist --only new --group b211 --pages digilism=/products/digilism,greenswift=/products/greenswift,digirunner=/products/digirunner,finance=/industries/finance --work <scratchpad>` 產生（head `e35affe`），截圖不進版控
+- 比較基準：digiRunner、金融、GreenSwift 是「數字加粗與案例列（#210）」，DigiLism 是「第一批（#202）」的第二次
+
+### 結果
+
+| 頁面 | 基準 | #211 | 驗收項 |
+|---|---|---|---|
+| digiRunner | 4.3（D2 4） | 4.2 | D2 4 |
+| 金融 | 4.0（D2 3） | 4.0 → 4.2（重評） | D2 3 → 4 |
+| DigiLism | 4.0（D3 3） | 4.2 | D3 4 |
+| GreenSwift | 3.5（D3 3） | 3.8（D2 3） | D3 4 |
+
+四項都不低於基準。評審寫到 #211 改的地方：DigiLism 的產品索引「h2 用 h2 字級，標題橫跨在上，列項目兩欄，名稱用連結色加底線」；三頁都寫頁內導覽「右緣淡出」，digiRunner 另寫「1280 寬有箭頭」。GreenSwift 的 D3 從 3 到 4，評審仍寫相關文章的紫色加底線襯線標題比只有一則的案例列重：縮圖縮到 120×80 之後，剩下的份量來自索引列名稱和案例客戶名同字級（見下方「評審依據不足」）。
+
+評審指出、在本 PR 修掉的：金融第 6 段末的索引列（InsureBrick、InsureRing）在 1280 寬仍是一欄，和改過的「索引列」不一致，改成兩欄（`0d44aef`）。改完後由另一位新的 `reviewer` 重評金融（素材取自 `0d44aef` 之後、`fd5b2de` 之前的本機 build，`--group b211b`）：4.2，D2 4，仍不低於基準；這位評審寫兩欄的段末索引列名稱「用大號襯線加底線，反而是這段文字裡最顯眼的元素」，壓過同段的保險具名案例（D3 4），和 GreenSwift 的相關文章是同一個問題。GreenSwift 的評審把相關文章一欄算成違反「索引列」，評審讀到的是補上例外前的原則；原則已寫明帶縮圖的相關文章維持一欄。
+
+其他扣分在本次之前就有，不在範圍內：GreenSwift 與金融內文最後一行只剩一個字或標點（`FactText`、`SiteFooter`、`SectionHeading` 說明句），GreenSwift 第 5、7 段片段旁的半欄空白與 hero 圖只有一個標籤，DigiLism hero 缺連到產品索引的次要連結、第 5 段 h2 斷出孤字（`phrases.ts` 沒收這個標題），digiRunner hero 圖少「新的服務」標籤與第 8 段片段的分頁和列項目重複，金融第 6 段兩個產品的事實交錯、具名案例沒放在片段旁。
+
+### 評審依據不足
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| 只有一則、沒有成果的案例列，在索引列名稱與客戶名同字級、索引列名稱又用連結色加底線時，怎麼做到「份量不低於相關文章」；段末索引列的名稱壓過同段的具名案例 | `design-principles.md`「案例列」「索引列」 | GreenSwift、金融 |
+| 文章封面算不算在 P3 的禁令內（擬人機器人、發光的 3D 圖） | `design-principles.md` P3、「索引列」 | digiRunner |
+| 家族頁 hero 的次要連結：原則（#213）要有，brief 第 1 段只寫一個動作 | `design-principles.md`「hub：產品家族頁」、`briefs/digilism.md` | DigiLism |
+| 斷詞表沒收的標題怎麼處理；內文最後一行只剩一字由哪個元件負責 | `design-principles.md`「斷行」 | DigiLism、GreenSwift、金融 |
+| 段末索引列只有 2 項時，「一句」是否必填 | `design-principles.md`「索引列」、`briefs/finance.md` 第 6 段 | 金融 |
+| GreenSwift hero 圖的標籤：原則要資料來源與產出去處，brief 只用事實寫得出的三個詞 | `design-principles.md`「offering：沒有既有系統可畫的產品頁」、`briefs/greenswift.md` 第 1 段 | GreenSwift |
+| 375 寬「一段不超過約 1.5 個螢幕高」和 brief 的事實量互相拉扯 | `design-principles.md`「內頁共用的規則」 | digiRunner、GreenSwift、DigiLism |
+
 ## 限制
 
 - 每頁只有一位評審評一次，沒有量評審之間的一致性。新版 digiRunner 的 C 平均 3.8、金融的 SEO 3.8，接近門檻，換一位評審可能翻轉

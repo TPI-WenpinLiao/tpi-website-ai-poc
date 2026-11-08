@@ -1,11 +1,16 @@
 ---
 // Bar of in-page anchors to the sections of a long page (the offering template's 功能／應用情境／…,
 // the /design-system table of contents). List only sections the page renders.
-// Set apart from the page by one step of fill, not a rule (#187). Scrolls sideways inside the bar on
-// narrow screens, never the page; the row runs to the screen's edge so the next item shows in part. `stick="header"` is for pages
-// with SiteHeader: the bar sticks under the header from --bp-lg-up only, so on phones the header
-// alone stays on screen. `stick="top"` sticks to the top at every width (pages without a header).
-// The page gives its section targets a scroll-margin-block-start so they land below the bars.
+// Set apart from the page by one step of fill, not a rule (#187). Scrolls sideways inside the bar,
+// never the page, with no scroll bar drawn (#211): the side that has more items fades out, so the
+// last one in view isn't cut off mid-word, and at --bp-lg-up with a mouse an arrow on that side
+// scrolls on. Its script marks the sides with data-more-start / data-more-end, and scrolls a focused
+// link out from under the fade; without it the row still scrolls, unfaded. The arrows are a mouse convenience only (tabindex="-1", aria-hidden):
+// tabbing to a link scrolls it into view, and the list reads the same to a screen reader.
+// `stick="header"` is for pages with SiteHeader: the bar sticks under the header from --bp-lg-up
+// only, so on phones the header alone stays on screen. `stick="top"` sticks to the top at every
+// width (pages without a header). The page gives its section targets a scroll-margin-block-start so
+// they land below the bars.
 // Stuck under SiteHeader, the bar takes the header's surface: SiteHeader's script sets its
 // data-surface while a purple band is under the bar (#179), and data-depth over the footer (#212).
 interface Props {
@@ -18,15 +23,23 @@ const { items, label, stick = 'header' } = Astro.props;
 ---
 
 <nav class:list={['in-page-nav', stick]} aria-label={label}>
-  <ul>
-    {
-      items.map((i) => (
-        <li>
-          <a href={i.href}>{i.label}</a>
-        </li>
-      ))
-    }
-  </ul>
+  <div class="track">
+    <ul>
+      {
+        items.map((i) => (
+          <li>
+            <a href={i.href}>{i.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+    <button class="arrow start" type="button" tabindex="-1" aria-hidden="true" data-step="-1">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="m15 6-6 6 6 6"></path></svg>
+    </button>
+    <button class="arrow end" type="button" tabindex="-1" aria-hidden="true" data-step="1">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="m9 6 6 6-6 6"></path></svg>
+    </button>
+  </div>
 </nav>
 
 <style>
@@ -59,16 +72,56 @@ const { items, label, stick = 'header' } = Astro.props;
     }
   }
 
+  /* Each side with more items: a clear strip (the gutter, or the arrow's width where it shows),
+     then a fade into the row */
+  .track {
+    --clear-start: 0%;
+    --clear-end: 0%;
+    --fade-start: 0%;
+    --fade-end: 0%;
+
+    position: relative;
+    max-inline-size: calc(var(--content-max-width) + 2 * var(--space-gutter));
+    margin: 0 auto;
+  }
+
+  [data-more-start] .track {
+    --clear-start: var(--space-gutter);
+    --fade-start: var(--space-16);
+  }
+
+  [data-more-end] .track {
+    --clear-end: var(--space-gutter);
+    --fade-end: var(--space-16);
+  }
+
   ul {
     display: flex;
     gap: var(--space-1);
-    box-sizing: content-box;
-    max-inline-size: var(--content-max-width);
-    margin: 0 auto;
+    margin: 0;
     padding: var(--space-1) var(--space-gutter);
     overflow-x: auto;
-    scroll-padding-inline: var(--space-gutter);
+    scroll-snap-type: x proximity;
+    /* A focused link scrolls clear of the faded edge (the script scrolls it in on focus) */
+    scroll-padding-inline: calc(var(--space-gutter) + var(--space-16));
+    scrollbar-width: none;
     list-style: none;
+    /* Only the mask's alpha counts; currentColor is any opaque colour */
+    mask-image: linear-gradient(
+      to right,
+      transparent var(--clear-start),
+      currentColor calc(var(--clear-start) + var(--fade-start)),
+      currentColor calc(100% - var(--clear-end) - var(--fade-end)),
+      transparent calc(100% - var(--clear-end))
+    );
+  }
+
+  ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  li {
+    scroll-snap-align: start;
   }
 
   a {
@@ -87,4 +140,101 @@ const { items, label, stick = 'header' } = Astro.props;
     background: var(--color-bg-muted);
     color: var(--color-text);
   }
+
+  .arrow {
+    position: absolute;
+    inset-block: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--touch-target);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+
+  .arrow.start {
+    inset-inline-start: 0;
+  }
+
+  .arrow.end {
+    inset-inline-end: 0;
+  }
+
+  .arrow:hover {
+    color: var(--color-text);
+  }
+
+  .arrow svg {
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--icon-stroke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (--bp-lg-up) and (pointer: fine) {
+    [data-more-start] .arrow.start,
+    [data-more-end] .arrow.end {
+      display: flex;
+    }
+
+    [data-more-start] .track {
+      --clear-start: var(--touch-target);
+    }
+
+    [data-more-end] .track {
+      --clear-end: var(--touch-target);
+    }
+
+    ul {
+      scroll-padding-inline: calc(var(--touch-target) + var(--space-16));
+    }
+  }
 </style>
+
+<script>
+  // Marks which sides of each bar have items out of view (the fade and the arrows), and scrolls the
+  // row by most of its width when an arrow is clicked.
+  const smooth = window.matchMedia('(prefers-reduced-motion: no-preference)');
+
+  for (const nav of document.querySelectorAll<HTMLElement>('.in-page-nav')) {
+    const list = nav.querySelector('ul');
+    if (!list) continue;
+    const update = () => {
+      const max = list.scrollWidth - list.clientWidth;
+      nav.toggleAttribute('data-more-start', list.scrollLeft > 1);
+      nav.toggleAttribute('data-more-end', list.scrollLeft < max - 1);
+    };
+    list.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(list);
+    void document.fonts.ready.then(update);
+    // The browser scrolls a focused link in only when it is out of view, and scrollIntoView's
+    // 'nearest' ignores scroll-padding; one under the fade is scrolled clear of the strips that
+    // scroll-padding marks
+    list.addEventListener('focusin', (event) => {
+      // Keyboard focus only: a click focuses the link on mousedown, and scrolling it then would move
+      // it from under the pointer before mouseup, so the click would not follow it
+      if (!(event.target instanceof HTMLElement) || !event.target.matches(':focus-visible')) return;
+      const style = getComputedStyle(list);
+      const box = list.getBoundingClientRect();
+      const link = event.target.getBoundingClientRect();
+      const start = box.left + parseFloat(style.scrollPaddingInlineStart);
+      const end = box.right - parseFloat(style.scrollPaddingInlineEnd);
+      const by = link.left < start ? link.left - start : link.right > end ? Math.min(link.right - end, link.left - start) : 0;
+      if (by !== 0) list.scrollBy({ left: by, behavior: smooth.matches ? 'smooth' : 'auto' });
+    });
+    for (const arrow of nav.querySelectorAll<HTMLButtonElement>('.arrow')) {
+      // The arrows are aria-hidden, so a click must not leave focus on one
+      arrow.addEventListener('mousedown', (event) => event.preventDefault());
+      arrow.addEventListener('click', () => {
+        list.scrollBy({ left: Number(arrow.dataset.step) * list.clientWidth * 0.75, behavior: smooth.matches ? 'smooth' : 'auto' });
+      });
+    }
+    update();
+  }
+</script>

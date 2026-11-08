@@ -215,6 +215,9 @@
   --reading-max-width: 46rem;
   /* Person photo on the person template; 20rem in its sizes attribute */
   --portrait-max-width: 20rem;
+  /* An index row's small picture (IndexList, 3:2 → 120×80): fixed, so a post's cover never outweighs
+     a case row's two lines (#211). 7.5rem in its sizes attribute */
+  --thumb-width: 7.5rem;
   --touch-target: 2.75rem;
   --progress-height: 3px;
   --header-height: 4rem;

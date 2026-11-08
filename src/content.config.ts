@@ -190,11 +190,13 @@ const pageSection = (image: ImageFn) => z.discriminatedUnion('layout', [
   z.strictObject({ layout: z.literal('results'), ...sectionCommon(image), items: z.array(resultItem).min(1), record: text.optional() }),
   // 色帶: the claim, a few facts and the action on a pale purple band, a fragment beside them
   z.strictObject({ layout: z.literal('band'), ...sectionCommon(image), items: z.array(sectionItem).optional(), fragment: uiFragment.optional() }),
-  // 索引列: a secondary section of its own, one page a row (IndexList), named by its node unless
-  // `label` says what the page answers (the link's text); `body` is wording (#200)
+  // 索引列: a section of its own, one page a row (IndexList), named by its node unless `label` says
+  // what the page answers (the link's text); `body` is wording (#200). Secondary unless `weight` is
+  // primary: a family hub's product index, the page's main way in (design-principles.md「索引列」, #211)
   z.strictObject({
     layout: z.literal('index'),
     ...sectionCommon(image),
+    weight: z.enum(['primary', 'secondary']).optional(),
     items: z.array(z.strictObject({ node: anyNode, label: text.optional(), body: text.optional() })).min(1),
   }),
 ]);

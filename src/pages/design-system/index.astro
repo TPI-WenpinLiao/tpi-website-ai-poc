@@ -565,6 +565,16 @@ const description =
               { title: '沒有縮圖的項目', href: `#components-${tone}` },
             ]}
           />
+          <p class="note"><code>columns</code> 設 2：寬螢幕排兩欄（PageSections 的 index 段落）</p>
+          <IndexList
+            level={4}
+            columns={2}
+            items={[
+              { title: '第一項', body: '一句說明', href: `#components-${tone}` },
+              { title: '第二項', body: '一句說明', href: `#components-${tone}` },
+              { title: '第三項', href: `#components-${tone}` },
+            ]}
+          />
 
           <h3>MapPicture</h3>
           <div class="demo">
@@ -810,6 +820,23 @@ const description =
             { href: '#chrome', label: '應用情境' },
             { href: '#chrome', label: '相關產品' },
             { href: '#chrome', label: '常見問題' },
+          ]}
+        />
+      </div>
+      <h3>InPageNav：項目放不下時</h3>
+      <div class="chrome-demo">
+        <InPageNav
+          label="頁內錨點（展示：放不下）"
+          items={[
+            { href: '#chrome', label: '接上既有系統，不必先汰換' },
+            { href: '#chrome', label: 'AI 流量走同一道 Gateway' },
+            { href: '#chrome', label: '部署環境由企業決定' },
+            { href: '#chrome', label: '資安機制內建' },
+            { href: '#chrome', label: '金融與政府的規範要求' },
+            { href: '#chrome', label: '尖峰流量與單點故障' },
+            { href: '#chrome', label: 'API 與 AI 的使用軌跡' },
+            { href: '#chrome', label: '先試用再決定' },
+            { href: '#chrome', label: '成功案例' },
           ]}
         />
       </div>
