@@ -153,6 +153,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
             )}
             {sec.index && (
               <IndexList
+                columns={2}
                 items={sec.index.map((i) => ({ title: localNode(i.node, locale).title, body: i.body, href: nodeHref(i.node, locale) }))}
               />
             )}
