@@ -605,7 +605,7 @@ digiRunner 的平均比 #211 低 0.2，扣分都和片段的狀態無關，本�
 
 ## 索引列名稱與案例列（#226）
 
-`IndexList` 的名稱跟段落分級（次要段落降到 `--font-size-base` 的無襯線半粗，產品家族 hub 的產品索引維持 `--font-size-text` 的襯線粗體），GreenSwift 的案例照 brief 排在試用之前（offering 的 `casesBefore`）之後，GreenSwift 與金融各由新的 `reviewer` 只評設計 rubric，確認 #226 的驗收：評審不再指出索引列比案例重，D3 不低於 #211 的 4。和 #210–#209 一樣是共用元件的確認，摘要在 PR #230 的 body，不另存評審檔、不進上方的分數表，也不套「門檻附近加評」。
+`IndexList` 的名稱跟段落分級（次要段落降到 `--font-size-base` 的無襯線半粗，主要段落——產品家族 hub 的產品索引、ESG 顧問頁的團隊、沒有 `sections` 的 hub 的子頁——維持 `--font-size-text` 的襯線粗體），GreenSwift 的案例照 brief 排在試用之前（offering 的 `casesBefore`）之後，GreenSwift 與金融各由新的 `reviewer` 只評設計 rubric，確認 #226 的驗收：評審不再指出索引列比案例重，D3 不低於 #211 的 4。和 #210–#209 一樣是共用元件的確認，摘要在 PR #230 的 body，不另存評審檔、不進上方的分數表，也不套「門檻附近加評」。
 
 ### 方法
 
