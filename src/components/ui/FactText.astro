@@ -1,7 +1,8 @@
 ---
 // A fact text as it reads on the page (#200): split into items one per line (factList,
 // site-research 第 2 條), it is a list, led by its first line when that ends in a colon, the short
-// items in two columns (design-principles.md「內頁共用的規則」375 寬); otherwise a paragraph keeping its
+// items in two columns (design-principles.md「內頁共用的規則」375 寬), a list of longer items in one
+// column on narrow screens (`long`, lists.ts; design-principles.md「斷行」, #225); otherwise a paragraph keeping its
 // line breaks. Its quantities are bold, list items too, names' numbers not (emphasis.ts, #210;
 // design-principles.md「內頁共用的規則」事實); `emphasis="none"` leaves it plain. `inline` leaves a
 // one-paragraph text bare, for a table cell that already keeps line breaks (SpecTable).
@@ -25,7 +26,7 @@ const parts = partsOf(text);
   list ? (
     <>
       {list.lead && <p class="lead">{partsOf(list.lead).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</p>}
-      <ul class="fact-list">
+      <ul class:list={['fact-list', { long: list.long }]}>
         {list.items.map((item) => (
           <li>{partsOf(item).map((p) => (p.strong ? <strong>{p.part}</strong> : p.part))}</li>
         ))}
@@ -39,6 +40,8 @@ const parts = partsOf(text);
 }
 
 <style>
+  @import '../../styles/media.css';
+
   .text {
     max-inline-size: var(--reading-max-width);
     margin: 0;
@@ -56,5 +59,11 @@ const parts = partsOf(text);
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  @media (--bp-md-down) {
+    .long {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 </style>

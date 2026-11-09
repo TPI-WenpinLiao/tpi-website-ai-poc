@@ -25,7 +25,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 需要新 token 時先加到 `tokens.css` 並在 PR 中說明用途，不得在元件內寫死數值
 - 不使用 UI framework 或 utility CSS framework
 - 元件樣式寫在 `.astro` 的 scoped `<style>`。傳給子元件的元素會帶上父層的 scope，父層的 class 名稱不要和子元件內部的 class 重複（#17 實測：頁面的 `.grid` 套到 `Surface pattern="grid"`、header 的 `.primary` 套到 `Button` 的 primary）。全域樣式與共用規則的分層見下方「CSS 分層」
-- 中文換行：標題與 `.text-phrase`（hero 與區塊的引言、卡片說明、`Tag`）只在空格與標點斷行，不會把「數位轉型」斷成「數位轉／型」。內文段落不加。沒有空格與標點的標題用 U+200B 標出可斷行的位置（見 `PageHero`）
+- 中文換行（`design-principles.md`「斷行」）：標題、`.text-phrase`（名稱、tagline、卡片說明、`Tag`、footer 連結）與 `Prose` 的表格儲存格只在空格與標點斷行，不會把「數位轉型」斷成「數位轉／型」；沒有標點的長串由 `src/lib/content/phrases.ts`（`src/middleware.ts` 套到每一頁）在詞之間放 `<wbr>`，`PageHero` 的標題也可以用 U+200B 指定斷點。內文（`p`、`li`、`dd` 等）照瀏覽器斷行，`base.css` 設 `text-wrap: pretty`，最後一行不只剩一個字或標點；說明句是內文，不加 `.text-phrase`。flex item 裡的 `.text-phrase` 要設 `flex-shrink: 0` 或給足寬度，否則 `overflow-wrap: anywhere` 讓它縮到一字寬（`Breadcrumb`）
 - 頁面元件在 `src/components/ui/`，新元件同步加到 `/design-system`，寫法見「展示頁」
 
 ## CSS 分層
@@ -35,7 +35,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | 層 | 位置 | 放什麼 |
 |---|---|---|
 | tokens | `src/styles/tokens.css`、`media.css` | design tokens（三層，見「Token 分層」）與斷點 |
-| base | `src/styles/base.css`（只由 `BaseLayout` import） | reset（`box-sizing`、`body`）、標題與 `.text-phrase` 的換行、`[data-surface='dark']` 的底色、`:focus-visible`、跨元件的工具類（`.sr-only`、`.anchor-target`、`.row-list`） |
+| base | `src/styles/base.css`（只由 `BaseLayout` import） | reset（`box-sizing`、`body`）、標題與 `.text-phrase` 的換行、內文的 `text-wrap: pretty`、`[data-surface='dark']` 的底色、`:focus-visible`、跨元件的工具類（`.sr-only`、`.anchor-target`、`.row-list`） |
 | 元件 | `src/components/ui/*.astro` 的 scoped `<style>` | 跨頁共用的區塊：卡片格線（`CardGrid`）、表單面板（`FormPanel`）、標籤列（`TagList`）、長文排版（`Prose`）等 |
 | 模板與頁面 | `src/layouts/templates/`、`src/pages/` 的 scoped `<style>` | 只屬於這個模板或頁面的版面 |
 
@@ -138,7 +138,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 |---|---|---|
 | `Surface` | 頁面區塊 | `tone` 切換亮暗；`fill`（`subtle` 淺灰、`brand` 淺紫）把亮底加深一階，用來分開判斷組，不用分隔線或框（#187）；`width="reading"` 收窄到閱讀寬度；同 tone、同 fill 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
 | `PageHero` | 頁面開場 | 輸出該頁唯一的 h1，上方不放任何小標（上層節點只在麵包屑，`design-principles.md` P1，#187）；h1 下依序是 `description`、`lead`（一句說明）、`points`（事實原文的證據點，每則可帶一行緊貼的 `note` 條件）、`meta`（一行附註，例如案例的產業）、`actions` slot；`visual` slot 放同一個世界的靜態圖；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」）；h1 之後的第二眼是 `description`：證據點用內文字重，只有獨立的數字加粗（`quantities()`，名稱裡的數字不加粗，規則見函式的註解）；`description`、`lead`、`note` 用完整文字色，只有 `meta` 用 muted（#208） |
-| `SectionHeading` | 區塊標題 | 只有標題、`description` 與 `action` slot，不加編號、eyebrow 與短線（#187）；`description` 用完整文字色，不用 muted（#208）；標題寫這段回答的問題的答案；`level` 由呼叫端指定，避免跳級；`weight="secondary"` 給次要段落（相關文章、子頁、相關產品），標題降到 `--font-size-text`；`size="display"` 每頁最多一次，`size="sm"` 用在面板裡的標題（表單的錯誤摘要）；`action` slot 放整區的連結（同一列靠右） |
+| `SectionHeading` | 區塊標題 | 只有標題、`description` 與 `action` slot，不加編號、eyebrow 與短線（#187）；`description` 用完整文字色，不用 muted（#208），照內文斷行、不加 `.text-phrase`（#225）；標題寫這段回答的問題的答案；`level` 由呼叫端指定，避免跳級；`weight="secondary"` 給次要段落（相關文章、子頁、相關產品），標題降到 `--font-size-text`；`size="display"` 每頁最多一次，`size="sm"` 用在面板裡的標題（表單的錯誤摘要）；`action` slot 放整區的連結（同一列靠右） |
 | `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；全部平塗、沒有陰影與上浮（#187）：primary 實心紫、secondary 淺紫底、text 沒有底；hover 只換顏色；`disabled` 只存在於 `<button>` |
 | `Link` | 內文連結、獨立連結 | 內文連結一律底線；`external` 加 ↗ 與「（外部網站）」螢幕閱讀器文字 |
 | `Tag` | 標籤 | `neutral`、`brand`，淺底文字，沒有 mono 與光點（#187）；有 `href` 才是連結。產品頁連到產業頁要寫成看得出目的地的文字連結，不用 `Tag` |
@@ -149,15 +149,15 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
 | `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的亮底列，沒有下框線（#187），展開的選單面板可以有陰影；下緣經過 `data-surface="dark"` 的段落時，script 把 header 的 `data-surface` 換成 `dark`（`IntersectionObserver`，#179），選單面板、搜尋框與「選單」固定 `data-surface="light"`；`--bp-lg-up` 有 `InPageNav` 黏在下方時，觸發線改在目錄列下緣，目錄列一起換色；`surface` 固定成一種，只給 `/design-system` 的預覽用；寬度小於 64rem 收進「選單」 |
-| `SiteFooter` | 頁尾 | 深色 surface、近黑底（`--color-bg-deep`），不用分隔線；帶 `data-depth="deep"`，`SiteHeader` 與黏住的 `InPageNav` 經過時也換成近黑；連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入） |
-| `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴 |
+| `SiteFooter` | 頁尾 | 深色 surface、近黑底（`--color-bg-deep`），不用分隔線；連結欄的連結是名稱，加 `.text-phrase`（#225）；帶 `data-depth="deep"`，`SiteHeader` 與黏住的 `InPageNav` 經過時也換成近黑；連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入） |
+| `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴；窄於 `--bp-lg-up` 時一列橫向捲動，項目不縮窄（#225） |
 | `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；和頁面用一階底色分開，不用下框線（#187）；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；固定在 header 下方時跟 header 算同一條 bar，紫色段落經過時由 `SiteHeader` 的 script 一起換成深色（#179）；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動，不畫原生捲軸（#211）：元件內的 script 標出哪一側還有項目（`data-more-start`／`data-more-end`），那一側先留一段全透明再淡出（`mask-image`），最後一項不在字中間硬切；`--bp-lg-up` 且 `pointer: fine` 時那一側加箭頭鈕，按一下捲動約一個列寬。箭頭鈕只給滑鼠用（`tabindex="-1"`、`aria-hidden`，按下時不接 focus）；鍵盤 Tab 到落在淡出區的連結時（`:focus-visible`），script 把它捲出淡出區，滑鼠點擊不捲 |
 | `Faq` | 常見問題 | 原生 `<details>`，零 JS |
 | `FactRow` | 論點與撐住它的事實 | `design-principles.md`「內頁的版型」的「主張與原文」：左邊 `SectionHeading`（`level`、`description`）加選填的 `link`（兩個連結時用 `links`，#202），右邊是 default slot 的 `<li>` 事實清單，用間距分開，沒有線與編號（#187）；64rem 以上照 12 欄並排（1–5、7–12） |
 | `PageSections` | offering、hub 依 brief 排的段落 | 讀內容檔的 `sections`（`src/content.config.ts` 的 `pageSection`），每段一個 `Surface`，照 `layout` 用 `FactRow`（claim）、`JunctionDiagram`（junction）、`UiFragment`（ui，`flip` 左右對調，`itemsBelow` 把事實排到下方兩欄，`index` 接 `IndexList`）、`SpecTable`（spec）、`Timeline`（timeline，可接對應表）、`CaseList`（results）、淺紫色帶（band）或標題橫跨在上、`IndexList columns={2}` 在下（index，#211；`weight: primary` 時標題用主要段落的字級，產品家族 hub 的產品索引用）；版型依據是 `design-principles.md`「內頁的版型」，相鄰兩段不用同一種（#187）；有 `id` 的段落是 `InPageNav` 的錨點；段落的 `image`（緞帶世界的段落圖）放在 spec 的 h2 旁（最後 4 欄）或沒有介面片段的 band 的圖位，375 寬不顯示；ui 段的事實超過 3 則時排到片段下方兩欄；段落的 `link` 可以連到節點、新聞或站外頁，也可以是兩個連結（#202） |
 | `JunctionDiagram` | 接點圖 | 三欄：既有系統（中性）、產品（紫）、新的服務（橘），欄位相鄰用平塗色塊表示接上，不畫細線箭頭；節點可標 `down`（故障）、`standby`（待命），高可用架構用；HTML 畫，文字是事實的用詞；`caption` 一句話說圖在講什麼；窄螢幕三欄上下排 |
 | `UiFragment` | 介面片段 | HTML 畫的產品畫面局部，標「示意」、帶 `data-ui`；只畫事實寫得出的面板名稱、分頁、設定項目與狀態（`state`：on、off、down、next，on、off、down 另有給螢幕閱讀器的文字，不只靠顏色）；`words` 傳頁面的 `strings.layout`（「示意」與狀態名稱），不畫筆數、時間、曲線、客戶名單；同一頁的片段用同一個外框 |
-| `FactText` | 一則事實原文 | 拆成一行一項、5 行以上時排成兩欄清單（第一行以冒號結尾時當導言），否則是保留換行的段落；數量預設加粗（段落、導言與清單每一項都套，名稱裡的數字不算，規則在 `src/lib/content/emphasis.ts` 的 `quantities()`，`design-principles.md`「內頁共用的規則」事實，#210），`emphasis="none"` 不加粗；`inline` 讓單段文字不包 `<p>`（表格的格子）。`PageSections` 與 `SpecTable` 共用（#200） |
+| `FactText` | 一則事實原文 | 拆成一行一項、5 行以上時排成兩欄清單（第一行以冒號結尾時當導言；有項目超過 8 個全形字寬時，窄於 `--bp-md-up` 排一欄，`src/lib/content/lists.ts` 的 `long`，#225），否則是保留換行的段落；數量預設加粗（段落、導言與清單每一項都套，名稱裡的數字不算，規則在 `src/lib/content/emphasis.ts` 的 `quantities()`，`design-principles.md`「內頁共用的規則」事實，#210），`emphasis="none"` 不加粗；`inline` 讓單段文字不包 `<p>`（表格的格子）。`PageSections` 與 `SpecTable` 共用（#200） |
 | `SpecTable` | 規格表、對應表 | 真的 `<table>`：一格一則事實時用 `FactText`；一列一個項目（部署方式、標準、規範），事實原文一格，選填的 `link` 一格；可以有列線（house rules 對真表格的例外）；`emphasis="name"` 讓第一欄用襯線粗體（對應表的規範名稱）；欄名只給螢幕閱讀器；每一格的數量加粗（`quantities()`，#210）；`compare`（`{ label; values: [兩個名稱] }`）把它變成兩樣東西並排的比較表，這一列是看得到的表頭，每列的兩個值各佔一格，不能有 `link`（#200） |
 | `Timeline` | 時間列 | 真的 `<ol>`：年份在前（襯線粗體、`tabular-nums`），事實原文在後，一列一則 |
 | `CaseList` | 案例列、成果列 | 一列一則，用間距分開，不做等大卡片：客戶（或作業名稱）用襯線粗體，接著作業、成果原文（數量加粗）、獎項、連結；`fragment` 在旁邊放這則作業的 `UiFragment`；`lead` 讓第一則的成果字級大一級；事實庫沒有成果時不放那一行；`more` 是「看所有成功案例」；`linkHeading` 讓每列的 heading 就是連到案例內頁（沒有時是新聞）的連結，同一個 `<a>` 裡分兩行：`title`（客戶名，`--font-size-text` 襯線粗體）與 `link.label`（案例或新聞的標題原文，`--font-size-base`、內文字重、連結色），不組成「客戶名：標題」一行，沒有連結的列只有 `title`（`design-principles.md`「案例列」，#210）；獎項用內文字重，數量加粗；`words` 傳頁面的 `strings.layout` |
@@ -165,7 +165,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `MapPicture` | hero 的靜態圖加標籤 | 同一個世界渲染的靜態圖（`src/assets/design/ribbon/`），`labels` 依 `pictures.json` 的錨點（core、legacy、product、model、service、ai0–ai2）放 HTML 標籤，落在圖外的不放；位置由 `src/lib/scene/ribbon/labels.ts` 算（首頁的地圖標籤共用）；`priority` 給 hero |
 | `CardGrid` | 卡片列表 | 手機一欄、`--bp-sm-up` 兩欄、`--bp-lg-up` 三欄（`cols`）；同一列等高；`compact` 讓手機也一列兩張短卡 |
 | `ContactCta` | 每頁最後的聯絡區塊 | 整段是深紫帶（`tone="dark"`），平塗按鈕，沒有格線、框與光暈（#187）；按鈕連到目前語系的聯絡我們，`label` 可換成「預約演示」，`title` 換成這一頁的下一步（內容檔的 `contactTitle`，#200） |
-| `Prose` | 長文 | Markdown 內文的排版，`:global()` 只作用在自己內部 |
+| `Prose` | 長文 | Markdown 內文的排版，`:global()` 只作用在自己內部；表格在自己的框裡橫向捲動，儲存格整個詞不拆開（#225） |
 | `FilterBar` | 列表篩選 | 有 `href` 的項目是連結（blog 分類），沒有的是標籤；窄螢幕在列內橫向捲動 |
 | `Pagination` | 列表分頁 | 第 2 頁起 `/page/n`（ADR 0002）；只有一頁不輸出 |
 | `EmptyState` | 沒有項目時 | 虛線框、標題、說明與 `action` slot |
@@ -244,6 +244,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - build 後的 `scripts/design/dist-css.mjs`：輸出的 CSS 不得有帶 scroll timeline 的 `animation` shorthand
 - build 後的 `scripts/design/font-subsets.mjs`：輸出的 `@font-face` 只能是 Inter 與 JetBrains Mono 的 latin、vietnamese、greek，範圍與套件的 `unicode.json` 相同；頁面文字不得有字型涵蓋、但這三個 subset 沒有的字元（例外在 `ALLOWED`）
 - build 後的 `scripts/design/overflow.mjs`：每頁在 320、390、1024、1440px 寬都不得比 viewport 寬。常見原因：沒寫 `grid-template-columns` 的 grid，隱含的 `auto` 欄會被子元素的 min-content 撐開（`<input>` 預設 20 字寬、`<select>` 跟最長選項一樣寬，`FormField` 的 `.control` 因此設 `inline-size: 100%`）；內文裡的長網址或長英文字（`Prose` 設 `overflow-wrap: break-word`）
+- build 後的 `scripts/design/orphans.mjs`：每個 zh-TW 頁面在 375、768、1280px 寬，`main` 的 `p`、`li`、`dd`、h1–h3 與 footer 連結，最後一行去掉標點後不得只剩一個漢字或只有標點。常見原因：`.text-phrase` 或標題的長串沒有斷點（`phrases.ts` 的 `LONG_RUN`）、兩欄清單的長項目（`FactText` 的 `long`）、全形標點前多一個空格（`pretty` 把它當成兩個詞）
 - build 後的 `scripts/design/axe.mjs`：每頁以 1280px、reduced motion 跑 axe-core（WCAG 2.2 A／AA），有任何 violation 就失敗
 - build 後的 `scripts/design/video-facade.mjs`：每個有 `VideoFacade` 的頁面，載入時不得有站外的請求；用鍵盤 Tab 到 facade 按鈕、按 Enter 後，要換上有 `title` 的播放器，焦點落在播放器上
 - build 後的 `npm run test:visual`：首頁與各模板預覽頁在 375、768、1280px 的截圖和 baseline 比對，只在 CI 執行（雲端 session 會 skip）。改樣式、token 或元件後預期會失敗，確認差異符合意圖後照 `docs/workflow.md`「視覺回歸」由 CI 更新 baseline

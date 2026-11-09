@@ -531,10 +531,41 @@ GreenSwift 的設計平均比基準低 0.5，和 #210 有關的只有 D3：只�
 | 只有一則、沒有成果的案例列，在索引列名稱與客戶名同字級、索引列名稱又用連結色加底線時，怎麼做到「份量不低於相關文章」；段末索引列的名稱壓過同段的具名案例 | `design-principles.md`「案例列」「索引列」 | GreenSwift、金融 |
 | 文章封面算不算在 P3 的禁令內（擬人機器人、發光的 3D 圖） | `design-principles.md` P3、「索引列」 | digiRunner |
 | 家族頁 hero 的次要連結：原則（#213）要有，brief 第 1 段只寫一個動作 | `design-principles.md`「hub：產品家族頁」、`briefs/digilism.md` | DigiLism |
-| 斷詞表沒收的標題怎麼處理；內文最後一行只剩一字由哪個元件負責 | `design-principles.md`「斷行」 | DigiLism、GreenSwift、金融 |
+| 斷詞表沒收的標題怎麼處理；內文最後一行只剩一字由哪個元件負責（#225 已處理，見下方「斷行（#225）」） | `design-principles.md`「斷行」 | DigiLism、GreenSwift、金融 |
 | 段末索引列只有 2 項時，「一句」是否必填 | `design-principles.md`「索引列」、`briefs/finance.md` 第 6 段 | 金融 |
 | GreenSwift hero 圖的標籤：原則要資料來源與產出去處，brief 只用事實寫得出的三個詞 | `design-principles.md`「offering：沒有既有系統可畫的產品頁」、`briefs/greenswift.md` 第 1 段 | GreenSwift |
 | 375 寬「一段不超過約 1.5 個螢幕高」和 brief 的事實量互相拉扯 | `design-principles.md`「內頁共用的規則」 | digiRunner、GreenSwift、DigiLism |
+
+## 斷行（#225）
+
+內文改成 `text-wrap: pretty`、`SectionHeading` 說明句不用詞組斷行、`FactText` 長項目清單窄寬排一欄、`phrases.ts` 單字詞併回一個詞並擴到 `.text-phrase` 與表格儲存格之後，三頁各由新的 `reviewer` 只評設計 rubric，確認 #225 的驗收：評審不再指出孤字或孤標點，D2 不低於 #211（GreenSwift 3、金融 4、DigiLism 4）。和 #210、#211 一樣是共用元件的確認，摘要在 PR #228 的 body，不另存評審檔、不進上方的分數表，也不套「門檻附近加評」。
+
+### 方法
+
+- rubric 與 prompt 同 #211，只評設計。素材由 `node scripts/strategy/eval-shots.mjs --new dist --only new --group b225 --pages greenswift=/products/greenswift,finance=/industries/finance,digilism=/products/digilism --work <scratchpad>` 產生（head `65fc25b`），截圖不進版控
+- 比較基準：三頁都是「索引列與頁內導覽（#211）」
+
+### 結果
+
+| 頁面 | #211 | #225 | 驗收項 |
+|---|---|---|---|
+| GreenSwift | 3.8（D2 3） | 3.7 | D2 3 |
+| 金融 | 4.2（D2 4） | 4.2 | D2 4 |
+| DigiLism | 4.2（D2 4） | 4.2 | D2 4 |
+
+三位評審都沒有指出孤字或孤標點。評審寫到 #225 改的地方：金融「375 寬時 tagline 照詞組斷成兩行」「超過 8 字的清單排一欄、沒有縮小字級」；DigiLism「標題沒有孤字」。
+
+GreenSwift 的平均比 #211 低 0.1，扣分都在本次之前就有：hero 圖只有一個標籤、第 5、7 段片段旁的單側空白（`PageSections` 的「超過 3 則」和原則的「超過 4 則，或文字比片段長」條件不同）、`UiFragment` 的「已啟用」只有紫色方塊、案例列比相關文章輕、第 4 段 375 寬約 1.7 個螢幕高。評審另外指出第 3 段「ISO 14064-1 與 GHG Protocol 的盤查步驟已內建」與第 5 段「部門分工收數據，帳號與組織邊界不設上限」的 h2 是三行（1280 寬，第 3 段 375 寬也是）。用 main（`8478e9f`）的 build 對照，兩個 h2 在 375、1280 的行數和本 PR 相同，是標題本身的長度，不是斷行規則造成的，不在 #225 範圍內。
+
+### 評審依據不足
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| h2 含長英文標準名（ISO 14064-1、GHG Protocol）時，「兩行以內」要改文案還是可以例外 | `design-principles.md`「段落標題」、`briefs/greenswift.md` 第 3 段 | GreenSwift |
+| 介面片段的事實何時排到片段下方：原則寫「超過 4 則，或文字比片段長」，`PageSections` 實作「超過 3 則」 | `design-principles.md`「內頁的版型」介面片段、`design-system` 元件表 | GreenSwift |
+| 案例列只有第一則配片段時，其餘列在 1280 寬右欄怎麼處理，和 P5「另一半螢幕空著」互相拉扯 | `design-principles.md`「案例列」 | 金融 |
+| 時間列「年份在前」和 brief「年份寫在事實原文裡」一起做，年份重複出現 | `design-principles.md`「內頁的版型」時間列、`briefs/finance.md` 第 2 段 | 金融 |
+| 同一張段落圖能否跨頁沿用；白底段落圖放在淺灰段落的背景 | `design-principles.md`「內頁共用的規則」段落圖、`briefs/digilism.md` 第 6 段 | DigiLism |
 
 ## 限制
 

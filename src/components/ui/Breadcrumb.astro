@@ -59,6 +59,12 @@ const trail = breadcrumb(node, locale).map((n, i, all) => (current && i === all.
       white-space: nowrap;
     }
 
+    /* Items keep their width and the row scrolls: a shrunk item breaks its name to one character a
+       line (首／頁; .text-phrase's overflow-wrap lets it get that narrow), design-principles.md「斷行」 */
+    li {
+      flex-shrink: 0;
+    }
+
     li:last-child {
       position: absolute;
       inline-size: var(--border-width);

@@ -99,13 +99,21 @@ body {
   font-weight: var(--font-weight-bold);
 }
 
+/* Body text never ends on one character or a lone punctuation mark (服／務。, 評／估):
+   design-principles.md「斷行」, #225. Chromium's pretty wrapping moves a word down from the line
+   before when the last line would be that short, Chinese included; headings balance instead (their
+   components set text-wrap: balance). scripts/design/orphans.mjs checks the built pages. */
+:is(p, li, dt, dd, figcaption, blockquote, td, th) {
+  text-wrap: pretty;
+}
+
 /* Short display text breaks Chinese only at spaces and punctuation, never inside a word
    (數位轉／型, 與能／源): headings, and lead text or labels marked .text-phrase. A run too long for
    the line still breaks anywhere instead of overflowing; a line-start full-width opening bracket
    drops its blank half where the font supports it (PingFang TC, Noto Sans TC). Not for body
    paragraphs, where breaks only at punctuation would leave ragged lines. A long zh-TW run with no
-   punctuation in a heading gets <wbr> between its words (src/lib/content/phrases.ts, applied by src/middleware.ts),
-   so it breaks between words instead of anywhere (申報格／式, #202). */
+   punctuation in a heading or .text-phrase gets <wbr> between its words (src/lib/content/phrases.ts, applied by src/middleware.ts),
+   so it breaks between words instead of anywhere (申報格／式, #202; 集中控／管, #225). */
 :is(h1, h2, h3, h4, h5, h6),
 .text-phrase {
   word-break: keep-all;
