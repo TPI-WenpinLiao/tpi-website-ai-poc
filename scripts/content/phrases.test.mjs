@@ -17,9 +17,17 @@ test('a one-character word keeps to both neighbours', () => {
   for (const p of phrases('顧問公司登入同一個平台輔導', 'zh-TW')) assert.notEqual([...p].length, 1, p);
 });
 
-test('a word the dictionary splits into single characters is put back together, so the run breaks before it', () => {
-  assert.deepEqual(phrases('驗身與日誌都集中控管', 'zh-TW'), ['驗身與', '日誌都集中', '控管']);
+test('a word the dictionary splits into two single characters is put back together, so the run breaks before it', () => {
+  assert.deepEqual(phrases('驗身與日誌都集中控管', 'zh-TW'), ['驗身與日誌都集中', '控管']);
   assert.deepEqual(phrases('進行資源與服務監控作業', 'zh-TW'), ['進行', '資源與服務', '監控', '作業']);
+});
+
+test('a function word is not joined to the next character, so no piece starts on it (#228)', () => {
+  const cases = ['中小企業最聰明的碳管理策略', '一站式管理企業的與能源相關的碳排放數據', '金融業的開放銀行交易量的效能', '可串接客戶內外部系統', '在集團內各通路'];
+  for (const text of cases) {
+    for (const p of phrases(text, 'zh-TW').slice(1)) assert.doesNotMatch(p, /^[的之與及和或在從各於可]/u, `${text}: ${p}`);
+  }
+  assert.deepEqual(phrases('中小企業最聰明的碳管理策略', 'zh-TW'), ['中小企業最聰明的碳管理', '策略']);
 });
 
 test('a run mixing Han and Latin counts as one, and breaks beside its Latin words too', () => {
