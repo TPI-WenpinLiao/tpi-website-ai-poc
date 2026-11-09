@@ -154,7 +154,7 @@ sections:
         - label: 核保規則調整
           state: "on"
         - label: 法令規範因應
-          state: "off"
+          state: "on"
     items:
       - body: InsureBrick是專為產壽險保險公司及保經代公司打造的保險科技平台，我們的系統採用了先進的微服務技術，每個功能都是獨立的模組
       - body: 只需購買所需模組，也可串接客戶內外部系統

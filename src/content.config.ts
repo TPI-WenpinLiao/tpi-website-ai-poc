@@ -7,6 +7,9 @@ import { parse } from 'yaml';
 import { frontmatterDateErrors } from '../scripts/content/dates.mjs';
 import { LOCALES } from './lib/i18n/locales';
 import { nodeIds, nodes } from './lib/ia/nodes';
+import { strings as zhTW } from './data/strings/zh-TW';
+import { strings as en } from './data/strings/en';
+import { strings as vi } from './data/strings/vi';
 
 const INDUSTRIES = ['finance', 'government', 'manufacturing'] as const;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -101,7 +104,12 @@ const parentOf = (id: string) => nodes.find((n) => n.id === id)?.parent;
 // next. The state words are the page's strings.layout, by kind (UiFragment, #209)
 // A state is picked with `state`, never written as a row's value (#209: GreenSwift wrote 已完成 and
 // 進行中 as values, so they showed without the component's words and colour cue)
-const STATE_WORDS = new Set(['已啟用', '未啟用', '故障', '已完成', '略過', '下一步', '進行中', '未開始']);
+// 進行中 and 未開始 aren't strings the component uses, but were written as values once
+const STATE_WORDS = new Set([
+  ...[zhTW, en, vi].flatMap(({ layout: w }) => [w.on, w.off, w.down, w.done, w.skip, w.next]),
+  '進行中',
+  '未開始',
+]);
 const fragmentRow = <const S extends readonly [string, ...string[]]>(states: S) =>
   z.strictObject({
     label: text,
