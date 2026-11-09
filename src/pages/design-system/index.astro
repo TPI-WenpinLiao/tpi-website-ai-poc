@@ -576,6 +576,7 @@ const description =
           <h3>IndexList</h3>
           <IndexList
             level={4}
+            weight="secondary"
             items={[
               { title: '有縮圖的項目', body: '一句說明', href: `#components-${tone}`, image: coverIntegration, date: '2026-11-03' },
               { title: '沒有縮圖的項目', href: `#components-${tone}` },
@@ -585,13 +586,14 @@ const description =
           <IndexList
             level={4}
             columns={2}
+            weight="secondary"
             items={[
               { title: '第一項', body: '一句說明', href: `#components-${tone}` },
               { title: '第二項', body: '一句說明', href: `#components-${tone}` },
               { title: '第三項', href: `#components-${tone}` },
             ]}
           />
-          <p class="note"><code>weight</code> 設 primary：產品家族 hub 的產品索引，名稱用襯線、大一級；預設 secondary 的名稱比案例列的客戶名小一級（#226）</p>
+          <p class="note"><code>weight</code> 設 primary：產品家族 hub 的產品索引，名稱用襯線、大一級；secondary 的名稱比案例列的客戶名小一級（#226）；<code>weight</code> 必填，和上方 SectionHeading 同值</p>
           <IndexList
             level={4}
             columns={2}

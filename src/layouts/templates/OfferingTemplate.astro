@@ -278,7 +278,7 @@ const blog = localNode('blog', locale);
     team.length > 0 && (
       <Surface tone="light" id="team" class="anchor-target">
         <SectionHeading title={t.offering.team} />
-        <IndexList items={team.map((p) => ({ title: p.title, body: p.role, href: p.href }))} />
+        <IndexList weight="primary" items={team.map((p) => ({ title: p.title, body: p.role, href: p.href }))} />
       </Surface>
     )
   }
@@ -290,13 +290,14 @@ const blog = localNode('blog', locale);
           {related.length > 0 && (
             <div id="related" class="anchor-target minor">
               <SectionHeading title={t.offering.related} weight="secondary" />
-              <IndexList items={related} />
+              <IndexList weight="secondary" items={related} />
             </div>
           )}
           {hasDownloads && (
             <div id="downloads" class="anchor-target minor">
               <SectionHeading title={t.offering.downloads} weight="secondary" />
               <IndexList
+                weight="secondary"
                 items={[...whitepapers.map((w) => ({ title: w.title, href: w.href, image: w.cover })), ...downloads.map((d) => ({ title: d.label, href: d.file }))]}
               />
             </div>
@@ -326,7 +327,7 @@ const blog = localNode('blog', locale);
               {blog.title}
             </Button>
           </SectionHeading>
-          <IndexList items={posts.map((p) => ({ title: p.title, href: p.href, image: p.image?.src, date: p.date }))} />
+          <IndexList weight="secondary" items={posts.map((p) => ({ title: p.title, href: p.href, image: p.image?.src, date: p.date }))} />
         </div>
       </Surface>
     )

@@ -193,7 +193,7 @@ const jsonLd = hubJsonLd({
     industryOfferings.length > 0 && (
       <Surface tone="light">
         <SectionHeading title={localNode('products', locale).title} weight="secondary" />
-        <IndexList items={industryOfferings} />
+        <IndexList weight="secondary" items={industryOfferings} />
       </Surface>
     )
   }
@@ -211,7 +211,7 @@ const jsonLd = hubJsonLd({
     whitepapers.length > 0 && (
       <Surface tone="light">
         <SectionHeading title={t.hub.whitepapers} weight="secondary" />
-        <IndexList items={whitepapers} />
+        <IndexList weight="secondary" items={whitepapers} />
       </Surface>
     )
   }
@@ -239,7 +239,7 @@ const jsonLd = hubJsonLd({
     posts.length > 0 && (
       <Surface tone="light">
         <SectionHeading title={t.relatedPosts} weight="secondary" />
-        <IndexList items={posts.map((p) => ({ title: p.title, href: p.href, image: p.image?.src, date: p.date }))} />
+        <IndexList weight="secondary" items={posts.map((p) => ({ title: p.title, href: p.href, image: p.image?.src, date: p.date }))} />
       </Surface>
     )
   }
