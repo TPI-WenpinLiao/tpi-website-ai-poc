@@ -5,16 +5,13 @@
 // with a fragment of the work beside it (the `fragment` slot of the first row, or each row's own
 // `fragment` given as a UiFragment props object).
 // A result without a fact is left out, never written in. `more` is the link to the full list.
+import type { ComponentProps } from 'astro/types';
 import UiFragment from './UiFragment.astro';
 import Link from './Link.astro';
 import { quantities } from '../../lib/content/emphasis';
 
-interface Fragment {
-  title: string;
-  tabs?: readonly string[] | undefined;
-  rows: readonly { label: string; value?: string | undefined; state?: 'on' | 'off' | 'down' | 'next' | undefined }[];
-  note?: string | undefined;
-}
+type Fragment = DistributiveOmit<ComponentProps<typeof UiFragment>, 'words'>;
+type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 
 interface Item {
   // The client or, in the results layout, the work's name
@@ -33,7 +30,7 @@ interface Props {
   level?: 3 | 4;
   more?: { label: string; href: string } | undefined;
   // The fragments' words: the 示意 mark and the state names (strings.layout)
-  words: { mark: string; on: string; off: string; down: string };
+  words: ComponentProps<typeof UiFragment>['words'];
   // The first row larger (cases); the results layout keeps every row the same
   lead?: boolean;
   // Cases: the row's heading is its link on two lines, the client (title) in the bold serif, then the

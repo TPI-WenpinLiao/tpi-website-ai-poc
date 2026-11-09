@@ -92,6 +92,7 @@ sections:
       node: contact
     fragment:
       title: 導入後健檢
+      kind: steps
       rows:
         - label: AI大腦健檢優化
           state: "on"

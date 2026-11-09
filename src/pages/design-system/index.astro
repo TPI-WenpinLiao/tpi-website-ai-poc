@@ -45,6 +45,7 @@ import VideoFacade from '../../components/ui/VideoFacade.astro';
 import SearchResults from '../../components/ui/SearchResults.astro';
 import ConsentBanner, { type ConsentCategory, type ConsentCopy } from '../../components/ui/ConsentBanner.astro';
 import { Image } from 'astro:assets';
+import { strings } from '../../data/strings';
 import tokensCss from '../../styles/tokens.css?raw';
 import { parseSurfaces, resolveColor, checkPairs, contrastRatio, PAIRS } from '../../../scripts/design/contrast.mjs';
 import { groupTokens, tokenNames, type Group } from '../../../scripts/design/token-groups.mjs';
@@ -60,6 +61,8 @@ import coverIntegration from '../../assets/design/cover-integration.webp';
 import coverData from '../../assets/design/cover-data.webp';
 import coverSecurity from '../../assets/design/cover-security.webp';
 
+// The interface fragments' words (示意 and the state names), as a zh-TW page passes them
+const layoutWords = strings('zh-TW').layout;
 const surfaces = parseSurfaces(tokensCss);
 const light = surfaces[0].tokens;
 const { groups } = groupTokens(tokenNames(tokensCss));
@@ -511,15 +514,28 @@ const description =
           <div class="demo">
             <UiFragment
               title="面板名稱"
-              words={{ mark: '示意', on: '已啟用', off: '未啟用', down: '故障' }}
+              words={layoutWords}
               tabs={['分頁一', '分頁二']}
               rows={[
                 { label: '設定項目（on）', state: 'on' },
                 { label: '設定項目（off）', state: 'off' },
                 { label: '故障的項目（down）', state: 'down' },
-                { label: '下一個狀態（next）', state: 'next' },
+                { label: '設定值', value: '事實原文' },
               ]}
-              note="片段只畫事實寫得出的名稱與狀態。"
+              note="設定面板（預設的 kind: settings）：狀態寫已啟用、未啟用、故障。"
+            />
+          </div>
+          <div class="demo">
+            <UiFragment
+              title="流程名稱"
+              kind="steps"
+              words={layoutWords}
+              rows={[
+                { label: '做完的步驟（on）', state: 'on' },
+                { label: '略過的步驟（off）', state: 'off' },
+                { label: '下一步（next）', state: 'next' },
+              ]}
+              note="流程步驟（kind: steps）：狀態寫已完成、略過、下一步。"
             />
           </div>
 
@@ -547,7 +563,7 @@ const description =
 
           <h3>CaseList</h3>
           <CaseList
-            words={{ mark: '示意', on: '已啟用', off: '未啟用', down: '故障' }}
+            words={layoutWords}
             more={{ label: '看所有成功案例', href: `#components-${tone}` }}
             linkHeading
             items={[

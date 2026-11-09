@@ -96,13 +96,16 @@ const parentOf = (id: string) => nodes.find((n) => n.id === id)?.parent;
 // section is wording (headings, bodies, labels) or a fact text verbatim (items, rows, results); the
 // facts are listed in the entry's `facts` and checked by scripts/strategy/facts.mjs.
 // An interface fragment (UiFragment): a panel drawn in HTML and marked 示意, naming only what the
-// facts name (features, settings, states), never sample data (counts, times, curves, client lists)
-const uiFragment = z.strictObject({
-  title: text,
-  tabs: z.array(text).optional(),
-  rows: z.array(z.strictObject({ label: text, value: text.optional(), state: z.enum(['on', 'off', 'down', 'next']).optional() })).min(1),
-  note: text.optional(),
-});
+// facts name (features, settings, states), never sample data (counts, times, curves, client lists).
+// A settings panel's rows are on, off or down; a flow of steps' rows are on (done), off (skipped) or
+// next. The state words are the page's strings.layout, by kind (UiFragment, #209)
+const fragmentRow = <const S extends readonly [string, ...string[]]>(states: S) =>
+  z.strictObject({ label: text, value: text.optional(), state: z.enum(states).optional() });
+const fragmentCommon = { title: text, tabs: z.array(text).optional(), note: text.optional() };
+const uiFragment = z.union([
+  z.strictObject({ ...fragmentCommon, kind: z.literal('settings').optional(), rows: z.array(fragmentRow(['on', 'off', 'down'])).min(1) }),
+  z.strictObject({ ...fragmentCommon, kind: z.literal('steps'), rows: z.array(fragmentRow(['on', 'off', 'next'])).min(1) }),
+]);
 // A junction diagram (JunctionDiagram): existing systems, the product in the middle, what it opens
 // up; a node can be marked down (failover) or standby
 const diagram = z.strictObject({

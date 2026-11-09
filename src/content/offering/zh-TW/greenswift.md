@@ -181,6 +181,7 @@ sections:
       - body: "你可以直接在 GreenSwift 上透過 Gmail 登入進行試用。試用期間可使用系統所有功能，惟下載報告書時會有浮水印。"
     fragment:
       title: 試用申請
+      kind: steps
       rows:
         - label: 註冊
           state: "on"

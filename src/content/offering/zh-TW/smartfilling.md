@@ -35,6 +35,7 @@ sections:
         result: "以 AI 取代傳統二登流程，節省將近 52% 委外成本，於三校時反饋系統再學習訓練模型，不但讓辨識資訊無縫介接內部系統，更有效降低維運人力約 45%。"
         fragment:
           title: 辨識結果介接內部系統
+          kind: steps
           rows:
             - label: 二登流程
               state: "off"
@@ -100,6 +101,7 @@ sections:
     body: 文件換了樣式，企業可以自己再訓練模型；系統會自動增加訓練資料，模擬不同情境的影像。
     fragment:
       title: 模型再訓練
+      kind: steps
       rows:
         - label: 自動增加訓練資料
           state: "on"

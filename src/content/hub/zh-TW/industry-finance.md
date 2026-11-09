@@ -98,6 +98,7 @@ sections:
           node: smartclaim
         fragment:
           title: 理賠案件
+          kind: steps
           rows:
             - label: 立案
               state: "on"
@@ -113,6 +114,7 @@ sections:
           node: smartfilling
         fragment:
           title: 文件辨識
+          kind: steps
           rows:
             - label: 辨識資訊
               state: "on"
