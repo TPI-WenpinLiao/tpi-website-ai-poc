@@ -6,7 +6,7 @@
 // Light paper throughout (ribbon-route, #167): no 3D scene on offering pages (ADR 0003「ribbon-route」).
 // An entry with `sections` is laid out by its brief, section by section (#187, PageSections); other
 // entries keep the older fields: features and use cases as claims with their facts (FactRow). Cases
-// are rows (CaseList), related offerings, downloads and posts are index rows (IndexList); no cards.
+// are rows (CaseList), after the sections or before the one `casesBefore` names (#226); related offerings, downloads and posts are index rows (IndexList); no cards.
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
@@ -54,6 +54,9 @@ const title = data.seoTitle ?? data.title;
 const ctaLabel = data.cta === 'demo' ? t.offering.demo : contactAction(locale);
 
 const sections = data.sections ?? [];
+// The cases sit after every section, or before the one `casesBefore` names (#226: the brief's order)
+const casesAt = data.casesBefore ? sections.findIndex((sec) => sec.id === data.casesBefore) : sections.length;
+const sectionsAfterCases = sections.slice(casesAt);
 const heroPoints = (data.heroPoints ?? []).map((p) => (typeof p === 'string' ? { text: p } : p));
 // An entry without a hero picture shows its product family's (the family hub's heroImage, #187), so
 // the first screen of every product page has a picture without each entry naming one
@@ -153,11 +156,13 @@ const hasDownloads = whitepapers.length + downloads.length > 0;
 // offerings take the three-column card grid
 const split = related.length > 0 && hasDownloads;
 
+const sectionAnchors = (list: typeof sections) => list.flatMap((sec) => (sec.id ? [{ href: `#${sec.id}`, label: sec.heading, show: true }] : []));
 const anchors = [
   { href: '#features', label: t.offering.features, show: features.length > 0 },
   { href: '#use-cases', label: useCasesTitle, show: useCases.length > 0 },
-  ...sections.flatMap((sec) => (sec.id ? [{ href: `#${sec.id}`, label: sec.heading, show: true }] : [])),
+  ...sectionAnchors(sections.slice(0, casesAt)),
   { href: '#cases', label: successStories.title, show: caseRows.length > 0 },
+  ...sectionAnchors(sectionsAfterCases),
   { href: '#team', label: t.offering.team, show: team.length > 0 },
   { href: '#related', label: t.offering.related, show: related.length > 0 },
   { href: '#downloads', label: t.offering.downloads, show: hasDownloads },
@@ -217,7 +222,7 @@ const blog = localNode('blog', locale);
     }
   </PageHero>
 
-  <PageSections sections={sections} locale={locale} />
+  <PageSections sections={sections.slice(0, casesAt)} locale={locale} />
 
   {
     blocks.map((block) =>
@@ -266,6 +271,8 @@ const blog = localNode('blog', locale);
       </Surface>
     )
   }
+
+  {sectionsAfterCases.length > 0 && <PageSections sections={sectionsAfterCases} locale={locale} />}
 
   {
     team.length > 0 && (

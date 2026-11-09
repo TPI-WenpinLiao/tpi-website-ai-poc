@@ -193,6 +193,7 @@ sections:
       label: 申請試用
       href: https://greenswift.tpisoftware.com/website/esg/ui
 # brief 第 8 段: the one named client, told in news 580; no result in the fact library, so no result row
+casesBefore: trial
 caseNotes:
   - client: "和鼎隆建築"
     news: zh-TW/580

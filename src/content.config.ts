@@ -278,6 +278,9 @@ const offering = defineCollection({
         // text about it; the facts are listed in `facts`
         casesIntro: text.optional(),
         caseNotes,
+        // The cases go before the section with this `id` instead of after every section, when the
+        // brief puts them earlier (#226: GreenSwift's cases before its trial)
+        casesBefore: z.string().regex(SLUG).optional(),
         relatedPosts: z.array(ref('blog')).optional(),
         downloads: z.array(z.strictObject({ label: text, file: text })).optional(),
       })
@@ -286,6 +289,9 @@ const offering = defineCollection({
         const cta = data.secondaryCta;
         if (cta && 'href' in cta && !data.sections?.some((s) => `#${s.id}` === cta.href)) {
           ctx.addIssue({ code: 'custom', path: ['secondaryCta', 'href'], message: `no section has the id of ${cta.href}` });
+        }
+        if (data.casesBefore && !data.sections?.some((s) => s.id === data.casesBefore)) {
+          ctx.addIssue({ code: 'custom', path: ['casesBefore'], message: `no section has the id ${data.casesBefore}` });
         }
       }),
 });

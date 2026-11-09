@@ -69,6 +69,8 @@ const childPages = children(self.id, locale)
   });
 const omitted = new Set(data.omitParts);
 const parts = childPages.filter((n) => !linkedInSections.has(n.id) && !omitted.has(n.id));
+// The sub-pages are the page's main entry until it is laid out by sections, which then lead (#226)
+const partsWeight = sections.length ? 'secondary' : 'primary';
 // Industry hubs: the offerings whose use cases name the industry, in nodes.csv order
 const industryOfferings =
   data.industry && !sections.length
@@ -199,8 +201,8 @@ const jsonLd = hubJsonLd({
   {
     parts.length > 0 && (
       <Surface tone="light">
-        <SectionHeading title={data.partsTitle ?? t.hub.parts} weight={sections.length ? 'secondary' : 'primary'} />
-        <IndexList items={parts.map((p) => ({ title: p.title, href: p.href, body: p.description }))} />
+        <SectionHeading title={data.partsTitle ?? t.hub.parts} weight={partsWeight} />
+        <IndexList weight={partsWeight} items={parts.map((p) => ({ title: p.title, href: p.href, body: p.description }))} />
       </Surface>
     )
   }

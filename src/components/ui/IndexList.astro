@@ -1,12 +1,14 @@
 ---
 // A list of pages the section leads on to (#187, design-principles.md「內頁的版型」索引列): one row a
-// page, its name in the bold serif at --font-size-text, a line and an optional small picture; no
-// frame. The name is a link in the link colour, underlined, like CaseList's titles (#211); the whole
-// row is clickable through it. The picture is a fixed --thumb-width, never as wide as the column, so
-// a post's cover doesn't outweigh the rows above it (#211). `columns={2}` sets the rows in two
-// columns on wide screens (PageSections' index sections). Related posts, sub-pages and related
-// offerings use it under a SectionHeading with weight="secondary"; a family hub's product index under
-// a primary one. The rows repeat other pages' titles, so the site search leaves them out.
+// page, its name, a line and an optional small picture; no frame. The name is a link in the link
+// colour, underlined (#211); the whole row is clickable through it. Its size follows the section's
+// weight (#226): a primary index (a family hub's product index) sets the name in the bold serif at
+// --font-size-text; a secondary one (related posts, sub-pages, related offerings, the rows at a
+// section's end) a step smaller, --font-size-base in the semibold sans, like CaseList's case titles,
+// so a case's client stays the larger name on the page. The picture is a fixed --thumb-width,
+// never as wide as the column, so a post's cover doesn't outweigh the rows above it (#211). `columns={2}` sets the rows in two
+// columns on wide screens (PageSections' index sections). Pass the same `weight` as the
+// SectionHeading above it. The rows repeat other pages' titles, so the site search leaves them out.
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 
@@ -23,9 +25,11 @@ interface Props {
   items: readonly Item[];
   level?: 3 | 4;
   columns?: 1 | 2;
+  // The section's weight, as its SectionHeading's (#226)
+  weight?: 'primary' | 'secondary';
 }
 
-const { items, level = 3, columns = 1 } = Astro.props;
+const { items, level = 3, columns = 1, weight = 'secondary' } = Astro.props;
 const Heading = `h${level}` as const;
 ---
 
@@ -35,7 +39,7 @@ const Heading = `h${level}` as const;
       <li class:list={['row', { 'has-image': i.image }]}>
         {i.image && <Image class="thumb" src={i.image} widths={[120, 240]} sizes="7.5rem" alt="" />}
         <div class="text">
-          <Heading class="name serif">
+          <Heading class:list={['name', { primary: weight === 'primary' }]}>
             <a href={i.href}>{i.title}</a>
           </Heading>
           {i.body && <p class="body">{i.body}</p>}
@@ -83,10 +87,19 @@ const Heading = `h${level}` as const;
     gap: var(--space-1);
   }
 
+  /* A secondary name: the sans a step under a case's client (#226); headings are serif by default */
   .name {
     margin: 0;
-    font-size: var(--font-size-text);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-snug);
+  }
+
+  .name.primary {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-text);
+    font-weight: var(--font-weight-bold);
   }
 
   .name a {

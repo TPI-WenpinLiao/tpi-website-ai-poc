@@ -591,6 +591,16 @@ const description =
               { title: '第三項', href: `#components-${tone}` },
             ]}
           />
+          <p class="note"><code>weight</code> 設 primary：產品家族 hub 的產品索引，名稱用襯線、大一級；預設 secondary 的名稱比案例列的客戶名小一級（#226）</p>
+          <IndexList
+            level={4}
+            columns={2}
+            weight="primary"
+            items={[
+              { title: '主要段落的第一項', body: '一句說明', href: `#components-${tone}` },
+              { title: '主要段落的第二項', body: '一句說明', href: `#components-${tone}` },
+            ]}
+          />
 
           <h3>MapPicture</h3>
           <div class="demo">

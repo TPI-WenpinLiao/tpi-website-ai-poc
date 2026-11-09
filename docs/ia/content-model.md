@@ -110,6 +110,7 @@ sourceUrl: []
 | `relatedCaseStudies` | `ref(case-study)[]` | 否 | 精選案例與排序。留空時由 `case-study.offerings` 反查；關聯以 `case-study.offerings` 為準，這裡只列其中的項目 | — |
 | `casesIntro` | `string` | 否 | 成功案例區塊標題下的一句：點名案例的表述，加上該案例的事實原文，事實要列進 `facts`（#183）；有 `caseNotes` 時不輸出 | — |
 | `caseNotes` | `{ client?: string; work?: string; result?: string; award?: string; caseStudy?: ref(case-study); news?: ref(news); fragment?: 介面片段 }[]` | 否 | 案例列（#187）：客戶、作業、成果、獎項都是事實原文，`caseStudy` 有就連到案例內頁；沒有案例頁、只有新聞的案例用 `news`（#202），兩者只能填一個。錨點與 heading 是同一個 `<a>`，分兩行：`client`，以及案例檔或新聞的 `title`（`design-principles.md`「案例列」，#210）。有填時取代反查出來的案例 | — |
+| `casesBefore` | `string` | 否 | 案例區塊改放在 `sections` 裡這個 `id` 的段落之前（#226：GreenSwift 照 brief 把案例排在試用之前）；沒填時排在所有段落之後。沒有這個 `id` 的段落時 build 失敗 | — |
 | `relatedPosts` | `ref(blog)[]` | 否 | 精選文章與排序。留空時由 `blog.relatedOfferings` 反查；關聯以 `blog.relatedOfferings` 為準，這裡只列其中的項目 | — |
 | `downloads` | `{ label: string; file: string }[]` | 否 | 下載檔（例如 `digirunner-aws-guide` 的 PDF），也是 `download` 中繼頁的資料來源。白皮書不列在這裡，由 `whitepaper.offeringNode` 反查 | 現站下載按鈕 |
 
