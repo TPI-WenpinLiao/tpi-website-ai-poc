@@ -212,7 +212,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
         return (
           <Surface {...surface}>
             {/* The heading across the top, the rows in two columns below on wide screens, so neither side
-                is left empty; a primary index differs only in its heading's weight (#211) */}
+                is left empty (#211); a primary index sets its heading and its rows' names a step larger (#226) */}
             <div class="index">
               <SectionHeading title={sec.heading} description={sec.body} weight={sec.weight ?? 'secondary'} />
               <IndexList
