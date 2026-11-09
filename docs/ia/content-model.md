@@ -196,7 +196,7 @@ JSON-LD：`CollectionPage`，`name` ← `title`、`description` ← `description
 |---|---|---|
 | `claim` | 主張與原文（`FactRow`） | `items`：`{ title?; body; node? }`，`body` 是事實原文；`node` 的連結掛在 `title` 上，有 `node` 就要有 `title`（schema 擋下）。`junction`、`ui`、`band` 的 `items` 同一個型別 |
 | `junction` | 接點圖（`JunctionDiagram`） | `diagram`：三欄 `{ title; tone: legacy\|product\|new; nodes: { label; state?: down\|standby }[] }` 與 `caption`；`items`；`rows`（規格表的列） |
-| `ui` | 介面片段（`UiFragment`） | `fragment`：`{ title; tabs?; rows: { label; value?; state?: on\|off\|down\|next }[]; note? }`，只寫事實寫得出的名稱與狀態；`items`；`flip` 左右對調；`itemsBelow` 把事實排到片段與主張下方兩欄（#200）；`index` 接索引列 |
+| `ui` | 介面片段（`UiFragment`） | `fragment`：`{ title; kind?: settings\|steps; tabs?; rows: { label; value?; state? }[]; note? }`，只寫事實寫得出的名稱與狀態；`kind` 預設 `settings`（`state` 收 on\|off\|down），流程片段寫 `steps`（收 on\|off\|next），狀態詞由 `UiFragment` 輸出（#209）；`items`；`flip` 左右對調；`itemsBelow` 把事實排到片段與主張下方兩欄（#200）；`index` 接索引列 |
 | `spec` | 規格表、對應表（`SpecTable`） | `rows`：`{ label; values: string[]; link? }`，有 `link` 時是對應表；`compare`：`{ label; values: [string, string] }`，兩樣東西並排比較（#200），它是表頭列，每列的兩個值各佔一格，不能有 `link`；`items` 是表格上方的事實，`record` 是表格下方收尾的一則事實（#200） |
 | `timeline` | 時間列（`Timeline`），可接對應表 | `intro`；`steps`：`{ year; body }`；`rows` |
 | `results` | 成果（`CaseList`） | `items`：`{ title; sub?; result; client?; link?; fragment? }`；`record` 段末一列紀錄 |

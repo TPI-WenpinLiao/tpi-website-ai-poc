@@ -36,6 +36,7 @@ sections:
         result: "全自動執行理賠立案到派件，精確解析診斷書，節省逾80%​人工作業時間"
         fragment:
           title: 理賠案件
+          kind: steps
           rows:
             - label: 立案
               state: "on"
@@ -78,6 +79,7 @@ sections:
     body: 各醫院的診斷書與單據格式不同。昕力自己研發的 NLP 先解析語意與敘述情境，再把內容填進對應的欄位。
     fragment:
       title: 文件解析
+      kind: steps
       tabs:
         - 診斷書
         - 單據
@@ -110,6 +112,7 @@ sections:
     body: 各醫院的收據與發票格式不一。AI 進化系統讓企業自己再訓練模型，維持辨識的準確率。
     fragment:
       title: AI 進化系統
+      kind: steps
       tabs:
         - 收據
         - 發票

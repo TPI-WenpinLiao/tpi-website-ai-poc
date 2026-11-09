@@ -7,6 +7,9 @@ import { parse } from 'yaml';
 import { frontmatterDateErrors } from '../scripts/content/dates.mjs';
 import { LOCALES } from './lib/i18n/locales';
 import { nodeIds, nodes } from './lib/ia/nodes';
+import { strings as zhTW } from './data/strings/zh-TW';
+import { strings as en } from './data/strings/en';
+import { strings as vi } from './data/strings/vi';
 
 const INDUSTRIES = ['finance', 'government', 'manufacturing'] as const;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -96,13 +99,28 @@ const parentOf = (id: string) => nodes.find((n) => n.id === id)?.parent;
 // section is wording (headings, bodies, labels) or a fact text verbatim (items, rows, results); the
 // facts are listed in the entry's `facts` and checked by scripts/strategy/facts.mjs.
 // An interface fragment (UiFragment): a panel drawn in HTML and marked 示意, naming only what the
-// facts name (features, settings, states), never sample data (counts, times, curves, client lists)
-const uiFragment = z.strictObject({
-  title: text,
-  tabs: z.array(text).optional(),
-  rows: z.array(z.strictObject({ label: text, value: text.optional(), state: z.enum(['on', 'off', 'down', 'next']).optional() })).min(1),
-  note: text.optional(),
-});
+// facts name (features, settings, states), never sample data (counts, times, curves, client lists).
+// A settings panel's rows are on, off or down; a flow of steps' rows are on (done), off (skipped) or
+// next. The state words are the page's strings.layout, by kind (UiFragment, #209)
+// A state is picked with `state`, never written as a row's value (#209: GreenSwift wrote 已完成 and
+// 進行中 as values, so they showed without the component's words and colour cue)
+// 進行中 and 未開始 aren't strings the component uses, but were written as values once
+const STATE_WORDS = new Set([
+  ...[zhTW, en, vi].flatMap(({ layout: w }) => [w.on, w.off, w.down, w.done, w.skip, w.next]),
+  '進行中',
+  '未開始',
+]);
+const fragmentRow = <const S extends readonly [string, ...string[]]>(states: S) =>
+  z.strictObject({
+    label: text,
+    value: text.refine((v) => !STATE_WORDS.has(v.trim()), { message: 'a state goes in `state`, not in `value`' }).optional(),
+    state: z.enum(states).optional(),
+  });
+const fragmentCommon = { title: text, tabs: z.array(text).optional(), note: text.optional() };
+const uiFragment = z.union([
+  z.strictObject({ ...fragmentCommon, kind: z.literal('settings').optional(), rows: z.array(fragmentRow(['on', 'off', 'down'])).min(1) }),
+  z.strictObject({ ...fragmentCommon, kind: z.literal('steps'), rows: z.array(fragmentRow(['on', 'off', 'next'])).min(1) }),
+]);
 // A junction diagram (JunctionDiagram): existing systems, the product in the middle, what it opens
 // up; a node can be marked down (failover) or standby
 const diagram = z.strictObject({

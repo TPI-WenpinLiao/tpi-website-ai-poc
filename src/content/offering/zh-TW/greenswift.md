@@ -65,19 +65,17 @@ sections:
     body: 系統照六個步驟帶著做，兩種標準可以切換，係數會跟著 IPCC 更新，不必自己查表。
     fragment:
       title: 盤查流程
+      kind: steps
       rows:
         - label: 盤查計畫
-          value: 已完成
+          state: "on"
         - label: 組織邊界
-          value: 已完成
+          state: "on"
         - label: 排放源鑑別
-          value: 進行中
+          state: next
         - label: 排放量計算
-          value: 未開始
         - label: 盤查報告
-          value: 未開始
         - label: 查證作業
-          value: 未開始
         - label: 標準
           value: GHG Protocol／ISO 14064-1:2018
     items:
@@ -181,6 +179,7 @@ sections:
       - body: "你可以直接在 GreenSwift 上透過 Gmail 登入進行試用。試用期間可使用系統所有功能，惟下載報告書時會有浮水印。"
     fragment:
       title: 試用申請
+      kind: steps
       rows:
         - label: 註冊
           state: "on"

@@ -46,7 +46,7 @@ sections:
         - label: 支援雲地靈活部署架構
           state: "on"
         - label: MCP 擴充應用
-          state: next
+          state: "on"
     items:
       - body: "應用場景：\n企業知識查詢\n專業分析\n流程自動化\n智慧決策輔助"
       - title: "MCP 擴充應用"
@@ -162,7 +162,7 @@ sections:
         - label: 設定 Token 用量上限
           state: "on"
         - label: 依據任務複雜度自動分派模型與 Agent
-          state: next
+          state: "on"
     link:
       label: 預約演示
       node: contact
