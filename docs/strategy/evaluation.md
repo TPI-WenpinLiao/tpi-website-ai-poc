@@ -528,7 +528,7 @@ GreenSwift 的設計平均比基準低 0.5，和 #210 有關的只有 D3：只�
 
 | 缺口 | 文件 | 出現在 |
 |---|---|---|
-| 只有一則、沒有成果的案例列，在索引列名稱與客戶名同字級、索引列名稱又用連結色加底線時，怎麼做到「份量不低於相關文章」；段末索引列的名稱壓過同段的具名案例 | `design-principles.md`「案例列」「索引列」 | GreenSwift、金融 |
+| 只有一則、沒有成果的案例列，在索引列名稱與客戶名同字級、索引列名稱又用連結色加底線時，怎麼做到「份量不低於相關文章」；段末索引列的名稱壓過同段的具名案例（#226 已處理，見下方「索引列名稱與案例列（#226）」） | `design-principles.md`「案例列」「索引列」 | GreenSwift、金融 |
 | 文章封面算不算在 P3 的禁令內（擬人機器人、發光的 3D 圖） | `design-principles.md` P3、「索引列」 | digiRunner |
 | 家族頁 hero 的次要連結：原則（#213）要有，brief 第 1 段只寫一個動作 | `design-principles.md`「hub：產品家族頁」、`briefs/digilism.md` | DigiLism |
 | 斷詞表沒收的標題怎麼處理；內文最後一行只剩一字由哪個元件負責（#225 已處理，見下方「斷行（#225）」） | `design-principles.md`「斷行」 | DigiLism、GreenSwift、金融 |
@@ -600,8 +600,39 @@ digiRunner 的平均比 #211 低 0.2，扣分都和片段的狀態無關，本�
 | 段落圖是白底，規格表段墊淺灰，兩者一起照做會出現白色方框 | `design-principles.md`「內頁共用的規則」段落圖 | 金融 |
 | hero 圖的標籤：brief 只用 `fact:greenswift-scope` 的詞，原則要求左標資料來源、右標產出 | `briefs/greenswift.md` 第 1 段、`design-principles.md`「offering：沒有既有系統可畫的產品頁」 | GreenSwift |
 | 頁內導覽「位置在 hero 下方」和 `InPageNav` 的 `stick="header"` | `design-principles.md`「內頁共用的規則」頁內導覽、`design-system` 元件表 | GreenSwift |
-| 案例與試用的段落順序：brief 案例在前，「沒有既有系統可畫的產品頁」照 digiRunner 是試用在前 | `briefs/greenswift.md`、`design-principles.md`「offering：digiRunner 產品頁」 | GreenSwift |
+| 案例與試用的段落順序：brief 案例在前，「沒有既有系統可畫的產品頁」照 digiRunner 是試用在前（#226 已處理） | `briefs/greenswift.md`、`design-principles.md`「offering：digiRunner 產品頁」 | GreenSwift |
 | 案例列只有第一則配片段時，1280 寬其餘各列的右半邊（#225 已列） | `design-principles.md`「案例列」 | digiRunner、金融 |
+
+## 索引列名稱與案例列（#226）
+
+`IndexList` 的名稱跟段落分級（次要段落降到 `--font-size-base` 的無襯線半粗，產品家族 hub 的產品索引維持 `--font-size-text` 的襯線粗體），GreenSwift 的案例照 brief 排在試用之前（offering 的 `casesBefore`）之後，GreenSwift 與金融各由新的 `reviewer` 只評設計 rubric，確認 #226 的驗收：評審不再指出索引列比案例重，D3 不低於 #211 的 4。和 #210–#209 一樣是共用元件的確認，摘要在 PR #230 的 body，不另存評審檔、不進上方的分數表，也不套「門檻附近加評」。
+
+### 方法
+
+- rubric 與 prompt 同 #209，只評設計。素材由 `node scripts/strategy/eval-shots.mjs --new dist --only new --group b226 --pages greenswift=/products/greenswift,finance=/industries/finance --work <scratchpad>` 產生（head `960c7cb`），截圖不進版控
+- 比較基準：兩頁都是「介面片段的狀態（#209）」。驗收看的 D3 門檻是 #211 的 4（issue 驗收）；GreenSwift 在 #209 的 D3 是 3
+
+### 結果
+
+| 頁面 | 基準 | #226 | 驗收項 |
+|---|---|---|---|
+| 金融 | 4.2（D3 4） | 4.2 | D3 4 |
+| GreenSwift | 3.8（D3 3） | 3.8 | D3 4 |
+
+兩位評審都沒有再指出索引列比案例重。金融的評審寫「第 6 段末的索引列名稱是 base 字級的無襯線，比案例的客戶名小，沒有壓過保險案例」；GreenSwift 的評審寫「案例排在試用之前，不會被相關文章壓過；和鼎隆建築的襯線粗體比相關文章的標題大」，D2 的符合項也列了「案例列排在試用色帶之前」「相關文章標題用次要字級」。
+
+GreenSwift 的 D3 仍扣在「成功案例」h2 用主要段落的字級、下面只有一行客戶名和一行連結，以及 8 個事實段的 h2 同級；這是段落標題的分級，不是索引列與案例列的份量（#209「評審依據不足」第 1 列的同類）。兩頁其他扣分在本次之前就有：GreenSwift 第 5、7 段片段旁的空白（`PageSections` 的「超過 3 則」和原則的條件不同）、hero 圖只有一個標籤、頁內導覽位置，金融第 3 段事實的排法、第 6 段兩個產品的事實交錯、案例列只有第一則配片段時的右半空白。
+
+### 評審依據不足
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| 只有一則案例的段落，h2 用主要段落的字級，下面只有兩行，讀起來像大標下的註腳 | `design-principles.md`「段落標題」「案例列」 | GreenSwift |
+| 一段裡有兩個產品的事實時，照產品分組還是照列排；「具名案例放片段旁」和「超過 4 則排到下方」（#211 已列） | `design-principles.md`「hub：金融產業頁」第 6 段、「內頁的版型」介面片段 | 金融 |
+| 375 寬「螢幕高」沒有定義 px；成果版型每則各配片段，和「375 寬片段只留主要的一塊」衝突 | `design-principles.md`「hub：金融產業頁」、「內頁共用的規則」 | 金融 |
+| 接點圖寫「SVG 架構圖」，HTML 的三欄色塊圖算不算 | `design-principles.md`「內頁的版型」接點圖 | GreenSwift |
+
+hero 標籤、頁內導覽位置、片段事實排到下方的條件、案例列右欄，在 #225、#209 已列，不重複。
 
 ## 限制
 

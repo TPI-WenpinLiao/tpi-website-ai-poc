@@ -169,13 +169,14 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 索引列與頁內導覽的版面完成（#211，`design-approved`）：`IndexList` 名稱改連結色加底線、縮圖固定 120×80（`--thumb-width`）、`columns` 兩欄；`PageSections` 的 index 段落改成標題在上、列項目兩欄，schema 加 `weight`，DigiLism 產品索引為 primary；`InPageNav` 不畫原生捲軸，還有項目的一側淡出，桌機加箭頭鈕，focus 的連結捲出淡出區。`design-principles.md`「索引列」「頁內導覽」、`design-system` 元件表同步。設計重評：digiRunner D2 4、金融 D2 3 → 4、DigiLism D3 3 → 4、GreenSwift D3 3 → 4（`evaluation.md`「索引列與頁內導覽（#211）」）
 - 內文最後一行不只剩一個字或標點完成（#225，`design-approved`）：內文設 `text-wrap: pretty`、`SectionHeading` 說明句照內文斷行、`FactText` 有超過 8 字項目的清單窄寬排一欄、`phrases.ts` 把斷詞表切成兩個單字的詞併回（虛詞不併）並套到 `.text-phrase` 與表格儲存格；`scripts/design/orphans.mjs` 擋下 zh-TW 頁的孤字（全站 0）；三頁重評 D2 不低於 #211（`evaluation.md`「斷行（#225）」）
 - 介面片段的狀態要有看得到的文字完成（#209，`design-approved`）：`UiFragment` 加 `kind`，設定面板寫已啟用、未啟用、故障，流程步驟寫已完成、略過、下一步，狀態是畫面上的字、色塊放在字前當色標；schema 依 `kind` 限制 `state`，也擋下把狀態詞寫進 `value`（GreenSwift 盤查流程改用 `kind: steps`）。規則寫進 `design-principles.md`「內頁共用的規則」影像，`/design-system` 與元件表同步。三頁設計重評 D2 不低於原分數（`evaluation.md`「介面片段的狀態（#209）」）
-- 索引列名稱與案例列的份量（#226），階段一，等待 design-approved
+- 索引列名稱與案例列的份量完成（#226，`design-approved`）：`IndexList` 加 `weight`，次要段落（相關文章、子頁、相關產品、下載、段末索引列）的名稱降到 `--font-size-base` 無襯線半粗、連結色加底線不變，產品家族 hub 的產品索引維持 `--font-size-text` 襯線粗體，案例列的客戶名因此比次要索引列大一級；offering 加 `casesBefore`，GreenSwift 照 brief 把案例排在試用之前。`design-principles.md`「索引列」「案例列」「offering：沒有既有系統可畫的產品頁」、`design-system` 元件表、`content-model.md` 同步。設計重評兩頁 D3 都是 4，評審不再指出索引列比案例重（`evaluation.md`「索引列名稱與案例列（#226）」）
 
 ## 下一步
 
 - `briefs/aiso.md` 第 3 段、`orient-ai.md` 第 1、5 段要求 h2 與說明句寫「金融與政府」，同段事實沒有政府，照 #214 的「表述的範圍詞要被同段事實撐住」撐不住；brief 與頁面要一起改，要做時另開 issue
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
 - `evaluation.md`「斷行（#225）」的「評審依據不足」（h2 含長標準名、片段事實排到下方的條件、案例列的右欄、時間列年份重複、段落圖跨頁沿用）還沒開 issue，要做時另開
+- `evaluation.md`「索引列名稱與案例列（#226）」的「評審依據不足」（單則案例段的 h2 字級、一段兩個產品的事實分組、375 寬螢幕高的定義與成果片段、HTML 接點圖）還沒開 issue，要做時另開
 - `evaluation.md`「介面片段的狀態（#209）」的「評審依據不足」（h2 字級分級、名稱裡的年份加粗、金融色帶的事實數與動作、段落圖的白底與淺灰段、GreenSwift hero 標籤、頁內導覽位置）還沒開 issue；案例與試用的順序由 #226 處理，要做時另開
 - #213 定案的規則和現有頁面不一致之處：先對照 #208–#212，沒有涵蓋的要做時另開。清單以 #213 的 PR「待確認問題」為準
 - `evaluation.md`「第一批（#200）」「第一批（#201）」「第一批（#202）」的「還不夠好的地方」與「評審依據不足」：共用元件的問題已開 #208–#212，規則文件的缺口由 #213–#215 補上（都已完成；各 issue 的內文列出它涵蓋哪幾項）。其餘還沒開 issue 的以 `evaluation.md` 那三節為準，要做時另開，開之前先對照 #208–#215 避免重複
