@@ -7,8 +7,10 @@
 // colour, not muted (design-principles.md P4, #208), and breaks like body copy (base.css's
 // text-wrap: pretty), not at phrases: keep-all left a long sentence no break but anywhere, down to a
 // lone 。 on its last line (design-principles.md「斷行」, #225).
-// `weight="secondary"` is for the minor sections (related posts, sub-pages, related offerings): the
-// heading drops to --font-size-text, so it weighs less than the cases and facts above it.
+// `weight="secondary"` is for the minor sections (related posts, related offerings, downloads, the
+// sub-pages of a page laid out by sections): the heading drops to --font-size-text, so it weighs less
+// than the cases and facts above it. A hub not laid out by sections leads with its sub-pages, so their
+// heading stays primary; an IndexList under a heading takes the same weight (#226).
 // The `action` slot puts links for the whole section (所有成功案例, 部落格) on the heading's row,
 // at its end on wide screens and below it when the row is too narrow.
 interface Props {
