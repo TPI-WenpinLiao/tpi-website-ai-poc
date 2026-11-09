@@ -63,7 +63,7 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
               <ul>
                 {group.children.map((c) => (
                   <li>
-                    <a href={c.href} aria-current={current(c.href)}>
+                    <a class="text-phrase" href={c.href} aria-current={current(c.href)}>
                       {c.label}
                       {c.external && <span class="sr-only">{t.externalSite}</span>}
                     </a>

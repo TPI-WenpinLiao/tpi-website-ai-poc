@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-11-08
+最後更新：2026-11-09
 
 ## 目前 milestone
 
@@ -167,6 +167,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 頁尾的分隔線與深紫連片完成（#212，`design-approved`）：`SiteFooter` 拿掉兩條細線，版權列用間距分開；footer 仍是深色 surface，底色改近黑 `--color-bg-deep`（`--ink-900`），和 `ContactCta` 的深紫帶分開，不算「全頁最多一條深紫帶」。`design-principles.md` 寫入規則並把 `SiteFooter` 補進衝突元件表，`contrast.mjs` 補 pair。試點三頁設計重評都沒有因 footer 扣分（`evaluation.md`「頁尾（#212）」）
 - 事實裡的數字加粗、只有新聞標題的案例列完成（#210，`design-approved`）：事實原文（`FactText`、`SpecTable` 每格、`CaseList` 的成果與獎項）的數量都用 `src/lib/content/emphasis.ts` 的 `quantities()` 加粗，規則補上緊貼單位（4GB）、`7×24`／`7/24`、時間單位前的中文數字（一個工作日），版本號、日期、`OAuth 2.0` 不算；`percentages()` 刪除。`CaseList` 的 heading 改成同一個 `<a>` 兩行（客戶名襯線粗體、標題原文小一級的連結色），獎項改內文字重，`caseLinkLabel` 刪除。`design-principles.md`「事實」與「案例列」、`design-system` 元件表、`content-model.md` 同步；`scripts/content/emphasis-report.mjs` 比較兩次 build 的加粗字串。設計重評的 D5：GreenSwift 3 → 4、digiRunner 5、金融 4（`evaluation.md`「數字加粗與案例列（#210）」）；GreenSwift 只有一則案例的份量交給 #211
 - 索引列與頁內導覽的版面完成（#211，`design-approved`）：`IndexList` 名稱改連結色加底線、縮圖固定 120×80（`--thumb-width`）、`columns` 兩欄；`PageSections` 的 index 段落改成標題在上、列項目兩欄，schema 加 `weight`，DigiLism 產品索引為 primary；`InPageNav` 不畫原生捲軸，還有項目的一側淡出，桌機加箭頭鈕，focus 的連結捲出淡出區。`design-principles.md`「索引列」「頁內導覽」、`design-system` 元件表同步。設計重評：digiRunner D2 4、金融 D2 3 → 4、DigiLism D3 3 → 4、GreenSwift D3 3 → 4（`evaluation.md`「索引列與頁內導覽（#211）」）
+- 內文最後一行不只剩一個字或標點（#225），階段一，等待 design-approved
 
 ## 下一步
 
