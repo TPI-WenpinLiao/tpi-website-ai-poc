@@ -99,8 +99,15 @@ const parentOf = (id: string) => nodes.find((n) => n.id === id)?.parent;
 // facts name (features, settings, states), never sample data (counts, times, curves, client lists).
 // A settings panel's rows are on, off or down; a flow of steps' rows are on (done), off (skipped) or
 // next. The state words are the page's strings.layout, by kind (UiFragment, #209)
+// A state is picked with `state`, never written as a row's value (#209: GreenSwift wrote 已完成 and
+// 進行中 as values, so they showed without the component's words and colour cue)
+const STATE_WORDS = new Set(['已啟用', '未啟用', '故障', '已完成', '略過', '下一步', '進行中', '未開始']);
 const fragmentRow = <const S extends readonly [string, ...string[]]>(states: S) =>
-  z.strictObject({ label: text, value: text.optional(), state: z.enum(states).optional() });
+  z.strictObject({
+    label: text,
+    value: text.refine((v) => !STATE_WORDS.has(v.trim()), { message: 'a state goes in `state`, not in `value`' }).optional(),
+    state: z.enum(states).optional(),
+  });
 const fragmentCommon = { title: text, tabs: z.array(text).optional(), note: text.optional() };
 const uiFragment = z.union([
   z.strictObject({ ...fragmentCommon, kind: z.literal('settings').optional(), rows: z.array(fragmentRow(['on', 'off', 'down'])).min(1) }),

@@ -567,6 +567,42 @@ GreenSwift 的平均比 #211 低 0.1，扣分都在本次之前就有：hero 圖
 | 時間列「年份在前」和 brief「年份寫在事實原文裡」一起做，年份重複出現 | `design-principles.md`「內頁的版型」時間列、`briefs/finance.md` 第 2 段 | 金融 |
 | 同一張段落圖能否跨頁沿用；白底段落圖放在淺灰段落的背景 | `design-principles.md`「內頁共用的規則」段落圖、`briefs/digilism.md` 第 6 段 | DigiLism |
 
+## 介面片段的狀態（#209）
+
+`UiFragment` 的狀態改成看得到的字（設定面板：已啟用、未啟用、故障；流程步驟：已完成、略過、下一步），色塊放在字前當色標之後，三頁各由新的 `reviewer` 只評設計 rubric，確認 #209 的驗收：digiRunner、金融的 D2 不低於目前分數（digiRunner 是 #211 的 4，金融是 #225 的 4），加看 GreenSwift（issue 舉的例子是它的試用片段）。和 #210–#225 一樣是共用元件的確認，摘要在 PR #229 的 body，不另存評審檔、不進上方的分數表，也不套「門檻附近加評」。
+
+### 方法
+
+- rubric 與 prompt 同 #225，只評設計。素材由 `node scripts/strategy/eval-shots.mjs --new dist --only new --group b209 --pages digirunner=/products/digirunner,finance=/industries/finance,greenswift=/products/greenswift --work <scratchpad>` 產生（head `d1fb631`），截圖不進版控
+- 比較基準：digiRunner 是「索引列與頁內導覽（#211）」，金融、GreenSwift 是「斷行（#225）」
+
+### 結果
+
+| 頁面 | 基準 | #209 | 驗收項 |
+|---|---|---|---|
+| digiRunner | 4.2（D2 4） | 4.0 | D2 4 |
+| 金融 | 4.2（D2 4） | 4.2 | D2 4 |
+| GreenSwift | 3.7（D2 3） | 3.8 | D2 4 |
+
+D2 都不低於基準，三位評審都沒有再指出「只有色塊的狀態」。digiRunner、金融的評審寫片段「狀態寫成字（已啟用、未啟用、故障）」「狀態用文字寫（已完成、下一步、已啟用、未啟用）」。
+
+評審指出、在本 PR 修掉的：GreenSwift 第 3 段的「盤查流程」片段把「已完成、進行中、未開始」寫在列的 `value`，畫面上沒有色標，和同頁用元件狀態詞的試用片段不一致，也是內容檔自己寫狀態詞（#209 期望 2）。改成 `kind: steps`（前兩步 `on`、第三步 `next`，其餘不標），`briefs/greenswift.md` 第 3 段的影像欄跟著改；schema 擋下 `value` 寫成狀態詞，之後不會再出現。這項修正在評審之後，GreenSwift 沒有重評：扣在 D2 的三處之一，D2 已經是 4。
+
+digiRunner 的平均比 #211 低 0.2，扣分都和片段的狀態無關，本次之前就有：hero 圖少「新的服務」標籤、第 2 段 `digirunner-five-applications` 的三行排成同一段、第 5 段與案例段 1280 寬的單側空白、相關文章的標題比案例列醒目、375 寬第 7 段約 2 個螢幕高。GreenSwift 只有 D3 低於 4（案例段被相關文章壓過、段落順序和 brief 不同），和 #225 相同，屬於 `IndexList`／`CaseList` 與本頁的段落順序，不在範圍內。
+
+### 評審依據不足
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| 產品頁的主要段落一律用 `--font-size-h2`，和 P5「字級依段落重要性分級」互相拉扯 | `design-principles.md`「段落標題」、P5「字體」 | digiRunner |
+| 名稱裡的年份（獎項名稱的 2020）算不算 `quantities()` 的例外 | `design-principles.md`「內頁共用的規則」事實 | digiRunner、金融 |
+| 色帶規定 1–2 則事實與一個動作，`briefs/finance.md` 第 7 段是 3 則不同主題、沒有動作 | `design-principles.md`「內頁的版型」色帶、`briefs/finance.md` 第 7 段 | 金融 |
+| 段落圖是白底，規格表段墊淺灰，兩者一起照做會出現白色方框 | `design-principles.md`「內頁共用的規則」段落圖 | 金融 |
+| hero 圖的標籤：brief 只用 `fact:greenswift-scope` 的詞，原則要求左標資料來源、右標產出 | `briefs/greenswift.md` 第 1 段、`design-principles.md`「offering：沒有既有系統可畫的產品頁」 | GreenSwift |
+| 頁內導覽「位置在 hero 下方」和 `InPageNav` 的 `stick="header"` | `design-principles.md`「內頁共用的規則」頁內導覽、`design-system` 元件表 | GreenSwift |
+| 案例與試用的段落順序：brief 案例在前，「沒有既有系統可畫的產品頁」照 digiRunner 是試用在前 | `briefs/greenswift.md`、`design-principles.md`「offering：digiRunner 產品頁」 | GreenSwift |
+| 案例列只有第一則配片段時，1280 寬其餘各列的右半邊（#225 已列） | `design-principles.md`「案例列」 | digiRunner、金融 |
+
 ## 限制
 
 - 每頁只有一位評審評一次，沒有量評審之間的一致性。新版 digiRunner 的 C 平均 3.8、金融的 SEO 3.8，接近門檻，換一位評審可能翻轉
