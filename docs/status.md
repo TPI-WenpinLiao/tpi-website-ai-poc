@@ -170,6 +170,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 內文最後一行不只剩一個字或標點完成（#225，`design-approved`）：內文設 `text-wrap: pretty`、`SectionHeading` 說明句照內文斷行、`FactText` 有超過 8 字項目的清單窄寬排一欄、`phrases.ts` 把斷詞表切成兩個單字的詞併回（虛詞不併）並套到 `.text-phrase` 與表格儲存格；`scripts/design/orphans.mjs` 擋下 zh-TW 頁的孤字（全站 0）；三頁重評 D2 不低於 #211（`evaluation.md`「斷行（#225）」）
 - 介面片段的狀態要有看得到的文字完成（#209，`design-approved`）：`UiFragment` 加 `kind`，設定面板寫已啟用、未啟用、故障，流程步驟寫已完成、略過、下一步，狀態是畫面上的字、色塊放在字前當色標；schema 依 `kind` 限制 `state`，也擋下把狀態詞寫進 `value`（GreenSwift 盤查流程改用 `kind: steps`）。規則寫進 `design-principles.md`「內頁共用的規則」影像，`/design-system` 與元件表同步。三頁設計重評 D2 不低於原分數（`evaluation.md`「介面片段的狀態（#209）」）
 - 索引列名稱與案例列的份量完成（#226，`design-approved`）：`IndexList` 加必填的 `weight`（有自己的 `SectionHeading` 時同值，段末索引列一律次要），次要段落（相關文章、相關產品、下載、依 `sections` 排的頁面的子頁、段末索引列）的名稱降到 `--font-size-base` 無襯線半粗、連結色加底線不變，主要段落（產品家族 hub 的產品索引、ESG 顧問頁的團隊、沒有 `sections` 的 hub 的子頁）維持 `--font-size-text` 襯線粗體，案例列的客戶名因此比次要索引列大一級；offering 加 `casesBefore`，GreenSwift 照 brief 把案例排在試用之前。`design-principles.md`「索引列」「案例列」「offering：沒有既有系統可畫的產品頁」、`design-system` 元件表、`content-model.md` 同步。設計重評兩頁 D3 都是 4，評審不再指出索引列比案例重（`evaluation.md`「索引列名稱與案例列（#226）」）
+- DigiLism hero 加上連到產品索引的次要連結完成（#227）：hub 加 `secondaryCta`（只接受本頁某段的 `#id`），`HubTemplate` 把它輸出成「聯絡業務」後的文字連結，不做第二個按鈕；`/products/digilism`「看 DigiLism 的產品」、`/products/systalk-ai`「看 SysTalk.ai 的產品」都連到 `#products`，兩份 brief 的第 1 段與「CTA」照「hub：產品家族頁」回寫，`content-model.md`、`design-system` 元件表同步。ESGswift 與 en、vi 的家族頁還沒照 brief 改版、hero 沒有動作，不加。設計重評 DigiLism D2 4，評審把文字連結列為符合（`evaluation.md`「家族頁 hero 的次要連結（#227）」）
 - 索引列主要／次要段落的清單只留一份完成（#232）：完整清單只寫在 `design-principles.md`「索引列」；「段落標題」、`design-system` 元件表的 `SectionHeading`、`IndexList`、兩個元件的開頭註解與 `/design-system` 的說明只寫規則（`weight` 有自己的 `SectionHeading` 時同值、段末索引列一律次要）並連過去
 
 ## 下一步
@@ -179,6 +180,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - `evaluation.md`「斷行（#225）」的「評審依據不足」（h2 含長標準名、片段事實排到下方的條件、案例列的右欄、時間列年份重複、段落圖跨頁沿用）還沒開 issue，要做時另開
 - `evaluation.md`「索引列名稱與案例列（#226）」的「評審依據不足」：單則案例段的 h2 字級已開 #231；其餘（一段兩個產品的事實分組、375 寬螢幕高的定義與成果片段、HTML 接點圖）還沒開 issue，要做時另開
 - `evaluation.md`「介面片段的狀態（#209）」的「評審依據不足」（名稱裡的年份加粗、金融色帶的事實數與動作、段落圖的白底與淺灰段、GreenSwift hero 標籤、頁內導覽位置）還沒開 issue，要做時另開（案例與試用的順序 #226 已處理，h2 字級分級併入 #231）
+- `evaluation.md`「家族頁 hero 的次要連結（#227）」：SysTalk.ai 的 h2 斷成三行（「地端」單獨一行）、對應表連結名稱與表頭在詞中間斷行（`SpecTable`）兩處違反「斷行」，以及「評審依據不足」（獎項段份量、接點圖 375 寬、h1 與 h2 的字級差、家族頁 hero 標籤、對應表當產品索引時子頁索引列的分級、清單欄數與模型參數加粗）還沒開 issue，要做時另開
 - #213 定案的規則和現有頁面不一致之處：先對照 #208–#212，沒有涵蓋的要做時另開。清單以 #213 的 PR「待確認問題」為準
 - `evaluation.md`「第一批（#200）」「第一批（#201）」「第一批（#202）」的「還不夠好的地方」與「評審依據不足」：共用元件的問題已開 #208–#212，規則文件的缺口由 #213–#215 補上（都已完成；各 issue 的內文列出它涵蓋哪幾項）。其餘還沒開 issue 的以 `evaluation.md` 那三節為準，要做時另開，開之前先對照 #208–#215 避免重複
 - `/blog/carbonfootprint`、`/blog/carbonfootprint-quick-implementation-sme` 結尾連到 GreenSwift 頁的錨點寫「經濟型方案」，新頁不寫經濟型方案（價格沒收，`briefs/greenswift.md` 取捨第 13 項）；#202 依使用者決定不改，等 `/carbon` 的價格收進事實庫再一起處理

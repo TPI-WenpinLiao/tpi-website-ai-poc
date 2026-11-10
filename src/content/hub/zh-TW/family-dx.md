@@ -15,6 +15,10 @@ heroPoints:
   - "兼具高度擴充、延展能耐的應用整合服務平台（iPaaS），可在雲端、地端及地雲混合環境中部署，適於金融、保險及各領域應用。"
   - "DigiLism 產品系列擁有7項發明專利"
 heroCta: contact
+# The product index, as a text link after the button (design-principles.md「hub：產品家族頁」動作, #227)
+secondaryCta:
+  label: 看 DigiLism 的產品
+  href: "#products"
 heroImage: ../../../assets/design/ribbon/page-digilism.webp
 # The blocks on the hero picture (src/lib/scene/ribbon/pictures.json), in section 4's words
 heroLabels:

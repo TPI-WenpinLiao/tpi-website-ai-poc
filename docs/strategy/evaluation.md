@@ -530,7 +530,7 @@ GreenSwift 的設計平均比基準低 0.5，和 #210 有關的只有 D3：只�
 |---|---|---|
 | 只有一則、沒有成果的案例列，在索引列名稱與客戶名同字級、索引列名稱又用連結色加底線時，怎麼做到「份量不低於相關文章」；段末索引列的名稱壓過同段的具名案例（#226 已處理，見下方「索引列名稱與案例列（#226）」） | `design-principles.md`「案例列」「索引列」 | GreenSwift、金融 |
 | 文章封面算不算在 P3 的禁令內（擬人機器人、發光的 3D 圖） | `design-principles.md` P3、「索引列」 | digiRunner |
-| 家族頁 hero 的次要連結：原則（#213）要有，brief 第 1 段只寫一個動作 | `design-principles.md`「hub：產品家族頁」、`briefs/digilism.md` | DigiLism |
+| 家族頁 hero 的次要連結：原則（#213）要有，brief 第 1 段只寫一個動作（#227 已處理，見下方「家族頁 hero 的次要連結（#227）」） | `design-principles.md`「hub：產品家族頁」、`briefs/digilism.md` | DigiLism |
 | 斷詞表沒收的標題怎麼處理；內文最後一行只剩一字由哪個元件負責（#225 已處理，見下方「斷行（#225）」） | `design-principles.md`「斷行」 | DigiLism、GreenSwift、金融 |
 | 段末索引列只有 2 項時，「一句」是否必填 | `design-principles.md`「索引列」、`briefs/finance.md` 第 6 段 | 金融 |
 | GreenSwift hero 圖的標籤：原則要資料來源與產出去處，brief 只用事實寫得出的三個詞 | `design-principles.md`「offering：沒有既有系統可畫的產品頁」、`briefs/greenswift.md` 第 1 段 | GreenSwift |
@@ -633,6 +633,41 @@ GreenSwift 的 D3 仍扣在「成功案例」h2 用主要段落的字級、下�
 | 接點圖寫「SVG 架構圖」，HTML 的三欄色塊圖算不算 | `design-principles.md`「內頁的版型」接點圖 | GreenSwift |
 
 hero 標籤、頁內導覽位置、片段事實排到下方的條件、案例列右欄，在 #225、#209 已列，不重複。
+
+## 家族頁 hero 的次要連結（#227）
+
+hub 加上 `secondaryCta`（只接受連到本頁某段的 `#id`），`HubTemplate` 把它輸出成「聯絡業務」按鈕後的文字連結（`Link variant="standalone"`），不做第二個按鈕。`/products/digilism` 寫「看 DigiLism 的產品」、`/products/systalk-ai` 寫「看 SysTalk.ai 的產品」，都連到 `#products`；兩份 brief 的第 1 段與「CTA」照「hub：產品家族頁」的動作回寫。改完後兩頁各由新的 `reviewer` 只評設計 rubric，確認 #227 的驗收：DigiLism 的 D2 不再因 hero 少了次要連結扣分、不低於 #211 的 4。和 #210–#226 一樣是確認，摘要在 PR body，不另存評審檔、不進上方的分數表，也不套「門檻附近加評」。
+
+其他產品家族 hub 不加：ESGswift（三語）與 en、vi 的 DigiLism、SysTalk.ai 還沒照 brief 改版，hero 沒有任何動作，「主要 CTA 照 brief」沒有 brief 可照，改版時再套；GadoSecurity 是 draft，不產生頁面。
+
+### 方法
+
+- rubric 與 prompt 同 #226，只評設計。素材由 `node scripts/strategy/eval-shots.mjs --new dist --only new --group b227 --pages digilism=/products/digilism,systalk-ai=/products/systalk-ai --work <scratchpad>` 產生（head `2916370`），截圖不進版控
+- 比較基準：DigiLism 是「斷行（#225）」，SysTalk.ai 是「第一批（#200）」的第二次
+
+### 結果
+
+| 頁面 | 基準 | #227 | 驗收項 |
+|---|---|---|---|
+| DigiLism | 4.2（D2 4） | 4.2 | D2 4 |
+| SysTalk.ai | 4.2 | 3.8（D2 3） | — |
+
+兩位評審都把 hero 的文字連結列為符合：DigiLism「次要動作是寫出目的地的文字連結，不是第二個按鈕」，SysTalk.ai「次要動作做成文字連結『看 SysTalk.ai 的產品』，沒有第二顆按鈕」。DigiLism 的 D2 扣在第 6 段段落圖在淺灰底上像空白卡片、hero 圖少了 brief 列的「大型主機」標籤，都和本次無關。
+
+SysTalk.ai 比 #200 低 0.4，D2 的 3 扣在四處，都不在本次改動的 hero 範圍內（本 PR 只改了 hero 的動作列）：第 3 段 h2 在 1280 寬斷成三行、第一行只剩「地端」；第 2 段對應表右欄的連結名稱在詞中間斷行（「SysTalk.Coach AI 業／務培訓」），375 寬第 6 段表頭斷在「4-／GPU Server」；`InPageNav` 在 hero 上方；hero 圖沒有既有系統的標籤。評審把前三處算成共用元件（`SpecTable`、`phrases.ts`、`InPageNav`）的扣分，不算時是 4.0。#200 之後 #211、#225 才寫進頁內導覽與斷行的規則，這次的評審照新的原則看。這幾處要另開 issue，見 `status.md`「下一步」。
+
+### 評審依據不足
+
+| 缺口 | 文件 | 出現在 |
+|---|---|---|
+| 外部評選（獎項）段的份量：brief 用「主張與原文」，讓這頁唯一的外部證據落在最輕的版面 | `design-principles.md`「hub：產品家族頁」、`briefs/digilism.md` 第 7 段 | DigiLism |
+| 接點圖在 375 寬改成上下疊時，怎麼保留左中右的接上順序 | `design-principles.md`「內頁的版型」接點圖 | DigiLism |
+| h1 與 h2 至少差多少；兩行的 h2 份量和 h1 接近算不算違反 | `design-principles.md`「段落標題」 | DigiLism |
+| hero 圖的標籤：原則寫「家族接上的既有系統類別」，`briefs/systalk-ai.md` 第 1 段指定用 AI 工作的詞；`briefs/digilism.md` 列了「大型主機」，原則只寫「例如」 | `design-principles.md`「hub：產品家族頁」影像、兩份 brief 第 1 段 | DigiLism、SysTalk.ai |
+| 產品家族頁用對應表當產品索引時，模板輸出的子頁索引列算主要還是次要段落 | `design-principles.md`「hub：產品家族頁」段落第 1 點、「索引列」 | SysTalk.ai |
+| 「375 寬」短詞清單排兩欄，和「斷行」超過 8 字的清單排一欄；模型參數規模（100B、70B）算不算數量 | `design-principles.md`「內頁共用的規則」375 寬、斷行、事實 | SysTalk.ai |
+
+段落圖的白底與淺灰段、頁內導覽位置，在 #225、#209 已列，不重複。
 
 ## 限制
 

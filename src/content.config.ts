@@ -240,6 +240,11 @@ const heroPoint = z.union([text, z.strictObject({ text, note: text })]);
 // Labels on the hero's static picture, by the picture's anchor (src/lib/scene/ribbon/pictures.json)
 const heroLabels = z.partialRecord(z.enum(['core', 'legacy', 'product', 'greenswift', 'model', 'service', 'ai0', 'ai1', 'ai2']), text).optional();
 
+// A link to a section of the same page by the section's `id` (#202); the entry's superRefine checks
+// the id is there
+const anchorLink = z.strictObject({ label: text, href: z.string().regex(/^#[a-z0-9]+(?:-[a-z0-9]+)*$/) });
+const missingSection = (sections: { id?: string }[] | undefined, href: string) => !sections?.some((s) => `#${s.id}` === href);
+
 const offering = defineCollection({
   loader: localizedGlob('offering'),
   schema: ({ image }) =>
@@ -257,7 +262,7 @@ const offering = defineCollection({
         heroLabels,
         // The second action: another page (a trial), or a section of this page by its `id` (#202)
         secondaryCta: z
-          .union([z.strictObject({ label: text, node: anyNode }), z.strictObject({ label: text, href: z.string().regex(/^#[a-z0-9]+(?:-[a-z0-9]+)*$/) })])
+          .union([z.strictObject({ label: text, node: anyNode }), anchorLink])
           .optional(),
         sections: z.array(pageSection(image)).optional(),
         // `points` are fact texts listed under the body, `link` a page the feature leads on to (#167)
@@ -287,7 +292,7 @@ const offering = defineCollection({
       .superRefine(requireMigratedAt)
       .superRefine((data, ctx) => {
         const cta = data.secondaryCta;
-        if (cta && 'href' in cta && !data.sections?.some((s) => `#${s.id}` === cta.href)) {
+        if (cta && 'href' in cta && missingSection(data.sections, cta.href)) {
           ctx.addIssue({ code: 'custom', path: ['secondaryCta', 'href'], message: `no section has the id of ${cta.href}` });
         }
         if (data.casesBefore && !data.sections?.some((s) => s.id === data.casesBefore)) {
@@ -313,6 +318,9 @@ const hub = defineCollection({
         heroPoints: z.array(heroPoint).optional(),
         heroLabels,
         heroCta: z.literal('contact').optional(),
+        // A text link after the contact button to a section of this page: a product family's product
+        // index (design-principles.md「hub：產品家族頁」動作, #227). Not a second button
+        secondaryCta: anchorLink.optional(),
         // The page's sections when its brief asks for more than highlights (#167, laid out per #187)
         sections: z.array(pageSection(image)).optional(),
         // Heading of the child pages' index rows (#200), by default 「探索」
@@ -331,6 +339,13 @@ const hub = defineCollection({
       })
       .superRefine(requireMigratedAt)
       .superRefine((data, ctx) => {
+        if (data.secondaryCta && missingSection(data.sections, data.secondaryCta.href)) {
+          ctx.addIssue({ code: 'custom', path: ['secondaryCta', 'href'], message: `no section has the id of ${data.secondaryCta.href}` });
+        }
+        // The link sits after the contact button: HubTemplate has no actions row without heroCta
+        if (data.secondaryCta && !data.heroCta) {
+          ctx.addIssue({ code: 'custom', path: ['secondaryCta'], message: 'secondaryCta needs heroCta: the link goes after the contact button' });
+        }
         // Industry hubs (industry-finance, …) look up offerings and case studies by `industry`
         for (const [i, id] of (data.omitParts ?? []).entries()) {
           if (parentOf(id) !== data.node) ctx.addIssue({ code: 'custom', path: ['omitParts', i], message: `${id} is not a child of ${data.node}` });
