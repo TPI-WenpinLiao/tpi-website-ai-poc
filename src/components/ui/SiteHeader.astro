@@ -694,8 +694,9 @@ const isMega = (item: NavItem) => groups(item).length > 0;
   }
 
   /* From the desktop menu up to --bp-lg-wide-up the bar is too narrow for vi's labels at the full
-     spacing (#240): the labels and the bar's gaps tighten one step. node scripts/design/header-fit.mjs
-     checks every locale at the narrowest width of both spacings */
+     spacing (#240): the first-level and language labels (every text summary) and the bar's gaps
+     tighten one step. node scripts/design/header-fit.mjs checks every locale at the narrowest
+     width of both spacings */
   @media (--bp-lg-up) and (not (--bp-lg-wide-up)) {
     .bar {
       gap: var(--space-4);

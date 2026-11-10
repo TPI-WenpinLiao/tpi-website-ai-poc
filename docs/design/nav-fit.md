@@ -83,7 +83,7 @@
 
 M4-04（#23）把 header 移進共用 layout 後，改量正式的 `SiteHeader`。#240 起量的是三語實際 build 出的頁面，不再把 zh-TW 首頁換成量測標籤：每個語系量首頁（`wide` header，可用寬度較窄）與 `about-us`（內頁 header），比較 header 列不換行時的寬度與實際可用寬度，並數每個第一層選單與聯絡按鈕的文字有幾行。字型是 header 本身的 Inter（`@fontsource-variable/inter`），中文 fallback 到系統安裝的字型。
 
-視窗寬度量 1024px 與 1280px，各是 header 兩種間距的最窄寬度：`--bp-lg-up`（64rem）到 `--bp-lg-wide-up`（80rem）之間第一層選單的左右 padding 與列的間距各縮一級，80rem 起是完整間距。同一種間距下內容寬度固定，可用寬度只會隨視窗變大，所以量最窄的寬度就夠。
+視窗寬度量 1024px 與 1280px，各是 header 兩種間距的最窄寬度：`--bp-lg-up`（64rem）到 `--bp-lg-wide-up`（80rem）之間第一層選單與語系選單的左右 padding、列的間距各縮一級，80rem 起是完整間距。同一種間距下內容寬度固定，可用寬度只會隨視窗變大，所以量最窄的寬度就夠。
 
 `npm run check` 執行 `--check`：有 header 放不下、有項目換行，或是寬度說放得下、文字卻換行（量測和實際 header 對不上）時失敗。`--check` 不比對下方段落，因為 zh-TW 的寬度取決於系統的中文字型，CI 與雲端 session 量到的不同；改了 header 或選單文字後，用不帶參數的指令重新產生。
 
