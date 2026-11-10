@@ -163,7 +163,7 @@ JSON-LD：
 | `tagline` | `string` | 否 | hero 標語 | 現站 hero 區 |
 | `heroLead`、`heroPoints`、`heroLabels` | 同 offering | 否 | hero 的說明句、證據點與靜態圖標籤（#187） | — |
 | `heroCta` | `'contact'` | 否 | hero 放「聯絡業務」按鈕（#187） | — |
-| `secondaryCta` | `{ label: string; href: string }` | 否 | 「聯絡業務」按鈕後的文字連結，`href` 連到本頁某段的 `id`（`#` 開頭）：產品家族頁連到產品索引（`design-principles.md`「hub：產品家族頁」的動作，#227）。不是第二個按鈕；`href` 指到不存在的段落時 build 失敗 | — |
+| `secondaryCta` | `{ label: string; href: string }` | 否 | 「聯絡業務」按鈕後的文字連結，`href` 連到本頁某段的 `id`（`#` 開頭）：產品家族頁連到產品索引（`design-principles.md`「hub：產品家族頁」的動作，#227）。不是第二個按鈕；`href` 指到不存在的段落、或沒有 `heroCta` 時 build 失敗 | — |
 | `heroImage` | `image` | 否 | hero 主圖；產品家族頁的圖也是家族底下沒有 hero 圖的產品頁的 hero（#187） | 現站 hero 區 |
 | `industry` | `'finance' \| 'government' \| 'manufacturing'` | 產業頁必填 | 產業頁用這個值反查 `offering.useCases[].industry` 與 `case-study.industry`，列出相關產品與案例 | — |
 | `highlights` | `{ title: string; body: string; link?: { label: string; node: string } }[]` | 否 | 介紹區塊。金融、政府頁承接開放銀行、開放政府頁的內容；`link` 是這一則接著要看的頁面（#178） | `/products/open-banking`、`/products/open-government` |

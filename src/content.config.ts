@@ -342,6 +342,10 @@ const hub = defineCollection({
         if (data.secondaryCta && missingSection(data.sections, data.secondaryCta.href)) {
           ctx.addIssue({ code: 'custom', path: ['secondaryCta', 'href'], message: `no section has the id of ${data.secondaryCta.href}` });
         }
+        // The link sits after the contact button: HubTemplate has no actions row without heroCta
+        if (data.secondaryCta && !data.heroCta) {
+          ctx.addIssue({ code: 'custom', path: ['secondaryCta'], message: 'secondaryCta needs heroCta: the link goes after the contact button' });
+        }
         // Industry hubs (industry-finance, …) look up offerings and case studies by `industry`
         for (const [i, id] of (data.omitParts ?? []).entries()) {
           if (parentOf(id) !== data.node) ctx.addIssue({ code: 'custom', path: ['omitParts', i], message: `${id} is not a child of ${data.node}` });
