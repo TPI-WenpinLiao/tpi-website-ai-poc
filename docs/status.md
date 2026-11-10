@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-11-09
+最後更新：2026-11-10
 
 ## 目前 milestone
 
@@ -170,6 +170,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 內文最後一行不只剩一個字或標點完成（#225，`design-approved`）：內文設 `text-wrap: pretty`、`SectionHeading` 說明句照內文斷行、`FactText` 有超過 8 字項目的清單窄寬排一欄、`phrases.ts` 把斷詞表切成兩個單字的詞併回（虛詞不併）並套到 `.text-phrase` 與表格儲存格；`scripts/design/orphans.mjs` 擋下 zh-TW 頁的孤字（全站 0）；三頁重評 D2 不低於 #211（`evaluation.md`「斷行（#225）」）
 - 介面片段的狀態要有看得到的文字完成（#209，`design-approved`）：`UiFragment` 加 `kind`，設定面板寫已啟用、未啟用、故障，流程步驟寫已完成、略過、下一步，狀態是畫面上的字、色塊放在字前當色標；schema 依 `kind` 限制 `state`，也擋下把狀態詞寫進 `value`（GreenSwift 盤查流程改用 `kind: steps`）。規則寫進 `design-principles.md`「內頁共用的規則」影像，`/design-system` 與元件表同步。三頁設計重評 D2 不低於原分數（`evaluation.md`「介面片段的狀態（#209）」）
 - 索引列名稱與案例列的份量完成（#226，`design-approved`）：`IndexList` 加必填的 `weight`（有自己的 `SectionHeading` 時同值，段末索引列一律次要），次要段落（相關文章、相關產品、下載、依 `sections` 排的頁面的子頁、段末索引列）的名稱降到 `--font-size-base` 無襯線半粗、連結色加底線不變，主要段落（產品家族 hub 的產品索引、ESG 顧問頁的團隊、沒有 `sections` 的 hub 的子頁）維持 `--font-size-text` 襯線粗體，案例列的客戶名因此比次要索引列大一級；offering 加 `casesBefore`，GreenSwift 照 brief 把案例排在試用之前。`design-principles.md`「索引列」「案例列」「offering：沒有既有系統可畫的產品頁」、`design-system` 元件表、`content-model.md` 同步。設計重評兩頁 D3 都是 4，評審不再指出索引列比案例重（`evaluation.md`「索引列名稱與案例列（#226）」）
+- 索引列主要／次要段落的清單只留一份完成（#232）：完整清單只寫在 `design-principles.md`「索引列」；「段落標題」、`design-system` 元件表的 `SectionHeading`、`IndexList`、兩個元件的開頭註解與 `/design-system` 的說明只寫規則（`weight` 有自己的 `SectionHeading` 時同值、段末索引列一律次要）並連過去
 
 ## 下一步
 
@@ -239,3 +240,4 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 本專案是 PoC，不設定 Cloudflare 的 Turnstile 與環境變數（使用者 2026-10-27 決定）。聯絡表單在 `*.pages.dev` 上送出一律失敗（沒有 `TURNSTILE_SECRET_KEY` 時 fail closed），表單行為由 `npm run check` 的 `scripts/forms/contact.mjs` 驗證。範圍外（本專案不上線）：正式上線時照 ADR 0005「設定」建立 widget、設定 `PUBLIC_TURNSTILE_SITE_KEY` 與 `TURNSTILE_SECRET_KEY`，見 `docs/launch/launch-readiness.md`「上線步驟」第 3 步
 - 範圍外（本專案不上線）：正式上線要開追蹤時照 ADR 0007「設定」：填好 `src/data/consent.ts` 的類別與三語文案並改成 `draft: false`、在 GTM 設定 tag 的同意條件、在 Cloudflare 設定 `PUBLIC_GTM_ID`；沒有設定 ID 時不顯示同意橫幅，也不載入 GTM。見 `docs/launch/launch-readiness.md`「上線步驟」第 4 步
 - 範圍外（本專案不上線）：正式上線時 `robots.txt` 改成允許收錄並加上 `Sitemap:` 行（M4-03 起 `dist/sitemap.xml` 已產生，上線前 `robots.txt` 不指向它），見 `docs/launch/launch-readiness.md`「上線步驟」第 6 步
+- 政府、製造業產業 hub（`/industries/government`、`/industries/manufacturing`）還沒用 `sections`，子頁名稱維持主要段落的字級，和案例客戶名同級（PR #230「待確認」）。照金融頁改用 `sections` 重做時，子頁會自動變成次要，不另改程式；重做前就要處理時，另開 `needs-design` issue
