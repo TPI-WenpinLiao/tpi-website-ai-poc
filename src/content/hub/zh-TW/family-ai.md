@@ -18,6 +18,10 @@ heroPoints:
   - "打造企業 雲/地端 AI 完整解決方案"
   - "digiRunner、digiLogs、SysTalk.ai 獲得「2024 台灣精品獎」"
 heroCta: contact
+# The product index, as a text link after the button (design-principles.md「hub：產品家族頁」動作, #227)
+secondaryCta:
+  label: 看 SysTalk.ai 的產品
+  href: "#products"
 # The blocks on the hero picture (src/lib/scene/ribbon/pictures.json), in section 2's words
 heroLabels:
   ai0: 客服機器人

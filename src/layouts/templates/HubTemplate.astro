@@ -152,6 +152,11 @@ const jsonLd = hubJsonLd({
           <Button href={nodeHref('contact', locale)} size="lg">
             {contactAction(locale)}
           </Button>
+          {data.secondaryCta && (
+            <Link href={data.secondaryCta.href} variant="standalone">
+              {data.secondaryCta.label}
+            </Link>
+          )}
         </Fragment>
       )
     }
