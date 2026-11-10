@@ -4,9 +4,9 @@
 export type HeadingWeight = 'primary' | 'secondary';
 
 // A row is CaseList's item; rows built from case studies have neither field, so it takes any object
-const has = (row: object, key: 'result' | 'award') => !!(row as Partial<Record<typeof key, string>>)[key];
+const hasProof = (row: object) => ('result' in row && !!row.result) || ('award' in row && !!row.award);
 
 export function caseWeight(rows: readonly object[]): HeadingWeight {
   const [only, ...rest] = rows;
-  return only && rest.length === 0 && !has(only, 'result') && !has(only, 'award') ? 'secondary' : 'primary';
+  return only && rest.length === 0 && !hasProof(only) ? 'secondary' : 'primary';
 }
