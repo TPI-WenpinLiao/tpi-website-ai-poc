@@ -173,6 +173,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - DigiLism hero 加上連到產品索引的次要連結完成（#227）：hub 加 `secondaryCta`（只接受本頁某段的 `#id`），`HubTemplate` 把它輸出成「聯絡業務」後的文字連結，不做第二個按鈕；`/products/digilism`「看 DigiLism 的產品」、`/products/systalk-ai`「看 SysTalk.ai 的產品」都連到 `#products`，兩份 brief 的第 1 段與「CTA」照「hub：產品家族頁」回寫，`content-model.md`、`design-system` 元件表同步。ESGswift 與 en、vi 的家族頁還沒照 brief 改版、hero 沒有動作，不加。設計重評 DigiLism D2 4，評審把文字連結列為符合（`evaluation.md`「家族頁 hero 的次要連結（#227）」）
 - 索引列主要／次要段落的清單只留一份完成（#232）：完整清單只寫在 `design-principles.md`「索引列」；「段落標題」、`design-system` 元件表的 `SectionHeading`、`IndexList`、兩個元件的開頭註解與 `/design-system` 的說明只寫規則（`weight` 有自己的 `SectionHeading` 時同值、段末索引列一律次要）並連過去
 - 規格表名稱在詞中間斷行與 h2 超過兩行完成（#233）：`SpecTable` 的名稱欄、表頭、連結欄加 `.text-phrase`，`phrases.ts` 把標題與 `.text-phrase` 裡連字號接起來的英數詞（`4-GPU`）包成 `.text-nowrap`；`orphans.mjs` 加兩項檢查：`th` 與 keep-all 元素在詞中間斷行（全站）、`PageSections` 段落的 h2 在 768、1280 寬超過兩行。排不進兩行或沒有斷點的 5 個 h2 改文案（SysTalk.ai 2 個、GreenSwift 2 個、金融 1 個，依使用者決定不改版型或字級），`design-principles.md`「斷行」與 `design-system` 元件表同步
+- 只有一則案例的段落標題份量（#231），階段一，等待 design-approved：內頁段落標題分主要（h2 字級）與次要（`--font-size-text`）兩級，寫在 `design-principles.md`「段落標題」；只有一則、沒有成果與獎項的案例段由模板降成次要（`src/lib/content/cases.ts` 的 `caseWeight()`），spec 段可設 `weight: secondary`（GreenSwift 第 6 段）
 
 ## 下一步
 

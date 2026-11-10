@@ -183,11 +183,14 @@ const pageSection = (image: ImageFn) => z.discriminatedUnion('layout', [
   // 規格表 and 對應表: a real table, one row a label (a regulation) and its fact texts
   // `compare` turns it into a comparison of two things side by side (#200, two machines): its row heads
   // the columns, and each row's two values go one to a column. `items` are fact texts above the table,
-  // `record` a fact text closing the section (#200)
+  // `record` a fact text closing the section (#200). `weight: secondary` marks a table that backs up
+  // the main judgements (security, availability, languages) and takes the secondary heading
+  // (design-principles.md「段落標題」, #231); the other fact layouts are always primary
   z
     .strictObject({
       layout: z.literal('spec'),
       ...sectionCommon(image),
+      weight: z.literal('secondary').optional(),
       rows: z.array(specRow).min(1),
       items: z.array(sectionItem).optional(),
       record: text.optional(),

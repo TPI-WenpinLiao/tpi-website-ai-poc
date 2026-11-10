@@ -18,6 +18,7 @@ import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Surface from '../../components/ui/Surface.astro';
 import Button from '../../components/ui/Button.astro';
 import CaseList from '../../components/ui/CaseList.astro';
+import { caseWeight } from '../../lib/content/cases';
 import IndexList from '../../components/ui/IndexList.astro';
 import MapPicture from '../../components/ui/MapPicture.astro';
 import PageSections from '../../components/ui/PageSections.astro';
@@ -224,7 +225,7 @@ const jsonLd = hubJsonLd({
   {
     caseRows.length > 0 && (
       <Surface tone="light" id="cases" class="anchor-target">
-        <SectionHeading title={localNode('success-stories', locale).title} description={data.caseNotes ? undefined : data.casesIntro} />
+        <SectionHeading title={localNode('success-stories', locale).title} description={data.caseNotes ? undefined : data.casesIntro} weight={caseWeight(caseRows)} />
         <CaseList items={caseRows} linkHeading words={t.layout} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
         {
           data.testimonial && (
