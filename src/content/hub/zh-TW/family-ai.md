@@ -73,7 +73,7 @@ sections:
   - layout: ui
     id: data
     itemsBelow: true
-    heading: 地端方案：資料與權限不出機房
+    heading: 地端部署，資料與權限留在內網
     body: 選擇地端方案時，AI 在企業自己的機房運算，不限 Token 用量；權限、存取控管與稽核紀錄都內建在系統裡。
     fragment:
       title: 權限與稽核
