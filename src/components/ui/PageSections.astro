@@ -3,8 +3,8 @@
 // layout its entry names (design-principles.md「內頁的版型」): claim (FactRow), junction
 // (JunctionDiagram), ui (UiFragment, the larger side; `flip` swaps sides), spec (SpecTable), timeline
 // (Timeline, then mapping rows), results (CaseList without a lead row), band (pale purple) and index
-// (IndexList under a secondary heading). The
-// schema is `pageSection` in src/content.config.ts. Links go through the page's locale; a section with
+// (IndexList under its heading, both secondary unless the section sets `weight: primary`, #211, #226).
+// The schema is `pageSection` in src/content.config.ts. Links go through the page's locale; a section with
 // an `id` is an in-page anchor target (the template lists it in InPageNav). A section's `image` (a
 // picture of the ribbon world) sits beside the heading of a spec or timeline, or in a band's figure.
 import type { CollectionEntry } from 'astro:content';
@@ -154,6 +154,7 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
             {sec.index && (
               <IndexList
                 columns={2}
+                weight="secondary"
                 items={sec.index.map((i) => ({ title: localNode(i.node, locale).title, body: i.body, href: nodeHref(i.node, locale) }))}
               />
             )}
@@ -211,11 +212,12 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
         return (
           <Surface {...surface}>
             {/* The heading across the top, the rows in two columns below on wide screens, so neither side
-                is left empty; a primary index differs only in its heading's weight (#211) */}
+                is left empty (#211); a primary index sets its heading and its rows' names a step larger (#226) */}
             <div class="index">
               <SectionHeading title={sec.heading} description={sec.body} weight={sec.weight ?? 'secondary'} />
               <IndexList
                 columns={2}
+                weight={sec.weight ?? 'secondary'}
                 items={sec.items.map((i) => ({ title: i.label ?? localNode(i.node, locale).title, body: i.body, href: nodeHref(i.node, locale) }))}
               />
               {more && <div class="index-more">{more}</div>}
