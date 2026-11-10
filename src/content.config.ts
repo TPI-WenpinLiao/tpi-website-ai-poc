@@ -185,7 +185,7 @@ const pageSection = (image: ImageFn) => z.discriminatedUnion('layout', [
   // the columns, and each row's two values go one to a column. `items` are fact texts above the table,
   // `record` a fact text closing the section (#200). `weight: secondary` marks a table that backs up
   // the main judgements (security, availability, languages) and takes the secondary heading
-  // (design-principles.md「段落標題」, #231); the other fact layouts are always primary
+  // (design-principles.md「段落標題」, #231) and no section picture; the other fact layouts are always primary
   z
     .strictObject({
       layout: z.literal('spec'),
@@ -198,6 +198,10 @@ const pageSection = (image: ImageFn) => z.discriminatedUnion('layout', [
     })
     .refine((s) => !s.compare || s.rows.every((r) => r.values.length === 2 && !r.link), {
       message: 'a comparison table has two values a row and no links',
+    })
+    // A secondary heading next to a section picture loses to the picture (#231 re-review, D3)
+    .refine((s) => !(s.weight === 'secondary' && s.image), {
+      message: 'a secondary spec section has no section picture',
     }),
   // 時間列: ordered steps with their year, then (optionally) the 對應表 rows
   z.strictObject({
