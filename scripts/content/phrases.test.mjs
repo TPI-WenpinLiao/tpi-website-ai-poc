@@ -52,3 +52,23 @@ test('a heading inside another heading-like wrapper is split once', () => {
   const out = phrasedHtml('<html lang="zh-TW"><body><h2><span>產出清冊與申報格式</span></h2></body></html>', 'zh-TW');
   assert.match(out, /<span>產出<wbr>清冊與申報<wbr>格式<\/span>/);
 });
+
+test('a hyphenated Latin word in a heading or .text-phrase stays on one line (#233)', () => {
+  const html = '<html lang="zh-TW"><body><table><tr><th class="name text-phrase">aiDAPTIV 4-GPU Server</th><td>calc(var(--space-6) + var(--touch-target))</td></tr></table><h2>ISO 14064-1 與 GHG Protocol</h2><p>aiDAPTIV 4-GPU Server</p></body></html>';
+  const out = phrasedHtml(html, 'zh-TW');
+  assert.match(out, /<th class="name text-phrase">aiDAPTIV <span class="text-nowrap">4-GPU<\/span> Server<\/th>/);
+  assert.match(out, /<h2>ISO <span class="text-nowrap">14064-1<\/span> 與 GHG Protocol<\/h2>/);
+  assert.match(out, /<td>calc\(var\(--space-6\) \+ var\(--touch-target\)\)<\/td>/);
+  assert.match(out, /<p>aiDAPTIV 4-GPU Server<\/p>/);
+  assert.equal(phrasedHtml(html, 'en'), html);
+});
+
+test('a heading inside a table cell still keeps its hyphenated words whole', () => {
+  const out = phrasedHtml('<html lang="zh-TW"><body><table><tr><td><h3>aiDAPTIV 4-GPU Server</h3></td></tr></table></body></html>', 'zh-TW');
+  assert.match(out, /<h3>aiDAPTIV <span class="text-nowrap">4-GPU<\/span> Server<\/h3>/);
+});
+
+test('code in a heading may still break at its hyphens', () => {
+  const html = '<html lang="zh-TW"><body><h3><code>--color-bg-brand-subtle</code></h3></body></html>';
+  assert.equal(phrasedHtml(html, 'zh-TW'), html);
+});

@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-11-09
+最後更新：2026-11-10
 
 ## 目前 milestone
 
@@ -170,6 +170,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 內文最後一行不只剩一個字或標點完成（#225，`design-approved`）：內文設 `text-wrap: pretty`、`SectionHeading` 說明句照內文斷行、`FactText` 有超過 8 字項目的清單窄寬排一欄、`phrases.ts` 把斷詞表切成兩個單字的詞併回（虛詞不併）並套到 `.text-phrase` 與表格儲存格；`scripts/design/orphans.mjs` 擋下 zh-TW 頁的孤字（全站 0）；三頁重評 D2 不低於 #211（`evaluation.md`「斷行（#225）」）
 - 介面片段的狀態要有看得到的文字完成（#209，`design-approved`）：`UiFragment` 加 `kind`，設定面板寫已啟用、未啟用、故障，流程步驟寫已完成、略過、下一步，狀態是畫面上的字、色塊放在字前當色標；schema 依 `kind` 限制 `state`，也擋下把狀態詞寫進 `value`（GreenSwift 盤查流程改用 `kind: steps`）。規則寫進 `design-principles.md`「內頁共用的規則」影像，`/design-system` 與元件表同步。三頁設計重評 D2 不低於原分數（`evaluation.md`「介面片段的狀態（#209）」）
 - 索引列名稱與案例列的份量完成（#226，`design-approved`）：`IndexList` 加必填的 `weight`（有自己的 `SectionHeading` 時同值，段末索引列一律次要），次要段落（相關文章、相關產品、下載、依 `sections` 排的頁面的子頁、段末索引列）的名稱降到 `--font-size-base` 無襯線半粗、連結色加底線不變，主要段落（產品家族 hub 的產品索引、ESG 顧問頁的團隊、沒有 `sections` 的 hub 的子頁）維持 `--font-size-text` 襯線粗體，案例列的客戶名因此比次要索引列大一級；offering 加 `casesBefore`，GreenSwift 照 brief 把案例排在試用之前。`design-principles.md`「索引列」「案例列」「offering：沒有既有系統可畫的產品頁」、`design-system` 元件表、`content-model.md` 同步。設計重評兩頁 D3 都是 4，評審不再指出索引列比案例重（`evaluation.md`「索引列名稱與案例列（#226）」）
+- 規格表名稱在詞中間斷行與 h2 超過兩行完成（#233）：`SpecTable` 的名稱欄、表頭、連結欄加 `.text-phrase`，`phrases.ts` 把標題與 `.text-phrase` 裡連字號接起來的英數詞（`4-GPU`）包成 `.text-nowrap`；`orphans.mjs` 加兩項檢查：`th` 與 keep-all 元素在詞中間斷行（全站）、`PageSections` 段落的 h2 在 768、1280 寬超過兩行。排不進兩行或沒有斷點的 5 個 h2 改文案（SysTalk.ai 2 個、GreenSwift 2 個、金融 1 個，依使用者決定不改版型或字級），`design-principles.md`「斷行」與 `design-system` 元件表同步
 
 ## 下一步
 
@@ -213,6 +214,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 回答 `docs/research/audience-and-goals.md`「尚未回答的問題」其餘 6 題（第 2、5 題已在 M2-01 暫定）
 - 回覆 #39 PR 的「待確認」：glossary 的 AI 草擬譯名、en 頁面沒搬的段落與照抄的錯字、不在詞彙表的專有名詞、現站 en 沒有的產品頁、en 法務頁是否需法務審閱
 - 回覆 #177 PR 的「待確認」：en、vi 的資安認證寫 DigiLism（zh-TW 寫企業產品中台之開發流程）、vi FT 原文是 Finance Times、OrientAI 段改用訓練資料的 FAQ、en hero 沒寫金融與政府
+- h2 兩行的檢查只看 `sections` 段落的 768、1280 寬（#233 使用者決定）：375 寬的長 h2（SysTalk.ai 第 6 段三行）、blog 與媒體中心卡片的文章標題、`/privacy` 的中英對照 h2 都有三行的，要處理時另開 issue
 - 以 `/next-issue` 找出下一張可開始的 issue
 
 ## 待辦備忘

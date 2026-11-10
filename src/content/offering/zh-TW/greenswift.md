@@ -61,7 +61,7 @@ sections:
             無產品碳足跡盤查報告數量限制
   - layout: ui
     id: standards
-    heading: ISO 14064-1 與 GHG Protocol 的盤查步驟已內建
+    heading: 內建 ISO 14064-1 與 GHG Protocol
     body: 系統照六個步驟帶著做，兩種標準可以切換，係數會跟著 IPCC 更新，不必自己查表。
     fragment:
       title: 盤查流程
@@ -118,7 +118,7 @@ sections:
   - layout: ui
     id: departments
     flip: true
-    heading: 部門分工收數據，帳號與組織邊界不設上限
+    heading: 各部門分工，帳號與組織邊界不限
     body: 各部門照權責收數據，系統會主動提醒；內部人員和外部顧問在雲端編同一份文稿。
     fragment:
       title: 帳號管理

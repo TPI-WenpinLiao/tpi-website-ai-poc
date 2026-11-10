@@ -152,6 +152,12 @@ body {
   white-space: nowrap;
 }
 
+/* A hyphenated Latin word kept on one line (4-GPU, 14064-1): src/lib/content/phrases.ts wraps it
+   in headings, .text-phrase text and table cells on zh-TW pages (#233) */
+.text-nowrap {
+  white-space: nowrap;
+}
+
 /* A list of rows set apart by space, no rules between them (FormPanel's error summary,
    ConsentBanner's categories; house rule: no thin rules, #187) */
 .row-list {
