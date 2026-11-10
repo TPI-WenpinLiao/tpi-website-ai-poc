@@ -7,6 +7,9 @@
 @custom-media --bp-sm-up (width >= 40rem);
 @custom-media --bp-lg-up (width >= 64rem);
 @custom-media --bp-lg-down (width < 64rem);
+/* SiteHeader's desktop menu is tighter below this; vi's labels don't fit in one row at 64rem with
+   the full spacing (#240, docs/design/nav-fit.md) */
+@custom-media --bp-lg-wide-up (width >= 80rem);
 /* The home page's pictures switch between their tall and wide framing here (#167); the live 3D
    scene starts at --bp-lg-up */
 @custom-media --bp-md-up (width >= 48rem);
