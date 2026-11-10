@@ -223,6 +223,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 生成的素材是「緞帶世界」風格：白色等角方塊、白底、平塗，只有緞帶有紫→品紅→橘的漸層；不放文字、數字、人物、介面與真實產品，要說明的字用 HTML 標籤疊上去。提示詞、規格與素材清單見 `docs/design/image-prompts.md`「#187」；同檔的 M3-02 深色素材只剩 `/design-system` 的範例在用
 - 檔案放 `src/assets/design/`，用 `node scripts/design/import-image.mjs <來源> <檔名>` 轉成 WebP 品質 95，不直接放 PNG
 - 公司 logo 在 `src/assets/brand/`，是 `node scripts/design/import-brand.mjs <AI 檔資料夾>` 從行銷部門的 AI 檔轉出的 SVG（刪掉反白版的預覽底色、裁掉留白），同時產生 `public/favicon.png`、`public/apple-touch-icon.png`。深色 surface 用白色版，亮色用彩色版；header 只放符號（`logo-symbol-white`，`--logo-height`），footer 放橫式中英版（`logo-horizontal-white`，`--logo-height-lg`）
+- `sizes` 寫圖在各斷點的實際寬度：內頁在 `--bp-xl-up` 加寬時，跟著內容欄變寬的圖要加 `(width >= 100rem)` 的值（`Card`、band 的段落圖）；首頁的圖到 `--layout-max-width` 就不再變寬，`vw` 的值前面加 `(width >= 120rem)` 封頂。改了版面或 `sizes` 後跑 `node scripts/design/wide.mjs`，它列出 `sizes` 與實際寬度挑到不同 srcset 候選的圖（#238）
 - 文字壓在圖上時，圖要讓出文字的位置（hero 的 `--hero-image-share`／`--hero-copy-share`、手機的 `--hero-narrow-offset`），不靠加深遮罩硬撐。換圖後跑 `node scripts/design/a11y-smoke.mjs`
 
 ## 無障礙
