@@ -56,7 +56,13 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
 {
   sections.map((sec) => {
     const links = [sec.link ?? []].flat().map(sectionTo);
-    const surface = { id: sec.id, class: sec.id ? 'anchor-target' : undefined, fill: sec.layout === 'band' ? ('brand' as const) : sec.fill };
+    // data-section marks the sections for scripts/design/orphans.mjs (their h2 two lines at most, #233)
+    const surface = {
+      id: sec.id,
+      class: sec.id ? 'anchor-target' : undefined,
+      fill: sec.layout === 'band' ? ('brand' as const) : sec.fill,
+      'data-section': sec.layout,
+    };
     const heading = <SectionHeading title={sec.heading} description={sec.body} />;
     // A section's picture (decorative, design-principles.md「內頁共用的規則」段落圖): beside the heading
     // for spec and timeline, in the figure's place for a band without a fragment; not on phones

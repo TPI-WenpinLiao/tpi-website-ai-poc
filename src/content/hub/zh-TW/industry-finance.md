@@ -170,7 +170,7 @@ sections:
   - layout: band
     id: planning
     image: ../../../assets/design/sec-planning.webp
-    heading: 規劃與導入由同一家負責
+    heading: 同一家公司負責規劃與導入
     body: 產品與導入不必分兩家找：昕力的顧問協助規劃架構，AI 導入從情境分析到模型微調。
     items:
       - body: 昕力資訊專業顧問團隊，協助規劃建立符合各國開放銀行規範之技術架構。

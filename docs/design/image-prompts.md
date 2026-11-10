@@ -14,7 +14,7 @@
 |---|---|---|
 | `sec-deployment.webp` | digiRunner「部署環境由企業決定」 | 同一個產品放在三種環境 |
 | `sec-identity.webp` | 金融「金融通路的身分驗證」 | 一次驗證，跨多個通路 |
-| `sec-planning.webp` | 金融「規劃與導入由同一家負責」（淺紫色帶，圖的地面也是淺紫） | 規劃與導入是同一條線 |
+| `sec-planning.webp` | 金融「同一家公司負責規劃與導入」（淺紫色帶，圖的地面也是淺紫） | 規劃與導入是同一條線 |
 | `family-dx.webp`、`family-ai.webp`、`family-security.webp`、`family-esg.webp` | 四個產品家族頁的 hero，以及家族底下沒有 hero 圖的產品頁 | 各產品家族一張識別圖，只換頂面的顏色 |
 
 另外產生過 `sec-open-banking`（三階段的台階）與 `sec-cases`（案例列旁的直式圖），第二輪重評時評審指出時間列旁與案例列旁的圖把內容推後、和案例搶焦點，使用者決定不用，圖檔已刪除。

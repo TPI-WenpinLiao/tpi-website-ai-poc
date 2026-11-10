@@ -29,6 +29,10 @@ const RUN_END = /^[\s\p{P}]+$/u;
 const LONG_RUN = 8;
 
 const escapeText = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// Latin letters and digits joined by hyphens (4-GPU, 14064-1, case-study): one word, though a
+// browser may break after the hyphen even under keep-all (aiDAPTIV 4-／GPU Server, #233)
+const HYPHENATED = /[A-Za-z0-9]+(?:-[A-Za-z0-9]+)+/g;
+const nowrap = (html: string) => html.replace(HYPHENATED, '<span class="text-nowrap">$&</span>');
 
 /**
  * The text split into the pieces a line may break between: only inside a run wider than LONG_RUN with no
@@ -79,26 +83,37 @@ export function phrases(text: string, locale: Locale): string[] {
 // .text-phrase, and table cells (Prose keeps their words whole). Only runs longer than LONG_RUN change, so text that breaks at its
 // punctuation reads as before (#225)
 const SELECTOR = 'h1, h2, h3, h4, h5, h6, .text-phrase, td, th';
+// The names among them, set keep-all by base.css
+const NAMES = 'h1, h2, h3, h4, h5, h6, .text-phrase';
+const isName = (el: HTMLElement) => /^H[1-6]$/.test(el.tagName) || el.classList.contains('text-phrase');
 
-/** A page's HTML with <wbr> between the words of the long runs in its headings and .text-phrase text. Only zh-TW pages change. */
+/**
+ * A page's HTML with <wbr> between the words of the long runs in its headings, .text-phrase text and
+ * table cells, and the hyphenated Latin words of its headings and .text-phrase kept on one line. Only
+ * zh-TW pages change.
+ */
 export function phrasedHtml(html: string, locale: Locale): string {
   if (locale !== 'zh-TW') return html;
   const root = parse(html, { comment: true, blockTextElements: { script: true, style: true, noscript: true, pre: true } });
   let changed = false;
   // A heading can sit inside another matching element: each text once
   const done = new WeakSet<TextNode>();
-  const walk = (node: HTMLElement) => {
+  // Hyphenated words stay whole only in names (headings and .text-phrase, the keep-all text): a plain
+  // table cell (calc(var(--space-6) + …)) or code (color-bg-brand-subtle) may still break at its hyphens
+  const walk = (node: HTMLElement, names: boolean) => {
     for (const child of node.childNodes) {
       if (child instanceof TextNode && !done.has(child)) {
         done.add(child);
         const parts = phrases(child.text, locale);
-        if (parts.length > 1) {
-          child.rawText = parts.map(escapeText).join('<wbr>');
+        const hyphenated = names && child.text.search(HYPHENATED) >= 0;
+        if (parts.length > 1 || hyphenated) {
+          const html = parts.map(escapeText).join('<wbr>');
+          child.rawText = hyphenated ? nowrap(html) : html;
           changed = true;
         }
-      } else if (child instanceof HTMLElement) walk(child);
+      } else if (child instanceof HTMLElement) walk(child, child.tagName !== 'CODE' && (names || isName(child)));
     }
   };
-  for (const el of root.querySelectorAll(SELECTOR)) walk(el);
+  for (const el of root.querySelectorAll(SELECTOR)) walk(el, el.closest(NAMES) !== null);
   return changed ? root.toString() : html;
 }

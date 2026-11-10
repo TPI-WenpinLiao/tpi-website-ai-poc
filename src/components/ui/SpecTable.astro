@@ -4,7 +4,8 @@
 // the page that goes deeper, its label saying where it goes. Rows may have row lines: a real table is
 // the house rules' exception to no thin rules. Several fact texts in a cell are a list; one fact text
 // reads as FactText (split into items it is a two-column list, otherwise its line breaks are kept).
-// Quantities are bold in every cell, names' numbers not (emphasis.ts, #210).
+// Quantities are bold in every cell, names' numbers not (emphasis.ts, #210). Labels, column heads
+// and link labels are names: .text-phrase keeps each word whole (design-principles.md「斷行」, #233).
 // `head` names the columns for screen readers (the row's own labels say it on screen); `emphasis="name"`
 // sets the first column in the bold serif, for a mapping table (規範名稱). `compare` compares two
 // things side by side (#200): its row is the visible head, and each row's two values go one to a cell.
@@ -35,11 +36,11 @@ const hasLinks = rows.some((r) => r.link);
     compare ? (
       <thead>
         <tr>
-          <th scope="col" class="name">
+          <th scope="col" class="name text-phrase">
             {compare.label}
           </th>
           {compare.values.map((v) => (
-            <th scope="col" class="name serif">
+            <th scope="col" class="name serif text-phrase">
               {v}
             </th>
           ))}
@@ -60,7 +61,7 @@ const hasLinks = rows.some((r) => r.link);
       compare &&
         rows.map((r) => (
           <tr>
-            <th scope="row" class="name">
+            <th scope="row" class="name text-phrase">
               {r.label}
             </th>
             {r.values.map((v) => (
@@ -73,7 +74,7 @@ const hasLinks = rows.some((r) => r.link);
       !compare &&
         rows.map((r) => (
         <tr>
-          <th scope="row" class:list={['name', { serif: emphasis === 'name' }]}>
+          <th scope="row" class:list={['name', 'text-phrase', { serif: emphasis === 'name' }]}>
             {r.label}
           </th>
           <td class="values">
@@ -87,7 +88,7 @@ const hasLinks = rows.some((r) => r.link);
               r.values.map((v) => <FactText text={v} inline />)
             )}
           </td>
-          {hasLinks && <td class="link">{r.link && <a href={r.link.href}>{r.link.label}</a>}</td>}
+          {hasLinks && <td class="link text-phrase">{r.link && <a href={r.link.href}>{r.link.label}</a>}</td>}
         </tr>
       ))
     }

@@ -73,7 +73,7 @@ sections:
   - layout: ui
     id: data
     itemsBelow: true
-    heading: 地端方案的資料與權限留在企業內
+    heading: 地端部署，資料與權限留在內網
     body: 選擇地端方案時，AI 在企業自己的機房運算，不限 Token 用量；權限、存取控管與稽核紀錄都內建在系統裡。
     fragment:
       title: 權限與稽核
@@ -114,7 +114,7 @@ sections:
     id: platform
     flip: true
     itemsBelow: true
-    heading: 平台的模組與可選的模型
+    heading: 模組依產業組合，模型依場景挑選
     body: SysTalk.ai 平台由功能模組組成，依產業挑選搭配；模型可以從主流的開源與企業級 LLM 中，依場景選擇。
     fragment:
       title: LLM 與模組設定

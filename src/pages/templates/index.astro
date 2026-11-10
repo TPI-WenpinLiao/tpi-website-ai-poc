@@ -68,6 +68,11 @@ const built = (id: string) => nodes.filter((n) => n.template === id && n.kind ==
     vertical-align: top;
   }
 
+  /* Header cells are names: whole on one line, the table scrolls instead (#233) */
+  th {
+    white-space: nowrap;
+  }
+
   code {
     font-family: var(--font-mono);
     font-size: var(--font-size-sm);
