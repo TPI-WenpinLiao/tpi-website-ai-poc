@@ -3,7 +3,8 @@
 // nothing above it (no eyebrow: where the page sits shows in the breadcrumb; design-principles.md
 // P1,「內頁共用的規則」, #187), then the description, an optional `lead` sentence, the evidence
 // (`points`: fact texts, each with an optional `note` set tight under it, the condition that goes
-// with the fact), an optional `meta` line, the actions, and a `visual` slot. After the h1 the
+// with the fact), an optional `meta` line, the actions (buttons, or a button and a standalone text
+// link, centred on one line: a product family's second action, #227), and a `visual` slot. After the h1 the
 // description (the tagline) is the second thing read: the evidence is body weight with only its
 // numbers bold (quantities), and every sentence of copy, the condition too, is full text colour;
 // only `meta` is muted (design-principles.md「內頁共用的規則」, #208). The visual is where the 3D scroll
@@ -178,6 +179,7 @@ const imageDrop = hasCrumbs ? '--hero-image-drop: var(--hero-crumb-space)' : und
   .actions {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: var(--space-3);
     margin-block-start: var(--space-2);
   }
