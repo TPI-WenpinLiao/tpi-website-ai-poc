@@ -4,9 +4,11 @@
 // previews, whether its `sizes` picks the same srcset candidate as its rendered width would: a
 // different pick downloads a smaller (blurry) or a larger (wasted) file. Prints tables; it fails
 // nothing (not part of `npm run check`).
-// After the build: node scripts/design/wide.mjs [widths=1440,1920,2560,3440,5120] [height=1440]
+// After the build: node scripts/design/wide.mjs [widths=1440,1920,2560,3440,5120] [height=1440] [shots dir]
+// With a shots dir it also saves one screen of each page it measures, for comparing by eye:
+// <width>-home.png, <width>-home-cases.png, <width>-about-us.png, <width>-templates-<id>.png
 // Uses CHROME_PATH (set by the SessionStart hook), else CHROME_BIN (set on GitHub's runners), else the installed Chrome.
-import { readdirSync } from 'node:fs';
+import { mkdirSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import puppeteer from 'puppeteer-core';
 import { serve } from '../lib/static-server.mjs';
@@ -57,7 +59,12 @@ function pictures() {
   });
 }
 
-async function main([widths = '1440,1920,2560,3440,5120', height = '1440']) {
+async function main([widths = '1440,1920,2560,3440,5120', height = '1440', shots = '']) {
+  if (shots) mkdirSync(shots, { recursive: true });
+  /** @param {import('puppeteer-core').Page} page @param {number} w @param {string} name */
+  const shoot = async (page, w, name) => {
+    if (shots) await page.screenshot({ path: /** @type {`${string}.png`} */ (resolve(shots, `${w}-${name}.png`)) });
+  };
   const previews = readdirSync(resolve(DIST, 'templates'))
     .filter((f) => f.endsWith('.html'))
     .map((f) => `/templates/${f.replace(/\.html$/, '')}`)
@@ -87,6 +94,7 @@ async function main([widths = '1440,1920,2560,3440,5120', height = '1440']) {
           casesTop: (box('.cases')?.top ?? 0) + scrollY,
         };
       });
+      await shoot(page, w, 'home');
       // The cases section holds its stage on screen: scroll it to the top and measure the picture there
       await page.evaluate((y) => scrollTo(0, y + 10), home.casesTop);
       await new Promise((r) => setTimeout(r, SETTLE_MS));
@@ -94,10 +102,12 @@ async function main([widths = '1440,1920,2560,3440,5120', height = '1440']) {
         const r = document.querySelector('.slot')?.getBoundingClientRect();
         return r ? { w: r.width, h: r.height, bottom: r.bottom } : undefined;
       });
+      await shoot(page, w, 'home-cases');
       await page.goto(`http://localhost:${port}${INNER}`, { waitUntil: 'load' });
       const inner = await page.evaluate(() => document.querySelector('main .surface .inner')?.getBoundingClientRect().width ?? NaN);
       for (const path of ['/', INNER, ...previews]) {
         await page.goto(`http://localhost:${port}${path}`, { waitUntil: 'load' });
+        if (path !== '/') await shoot(page, w, path.slice(1).replaceAll('/', '-'));
         for (const p of await page.evaluate(pictures)) {
           if (p.fits === p.picked) continue;
           const way = p.picked < p.fits ? 'too small' : 'too large';
