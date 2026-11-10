@@ -85,8 +85,12 @@ function measure() {
   const nav = [...bar.querySelectorAll('.desktop-nav .top > li > details > summary')];
   const locale = bar.querySelector('.tools .locale summary');
   const cta = bar.querySelector('.tools .cta a');
+  // Every first-level item must be a disclosure the selector above reaches; one turned into a plain
+  // link would otherwise drop out of the check unnoticed
+  const items = bar.querySelectorAll('.desktop-nav .top > li').length;
   const missing = [
     ...(nav.length ? [] : ['first-level menu']),
+    ...(nav.length < items ? [`${items - nav.length} of ${items} first-level items`] : []),
     ...(locale ? [] : ['language menu']),
     ...(cta ? [] : ['contact button']),
   ];
