@@ -154,7 +154,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
             <img
               src={heroWideImg.src}
               srcset={heroWideImg.srcSet.attribute}
-              sizes="100vw"
+              sizes="(width >= 120rem) 120rem, 100vw"
               width={heroWide.width}
               height={heroWide.height}
               fetchpriority="high"
@@ -179,7 +179,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
         <figure class="fork" aria-hidden="true">
           <picture>
             <source media={NARROW_MEDIA} srcset={forkTallImg.srcSet.attribute} sizes="100vw" width={forkTall.width} height={forkTall.height} />
-            <img src={forkWideImg.src} srcset={forkWideImg.srcSet.attribute} sizes="100vw" width={forkWide.width} height={forkWide.height} loading="lazy" alt="" data-ribbon-fork />
+            <img src={forkWideImg.src} srcset={forkWideImg.srcSet.attribute} sizes="(width >= 120rem) 120rem, 100vw" width={forkWide.width} height={forkWide.height} loading="lazy" alt="" data-ribbon-fork />
           </picture>
         </figure>
         <h2 id="industries-title" class="head industries-title">{lines(copy.industries.title).map((line, i) => (i ? [<br />, line] : line))}</h2>
@@ -215,7 +215,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
               </div>
               {c.picture && (
                 <figure class="case-fig">
-                  <Image src={c.picture.image} widths={[640, 1200, 1600]} sizes="(width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
+                  <Image src={c.picture.image} widths={[640, 1200, 1600]} sizes="(width >= 120rem) 46rem, (width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
                   {c.label && (
                     <span class="map-label" style={c.label.style} aria-hidden="true">
                       {c.name}
@@ -228,7 +228,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
         }
       </div>
       <div class="slot" data-ribbon-slot="cases" aria-hidden="true">
-        <Image src={case1} widths={[640, 1200, 1600]} sizes="50vw" alt="" loading="lazy" />
+        <Image src={case1} widths={[640, 1200, 1600]} sizes="(width >= 120rem) 56rem, 50vw" alt="" loading="lazy" />
         <span class="map-label live-label" data-ribbon-case-label style={cases[0]?.label?.style}>{cases[0]?.name}</span>
       </div>
     </div>
@@ -242,7 +242,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
           <li>
             <a class="row" href={href(p)}>
               <span class="name serif">{p.title}</span>
-              {p.thumb && <Image class="thumb" src={p.thumb} widths={[384, 768]} sizes="(width >= 64rem) 16vw, 33vw" alt="" loading="lazy" />}
+              {p.thumb && <Image class="thumb" src={p.thumb} widths={[384, 768]} sizes="(width >= 120rem) 18rem, (width >= 64rem) 16vw, 33vw" alt="" loading="lazy" />}
             </a>
           </li>
         ))
@@ -258,7 +258,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
       <Link href={nodeHref(orient.id, locale)} variant="standalone">{copy.orientAi.link}</Link>
     </div>
     <figure class="orient-fig">
-      <Image src={orientaiImage} widths={[640, 1200, 1600]} sizes="(width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
+      <Image src={orientaiImage} widths={[640, 1200, 1600]} sizes="(width >= 120rem) 46rem, (width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
     </figure>
   </section>
 

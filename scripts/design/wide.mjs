@@ -1,8 +1,12 @@
 // Measures the built site on wide screens (#238): how tall the home page grows, whether the cases
 // section's picture fits the screen, whether the header and the home grid share a left edge, and how
-// wide an inner page's content runs. Prints a table; it fails nothing (not part of `npm run check`).
+// wide an inner page's content runs. Then, for every picture on the home page and the template
+// previews, whether its `sizes` picks the same srcset candidate as its rendered width would: a
+// different pick downloads a smaller (blurry) or a larger (wasted) file. Prints tables; it fails
+// nothing (not part of `npm run check`).
 // After the build: node scripts/design/wide.mjs [widths=1440,1920,2560,3440,5120] [height=1440]
 // Uses CHROME_PATH (set by the SessionStart hook), else CHROME_BIN (set on GitHub's runners), else the installed Chrome.
+import { readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import puppeteer from 'puppeteer-core';
 import { serve } from '../lib/static-server.mjs';
@@ -14,7 +18,50 @@ const SETTLE_MS = 1500;
 
 const round = (/** @type {number} */ n) => Math.round(n);
 
+/**
+ * Every picture with `sizes` on the page: its rendered width, the width its `sizes` resolves to at
+ * this viewport, and the srcset candidates (DPR 1) each of them picks. Runs in the page.
+ */
+function pictures() {
+  const px = (/** @type {string} */ length) => {
+    const probe = document.createElement('div');
+    probe.style.cssText = `position:absolute;visibility:hidden;inline-size:${length}`;
+    document.body.append(probe);
+    const w = probe.getBoundingClientRect().width;
+    probe.remove();
+    return w;
+  };
+  // `(media) length, (media) length, length`: the first entry whose media matches
+  const sizeOf = (/** @type {string} */ sizes) => {
+    for (const entry of sizes.split(/,(?![^(]*\))/).map((e) => e.trim())) {
+      const m = entry.match(/^(\(.*\))\s+(.+)$/);
+      if (!m) return px(entry);
+      if (matchMedia(/** @type {string} */ (m[1])).matches) return px(/** @type {string} */ (m[2]));
+    }
+    return NaN;
+  };
+  const pick = (/** @type {number[]} */ ws, /** @type {number} */ w) => ws.find((c) => c >= w) ?? ws.at(-1) ?? NaN;
+  return [...document.querySelectorAll('img')].flatMap((img) => {
+    // In a <picture> the matching <source> carries srcset and sizes
+    const source = [...(img.parentElement?.tagName === 'PICTURE' ? img.parentElement.querySelectorAll('source') : [])].find(
+      (s) => !s.media || matchMedia(s.media).matches,
+    );
+    const sizes = source?.getAttribute('sizes') ?? img.getAttribute('sizes');
+    const srcset = source?.getAttribute('srcset') ?? img.getAttribute('srcset');
+    const rendered = img.getBoundingClientRect().width;
+    if (!sizes || !srcset || !rendered) return [];
+    const ws = [...srcset.matchAll(/\s(\d+)w(?:,|$)/g)].map((m) => Number(m[1])).sort((a, b) => a - b);
+    const wanted = sizeOf(sizes);
+    const name = img.className.split(' ')[0] || img.closest('[class]')?.className.split(' ')[0] || 'img';
+    return [{ name, sizes, rendered, wanted, fits: pick(ws, rendered), picked: pick(ws, wanted) }];
+  });
+}
+
 async function main([widths = '1440,1920,2560,3440,5120', height = '1440']) {
+  const previews = readdirSync(resolve(DIST, 'templates'))
+    .filter((f) => f.endsWith('.html'))
+    .map((f) => `/templates/${f.replace(/\.html$/, '')}`)
+    .sort();
   const server = await serve(DIST);
   const { port } = /** @type {import('node:net').AddressInfo} */ (server.address());
   const executablePath = process.env.CHROME_PATH || process.env.CHROME_BIN;
@@ -22,6 +69,8 @@ async function main([widths = '1440,1920,2560,3440,5120', height = '1440']) {
   const browser = await puppeteer.launch({ ...chrome, headless: true, args: ['--no-sandbox', '--enable-unsafe-swiftshader'] });
   const h = Number(height);
   const rows = [];
+  /** @type {Map<string, number>} a miss and how many pictures on that page share it */
+  const misses = new Map();
   try {
     for (const w of widths.split(',').map(Number)) {
       const page = await browser.newPage();
@@ -47,6 +96,15 @@ async function main([widths = '1440,1920,2560,3440,5120', height = '1440']) {
       });
       await page.goto(`http://localhost:${port}${INNER}`, { waitUntil: 'load' });
       const inner = await page.evaluate(() => document.querySelector('main .surface .inner')?.getBoundingClientRect().width ?? NaN);
+      for (const path of ['/', INNER, ...previews]) {
+        await page.goto(`http://localhost:${port}${path}`, { waitUntil: 'load' });
+        for (const p of await page.evaluate(pictures)) {
+          if (p.fits === p.picked) continue;
+          const way = p.picked < p.fits ? 'too small' : 'too large';
+          const key = `${w}px ${path} .${p.name}: rendered ${round(p.rendered)}, sizes "${p.sizes}" = ${round(p.wanted)} → picks ${p.picked}w, ${way} (fits ${p.fits}w)`;
+          misses.set(key, (misses.get(key) ?? 0) + 1);
+        }
+      }
       await page.close();
       rows.push({
         width: `${w}×${h}`,
@@ -65,6 +123,9 @@ async function main([widths = '1440,1920,2560,3440,5120', height = '1440']) {
   const keys = Object.keys(rows[0] ?? {});
   console.log(`| ${keys.join(' | ')} |\n|${keys.map(() => '---').join('|')}|`);
   for (const r of rows) console.log(`| ${keys.map((k) => r[/** @type {keyof typeof r} */ (k)]).join(' | ')} |`);
+  const total = [...misses.values()].reduce((a, b) => a + b, 0);
+  console.log(`\nPictures whose sizes picks another srcset candidate than their rendered width (DPR 1): ${total}`);
+  for (const [m, n] of misses) console.log(`- ${m}${n > 1 ? ` ×${n}` : ''}`);
 }
 
 await main(process.argv.slice(2));
