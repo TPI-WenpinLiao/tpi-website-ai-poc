@@ -173,14 +173,16 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - DigiLism hero 加上連到產品索引的次要連結完成（#227）：hub 加 `secondaryCta`（只接受本頁某段的 `#id`），`HubTemplate` 把它輸出成「聯絡業務」後的文字連結，不做第二個按鈕；`/products/digilism`「看 DigiLism 的產品」、`/products/systalk-ai`「看 SysTalk.ai 的產品」都連到 `#products`，兩份 brief 的第 1 段與「CTA」照「hub：產品家族頁」回寫，`content-model.md`、`design-system` 元件表同步。ESGswift 與 en、vi 的家族頁還沒照 brief 改版、hero 沒有動作，不加。設計重評 DigiLism D2 4，評審把文字連結列為符合（`evaluation.md`「家族頁 hero 的次要連結（#227）」）
 - 索引列主要／次要段落的清單只留一份完成（#232）：完整清單只寫在 `design-principles.md`「索引列」；「段落標題」、`design-system` 元件表的 `SectionHeading`、`IndexList`、兩個元件的開頭註解與 `/design-system` 的說明只寫規則（`weight` 有自己的 `SectionHeading` 時同值、段末索引列一律次要）並連過去
 - 規格表名稱在詞中間斷行與 h2 超過兩行完成（#233）：`SpecTable` 的名稱欄、表頭、連結欄加 `.text-phrase`，`phrases.ts` 把標題與 `.text-phrase` 裡連字號接起來的英數詞（`4-GPU`）包成 `.text-nowrap`；`orphans.mjs` 加兩項檢查：`th` 與 keep-all 元素在詞中間斷行（全站）、`PageSections` 段落的 h2 在 768、1280 寬超過兩行。排不進兩行或沒有斷點的 5 個 h2 改文案（SysTalk.ai 2 個、GreenSwift 2 個、金融 1 個，依使用者決定不改版型或字級），`design-principles.md`「斷行」與 `design-system` 元件表同步
+- 只有一則案例的段落標題份量完成（#231）：內頁段落標題分主要（h2 字級）與次要（`--font-size-text`）兩級，寫在 `design-principles.md`「段落標題」；只有一則、沒有成果與獎項的案例段由模板降成次要（`src/lib/content/cases.ts` 的 `caseWeight()`），spec 段可設 `weight: secondary`（GreenSwift 第 6 段），次要的規格表不放段落圖（schema 擋下）
 
 ## 下一步
 
 - `briefs/aiso.md` 第 3 段、`orient-ai.md` 第 1、5 段要求 h2 與說明句寫「金融與政府」，同段事實沒有政府，照 #214 的「表述的範圍詞要被同段事實撐住」撐不住；brief 與頁面要一起改，要做時另開 issue
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
 - `evaluation.md`「斷行（#225）」的「評審依據不足」（h2 含長標準名、片段事實排到下方的條件、案例列的右欄、時間列年份重複、段落圖跨頁沿用）還沒開 issue，要做時另開
-- `evaluation.md`「索引列名稱與案例列（#226）」的「評審依據不足」：單則案例段的 h2 字級已開 #231；其餘（一段兩個產品的事實分組、375 寬螢幕高的定義與成果片段、HTML 接點圖）還沒開 issue，要做時另開
-- `evaluation.md`「介面片段的狀態（#209）」的「評審依據不足」（名稱裡的年份加粗、金融色帶的事實數與動作、段落圖的白底與淺灰段、GreenSwift hero 標籤、頁內導覽位置）還沒開 issue，要做時另開（案例與試用的順序 #226 已處理，h2 字級分級併入 #231）
+- `evaluation.md`「索引列名稱與案例列（#226）」的「評審依據不足」：單則案例段的 h2 字級 #231 已處理；其餘（一段兩個產品的事實分組、375 寬螢幕高的定義與成果片段、HTML 接點圖）還沒開 issue，要做時另開
+- `evaluation.md`「介面片段的狀態（#209）」的「評審依據不足」（名稱裡的年份加粗、金融色帶的事實數與動作、段落圖的白底與淺灰段、GreenSwift hero 標籤、頁內導覽位置）還沒開 issue，要做時另開（案例與試用的順序 #226 已處理，h2 字級分級 #231 已處理）
+- `evaluation.md`「單則案例的段落標題（#231）」的「評審依據不足」（段落圖要不要照 P4 的方塊配色、片段比文字欄短很多時的單側空白）還沒開 issue，要做時另開
 - `evaluation.md`「家族頁 hero 的次要連結（#227）」的「評審依據不足」（獎項段份量、接點圖 375 寬、h1 與 h2 的字級差、家族頁 hero 標籤、對應表當產品索引時子頁索引列的分級、清單欄數與模型參數加粗）還沒開 issue，要做時另開
 - #213 定案的規則和現有頁面不一致之處：先對照 #208–#212，沒有涵蓋的要做時另開。清單以 #213 的 PR「待確認問題」為準
 - `evaluation.md`「第一批（#200）」「第一批（#201）」「第一批（#202）」的「還不夠好的地方」與「評審依據不足」：共用元件的問題已開 #208–#212，規則文件的缺口由 #213–#215 補上（都已完成；各 issue 的內文列出它涵蓋哪幾項）。其餘還沒開 issue 的以 `evaluation.md` 那三節為準，要做時另開，開之前先對照 #208–#215 避免重複

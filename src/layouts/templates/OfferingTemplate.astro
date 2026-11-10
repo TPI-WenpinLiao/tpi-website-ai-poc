@@ -17,6 +17,7 @@ import Button from '../../components/ui/Button.astro';
 import FactRow from '../../components/ui/FactRow.astro';
 import Surface from '../../components/ui/Surface.astro';
 import CaseList from '../../components/ui/CaseList.astro';
+import { caseWeight } from '../../lib/content/cases';
 import IndexList from '../../components/ui/IndexList.astro';
 import MapPicture from '../../components/ui/MapPicture.astro';
 import PageSections from '../../components/ui/PageSections.astro';
@@ -266,7 +267,7 @@ const blog = localNode('blog', locale);
   {
     caseRows.length > 0 && (
       <Surface tone="light" id="cases" class="anchor-target">
-        <SectionHeading title={successStories.title} description={data.caseNotes ? undefined : data.casesIntro} />
+        <SectionHeading title={successStories.title} description={data.caseNotes ? undefined : data.casesIntro} weight={caseWeight(caseRows)} />
         <CaseList items={caseRows} linkHeading words={t.layout} more={{ label: t.layout.allCases, href: nodeHref('success-stories', locale) }} />
       </Surface>
     )

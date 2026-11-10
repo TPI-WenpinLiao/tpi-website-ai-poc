@@ -137,10 +137,10 @@ sections:
       - body: "對企業而言，系統分為主要管理者帳號和子管理者帳號，且沒有使用者數量的上限。主要管理者帳號可以審核和管理該公司申請的所有子帳號。系統也不限制使用者設立的組織邊界數量，支持靈活配置和擴展。"
   - layout: spec
     id: security
+    weight: secondary
     fill: subtle
     heading: 資安、可用性與語言
     body: 導入前要確認的三件事：資安架構、服務可用性，以及介面與支援用的語言。
-    image: ../../../assets/design/sec-identity.webp
     rows:
       - label: 資安
         values: ["GreenSwift採用零信任架構並且所有研發過程均符合 ISO 27001 安全標準"]
