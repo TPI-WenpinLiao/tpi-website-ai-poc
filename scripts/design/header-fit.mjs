@@ -45,11 +45,16 @@ export const PAGES = [
 
 export const fits = ({ content, available }) => content <= available;
 
-// What is wrong with one measured row: it doesn't fit, a label wraps, or the two disagree
+// What is wrong with one measured row: it doesn't fit, a label wraps, the two disagree, or a label
+// wasn't measured at all (missing from the header, or no visible text found: a check that silently
+// skips a label is how #240 went unnoticed)
 export function problems(row) {
   const out = [];
   const where = `${row.path} at ${row.width}px`;
   const wrapped = row.labels.filter((l) => l.lines > 1).map((l) => l.text);
+  const unmeasured = row.labels.filter((l) => l.lines === 0).map((l) => l.text || '(no text)');
+  if (row.missing.length) out.push(`${where}: not found in the header: ${row.missing.join(', ')}`);
+  if (unmeasured.length) out.push(`${where}: no visible text measured: ${unmeasured.join(', ')}`);
   if (!fits(row)) out.push(`${where}: the header needs ${row.content}px, has ${row.available}px`);
   if (wrapped.length) out.push(`${where}: wraps: ${wrapped.join(', ')}`);
   if (fits(row) && wrapped.length) out.push(`${where}: the widths say it fits but labels wrap; the measurement no longer matches the header`);
@@ -77,14 +82,24 @@ export function renderSection(rows) {
 // Runs in the page: the header bar's widths and the line count of each label
 function measure() {
   const bar = document.querySelector('header.site-header .bar');
-  const els = [
-    ...bar.querySelectorAll('.desktop-nav .top > li > details > summary'),
-    ...bar.querySelectorAll('.tools .locale summary, .tools .cta a'),
+  const nav = [...bar.querySelectorAll('.desktop-nav .top > li > details > summary')];
+  const locale = bar.querySelector('.tools .locale summary');
+  const cta = bar.querySelector('.tools .cta a');
+  const missing = [
+    ...(nav.length ? [] : ['first-level menu']),
+    ...(locale ? [] : ['language menu']),
+    ...(cta ? [] : ['contact button']),
   ];
-  // The visible text only: not the caret, the icon or the sr-only prefix
-  const visibleText = (el) =>
-    [...el.childNodes].filter((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
-  const labels = els.map((el) => {
+  // The visible text at any depth: not the caret, the icon or the sr-only prefix
+  const visibleText = (el) => {
+    const nodes = [];
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      if (n.textContent.trim() && !n.parentElement.closest('.sr-only')) nodes.push(n);
+    }
+    return nodes;
+  };
+  const labels = [...nav, locale, cta].filter(Boolean).map((el) => {
     const nodes = visibleText(el);
     const tops = new Set();
     for (const n of nodes) {
@@ -100,7 +115,7 @@ function measure() {
   bar.style.inlineSize = 'max-content';
   bar.style.maxInlineSize = 'none';
   const content = Math.ceil(bar.getBoundingClientRect().width - padding);
-  return { labels, content, available };
+  return { labels, missing, content, available };
 }
 
 async function main() {

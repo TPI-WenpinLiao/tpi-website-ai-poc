@@ -8,6 +8,7 @@ const row = (over = {}) => ({
   header: '首頁',
   path: '/vi',
   width: 1024,
+  missing: [],
   content: 900,
   available: 947,
   labels: [
@@ -31,6 +32,12 @@ test('a header wider than its bar is reported with both widths', () => {
 test('labels that wrap while the widths say it fits mean the measurement is off (#240)', () => {
   const found = problems(row({ labels: [{ text: 'Liên hệ kinh doanh', lines: 2 }] }));
   assert.ok(found.some((p) => /no longer matches the header/.test(p)));
+});
+
+test('a label with no measured text, or a missing part of the header, is a problem, not a pass', () => {
+  const found = problems(row({ missing: ['language menu'], labels: [{ text: '', lines: 0 }] }));
+  assert.ok(found.some((p) => /not found in the header: language menu/.test(p)));
+  assert.ok(found.some((p) => /no visible text measured: \(no text\)/.test(p)));
 });
 
 test('the section lists each locale once and marks rows that do not fit', () => {
