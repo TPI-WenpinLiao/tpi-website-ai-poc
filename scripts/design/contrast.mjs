@@ -54,7 +54,8 @@ export const SURFACES = [
  * @param {string} css @param {string} [selector] @returns {Map<string, string>}
  */
 export function parseTokens(css, selector = ':root') {
-  const clean = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  // @import statements (tokens.css imports media.css for its breakpoints) end in `;`, not a block
+  const clean = css.replace(/\/\*[\s\S]*?\*\//g, '').replace(/@import[^;]*;/g, '');
   let depth = 0;
   let prelude = 0;
   for (let i = 0; i < clean.length; i += 1) {

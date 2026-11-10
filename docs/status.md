@@ -174,6 +174,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 索引列主要／次要段落的清單只留一份完成（#232）：完整清單只寫在 `design-principles.md`「索引列」；「段落標題」、`design-system` 元件表的 `SectionHeading`、`IndexList`、兩個元件的開頭註解與 `/design-system` 的說明只寫規則（`weight` 有自己的 `SectionHeading` 時同值、段末索引列一律次要）並連過去
 - 規格表名稱在詞中間斷行與 h2 超過兩行完成（#233）：`SpecTable` 的名稱欄、表頭、連結欄加 `.text-phrase`，`phrases.ts` 把標題與 `.text-phrase` 裡連字號接起來的英數詞（`4-GPU`）包成 `.text-nowrap`；`orphans.mjs` 加兩項檢查：`th` 與 keep-all 元素在詞中間斷行（全站）、`PageSections` 段落的 h2 在 768、1280 寬超過兩行。排不進兩行或沒有斷點的 5 個 h2 改文案（SysTalk.ai 2 個、GreenSwift 2 個、金融 1 個，依使用者決定不改版型或字級），`design-principles.md`「斷行」與 `design-system` 元件表同步
 - 只有一則案例的段落標題份量完成（#231）：內頁段落標題分主要（h2 字級）與次要（`--font-size-text`）兩級，寫在 `design-principles.md`「段落標題」；只有一則、沒有成果與獎項的案例段由模板降成次要（`src/lib/content/cases.ts` 的 `caseWeight()`），spec 段可設 `weight: secondary`（GreenSwift 第 6 段），次要的規格表不放段落圖（schema 擋下）
+- 超寬螢幕的版面（#238），階段一，等待 design-approved：首頁的 12 欄格線、3D 舞台與圖到 `--layout-max-width`（120rem）停止變寬並置中，`.slot` 高度以 `100svh` 為上限，首頁的 `SiteHeader`、`SiteFooter` 用 `wide` 對齊首頁格線；內頁在 `--bp-xl-up`（≥ 100rem）時 `--content-max-width` 加寬到 90rem，閱讀寬度與字級不變；`node scripts/design/wide.mjs` 量首頁高度、案例圖與內頁內容寬度
 
 ## 下一步
 

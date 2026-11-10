@@ -47,12 +47,14 @@ interface Props {
   locales?: readonly LocaleLink[];
   // Fixed surface; omitted, the header follows the bands under it
   surface?: 'light' | 'dark';
+  // On the home page's grid (--grid-margin, up to --layout-max-width) instead of the content width
+  wide?: boolean;
 }
 
 const path = normalizePath(Astro.url.pathname);
 const currentLocale = localeFromPath(path);
 const t = strings(currentLocale);
-const { navLabel = t.mainNav, skipTo = '#main', open, locales = pageLocales(path), surface } = Astro.props;
+const { navLabel = t.mainNav, skipTo = '#main', open, locales = pageLocales(path), surface, wide = false } = Astro.props;
 // Rendered height in px; matches --logo-height (2rem)
 const LOGO_HEIGHT = 32;
 // One exclusive group per header; /design-system shows several headers, each with its own navLabel
@@ -72,7 +74,7 @@ const isMega = (item: NavItem) => groups(item).length > 0;
 
 <header class="site-header" data-surface={surface ?? 'light'} data-follow-surface={surface ? undefined : ''}>
   {skipTo && <a class="skip" href={skipTo}>{t.skipToMain}</a>}
-  <div class="bar">
+  <div class:list={['bar', { wide }]}>
     <a class="brand" href={nodeHref('home', currentLocale)}>
       <Image class="logo on-light" src={logo} alt={t.homeLogoAlt} height={LOGO_HEIGHT} loading="eager" layout="none" />
       <Image class="logo on-dark" src={logoWhite} alt={t.homeLogoAlt} height={LOGO_HEIGHT} loading="eager" layout="none" />
@@ -420,6 +422,13 @@ const isMega = (item: NavItem) => groups(item).length > 0;
     min-block-size: var(--header-height);
     margin-inline: auto;
     padding-inline: var(--space-gutter);
+  }
+
+  /* The home page's grid: its margin is inside the width, so the logo sits on the hero's left edge */
+  .bar.wide {
+    box-sizing: border-box;
+    max-inline-size: var(--layout-max-width);
+    padding-inline: var(--grid-margin);
   }
 
   ul {

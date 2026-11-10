@@ -11,3 +11,5 @@
    scene starts at --bp-lg-up */
 @custom-media --bp-md-up (width >= 48rem);
 @custom-media --bp-md-down (width < 48rem);
+/* Wide screens (#238): inner pages' content grows to --content-max-width-wide (tokens.css) */
+@custom-media --bp-xl-up (width >= 100rem);

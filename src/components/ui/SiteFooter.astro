@@ -20,8 +20,12 @@ import logo from '../../assets/brand/logo-horizontal-white.svg';
 // Rendered height in px; matches --logo-height-lg (3rem)
 const LOGO_HEIGHT = 48;
 
-type Props = { consentSettings?: { label: string; dialog: string } };
-const { consentSettings } = Astro.props;
+type Props = {
+  consentSettings?: { label: string; dialog: string };
+  // On the home page's grid (--grid-margin, up to --layout-max-width) instead of the content width
+  wide?: boolean;
+};
+const { consentSettings, wide = false } = Astro.props;
 
 const locale = localeFromPath(normalizePath(Astro.url.pathname));
 const t = strings(locale);
@@ -36,7 +40,7 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
 ---
 
 <footer class="site-footer" data-surface="dark" data-depth="deep">
-  <div class="inner">
+  <div class:list={['inner', { wide }]}>
     <div class="top">
       <div class="company">
         <a class="brand" href={nodeHref('home', locale)}>
@@ -114,6 +118,12 @@ if (!phone) throw new Error(`src/content/organization/${locale}.yaml needs a hea
     max-inline-size: var(--content-max-width);
     margin-inline: auto;
     padding: var(--space-16) var(--space-gutter) var(--space-8);
+  }
+
+  .inner.wide {
+    box-sizing: border-box;
+    max-inline-size: var(--layout-max-width);
+    padding-inline: var(--grid-margin);
   }
 
   ul,

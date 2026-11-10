@@ -39,6 +39,10 @@ test('parseTokens reads only the top-level block for the selector and skips comm
   assert.throws(() => parseTokens(CSS, '.missing'), /no top-level/);
 });
 
+test('parseTokens skips @import statements before the first block', () => {
+  assert.equal(parseTokens(`@import './media.css';\n${CSS}`).get('--white'), '#fff');
+});
+
 test('parseSurfaces stacks :root, the light block and the dark block', () => {
   const [light, dark] = parseSurfaces(CSS);
   assert.equal(resolveColor(light.tokens, '--color-bg'), '#fff');

@@ -29,9 +29,11 @@ type Props = Omit<SeoProps, 'locales'> & {
   translations?: readonly string[];
   // The page's breadcrumb trail, for pages that are found through the site search
   searchTrail?: readonly TrailNode[];
+  // The header and footer on the home page's grid instead of the content width (#238)
+  wide?: boolean;
 };
 
-const { translations, searchTrail, title, description, ...seo } = Astro.props;
+const { translations, searchTrail, title, description, wide, ...seo } = Astro.props;
 const locales = pageLocales(Astro.url.pathname, translations);
 const preview = isInternal(Astro.url.pathname);
 // Template previews show sample data, so they stay out of the index like the other internal pages
@@ -50,7 +52,7 @@ const ConsentBanner = import.meta.env.PUBLIC_GTM_ID ? (await import('../componen
   description={preview ? `${PREVIEW}（範例資料）：${title}。${description}` : description}
   locales={locales}
 >
-  <SiteHeader locales={locales} />
+  <SiteHeader locales={locales} wide={wide} />
   <!-- After the header: same z-index, so the later one paints the bar on top of the header -->
   <ScrollProgress />
   <!-- Below the header: above it, the notice would uncover the skip link hidden above the header -->
@@ -59,7 +61,7 @@ const ConsentBanner = import.meta.env.PUBLIC_GTM_ID ? (await import('../componen
   <main id="main" data-pagefind-body={indexed ? '' : undefined} data-pagefind-meta={section && `section:${section}`}>
     <slot />
   </main>
-  <SiteFooter consentSettings={consent?.footer} />
+  <SiteFooter consentSettings={consent?.footer} wide={wide} />
   {consent && ConsentBanner && <ConsentBanner id={consent.id} config={consent.config} categories={consent.categories} copy={consent.copy} />}
 </BaseLayout>
 

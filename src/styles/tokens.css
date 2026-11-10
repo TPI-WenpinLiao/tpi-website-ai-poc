@@ -19,6 +19,7 @@
  * orange #ff6329. Contrast for both surfaces is checked by scripts/design/contrast.mjs
  * (npm run check:design). Breakpoints live in src/styles/media.css as @custom-media.
  */
+@import './media.css';
 :root {
   /* Primitives: brand purple. 700 is the current site's primary color; 900 is the dark band. */
   --purple-50: #f6f1fa;
@@ -211,7 +212,14 @@
   /* Layout */
   /* The orange band that ends the ribbon at the home page's contact button (#167) */
   --home-band-width: clamp(5rem, 16vw, 16rem);
+  /* Inner pages' content width (Surface, SiteHeader, SiteFooter, InPageNav, ConsentBanner); wider
+     on wide screens, below */
   --content-max-width: 72rem;
+  --content-max-width-wide: 90rem;
+  /* The home page's 12-column grid, its 3D stage and pictures stop growing here and centre (#238):
+     the scene is framed by width, so past this a wider screen would only show it bigger. The home
+     page's SiteHeader and SiteFooter (`wide`) share this edge */
+  --layout-max-width: 120rem;
   --reading-max-width: 46rem;
   /* Person photo on the person template; 20rem in its sizes attribute */
   --portrait-max-width: 20rem;
@@ -341,6 +349,14 @@
   --scene-worst: var(--ink-0);
 
   color-scheme: dark;
+}
+
+/* Wide screens (#238): inner pages' content grows so it doesn't sit in a third of a 3440px screen;
+   the reading width and the type sizes stay, the screen's pixels are no bigger */
+@media (--bp-xl-up) {
+  :root {
+    --content-max-width: var(--content-max-width-wide);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
