@@ -153,7 +153,7 @@ body {
 }
 
 /* A hyphenated Latin word kept on one line (4-GPU, 14064-1): src/lib/content/phrases.ts wraps it
-   in headings, .text-phrase text and table cells on zh-TW pages (#233) */
+   in headings and .text-phrase text on zh-TW pages, not in plain table cells or code (#233) */
 .text-nowrap {
   white-space: nowrap;
 }
