@@ -43,7 +43,7 @@ const Heading = `h${level}` as const;
 ---
 
 <article class:list={['card', size, { linked: href }]} data-pagefind-ignore={href ? '' : undefined} data-preview-state={previewState}>
-  {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes="(width >= 64rem) 22rem, 100vw" />}
+  {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes="(width >= 100rem) 29rem, (width >= 64rem) 22rem, 100vw" />}
   <div class="body">
     <Heading class="title">{href ? <a href={href}>{title}</a> : title}</Heading>
     {description && <p class="description text-phrase">{description}</p>}

@@ -68,9 +68,12 @@ const items = (list: readonly { title?: string | undefined; body: string; node?:
     const heading = <SectionHeading title={sec.heading} description={sec.body} weight={sec.layout === 'spec' && sec.weight ? sec.weight : 'primary'} />;
     // A section's picture (decorative, design-principles.md「內頁共用的規則」段落圖): beside the heading
     // for spec and timeline, in the figure's place for a band without a fragment; not on phones
+    // sizes: a band's figure grows with the wide content width (--bp-xl-up, #238); beside a heading
+    // the picture stays within 36rem
+    const pictureSizes = sec.layout === 'band' ? '(width >= 100rem) 44rem, (width >= 64rem) 36rem, 100vw' : '(width >= 64rem) 36rem, 100vw';
     const picture = sec.image && (
       <div class="figure picture-figure">
-        <Image class="picture" src={sec.image} widths={[640, 960, 1280]} sizes="(width >= 64rem) 36rem, 100vw" alt="" loading="lazy" />
+        <Image class="picture" src={sec.image} widths={[640, 960, 1280]} sizes={pictureSizes} alt="" loading="lazy" />
       </div>
     );
     const head = picture ? (

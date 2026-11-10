@@ -53,6 +53,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 - 元件的 `min-height: var(--touch-target)` 就是實際高度，不必扣 padding
 - `max-width` 代表內容寬度、外面再加左右 padding 的容器（`Surface` 的 `.inner`），寫 `box-sizing: content-box`，讓 `--content-max-width`、`--reading-max-width` 維持內容寬度
+- 超寬螢幕（#238）：內頁在 `--bp-xl-up` 時 `--content-max-width` 加寬，閱讀寬度與字級不變（螢幕的像素沒有變大）。首頁的 12 欄格線、3D 舞台與圖到 `--layout-max-width` 就停止變寬並置中，格線用 `padding-inline: max(var(--grid-margin), 50% - var(--layout-max-width) / 2 + var(--grid-margin))`，段落底色仍然滿版；3D 依舞台寬度取景，舞台不設上限的話，畫面越寬場景就放得越大。首頁的 `SiteHeader`、`SiteFooter` 用 `wide`，跟首頁格線同一條左緣
 - 沒有這條規則時，`<a>` 按鈕與 `input` 是 content-box，`<button>`、`<select>` 在瀏覽器預設樣式裡是 border-box，同一個元件會因輸出的標籤不同而高度不同（#16 實測：`<a>` 的 lg 按鈕 76px，應為約 48px）
 
 ## 亮暗 surface
@@ -105,6 +106,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `--bp-sm-up` | `width >= 40rem` |
 | `--bp-lg-up` | `width >= 64rem` |
 | `--bp-lg-down` | `width < 64rem` |
+| `--bp-xl-up` | `width >= 100rem`（只在 `tokens.css` 用：內頁的 `--content-max-width` 換成 `--content-max-width-wide`） |
 
 用斷點的 `<style>` 要先 `@import` media.css（路徑相對於該檔），漏掉時 build 失敗：
 
@@ -148,8 +150,8 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
 | `ScrollProgress` | 頁首捲動進度條 | 能量漸層；裝飾用 |
-| `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的亮底列，沒有下框線（#187），展開的選單面板可以有陰影；下緣經過 `data-surface="dark"` 的段落時，script 把 header 的 `data-surface` 換成 `dark`（`IntersectionObserver`，#179），選單面板、搜尋框與「選單」固定 `data-surface="light"`；`--bp-lg-up` 有 `InPageNav` 黏在下方時，觸發線改在目錄列下緣，目錄列一起換色；`surface` 固定成一種，只給 `/design-system` 的預覽用；寬度小於 64rem 收進「選單」 |
-| `SiteFooter` | 頁尾 | 深色 surface、近黑底（`--color-bg-deep`），不用分隔線；連結欄的連結是名稱，加 `.text-phrase`（#225）；帶 `data-depth="deep"`，`SiteHeader` 與黏住的 `InPageNav` 經過時也換成近黑；連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入） |
+| `SiteHeader` | 頁首 | 資料只讀 `navigation.csv`（`src/lib/ia/navigation.ts`）；選單是原生 `<details>`，共用同一個 `name`，一次只開一個；點選單外、按 Esc 收起由元件內的小段 script 處理（Esc 後焦點回到 summary）；`--header-height` 高、sticky 的亮底列，沒有下框線（#187），展開的選單面板可以有陰影；下緣經過 `data-surface="dark"` 的段落時，script 把 header 的 `data-surface` 換成 `dark`（`IntersectionObserver`，#179），選單面板、搜尋框與「選單」固定 `data-surface="light"`；`--bp-lg-up` 有 `InPageNav` 黏在下方時，觸發線改在目錄列下緣，目錄列一起換色；`surface` 固定成一種，只給 `/design-system` 的預覽用；寬度小於 64rem 收進「選單」；`wide` 讓內容寬度改用首頁格線（`--grid-margin`、上限 `--layout-max-width`），由 `PageLayout` 的 `wide` 傳入，只有首頁用 |
+| `SiteFooter` | 頁尾 | 深色 surface、近黑底（`--color-bg-deep`），不用分隔線；連結欄的連結是名稱，加 `.text-phrase`（#225）；帶 `data-depth="deep"`，`SiteHeader` 與黏住的 `InPageNav` 經過時也換成近黑；連結欄與法務列讀 `navigation.csv`，電話、Email、版權讀 `src/data/site.ts`；`consentSettings` 在法務列最後加上重新打開 `ConsentBanner` 偏好設定的按鈕（`PageLayout` 在有 GTM ID 時傳入）；`wide` 讓內容寬度改用首頁格線（`--grid-margin`、上限 `--layout-max-width`），由 `PageLayout` 的 `wide` 傳入，只有首頁用 |
 | `Breadcrumb` | 麵包屑 | 放在 `PageHero` 的 `breadcrumb` slot；項目由 `nodes.csv` 的 `parent` 推出（`breadcrumb()`），最後一項是目前頁面；collection 頁用 `current` 換成項目標題；連結帶目前語系的前綴；窄於 `--bp-lg-up` 時一列橫向捲動，項目不縮窄（#225） |
 | `InPageNav` | 頁內錨點列 | 只列頁面有輸出的區塊；和頁面用一階底色分開，不用下框線（#187）；`stick="header"` 在 `--bp-lg-up` 固定在 header 下方，手機隨頁面捲走；固定在 header 下方時跟 header 算同一條 bar，紫色段落經過時由 `SiteHeader` 的 script 一起換成深色（#179）；`stick="top"` 給沒有 header 的頁面；選項多時在列內橫向捲動，不畫原生捲軸（#211）：元件內的 script 標出哪一側還有項目（`data-more-start`／`data-more-end`），那一側先留一段全透明再淡出（`mask-image`），最後一項不在字中間硬切；`--bp-lg-up` 且 `pointer: fine` 時那一側加箭頭鈕，按一下捲動約一個列寬。箭頭鈕只給滑鼠用（`tabindex="-1"`、`aria-hidden`，按下時不接 focus）；鍵盤 Tab 到落在淡出區的連結時（`:focus-visible`），script 把它捲出淡出區，滑鼠點擊不捲 |
 | `Faq` | 常見問題 | 原生 `<details>`，零 JS |
@@ -221,6 +223,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 生成的素材是「緞帶世界」風格：白色等角方塊、白底、平塗，只有緞帶有紫→品紅→橘的漸層；不放文字、數字、人物、介面與真實產品，要說明的字用 HTML 標籤疊上去。提示詞、規格與素材清單見 `docs/design/image-prompts.md`「#187」；同檔的 M3-02 深色素材只剩 `/design-system` 的範例在用
 - 檔案放 `src/assets/design/`，用 `node scripts/design/import-image.mjs <來源> <檔名>` 轉成 WebP 品質 95，不直接放 PNG
 - 公司 logo 在 `src/assets/brand/`，是 `node scripts/design/import-brand.mjs <AI 檔資料夾>` 從行銷部門的 AI 檔轉出的 SVG（刪掉反白版的預覽底色、裁掉留白），同時產生 `public/favicon.png`、`public/apple-touch-icon.png`。深色 surface 用白色版，亮色用彩色版；header 只放符號（`logo-symbol-white`，`--logo-height`），footer 放橫式中英版（`logo-horizontal-white`，`--logo-height-lg`）
+- `sizes` 寫圖在各斷點的實際寬度：內頁在 `--bp-xl-up` 加寬時，跟著內容欄變寬的圖要加 `(width >= 100rem)` 的值（`Card`、band 的段落圖）；首頁的圖到 `--layout-max-width` 就不再變寬，`vw` 的值前面加 `(width >= 120rem)` 封頂。改了版面或 `sizes` 後跑 `node scripts/design/wide.mjs`，它列出 `sizes` 與實際寬度挑到不同 srcset 候選的圖（#238）
 - 文字壓在圖上時，圖要讓出文字的位置（hero 的 `--hero-image-share`／`--hero-copy-share`、手機的 `--hero-narrow-offset`），不靠加深遮罩硬撐。換圖後跑 `node scripts/design/a11y-smoke.mjs`
 
 ## 無障礙

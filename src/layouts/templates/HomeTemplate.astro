@@ -118,7 +118,7 @@ const searchUrl = builtNodes.get(locale)?.has('search') ? new URL(nodeHref('sear
 const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(org.data.logo.src, Astro.site).href, inLanguage: locale, searchUrl });
 ---
 
-<PageLayout title={copy.meta.title} titleSuffix={false} description={copy.meta.description} jsonLd={jsonLd}>
+<PageLayout title={copy.meta.title} titleSuffix={false} description={copy.meta.description} jsonLd={jsonLd} wide>
   <!-- Decides the layout before the first paint, with src/lib/scene/tiers.ts LIVE -->
   <script is:inline define:vars={{ live: LIVE }}>
     const c = navigator.connection;
@@ -154,7 +154,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
             <img
               src={heroWideImg.src}
               srcset={heroWideImg.srcSet.attribute}
-              sizes="100vw"
+              sizes="(width >= 120rem) 120rem, 100vw"
               width={heroWide.width}
               height={heroWide.height}
               fetchpriority="high"
@@ -179,7 +179,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
         <figure class="fork" aria-hidden="true">
           <picture>
             <source media={NARROW_MEDIA} srcset={forkTallImg.srcSet.attribute} sizes="100vw" width={forkTall.width} height={forkTall.height} />
-            <img src={forkWideImg.src} srcset={forkWideImg.srcSet.attribute} sizes="100vw" width={forkWide.width} height={forkWide.height} loading="lazy" alt="" data-ribbon-fork />
+            <img src={forkWideImg.src} srcset={forkWideImg.srcSet.attribute} sizes="(width >= 120rem) 120rem, 100vw" width={forkWide.width} height={forkWide.height} loading="lazy" alt="" data-ribbon-fork />
           </picture>
         </figure>
         <h2 id="industries-title" class="head industries-title">{lines(copy.industries.title).map((line, i) => (i ? [<br />, line] : line))}</h2>
@@ -215,7 +215,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
               </div>
               {c.picture && (
                 <figure class="case-fig">
-                  <Image src={c.picture.image} widths={[640, 1200, 1600]} sizes="(width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
+                  <Image src={c.picture.image} widths={[640, 1200, 1600]} sizes="(width >= 120rem) 46rem, (width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
                   {c.label && (
                     <span class="map-label" style={c.label.style} aria-hidden="true">
                       {c.name}
@@ -228,7 +228,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
         }
       </div>
       <div class="slot" data-ribbon-slot="cases" aria-hidden="true">
-        <Image src={case1} widths={[640, 1200, 1600]} sizes="50vw" alt="" loading="lazy" />
+        <Image src={case1} widths={[640, 1200, 1600]} sizes="(width >= 120rem) 56rem, 50vw" alt="" loading="lazy" />
         <span class="map-label live-label" data-ribbon-case-label style={cases[0]?.label?.style}>{cases[0]?.name}</span>
       </div>
     </div>
@@ -242,7 +242,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
           <li>
             <a class="row" href={href(p)}>
               <span class="name serif">{p.title}</span>
-              {p.thumb && <Image class="thumb" src={p.thumb} widths={[384, 768]} sizes="(width >= 64rem) 16vw, 33vw" alt="" loading="lazy" />}
+              {p.thumb && <Image class="thumb" src={p.thumb} widths={[384, 768]} sizes="(width >= 120rem) 18rem, (width >= 64rem) 16vw, 33vw" alt="" loading="lazy" />}
             </a>
           </li>
         ))
@@ -258,7 +258,7 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
       <Link href={nodeHref(orient.id, locale)} variant="standalone">{copy.orientAi.link}</Link>
     </div>
     <figure class="orient-fig">
-      <Image src={orientaiImage} widths={[640, 1200, 1600]} sizes="(width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
+      <Image src={orientaiImage} widths={[640, 1200, 1600]} sizes="(width >= 120rem) 46rem, (width >= 48rem) 40vw, 100vw" alt="" loading="lazy" />
     </figure>
   </section>
 
@@ -365,12 +365,14 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
 <style>
   @import '../../styles/media.css';
 
-  /* One 12-column grid and one left edge for every section */
+  /* One 12-column grid and one left edge for every section. Past --layout-max-width the grid stops
+     growing and centres, while each section's background still runs to the screen's edges (#238);
+     SiteHeader and SiteFooter (`wide`) share the edge */
   .grid {
     display: grid;
     grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
     column-gap: var(--grid-gutter);
-    padding-inline: var(--grid-margin);
+    padding-inline: max(var(--grid-margin), 50% - var(--layout-max-width) / 2 + var(--grid-margin));
   }
 
   /* Full width by default; :where keeps this below each section's own column rules */
@@ -484,12 +486,19 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
   }
 
   /* ---- 1 Hero and 2 industries: one ribbon ---- */
+  /* clip: the held stage's negative end margin lets it run a screen past the route, over the cases
+     band (a white box once the stage is narrower than the screen, #238); clip keeps it sticky */
   .route {
     position: relative;
+    overflow: clip;
   }
 
+  /* The scene is framed by the stage's width (runtime.ts): capped like the grid, a wider screen
+     doesn't show it bigger */
   .stage {
     display: none;
+    max-inline-size: var(--layout-max-width);
+    margin-inline: auto;
   }
 
   .hero-copy {
@@ -513,7 +522,9 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
 
   .hero-map {
     position: relative;
+    max-inline-size: var(--layout-max-width);
     margin-block-start: var(--space-10);
+    margin-inline: auto;
     overflow: clip;
   }
 
@@ -939,6 +950,8 @@ const jsonLd = homeJsonLd({ org: org.data, site: Astro.site, logoUrl: new URL(or
     align-self: start;
     inline-size: 100%;
     aspect-ratio: 4 / 3;
+    /* Fits the held stage, inside its padding, on a wide and short screen */
+    max-block-size: calc(100svh - 2 * var(--space-16));
     overflow: clip;
     background: var(--color-bg);
   }

@@ -140,11 +140,13 @@ export async function mount({ canvas, context, route, cases }: Options): Promise
     // where the hero words end on the stuck stage (its top is the screen's top), and how tall a label is
     layout.copyBottom = copy.getBoundingClientRect().bottom - hr.top - Math.max(0, y - layout.heroTop);
     layout.labelH = (routeLabels[0]?.offsetHeight ?? 0) + 8;
-    // the tail: the fork picture's box, its top on the city edge, the page's centre on x = 0
+    // the tail: the fork picture's box, its top on the city edge, the stage's centre on x = 0 (the
+    // stage stops growing past --layout-max-width and centres, so it needn't start at the screen's edge)
     const fb = forkBox.getBoundingClientRect();
     const stageW = slots.route.clientWidth || innerWidth;
+    const stageLeft = slots.route.getBoundingClientRect().left;
     const f = { ...FORK.wide, w: fb.width || FORK.wide.w, h: fb.height || FORK.wide.h, halfW: HALF_W * (fb.width / stageW || 1) };
-    const cx = (fb.left + fb.width / 2 - stageW / 2) * ((2 * HALF_W) / stageW);
+    const cx = (fb.left - stageLeft + fb.width / 2 - stageW / 2) * ((2 * HALF_W) / stageW);
     const t = tailWorld(world, f, cx);
     world.ribbon.build(t.main, t.branch);
     world.ribbon.draw(state.draw);

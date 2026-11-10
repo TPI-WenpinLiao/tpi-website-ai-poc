@@ -174,9 +174,11 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 索引列主要／次要段落的清單只留一份完成（#232）：完整清單只寫在 `design-principles.md`「索引列」；「段落標題」、`design-system` 元件表的 `SectionHeading`、`IndexList`、兩個元件的開頭註解與 `/design-system` 的說明只寫規則（`weight` 有自己的 `SectionHeading` 時同值、段末索引列一律次要）並連過去
 - 規格表名稱在詞中間斷行與 h2 超過兩行完成（#233）：`SpecTable` 的名稱欄、表頭、連結欄加 `.text-phrase`，`phrases.ts` 把標題與 `.text-phrase` 裡連字號接起來的英數詞（`4-GPU`）包成 `.text-nowrap`；`orphans.mjs` 加兩項檢查：`th` 與 keep-all 元素在詞中間斷行（全站）、`PageSections` 段落的 h2 在 768、1280 寬超過兩行。排不進兩行或沒有斷點的 5 個 h2 改文案（SysTalk.ai 2 個、GreenSwift 2 個、金融 1 個，依使用者決定不改版型或字級），`design-principles.md`「斷行」與 `design-system` 元件表同步
 - 只有一則案例的段落標題份量完成（#231）：內頁段落標題分主要（h2 字級）與次要（`--font-size-text`）兩級，寫在 `design-principles.md`「段落標題」；只有一則、沒有成果與獎項的案例段由模板降成次要（`src/lib/content/cases.ts` 的 `caseWeight()`），spec 段可設 `weight: secondary`（GreenSwift 第 6 段），次要的規格表不放段落圖（schema 擋下）
+- 超寬螢幕的版面完成（#238）：首頁的 12 欄格線、3D 舞台與圖到 `--layout-max-width`（120rem）停止變寬並置中，`.slot` 高度以 `100svh` 為上限，首頁的 `SiteHeader`、`SiteFooter` 用 `wide` 對齊首頁格線（所有寬度的左右邊距都改成 `--grid-margin`，三語首頁 9 張視覺回歸 baseline 已更新）；內頁在 `--bp-xl-up`（≥ 100rem）時 `--content-max-width` 加寬到 90rem，閱讀寬度與字級不變；`node scripts/design/wide.mjs` 量首頁高度、案例圖與內頁內容寬度，並列出 `sizes` 與實際寬度挑到不同 srcset 候選的圖；首頁的圖 `sizes` 在 120rem 封頂，`Card` 與 band 的段落圖加上 ≥ 100rem 的值。橘色 band 停在 1920 格線邊緣、內頁加寬 90rem 照階段一定案
 
 ## 下一步
 
+- 內頁 `Surface` 的 `reading` 欄置中，與 hero 的左緣有落差，`--bp-xl-up` 加寬後更明顯（#238 的 PR「待確認問題」）；要改時另開 issue
 - `briefs/aiso.md` 第 3 段、`orient-ai.md` 第 1、5 段要求 h2 與說明句寫「金融與政府」，同段事實沒有政府，照 #214 的「表述的範圍詞要被同段事實撐住」撐不住；brief 與頁面要一起改，要做時另開 issue
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
 - `evaluation.md`「斷行（#225）」的「評審依據不足」（h2 含長標準名、片段事實排到下方的條件、案例列的右欄、時間列年份重複、段落圖跨頁沿用）還沒開 issue，要做時另開
