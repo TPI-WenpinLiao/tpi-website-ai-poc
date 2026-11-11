@@ -12,18 +12,22 @@
 // A linked card only repeats another page's title and summary, so the site search leaves it out
 // (data-pagefind-ignore); static panels are the page's own content and stay in the index.
 // data-preview-state="hover" | "focus" draws that state statically, for the /design-system page only.
-// `sizes` defaults to a card in a three-column CardGrid at the content width. Elsewhere pass the
-// card's own widths (the listing's featured card, a two-column grid in a reading-width section).
+// `layout` says where the card sits, for the image's sizes: "grid" (default) in a three-column
+// CardGrid at the content width, "full" across the content width (the listing's featured card),
+// "reading-pair" in a two-column CardGrid at the reading width (content pages' section items).
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
-// A card in CardGrid (cols 3): three columns from --bp-lg-up, two from --bp-sm-up, else one, gaps
-// of --space-6. The content runs at --content-max-width (72rem) from 76rem and at the wide 90rem
-// from --bp-xl-up; below 75rem it is 100vw less two gutters of 0.5rem + 2vw (--space-gutter), so
-// three columns are (96vw - 1rem - 3rem) / 3, two are (96vw - 1rem - 1.5rem) / 2 and one is
-// 96vw - 1rem (#242).
-const GRID_SIZES =
-  '(width >= 100rem) 29rem, (width >= 76rem) 23rem, (width >= 64rem) calc(32vw - 1.33rem), (width >= 40rem) calc(48vw - 1.25rem), calc(96vw - 1rem)';
+// Image widths per layout (#242). Gaps are --space-6. The content box is --content-max-width
+// (72rem) from 76rem and the wide 90rem from --bp-xl-up, --reading-max-width (46rem) from 49rem;
+// narrower, it is 100vw less two gutters of 0.5rem + 2vw (--space-gutter) = 96vw - 1rem. So in that
+// range three columns are (96vw - 1rem - 3rem) / 3, two are (96vw - 1rem - 1.5rem) / 2.
+// CardGrid: three columns from --bp-lg-up, two from --bp-sm-up, else one.
+const SIZES = {
+  grid: '(width >= 100rem) 29rem, (width >= 76rem) 23rem, (width >= 64rem) calc(32vw - 1.33rem), (width >= 40rem) calc(48vw - 1.25rem), calc(96vw - 1rem)',
+  full: '(width >= 100rem) 90rem, (width >= 76rem) 72rem, calc(96vw - 1rem)',
+  'reading-pair': '(width >= 49rem) 22.25rem, (width >= 40rem) calc(48vw - 1.25rem), calc(96vw - 1rem)',
+} as const;
 
 interface Props {
   title: string;
@@ -35,7 +39,7 @@ interface Props {
   size?: 'md' | 'sm';
   // YYYY-MM-DD publish date (posts, news), shown as 2026/09/11 in the meta row before the slot
   date?: string | undefined;
-  sizes?: string;
+  layout?: keyof typeof SIZES;
   'data-preview-state'?: 'hover' | 'focus';
 }
 
@@ -48,14 +52,14 @@ const {
   image,
   size = 'md',
   date,
-  sizes = GRID_SIZES,
+  layout = 'grid',
   'data-preview-state': previewState,
 } = Astro.props;
 const Heading = `h${level}` as const;
 ---
 
 <article class:list={['card', size, { linked: href }]} data-pagefind-ignore={href ? '' : undefined} data-preview-state={previewState}>
-  {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes={sizes} />}
+  {image && <Image class="media" src={image.src} alt={image.alt} widths={[400, 800]} sizes={SIZES[layout]} />}
   <div class="body">
     <Heading class="title">{href ? <a href={href}>{title}</a> : title}</Heading>
     {description && <p class="description text-phrase">{description}</p>}
