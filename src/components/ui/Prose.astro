@@ -3,10 +3,17 @@
 // paragraphs, lists, links, images, tables, quotes and code at reading width. Pages put the
 // rendered entry (<Content />) or plain paragraphs inside. Reading pages use it on the light
 // surface; colors follow the surrounding data-surface. Headings in the Markdown start at h2, under
-// the page's h1.
+// the page's h1. Other attributes go on the wrapper (ContentTemplate marks a legal page's body for
+// PolicyDialog with data-policy-source). `size="sm"` sets the body text one step down, for text in
+// a narrow box (PolicyDialog's dialog, #250).
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'> & { size?: 'md' | 'sm' };
+
+const { class: className, size = 'md', ...rest } = Astro.props;
 ---
 
-<div class="prose">
+<div class:list={['prose', size, className]} {...rest}>
   <slot />
 </div>
 
@@ -18,6 +25,10 @@
     line-height: var(--line-height-base);
     /* A bare URL or long word breaks instead of widening the page */
     overflow-wrap: break-word;
+  }
+
+  .prose.sm {
+    font-size: var(--font-size-base);
   }
 
   .prose > :global(:first-child) {

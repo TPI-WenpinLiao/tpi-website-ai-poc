@@ -18,7 +18,9 @@ import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import Button from '../../components/ui/Button.astro';
 import FormField from '../../components/ui/FormField.astro';
 import FormPanel from '../../components/ui/FormPanel.astro';
-import { breadcrumb, localeHref, localNode } from '../../lib/ia/navigation';
+import Link from '../../components/ui/Link.astro';
+import PolicyDialog from '../../components/ui/PolicyDialog.astro';
+import { breadcrumb, localeHref, localNode, nodeHref } from '../../lib/ia/navigation';
 import { entryLocale } from '../../lib/content/entries';
 import { whitepaperJsonLd } from '../../lib/seo/jsonld/whitepaper';
 import { canonicalUrl } from '../../lib/seo/meta';
@@ -95,9 +97,12 @@ const jsonLd = whitepaperJsonLd({
         <FormField kind="email" id="email" name="email" label={f.email} autocomplete="email" required />
         <FormField kind="text" id="company" name="company" label={f.company} autocomplete="organization" required />
         <FormField kind="text" id="job" name="job" label={f.jobTitle} autocomplete="organization-title" required />
-        <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required />
+        <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required>
+          <Link slot="hint" href={nodeHref('privacy', locale)} data-policy-open="privacy-dialog">{f.privacyLink}</Link>
+        </FormField>
         <Button slot="actions" type="submit" size="lg">{t.download.submit}</Button>
         </FormPanel>
+        <PolicyDialog id="privacy-dialog" />
       </div>
     </div>
   </Surface>

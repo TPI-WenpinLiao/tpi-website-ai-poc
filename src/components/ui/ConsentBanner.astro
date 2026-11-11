@@ -1,6 +1,6 @@
 ---
 // Cookie consent (M6-04, #36, ADR 0007): a banner fixed to the bottom of the viewport and a
-// preferences dialog (native <dialog>, so showModal() traps focus and Esc closes it). Dark chrome like
+// preferences dialog (Dialog: native <dialog>, so showModal() traps focus and Esc closes it). Dark chrome like
 // the header and footer, on every page whatever its surface. Accept and reject share one visual weight.
 // PageLayout renders it, at body level, only when the build has PUBLIC_GTM_ID (src/lib/consent/page.ts):
 // `config` carries the container ID, the data version and the categories' consent types to the
@@ -15,6 +15,7 @@
 // `wide`: from --bp-sm-up the banner spans the home page's grid (--grid-margin, up to
 // --layout-max-width) instead of the content width, so it lines up with the wide header's logo (#243).
 import Button from './Button.astro';
+import Dialog from './Dialog.astro';
 import Link from './Link.astro';
 import type { ConsentConfig } from '../../lib/consent/page';
 
@@ -87,57 +88,49 @@ const dialogId = `${id}-dialog`;
     )
   }
 
-  <dialog class="dialog" id={dialogId} aria-labelledby={`${dialogId}-title`} open={preview === 'dialog'}>
-    <form method="dialog" class="sheet">
-      <div class="head">
-        <h2 class="title" id={`${dialogId}-title`}>{copy.dialogTitle}</h2>
-        <button class="close" type="submit" aria-label={copy.close}>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
-        </button>
-      </div>
-      <p class="description">
-        {copy.dialogDescription} <Link href={copy.policy.href}>{copy.policy.label}</Link>
-      </p>
-      <ul class="row-list">
-        {
-          categories.map((c) => (
-            <li class="category">
-              <label class="name" for={`${dialogId}-${c.id}`}>
-                {c.name}
-              </label>
-              <p class="category-description" id={`${dialogId}-${c.id}-description`}>
-                {c.description}
-              </p>
-              <span class="toggle">
-                {c.required && <span class="always">{copy.alwaysOn}</span>}
-                <input
-                  class="switch"
-                  type="checkbox"
-                  role="switch"
-                  id={`${dialogId}-${c.id}`}
-                  name={c.id}
-                  checked={c.required || c.checked}
-                  disabled={c.required}
-                  aria-describedby={`${dialogId}-${c.id}-description`}
-                />
-              </span>
-            </li>
-          ))
-        }
-      </ul>
-      <div class="actions">
-        <Button variant="secondary" size="sm" type="submit" data-consent-action="reject">
-          {copy.rejectAll}
-        </Button>
-        <Button variant="secondary" size="sm" type="submit" data-consent-action="accept">
-          {copy.acceptAll}
-        </Button>
-        <Button size="sm" type="submit" data-consent-action="save">
-          {copy.save}
-        </Button>
-      </div>
-    </form>
-  </dialog>
+  <Dialog id={dialogId} title={copy.dialogTitle} closeLabel={copy.close} preview={preview === 'dialog'}>
+    <p class="description in-dialog">
+      {copy.dialogDescription} <Link href={copy.policy.href}>{copy.policy.label}</Link>
+    </p>
+    <ul class="row-list">
+      {
+        categories.map((c) => (
+          <li class="category">
+            <label class="name" for={`${dialogId}-${c.id}`}>
+              {c.name}
+            </label>
+            <p class="category-description" id={`${dialogId}-${c.id}-description`}>
+              {c.description}
+            </p>
+            <span class="toggle">
+              {c.required && <span class="always">{copy.alwaysOn}</span>}
+              <input
+                class="switch"
+                type="checkbox"
+                role="switch"
+                id={`${dialogId}-${c.id}`}
+                name={c.id}
+                checked={c.required || c.checked}
+                disabled={c.required}
+                aria-describedby={`${dialogId}-${c.id}-description`}
+              />
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="actions in-dialog">
+      <Button variant="secondary" size="sm" type="submit" data-consent-action="reject">
+        {copy.rejectAll}
+      </Button>
+      <Button variant="secondary" size="sm" type="submit" data-consent-action="accept">
+        {copy.acceptAll}
+      </Button>
+      <Button size="sm" type="submit" data-consent-action="save">
+        {copy.save}
+      </Button>
+    </div>
+  </Dialog>
 </div>
 
 <script>
@@ -314,76 +307,7 @@ const dialogId = `${id}-dialog`;
     justify-content: center;
   }
 
-  .dialog {
-    inline-size: min(100% - 2 * var(--space-gutter), var(--reading-max-width));
-    max-block-size: calc(100% - 2 * var(--space-gutter));
-    padding: 0;
-    border: var(--border-width) solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-bg-subtle);
-    color: var(--color-text);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .dialog::backdrop {
-    background: var(--color-bg-overlay);
-  }
-
-  [data-preview='dialog'] .dialog {
-    position: static;
-    display: block;
-    inline-size: auto;
-    max-inline-size: var(--reading-max-width);
-    margin: 0;
-  }
-
-  .sheet {
-    display: grid;
-    gap: var(--space-4);
-    padding: var(--space-5);
-  }
-
-  .head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-4);
-  }
-
-  .head .title {
-    font-size: var(--font-size-lg);
-  }
-
-  .close {
-    display: grid;
-    flex: none;
-    place-items: center;
-    inline-size: var(--touch-target);
-    block-size: var(--touch-target);
-    margin-inline-end: calc(var(--space-2) * -1);
-    padding: 0;
-    border: 0;
-    border-radius: var(--radius-md);
-    background: transparent;
-    color: var(--color-text-muted);
-    cursor: pointer;
-  }
-
-  .close:is(:hover, [data-preview-state='hover']) {
-    background: var(--color-bg-muted);
-    color: var(--color-text);
-  }
-
-  .close svg {
-    inline-size: var(--icon-size);
-    block-size: var(--icon-size);
-    fill: none;
-    stroke: currentColor;
-    stroke-width: var(--icon-stroke);
-    stroke-linecap: round;
-  }
-
-  .sheet > .description {
+  .description.in-dialog {
     margin: 0;
   }
 
@@ -467,7 +391,7 @@ const dialogId = `${id}-dialog`;
     background: var(--color-disabled-text);
   }
 
-  .sheet .actions {
+  .actions.in-dialog {
     justify-content: end;
   }
 

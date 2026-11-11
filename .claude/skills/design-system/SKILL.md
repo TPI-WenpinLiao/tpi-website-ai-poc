@@ -147,7 +147,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Link` | 內文連結、獨立連結 | 內文連結一律底線；`external` 加 ↗ 與「（外部網站）」螢幕閱讀器文字 |
 | `Tag` | 標籤 | `neutral`、`brand`，淺底文字，沒有 mono 與光點（#187）；有 `href` 才是連結。產品頁連到產業頁要寫成看得出目的地的文字連結，不用 `Tag` |
 | `Card` | 列表卡片 | 比頁面深一階的底色，沒有框、玻璃、陰影與傾斜（#187）；hover／focus 只換標題的顏色與底線，focus 由整張卡畫外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`category`（分類、新聞類型、產業）與 `date` 放在 meta 列，不當 eyebrow；`size="sm"` 是只有標題、手機上一列兩張的短卡；沒有 `href` 是不能點的靜態面板，meta 裡的 `Tag` 連結各自可點；圖片的 `sizes` 由 `layout` 決定：預設 `grid` 是 content 寬度的三欄 `CardGrid`，listing 的精選卡傳 `full`，reading 寬度的兩欄 grid 傳 `reading-pair`；卡片放進別種版面時在 `Card.astro` 的 `SIZES` 加一組。offering、hub 模板不用卡片 |
-| `FormField` | 表單欄位 | `kind` 區分 text／email／tel／textarea／select／checkbox；hint、error 以 `aria-describedby` 連到欄位，error 加 `aria-invalid`；有連結的說明（個資同意的隱私權政策）放 `hint` slot |
+| `FormField` | 表單欄位 | `kind` 區分 text／email／tel／textarea／select／checkbox；hint、error 以 `aria-describedby` 連到欄位，error 加 `aria-invalid`；有連結的說明（個資同意的隱私權政策，連結帶 `data-policy-open` 打開 `PolicyDialog`）放 `hint` slot |
 | `FormGroup` | 多選題 | `fieldset`＋`legend`，選項是不帶 `required` 的 `FormField` checkbox，`--bp-sm-up` 起兩欄；`error` 屬於整組（至少選一項），以 `aria-describedby` 連到 fieldset，`id` 給錯誤摘要連結 |
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
 | `Reveal` | 捲動進場 | `delay` 0–3 錯開同一列的元素 |
@@ -169,7 +169,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `MapPicture` | hero 的靜態圖加標籤 | 同一個世界渲染的靜態圖（`src/assets/design/ribbon/`），`labels` 依 `pictures.json` 的錨點（core、legacy、product、model、service、ai0–ai2）放 HTML 標籤，落在圖外的不放；位置由 `src/lib/scene/ribbon/labels.ts` 算（首頁的地圖標籤共用）；`priority` 給 hero |
 | `CardGrid` | 卡片列表 | 手機一欄、`--bp-sm-up` 兩欄、`--bp-lg-up` 三欄（`cols`）；同一列等高；`compact` 讓手機也一列兩張短卡 |
 | `ContactCta` | 每頁最後的聯絡區塊 | 整段是深紫帶（`tone="dark"`），平塗按鈕，沒有格線、框與光暈（#187）；按鈕連到目前語系的聯絡我們，`label` 可換成「預約演示」，`title` 換成這一頁的下一步（內容檔的 `contactTitle`，#200） |
-| `Prose` | 長文 | Markdown 內文的排版，`:global()` 只作用在自己內部；表格在自己的框裡橫向捲動，儲存格整個詞不拆開（#225） |
+| `Prose` | 長文 | Markdown 內文的排版，`size="sm"` 內文小一級（對話框裡的長文）；`:global()` 只作用在自己內部；表格在自己的框裡橫向捲動，儲存格整個詞不拆開（#225） |
 | `FilterBar` | 列表篩選 | 有 `href` 的項目是連結（blog 分類），沒有的是標籤；窄螢幕在列內橫向捲動 |
 | `Pagination` | 列表分頁 | 第 2 頁起 `/page/n`（ADR 0002）；只有一頁不輸出 |
 | `EmptyState` | 沒有項目時 | 虛線框、標題、說明與 `action` slot |
@@ -177,7 +177,9 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `FormPanel` | 頁面唯一的表單 | 有標題的面板，表單以標題命名；送出按鈕放 `actions` slot。標題下方是送出後的狀態區（`role="alert"`、`tabindex="-1"`）：`errors` 是錯誤摘要（`SectionHeading size="sm"` 的標題，下面的 `<ol>` 每個錯誤一列、連到欄位，錯誤色只用在編號，不用淡紅底與左側粗線），`message` 是整張表單的訊息（送出失敗、安全驗證未通過）；`challenge` 在按鈕上方預留 Turnstile 的高度（窄螢幕 compact、`--bp-sm-up` 起 flexible，`--challenge-height*`），`preview` 在展示頁畫出預留框；`busy` 加 `aria-busy`。要送出的表單傳 `form`（`src/lib/forms/rules.ts` 的 id）、`action`、`next`：script 用同一套規則驗證、填入錯誤、第一次 focus 時載入 Turnstile、成功後導到 `next`（ADR 0005）；錯誤元素預先 render，script 才不會失去 scoped 樣式 |
 | `TagList` | 一列標籤 | `Tag` 的清單，`label` 給沒有標題的列命名 |
 | `VideoFacade` | 影片 | `video` 是 `{ kind: 'youtube', id }` 或 `{ kind: 'file', src }`（自架 MP4）；初始只有本機 `poster` 與原生 `<button>`，播放器在 `<template>` 裡，點擊後才換上並取得焦點，首次載入不請求第三方資源；`poster` 不用 YouTube 縮圖；`title` 是圖說、按鈕的 accessible name 與播放器的 `title`；`node scripts/design/video-facade.mjs` 檢查（`npm run check`） |
-| `ConsentBanner` | cookie 同意 | 固定在視窗底部、不擋操作的深色橫幅，加上原生 `<dialog>` 的偏好設定（`showModal()` 鎖住焦點、Esc 關閉，關閉後焦點回到打開它的按鈕）；接受與拒絕同一個視覺層級；必要類別固定開啟，其他類別是 `role="switch"` 的 checkbox。只由 `PageLayout` 在 build 有 `PUBLIC_GTM_ID` 時放在 `body` 層級（放進有 transform 或 stacking context 的容器會被蓋住），內部頁不放；顯示時以 `scroll-padding-block-end` 與頁尾後的 spacer 留出橫幅高度，焦點不會被蓋住（WCAG 2.4.11），類別與文案來自 `src/data/consent.ts`，`config` 交給 script 儲存選擇與載入 GTM（ADR 0007）；任何帶 `data-consent-open="<id>-dialog"` 的按鈕都能打開對話框。`preview` 只給 `/design-system`，不儲存也不載入；`wide` 讓 `--bp-sm-up` 起的橫幅寬度改用首頁格線（`--grid-margin`、上限 `--layout-max-width`），跟 `SiteHeader` 的 logo 同一條左緣，由 `PageLayout` 的 `wide` 傳入，只有首頁用 |
+| `ConsentBanner` | cookie 同意 | 固定在視窗底部、不擋操作的深色橫幅，加上 `Dialog` 的偏好設定（`showModal()` 鎖住焦點、Esc 關閉，關閉後焦點回到打開它的按鈕）；接受與拒絕同一個視覺層級；必要類別固定開啟，其他類別是 `role="switch"` 的 checkbox。只由 `PageLayout` 在 build 有 `PUBLIC_GTM_ID` 時放在 `body` 層級（放進有 transform 或 stacking context 的容器會被蓋住），內部頁不放；顯示時以 `scroll-padding-block-end` 與頁尾後的 spacer 留出橫幅高度，焦點不會被蓋住（WCAG 2.4.11），類別與文案來自 `src/data/consent.ts`，`config` 交給 script 儲存選擇與載入 GTM（ADR 0007）；任何帶 `data-consent-open="<id>-dialog"` 的按鈕都能打開對話框。`preview` 只給 `/design-system`，不儲存也不載入；`wide` 讓 `--bp-sm-up` 起的橫幅寬度改用首頁格線（`--grid-margin`、上限 `--layout-max-width`），跟 `SiteHeader` 的 logo 同一條左緣，由 `PageLayout` 的 `wide` 傳入，只有首頁用 |
+| `Dialog` | 對話框外框 | 原生 `<dialog>`：標題列（h2，以 `aria-labelledby` 命名對話框）與關閉按鈕，下面是 default slot，全部包在 `<form method="dialog">` 裡，slot 裡的 submit 按鈕也會關閉它；由使用的元件呼叫 `showModal()`（焦點留在對話框內、Esc 關閉），關閉後把焦點放回打開它的元素也是使用者的責任；打開時 `base.css` 的 `html:has(dialog:modal)` 讓背後的頁面不捲動；長內容捲動時標題列留在頂端；`surface` 指定對話框自己的 surface，沒給時跟著外層；`size="reading"` 給長文，一打開就是接近視窗的高度，內容載入時對話框不長高，內文在紙色上、標題列深一階，捲動時靠底色分開，不用線與陰影；`preview` 只給 `/design-system`。`ConsentBanner`、`PolicyDialog` 共用，不要另寫一份對話框樣式 |
+| `PolicyDialog` | 表單裡的隱私權政策 | 帶 `data-policy-open="<id>"` 的連結點了在原頁打開，填到一半的表單不受影響（#250）；第一次打開時才 `fetch` 連結的頁面，取出 `ContentTemplate` 標了 `POLICY_SOURCE`（`src/lib/forms/policy.ts`）的內文放進 `Prose`，內文標上政策頁的 `lang`（vi 顯示 zh-TW 的政策）；頁面載入時不發請求；沒有 JS、修飾鍵或中鍵點擊（`opensInDialog()`）時照一般連結轉頁，載入失敗時只在對話框還開著才轉頁（已關閉就留在表單，下次打開重抓）；從內文拖曳選字到對話框外不會關閉；Esc、關閉按鈕或點對話框外關閉，焦點回到連結；亮色、`size="reading"` 的 `Dialog`；內文用 `Prose size="sm"`（小一級）；放在 `FormPanel` 與 hint 段落之外（`<dialog>` 有自己的 form，也不是 phrasing content）；標 `data-pagefind-ignore`；`node scripts/forms/policy-dialog.mjs` 檢查每個有 `data-policy-open` 的頁面（`npm run check`） |
 | `LocaleSwitcher` | 語系切換 | 純連結，零 JS；連到同一頁的其他語系版本，沒有翻譯時連到該語系首頁，連首頁都沒有的語系不列，只剩目前語系時不輸出（ADR 0002）；語系名稱用各自的語言並加上 `lang`；同一頁有多個時用 `label` 給不同的 landmark 名稱 |
 
 ## 新增元件

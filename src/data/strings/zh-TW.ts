@@ -95,6 +95,9 @@ export const strings = {
     required: '必填',
     // Link to the privacy policy under the consent checkbox; the whole phrase is the link text
     privacyLink: '閱讀隱私權政策',
+    // The privacy policy dialog (PolicyDialog): its close button, and the text while the policy loads
+    privacyClose: '關閉',
+    privacyLoading: '載入中…',
     // Heading of the error summary at the top of a form that failed validation
     errorSummary: '請修正以下欄位後再送出',
     // Submit button while the form is being sent

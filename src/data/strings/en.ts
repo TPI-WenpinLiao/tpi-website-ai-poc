@@ -88,6 +88,8 @@ export const strings: Strings = {
     consent: 'Privacy consent',
     required: 'Required',
     privacyLink: 'Read our Privacy Policy',
+    privacyClose: 'Close',
+    privacyLoading: 'Loading…',
     errorSummary: 'Please fix the following fields and submit again',
     pending: 'Sending…',
     failed: 'Your message could not be sent. Please try again later; everything you entered is still in the form.',

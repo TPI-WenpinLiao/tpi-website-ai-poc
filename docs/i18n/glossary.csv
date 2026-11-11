@@ -140,6 +140,8 @@ ui:form.jobTitle,ui,職稱,Job title,Chức danh,draft,src/data/strings/zh-TW.ts
 ui:form.consent,ui,個資同意,Privacy consent,Đồng ý về dữ liệu cá nhân,draft,src/data/strings/zh-TW.ts,
 ui:form.required,ui,必填,Required,Bắt buộc,draft,src/data/strings/zh-TW.ts,必填欄位標籤後的標記
 ui:form.privacyLink,ui,閱讀隱私權政策,Read our Privacy Policy,Đọc chính sách bảo mật,draft,src/data/strings/zh-TW.ts,
+ui:form.privacyClose,ui,關閉,Close,Đóng,draft,src/data/strings/zh-TW.ts,
+ui:form.privacyLoading,ui,載入中…,Loading…,Đang tải…,draft,src/data/strings/zh-TW.ts,
 ui:form.errorSummary,ui,請修正以下欄位後再送出,Please fix the following fields and submit again,Vui lòng sửa các trường sau rồi gửi lại,draft,src/data/strings/zh-TW.ts,
 ui:form.pending,ui,送出中…,Sending…,Đang gửi…,draft,src/data/strings/zh-TW.ts,
 ui:form.failed,ui,送出失敗，請稍後再試。您填寫的內容仍保留在表單中。,Your message could not be sent. Please try again later; everything you entered is still in the form.,Gửi không thành công. Vui lòng thử lại sau; nội dung bạn đã nhập vẫn được giữ trong biểu mẫu.,draft,src/data/strings/zh-TW.ts,
