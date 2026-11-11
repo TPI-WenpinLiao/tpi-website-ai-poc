@@ -179,10 +179,10 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - Card 圖片的 sizes 依各 grid 的欄寬改寫完成（#242）：`Card` 的預設 `sizes` 是三欄 `CardGrid` 每一段的欄寬，兩欄與一欄用 `--space-gutter` 推算的 `calc()`；加 `layout` prop（`grid`／`full`／`reading-pair`），三組 `sizes` 集中在 `Card.astro`，listing 的精選卡傳 `full`、ContentTemplate 的 reading 兩欄 grid 傳 `reading-pair`。`node scripts/design/wide.mjs 375,768,1024,1280 900` 的圖片表從 15 張（768 寬的 `/templates/listing` 12 張、`/templates/article` 3 張）降到 0 張
 - 視覺回歸 `/templates/hub` 1280px 偶發截圖不穩定修正完成（#246）：失敗時連拍的兩張只差在一張 viewport 外、`decoding="async"` 的圖，一張畫成空白、一張有圖。`tests/visual/pages.spec.ts` 的 `settle()` 在截圖前把每張圖改成同步解碼，頁面本身維持 `async`。本機 hub 1280 重跑：修改前 100 次中 10 次不穩定，修改後 200 次 0 次
 - 首頁的 ConsentBanner 跟首頁格線對齊完成（#243）：`ConsentBanner` 加 `wide`，由 `PageLayout` 傳入，`--bp-sm-up` 起橫幅外框跟 `SiteHeader` 的 `wide` bar 一樣用 `--grid-margin`、上限 `--layout-max-width`（sm 以下維持貼近視窗邊）。`gtm.mjs` 在 1280、2560 寬檢查橫幅左右緣等於 header bar 的內容邊；測試 ID build 的 2560 寬首頁，橫幅從 x=560 改到 x=376，跟 logo 相同
+- 內頁 reading 欄與 hero 左緣對齊完成（#241）：依使用者決定採方案 A，`Surface` 的 `width="reading"` 不再置中，改從內容欄左緣開始、右側留白；`node scripts/design/wide.mjs` 多量 reading 頁 logo、h1 與第一個 reading h2 的 x，五頁在 375–3440 寬落差都是 0（原本 1280 寬 208px、≥ 1920 寬 352px）；規則寫在 `design-principles.md`「內頁共用的規則」的「左緣」與 `design-system` skill
 
 ## 下一步
 
-- 內頁 `Surface` 的 `reading` 欄置中，與 hero 的左緣有落差，`--bp-xl-up` 加寬後更明顯（#238 的 PR「待確認問題」）；要改時另開 issue
 - `briefs/aiso.md` 第 3 段、`orient-ai.md` 第 1、5 段要求 h2 與說明句寫「金融與政府」，同段事實沒有政府，照 #214 的「表述的範圍詞要被同段事實撐住」撐不住；brief 與頁面要一起改，要做時另開 issue
 - #187 的第二輪重評留下的單頁改進與規則衝突（`evaluation.md`「第二輪（#187）」的「還不夠好的地方」「評審依據不足」）還沒開 issue，要做時另開
 - `evaluation.md`「斷行（#225）」的「評審依據不足」（h2 含長標準名、片段事實排到下方的條件、案例列的右欄、時間列年份重複、段落圖跨頁沿用）還沒開 issue，要做時另開
