@@ -89,6 +89,8 @@ export const strings: Strings = {
     consent: 'Đồng ý về dữ liệu cá nhân',
     required: 'Bắt buộc',
     privacyLink: 'Đọc chính sách bảo mật',
+    privacyClose: 'Đóng',
+    privacyLoading: 'Đang tải…',
     errorSummary: 'Vui lòng sửa các trường sau rồi gửi lại',
     pending: 'Đang gửi…',
     failed: 'Gửi không thành công. Vui lòng thử lại sau; nội dung bạn đã nhập vẫn được giữ trong biểu mẫu.',

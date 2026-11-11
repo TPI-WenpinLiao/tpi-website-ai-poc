@@ -43,6 +43,8 @@ import MapPicture from '../../components/ui/MapPicture.astro';
 import pageDigirunner from '../../assets/design/ribbon/page-digirunner.webp';
 import VideoFacade from '../../components/ui/VideoFacade.astro';
 import SearchResults from '../../components/ui/SearchResults.astro';
+import Dialog from '../../components/ui/Dialog.astro';
+import PolicyDialog from '../../components/ui/PolicyDialog.astro';
 import ConsentBanner, { type ConsentCategory, type ConsentCopy } from '../../components/ui/ConsentBanner.astro';
 import { Image } from 'astro:assets';
 import { strings } from '../../data/strings';
@@ -882,6 +884,22 @@ const description =
         <ConsentBanner id="consent-preview" categories={consentCategories} copy={consentCopy} preview="dialog" />
       </div>
       <p class="note">原生 dialog，以 showModal() 打開：焦點留在對話框內，Esc 關閉，關閉後焦點回到打開它的按鈕。必要類別固定開啟；其他類別用開關。本頁的範例不儲存選擇，也不載入 GTM，按鈕只會關閉對話框；正式頁面只在設定了 GTM ID 時顯示（ADR 0007）。</p>
+      <h3>Dialog（示意）</h3>
+      <div class="chrome-demo" inert>
+        <Dialog id="dialog-preview" title="對話框標題" closeLabel="關閉" surface="light" preview>
+          <p class="note">標題列與關閉按鈕，下面放內容。內容很長時標題列留在頂端。</p>
+        </Dialog>
+      </div>
+      <p class="note">ConsentBanner 的偏好設定與 PolicyDialog 共用的外框。原生 dialog，由使用的元件以 showModal() 打開，關閉後把焦點放回打開它的元素；打開時背後的頁面不捲動。</p>
+      <h3>PolicyDialog：隱私權政策（示意）</h3>
+      <div class="chrome-demo" inert>
+        <PolicyDialog id="policy-preview" preview>
+          <h2>1. 範例段落標題</h2>
+          <p>正式頁面上，這裡是點擊「閱讀隱私權政策」時才從隱私權政策頁取得的內文。</p>
+          <p>載入前顯示「載入中…」；載入失敗時直接前往隱私權政策頁。</p>
+        </PolicyDialog>
+      </div>
+      <p class="note">表單同意勾選框的「閱讀隱私權政策」帶 data-policy-open，點了在原頁打開這個對話框，已填的欄位不受影響；Esc、關閉按鈕或點對話框外關閉，焦點回到連結。沒有 JS、按著修飾鍵或用中鍵點擊時，照一般連結前往隱私權政策頁。</p>
       <h3>ContactCta</h3>
       <div class="chrome-demo">
         <ContactCta />

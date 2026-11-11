@@ -20,6 +20,7 @@ import FormField from '../../components/ui/FormField.astro';
 import FormGroup from '../../components/ui/FormGroup.astro';
 import FormPanel from '../../components/ui/FormPanel.astro';
 import Link from '../../components/ui/Link.astro';
+import PolicyDialog from '../../components/ui/PolicyDialog.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import { breadcrumb, localizedNav, localNode, nodeHref } from '../../lib/ia/navigation';
 import { pageJsonLd } from '../../lib/seo/jsonld/page';
@@ -112,10 +113,11 @@ const jsonLd = pageJsonLd({
         <FormField kind="text" id="subject" name="subject" label={t.contact.subject} maxlength={rules.subject.maxLength} required />
         <FormField kind="textarea" id="message" name="message" label={t.contact.message} rows={5} maxlength={rules.message.maxLength} />
         <FormField kind="checkbox" id="consent" name="consent" label={f.consent} required error={errors.consent}>
-          <Link slot="hint" href={nodeHref('privacy', locale)}>{f.privacyLink}</Link>
+          <Link slot="hint" href={nodeHref('privacy', locale)} data-policy-open="privacy-dialog">{f.privacyLink}</Link>
         </FormField>
         <Button slot="actions" type="submit" size="lg">{t.contact.submit}</Button>
       </FormPanel>
+      <PolicyDialog id="privacy-dialog" />
 
       <section class="offices">
         <SectionHeading level={2} title={t.contact.offices} />

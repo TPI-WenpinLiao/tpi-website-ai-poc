@@ -1,0 +1,126 @@
+---
+// Modal dialog shell: a native <dialog> (the caller opens it with showModal(), so focus stays inside
+// and Esc closes it) with a title row and a close button, then the default slot. Everything sits in a
+// <form method="dialog">, so the close button and any submit button in the slot close it. Colors
+// follow the surrounding data-surface; `surface` sets one on the dialog itself. The title row stays
+// at the top while long content scrolls under it. Focus going back to what opened the dialog is the
+// caller's job (ConsentBanner, PolicyDialog).
+// `id` is the dialog's id; the title is `${id}-title` and names it. `size="reading"` is for long text:
+// the sheet takes most of the viewport height from the start, so the dialog doesn't grow while its
+// text loads.
+// `preview` draws it open in the page flow (non-modal; wrap it in inert), for /design-system only.
+interface Props {
+  id: string;
+  title: string;
+  closeLabel: string;
+  surface?: 'light' | 'dark';
+  size?: 'fit' | 'reading';
+  preview?: boolean;
+}
+
+const { id, title, closeLabel, surface, size = 'fit', preview = false } = Astro.props;
+---
+
+<dialog class:list={['dialog', size, { preview }]} id={id} aria-labelledby={`${id}-title`} data-surface={surface} open={preview}>
+  <form method="dialog" class="sheet">
+    <div class="head">
+      <h2 class="title" id={`${id}-title`}>{title}</h2>
+      <button class="close" type="submit" aria-label={closeLabel}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+    </div>
+    <slot />
+  </form>
+</dialog>
+
+<style>
+  .dialog {
+    inline-size: min(100% - 2 * var(--space-gutter), var(--reading-max-width));
+    max-block-size: calc(100% - 2 * var(--space-gutter));
+    padding: 0;
+    border: var(--border-width) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-subtle);
+    color: var(--color-text);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .dialog::backdrop {
+    background: var(--color-bg-overlay);
+  }
+
+  .dialog.reading {
+    block-size: calc(100% - 2 * var(--space-gutter));
+  }
+
+  /* The sheet fills the dialog, so only a click outside it lands on the <dialog> (the backdrop) */
+  .dialog.reading .sheet {
+    min-block-size: 100%;
+    align-content: start;
+  }
+
+  .dialog.preview {
+    position: static;
+    display: block;
+    inline-size: auto;
+    block-size: auto;
+    max-inline-size: var(--reading-max-width);
+    margin: 0;
+  }
+
+  .sheet {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0 var(--space-5) var(--space-5);
+  }
+
+  /* Sticky under the dialog's top edge: the padding above the title is the row's own, so it covers
+     the content scrolling under it */
+  .head {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-5) var(--space-2);
+    background: var(--color-bg-subtle);
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-snug);
+  }
+
+  .close {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--touch-target);
+    block-size: var(--touch-target);
+    margin-inline-end: calc(var(--space-2) * -1);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+
+  .close:is(:hover, [data-preview-state='hover']) {
+    background: var(--color-bg-muted);
+    color: var(--color-text);
+  }
+
+  .close svg {
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--icon-stroke);
+    stroke-linecap: round;
+  }
+</style>

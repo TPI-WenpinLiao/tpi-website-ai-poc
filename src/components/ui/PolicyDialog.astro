@@ -1,0 +1,95 @@
+---
+// The privacy policy in a dialog, so reading it doesn't take the visitor away from a half-filled form
+// (#250). Any link with data-policy-open="<id>" opens it (the privacy link in a consent checkbox's
+// hint); the link keeps its href to the policy page, which is where it goes without JS, on a
+// modified or middle click (src/lib/forms/policy.ts) and when the policy can't be loaded.
+// The dialog ships empty: on the first open the script fetches the link's page and copies the body
+// marked with POLICY_SOURCE (ContentTemplate) into the dialog's Prose. Nothing is requested before
+// that click. Closing (button, Esc, a click on the backdrop) puts focus back on the link.
+// Place it outside the form and outside the hint paragraph: a <dialog> holds its own <form
+// method="dialog"> and isn't phrasing content. Its text is the policy page's, so it is left out of
+// the search index.
+// `preview` draws it open in the page flow with the default slot as its text (wrap it in inert), for
+// /design-system only.
+import Dialog from './Dialog.astro';
+import Prose from './Prose.astro';
+import { strings } from '../../data/strings';
+import { localNode } from '../../lib/ia/navigation';
+import { localeFromPath } from '../../lib/i18n/paths';
+
+interface Props {
+  id: string;
+  preview?: boolean;
+}
+
+const { id, preview = false } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+const f = strings(locale).form;
+---
+
+<div class="policy" data-pagefind-ignore>
+  <Dialog id={id} title={localNode('privacy', locale).title} closeLabel={f.privacyClose} surface="light" size="reading" preview={preview}>
+    <p class="status" role="status" data-policy-status hidden={preview}>{f.privacyLoading}</p>
+    <Prose data-policy-body>
+      <slot />
+    </Prose>
+  </Dialog>
+</div>
+
+<script>
+  import { POLICY_SOURCE, opensInDialog } from '../../lib/forms/policy';
+
+  // The page whose policy each dialog holds, so it is fetched once
+  const loaded = new WeakMap<HTMLDialogElement, string>();
+
+  async function fill(dialog: HTMLDialogElement, href: string): Promise<void> {
+    const status = dialog.querySelector<HTMLElement>('[data-policy-status]');
+    const body = dialog.querySelector<HTMLElement>('[data-policy-body]');
+    if (!status || !body) throw new Error('PolicyDialog markup changed');
+    status.hidden = false;
+    body.replaceChildren();
+    const response = await fetch(href);
+    if (!response.ok) throw new Error(`${href}: ${response.status}`);
+    const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+    const source = page.querySelector(`[${POLICY_SOURCE}]`);
+    if (!source) throw new Error(`${href} has no [${POLICY_SOURCE}]`);
+    body.replaceChildren(...[...source.childNodes].map((n) => document.importNode(n, true)));
+    status.hidden = true;
+    loaded.set(dialog, href);
+  }
+
+  document.addEventListener('click', (e) => {
+    const link = e.target instanceof Element ? e.target.closest<HTMLAnchorElement>('a[data-policy-open]') : null;
+    if (!link || link.closest('[inert]') || !opensInDialog(e)) return;
+    const dialog = document.getElementById(link.dataset.policyOpen ?? '');
+    if (!(dialog instanceof HTMLDialogElement)) return;
+    e.preventDefault();
+    dialog.addEventListener('close', () => link.focus({ preventScroll: true }), { once: true });
+    dialog.showModal();
+    if (loaded.get(dialog) === link.href) return;
+    // Couldn't load it here: open the policy page as the link would have
+    fill(dialog, link.href).catch(() => location.assign(link.href));
+  });
+
+  // A click on the backdrop lands on the <dialog> itself, outside its sheet
+  for (const dialog of document.querySelectorAll<HTMLDialogElement>('.policy dialog')) {
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  }
+</script>
+
+<style>
+  .policy {
+    display: contents;
+  }
+
+  .status {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .status[hidden] {
+    display: none;
+  }
+</style>

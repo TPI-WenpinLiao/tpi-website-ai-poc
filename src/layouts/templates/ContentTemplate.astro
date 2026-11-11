@@ -5,6 +5,8 @@
 // pages show their effective date and the PDF under the title.
 // The table of contents is the in-page bar (InPageNav), as on offering pages, listed only with two
 // sections or more.
+// The Markdown body carries POLICY_SOURCE: a form's PolicyDialog fetches the privacy page and shows
+// this element's content (#250).
 import type { CollectionEntry } from 'astro:content';
 import { getEntry, render } from 'astro:content';
 import { Image } from 'astro:assets';
@@ -24,6 +26,7 @@ import { pageJsonLd } from '../../lib/seo/jsonld/page';
 import { isoDate } from '../../lib/seo/jsonld/shared';
 import { canonicalUrl } from '../../lib/seo/meta';
 import { strings } from '../../data/strings';
+import { POLICY_SOURCE } from '../../lib/forms/policy';
 
 interface Props {
   entry: CollectionEntry<'page'>;
@@ -84,7 +87,7 @@ const jsonLd = pageJsonLd({
   <Surface tone="light" width="reading">
     {
       entry.body?.trim() && (
-        <Prose>
+        <Prose {...{ [POLICY_SOURCE]: '' }}>
           <Content />
         </Prose>
       )

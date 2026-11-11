@@ -90,6 +90,12 @@ body {
   background: var(--color-bg);
 }
 
+/* The page under a modal dialog (Dialog opened with showModal()) doesn't scroll; the dialog's own
+   content still does (#250) */
+html:has(dialog:modal) {
+  overflow: hidden;
+}
+
 /* ---- Typography ---- */
 
 /* Headings and .serif text (names in an index, years in a record) use the serif face; one weight */
