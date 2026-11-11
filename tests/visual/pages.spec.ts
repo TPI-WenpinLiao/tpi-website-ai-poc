@@ -25,12 +25,18 @@ const name = (path: string, width: number) => `${path === '/' ? 'home' : path.sl
  * Loads every image, including lazy ones below the fold, and waits for the web fonts. Sections with
  * content-visibility: auto (the article's More, #143) are drawn first: until then they stand in at
  * --offscreen-section-height, and the full-page screenshot would take that height, not the real one.
+ * Images are decoded synchronously: the full-page capture paints beyond the viewport, where an image
+ * with decoding="async" (Astro's default) may be painted blank and filled in a frame later, so
+ * consecutive captures of the same page differed (/templates/hub at 1280px, #246).
  */
 async function settle(page: Page) {
   await page.addStyleTag({ content: '* { content-visibility: visible !important; }' });
   await page.evaluate(async () => {
     const images = [...document.images];
-    for (const img of images) img.loading = 'eager';
+    for (const img of images) {
+      img.loading = 'eager';
+      img.decoding = 'sync';
+    }
     await Promise.all(images.map((img) => (img.complete ? null : img.decode().catch(() => null))));
     await document.fonts.ready;
   });
