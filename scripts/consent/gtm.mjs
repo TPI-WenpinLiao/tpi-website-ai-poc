@@ -7,6 +7,8 @@
 //    must have no banner. Per page, in a fresh browser context (no stored choice):
 //    - first load: the banner shows, nothing is requested off-site, there is no dataLayer, one h1,
 //      no axe violation, no horizontal scroll at 375 and 1280px
+//    - at 1280 and 2560px, the banner's sides line up with the header bar's content (the logo's left
+//      edge): the content width on reading pages, the home page's grid with `wide` (#243)
 //    - at 375 and 1280px, Tab through the page: no focused element is entirely behind the banner
 //      (WCAG 2.4.11), the last ones in the footer included
 //    - Tab reaches the banner; 偏好設定 opens the dialog with focus inside, Tab never reaches the page
@@ -43,6 +45,8 @@ const GTM_JS = 'https://www.googletagmanager.com/gtm.js';
 // The three home pages and a reading page (light surface)
 const PAGES = ['/', '/en', '/vi', '/privacy'];
 const WIDTHS = [375, 1280];
+// Widths where the banner lines up with the header (below --bp-sm-up it sits near the viewport's edges)
+const ALIGN_WIDTHS = [1280, 2560];
 const MAX_TABS = 400;
 
 // Pages are loaded until the load event, not network idle: the home page's 3D scene keeps a font
@@ -153,6 +157,21 @@ const state = (page) =>
     };
   });
 
+/**
+ * The banner's left and right edges minus the header bar's content edges, in px.
+ * @param {import('puppeteer-core').Page} page
+ */
+const bannerOffset = (page) =>
+  page.evaluate(() => {
+    const banner = document.querySelector('[data-consent-config] section');
+    const bar = document.querySelector('.site-header .bar');
+    if (!banner || !bar) return undefined;
+    const b = banner.getBoundingClientRect();
+    const r = bar.getBoundingClientRect();
+    const cs = getComputedStyle(bar);
+    return { left: b.left - (r.left + parseFloat(cs.paddingLeft)), right: r.right - parseFloat(cs.paddingRight) - b.right };
+  });
+
 /** Consent commands in the dataLayer, as [command, params]. @param {unknown[] | undefined} layer */
 export const consentCommands = (layer) => (layer ?? []).filter((e) => Array.isArray(e) && e[0] === 'consent').map((e) => [e[1], e[2]]);
 
@@ -196,6 +215,13 @@ async function check(browser, origin, path) {
     await page.setViewport({ width, height: 860 });
     const { overflow } = await state(page);
     if (overflow > 0) fail(`${width}px: ${overflow}px wider than the viewport`);
+  }
+  for (const width of ALIGN_WIDTHS) {
+    await page.setViewport({ width, height: 860 });
+    const offset = await bannerOffset(page);
+    if (!offset) fail(`${width}px: no banner or header bar to line up`);
+    else if (Math.abs(offset.left) > 1 || Math.abs(offset.right) > 1)
+      fail(`${width}px: the banner is ${offset.left.toFixed(1)}px (left) and ${offset.right.toFixed(1)}px (right) inside the header's content edges`);
   }
   // Focus is never hidden behind the banner, at either width
   for (const width of WIDTHS) {
