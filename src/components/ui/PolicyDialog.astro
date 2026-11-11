@@ -30,7 +30,7 @@ const f = strings(locale).form;
 <div class="policy" data-pagefind-ignore>
   <Dialog id={id} title={localNode('privacy', locale).title} closeLabel={f.privacyClose} surface="light" size="reading" preview={preview}>
     <p class="status" role="status" data-policy-status hidden={preview}>{f.privacyLoading}</p>
-    <Prose data-policy-body>
+    <Prose size="sm" data-policy-body>
       <slot />
     </Prose>
   </Dialog>

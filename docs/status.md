@@ -180,7 +180,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 視覺回歸 `/templates/hub` 1280px 偶發截圖不穩定修正完成（#246）：失敗時連拍的兩張只差在一張 viewport 外、`decoding="async"` 的圖，一張畫成空白、一張有圖。`tests/visual/pages.spec.ts` 的 `settle()` 在截圖前把每張圖改成同步解碼，頁面本身維持 `async`。本機 hub 1280 重跑：修改前 100 次中 10 次不穩定，修改後 200 次 0 次
 - 首頁的 ConsentBanner 跟首頁格線對齊完成（#243）：`ConsentBanner` 加 `wide`，由 `PageLayout` 傳入，`--bp-sm-up` 起橫幅外框跟 `SiteHeader` 的 `wide` bar 一樣用 `--grid-margin`、上限 `--layout-max-width`（sm 以下維持貼近視窗邊）。`gtm.mjs` 在 1280、2560 寬檢查橫幅左右緣等於 header bar 的內容邊；測試 ID build 的 2560 寬首頁，橫幅從 x=560 改到 x=376，跟 logo 相同
 - 內頁 reading 欄與 hero 左緣對齊完成（#241）：依使用者決定採方案 A，`Surface` 的 `width="reading"` 不再置中，改從內容欄左緣開始、右側留白；`node scripts/design/wide.mjs` 多量 reading 頁 logo、h1 與第一個 reading h2 的 x，五頁在 375–3440 寬落差都是 0（原本 1280 寬 208px、≥ 1920 寬 352px）；規則寫在 `design-principles.md`「內頁共用的規則」的「左緣」與 `design-system` skill
-- 表單的「閱讀隱私權政策」改在原頁的對話框打開（#250），階段一，等待 design-approved：新元件 `PolicyDialog` 第一次打開時才 fetch 隱私權政策頁的內文，聯絡表單與 gated-download 表單共用；`ConsentBanner` 的對話框外框抽成 `Dialog`
+- 表單的「閱讀隱私權政策」改在原頁的對話框打開完成（#250，`design-approved`）：新元件 `PolicyDialog` 第一次打開時才 fetch 隱私權政策頁的內文，聯絡表單與 gated-download 表單共用（gated-download 原本沒有政策連結，一併補上）；`ConsentBanner` 的對話框外框抽成 `Dialog`，長文版內文在紙色上、標題列深一階，內文用 `Prose size="sm"`；`node scripts/forms/policy-dialog.mjs`（`npm run check`）檢查載入時不請求、鍵盤與焦點、欄位保留、axe、375 寬、沒有 JS 時照常轉頁
 
 ## 下一步
 
