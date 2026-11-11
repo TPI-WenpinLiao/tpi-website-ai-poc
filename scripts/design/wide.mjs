@@ -1,6 +1,7 @@
 // Measures the built site on wide screens (#238): how tall the home page grows, whether the cases
 // section's picture fits the screen, whether the header and the home grid share a left edge, and how
-// wide an inner page's content runs. Then, for every picture on the home page and the template
+// wide an inner page's content runs, and whether a reading page's sections start on its hero's left
+// edge (#241). Then, for every picture on the home page and the template
 // previews, whether its `sizes` picks the same srcset candidate as its rendered width would: a
 // different pick downloads a smaller (blurry) or a larger (wasted) file. Prints tables; it fails
 // nothing (not part of `npm run check`).
@@ -78,6 +79,8 @@ async function main([widths = '1440,1920,2560,3440,5120', height = '1440', shots
   const rows = [];
   /** @type {Map<string, number>} a miss and how many pictures on that page share it */
   const misses = new Map();
+  /** @type {{ width: number, path: string, logo: number, h1: number, h2: number }[]} */
+  const edges = [];
   try {
     for (const w of widths.split(',').map(Number)) {
       const page = await browser.newPage();
@@ -108,6 +111,13 @@ async function main([widths = '1440,1920,2560,3440,5120', height = '1440', shots
       for (const path of ['/', INNER, ...previews]) {
         await page.goto(`http://localhost:${port}${path}`, { waitUntil: 'load' });
         if (path !== '/') await shoot(page, w, path.slice(1).replaceAll('/', '-'));
+        // A page with a reading-width section: the logo, the h1 and that section's first h2 should share a left edge
+        const edge = await page.evaluate(() => {
+          const left = (/** @type {string} */ s) => document.querySelector(s)?.getBoundingClientRect().left;
+          const h2 = left('main .inner.reading h2');
+          return h2 === undefined ? undefined : { logo: left('.site-header .logo') ?? NaN, h1: left('main h1') ?? NaN, h2 };
+        });
+        if (edge) edges.push({ width: w, path, ...edge });
         for (const p of await page.evaluate(pictures)) {
           if (p.fits === p.picked) continue;
           const way = p.picked < p.fits ? 'too small' : 'too large';
@@ -133,6 +143,9 @@ async function main([widths = '1440,1920,2560,3440,5120', height = '1440', shots
   const keys = Object.keys(rows[0] ?? {});
   console.log(`| ${keys.join(' | ')} |\n|${keys.map(() => '---').join('|')}|`);
   for (const r of rows) console.log(`| ${keys.map((k) => r[/** @type {keyof typeof r} */ (k)]).join(' | ')} |`);
+  console.log('\nLeft edges on pages with a reading-width section (logo / h1 / first reading h2; h2 − h1 should be 0):');
+  console.log('| width | page | logo x | h1 x | h2 x | h2 − h1 |\n|---|---|---|---|---|---|');
+  for (const e of edges) console.log(`| ${e.width} | ${e.path} | ${round(e.logo)} | ${round(e.h1)} | ${round(e.h2)} | ${round(e.h2 - e.h1)} |`);
   const total = [...misses.values()].reduce((a, b) => a + b, 0);
   console.log(`\nPictures whose sizes picks another srcset candidate than their rendered width (DPR 1): ${total}`);
   for (const [m, n] of misses) console.log(`- ${m}${n > 1 ? ` ×${n}` : ''}`);

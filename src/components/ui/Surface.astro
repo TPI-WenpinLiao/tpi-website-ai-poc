@@ -7,6 +7,8 @@
 // 的規則」, #187). The `backdrop` slot takes a Backdrop image.
 // Two sections in a row on the same tone and fill read as one band, so the second drops its top
 // padding: the gap between them is one --space-section, not two. A change of tone or fill keeps both.
+// width="reading" narrows the content to the reading width on the content column's left edge, not
+// centred, so the sections below a hero start where its h1 does (#241).
 // trim="end" cuts the bottom padding to --space-16, for a compact title block (PageHero
 // size="compact") that leads straight into its page's text.
 import type { HTMLAttributes } from 'astro/types';
@@ -73,8 +75,12 @@ const { tone = 'light', fill, width = 'content', trim, class: className, ...rest
     max-width: var(--content-max-width);
   }
 
+  /* The reading column starts at the content column's left edge, where the header logo, breadcrumb
+     and h1 sit, and leaves the rest of the row empty (#241). The margin is the space outside the
+     content column and its gutters, halved: what centring a content-width .inner would leave */
   .reading {
     max-width: var(--reading-max-width);
+    margin-inline: max(0%, (100% - var(--content-max-width) - 2 * var(--space-gutter)) / 2) auto;
   }
 
   .surface[data-surface='light'][data-fill='none'] + .surface[data-surface='light'][data-fill='none'] > .inner,
