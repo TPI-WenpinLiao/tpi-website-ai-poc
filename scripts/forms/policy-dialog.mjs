@@ -2,12 +2,16 @@
 // in a real browser. Per page:
 // 1. Loading the page doesn't request the policy page
 // 2. With a field of the page's form filled in, Enter on the link opens the dialog as a modal, puts
-//    focus inside it, shows the policy's text (the loading text hidden) and stops the page scrolling
+//    focus inside it, shows the policy's text (the loading text hidden) marked with the policy page's
+//    lang, and stops the page scrolling
 // 3. axe-core finds no WCAG 2.2 A/AA violation in the open dialog
 // 4. Esc closes it, focus goes back to the link and the field keeps its value; opening it again
-//    doesn't fetch the policy again, and a click on the backdrop closes it
+//    doesn't fetch the policy again; a drag from the text to the backdrop (selecting text) leaves it
+//    open, a click on the backdrop closes it
 // 5. At 375px the open dialog fits the viewport's width
 // 6. Without JS the link goes to the policy page
+// 7. When the policy fails to load after the dialog was closed, the page stays (the form keeps what
+//    was typed); the next open loads it
 // Part of `npm run check`, after the build: node scripts/forms/policy-dialog.mjs
 // Uses CHROME_PATH (set by the SessionStart hook), else CHROME_BIN (set on GitHub's runners), else the installed Chrome.
 
@@ -31,18 +35,20 @@ const VALUE = '王小明';
  * @typedef {{
  *   policy: string,
  *   onLoad: number,
- *   opened: { modal: boolean, focusInside: boolean, blocks: number, loadingShown: boolean, pageScrolls: boolean },
+ *   opened: { modal: boolean, focusInside: boolean, blocks: number, loadingShown: boolean, pageScrolls: boolean, lang: string, policyLang: string },
  *   violations: string[],
  *   closed: { open: boolean, focusOnLink: boolean, value: string },
  *   fetches: number,
+ *   dragClosed: boolean,
  *   backdropClosed: boolean,
  *   narrow: { dialogWidth: number, viewport: number },
  *   noJs: string,
+ *   failedLate: { path: string, start: string, retried: boolean },
  * }} Result
  */
 
 /** @param {Result} r @returns {string[]} */
-export function problems({ policy, onLoad, opened, violations, closed, fetches, backdropClosed, narrow, noJs }) {
+export function problems({ policy, onLoad, opened, violations, closed, fetches, dragClosed, backdropClosed, narrow, noJs, failedLate }) {
   const out = [];
   if (onLoad) out.push(`${policy} requested ${onLoad} times on load`);
   if (!opened.modal) out.push('Enter on the link does not open the dialog as a modal');
@@ -50,33 +56,43 @@ export function problems({ policy, onLoad, opened, violations, closed, fetches, 
   if (!opened.blocks) out.push('the open dialog shows no policy text');
   if (opened.loadingShown) out.push('the loading text still shows after the policy loaded');
   if (opened.pageScrolls) out.push('the page under the open dialog still scrolls');
+  if (opened.lang !== opened.policyLang) out.push(`the policy text has lang "${opened.lang}", not the policy page's "${opened.policyLang}"`);
   for (const v of violations) out.push(`axe in the open dialog: ${v}`);
   if (closed.open) out.push('Esc does not close the dialog');
   if (!closed.focusOnLink) out.push('focus does not go back to the link after closing');
   if (closed.value !== VALUE) out.push(`the filled field reads "${closed.value}" after closing, not "${VALUE}"`);
   if (fetches !== 1) out.push(`${policy} fetched ${fetches} times over two opens, not once`);
+  if (dragClosed) out.push('a drag from the text to the backdrop closes the dialog');
   if (!backdropClosed) out.push('a click on the backdrop does not close the dialog');
   if (narrow.dialogWidth > narrow.viewport) out.push(`at ${narrow.viewport}px the dialog is ${narrow.dialogWidth}px wide`);
   if (noJs !== policy) out.push(`without JS the link goes to ${noJs}, not ${policy}`);
+  if (failedLate.path !== failedLate.start) out.push(`a load that failed after closing the dialog left the page for ${failedLate.path}`);
+  if (!failedLate.retried) out.push('after a failed load the next open does not load the policy');
   return out;
 }
 
-/** @param {import('puppeteer-core').Browser} browser @param {number} width */
-async function open(browser, width) {
+/**
+ * @param {import('puppeteer-core').Browser} browser @param {number} width
+ * @param {(req: import('puppeteer-core').HTTPRequest) => boolean} [hold] requests to leave unanswered until released
+ */
+async function open(browser, width, hold) {
   const page = await browser.newPage();
   await page.setViewport({ width, height: 900 });
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   await page.setRequestInterception(true);
   /** @type {string[]} */
   const requested = [];
+  /** @type {import('puppeteer-core').HTTPRequest[]} */
+  const held = [];
   page.on('request', (req) => {
     const url = req.url();
     // Turnstile loads when focus enters a sending form; nothing outside the site is needed here
     if (offSite([url], new URL(page.url() === 'about:blank' ? url : page.url()).origin).length) return void req.abort();
     requested.push(new URL(url).pathname);
+    if (hold?.(req)) return void held.push(req);
     req.continue();
   });
-  return { page, requested };
+  return { page, requested, held };
 }
 
 /** Opens the dialog from the keyboard and waits for the policy's text. @param {import('puppeteer-core').Page} page */
@@ -97,16 +113,19 @@ async function check(browser, url) {
   await page.$eval(FIELD, (el, v) => void (/** @type {HTMLInputElement} */ (el).value = v), VALUE);
 
   await openDialog(page);
-  const opened = await page.evaluate(() => {
+  const policyLang = readFileSync(join(DIST, `${policy}.html`), 'utf8').match(/<html[^>]*\blang="([^"]*)"/)?.[1] ?? '';
+  const opened = await page.evaluate((policyLang) => {
     const dialog = document.querySelector('dialog:has([data-policy-body])');
     return {
+      lang: dialog?.querySelector('[data-policy-body]')?.getAttribute('lang') ?? '',
+      policyLang,
       modal: dialog?.matches(':modal') ?? false,
       focusInside: dialog?.contains(document.activeElement) ?? false,
       blocks: dialog?.querySelector('[data-policy-body]')?.children.length ?? 0,
       loadingShown: !(dialog?.querySelector('[data-policy-status]')?.hasAttribute('hidden') ?? true),
       pageScrolls: getComputedStyle(document.documentElement).overflow !== 'hidden',
     };
-  });
+  }, policyLang);
   await page.evaluate(axe.source);
   /** @type {string[]} */
   const violations = await page.evaluate(
@@ -129,6 +148,15 @@ async function check(browser, url) {
   );
 
   await openDialog(page);
+  const text = await page.$eval('dialog [data-policy-body] p', (p) => {
+    const r = p.getBoundingClientRect();
+    return { x: r.left + 8, y: r.top + 8 };
+  });
+  await page.mouse.move(text.x, text.y);
+  await page.mouse.down();
+  await page.mouse.move(2, 2, { steps: 4 });
+  await page.mouse.up();
+  const dragClosed = await page.evaluate(() => !document.querySelector('dialog:has([data-policy-body])')?.open);
   await page.mouse.click(2, 2);
   const backdropClosed = await page.evaluate(() => !document.querySelector('dialog:has([data-policy-body])')?.open);
   const fetches = fetched();
@@ -150,7 +178,27 @@ async function check(browser, url) {
   const noJs = new URL(plain.url()).pathname;
   await plain.close();
 
-  return problems({ policy, onLoad, opened, violations, closed, fetches, backdropClosed, narrow, noJs });
+  // The first policy request waits until the dialog is closed, then fails
+  let failNext = true;
+  const late = await open(browser, 1280, (req) => new URL(req.url()).pathname === policy && failNext);
+  await late.page.goto(url, { waitUntil: 'networkidle0' });
+  await late.page.focus(LINK);
+  await late.page.keyboard.press('Enter');
+  await late.page.waitForFunction(() => document.querySelector('dialog:has([data-policy-body])')?.open);
+  await late.page.keyboard.press('Escape');
+  failNext = false;
+  for (const req of late.held.splice(0)) await req.respond({ status: 500, body: '' });
+  await new Promise((done) => setTimeout(done, 500));
+  const start = new URL(url).pathname;
+  const path = new URL(late.page.url()).pathname;
+  let retried = false;
+  if (path === start) {
+    await openDialog(late.page);
+    retried = await late.page.evaluate(() => (document.querySelector('dialog [data-policy-body]')?.children.length ?? 0) > 0);
+  }
+  await late.page.close();
+
+  return problems({ policy, onLoad, opened, violations, closed, fetches, dragClosed, backdropClosed, narrow, noJs, failedLate: { path, start, retried } });
 }
 
 async function main() {

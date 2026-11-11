@@ -2,10 +2,12 @@
 // The privacy policy in a dialog, so reading it doesn't take the visitor away from a half-filled form
 // (#250). Any link with data-policy-open="<id>" opens it (the privacy link in a consent checkbox's
 // hint); the link keeps its href to the policy page, which is where it goes without JS, on a
-// modified or middle click (src/lib/forms/policy.ts) and when the policy can't be loaded.
+// modified or middle click (src/lib/forms/policy.ts) and when the policy can't be loaded while the
+// dialog is open (closed by then, the visitor is back on the form: it stays, the next open tries again).
 // The dialog ships empty: on the first open the script fetches the link's page and copies the body
-// marked with POLICY_SOURCE (ContentTemplate) into the dialog's Prose. Nothing is requested before
-// that click. Closing (button, Esc, a click on the backdrop) puts focus back on the link.
+// marked with POLICY_SOURCE (ContentTemplate) into the dialog's Prose, with the policy page's lang.
+// Nothing is requested before that click. Closing (button, Esc, a click on the backdrop) puts focus
+// back on the link.
 // Place it outside the form and outside the hint paragraph: a <dialog> holds its own <form
 // method="dialog"> and isn't phrasing content. Its text is the policy page's, so it is left out of
 // the search index.
@@ -39,8 +41,8 @@ const f = strings(locale).form;
 <script>
   import { POLICY_SOURCE, opensInDialog } from '../../lib/forms/policy';
 
-  // The page whose policy each dialog holds, so it is fetched once
-  const loaded = new WeakMap<HTMLDialogElement, string>();
+  // The policy each dialog holds or is loading, and the page it comes from: each page is fetched once
+  const loads = new WeakMap<HTMLDialogElement, { href: string; done: Promise<void> }>();
 
   async function fill(dialog: HTMLDialogElement, href: string): Promise<void> {
     const status = dialog.querySelector<HTMLElement>('[data-policy-status]');
@@ -54,8 +56,22 @@ const f = strings(locale).form;
     const source = page.querySelector(`[${POLICY_SOURCE}]`);
     if (!source) throw new Error(`${href} has no [${POLICY_SOURCE}]`);
     body.replaceChildren(...[...source.childNodes].map((n) => document.importNode(n, true)));
+    // The policy page can be in another language than this page (vi links to the zh-TW policy)
+    body.lang = page.documentElement.lang;
     status.hidden = true;
-    loaded.set(dialog, href);
+  }
+
+  // Opening the dialog again while the policy loads waits for the same fetch; a failed load is tried
+  // again on the next open
+  function load(dialog: HTMLDialogElement, href: string): Promise<void> {
+    const current = loads.get(dialog);
+    if (current?.href === href) return current.done;
+    const done = fill(dialog, href);
+    loads.set(dialog, { href, done });
+    done.catch(() => {
+      if (loads.get(dialog)?.done === done) loads.delete(dialog);
+    });
+    return done;
   }
 
   document.addEventListener('click', (e) => {
@@ -66,15 +82,24 @@ const f = strings(locale).form;
     e.preventDefault();
     dialog.addEventListener('close', () => link.focus({ preventScroll: true }), { once: true });
     dialog.showModal();
-    if (loaded.get(dialog) === link.href) return;
-    // Couldn't load it here: open the policy page as the link would have
-    fill(dialog, link.href).catch(() => location.assign(link.href));
+    load(dialog, link.href).catch(() => {
+      // Couldn't load it here: open the policy page as the link would have, unless the visitor has
+      // closed the dialog and is back on the form, which leaving would empty
+      if (dialog.open) location.assign(link.href);
+    });
   });
 
-  // A click on the backdrop lands on the <dialog> itself, outside its sheet
+  // A click on the backdrop lands on the <dialog> itself, outside its sheet. So does a drag that
+  // starts in the text (selecting it) and ends outside it, which mustn't close the dialog: only a
+  // press that also started on the backdrop does.
   for (const dialog of document.querySelectorAll<HTMLDialogElement>('.policy dialog')) {
+    let pressedOnBackdrop = false;
+    dialog.addEventListener('pointerdown', (e) => {
+      pressedOnBackdrop = e.target === dialog;
+    });
     dialog.addEventListener('click', (e) => {
-      if (e.target === dialog) dialog.close();
+      if (pressedOnBackdrop && e.target === dialog) dialog.close();
+      pressedOnBackdrop = false;
     });
   }
 </script>
