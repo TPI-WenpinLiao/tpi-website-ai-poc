@@ -102,7 +102,12 @@ const jsonLd = pageJsonLd({
             <CardGrid cols={2}>
               {s.items.map((item) => (
                 <li>
-                  <Card title={item.title} description={item.body} image={item.image && { src: item.image, alt: '' }} />
+                  <Card
+                    title={item.title}
+                    description={item.body}
+                    image={item.image && { src: item.image, alt: '' }}
+                    layout="reading-pair"
+                  />
                 </li>
               ))}
             </CardGrid>
