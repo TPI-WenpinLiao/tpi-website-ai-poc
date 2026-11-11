@@ -62,7 +62,7 @@ const ConsentBanner = import.meta.env.PUBLIC_GTM_ID ? (await import('../componen
     <slot />
   </main>
   <SiteFooter consentSettings={consent?.footer} wide={wide} />
-  {consent && ConsentBanner && <ConsentBanner id={consent.id} config={consent.config} categories={consent.categories} copy={consent.copy} />}
+  {consent && ConsentBanner && <ConsentBanner id={consent.id} config={consent.config} categories={consent.categories} copy={consent.copy} wide={wide} />}
 </BaseLayout>
 
 <style>

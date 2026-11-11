@@ -12,6 +12,8 @@
 // `preview` is for /design-system only, without `config`: "banner" draws the banner in the page flow
 // instead of fixed to the viewport, "dialog" draws the dialog open in the flow (non-modal, wrap it in
 // inert). Previews store nothing and load nothing; their buttons only close the dialog.
+// `wide`: from --bp-sm-up the banner spans the home page's grid (--grid-margin, up to
+// --layout-max-width) instead of the content width, so it lines up with the wide header's logo (#243).
 import Button from './Button.astro';
 import Link from './Link.astro';
 import type { ConsentConfig } from '../../lib/consent/page';
@@ -46,16 +48,17 @@ type Props = {
   copy: ConsentCopy;
   config?: ConsentConfig;
   preview?: 'banner' | 'dialog';
+  wide?: boolean;
 };
 
-const { id, categories, copy, config, preview } = Astro.props;
+const { id, categories, copy, config, preview, wide = false } = Astro.props;
 const dialogId = `${id}-dialog`;
 ---
 
 <div class="consent" data-surface="dark" data-preview={preview} data-consent-config={config && JSON.stringify(config)}>
   {
     preview !== 'dialog' && (
-      <section class="banner" aria-labelledby={`${id}-title`} hidden={config !== undefined}>
+      <section class:list={['banner', { wide }]} aria-labelledby={`${id}-title`} hidden={config !== undefined}>
         <div class="text">
           <h2 class="title" id={`${id}-title`}>{copy.title}</h2>
           <p class="description">
@@ -472,6 +475,12 @@ const dialogId = `${id}-dialog`;
     .banner {
       inset-inline: var(--space-gutter);
       inset-block-end: var(--space-gutter);
+    }
+
+    /* The edges of the wide header bar's content: --grid-margin inside --layout-max-width */
+    .banner.wide {
+      inset-inline: var(--grid-margin);
+      max-inline-size: calc(var(--layout-max-width) - 2 * var(--grid-margin));
     }
 
     .banner .actions {
