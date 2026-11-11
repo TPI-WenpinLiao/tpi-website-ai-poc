@@ -73,7 +73,17 @@ const jsonLd = graph(breadcrumbList(breadcrumb(id, locale), Astro.site));
           <h2 id="featured-title" class="sr-only">
             {t.listing.featured}
           </h2>
-          <Card level={3} title={featured.title} href={featured.href} category={featured.category} description={featured.description} image={featured.image} date={featured.date} />
+          {/* sizes: the full content width (Card.astro's GRID_SIZES has the gutter math) */}
+          <Card
+            level={3}
+            title={featured.title}
+            href={featured.href}
+            category={featured.category}
+            description={featured.description}
+            image={featured.image}
+            date={featured.date}
+            sizes="(width >= 100rem) 90rem, (width >= 76rem) 72rem, calc(96vw - 1rem)"
+          />
         </article>
       )
     }

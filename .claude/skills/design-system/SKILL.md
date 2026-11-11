@@ -145,7 +145,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 | `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；全部平塗、沒有陰影與上浮（#187）：primary 實心紫、secondary 淺紫底、text 沒有底；hover 只換顏色；`disabled` 只存在於 `<button>` |
 | `Link` | 內文連結、獨立連結 | 內文連結一律底線；`external` 加 ↗ 與「（外部網站）」螢幕閱讀器文字 |
 | `Tag` | 標籤 | `neutral`、`brand`，淺底文字，沒有 mono 與光點（#187）；有 `href` 才是連結。產品頁連到產業頁要寫成看得出目的地的文字連結，不用 `Tag` |
-| `Card` | 列表卡片 | 比頁面深一階的底色，沒有框、玻璃、陰影與傾斜（#187）；hover／focus 只換標題的顏色與底線，focus 由整張卡畫外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`category`（分類、新聞類型、產業）與 `date` 放在 meta 列，不當 eyebrow；`size="sm"` 是只有標題、手機上一列兩張的短卡；沒有 `href` 是不能點的靜態面板，meta 裡的 `Tag` 連結各自可點。offering、hub 模板不用卡片 |
+| `Card` | 列表卡片 | 比頁面深一階的底色，沒有框、玻璃、陰影與傾斜（#187）；hover／focus 只換標題的顏色與底線，focus 由整張卡畫外框；整卡可點，但只有標題一個連結；圖片 `alt` 必填；`category`（分類、新聞類型、產業）與 `date` 放在 meta 列，不當 eyebrow；`size="sm"` 是只有標題、手機上一列兩張的短卡；沒有 `href` 是不能點的靜態面板，meta 裡的 `Tag` 連結各自可點；圖片的 `sizes` 預設是三欄 `CardGrid` 的欄寬，不在這種 grid 的卡片（listing 的精選卡、reading 寬度的兩欄 grid）傳自己的 `sizes`。offering、hub 模板不用卡片 |
 | `FormField` | 表單欄位 | `kind` 區分 text／email／tel／textarea／select／checkbox；hint、error 以 `aria-describedby` 連到欄位，error 加 `aria-invalid`；有連結的說明（個資同意的隱私權政策）放 `hint` slot |
 | `FormGroup` | 多選題 | `fieldset`＋`legend`，選項是不帶 `required` 的 `FormField` checkbox，`--bp-sm-up` 起兩欄；`error` 屬於整組（至少選一項），以 `aria-describedby` 連到 fieldset，`id` 給錯誤摘要連結 |
 | `Backdrop` | 區塊背景圖 | 放進 `Surface`／`PageHero` 的 `backdrop` slot；`fade`（`hero`／`bottom`／`none`）、`strength="soft"`、`priority`（LCP 圖才加）；alt 一律留空 |
@@ -224,7 +224,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 生成的素材是「緞帶世界」風格：白色等角方塊、白底、平塗，只有緞帶有紫→品紅→橘的漸層；不放文字、數字、人物、介面與真實產品，要說明的字用 HTML 標籤疊上去。提示詞、規格與素材清單見 `docs/design/image-prompts.md`「#187」；同檔的 M3-02 深色素材只剩 `/design-system` 的範例在用
 - 檔案放 `src/assets/design/`，用 `node scripts/design/import-image.mjs <來源> <檔名>` 轉成 WebP 品質 95，不直接放 PNG
 - 公司 logo 在 `src/assets/brand/`，是 `node scripts/design/import-brand.mjs <AI 檔資料夾>` 從行銷部門的 AI 檔轉出的 SVG（刪掉反白版的預覽底色、裁掉留白），同時產生 `public/favicon.png`、`public/apple-touch-icon.png`。深色 surface 用白色版，亮色用彩色版；header 只放符號（`logo-symbol-white`，`--logo-height`），footer 放橫式中英版（`logo-horizontal-white`，`--logo-height-lg`）
-- `sizes` 寫圖在各斷點的實際寬度：內頁在 `--bp-xl-up` 加寬時，跟著內容欄變寬的圖要加 `(width >= 100rem)` 的值（`Card`、band 的段落圖）；首頁的圖到 `--layout-max-width` 就不再變寬，`vw` 的值前面加 `(width >= 120rem)` 封頂。改了版面或 `sizes` 後跑 `node scripts/design/wide.mjs`，它列出 `sizes` 與實際寬度挑到不同 srcset 候選的圖（#238）
+- `sizes` 寫圖在各斷點的實際寬度：內頁在 `--bp-xl-up` 加寬時，跟著內容欄變寬的圖要加 `(width >= 100rem)` 的值（`Card`、band 的段落圖）；欄數在斷點之間會變的圖（`CardGrid` 的卡片），每一段都要寫，兩欄寫成扣掉 gutter 的 `calc()`（`Card.astro` 的 `GRID_SIZES`，#242）；首頁的圖到 `--layout-max-width` 就不再變寬，`vw` 的值前面加 `(width >= 120rem)` 封頂。改了版面或 `sizes` 後跑 `node scripts/design/wide.mjs`，它列出 `sizes` 與實際寬度挑到不同 srcset 候選的圖（#238）
 - 文字壓在圖上時，圖要讓出文字的位置（hero 的 `--hero-image-share`／`--hero-copy-share`、手機的 `--hero-narrow-offset`），不靠加深遮罩硬撐。換圖後跑 `node scripts/design/a11y-smoke.mjs`
 
 ## 無障礙

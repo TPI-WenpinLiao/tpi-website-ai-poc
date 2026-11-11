@@ -1,6 +1,6 @@
 # 專案狀態
 
-最後更新：2026-11-10
+最後更新：2026-11-11
 
 ## 目前 milestone
 
@@ -176,6 +176,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - 只有一則案例的段落標題份量完成（#231）：內頁段落標題分主要（h2 字級）與次要（`--font-size-text`）兩級，寫在 `design-principles.md`「段落標題」；只有一則、沒有成果與獎項的案例段由模板降成次要（`src/lib/content/cases.ts` 的 `caseWeight()`），spec 段可設 `weight: secondary`（GreenSwift 第 6 段），次要的規格表不放段落圖（schema 擋下）
 - 超寬螢幕的版面完成（#238）：首頁的 12 欄格線、3D 舞台與圖到 `--layout-max-width`（120rem）停止變寬並置中，`.slot` 高度以 `100svh` 為上限，首頁的 `SiteHeader`、`SiteFooter` 用 `wide` 對齊首頁格線（所有寬度的左右邊距都改成 `--grid-margin`，三語首頁 9 張視覺回歸 baseline 已更新）；內頁在 `--bp-xl-up`（≥ 100rem）時 `--content-max-width` 加寬到 90rem，閱讀寬度與字級不變；`node scripts/design/wide.mjs` 量首頁高度、案例圖與內頁內容寬度，並列出 `sizes` 與實際寬度挑到不同 srcset 候選的圖；首頁的圖 `sizes` 在 120rem 封頂，`Card` 與 band 的段落圖加上 ≥ 100rem 的值。橘色 band 停在 1920 格線邊緣、內頁加寬 90rem 照階段一定案
 - vi 的 header 選單在 1024–1099px 寬換行修正完成（#240）：`header-fit.mjs` 原本把 zh-TW 首頁換成 M3-01 的量測標籤，vi 聯絡按鈕是「Liên Hệ」，實際是「Liên hệ kinh doanh」，1024 寬少算 77px。改量三語實際頁面（首頁與 `about-us`，1024、1280），同時數每個選單項目的行數，寬度與行數對不上也算失敗，`--check` 接進 `npm run check`。`SiteHeader` 在 64–80rem（`--bp-lg-wide-up`）之間把第一層選單與語系選單的 padding、列的間距各縮一級，vi 首頁 1024 寬餘裕 20px（`docs/design/nav-fit.md`「正式 header」）
+- Card 圖片的 sizes 依各 grid 的欄寬改寫完成（#242）：`Card` 的預設 `sizes` 是三欄 `CardGrid` 每一段的欄寬，兩欄與一欄用 `--space-gutter` 推算的 `calc()`；加 `sizes` prop，listing 的精選卡傳滿版寬、ContentTemplate 的 reading 兩欄 grid 傳自己的值。`node scripts/design/wide.mjs 375,768,1024,1280 900` 的圖片表從 15 張（768 寬的 `/templates/listing` 12 張、`/templates/article` 3 張）降到 0 張
 
 ## 下一步
 
