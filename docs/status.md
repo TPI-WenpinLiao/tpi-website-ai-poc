@@ -178,6 +178,7 @@ M0–M8 都已完成（M6 收尾 #37）。之後的需求用 issue form 開，�
 - vi 的 header 選單在 1024–1099px 寬換行修正完成（#240）：`header-fit.mjs` 原本把 zh-TW 首頁換成 M3-01 的量測標籤，vi 聯絡按鈕是「Liên Hệ」，實際是「Liên hệ kinh doanh」，1024 寬少算 77px。改量三語實際頁面（首頁與 `about-us`，1024、1280），同時數每個選單項目的行數，寬度與行數對不上也算失敗，`--check` 接進 `npm run check`。`SiteHeader` 在 64–80rem（`--bp-lg-wide-up`）之間把第一層選單與語系選單的 padding、列的間距各縮一級，vi 首頁 1024 寬餘裕 20px（`docs/design/nav-fit.md`「正式 header」）
 - Card 圖片的 sizes 依各 grid 的欄寬改寫完成（#242）：`Card` 的預設 `sizes` 是三欄 `CardGrid` 每一段的欄寬，兩欄與一欄用 `--space-gutter` 推算的 `calc()`；加 `layout` prop（`grid`／`full`／`reading-pair`），三組 `sizes` 集中在 `Card.astro`，listing 的精選卡傳 `full`、ContentTemplate 的 reading 兩欄 grid 傳 `reading-pair`。`node scripts/design/wide.mjs 375,768,1024,1280 900` 的圖片表從 15 張（768 寬的 `/templates/listing` 12 張、`/templates/article` 3 張）降到 0 張
 - 視覺回歸 `/templates/hub` 1280px 偶發截圖不穩定修正完成（#246）：失敗時連拍的兩張只差在一張 viewport 外、`decoding="async"` 的圖，一張畫成空白、一張有圖。`tests/visual/pages.spec.ts` 的 `settle()` 在截圖前把每張圖改成同步解碼，頁面本身維持 `async`。本機 hub 1280 重跑：修改前 100 次中 10 次不穩定，修改後 200 次 0 次
+- 首頁的 ConsentBanner 跟首頁格線對齊完成（#243）：`ConsentBanner` 加 `wide`，由 `PageLayout` 傳入，`--bp-sm-up` 起橫幅外框跟 `SiteHeader` 的 `wide` bar 一樣用 `--grid-margin`、上限 `--layout-max-width`（sm 以下維持貼近視窗邊）。`gtm.mjs` 在 1280、2560 寬檢查橫幅左右緣等於 header bar 的內容邊；測試 ID build 的 2560 寬首頁，橫幅從 x=560 改到 x=376，跟 logo 相同
 
 ## 下一步
 
