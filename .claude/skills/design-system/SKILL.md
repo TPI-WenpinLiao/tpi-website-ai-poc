@@ -54,6 +54,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 - 元件的 `min-height: var(--touch-target)` 就是實際高度，不必扣 padding
 - `max-width` 代表內容寬度、外面再加左右 padding 的容器（`Surface` 的 `.inner`），寫 `box-sizing: content-box`，讓 `--content-max-width`、`--reading-max-width` 維持內容寬度
 - 超寬螢幕（#238）：內頁在 `--bp-xl-up` 時 `--content-max-width` 加寬，閱讀寬度與字級不變（螢幕的像素沒有變大）。首頁的 12 欄格線、3D 舞台與圖到 `--layout-max-width` 就停止變寬並置中，格線用 `padding-inline: max(var(--grid-margin), 50% - var(--layout-max-width) / 2 + var(--grid-margin))`，段落底色仍然滿版；3D 依舞台寬度取景，舞台不設上限的話，畫面越寬場景就放得越大。首頁的 `SiteHeader`、`SiteFooter` 用 `wide`，跟首頁格線同一條左緣
+- 內頁的左緣（#241）：`Surface width="reading"` 的欄不置中，`margin-inline-start` 算到內容欄左緣（內容欄與兩側 gutter 以外的空間除以 2），跟 hero、header 的 logo 同一條線，右側留白。內頁新增只有閱讀寬度的區塊時同樣靠左，不用 `margin-inline: auto` 置中（`design-principles.md`「內頁共用的規則」的「左緣」）
 - 沒有這條規則時，`<a>` 按鈕與 `input` 是 content-box，`<button>`、`<select>` 在瀏覽器預設樣式裡是 border-box，同一個元件會因輸出的標籤不同而高度不同（#16 實測：`<a>` 的 lg 按鈕 76px，應為約 48px）
 
 ## 亮暗 surface
@@ -139,7 +140,7 @@ description: 撰寫或修改任何樣式、元件時使用。說明亮暗雙 sur
 
 | 元件 | 用途 | 重點 |
 |---|---|---|
-| `Surface` | 頁面區塊 | `tone` 切換亮暗；`fill`（`subtle` 淺灰、`brand` 淺紫）把亮底加深一階，用來分開判斷組，不用分隔線或框（#187）；`width="reading"` 收窄到閱讀寬度；同 tone、同 fill 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
+| `Surface` | 頁面區塊 | `tone` 切換亮暗；`fill`（`subtle` 淺灰、`brand` 淺紫）把亮底加深一階，用來分開判斷組，不用分隔線或框（#187）；`width="reading"` 收窄到閱讀寬度，靠內容欄左緣、不置中（#241）；同 tone、同 fill 相鄰時後一個不留頂部 padding，間距只有一段 `--space-section` |
 | `PageHero` | 頁面開場 | 輸出該頁唯一的 h1，上方不放任何小標（上層節點只在麵包屑，`design-principles.md` P1，#187）；h1 下依序是 `description`、`lead`（一句說明）、`points`（事實原文的證據點，每則可帶一行緊貼的 `note` 條件）、`meta`（一行附註，例如案例的產業）、`actions` slot（按鈕與文字連結垂直置中；產品家族 hub 的次要動作是 `Link variant="standalone"`，不是第二顆按鈕，#227）；`visual` slot 放同一個世界的靜態圖；`breadcrumb` slot 是 hero 頂端獨立的一列；`size="compact"` 是閱讀頁的標題區（h1 用 `--font-size-h2`，底部只留 `--space-16`）；有 `backdrop` 時，窄螢幕在文字上方輸出視覺區 `data-hero-visual`（3D 依它取景，見「3D 場景」）；h1 之後的第二眼是 `description`：證據點用內文字重，只有獨立的數字加粗（`quantities()`，名稱裡的數字不加粗，規則見函式的註解）；`description`、`lead`、`note` 用完整文字色，只有 `meta` 用 muted（#208） |
 | `SectionHeading` | 區塊標題 | 只有標題、`description` 與 `action` slot，不加編號、eyebrow 與短線（#187）；`description` 用完整文字色，不用 muted（#208），照內文斷行、不加 `.text-phrase`（#225）；標題寫這段回答的問題的答案；`level` 由呼叫端指定，避免跳級；`weight="secondary"` 給次要段落，標題降到 `--font-size-text`；哪些段落算主要、次要寫在 `design-principles.md`「段落標題」（索引列的分級在「索引列」）；下方的 `IndexList` 傳同一個 `weight`（#226）；案例段由模板傳 `caseWeight(caseRows)`（`src/lib/content/cases.ts`：只有一則、沒有成果與獎項時 `secondary`，#231）；`size="display"` 每頁最多一次，`size="sm"` 用在面板裡的標題（表單的錯誤摘要）；`action` slot 放整區的連結（同一列靠右） |
 | `Button` | 動作或按鈕樣式的連結 | 有 `href` 輸出 `<a>`，沒有輸出 `<button>`（預設 `type="button"`）；全部平塗、沒有陰影與上浮（#187）：primary 實心紫、secondary 淺紫底、text 沒有底；hover 只換顏色；`disabled` 只存在於 `<button>` |
